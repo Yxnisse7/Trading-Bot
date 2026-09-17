@@ -13,7 +13,7 @@ from .backtest import format_backtest, run_backtest
 from .config import DISCLAIMER, Config, load_config
 from .learning import learn
 from .models import Signal, iso, parse_iso, utcnow
-from .notify import notify
+from .notify import notify, telegram_chat_id, telegram_updates
 from .providers import market
 from .providers import news as newsmod
 from .providers.http import ProviderError
@@ -415,10 +415,100 @@ class Engine:
             self.write_report()
         return results
 
+    # -------------------------------------------------------------- commandes
+    ASSET_ALIASES = {
+        "nasdaq": "nasdaq", "nq": "nasdaq", "ndx": "nasdaq",
+        "sp500": "sp500", "sp": "sp500", "spx": "sp500", "es": "sp500", "s&p": "sp500", "s&p500": "sp500",
+        "bitcoin": "bitcoin", "btc": "bitcoin",
+        "ethereum": "ethereum", "eth": "ethereum",
+        "gold": "gold", "or": "gold", "xau": "gold", "xauusd": "gold",
+    }
+    HELP = ("Commandes disponibles :\n"
+            "/propose <actif> — analyse immédiate et proposition de trade\n"
+            "/long <actif> [commentaire] — signal manuel à l'achat\n"
+            "/short <actif> [commentaire] — signal manuel à la vente\n"
+            "/status — signaux ouverts\n"
+            "/resume — résumé du jour\n"
+            "Actifs : nasdaq (nq), sp500 (es), bitcoin (btc), ethereum (eth), gold (or)")
+
+    def handle_command(self, text: str, now: datetime | None = None) -> str | None:
+        """Exécute une commande texte (Telegram). Renvoie la réponse à envoyer, ou None si ignorée."""
+        now = now or utcnow()
+        parts = text.strip().split()
+        if not parts or not parts[0].startswith("/"):
+            return None
+        cmd = parts[0].lower().split("@", 1)[0]
+        args = parts[1:]
+        if cmd in ("/help", "/start", "/aide"):
+            return self.HELP
+        if cmd == "/status":
+            sigs = self.store.open_signals()
+            if not sigs:
+                return "Aucun signal ouvert."
+            return "\n\n".join(format_signal(s, self.cfg.timezone) for s in sigs)
+        if cmd in ("/resume", "/résumé", "/summary"):
+            return self.summary(send=False)
+        if cmd in ("/propose", "/long", "/short"):
+            if not args:
+                return f"Précisez l'actif : {cmd} bitcoin"
+            asset_key = self.ASSET_ALIASES.get(args[0].lower())
+            if asset_key is None:
+                return f"Actif inconnu « {args[0]} ». " + self.HELP
+            try:
+                if cmd == "/propose":
+                    self.propose(asset_key, now)   # envoie lui-même la notification
+                    return None
+                note = " ".join(args[1:])[:200]
+                self.manual(asset_key, "long" if cmd == "/long" else "short", now, note=note)  # notifie lui-même
+                return None
+            except (ProviderError, RuntimeError, ValueError) as exc:
+                return f"Impossible de traiter {cmd} {args[0]} : {exc}"
+        return None
+
+    def process_commands(self, now: datetime | None = None) -> int:
+        """Lit les messages Telegram reçus depuis le dernier passage et exécute les commandes.
+
+        Seuls les messages du chat configuré (TELEGRAM_CHAT_ID) sont pris en compte.
+        """
+        chat = telegram_chat_id()
+        if not chat:
+            return 0
+        st = self.store.state()
+        offset = st.get("telegram_offset")
+        updates = telegram_updates(offset)
+        if not updates:
+            return 0
+        handled = 0
+        last_id = offset
+        for upd in updates:
+            last_id = max(last_id or 0, (upd.get("update_id") or 0) + 1)
+            if upd["chat_id"] != str(chat):
+                log.warning("message Telegram ignoré (chat %s non autorisé)", upd["chat_id"])
+                continue
+            # messages trop anciens (avant la mise en service) : ignorés pour ne pas rejouer d'anciens /start
+            if upd.get("date") and (now or utcnow()).timestamp() - upd["date"] > 6 * 3600:
+                continue
+            try:
+                reply = self.handle_command(upd["text"], now)
+            except Exception as exc:  # noqa: BLE001 — une commande ne doit pas casser le passage
+                log.exception("commande en erreur : %s", upd["text"])
+                reply = f"Erreur en traitant « {upd['text']} » : {exc}"
+            if reply:
+                notify(reply)
+            handled += 1
+        st = self.store.state()
+        st["telegram_offset"] = last_id
+        self.store.save_state(st)
+        return handled
+
     # ------------------------------------------------------------------ tick
     def tick(self, now: datetime | None = None) -> dict[str, Any]:
-        """Un passage complet : suivi des signaux ouverts, puis scan si l'intervalle est écoulé."""
+        """Un passage complet : commandes reçues, suivi des signaux ouverts, puis scan si l'intervalle est écoulé."""
         now = now or utcnow()
+        try:
+            self.process_commands(now)
+        except Exception:  # noqa: BLE001
+            log.exception("traitement des commandes Telegram")
         closed = self.track(now)
         st = self.store.state()
         last_scan = parse_iso(st["last_scan"]) if st.get("last_scan") else None

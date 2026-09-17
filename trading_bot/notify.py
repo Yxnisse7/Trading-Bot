@@ -50,3 +50,33 @@ def _discord(webhook: str, body: str) -> None:
         r.raise_for_status()
     except requests.RequestException as exc:
         log.warning("Discord : envoi impossible (%s)", exc)
+
+
+def telegram_updates(offset: int | None = None) -> list[dict]:
+    """Messages reçus par le bot Telegram (getUpdates). Vide si Telegram n'est pas configuré."""
+    token = os.environ.get("TELEGRAM_BOT_TOKEN")
+    if not token:
+        return []
+    params: dict = {"timeout": 0, "allowed_updates": '["message"]'}
+    if offset is not None:
+        params["offset"] = offset
+    try:
+        r = requests.get(f"https://api.telegram.org/bot{token}/getUpdates", params=params, timeout=15)
+        r.raise_for_status()
+        data = r.json()
+    except (requests.RequestException, ValueError) as exc:
+        log.warning("Telegram : lecture des messages impossible (%s)", exc)
+        return []
+    out = []
+    for upd in data.get("result", []):
+        msg = upd.get("message") or {}
+        text = msg.get("text")
+        chat = (msg.get("chat") or {}).get("id")
+        if text and chat is not None:
+            out.append({"update_id": upd.get("update_id"), "chat_id": str(chat), "text": text.strip(),
+                        "date": msg.get("date")})
+    return out
+
+
+def telegram_chat_id() -> str | None:
+    return os.environ.get("TELEGRAM_CHAT_ID") or None

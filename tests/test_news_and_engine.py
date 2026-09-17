@@ -264,3 +264,39 @@ def test_propose_with_and_without_direction(tmp_path, monkeypatch):
     res3 = eng.propose("gold", now)
     assert not res3["proposed"] and "abstiens" in notified[-1]
     assert all(s.asset != "gold" for s in eng.store.open_signals())
+
+
+def test_telegram_commands(tmp_path, monkeypatch):
+    now = datetime(2026, 9, 17, 14, 0, tzinfo=timezone.utc)
+    candles = make_candles(n=500, drift=0.0003, noise=0.0012, seed=7, start_ts=int(now.timestamp()) - 500 * 300)
+    eng = _engine(tmp_path, monkeypatch, candles, candles[-1].close)
+    sent = []
+    from trading_bot import engine as engmod
+    monkeypatch.setattr(engmod, "notify", lambda text, title=None: sent.append(text))
+    monkeypatch.setattr(engmod, "telegram_chat_id", lambda: "42")
+    ts = int(now.timestamp())
+    updates = [
+        {"update_id": 1, "chat_id": "42", "text": "/help", "date": ts},
+        {"update_id": 2, "chat_id": "99", "text": "/long btc", "date": ts},          # chat non autorisé
+        {"update_id": 3, "chat_id": "42", "text": "/short xyz", "date": ts},         # actif inconnu
+        {"update_id": 4, "chat_id": "42", "text": "/long eth cassure", "date": ts},  # manuel
+        {"update_id": 5, "chat_id": "42", "text": "/status", "date": ts},
+        {"update_id": 6, "chat_id": "42", "text": "/propose nq", "date": ts - 7 * 3600},  # trop ancien
+        {"update_id": 7, "chat_id": "42", "text": "bonjour", "date": ts},            # pas une commande
+    ]
+    seen_offsets = []
+    monkeypatch.setattr(engmod, "telegram_updates", lambda offset=None: (seen_offsets.append(offset), updates)[1])
+    n = eng.process_commands(now)
+    assert n == 5
+    assert seen_offsets == [None]
+    assert eng.store.state()["telegram_offset"] == 8
+    assert any("Commandes disponibles" in s for s in sent)
+    assert any("Actif inconnu" in s for s in sent)
+    assert any("SIGNAL MANUEL" in s and "Ethereum" in s for s in sent)
+    assert sent[-1].startswith("📡 SIGNAL") and "Entrée visée" in sent[-1]   # /status
+    assert not any("Nasdaq" in s for s in sent)
+    open_sigs = eng.store.open_signals()
+    assert len(open_sigs) == 1 and open_sigs[0].asset == "ethereum" and open_sigs[0].source == "manual"
+    # sans chat configuré : rien n'est lu
+    monkeypatch.setattr(engmod, "telegram_chat_id", lambda: None)
+    assert eng.process_commands(now) == 0

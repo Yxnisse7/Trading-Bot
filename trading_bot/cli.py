@@ -13,6 +13,7 @@
   python run.py fetch-data  # enregistre 60 jours de bougies 5 min dans data/candles/ (backtest --offline)
   python run.py manual --asset bitcoin --direction long   # signal demandé, notifié et suivi
   python run.py propose --asset bitcoin                   # analyse à la demande + proposition
+  python run.py commands    # traite les commandes Telegram reçues (/propose, /long, /short, /status)
   python run.py ui          # interface locale : http://127.0.0.1:8787
 """
 from __future__ import annotations
@@ -34,7 +35,7 @@ from .signals import format_signal
 
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(description="Générateur de signaux de scalping (NQ, BTC, XAU) — données gratuites")
-    p.add_argument("command", choices=["scan", "track", "tick", "summary", "stats", "loop", "status", "test-notify", "backtest", "report", "fetch-data", "manual", "propose", "ui"])
+    p.add_argument("command", choices=["scan", "track", "tick", "summary", "stats", "loop", "status", "test-notify", "backtest", "report", "fetch-data", "manual", "propose", "ui", "commands"])
     p.add_argument("--dry-run", action="store_true", help="scan sans enregistrer les signaux")
     p.add_argument("--day", help="jour du résumé (AAAA-MM-JJ)")
     p.add_argument("--interval", type=int, default=5, help="minutes entre deux ticks (mode loop)")
@@ -92,6 +93,8 @@ def main(argv: list[str] | None = None) -> int:
             return 2
         sig = eng.manual(args.asset[0], args.direction, note=args.note)
         print(json.dumps(sig.to_dict(), ensure_ascii=False, indent=2))
+    elif args.command == "commands":
+        print(f"{eng.process_commands()} commande(s) traitée(s).")
     elif args.command == "propose":
         if not args.asset:
             print("Usage : python run.py propose --asset <actif>")

@@ -85,6 +85,20 @@ python run.py ui           # interface locale : http://127.0.0.1:8787
 python run.py loop         # boucle locale : un tick toutes les 5 min
 ```
 
+### Commandes Telegram
+Écrivez au bot depuis votre téléphone ; les commandes sont traitées au passage suivant (toutes les
+15 min sur GitHub Actions, 5 min en local) et seuls les messages du chat configuré sont acceptés :
+
+| Commande | Effet |
+|---|---|
+| `/propose btc` | analyse immédiate de l'actif, lecture des indicateurs, proposition calibrée ou abstention expliquée |
+| `/long nq cassure` / `/short or` | signal manuel (le commentaire est facultatif), calibré par le bot, notifié et suivi |
+| `/status` | signaux ouverts |
+| `/resume` | résumé du jour |
+| `/help` | aide |
+
+Actifs : `nasdaq` (`nq`), `sp500` (`es`), `bitcoin` (`btc`), `ethereum` (`eth`), `gold` (`or`).
+
 ### Interface
 `python run.py ui` sert une page simple et visuelle (`docs/index.html`) : indicateurs clés,
 signaux ouverts, **résumé des derniers trades par indicateur** (taux de réussite contre hasard
