@@ -272,8 +272,8 @@ def test_telegram_commands(tmp_path, monkeypatch):
     eng = _engine(tmp_path, monkeypatch, candles, candles[-1].close)
     sent = []
     from trading_bot import engine as engmod
-    monkeypatch.setattr(engmod, "notify", lambda text, title=None: sent.append(text))
-    monkeypatch.setattr(engmod, "telegram_chat_id", lambda: "42")
+    monkeypatch.setattr(engmod, "notify", lambda text, title=None, chat_id=None: sent.append((chat_id, text)))
+    monkeypatch.setattr(engmod, "telegram_chat_ids", lambda: ["42", "43"])
     ts = int(now.timestamp())
     updates = [
         {"update_id": 1, "chat_id": "42", "text": "/help", "date": ts},
@@ -290,13 +290,25 @@ def test_telegram_commands(tmp_path, monkeypatch):
     assert n == 5
     assert seen_offsets == [None]
     assert eng.store.state()["telegram_offset"] == 8
-    assert any("Commandes disponibles" in s for s in sent)
-    assert any("Actif inconnu" in s for s in sent)
-    assert any("SIGNAL MANUEL" in s and "Ethereum" in s for s in sent)
-    assert sent[-1].startswith("📡 SIGNAL") and "Entrée visée" in sent[-1]   # /status
-    assert not any("Nasdaq" in s for s in sent)
+    texts = [s for _, s in sent]
+    assert any("Commandes disponibles" in s for s in texts)
+    assert any("Actif inconnu" in s for s in texts)
+    assert any("SIGNAL MANUEL" in s and "Ethereum" in s for s in texts)
+    assert texts[-1].startswith("📡 SIGNAL") and "Entrée visée" in texts[-1]   # /status
+    assert not any("Nasdaq" in s for s in texts)
+    # réponses aux commandes ciblées sur le chat demandeur ; signal manuel diffusé à tous (chat_id None)
+    assert ("42", texts[0]) in sent and all(c == "42" for c, s in sent if "Commandes disponibles" in s and "identifiant" not in s)
+    assert any(c is None and "SIGNAL MANUEL" in s for c, s in sent)
+    # chat inconnu (99) : informé une seule fois de son identifiant
+    unknown = [(c, s) for c, s in sent if c == "99"]
+    assert len(unknown) == 1 and "99" in unknown[0][1] and "privé" in unknown[0][1]
+    assert eng.store.state()["telegram_informed"] == ["99"]
     open_sigs = eng.store.open_signals()
     assert len(open_sigs) == 1 and open_sigs[0].asset == "ethereum" and open_sigs[0].source == "manual"
+    # second passage avec le même inconnu : plus de message
+    monkeypatch.setattr(engmod, "telegram_updates", lambda offset=None: [{"update_id": 8, "chat_id": "99", "text": "/help", "date": ts}])
+    sent.clear()
+    assert eng.process_commands(now) == 0 and sent == []
     # sans chat configuré : rien n'est lu
-    monkeypatch.setattr(engmod, "telegram_chat_id", lambda: None)
+    monkeypatch.setattr(engmod, "telegram_chat_ids", lambda: [])
     assert eng.process_commands(now) == 0

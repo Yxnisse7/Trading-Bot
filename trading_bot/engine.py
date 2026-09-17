@@ -13,7 +13,7 @@ from .backtest import format_backtest, run_backtest
 from .config import DISCLAIMER, Config, load_config
 from .learning import learn
 from .models import Signal, iso, parse_iso, utcnow
-from .notify import notify, telegram_chat_id, telegram_updates
+from .notify import notify, telegram_chat_ids, telegram_updates
 from .providers import market
 from .providers import news as newsmod
 from .providers.http import ProviderError
@@ -470,8 +470,8 @@ class Engine:
 
         Seuls les messages du chat configuré (TELEGRAM_CHAT_ID) sont pris en compte.
         """
-        chat = telegram_chat_id()
-        if not chat:
+        allowed = set(telegram_chat_ids())
+        if not allowed:
             return 0
         st = self.store.state()
         offset = st.get("telegram_offset")
@@ -480,10 +480,15 @@ class Engine:
             return 0
         handled = 0
         last_id = offset
+        informed: list[str] = list(st.get("telegram_informed", []))
         for upd in updates:
             last_id = max(last_id or 0, (upd.get("update_id") or 0) + 1)
-            if upd["chat_id"] != str(chat):
+            if upd["chat_id"] not in allowed:
                 log.warning("message Telegram ignoré (chat %s non autorisé)", upd["chat_id"])
+                if upd["chat_id"] not in informed:
+                    informed.append(upd["chat_id"])
+                    notify("Ce bot est privé. Votre identifiant de chat est " + upd["chat_id"]
+                           + " : transmettez-le au propriétaire pour qu'il vous ajoute.", chat_id=upd["chat_id"])
                 continue
             # messages trop anciens (avant la mise en service) : ignorés pour ne pas rejouer d'anciens /start
             if upd.get("date") and (now or utcnow()).timestamp() - upd["date"] > 6 * 3600:
@@ -494,10 +499,11 @@ class Engine:
                 log.exception("commande en erreur : %s", upd["text"])
                 reply = f"Erreur en traitant « {upd['text']} » : {exc}"
             if reply:
-                notify(reply)
+                notify(reply, chat_id=upd["chat_id"])
             handled += 1
         st = self.store.state()
         st["telegram_offset"] = last_id
+        st["telegram_informed"] = informed[-50:]
         self.store.save_state(st)
         return handled
 

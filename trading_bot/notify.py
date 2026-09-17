@@ -12,17 +12,26 @@ from .config import DATA_DIR
 log = logging.getLogger(__name__)
 
 
-def notify(text: str, *, title: str | None = None) -> None:
+def telegram_chat_ids() -> list[str]:
+    """Identifiants de chat autorisés (TELEGRAM_CHAT_ID, plusieurs séparés par des virgules)."""
+    raw = os.environ.get("TELEGRAM_CHAT_ID") or ""
+    return [c.strip() for c in raw.replace(";", ",").split(",") if c.strip()]
+
+
+def notify(text: str, *, title: str | None = None, chat_id: str | None = None) -> None:
+    """Envoie un message. `chat_id` : cible un seul chat Telegram (réponse à une commande) ;
+    sinon tous les chats configurés + Discord."""
     body = f"{title}\n{text}" if title else text
     print(body, flush=True)
     _append_log(body)
     token = os.environ.get("TELEGRAM_BOT_TOKEN")
-    chat_id = os.environ.get("TELEGRAM_CHAT_ID")
-    if token and chat_id:
-        _telegram(token, chat_id, body)
-    webhook = os.environ.get("DISCORD_WEBHOOK_URL")
-    if webhook:
-        _discord(webhook, body)
+    if token:
+        for cid in ([chat_id] if chat_id else telegram_chat_ids()):
+            _telegram(token, cid, body)
+    if chat_id is None:
+        webhook = os.environ.get("DISCORD_WEBHOOK_URL")
+        if webhook:
+            _discord(webhook, body)
 
 
 def _append_log(body: str) -> None:
@@ -79,4 +88,5 @@ def telegram_updates(offset: int | None = None) -> list[dict]:
 
 
 def telegram_chat_id() -> str | None:
-    return os.environ.get("TELEGRAM_CHAT_ID") or None
+    ids = telegram_chat_ids()
+    return ids[0] if ids else None

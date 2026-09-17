@@ -99,6 +99,16 @@ python run.py loop         # boucle locale : un tick toutes les 5 min
 
 Actifs : `nasdaq` (`nq`), `sp500` (`es`), `bitcoin` (`btc`), `ethereum` (`eth`), `gold` (`or`).
 
+**Plusieurs personnes** : `TELEGRAM_CHAT_ID` accepte plusieurs identifiants séparés par des virgules.
+Tous reçoivent les signaux et le résumé ; chacun peut envoyer des commandes, dont les réponses ne
+vont qu'à lui. Un inconnu qui écrit au bot reçoit une seule fois son identifiant de chat, à
+transmettre au propriétaire pour être ajouté au secret. Un groupe Telegram fonctionne aussi
+(ajoutez le bot au groupe, son identifiant est négatif).
+
+**Réactivité** : le workflow `commands.yml` ne fait que lire et traiter les commandes (quelques
+secondes) ; déclenché par un cron externe toutes les 1 à 2 minutes, il rend les commandes quasi
+immédiates sans alourdir le passage complet de 5 min.
+
 ### Interface
 `python run.py ui` sert une page simple et visuelle (`docs/index.html`) : indicateurs clés,
 signaux ouverts, **résumé des derniers trades par indicateur** (taux de réussite contre hasard
