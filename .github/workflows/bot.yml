@@ -1,11 +1,11 @@
 name: Trading bot — tick (suivi + scan)
 
-# Toutes les 5 minutes : suit les signaux ouverts (TP / SL / expiration) et,
-# si ~15 min se sont écoulées depuis le dernier scan, cherche de nouveaux signaux.
+# Toutes les 15 minutes (dépôt privé : le quota gratuit ne couvre pas un passage toutes les 5 min) :
+# suit les signaux ouverts (TP / SL / expiration) puis cherche de nouveaux signaux.
 # GitHub Actions exécute les crons "au mieux" : quelques minutes de retard sont normales.
 on:
   schedule:
-    - cron: "*/5 * * * *"
+    - cron: "*/15 * * * *"
   workflow_dispatch:
     inputs:
       command:

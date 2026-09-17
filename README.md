@@ -42,7 +42,8 @@ python run.py loop      # boucle locale : un tick toutes les 5 min
 ```
 
 ### Suivi automatique
-- Toutes les 5 min, le bot récupère les bougies 1 m depuis l'émission du signal et le prix courant.
+- À chaque passage (5 min en local, 15 min sur GitHub Actions), le bot récupère les bougies 1 m
+  depuis l'émission du signal et le prix courant.
 - TP touché / SL touché (si les deux dans la même bougie : SL, par prudence) / **expiré** après 1 h
   (clôturé au prix courant pour les statistiques).
 - Notification immédiate avec l'heure exacte, le prix de clôture, le P&L et la durée réelle.
@@ -82,17 +83,19 @@ Sans configuration, les messages sont affichés en console et journalisés dans 
 
 Trois workflows sont fournis dans `.github/workflows/` :
 
-- `bot.yml` : `tick` toutes les 5 min (suivi) avec scan toutes les ~15 min ; l'état
+- `bot.yml` : `tick` toutes les 15 min (suivi des signaux ouverts puis scan) ; l'état
   (`data/*.json`) est commité dans le dépôt pour persister entre deux exécutions.
 - `daily-summary.yml` : résumé quotidien à 22:05 UTC.
 - `tests.yml` : tests à chaque push.
 
 Ajoutez les secrets Telegram / Discord dans *Settings → Secrets and variables → Actions*.
 
-**Coût.** GitHub Actions est illimité pour les dépôts **publics**. Pour un dépôt privé, le quota
-gratuit (2 000 min/mois) ne couvre pas un tick toutes les 5 min : passez le cron de `bot.yml` à
-`*/15` (le suivi sera alors moins fin) ou exécutez `python run.py loop` sur une machine locale.
-Les crons GitHub sont exécutés « au mieux » : un retard de quelques minutes est normal.
+**Coût.** Le cron est réglé sur 15 min car le dépôt est privé : le quota gratuit (2 000 min/mois)
+ne couvre pas un tick toutes les 5 min. Le suivi TP/SL reste exact (il s'appuie sur les bougies 1 min
+depuis l'émission du signal) mais la notification d'issue peut arriver avec jusqu'à 15 min de retard.
+Pour un suivi toutes les 5 min, exécutez `python run.py loop` sur une machine locale, ou passez le
+dépôt en public (minutes illimitées) et remettez `*/5`. Les crons GitHub sont exécutés « au mieux » :
+un retard de quelques minutes est normal.
 
 ## Configuration
 
@@ -101,7 +104,8 @@ Valeurs par défaut dans `trading_bot/config.py`, surcharge via `config.json` (v
 par actif (UTC), tolérance à l'actualité, fuseau d'affichage.
 
 Calendrier macro : `data/macro_calendar.json` (heures UTC). Blackout 45 min avant / 30 min après
-chaque événement `high`. Vérifiez les dates FOMC/CPI sur les sites officiels et complétez-les.
+chaque événement `high`. Les 8 réunions FOMC et les 12 publications CPI de 2026 sont pré-remplies
+(sources : federalreserve.gov, bls.gov) ; complétez avec BCE, PCE, etc. si besoin.
 
 ## Structure
 
