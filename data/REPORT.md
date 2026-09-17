@@ -1,13 +1,13 @@
 # Trading-Bot — rapport
 
-_Mis à jour le 17/09/2026 à 16:45 (Europe/Paris)._
+_Mis à jour le 17/09/2026 à 17:01 (Europe/Paris)._
 
 ## Vue d'ensemble
 
 - Trades clôturés : **1**
 - Taux de réussite cumulé (TP / (TP+SL)) : **100%** — hasard attendu 40%, avantage **+60%**
 - P&L théorique cumulé, net des coûts estimés (somme des % par trade, sans levier) : **+0.18 %** (brut +0.19 %)
-- Signaux ouverts : **1**
+- Signaux ouverts : **2**
 - Signaux fantômes (suivis en silence pour l'apprentissage) : **0** clôturés, 0 ouverts, taux de réussite n/a (hasard attendu n/a)
 
 ## Signaux ouverts
@@ -15,6 +15,7 @@ _Mis à jour le 17/09/2026 à 16:45 (Europe/Paris)._
 | Heure | Actif | Sens | Entrée | TP | SL | Confiance | Source | Expire |
 |---|---|---|---:|---:|---:|---|---|---|
 | 17/09 16:45 | Ethereum (ETH/USD) | long | 2462.6 | 2475.1 | 2454.3 | fort | signaux du bot | 17:45 |
+| 17/09 17:01 | Nasdaq 100 (NQ) | long | 29695.5 | 29747.5 | 29657.25 | moyen | signaux du bot | 18:01 |
 
 ## Statistiques
 
