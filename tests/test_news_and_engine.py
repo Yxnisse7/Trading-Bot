@@ -55,13 +55,15 @@ def _engine(tmp_path, monkeypatch, candles, price, rss_items=None):
 
 def test_full_cycle_scan_track_summary(tmp_path, monkeypatch):
     now = datetime(2026, 9, 17, 14, 0, tzinfo=timezone.utc)
-    candles = make_candles(n=500, drift=0.0006, noise=0.0004, seed=7,
+    candles = make_candles(n=500, drift=0.0003, noise=0.0012, seed=7,
                            start_ts=int(now.timestamp()) - 500 * 300)
     eng = _engine(tmp_path, monkeypatch, candles, candles[-1].close)
     sigs = eng.scan(now)
-    assert len(sigs) == 3  # même série pour les 3 actifs → 3 signaux long
+    # même série pour les 3 actifs, mais plafond de 2 signaux ouverts simultanés
+    assert len(sigs) == 2
     assert all(s.direction == "long" for s in sigs)
-    assert len(eng.store.open_signals()) == 3
+    assert len(eng.store.open_signals()) == 2
+    assert eng.store.report_file.exists()
 
     # un second scan immédiat ne produit rien (signal ouvert + cooldown)
     assert eng.scan(now + timedelta(minutes=5)) == []
@@ -70,33 +72,36 @@ def test_full_cycle_scan_track_summary(tmp_path, monkeypatch):
     from trading_bot import engine as engmod
     monkeypatch.setattr(engmod.market, "fetch_price", lambda asset: 10 ** 9)
     closed = eng.track(now + timedelta(minutes=20))
-    assert len(closed) == 3 and all(s.status == "tp" for s in closed)
-    assert eng.store.open_signals() == [] and len(eng.store.history()) == 3
-    assert eng.store.adjustments()["sample"] == 3
+    assert len(closed) == 2 and all(s.status == "tp" for s in closed)
+    assert eng.store.open_signals() == [] and len(eng.store.history()) == 2
+    assert eng.store.adjustments()["sample"] == 2
 
     text = eng.summary(now.date(), send=False)
-    assert "Signaux proposés : 3" in text and "Gagnants (TP) : 3" in text
+    assert "Signaux proposés : 2" in text and "Gagnants (TP) : 2" in text
+    report = eng.store.report_file.read_text(encoding="utf-8")
+    assert "Trades clôturés : **2**" in report and "Par critère technique" in report
 
 
 def test_daily_limit_and_cooldown(tmp_path, monkeypatch):
     now = datetime(2026, 9, 17, 14, 0, tzinfo=timezone.utc)
-    candles = make_candles(n=500, drift=0.0006, noise=0.0004, seed=7, start_ts=int(now.timestamp()) - 500 * 300)
+    candles = make_candles(n=500, drift=0.0003, noise=0.0012, seed=7, start_ts=int(now.timestamp()) - 500 * 300)
     eng = _engine(tmp_path, monkeypatch, candles, candles[-1].close)
     eng.cfg.max_signals_per_asset_per_day = 1
+    eng.cfg.max_open_signals = 3
     assert len(eng.scan(now)) == 3
     from trading_bot import engine as engmod
     monkeypatch.setattr(engmod.market, "fetch_price", lambda asset: 10 ** 9)
     eng.track(now + timedelta(minutes=10))
     # plus de signaux le même jour, même avec un setup parfait, même après le cooldown
     later = now + timedelta(hours=3)
-    candles2 = make_candles(n=500, drift=0.0006, noise=0.0004, seed=7, start_ts=int(later.timestamp()) - 500 * 300)
+    candles2 = make_candles(n=500, drift=0.0003, noise=0.0012, seed=7, start_ts=int(later.timestamp()) - 500 * 300)
     monkeypatch.setattr(engmod.market, "fetch_candles_5m", lambda asset, days=5: candles2)
     assert eng.scan(later) == []
 
 
 def test_news_risk_blocks_signal(tmp_path, monkeypatch):
     now = datetime(2026, 9, 17, 14, 0, tzinfo=timezone.utc)
-    candles = make_candles(n=500, drift=0.0006, noise=0.0004, seed=7, start_ts=int(now.timestamp()) - 500 * 300)
+    candles = make_candles(n=500, drift=0.0003, noise=0.0012, seed=7, start_ts=int(now.timestamp()) - 500 * 300)
     items = [news.NewsItem("Fed rate decision shocks Wall Street, Nasdaq plunges", "", now, "x", "macro"),
              news.NewsItem("Bitcoin ETF decision and exchange hack", "", now, "x", "crypto")]
     eng = _engine(tmp_path, monkeypatch, candles, candles[-1].close, rss_items=items)
@@ -106,17 +111,17 @@ def test_news_risk_blocks_signal(tmp_path, monkeypatch):
 
 def test_stale_candles_skipped(tmp_path, monkeypatch):
     now = datetime(2026, 9, 17, 14, 0, tzinfo=timezone.utc)
-    candles = make_candles(n=500, drift=0.0006, noise=0.0004, seed=7, start_ts=int(now.timestamp()) - 600 * 300)
+    candles = make_candles(n=500, drift=0.0003, noise=0.0012, seed=7, start_ts=int(now.timestamp()) - 600 * 300)
     eng = _engine(tmp_path, monkeypatch, candles, candles[-1].close)
     assert eng.scan(now) == []
 
 
 def test_tick_scans_only_on_interval(tmp_path, monkeypatch):
     now = datetime(2026, 9, 17, 14, 0, tzinfo=timezone.utc)
-    candles = make_candles(n=500, drift=0.0006, noise=0.0004, seed=7, start_ts=int(now.timestamp()) - 500 * 300)
+    candles = make_candles(n=500, drift=0.0003, noise=0.0012, seed=7, start_ts=int(now.timestamp()) - 500 * 300)
     eng = _engine(tmp_path, monkeypatch, candles, candles[-1].close)
     r1 = eng.tick(now)
-    assert len(r1["new"]) == 3
+    assert len(r1["new"]) == 2
     r2 = eng.tick(now + timedelta(minutes=5))
     assert r2["new"] == [] and r2["closed"] == []
 
@@ -139,3 +144,49 @@ def test_4xx_is_not_retried(monkeypatch):
     with pytest.raises(h.ProviderError):
         h.get_json("https://example.invalid/x", retries=3)
     assert len(calls) == 1
+
+
+def test_loss_protection_and_cooldown_after_loss(tmp_path, monkeypatch):
+    now = datetime(2026, 9, 17, 14, 0, tzinfo=timezone.utc)
+    candles = make_candles(n=500, drift=0.0003, noise=0.0012, seed=7, start_ts=int(now.timestamp()) - 500 * 300)
+    eng = _engine(tmp_path, monkeypatch, candles, candles[-1].close)
+    eng.cfg.max_open_signals = 1
+    eng.cfg.max_losses_per_asset_per_day = 1
+    from trading_bot import engine as engmod
+    first = eng.scan(now)
+    assert len(first) == 1 and first[0].asset == "nasdaq"
+    # stop touché
+    monkeypatch.setattr(engmod.market, "fetch_price", lambda asset: 1.0)
+    assert eng.track(now + timedelta(minutes=5))[0].status == "sl"
+    # cooldown après perte (90 min) : rien à +60 min même sur un autre passage
+    later = now + timedelta(minutes=60)
+    candles2 = make_candles(n=500, drift=0.0003, noise=0.0012, seed=7, start_ts=int(later.timestamp()) - 500 * 300)
+    monkeypatch.setattr(engmod.market, "fetch_candles_5m", lambda asset, days=5: candles2)
+    sigs = eng.scan(later)
+    assert all(s.asset != "nasdaq" for s in sigs)
+    # après le cooldown, la protection quotidienne (1 stop) bloque toujours le Nasdaq
+    much_later = now + timedelta(minutes=200)
+    candles3 = make_candles(n=500, drift=0.0003, noise=0.0012, seed=7, start_ts=int(much_later.timestamp()) - 500 * 300)
+    monkeypatch.setattr(engmod.market, "fetch_candles_5m", lambda asset, days=5: candles3)
+    monkeypatch.setattr(engmod.market, "fetch_price", lambda asset: 10 ** 9)
+    eng.track(much_later)  # clôture d'éventuels signaux ouverts sur les autres actifs
+    reasons = eng._policy_block("nasdaq", eng.store.all_signals(), much_later)
+    assert any("protection quotidienne" in r for r in reasons)
+
+
+def test_forming_candle_is_dropped_before_analysis(tmp_path, monkeypatch):
+    now = datetime(2026, 9, 17, 14, 2, tzinfo=timezone.utc)
+    # dernière bougie ouverte à 14:00 : en cours de formation à 14:02 → ignorée
+    candles = make_candles(n=500, drift=0.0003, noise=0.0012, seed=7, start_ts=int(now.timestamp()) - 120 - 499 * 300)
+    seen = {}
+    from trading_bot import engine as engmod
+    real_assess = engmod.assess
+
+    def spy(asset, cs, cfg, weights=None):
+        seen["last_ts"] = cs[-1].ts
+        return real_assess(asset, cs, cfg, weights)
+
+    eng = _engine(tmp_path, monkeypatch, candles, candles[-1].close)
+    monkeypatch.setattr(engmod, "assess", spy)
+    eng.scan(now)
+    assert seen["last_ts"] == candles[-2].ts

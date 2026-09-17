@@ -8,6 +8,8 @@
   python run.py loop        # boucle locale : tick toutes les 5 minutes
   python run.py status      # signaux ouverts
   python run.py test-notify # envoie un message de test (Telegram / Discord / console)
+  python run.py backtest    # rejoue la stratégie sur l'historique 5 min (--days 30, --asset bitcoin)
+  python run.py report      # régénère data/REPORT.md
 """
 from __future__ import annotations
 
@@ -28,10 +30,13 @@ from .signals import format_signal
 
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(description="Générateur de signaux de scalping (NQ, BTC, XAU) — données gratuites")
-    p.add_argument("command", choices=["scan", "track", "tick", "summary", "stats", "loop", "status", "test-notify"])
+    p.add_argument("command", choices=["scan", "track", "tick", "summary", "stats", "loop", "status", "test-notify", "backtest", "report"])
     p.add_argument("--dry-run", action="store_true", help="scan sans enregistrer les signaux")
     p.add_argument("--day", help="jour du résumé (AAAA-MM-JJ)")
     p.add_argument("--interval", type=int, default=5, help="minutes entre deux ticks (mode loop)")
+    p.add_argument("--days", type=int, default=30, help="profondeur du backtest en jours (max 60 sur Yahoo)")
+    p.add_argument("--asset", action="append", help="limiter le backtest à un actif (répétable)")
+    p.add_argument("--send", action="store_true", help="envoyer aussi le résultat du backtest en notification")
     p.add_argument("-v", "--verbose", action="store_true")
     args = p.parse_args(argv)
 
@@ -62,6 +67,14 @@ def main(argv: list[str] | None = None) -> int:
         for s in sigs:
             print(format_signal(s, cfg.timezone))
             print()
+    elif args.command == "backtest":
+        res = eng.backtest(days=min(60, max(2, args.days)), asset_keys=args.asset, send=args.send)
+        if not res:
+            print("Backtest impossible : aucune donnée récupérée.")
+            return 1
+        print(DISCLAIMER)
+    elif args.command == "report":
+        print(eng.write_report())
     elif args.command == "test-notify":
         notify(f"🔔 Test de notification du Trading-Bot — {utcnow():%d/%m/%Y %H:%M} UTC.\n"
                "Si vous lisez ceci sur Telegram/Discord, les notifications sont opérationnelles.\n\n" + DISCLAIMER)

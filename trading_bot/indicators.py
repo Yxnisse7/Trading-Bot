@@ -199,3 +199,132 @@ def slope(values: Sequence[float | None], lookback: int = 5) -> float | None:
     if len(vals) <= lookback or vals[-1 - lookback] == 0:
         return None
     return (vals[-1] - vals[-1 - lookback]) / abs(vals[-1 - lookback]) * 100.0
+
+
+# ---------------------------------------------------------------------------
+# Indicateurs additionnels : ADX (force de tendance), VWAP, volatilité réalisée,
+# simulation de barrières (faisabilité d'un TP/SL dans un horizon donné).
+# ---------------------------------------------------------------------------
+
+def adx(candles: Sequence[Candle], period: int = 14) -> tuple[list[float | None], list[float | None], list[float | None]]:
+    """ADX de Wilder. Renvoie (ADX, +DI, -DI), None tant que non calculable."""
+    n = len(candles)
+    out_adx: list[float | None] = [None] * n
+    out_pdi: list[float | None] = [None] * n
+    out_mdi: list[float | None] = [None] * n
+    if n < 2 * period + 1:
+        return out_adx, out_pdi, out_mdi
+    tr = true_range(candles)
+    pdm = [0.0] * n
+    mdm = [0.0] * n
+    for i in range(1, n):
+        up = candles[i].high - candles[i - 1].high
+        down = candles[i - 1].low - candles[i].low
+        pdm[i] = up if (up > down and up > 0) else 0.0
+        mdm[i] = down if (down > up and down > 0) else 0.0
+    # lissage de Wilder (sommes lissées)
+    s_tr = sum(tr[1:period + 1])
+    s_pdm = sum(pdm[1:period + 1])
+    s_mdm = sum(mdm[1:period + 1])
+    dx_values: list[float] = []
+    adx_prev: float | None = None
+    for i in range(period, n):
+        if i > period:
+            s_tr = s_tr - s_tr / period + tr[i]
+            s_pdm = s_pdm - s_pdm / period + pdm[i]
+            s_mdm = s_mdm - s_mdm / period + mdm[i]
+        if s_tr == 0:
+            continue
+        pdi = 100.0 * s_pdm / s_tr
+        mdi = 100.0 * s_mdm / s_tr
+        out_pdi[i] = pdi
+        out_mdi[i] = mdi
+        denom = pdi + mdi
+        dx = 100.0 * abs(pdi - mdi) / denom if denom else 0.0
+        if adx_prev is None:
+            dx_values.append(dx)
+            if len(dx_values) == period:
+                adx_prev = sum(dx_values) / period
+                out_adx[i] = adx_prev
+        else:
+            adx_prev = (adx_prev * (period - 1) + dx) / period
+            out_adx[i] = adx_prev
+    return out_adx, out_pdi, out_mdi
+
+
+def vwap(candles: Sequence[Candle], since_ts: int) -> float | None:
+    """VWAP depuis `since_ts` (prix typique pondéré par le volume). None si volume nul."""
+    pv = 0.0
+    vol = 0.0
+    for c in candles:
+        if c.ts < since_ts:
+            continue
+        tp = (c.high + c.low + c.close) / 3.0
+        pv += tp * c.volume
+        vol += c.volume
+    if vol <= 0:
+        return None
+    return pv / vol
+
+
+def realized_volatility(closes: Sequence[float], lookback: int = 48) -> float | None:
+    """Écart-type des rendements logarithmiques par bougie sur `lookback` bougies."""
+    if len(closes) < lookback + 1:
+        return None
+    rets = []
+    for i in range(len(closes) - lookback, len(closes)):
+        if closes[i - 1] > 0 and closes[i] > 0:
+            rets.append(math.log(closes[i] / closes[i - 1]))
+    if len(rets) < 10:
+        return None
+    mean = sum(rets) / len(rets)
+    var = sum((r - mean) ** 2 for r in rets) / (len(rets) - 1)
+    return math.sqrt(var)
+
+
+def barrier_probabilities(price: float, tp: float, sl: float, sigma_per_step: float,
+                          steps: int = 12, paths: int = 3000, seed: int = 12345) -> tuple[float, float]:
+    """Simulation Monte-Carlo (marche aléatoire sans dérive, volatilité réalisée).
+
+    Renvoie (p_resolution, p_tp_first) :
+      - p_resolution : probabilité que TP ou SL soit touché avant la fin de l'horizon
+      - p_tp_first   : probabilité que le TP soit touché avant le SL (sur l'horizon)
+    Sert de test de faisabilité : si le marché ne bouge statistiquement pas assez
+    pour atteindre l'un des deux niveaux en ~1 h, le signal n'a pas lieu d'être.
+    """
+    import random
+
+    if sigma_per_step <= 0 or steps <= 0 or paths <= 0:
+        return 0.0, 0.0
+    long = tp > price
+    rnd = random.Random(seed)
+    resolved = 0
+    tp_first = 0
+    log_tp = math.log(tp / price)
+    log_sl = math.log(sl / price)
+    for _ in range(paths):
+        x = 0.0
+        for _ in range(steps):
+            x += rnd.gauss(0.0, sigma_per_step)
+            if long:
+                if x >= log_tp:
+                    resolved += 1
+                    tp_first += 1
+                    break
+                if x <= log_sl:
+                    resolved += 1
+                    break
+            else:
+                if x <= log_tp:
+                    resolved += 1
+                    tp_first += 1
+                    break
+                if x >= log_sl:
+                    resolved += 1
+                    break
+    return resolved / paths, tp_first / paths
+
+
+def closed_candles(candles: Sequence[Candle], now_ts: int, step_seconds: int = 300) -> list[Candle]:
+    """Écarte la bougie en cours de formation (son ouverture + durée dépasse `now_ts`)."""
+    return [c for c in candles if c.ts + step_seconds <= now_ts]

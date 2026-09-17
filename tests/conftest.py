@@ -36,12 +36,12 @@ def cfg() -> Config:
 
 @pytest.fixture
 def trending_up():
-    return make_candles(n=500, drift=0.0006, noise=0.0004, seed=7)
+    return make_candles(n=500, drift=0.0003, noise=0.0012, seed=7)
 
 
 @pytest.fixture
 def trending_down():
-    return make_candles(n=500, drift=-0.0006, noise=0.0004, seed=11)
+    return make_candles(n=500, drift=-0.0003, noise=0.0012, seed=11)
 
 
 @pytest.fixture

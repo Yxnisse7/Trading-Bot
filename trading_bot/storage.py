@@ -18,6 +18,8 @@ class Store:
         self.state_file = self.dir / "state.json"            # méta (dernier scan, etc.)
         self.adjust_file = self.dir / "adjustments.json"     # poids appris
         self.calendar_file = self.dir / "macro_calendar.json"
+        self.backtest_file = self.dir / "backtests.json"      # derniers résultats de backtest
+        self.report_file = self.dir / "REPORT.md"             # rapport lisible sur GitHub
 
     # ---- helpers
     def _read(self, path: Path, default: Any) -> Any:
@@ -74,3 +76,15 @@ class Store:
     # ---- calendrier macro
     def calendar(self) -> list[dict]:
         return self._read(self.calendar_file, {"events": []}).get("events", [])
+
+    # ---- backtests (sans la liste détaillée des trades, trop volumineuse)
+    def backtests(self) -> dict[str, Any]:
+        return self._read(self.backtest_file, {})
+
+    def save_backtests(self, results: dict[str, Any]) -> None:
+        slim = {k: {kk: vv for kk, vv in v.items() if kk != "trades"} for k, v in results.items()}
+        self._write(self.backtest_file, slim)
+
+    # ---- rapport
+    def save_report(self, text: str) -> None:
+        self.report_file.write_text(text, encoding="utf-8")

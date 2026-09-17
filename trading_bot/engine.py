@@ -1,11 +1,14 @@
-"""Orchestration : scan (génération de signaux), track (suivi), summary (bilan)."""
+"""Orchestration : scan (génération de signaux), track (suivi), summary (bilan), tick, backtest."""
 from __future__ import annotations
 
 import logging
 from datetime import datetime, timedelta
 from typing import Any
+from zoneinfo import ZoneInfo
 
+from . import indicators as ind
 from .analysis import assess
+from .backtest import format_backtest, run_backtest
 from .config import DISCLAIMER, Config, load_config
 from .learning import learn
 from .models import Signal, iso, parse_iso, utcnow
@@ -13,6 +16,7 @@ from .notify import notify
 from .providers import market
 from .providers import news as newsmod
 from .providers.http import ProviderError
+from .report import build_report
 from .signals import build_signal, format_signal
 from .storage import Store
 from .summary import daily_summary
@@ -27,6 +31,7 @@ class Engine:
     def __init__(self, cfg: Config | None = None, store: Store | None = None):
         self.cfg = cfg or load_config()
         self.store = store or Store()
+        self.tz = ZoneInfo(self.cfg.timezone)
 
     # ------------------------------------------------------------------ scan
     def scan(self, now: datetime | None = None, dry_run: bool = False) -> list[Signal]:
@@ -41,7 +46,7 @@ class Engine:
         blackout = newsmod.in_blackout(now, calendar, self.cfg.news_blackout_before_minutes,
                                        self.cfg.news_blackout_after_minutes)
         if blackout:
-            log.info("Blackout macro : %s à %s — aucun signal", blackout.name, blackout.at)
+            log.info("Blackout macro : %s à %s UTC — aucun signal", blackout.name, blackout.at.strftime("%H:%M"))
             self._touch_state(now, note=f"blackout {blackout.name}")
             return []
         if now.hour in avoid_hours:
@@ -58,12 +63,13 @@ class Engine:
                 log.info("%s : pas de scan (%s)", asset.label, "; ".join(reasons))
                 continue
             try:
-                candles = market.fetch_candles_5m(asset, days=5)
+                raw = market.fetch_candles_5m(asset, days=5)
             except ProviderError as exc:
                 log.warning("%s : données indisponibles (%s)", asset.label, exc)
                 continue
-            if now.timestamp() - candles[-1].ts > 30 * 60:
-                log.info("%s : dernière bougie trop ancienne (marché fermé ?)", asset.label)
+            candles = ind.closed_candles(raw, int(now.timestamp()), 300)
+            if not candles or now.timestamp() - candles[-1].ts > 30 * 60:
+                log.info("%s : dernière bougie clôturée trop ancienne (marché fermé ?)", asset.label)
                 continue
 
             a = assess(asset, candles, self.cfg, weights)
@@ -88,24 +94,34 @@ class Engine:
                 log.info("%s : pas de signal (%s)", asset.label, "; ".join(why))
                 continue
             produced.append(sig)
+            all_sigs.append(sig)
             if not dry_run:
                 self.store.add_signal(sig)
-                all_sigs.append(sig)
             notify(format_signal(sig, self.cfg.timezone) + "\n\n" + DISCLAIMER)
+            log.info("%s : signal %s %s émis (id %s)", asset.label, sig.direction, sig.entry, sig.id)
         self._touch_state(now, note=f"{len(produced)} signal(aux)")
+        if produced and not dry_run:
+            self.write_report()
         return produced
 
     def _policy_block(self, asset_key: str, all_sigs: list[Signal], now: datetime) -> list[str]:
         reasons = []
-        mine = [s for s in all_sigs if s.asset == asset_key]
-        todays = [s for s in mine if parse_iso(s.created_at).date() == now.date()]
+        today = now.astimezone(self.tz).date()
+        mine = sorted((s for s in all_sigs if s.asset == asset_key), key=lambda s: s.created_at)
+        todays = [s for s in mine if parse_iso(s.created_at).astimezone(self.tz).date() == today]
         if len(todays) >= self.cfg.max_signals_per_asset_per_day:
             reasons.append(f"maximum quotidien atteint ({self.cfg.max_signals_per_asset_per_day})")
+        if sum(1 for s in todays if s.status == "sl") >= self.cfg.max_losses_per_asset_per_day:
+            reasons.append(f"protection quotidienne : {self.cfg.max_losses_per_asset_per_day} stops déjà touchés")
         if any(s.status == "open" for s in mine):
             reasons.append("un signal est déjà ouvert sur cet actif")
-        last = max((parse_iso(s.created_at) for s in mine), default=None)
-        if last and now - last < timedelta(minutes=self.cfg.cooldown_minutes):
-            reasons.append("délai de refroidissement en cours")
+        if sum(1 for s in all_sigs if s.status == "open") >= self.cfg.max_open_signals:
+            reasons.append(f"plafond de signaux ouverts atteint ({self.cfg.max_open_signals})")
+        if mine:
+            last = mine[-1]
+            cooldown = self.cfg.cooldown_after_loss_minutes if last.status == "sl" else self.cfg.cooldown_minutes
+            if now - parse_iso(last.created_at) < timedelta(minutes=cooldown):
+                reasons.append("délai de refroidissement en cours")
         return reasons
 
     def _touch_state(self, now: datetime, note: str = "") -> None:
@@ -129,7 +145,7 @@ class Engine:
             try:
                 candles = market.fetch_candles_1m(asset)
             except ProviderError as exc:
-                log.warning("%s : bougies 1m indisponibles (%s)", asset.label, exc)
+                log.warning("%s : bougies 1 min indisponibles (%s)", asset.label, exc)
             try:
                 price = market.fetch_price(asset)
             except ProviderError as exc:
@@ -144,6 +160,7 @@ class Engine:
         self.store.save_open(remaining)
         if closed:
             self._relearn()
+            self.write_report()
         st = self.store.state()
         st["last_track"] = iso(now)
         self.store.save_state(st)
@@ -160,10 +177,40 @@ class Engine:
         text = daily_summary(self.store.all_signals(), self.cfg, day, adj)
         if send:
             notify(text)
+        self.write_report()
         st = self.store.state()
         st["last_summary"] = iso(utcnow())
         self.store.save_state(st)
         return text
+
+    # ---------------------------------------------------------------- report
+    def write_report(self) -> str:
+        backtests = self.store.backtests()
+        text = build_report(self.store.all_signals(), self.cfg, self.store.adjustments(), backtests)
+        self.store.save_report(text)
+        return text
+
+    # -------------------------------------------------------------- backtest
+    def backtest(self, days: int = 30, asset_keys: list[str] | None = None, send: bool = False) -> dict[str, Any]:
+        results: dict[str, Any] = {}
+        for key, asset in self.cfg.assets.items():
+            if asset_keys and key not in asset_keys:
+                continue
+            try:
+                candles = market.fetch_candles_5m(asset, days=days)
+            except ProviderError as exc:
+                log.warning("%s : données indisponibles pour le backtest (%s)", asset.label, exc)
+                continue
+            res = run_backtest(asset, candles, self.cfg)
+            results[key] = res
+            text = format_backtest(res)
+            print(text, flush=True)
+            if send:
+                notify(text)
+        if results:
+            self.store.save_backtests(results)
+            self.write_report()
+        return results
 
     # ------------------------------------------------------------------ tick
     def tick(self, now: datetime | None = None) -> dict[str, Any]:

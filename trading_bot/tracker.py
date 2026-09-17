@@ -1,4 +1,4 @@
-"""Suivi automatique des signaux ouverts : TP touché, SL touché ou expiration après 1h."""
+"""Suivi automatique des signaux ouverts : TP touché, SL touché ou expiration après 1 h."""
 from __future__ import annotations
 
 import logging

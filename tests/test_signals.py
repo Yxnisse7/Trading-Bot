@@ -43,7 +43,7 @@ def test_build_signal_levels_and_rr(cfg, trending_up):
     assert abs(sig.take_profit - sig.entry) >= cfg.min_tp_range_fraction * sig.hourly_range - asset.tick_size
     assert sig.expires_at.endswith("Z") and "15:00" in sig.expires_at
     text = format_signal(sig)
-    for needle in ("LONG", "Entrée", "Take Profit", "Stop Loss", "Risque/Rendement", "Confiance", "Actualité"):
+    for needle in ("LONG", "Entrée", "Take Profit", "Stop Loss", "Risque / rendement", "Confiance", "Actualité"):
         assert needle in text
 
 

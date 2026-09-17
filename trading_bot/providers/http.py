@@ -1,4 +1,4 @@
-"""Client HTTP minimal avec ré-essais et cache court (pour rester sous les quotas gratuits)."""
+"""Client HTTP minimal avec réessais et cache court (pour rester sous les quotas gratuits)."""
 from __future__ import annotations
 
 import json

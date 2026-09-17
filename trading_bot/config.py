@@ -39,20 +39,27 @@ class Config:
 
     # ---- Politique de signaux ----
     max_signals_per_asset_per_day: int = 3
-    cooldown_minutes: int = 60          # délai minimal entre deux signaux sur un même actif
-    signal_lifetime_minutes: int = 60   # durée de vie d'un signal (TP/SL sinon expiré)
-    min_confidence: str = "moyen"       # moyen | fort
-    min_score: float = 3.0              # score pondéré minimal pour "moyen"
-    strong_score: float = 4.5           # score pondéré à partir duquel "fort"
-    min_criteria: int = 3               # nombre minimal de critères alignés
+    max_losses_per_asset_per_day: int = 2   # après N stops sur un actif, plus de signal ce jour-là
+    max_open_signals: int = 2               # positions simultanées maximum, tous actifs confondus
+    cooldown_minutes: int = 60              # délai minimal entre deux signaux sur un même actif
+    cooldown_after_loss_minutes: int = 90   # délai après un stop touché
+    signal_lifetime_minutes: int = 60       # durée de vie d'un signal (TP / SL sinon expiré)
+    min_confidence: str = "moyen"           # moyen | fort
+    min_score: float = 3.0                  # score pondéré minimal pour "moyen"
+    strong_score: float = 5.0               # score pondéré à partir duquel "fort"
+    min_criteria: int = 3                   # nombre minimal de critères alignés
     min_risk_reward: float = 1.2
+    min_adx: float = 18.0                   # force de tendance minimale (ADX 15 min)
+    min_resolution_probability: float = 0.35  # P(TP ou SL touché sous 1 h) minimale (simulation sans dérive)
 
     # ---- Calibrage TP / SL sur la volatilité ----
     atr_period: int = 14
     tp_range_fraction: float = 0.60     # TP = fraction du range horaire moyen
     sl_range_fraction: float = 0.40     # SL = fraction du range horaire moyen
+    min_sl_range_fraction: float = 0.25 # SL jamais plus serré que cette fraction (bruit)
     min_tp_range_fraction: float = 0.25 # en dessous : cible trop proche (bruit/spread)
-    max_tp_range_fraction: float = 0.90 # au-dessus : cible irréaliste sous 1h
+    max_tp_range_fraction: float = 0.90 # au-dessus : cible irréaliste sous 1 h
+    max_atr_ratio: float = 2.5          # ATR actuel / ATR moyen 24 h au-delà duquel on s'abstient
 
     # ---- Actualité ----
     news_lookback_minutes: int = 120

@@ -1,6 +1,8 @@
 # Trading-Bot — signaux de scalping (Nasdaq, Bitcoin, Or) à coût zéro
 
-Générateur de **signaux courts (~1 h)** sur trois actifs :
+Générateur de **signaux courts (~1 h)** sur trois actifs, à partir de **données gratuites**,
+avec **suivi automatique** des issues, **apprentissage** sur l'historique, **backtest** et
+**résumé quotidien**. Le bot **n'exécute aucun ordre** : il propose, vous décidez.
 
 | Actif | Source principale | Repli |
 |---|---|---|
@@ -8,62 +10,105 @@ Générateur de **signaux courts (~1 h)** sur trois actifs :
 | Bitcoin (`BTC/USD`) | Binance API publique (`BTCUSDT`) | Yahoo `BTC-USD`, CoinGecko (prix) |
 | Or (`XAU/USD` via `GC=F`) | Yahoo Finance | — |
 
-Actualité : flux RSS gratuits (MarketWatch, CNBC, Yahoo Finance, CoinDesk, Cointelegraph, Kitco, FXStreet)
-+ calendrier macro (`data/macro_calendar.json`, NFP détecté automatiquement).
+Actualité : flux RSS gratuits (MarketWatch, CNBC, Yahoo Finance, CoinDesk, Cointelegraph, Kitco,
+FXStreet) et calendrier macro (`data/macro_calendar.json` : FOMC et CPI 2026 pré-remplis, rapport
+emploi US détecté automatiquement).
 
 > ⚠️ **Avertissement.** Les signaux sont générés automatiquement à partir de données publiques et
 > d'une analyse algorithmique. Ils ne constituent **pas un conseil financier** et aucune stratégie ne
-> garantit un gain. Le bot **n'exécute aucun ordre** : vous décidez et exécutez vous-même.
-> **Validez d'abord en paper trading** (compte simulé) avant tout passage en argent réel.
+> garantit un gain. **Validez d'abord en paper trading** (compte simulé) avant tout passage en argent
+> réel. Vous seul décidez et exécutez vos trades.
 
 ## Philosophie
 
-- **Qualité avant quantité** : un signal n'est émis que si **au moins 3 critères convergent**
-  (tendance 5 m / 15 m / 1 h, RSI en momentum, MACD en expansion, proximité d'un niveau clé,
-  volume anormal) et que le score pondéré atteint la confiance *moyen* ou *fort*.
-- **Abstention par défaut** : marché indécis, tendance 15 m contraire, niveau clé bloquant, volatilité
-  trop faible ou anormale, actualité à risque, fenêtre de blackout macro → **aucun signal**.
-- **Maximum 3 signaux / actif / jour**, 1 seul signal ouvert par actif, 60 min de refroidissement.
-- **TP / SL calibrés sur la volatilité réelle** : range horaire moyen des 24 dernières heures
-  (bougies 5 m). TP = 60 % du range, SL = 40 % (ratio ≥ 1,2), TP borné entre 25 % et 90 % du
-  range pour rester atteignable en ~1 h sans être noyé dans le bruit. Si aucune cible réaliste
-  n'existe, pas de signal.
+**Qualité avant quantité.** Un signal n'est émis que si **au moins 3 critères convergent** sur
+9 évalués, avec un score pondéré suffisant (confiance *moyen* ou *fort*) :
+
+| Critère | Ce qu'il vérifie |
+|---|---|
+| Tendance 5 min | EMA20 > EMA50 et prix au-dessus de l'EMA20 (inverse pour un short) |
+| Tendance 15 min | EMA20 vs EMA50 |
+| Tendance 1 h | Prix vs EMA20 sur 1 h |
+| Force de tendance | ADX 15 min ≥ 18 et +DI / −DI dans le sens du trade |
+| VWAP | Prix du bon côté du VWAP de la journée |
+| RSI | RSI 5 min en zone de momentum sain (52–70 long, 30–48 short) |
+| MACD | Histogramme du bon côté et en expansion sur 3 barres |
+| Niveau clé | Proche d'un support (long) / d'une résistance (short), avec de la place vers la cible |
+| Volume | Volume anormal (z-score ≥ 1,5) confirmant la dernière bougie |
+
+**Abstention par défaut.** Aucun signal si : marché sans tendance (ADX < 18), critères
+contradictoires, tendance 15 min ou directionnel ADX opposés, RSI extrême, volatilité trop faible
+ou anormale (ATR instantané > 2,5 × la moyenne 24 h), actualité à risque, fenêtre de blackout
+macro, ou faible probabilité statistique d'atteindre TP ou SL sous 1 h.
+
+**TP / SL réalistes, calibrés sur la volatilité.**
+- Base : range horaire moyen des 24 dernières heures (bougies 5 min).
+- TP = 60 % du range, ramené devant le niveau clé le plus proche s'il est plus près.
+- SL = 40 % du range, ou juste au-delà du niveau clé opposé s'il est proche, jamais sous 25 %.
+- Ratio risque / rendement ≥ 1,2, TP borné entre 25 % et 90 % du range.
+- **Test de faisabilité** : simulation Monte-Carlo (3 000 trajectoires sur la volatilité réalisée des
+  4 dernières heures, sans dérive). Si la probabilité que TP ou SL soit touché en 1 h est inférieure
+  à 35 %, le signal est refusé.
+
+**Garde-fous de risque.**
+- Maximum 3 signaux par actif et par jour, un seul signal ouvert par actif, 2 positions
+  ouvertes au plus tous actifs confondus.
+- Refroidissement de 60 min entre deux signaux, 90 min après un stop.
+- Protection quotidienne : après 2 stops sur un actif, plus de signal ce jour-là.
+- Sessions : Nasdaq 12 h–21 h UTC, Or 7 h–20 h UTC, Bitcoin en continu.
+- Seules les bougies **clôturées** sont analysées (jamais la bougie en formation).
 
 ## Fonctionnement
 
 ```
-python run.py scan      # analyse + propose des signaux (si convergence)
-python run.py track     # vérifie les signaux ouverts : TP / SL / expiration (1 h)
-python run.py tick      # track puis scan (toutes les ~15 min) — commande planifiée
-python run.py summary   # résumé quotidien (jour + cumulé, enseignements, ajustements)
-python run.py stats     # statistiques détaillées de l'historique
-python run.py status    # signaux ouverts
-python run.py loop      # boucle locale : un tick toutes les 5 min
+python run.py scan         # analyse + propose des signaux (si convergence)
+python run.py track        # vérifie les signaux ouverts : TP / SL / expiration (1 h)
+python run.py tick         # track puis scan — commande planifiée
+python run.py backtest     # rejoue la stratégie sur l'historique (--days 30, --asset bitcoin)
+python run.py summary      # résumé quotidien (jour + cumulé, enseignements, ajustements)
+python run.py report       # régénère data/REPORT.md
+python run.py stats        # statistiques détaillées de l'historique (JSON)
+python run.py status       # signaux ouverts
+python run.py test-notify  # message de test Telegram / Discord
+python run.py loop         # boucle locale : un tick toutes les 5 min
 ```
 
 ### Suivi automatique
-- À chaque passage (5 min en local, 15 min sur GitHub Actions), le bot récupère les bougies 1 m
+- À chaque passage (5 min en local, 15 min sur GitHub Actions), le bot récupère les bougies 1 min
   depuis l'émission du signal et le prix courant.
 - TP touché / SL touché (si les deux dans la même bougie : SL, par prudence) / **expiré** après 1 h
   (clôturé au prix courant pour les statistiques).
 - Notification immédiate avec l'heure exacte, le prix de clôture, le P&L et la durée réelle.
 - Chaque issue est enregistrée dans `data/history.json` (horodatages, résultat, durée, critères).
 
-### Apprentissage
-`trading_bot/learning.py` analyse l'historique par critère, actif, direction, confiance, tranche horaire
-et contexte d'actualité. Un critère dont le taux de réussite est < 40 % sur ≥ 10 trades voit son poids
-réduit ; > 60 % → augmenté. Les tranches horaires < 30 % sont évitées. Les poids sont stockés dans
-`data/adjustments.json` et appliqués aux scans suivants.
+### Backtest
+`python run.py backtest --days 30` rejoue la même logique (analyse, niveaux, politique de risque)
+sur jusqu'à 60 jours de bougies 5 min, sans biais de futur : chaque signal est évalué sur les
+bougies clôturées, son issue sur l'heure suivante. Résultats : taux de réussite, P&L cumulé,
+espérance par trade, profit factor, pire série de stops, motifs de refus. Les résultats sont
+enregistrés dans `data/backtests.json` et repris dans le rapport. L'actualité n'étant pas
+disponible historiquement, elle n'est pas rejouée : les résultats sont légèrement optimistes sur
+ce point.
 
-### Résumé quotidien
-Nombre de signaux, gagnants / perdants / expirés, taux de réussite du jour et cumulé, ce qui a
-fonctionné ou non, ajustements prévus, rappel des limites.
+### Apprentissage
+`trading_bot/learning.py` analyse l'historique par critère, actif, sens, confiance, tranche horaire
+et contexte d'actualité. Un critère dont le taux de réussite est < 40 % sur ≥ 10 trades voit son
+poids réduit ; > 60 % → augmenté. Les tranches horaires < 30 % sont évitées. Les poids sont stockés
+dans `data/adjustments.json` et appliqués aux scans suivants.
+
+### Rapport et résumé quotidien
+`data/REPORT.md` est régénéré à chaque événement (signal, clôture, résumé, backtest) : vue
+d'ensemble, signaux ouverts, statistiques par actif / sens / confiance / critère / heure, derniers
+trades, poids appris, backtests. Le résumé quotidien (Telegram) reprend le nombre de signaux,
+gagnants / perdants / expirés, taux du jour et cumulé, ce qui a fonctionné ou non, ajustements
+prévus et rappel des limites.
 
 ## Installation locale
 
 ```bash
 pip install -r requirements.txt        # uniquement `requests`
 cp config.example.json config.json     # optionnel : ajustez les seuils
+python run.py backtest --days 30       # validez la stratégie sur l'historique
 python run.py scan -v
 python run.py loop                     # laisse tourner en tâche de fond
 ```
@@ -74,7 +119,7 @@ Tests : `pip install -r requirements-dev.txt && python -m pytest -q`
 
 | Variable d'environnement | Service |
 |---|---|
-| `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID` | Bot Telegram (créez-le via @BotFather) |
+| `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID` | Bot Telegram (créé via @BotFather ; le chat ID est le `chat.id` de `getUpdates`) |
 | `DISCORD_WEBHOOK_URL` | Webhook Discord |
 
 Sans configuration, les messages sont affichés en console et journalisés dans `data/notifications.log`.
@@ -84,11 +129,13 @@ Sans configuration, les messages sont affichés en console et journalisés dans 
 Trois workflows sont fournis dans `.github/workflows/` :
 
 - `bot.yml` : `tick` toutes les 15 min (suivi des signaux ouverts puis scan) ; l'état
-  (`data/*.json`) est commité dans le dépôt pour persister entre deux exécutions.
+  (`data/*.json`, `data/REPORT.md`) est commité dans le dépôt pour persister entre deux exécutions.
+  Lancement manuel possible avec une autre commande (`scan`, `track`, `test-notify`, `backtest`).
 - `daily-summary.yml` : résumé quotidien à 22:05 UTC.
 - `tests.yml` : tests à chaque push.
 
-Ajoutez les secrets Telegram / Discord dans *Settings → Secrets and variables → Actions*.
+Ajoutez les secrets Telegram / Discord dans *Settings → Secrets and variables → Actions*, et vérifiez
+que `main` est la branche par défaut (les crons ne s'exécutent que sur celle-ci).
 
 **Coût.** Le cron est réglé sur 15 min car le dépôt est privé : le quota gratuit (2 000 min/mois)
 ne couvre pas un tick toutes les 5 min. Le suivi TP/SL reste exact (il s'appuie sur les bougies 1 min
@@ -97,11 +144,29 @@ Pour un suivi toutes les 5 min, exécutez `python run.py loop` sur une machine l
 dépôt en public (minutes illimitées) et remettez `*/5`. Les crons GitHub sont exécutés « au mieux » :
 un retard de quelques minutes est normal.
 
+**Binance depuis GitHub Actions** : les serveurs GitHub sont situés aux États-Unis, Binance y
+répond « 451 ». Le bot bascule immédiatement sur Yahoo Finance pour le Bitcoin.
+
 ## Configuration
 
 Valeurs par défaut dans `trading_bot/config.py`, surcharge via `config.json` (voir
-`config.example.json`) : limites par jour, seuils de score, fractions TP/SL, sessions horaires
-par actif (UTC), tolérance à l'actualité, fuseau d'affichage.
+`config.example.json`). Principaux réglages :
+
+| Clé | Défaut | Rôle |
+|---|---:|---|
+| `max_signals_per_asset_per_day` | 3 | plafond quotidien par actif |
+| `max_losses_per_asset_per_day` | 2 | stops avant arrêt pour la journée |
+| `max_open_signals` | 2 | positions ouvertes simultanées |
+| `cooldown_minutes` / `cooldown_after_loss_minutes` | 60 / 90 | délais entre signaux |
+| `min_criteria` / `min_score` / `strong_score` | 3 / 3,0 / 5,0 | seuils de confiance |
+| `min_confidence` | `moyen` | `fort` pour ne garder que les meilleurs signaux |
+| `min_adx` | 18 | force de tendance minimale |
+| `tp_range_fraction` / `sl_range_fraction` | 0,60 / 0,40 | calibrage TP / SL sur le range horaire |
+| `min_risk_reward` | 1,2 | ratio minimal |
+| `min_resolution_probability` | 0,35 | faisabilité sous 1 h (simulation) |
+| `max_atr_ratio` | 2,5 | volatilité instantanée anormale |
+| `max_news_risk_score` | 2 | tolérance à l'actualité |
+| `assets.<actif>.session_utc` | voir ci-dessus | plage horaire de scan |
 
 Calendrier macro : `data/macro_calendar.json` (heures UTC). Blackout 45 min avant / 30 min après
 chaque événement `high`. Les 8 réunions FOMC et les 12 publications CPI de 2026 sont pré-remplies
@@ -114,16 +179,18 @@ run.py                      point d'entrée CLI
 trading_bot/
   config.py                 paramètres + actifs
   models.py                 Candle, Signal
-  indicators.py             SMA/EMA/RSI/MACD/ATR/pivots/range horaire (Python pur)
+  indicators.py             EMA / RSI / MACD / ATR / ADX / VWAP / pivots / range horaire / Monte-Carlo
   analysis.py               évaluation multi-timeframe, score, confiance
-  signals.py                construction TP/SL/RR et formatage
-  tracker.py                résolution TP/SL/expiration
+  signals.py                construction TP / SL / ratio, faisabilité, formatage
+  tracker.py                résolution TP / SL / expiration
+  backtest.py               rejeu historique sans biais de futur
   learning.py               statistiques + ajustement des poids
   summary.py                résumé quotidien
-  engine.py                 orchestration scan/track/summary/tick
+  report.py                 rapport Markdown
+  engine.py                 orchestration scan / track / summary / tick / backtest
   notify.py                 Telegram / Discord / console
   storage.py                persistance JSON
   providers/                yahoo, binance, coingecko, news (RSS + calendrier)
-data/                       état persistant (signaux ouverts, historique, ajustements)
+data/                       état persistant (signaux, historique, ajustements, backtests, rapport)
 tests/                      tests unitaires (données synthétiques, sans réseau)
 ```
