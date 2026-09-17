@@ -14,13 +14,13 @@ log = logging.getLogger(__name__)
 def fetch_candles_5m(asset: AssetConfig, days: int = 5) -> list[Candle]:
     """Bougies 5 minutes sur plusieurs jours (pour ATR, range horaire, MTF)."""
     errors = []
-    if asset.binance_symbol:
+    if asset.binance_symbol and days * 288 <= 1000:  # Binance : 1 000 bougies max par requête
         try:
-            return binance.fetch_candles(asset.binance_symbol, "5m", limit=min(1000, days * 288))
+            return binance.fetch_candles(asset.binance_symbol, "5m", limit=days * 288)
         except ProviderError as exc:
             errors.append(f"binance: {exc}")
     try:
-        return yahoo.fetch_candles(asset.yahoo_symbol, "5m", f"{days}d")
+        return yahoo.fetch_candles(asset.yahoo_symbol, "5m", f"{min(days, 60)}d")
     except ProviderError as exc:
         errors.append(f"yahoo: {exc}")
     raise ProviderError(f"{asset.key}: " + " | ".join(errors))

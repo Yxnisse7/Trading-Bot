@@ -190,17 +190,47 @@ class Engine:
         self.store.save_report(text)
         return text
 
-    # -------------------------------------------------------------- backtest
-    def backtest(self, days: int = 30, asset_keys: list[str] | None = None, send: bool = False) -> dict[str, Any]:
-        results: dict[str, Any] = {}
+    # ------------------------------------------------------------ données
+    def fetch_data(self, days: int = 60, asset_keys: list[str] | None = None) -> dict[str, int]:
+        """Enregistre l'historique 5 min dans data/candles/ (backtests hors ligne, reproductibles)."""
+        out: dict[str, int] = {}
         for key, asset in self.cfg.assets.items():
             if asset_keys and key not in asset_keys:
                 continue
             try:
-                candles = market.fetch_candles_5m(asset, days=days)
+                fresh = market.fetch_candles_5m(asset, days=days)
             except ProviderError as exc:
-                log.warning("%s : données indisponibles pour le backtest (%s)", asset.label, exc)
+                log.warning("%s : données indisponibles (%s)", asset.label, exc)
                 continue
+            known = {c.ts: c for c in self.store.load_candles(key)}
+            known.update({c.ts: c for c in fresh})
+            merged = [known[ts] for ts in sorted(known)]
+            self.store.save_candles(key, merged)
+            out[key] = len(merged)
+            log.info("%s : %d bougies 5 min enregistrées", asset.label, len(merged))
+        return out
+
+    # -------------------------------------------------------------- backtest
+    def backtest(self, days: int = 30, asset_keys: list[str] | None = None, send: bool = False,
+                 offline: bool = False) -> dict[str, Any]:
+        results: dict[str, Any] = {}
+        for key, asset in self.cfg.assets.items():
+            if asset_keys and key not in asset_keys:
+                continue
+            if offline:
+                candles = self.store.load_candles(key)
+                if candles:
+                    cutoff = candles[-1].ts - days * 86400
+                    candles = [c for c in candles if c.ts >= cutoff]
+                if not candles:
+                    log.warning("%s : aucune bougie hors ligne (lancez d'abord `fetch-data`)", asset.label)
+                    continue
+            else:
+                try:
+                    candles = market.fetch_candles_5m(asset, days=days)
+                except ProviderError as exc:
+                    log.warning("%s : données indisponibles pour le backtest (%s)", asset.label, exc)
+                    continue
             res = run_backtest(asset, candles, self.cfg)
             results[key] = res
             text = format_backtest(res)
