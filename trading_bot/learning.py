@@ -101,7 +101,7 @@ def learn(history: list[Signal], cfg: Config, current: dict[str, Any] | None = N
     avoid_hours = []
     for hour, st in report["by_hour_utc"].items():
         n = st["tp"] + st["sl"]
-        if n >= cfg.learning_min_trades and st["win_rate"] is not None and st["win_rate"] < 0.30:
+        if n >= max(20, 2 * cfg.learning_min_trades) and st["win_rate"] is not None and st["win_rate"] < 0.30:
             avoid_hours.append(int(hour[:2]))
             notes.append(f"tranche {hour} UTC : win rate {st['win_rate']:.0%} sur {n} trades → évitée")
     closed = [s for s in history if s.status != "open"]

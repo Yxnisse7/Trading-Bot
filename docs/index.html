@@ -82,7 +82,7 @@
       <div style="display:flex; gap:8px; flex-wrap:wrap"><button type="submit" id="m-submit">Envoyer ce signal</button><button type="button" class="secondary" id="m-propose">Proposer un trade</button></div>
     </form>
     <div class="muted" style="margin-top:8px"><b>Envoyer ce signal</b> : vous choisissez le sens, le bot calibre entrée / TP / SL, notifie et suit (source « manuel »).<br><b>Proposer un trade</b> : le bot analyse l'actif choisi maintenant, envoie sa lecture des indicateurs et, s'il voit une direction, une proposition calibrée avec son verdict honnête (passe ou non ses critères), suivie sous la source « proposition ».</div>
-    <div class="msg" id="m-msg"></div>
+    <div class="msg" id="m-msg">Les boutons fonctionnent dès maintenant ; les statistiques apparaissent quand les données sont chargées.</div>
     <details id="gh-settings">
       <summary>Mode GitHub Actions (quand l'interface n'est pas servie par <code>python run.py ui</code>)</summary>
       <div class="manual" style="margin-top:10px; display:grid; gap:10px; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr))">
@@ -130,6 +130,13 @@
   let mcp = null;            // capacité claude.ai : connecteur GitHub du lecteur (page hébergée)
   let mcpWatching = false;
   const GH_DEFAULT = { owner: "Yxnisse7", repo: "Trading-Bot" };
+  const ASSETS_DEFAULT = [["nasdaq", "Nasdaq 100 (NQ)"], ["sp500", "S&P 500 (ES)"], ["bitcoin", "Bitcoin (BTC/USD)"], ["ethereum", "Ethereum (ETH/USD)"], ["gold", "Or (XAU/USD)"]];
+  function fillAssets(list) {
+    const sel = $("#m-asset"); const cur = sel.value;
+    sel.innerHTML = list.map(([k, l]) => `<option value="${esc(k)}">${esc(l)}</option>`).join("");
+    if (cur && list.some(([k]) => k === cur)) sel.value = cur;
+  }
+  fillAssets(ASSETS_DEFAULT);
   const MCP_FIX = {
     needs_reauth: "Reconnectez GitHub dans claude.ai → Paramètres → Connecteurs, puis actualisez.",
     server_not_connected: "Ajoutez le connecteur GitHub dans claude.ai → Paramètres → Connecteurs, puis actualisez.",
@@ -159,10 +166,22 @@
     }
     return null;
   }
+  let mcpChecked = false;
   async function initMcp() {
-    if (mcp !== null) return mcp;
-    try { mcp = (window.claude && typeof window.claude.use === "function") ? await window.claude.use("mcp") : null; }
-    catch (e) { mcp = null; }
+    if (mcp) return mcp;
+    if (mcpChecked) return null;
+    mcpChecked = true;
+    const hasClaude = window.claude && typeof window.claude.use === "function";
+    if (!hasClaude) return null;
+    try { mcp = await window.claude.use("mcp"); } catch (e) { mcp = null; }
+    if (!mcp) {
+      // La vue claude.ai ne sert pas le connecteur : on l'explique plutôt que d'afficher une page vide
+      let state = "inconnu";
+      try { const perms = await window.claude.use("permissions"); if (perms) state = await perms.state("mcp:github"); } catch (e) { /* diagnostic seulement */ }
+      $("#updated").textContent = "Connecteur GitHub indisponible dans cette vue (état : " + state + "). Ouvrez la page dans claude.ai sur navigateur, vérifiez que GitHub est bien connecté (Paramètres → Connecteurs), puis rechargez.";
+      mode = "static";
+      return null;
+    }
     return mcp;
   }
   function startMcpWatch() {
@@ -201,6 +220,7 @@
       else startMcpWatch();
       return;
     }
+    if (window.claude) { $("#btn-scan").style.display = "none"; return; }  // vue claude.ai sans connecteur : message déjà affiché
     try {
       const ping = await fetch("/api/ping", { cache: "no-store" });
       if (ping.ok) mode = "local";
@@ -257,8 +277,7 @@
     ].join("");
 
     // actifs (formulaire + tableau)
-    const sel = $("#m-asset");
-    sel.innerHTML = d.assets.map((a) => `<option value="${esc(a.key)}">${esc(a.label)}</option>`).join("");
+    fillAssets(d.assets.map((a) => [a.key, a.label]));
     $("#assets tbody").innerHTML = d.assets.map((a) => `<tr>
       <td>${esc(a.label)}${a.open ? ` <span class="pill open">${a.open} ouvert(s)</span>` : ""}</td>
       <td class="num">${a.stats.n}</td><td class="num">${pct(a.stats.win_rate)}</td><td class="num">${pct(a.stats.neutral_win_rate)}</td>
