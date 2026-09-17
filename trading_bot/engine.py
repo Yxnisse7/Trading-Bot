@@ -280,6 +280,79 @@ class Engine:
         self.store.save_state(st)
         return text
 
+    # ------------------------------------------------------------ proposition
+    def propose(self, asset_key: str, now: datetime | None = None) -> dict[str, Any]:
+        """Analyse immédiate d'un actif à la demande : le bot dit ce qu'il voit et, s'il y a une
+        direction, propose un trade calibré (suivi comme les autres, source « request »).
+        S'il n'y a pas de direction, il s'abstient et l'explique."""
+        from .analysis import confidence_label
+        from .signals import criterion_label
+
+        now = now or utcnow()
+        if asset_key not in self.cfg.assets:
+            raise ValueError(f"actif inconnu : {asset_key}")
+        asset = self.cfg.assets[asset_key]
+        raw = market.fetch_candles_5m(asset, days=5)
+        candles = ind.closed_candles(raw, int(now.timestamp()), 300) or raw
+        stale = now.timestamp() - candles[-1].ts > 30 * 60
+        a = assess(asset, candles, self.cfg, self.store.adjustments().get("weights") or None)
+        try:
+            a.price = market.fetch_price(asset)
+        except ProviderError:
+            pass
+        items: list[newsmod.NewsItem] = []
+        for c in NEWS_CATEGORIES.get(asset.key, ["macro"]):
+            items += newsmod.fetch_news([c], self.cfg.news_lookback_minutes, now)
+        risk, hits = newsmod.risk_score(items, asset.news_keywords)
+        news_ctx = ("actualité calme sur les 2 dernières heures" if risk == 0
+                    else f"actualité à surveiller (score {risk}) : " + " | ".join(hits[:2]))
+
+        lecture = "\n".join(f"  • {criterion_label(k)} : {v}" for k, v in a.details.items())
+        header = f"🔎 ANALYSE À LA DEMANDE — {asset.label} — prix {a.price:.{asset.price_decimals}f}"
+        already = next((s for s in self.store.open_signals() if s.asset == asset_key), None)
+
+        if stale:
+            text = header + "\n\nMarché fermé ou données trop anciennes : pas de proposition.\n\nLecture des indicateurs :\n" + lecture
+            notify(text)
+            return {"proposed": False, "reason": "marché fermé", "text": text}
+        if already is not None:
+            text = (header + f"\n\nUn signal est déjà ouvert sur cet actif (id {already.id}, {already.direction} @ {already.entry}, "
+                    f"TP {already.take_profit}, SL {already.stop_loss}). Attendez son issue.\n\nLecture des indicateurs :\n" + lecture)
+            notify(text)
+            return {"proposed": False, "reason": "signal déjà ouvert", "text": text, "signal": already.to_dict()}
+        if a.direction is None:
+            why = "; ".join(a.reasons_rejected) or "aucune direction dominante"
+            text = (header + f"\n\n❌ Je m'abstiens : {why}.\nActualité : {news_ctx}\n\nLecture des indicateurs :\n" + lecture
+                    + "\n\n" + DISCLAIMER)
+            notify(text)
+            return {"proposed": False, "reason": why, "text": text}
+
+        relaxed = copy.copy(self.cfg)
+        relaxed.min_criteria = 1
+        relaxed.min_score = 0.0
+        relaxed.min_confidence = "moyen"
+        sig, why = build_signal(asset, a, relaxed, news_ctx, now)
+        if sig is None:
+            text = (header + f"\n\n❌ Direction {a.direction} ({a.n_criteria} critère(s)) mais pas de niveaux réalistes : "
+                    + "; ".join(why) + f"\nActualité : {news_ctx}\n\nLecture des indicateurs :\n" + lecture + "\n\n" + DISCLAIMER)
+            notify(text)
+            return {"proposed": False, "reason": "; ".join(why), "text": text}
+
+        conf = confidence_label(a.score, a.n_criteria, self.cfg)
+        sig.source = "request"
+        sig.confidence = conf or "faible"
+        verdict = {"fort": "✅ Ce setup passe mes critères (confiance forte).",
+                   "moyen": "✅ Ce setup passe mes critères (confiance moyenne)."}.get(
+            conf, f"⚠️ Ce setup ne passe PAS mes critères ({a.n_criteria} critère(s) aligné(s), score {a.score}) : je ne l'aurais pas envoyé seul.")
+        if risk > self.cfg.max_news_risk_score:
+            verdict += f" ⚠️ Actualité à risque (score {risk})."
+        self.store.add_signal(sig)
+        text = (header + "\n\n" + verdict + "\n\n" + format_signal(sig, self.cfg.timezone)
+                + "\n\nLecture des indicateurs :\n" + lecture + "\n\n" + DISCLAIMER)
+        notify(text)
+        self.write_report()
+        return {"proposed": True, "verdict": verdict, "text": text, "signal": sig.to_dict()}
+
     # ---------------------------------------------------------------- report
     def write_report(self) -> str:
         backtests = self.store.backtests()

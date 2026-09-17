@@ -102,6 +102,10 @@ def make_handler(engine: Engine):
                         sig = engine.manual(str(body.get("asset", "")), str(body.get("direction", "")),
                                             note=str(body.get("note", ""))[:200])
                     self._json(200, {"ok": True, "signal": sig.to_dict()})
+                elif path == "/api/propose":
+                    with lock:
+                        res = engine.propose(str(body.get("asset", "")))
+                    self._json(200, {"ok": True, **res})
                 elif path == "/api/scan":
                     with lock:
                         sigs = engine.scan()

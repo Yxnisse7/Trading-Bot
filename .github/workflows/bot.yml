@@ -9,10 +9,10 @@ on:
   workflow_dispatch:
     inputs:
       command:
-        description: "Commande (tick, scan, track, test-notify, backtest, fetch-data, manual)"
+        description: "Commande (tick, scan, track, test-notify, backtest, fetch-data, manual, propose)"
         default: "tick"
       asset:
-        description: "Actif pour `manual` (nasdaq, sp500, bitcoin, ethereum, gold)"
+        description: "Actif pour `manual` / `propose` (nasdaq, sp500, bitcoin, ethereum, gold)"
         required: false
       direction:
         description: "Sens pour `manual` (long ou short)"
@@ -54,6 +54,7 @@ jobs:
           case "$CMD" in
             fetch-data) python run.py fetch-data --days 60 ;;
             manual)     python run.py manual --asset "$ASSET" --direction "$DIRECTION" --note "$NOTE" ;;
+            propose)    python run.py propose --asset "$ASSET" ;;
             *)          python run.py "$CMD" ;;
           esac
       - name: Sauvegarder l'état (signaux, historique, apprentissage)

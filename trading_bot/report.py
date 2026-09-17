@@ -25,7 +25,8 @@ def _table(title: str, rows: dict[str, dict[str, Any]]) -> list[str]:
     return out
 
 
-SOURCE_LABELS = {"bot": "signaux du bot", "manual": "demandes manuelles", "shadow": "signaux fantômes", "backtest": "backtest"}
+SOURCE_LABELS = {"bot": "signaux du bot", "manual": "demandes manuelles", "request": "propositions à la demande",
+                 "shadow": "signaux fantômes", "backtest": "backtest"}
 
 
 def build_report(all_signals: list[Signal], cfg: Config, adjustments: dict[str, Any] | None = None,
@@ -156,7 +157,7 @@ def build_dashboard(all_signals: list[Signal], cfg: Config, adjustments: dict[st
     criteria = []
     for key, label in CRITERION_LABELS.items():
         with_crit = [s for s in closed_all if key in s.criteria]
-        by_source = {src: _stats([s for s in with_crit if s.source == src]) for src in ("bot", "manual", "shadow")}
+        by_source = {src: _stats([s for s in with_crit if s.source == src]) for src in ("bot", "manual", "request", "shadow")}
         last = sorted(with_crit, key=lambda s: s.created_at, reverse=True)[:8]
         criteria.append({"key": key, "label": label, "weight": weights.get(key), "stats": _stats(with_crit),
                          "by_source": by_source, "last_trades": [_sig_row(s, tz) for s in last]})
@@ -176,7 +177,7 @@ def build_dashboard(all_signals: list[Signal], cfg: Config, adjustments: dict[st
         "overview": {"visible": _stats(visible_closed), "shadow": _stats([s for s in closed_all if s.source == "shadow"]),
                      "open": len([s for s in open_sigs if s.source != "shadow"]),
                      "open_shadow": len([s for s in open_sigs if s.source == "shadow"])},
-        "by_source": {src: _stats([s for s in closed_all if s.source == src]) for src in ("bot", "manual", "shadow")},
+        "by_source": {src: _stats([s for s in closed_all if s.source == src]) for src in ("bot", "manual", "request", "shadow")},
         "assets": assets,
         "criteria": criteria,
         "open_signals": [_sig_row(s, tz) for s in sorted(open_sigs, key=lambda s: s.created_at, reverse=True)],

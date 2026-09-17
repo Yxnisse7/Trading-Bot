@@ -242,3 +242,25 @@ def test_manual_signal_is_notified_and_tracked(tmp_path, monkeypatch):
         eng.manual("inconnu", "long", now)
     with pytest.raises(ValueError):
         eng.manual("bitcoin", "haut", now)
+
+
+def test_propose_with_and_without_direction(tmp_path, monkeypatch):
+    now = datetime(2026, 9, 17, 14, 0, tzinfo=timezone.utc)
+    trending = make_candles(n=500, drift=0.0003, noise=0.0012, seed=7, start_ts=int(now.timestamp()) - 500 * 300)
+    eng = _engine(tmp_path, monkeypatch, trending, trending[-1].close)
+    notified = []
+    from trading_bot import engine as engmod
+    monkeypatch.setattr(engmod, "notify", lambda text, title=None: notified.append(text))
+    res = eng.propose("bitcoin", now)
+    assert res["proposed"] and res["signal"]["source"] == "request"
+    assert "ANALYSE À LA DEMANDE" in notified[-1] and "Lecture des indicateurs" in notified[-1]
+    assert eng.store.open_signals()[0].source == "request"
+    # second appel : signal déjà ouvert → pas de doublon
+    res2 = eng.propose("bitcoin", now + timedelta(minutes=5))
+    assert not res2["proposed"] and res2["reason"] == "signal déjà ouvert"
+    # marché sans direction → abstention expliquée, rien d'ouvert
+    flat = make_candles(n=500, drift=0.0, noise=0.0008, seed=9, start_ts=int(now.timestamp()) - 500 * 300)
+    monkeypatch.setattr(engmod.market, "fetch_candles_5m", lambda asset, days=5: flat)
+    res3 = eng.propose("gold", now)
+    assert not res3["proposed"] and "abstiens" in notified[-1]
+    assert all(s.asset != "gold" for s in eng.store.open_signals())

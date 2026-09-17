@@ -79,9 +79,9 @@
       <div><label for="m-asset">Actif</label><select id="m-asset"></select></div>
       <div><label for="m-dir">Sens</label><select id="m-dir"><option value="long">Long (achat)</option><option value="short">Short (vente)</option></select></div>
       <div><label for="m-note">Commentaire (facultatif)</label><input id="m-note" maxlength="200" placeholder="ex. cassure du plus haut de la veille"></div>
-      <div><button type="submit" id="m-submit">Envoyer le signal</button></div>
+      <div style="display:flex; gap:8px; flex-wrap:wrap"><button type="submit" id="m-submit">Envoyer ce signal</button><button type="button" class="secondary" id="m-propose">Proposer un trade</button></div>
     </form>
-    <div class="muted" style="margin-top:8px">Le bot calibre l'entrée, le TP et le SL sur la volatilité du moment, envoie la notification et suit le trade comme les siens. Le résultat est comptabilisé à part (source « manuel »).</div>
+    <div class="muted" style="margin-top:8px"><b>Envoyer ce signal</b> : vous choisissez le sens, le bot calibre entrée / TP / SL, notifie et suit (source « manuel »).<br><b>Proposer un trade</b> : le bot analyse l'actif choisi maintenant, envoie sa lecture des indicateurs et, s'il voit une direction, une proposition calibrée avec son verdict honnête (passe ou non ses critères), suivie sous la source « proposition ».</div>
     <div class="msg" id="m-msg"></div>
     <details id="gh-settings">
       <summary>Mode GitHub Actions (quand l'interface n'est pas servie par <code>python run.py ui</code>)</summary>
@@ -123,7 +123,7 @@
   const signed = (v, d = 2, suffix = " %") => (v === null || v === undefined) ? "n/a" : ((v >= 0 ? "+" : "") + v.toFixed(d) + suffix);
   const cls = (v) => (v === null || v === undefined) ? "" : (v > 0 ? "good" : v < 0 ? "bad" : "");
   const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-  const SRC = { bot: "bot", manual: "manuel", shadow: "fantôme", backtest: "backtest" };
+  const SRC = { bot: "bot", manual: "manuel", request: "proposition", shadow: "fantôme", backtest: "backtest" };
   const RES = { tp: "TP", sl: "SL", expired: "expiré", open: "ouvert" };
   let mode = "static";
   let data = null;
@@ -223,7 +223,7 @@
       return `<div class="card"><h3><span>${esc(c.label)}</span><span class="muted">poids ${c.weight ?? "1.0"}</span></h3>
         <div class="muted">${st.n} trades · réussite <b class="${cls(st.edge)}">${pct(st.win_rate)}</b> (hasard ${pct(st.neutral_win_rate)}) · P&L moyen <span class="${cls(st.avg_pnl_pct)}">${signed(st.avg_pnl_pct, 3)}</span></div>
         <div class="bar"><i style="width:${(wr * 100).toFixed(0)}%"></i></div>
-        <div class="muted" style="font-size:12px;margin-top:4px">bot ${c.by_source.bot.n} · manuel ${c.by_source.manual.n} · fantôme ${c.by_source.shadow.n}</div>
+        <div class="muted" style="font-size:12px;margin-top:4px">bot ${c.by_source.bot.n} · manuel ${c.by_source.manual.n} · propositions ${(c.by_source.request || {n: 0}).n} · fantôme ${c.by_source.shadow.n}</div>
         <div class="mini">${rows || '<div class="muted">Pas encore de trade avec cet indicateur.</div>'}</div></div>`;
     }).join("");
 
@@ -275,6 +275,36 @@
     catch (e) { $("#m-msg").textContent = "Impossible d'enregistrer (stockage du navigateur indisponible)."; }
   });
 
+  async function dispatchGitHub(inputs) {
+    const gh = ghSettings();
+    if (!gh) throw new Error("Renseignez propriétaire, dépôt et jeton GitHub (section « Mode GitHub Actions »).");
+    const r = await fetch(`https://api.github.com/repos/${gh.owner}/${gh.repo}/actions/workflows/bot.yml/dispatches`, {
+      method: "POST",
+      headers: { "Authorization": "Bearer " + gh.token, "Accept": "application/vnd.github+json", "Content-Type": "application/json" },
+      body: JSON.stringify({ ref: "main", inputs }),
+    });
+    if (r.status !== 204) throw new Error(`GitHub a répondu ${r.status} : vérifiez le jeton (Actions : lecture/écriture) et le dépôt.`);
+  }
+
+  $("#m-propose").addEventListener("click", async () => {
+    const btn = $("#m-propose"); const msg = $("#m-msg");
+    const asset = $("#m-asset").value;
+    btn.disabled = true; msg.textContent = "Analyse en cours…";
+    try {
+      if (mode === "local") {
+        const r = await fetch("/api/propose", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ asset }) });
+        const j = await r.json();
+        if (!r.ok || !j.ok) throw new Error(j.error || "erreur");
+        msg.textContent = j.text;
+        await load();
+      } else {
+        await dispatchGitHub({ command: "propose", asset });
+        msg.textContent = "Analyse lancée sur GitHub Actions : la lecture des indicateurs et l'éventuelle proposition arrivent sur Telegram dans 1 à 2 minutes.";
+      }
+    } catch (e) { msg.textContent = "Échec : " + e.message; }
+    finally { btn.disabled = false; }
+  });
+
   $("#manual").addEventListener("submit", async (ev) => {
     ev.preventDefault();
     const btn = $("#m-submit"); const msg = $("#m-msg");
@@ -289,14 +319,7 @@
         msg.textContent = `Signal ${s.direction} ${s.asset_label} envoyé : entrée ${s.entry}, TP ${s.take_profit}, SL ${s.stop_loss} (ratio ${s.risk_reward}). Notification transmise.`;
         await load();
       } else {
-        const owner = $("#gh-owner").value.trim(), repo = $("#gh-repo").value.trim(), token = $("#gh-token").value.trim();
-        if (!owner || !repo || !token) throw new Error("Renseignez propriétaire, dépôt et jeton GitHub (section « Mode GitHub Actions »).");
-        const r = await fetch(`https://api.github.com/repos/${owner}/${repo}/actions/workflows/bot.yml/dispatches`, {
-          method: "POST",
-          headers: { "Authorization": "Bearer " + token, "Accept": "application/vnd.github+json", "Content-Type": "application/json" },
-          body: JSON.stringify({ ref: "main", inputs: { command: "manual", asset: payload.asset, direction: payload.direction, note: payload.note } }),
-        });
-        if (r.status !== 204) throw new Error(`GitHub a répondu ${r.status} : vérifiez le jeton (Actions : lecture/écriture) et le dépôt.`);
+        await dispatchGitHub({ command: "manual", asset: payload.asset, direction: payload.direction, note: payload.note });
         msg.textContent = "Demande transmise à GitHub Actions : la notification arrive dans 1 à 2 minutes, le tableau de bord se mettra à jour au prochain passage.";
       }
     } catch (e) { msg.textContent = "Échec : " + e.message; }
