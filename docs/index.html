@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Trading-Bot — tableau de bord</title>
+<title>Yasuke Trading-Bot</title>
 <style>
   :root {
     --bg: #f6f7f9; --card: #ffffff; --text: #1a1d23; --muted: #6b7280; --line: #e5e7eb;
@@ -61,7 +61,7 @@
 <div class="wrap">
   <header>
     <div>
-      <h1>Trading-Bot — tableau de bord</h1>
+      <h1>Yasuke Trading-Bot</h1>
       <div class="muted" id="updated">Chargement…</div>
     </div>
     <div style="display:flex; gap:8px; flex-wrap:wrap">
@@ -127,6 +127,61 @@
   const RES = { tp: "TP", sl: "SL", expired: "expiré", open: "ouvert" };
   let mode = "static";
   let data = null;
+  let mcp = null;            // capacité claude.ai : connecteur GitHub du lecteur (page hébergée)
+  let mcpWatching = false;
+  const GH_DEFAULT = { owner: "Yxnisse7", repo: "Trading-Bot" };
+  const MCP_FIX = {
+    needs_reauth: "Reconnectez GitHub dans claude.ai → Paramètres → Connecteurs, puis actualisez.",
+    server_not_connected: "Ajoutez le connecteur GitHub dans claude.ai → Paramètres → Connecteurs, puis actualisez.",
+    selection_required: "Plusieurs connecteurs GitHub : choisissez-en un dans l'invite de claude.ai, puis actualisez.",
+    not_in_manifest: "Accès GitHub refusé pour cette page : autorisez-le quand claude.ai le demande.",
+    consent_required: "Autorisez l'accès GitHub quand claude.ai le demande, puis réessayez.",
+    blocked_by_policy: "L'accès GitHub est bloqué par la politique de votre organisation.",
+    approval_required: "Cette action GitHub demande une approbation qui n'est pas disponible ici.",
+  };
+  function ghRepo() {
+    const s = ghSettings();
+    return { owner: (s && s.owner) || GH_DEFAULT.owner, repo: (s && s.repo) || GH_DEFAULT.repo };
+  }
+  function extractDashboard(result) {
+    const cands = [];
+    if (result && result.payload !== undefined) cands.push(result.payload);
+    for (const b of (result && result.content) || []) {
+      if (typeof b.text === "string") cands.push(b.text);
+      if (b.resource && typeof b.resource.text === "string") cands.push(b.resource.text);
+    }
+    for (const c of cands) {
+      if (c && typeof c === "object" && c.overview) return c;
+      if (typeof c === "string") {
+        const i = c.indexOf("{");
+        if (i >= 0) { try { const j = JSON.parse(c.slice(i)); if (j && j.overview) return j; } catch (e) { /* bloc suivant */ } }
+      }
+    }
+    return null;
+  }
+  async function initMcp() {
+    if (mcp !== null) return mcp;
+    try { mcp = (window.claude && typeof window.claude.use === "function") ? await window.claude.use("mcp") : null; }
+    catch (e) { mcp = null; }
+    return mcp;
+  }
+  function startMcpWatch() {
+    if (mcpWatching || !mcp) return;
+    mcpWatching = true;
+    const { owner, repo } = ghRepo();
+    mcp.watchTool("github", "get_file_contents", { owner, repo, path: "data/dashboard.json", ref: "refs/heads/main" }, (ev) => {
+      if (ev.type === "data") {
+        const d = extractDashboard(ev.result);
+        if (d) { data = d; mode = "mcp"; render(); }
+        else $("#updated").textContent = "Réponse GitHub inattendue : le fichier data/dashboard.json est-il présent ?";
+        return;
+      }
+      const code = ev.error && ev.error.code;
+      const fix = MCP_FIX[code];
+      if (fix) { $("#updated").textContent = fix; if (["needs_reauth", "server_not_connected", "not_in_manifest", "blocked_by_policy", "approval_required"].includes(code)) { data = null; } }
+      else if (!data) $("#updated").textContent = "GitHub ne répond pas pour le moment (" + (code || "erreur") + ") : nouvel essai automatique.";
+    }, { cache: { staleTime: 60000 }, refetchInterval: 300000 });
+  }
 
   // ---- thème
   const themeBtn = $("#btn-theme");
@@ -141,6 +196,11 @@
   // ---- chargement des données
   async function load() {
     $("#updated").textContent = "Chargement…";
+    if (await initMcp()) {
+      if (mcpWatching) { try { await mcp.invalidate("github", "get_file_contents"); } catch (e) { /* rien en cache */ } }
+      else startMcpWatch();
+      return;
+    }
     try {
       const ping = await fetch("/api/ping", { cache: "no-store" });
       if (ping.ok) mode = "local";
@@ -181,10 +241,10 @@
   function render() {
     const d = data;
     const when = new Date(d.updated_at);
-    $("#updated").textContent = `Mis à jour le ${when.toLocaleString("fr-FR")} (${d.timezone}) — mode ${mode === "local" ? "local" : mode === "github" ? "GitHub (lecture via l'API, mise à jour toutes les 15 min)" : "lecture seule"}` +
+    $("#updated").textContent = `Mis à jour le ${when.toLocaleString("fr-FR")} (${d.timezone}) — mode ${mode === "local" ? "local" : mode === "mcp" ? "connecté à GitHub via claude.ai (mise à jour toutes les 15 min)" : mode === "github" ? "GitHub (lecture via l'API, mise à jour toutes les 15 min)" : "lecture seule"}` +
       (d.state && d.state.last_scan ? ` — dernier scan ${new Date(d.state.last_scan).toLocaleTimeString("fr-FR")} (${esc(d.state.last_scan_note || "")})` : "");
     $("#btn-scan").style.display = mode === "local" ? "" : "none";
-    $("#gh-settings").style.display = mode === "local" ? "none" : "";
+    $("#gh-settings").style.display = (mode === "local" || mode === "mcp") ? "none" : "";
 
     const v = d.overview.visible, s = d.overview.shadow;
     $("#kpis").innerHTML = [
@@ -276,6 +336,16 @@
   });
 
   async function dispatchGitHub(inputs) {
+    if (mcp) {
+      const { owner, repo } = ghRepo();
+      try {
+        await mcp.callTool("github", "actions_run_trigger", { method: "run_workflow", owner, repo, workflow_id: "bot.yml", ref: "main", inputs });
+      } catch (err) {
+        const code = err && err.code;
+        throw new Error(MCP_FIX[code] || (code === "tool_error" ? "GitHub a refusé la demande : " + (err.message || "") : "GitHub n'a pas répondu (" + (code || "erreur") + "). Réessayez dans un instant."));
+      }
+      return;
+    }
     const gh = ghSettings();
     if (!gh) throw new Error("Renseignez propriétaire, dépôt et jeton GitHub (section « Mode GitHub Actions »).");
     const r = await fetch(`https://api.github.com/repos/${gh.owner}/${gh.repo}/actions/workflows/bot.yml/dispatches`, {
