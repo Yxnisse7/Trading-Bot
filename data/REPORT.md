@@ -1,6 +1,6 @@
 # Trading-Bot — rapport
 
-_Mis à jour le 17/09/2026 à 15:25 (Europe/Paris)._
+_Mis à jour le 17/09/2026 à 15:29 (Europe/Paris)._
 
 ## Vue d'ensemble
 
@@ -9,6 +9,28 @@ _Mis à jour le 17/09/2026 à 15:25 (Europe/Paris)._
 - P&L théorique cumulé, net des coûts estimés (somme des % par trade, sans levier) : **+0.00 %** (brut +0.00 %)
 - Signaux ouverts : **0**
 - Signaux fantômes (suivis en silence pour l'apprentissage) : **0** clôturés, 0 ouverts, taux de réussite n/a (hasard attendu n/a)
+
+## Apprentissage
+
+| Critère | Poids actuel |
+|---|---:|
+| trend_5m | 1.0 |
+| trend_15m | 1.0 |
+| trend_1h | 1.0 |
+| adx | 1.0 |
+| vwap | 0.75 |
+| rsi | 1.0 |
+| macd | 1.0 |
+| level | 0.85 |
+| volume | 0.637 |
+
+Tranches horaires évitées (UTC) : [9]
+
+Dernières notes :
+
+- level: win rate 39% sur 67 trades → poids 1.0 → 0.85
+- volume: win rate 35% sur 26 trades → poids 0.75 → 0.637
+- tranche 09h UTC : win rate 25% sur 12 trades → évitée
 
 ## Backtests (données historiques 5 min)
 
