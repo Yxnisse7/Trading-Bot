@@ -166,6 +166,27 @@
     }
     return null;
   }
+  let consentAsked = false;
+  async function ensureConsent() {
+    // Demande l'autorisation GitHub une seule fois par chargement (au clic : l'invite de claude.ai s'affiche)
+    if (consentAsked) return "asked";
+    consentAsked = true;
+    try {
+      const perms = window.claude && typeof window.claude.use === "function" ? await window.claude.use("permissions") : null;
+      if (!perms) return "unknown";
+      const before = await perms.state("mcp:github").catch(() => "unavailable");
+      if (before === "granted") return "granted";
+      const after = await perms.request(["mcp:github"]).catch(() => ({}));
+      return after["mcp:github"] || before;
+    } catch (e) { return "unknown"; }
+  }
+  const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+  function mcpErrorText(err) {
+    const code = err && err.code;
+    if (MCP_FIX[code]) return MCP_FIX[code];
+    if (code === "tool_error") return "GitHub a refusé la demande : " + (err.message || "");
+    return "GitHub n'a pas répondu (" + (code || "erreur") + (err && err.message ? " : " + err.message : "") + "). Réessayez dans un instant.";
+  }
   let mcpChecked = false;
   async function initMcp() {
     if (mcp) return mcp;
@@ -184,9 +205,10 @@
     }
     return mcp;
   }
-  function startMcpWatch() {
+  async function startMcpWatch() {
     if (mcpWatching || !mcp) return;
     mcpWatching = true;
+    await ensureConsent();
     const { owner, repo } = ghRepo();
     mcp.watchTool("github", "get_file_contents", { owner, repo, path: "data/dashboard.json", ref: "refs/heads/main" }, (ev) => {
       if (ev.type === "data") {
@@ -198,7 +220,7 @@
       const code = ev.error && ev.error.code;
       const fix = MCP_FIX[code];
       if (fix) { $("#updated").textContent = fix; if (["needs_reauth", "server_not_connected", "not_in_manifest", "blocked_by_policy", "approval_required"].includes(code)) { data = null; } }
-      else if (!data) $("#updated").textContent = "GitHub ne répond pas pour le moment (" + (code || "erreur") + ") : nouvel essai automatique.";
+      else if (!data) $("#updated").textContent = "GitHub ne répond pas pour le moment (" + (code || "erreur") + (ev.error && ev.error.message ? " : " + ev.error.message : "") + "). Cliquez sur « Actualiser » pour réessayer.";
     }, { cache: { staleTime: 60000 }, refetchInterval: 300000 });
   }
 
@@ -217,7 +239,7 @@
     $("#updated").textContent = "Chargement…";
     if (await initMcp()) {
       if (mcpWatching) { try { await mcp.invalidate("github", "get_file_contents"); } catch (e) { /* rien en cache */ } }
-      else startMcpWatch();
+      else await startMcpWatch();
       return;
     }
     if (window.claude) { $("#btn-scan").style.display = "none"; return; }  // vue claude.ai sans connecteur : message déjà affiché
@@ -354,14 +376,21 @@
     catch (e) { $("#m-msg").textContent = "Impossible d'enregistrer (stockage du navigateur indisponible)."; }
   });
 
-  async function dispatchGitHub(inputs) {
+  async function dispatchGitHub(inputs, { retryOnce = false } = {}) {
     if (mcp) {
+      const consent = await ensureConsent();
+      if (consent === "denied") throw new Error("Accès GitHub refusé pour cette page. Rechargez la page et acceptez l'invite d'autorisation de claude.ai.");
       const { owner, repo } = ghRepo();
+      const call = () => mcp.callTool("github", "actions_run_trigger", { method: "run_workflow", owner, repo, workflow_id: "bot.yml", ref: "main", inputs });
       try {
-        await mcp.callTool("github", "actions_run_trigger", { method: "run_workflow", owner, repo, workflow_id: "bot.yml", ref: "main", inputs });
+        await call();
       } catch (err) {
-        const code = err && err.code;
-        throw new Error(MCP_FIX[code] || (code === "tool_error" ? "GitHub a refusé la demande : " + (err.message || "") : "GitHub n'a pas répondu (" + (code || "erreur") + "). Réessayez dans un instant."));
+        // Premier appel dont l'invite d'autorisation n'a pas pu être posée : l'appel n'est pas parti, réessayer est sûr
+        if (retryOnce && err && err.retryable) {
+          await sleep(Math.min(err.retryAfterMs || 3000, 10000));
+          try { await call(); return; } catch (err2) { throw new Error(mcpErrorText(err2)); }
+        }
+        throw new Error(mcpErrorText(err));
       }
       return;
     }
@@ -387,7 +416,7 @@
         msg.textContent = j.text;
         await load();
       } else {
-        await dispatchGitHub({ command: "propose", asset });
+        await dispatchGitHub({ command: "propose", asset }, { retryOnce: true });
         msg.textContent = "Analyse lancée sur GitHub Actions : la lecture des indicateurs et l'éventuelle proposition arrivent sur Telegram dans 1 à 2 minutes.";
       }
     } catch (e) { msg.textContent = "Échec : " + e.message; }
