@@ -7,6 +7,7 @@
   python run.py stats       # statistiques de l'historique
   python run.py loop        # boucle locale : tick toutes les 5 minutes
   python run.py status      # signaux ouverts
+  python run.py test-notify # envoie un message de test (Telegram / Discord / console)
 """
 from __future__ import annotations
 
@@ -18,6 +19,8 @@ import time
 from datetime import date
 
 from .config import DISCLAIMER, load_config
+from .models import utcnow
+from .notify import notify
 from .engine import Engine
 from .learning import analyze
 from .signals import format_signal
@@ -25,7 +28,7 @@ from .signals import format_signal
 
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(description="Générateur de signaux de scalping (NQ, BTC, XAU) — données gratuites")
-    p.add_argument("command", choices=["scan", "track", "tick", "summary", "stats", "loop", "status"])
+    p.add_argument("command", choices=["scan", "track", "tick", "summary", "stats", "loop", "status", "test-notify"])
     p.add_argument("--dry-run", action="store_true", help="scan sans enregistrer les signaux")
     p.add_argument("--day", help="jour du résumé (AAAA-MM-JJ)")
     p.add_argument("--interval", type=int, default=5, help="minutes entre deux ticks (mode loop)")
@@ -59,6 +62,9 @@ def main(argv: list[str] | None = None) -> int:
         for s in sigs:
             print(format_signal(s, cfg.timezone))
             print()
+    elif args.command == "test-notify":
+        notify(f"🔔 Test de notification du Trading-Bot — {utcnow():%d/%m/%Y %H:%M} UTC.\n"
+               "Si vous lisez ceci sur Telegram/Discord, les notifications sont opérationnelles.\n\n" + DISCLAIMER)
     elif args.command == "loop":
         print(f"Boucle locale : un tick toutes les {args.interval} min (Ctrl+C pour arrêter)")
         while True:

@@ -22,6 +22,10 @@ class ProviderError(RuntimeError):
     pass
 
 
+class NonRetryableError(ProviderError):
+    """Erreur client (4xx) : le fournisseur ne répondra pas mieux en réessayant."""
+
+
 def get_json(url: str, params: dict[str, Any] | None = None, *, timeout: int = 15,
              retries: int = 3, cache_seconds: int = 0, headers: dict[str, str] | None = None) -> Any:
     hdrs = {"User-Agent": UA, "Accept": "application/json,text/plain,*/*"}
@@ -42,12 +46,18 @@ def get_json(url: str, params: dict[str, Any] | None = None, *, timeout: int = 1
             r = requests.get(url, params=params, headers=hdrs, timeout=timeout)
             if r.status_code == 429:
                 raise ProviderError(f"rate limited: {url}")
+            if 400 <= r.status_code < 500:
+                # 451 (Binance bloqué géographiquement sur GitHub Actions), 404… : inutile de réessayer
+                raise NonRetryableError(f"HTTP {r.status_code}: {url}")
             r.raise_for_status()
             data = r.json()
             if cache_file is not None:
                 CACHE_DIR.mkdir(parents=True, exist_ok=True)
                 cache_file.write_text(json.dumps(data), encoding="utf-8")
             return data
+        except NonRetryableError as exc:
+            log.warning("HTTP %s refusé : %s", url, exc)
+            raise
         except (requests.RequestException, ValueError, ProviderError) as exc:  # noqa: PERF203
             last_err = exc
             log.warning("HTTP %s échec (%d/%d): %s", url, attempt + 1, retries, exc)

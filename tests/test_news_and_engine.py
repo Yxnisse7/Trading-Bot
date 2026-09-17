@@ -119,3 +119,23 @@ def test_tick_scans_only_on_interval(tmp_path, monkeypatch):
     assert len(r1["new"]) == 3
     r2 = eng.tick(now + timedelta(minutes=5))
     assert r2["new"] == [] and r2["closed"] == []
+
+
+def test_4xx_is_not_retried(monkeypatch):
+    import requests
+
+    from trading_bot.providers import http as h
+
+    calls = []
+
+    class R:
+        status_code = 451
+        def json(self): return {}
+        def raise_for_status(self): raise requests.HTTPError("451")
+
+    monkeypatch.setattr(h.requests, "get", lambda *a, **k: (calls.append(1), R())[1])
+    monkeypatch.setattr(h.time, "sleep", lambda s: None)
+    import pytest
+    with pytest.raises(h.ProviderError):
+        h.get_json("https://example.invalid/x", retries=3)
+    assert len(calls) == 1
