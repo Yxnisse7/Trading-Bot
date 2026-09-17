@@ -1,6 +1,6 @@
 # Trading-Bot — rapport
 
-_Mis à jour le 18/09/2026 à 00:01 (Europe/Paris)._
+_Mis à jour le 18/09/2026 à 00:05 (Europe/Paris)._
 
 ## Vue d'ensemble
 
@@ -79,13 +79,13 @@ _Mis à jour le 18/09/2026 à 00:01 (Europe/Paris)._
 | vwap | 0.75 |
 | rsi | 1.0 |
 | macd | 1.0 |
-| level | 0.32 |
+| level | 0.272 |
 | volume | 0.25 |
 
 Dernières notes :
 
-- level: win rate 38% sur 68 trades → poids 0.377 → 0.32
-- volume: win rate 35% sur 26 trades → poids 0.282 → 0.25
+- level: win rate 38% sur 68 trades → poids 0.32 → 0.272
+- volume: win rate 35% sur 26 trades → poids 0.25 → 0.25
 
 ## Backtests (données historiques 5 min)
 
