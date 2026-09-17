@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 from typing import Any
 
-from .config import DATA_DIR
+from .config import DATA_DIR, ROOT_DIR
 from .models import Signal
 
 
@@ -123,6 +123,13 @@ class Store:
     # ---- interface
     def save_dashboard(self, data: dict[str, Any]) -> None:
         self._write(self.dashboard_file, data)
+        # copie à côté de docs/index.html pour GitHub Pages (dossier /docs)
+        docs = ROOT_DIR / "docs"
+        if docs.is_dir():
+            try:
+                self._write(docs / "dashboard.json", data)
+            except OSError:
+                pass
 
     # ---- rapport
     def save_report(self, text: str) -> None:

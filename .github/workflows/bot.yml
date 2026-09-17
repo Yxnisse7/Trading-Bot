@@ -61,7 +61,7 @@ jobs:
         run: |
           git config user.name "trading-bot[actions]"
           git config user.email "actions@users.noreply.github.com"
-          git add data/
+          git add data/ docs/dashboard.json 2>/dev/null || git add data/
           if git diff --cached --quiet; then
             echo "Aucun changement d'état."
             exit 0
