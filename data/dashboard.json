@@ -1,17 +1,17 @@
 {
-  "updated_at": "2026-09-17T17:15:46.879899+02:00",
+  "updated_at": "2026-09-17T17:20:49.509295+02:00",
   "timezone": "Europe/Paris",
   "overview": {
     "visible": {
-      "n": 2,
+      "n": 3,
       "tp": 1,
-      "sl": 1,
+      "sl": 2,
       "expired": 0,
-      "win_rate": 0.5,
-      "neutral_win_rate": 0.3995,
-      "edge": 0.1005,
-      "pnl_pct": -0.2349,
-      "avg_pnl_pct": -0.1174
+      "win_rate": 0.3333333333333333,
+      "neutral_win_rate": 0.4076,
+      "edge": -0.0743,
+      "pnl_pct": -0.3737,
+      "avg_pnl_pct": -0.1246
     },
     "shadow": {
       "n": 0,
@@ -24,20 +24,20 @@
       "pnl_pct": 0,
       "avg_pnl_pct": 0.0
     },
-    "open": 1,
+    "open": 0,
     "open_shadow": 0
   },
   "by_source": {
     "bot": {
-      "n": 2,
+      "n": 3,
       "tp": 1,
-      "sl": 1,
+      "sl": 2,
       "expired": 0,
-      "win_rate": 0.5,
-      "neutral_win_rate": 0.3995,
-      "edge": 0.1005,
-      "pnl_pct": -0.2349,
-      "avg_pnl_pct": -0.1174
+      "win_rate": 0.3333333333333333,
+      "neutral_win_rate": 0.4076,
+      "edge": -0.0743,
+      "pnl_pct": -0.3737,
+      "avg_pnl_pct": -0.1246
     },
     "manual": {
       "n": 0,
@@ -78,15 +78,15 @@
       "key": "nasdaq",
       "label": "Nasdaq 100 (NQ)",
       "stats": {
-        "n": 1,
+        "n": 2,
         "tp": 1,
-        "sl": 0,
+        "sl": 1,
         "expired": 0,
-        "win_rate": 1.0,
-        "neutral_win_rate": 0.4,
-        "edge": 0.6,
-        "pnl_pct": 0.1821,
-        "avg_pnl_pct": 0.1821
+        "win_rate": 0.5,
+        "neutral_win_rate": 0.4119,
+        "edge": 0.0881,
+        "pnl_pct": 0.0433,
+        "avg_pnl_pct": 0.0217
       },
       "shadow": {
         "n": 0,
@@ -99,7 +99,7 @@
         "pnl_pct": 0,
         "avg_pnl_pct": 0.0
       },
-      "open": 1,
+      "open": 0,
       "session_utc": [
         12,
         21
@@ -330,27 +330,27 @@
       "label": "Tendance 15 min",
       "weight": 1.0,
       "stats": {
-        "n": 2,
+        "n": 3,
         "tp": 1,
-        "sl": 1,
+        "sl": 2,
         "expired": 0,
-        "win_rate": 0.5,
-        "neutral_win_rate": 0.3995,
-        "edge": 0.1005,
-        "pnl_pct": -0.2349,
-        "avg_pnl_pct": -0.1174
+        "win_rate": 0.3333333333333333,
+        "neutral_win_rate": 0.4076,
+        "edge": -0.0743,
+        "pnl_pct": -0.3737,
+        "avg_pnl_pct": -0.1246
       },
       "by_source": {
         "bot": {
-          "n": 2,
+          "n": 3,
           "tp": 1,
-          "sl": 1,
+          "sl": 2,
           "expired": 0,
-          "win_rate": 0.5,
-          "neutral_win_rate": 0.3995,
-          "edge": 0.1005,
-          "pnl_pct": -0.2349,
-          "avg_pnl_pct": -0.1174
+          "win_rate": 0.3333333333333333,
+          "neutral_win_rate": 0.4076,
+          "edge": -0.0743,
+          "pnl_pct": -0.3737,
+          "avg_pnl_pct": -0.1246
         },
         "manual": {
           "n": 0,
@@ -387,6 +387,35 @@
         }
       },
       "last_trades": [
+        {
+          "id": "9fb3c875d8",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "long",
+          "entry": 29695.5,
+          "take_profit": 29747.5,
+          "stop_loss": 29657.25,
+          "risk_reward": 1.36,
+          "confidence": "moyen",
+          "score": 3.75,
+          "criteria": [
+            "adx",
+            "trend_15m",
+            "trend_1h",
+            "vwap"
+          ],
+          "source": "bot",
+          "status": "sl",
+          "pnl_pct": -0.1388,
+          "pnl_gross_pct": -0.1288,
+          "duration_minutes": 4,
+          "close_price": 29657.25,
+          "created_at": "2026-09-17T15:01:12Z",
+          "created_local": "17/09 17:01",
+          "expires_at": "2026-09-17T16:01:12Z",
+          "rationale": "Achat : tendance forte (ADX), tendance 15 min, tendance 1 h, prix du bon côté du VWAP. Range horaire moyen ≈ 95.45 (0.32 %), TP = 54 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 82%.",
+          "news_context": "actualité à surveiller (score 1) : 'Hostile act': Trump threatens EU with tariffs over Canada associate membership proposal"
+        },
         {
           "id": "97f982e0d4",
           "asset": "ethereum",
@@ -454,27 +483,27 @@
       "label": "Tendance 1 h",
       "weight": 1.0,
       "stats": {
-        "n": 2,
+        "n": 3,
         "tp": 1,
-        "sl": 1,
+        "sl": 2,
         "expired": 0,
-        "win_rate": 0.5,
-        "neutral_win_rate": 0.3995,
-        "edge": 0.1005,
-        "pnl_pct": -0.2349,
-        "avg_pnl_pct": -0.1174
+        "win_rate": 0.3333333333333333,
+        "neutral_win_rate": 0.4076,
+        "edge": -0.0743,
+        "pnl_pct": -0.3737,
+        "avg_pnl_pct": -0.1246
       },
       "by_source": {
         "bot": {
-          "n": 2,
+          "n": 3,
           "tp": 1,
-          "sl": 1,
+          "sl": 2,
           "expired": 0,
-          "win_rate": 0.5,
-          "neutral_win_rate": 0.3995,
-          "edge": 0.1005,
-          "pnl_pct": -0.2349,
-          "avg_pnl_pct": -0.1174
+          "win_rate": 0.3333333333333333,
+          "neutral_win_rate": 0.4076,
+          "edge": -0.0743,
+          "pnl_pct": -0.3737,
+          "avg_pnl_pct": -0.1246
         },
         "manual": {
           "n": 0,
@@ -511,6 +540,35 @@
         }
       },
       "last_trades": [
+        {
+          "id": "9fb3c875d8",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "long",
+          "entry": 29695.5,
+          "take_profit": 29747.5,
+          "stop_loss": 29657.25,
+          "risk_reward": 1.36,
+          "confidence": "moyen",
+          "score": 3.75,
+          "criteria": [
+            "adx",
+            "trend_15m",
+            "trend_1h",
+            "vwap"
+          ],
+          "source": "bot",
+          "status": "sl",
+          "pnl_pct": -0.1388,
+          "pnl_gross_pct": -0.1288,
+          "duration_minutes": 4,
+          "close_price": 29657.25,
+          "created_at": "2026-09-17T15:01:12Z",
+          "created_local": "17/09 17:01",
+          "expires_at": "2026-09-17T16:01:12Z",
+          "rationale": "Achat : tendance forte (ADX), tendance 15 min, tendance 1 h, prix du bon côté du VWAP. Range horaire moyen ≈ 95.45 (0.32 %), TP = 54 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 82%.",
+          "news_context": "actualité à surveiller (score 1) : 'Hostile act': Trump threatens EU with tariffs over Canada associate membership proposal"
+        },
         {
           "id": "97f982e0d4",
           "asset": "ethereum",
@@ -578,27 +636,27 @@
       "label": "Force de tendance (ADX)",
       "weight": 1.0,
       "stats": {
-        "n": 2,
+        "n": 3,
         "tp": 1,
-        "sl": 1,
+        "sl": 2,
         "expired": 0,
-        "win_rate": 0.5,
-        "neutral_win_rate": 0.3995,
-        "edge": 0.1005,
-        "pnl_pct": -0.2349,
-        "avg_pnl_pct": -0.1174
+        "win_rate": 0.3333333333333333,
+        "neutral_win_rate": 0.4076,
+        "edge": -0.0743,
+        "pnl_pct": -0.3737,
+        "avg_pnl_pct": -0.1246
       },
       "by_source": {
         "bot": {
-          "n": 2,
+          "n": 3,
           "tp": 1,
-          "sl": 1,
+          "sl": 2,
           "expired": 0,
-          "win_rate": 0.5,
-          "neutral_win_rate": 0.3995,
-          "edge": 0.1005,
-          "pnl_pct": -0.2349,
-          "avg_pnl_pct": -0.1174
+          "win_rate": 0.3333333333333333,
+          "neutral_win_rate": 0.4076,
+          "edge": -0.0743,
+          "pnl_pct": -0.3737,
+          "avg_pnl_pct": -0.1246
         },
         "manual": {
           "n": 0,
@@ -635,6 +693,35 @@
         }
       },
       "last_trades": [
+        {
+          "id": "9fb3c875d8",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "long",
+          "entry": 29695.5,
+          "take_profit": 29747.5,
+          "stop_loss": 29657.25,
+          "risk_reward": 1.36,
+          "confidence": "moyen",
+          "score": 3.75,
+          "criteria": [
+            "adx",
+            "trend_15m",
+            "trend_1h",
+            "vwap"
+          ],
+          "source": "bot",
+          "status": "sl",
+          "pnl_pct": -0.1388,
+          "pnl_gross_pct": -0.1288,
+          "duration_minutes": 4,
+          "close_price": 29657.25,
+          "created_at": "2026-09-17T15:01:12Z",
+          "created_local": "17/09 17:01",
+          "expires_at": "2026-09-17T16:01:12Z",
+          "rationale": "Achat : tendance forte (ADX), tendance 15 min, tendance 1 h, prix du bon côté du VWAP. Range horaire moyen ≈ 95.45 (0.32 %), TP = 54 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 82%.",
+          "news_context": "actualité à surveiller (score 1) : 'Hostile act': Trump threatens EU with tariffs over Canada associate membership proposal"
+        },
         {
           "id": "97f982e0d4",
           "asset": "ethereum",
@@ -702,27 +789,27 @@
       "label": "VWAP",
       "weight": 0.75,
       "stats": {
-        "n": 1,
+        "n": 2,
         "tp": 1,
-        "sl": 0,
+        "sl": 1,
         "expired": 0,
-        "win_rate": 1.0,
-        "neutral_win_rate": 0.4,
-        "edge": 0.6,
-        "pnl_pct": 0.1821,
-        "avg_pnl_pct": 0.1821
+        "win_rate": 0.5,
+        "neutral_win_rate": 0.4119,
+        "edge": 0.0881,
+        "pnl_pct": 0.0433,
+        "avg_pnl_pct": 0.0217
       },
       "by_source": {
         "bot": {
-          "n": 1,
+          "n": 2,
           "tp": 1,
-          "sl": 0,
+          "sl": 1,
           "expired": 0,
-          "win_rate": 1.0,
-          "neutral_win_rate": 0.4,
-          "edge": 0.6,
-          "pnl_pct": 0.1821,
-          "avg_pnl_pct": 0.1821
+          "win_rate": 0.5,
+          "neutral_win_rate": 0.4119,
+          "edge": 0.0881,
+          "pnl_pct": 0.0433,
+          "avg_pnl_pct": 0.0217
         },
         "manual": {
           "n": 0,
@@ -759,6 +846,35 @@
         }
       },
       "last_trades": [
+        {
+          "id": "9fb3c875d8",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "long",
+          "entry": 29695.5,
+          "take_profit": 29747.5,
+          "stop_loss": 29657.25,
+          "risk_reward": 1.36,
+          "confidence": "moyen",
+          "score": 3.75,
+          "criteria": [
+            "adx",
+            "trend_15m",
+            "trend_1h",
+            "vwap"
+          ],
+          "source": "bot",
+          "status": "sl",
+          "pnl_pct": -0.1388,
+          "pnl_gross_pct": -0.1288,
+          "duration_minutes": 4,
+          "close_price": 29657.25,
+          "created_at": "2026-09-17T15:01:12Z",
+          "created_local": "17/09 17:01",
+          "expires_at": "2026-09-17T16:01:12Z",
+          "rationale": "Achat : tendance forte (ADX), tendance 15 min, tendance 1 h, prix du bon côté du VWAP. Range horaire moyen ≈ 95.45 (0.32 %), TP = 54 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 82%.",
+          "news_context": "actualité à surveiller (score 1) : 'Hostile act': Trump threatens EU with tariffs over Canada associate membership proposal"
+        },
         {
           "id": "ea67e39f0f",
           "asset": "nasdaq",
@@ -951,7 +1067,7 @@
     {
       "key": "level",
       "label": "Niveau clé",
-      "weight": 0.614,
+      "weight": 0.522,
       "stats": {
         "n": 1,
         "tp": 0,
@@ -1046,7 +1162,7 @@
     {
       "key": "volume",
       "label": "Volume anormal",
-      "weight": 0.46,
+      "weight": 0.391,
       "stats": {
         "n": 0,
         "tp": 0,
@@ -1107,7 +1223,8 @@
       "last_trades": []
     }
   ],
-  "open_signals": [
+  "open_signals": [],
+  "recent_trades": [
     {
       "id": "9fb3c875d8",
       "asset": "nasdaq",
@@ -1126,19 +1243,17 @@
         "vwap"
       ],
       "source": "bot",
-      "status": "open",
-      "pnl_pct": null,
-      "pnl_gross_pct": null,
-      "duration_minutes": null,
-      "close_price": null,
+      "status": "sl",
+      "pnl_pct": -0.1388,
+      "pnl_gross_pct": -0.1288,
+      "duration_minutes": 4,
+      "close_price": 29657.25,
       "created_at": "2026-09-17T15:01:12Z",
       "created_local": "17/09 17:01",
       "expires_at": "2026-09-17T16:01:12Z",
       "rationale": "Achat : tendance forte (ADX), tendance 15 min, tendance 1 h, prix du bon côté du VWAP. Range horaire moyen ≈ 95.45 (0.32 %), TP = 54 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 82%.",
       "news_context": "actualité à surveiller (score 1) : 'Hostile act': Trump threatens EU with tariffs over Canada associate membership proposal"
-    }
-  ],
-  "recent_trades": [
+    },
     {
       "id": "97f982e0d4",
       "asset": "ethereum",
@@ -1338,11 +1453,11 @@
   },
   "adjustments": {
     "notes": [
-      "level: win rate 38% sur 68 trades → poids 0.722 → 0.614",
-      "volume: win rate 35% sur 26 trades → poids 0.541 → 0.46"
+      "level: win rate 38% sur 68 trades → poids 0.614 → 0.522",
+      "volume: win rate 35% sur 26 trades → poids 0.46 → 0.391"
     ],
     "avoid_hours_utc": [],
-    "sample": 475
+    "sample": 476
   },
   "state": {
     "last_scan": "2026-09-17T15:15:44Z",
