@@ -152,14 +152,36 @@
         if (r.ok) { data = await r.json(); break; }
       } catch (e) { /* essai suivant */ }
     }
-    if (!data) { $("#updated").textContent = "Aucune donnée : lancez `python run.py report` ou `python run.py ui`."; return; }
+    if (!data && mode !== "local") {
+      // Page ouverte hors serveur (fichier local, autre site) : lecture via l'API GitHub avec le jeton
+      const gh = ghSettings();
+      if (gh) {
+        try {
+          const r = await fetch(`https://api.github.com/repos/${gh.owner}/${gh.repo}/contents/data/dashboard.json?ref=main`, {
+            headers: { "Authorization": "Bearer " + gh.token, "Accept": "application/vnd.github+json" }, cache: "no-store" });
+          if (r.ok) {
+            const j = await r.json();
+            const bytes = Uint8Array.from(atob(j.content.replace(/\n/g, "")), (c) => c.charCodeAt(0));
+            data = JSON.parse(new TextDecoder("utf-8").decode(bytes));
+            mode = "github";
+          } else {
+            $("#updated").textContent = `GitHub a répondu ${r.status} : vérifiez le jeton et le dépôt dans « Mode GitHub Actions ».`;
+          }
+        } catch (e) { /* affichage ci-dessous */ }
+      }
+    }
+    if (!data) {
+      $("#updated").textContent = "Aucune donnée : lancez `python run.py ui` sur votre PC, ou renseignez le dépôt et un jeton GitHub dans « Mode GitHub Actions » puis cliquez sur Actualiser.";
+      $("#gh-settings").open = true;
+      return;
+    }
     render();
   }
 
   function render() {
     const d = data;
     const when = new Date(d.updated_at);
-    $("#updated").textContent = `Mis à jour le ${when.toLocaleString("fr-FR")} (${d.timezone}) — mode ${mode === "local" ? "local" : "lecture seule / GitHub"}` +
+    $("#updated").textContent = `Mis à jour le ${when.toLocaleString("fr-FR")} (${d.timezone}) — mode ${mode === "local" ? "local" : mode === "github" ? "GitHub (lecture via l'API, mise à jour toutes les 15 min)" : "lecture seule"}` +
       (d.state && d.state.last_scan ? ` — dernier scan ${new Date(d.state.last_scan).toLocaleTimeString("fr-FR")} (${esc(d.state.last_scan_note || "")})` : "");
     $("#btn-scan").style.display = mode === "local" ? "" : "none";
     $("#gh-settings").style.display = mode === "local" ? "none" : "";
@@ -228,6 +250,13 @@
       ((adj.notes || []).length ? "<ul>" + adj.notes.slice(-8).map((n) => `<li>${esc(n)}</li>`).join("") + "</ul>" : `<div class="muted" style="margin-top:6px">Aucun ajustement pour l'instant (10 trades par critère sont nécessaires).</div>`);
   }
 
+  function ghSettings() {
+    try {
+      const owner = (localStorage.getItem("tb-gh-owner") || "").trim(), repo = (localStorage.getItem("tb-gh-repo") || "").trim(), token = (localStorage.getItem("tb-gh-token") || "").trim();
+      return owner && repo && token ? { owner, repo, token } : null;
+    } catch (e) { return null; }
+  }
+
   function kpi(label, value, sub, klass = "") {
     return `<div class="card kpi"><div class="s">${esc(label)}</div><div class="v ${klass}">${esc(value)}</div><div class="s">${esc(sub)}</div></div>`;
   }
@@ -242,7 +271,7 @@
   const ghFields = ["owner", "repo", "token"];
   try { ghFields.forEach((k) => { const v = localStorage.getItem("tb-gh-" + k); if (v) $("#gh-" + k).value = v; }); } catch (e) {}
   $("#gh-save").addEventListener("click", () => {
-    try { ghFields.forEach((k) => localStorage.setItem("tb-gh-" + k, $("#gh-" + k).value.trim())); $("#m-msg").textContent = "Paramètres GitHub enregistrés dans ce navigateur."; }
+    try { ghFields.forEach((k) => localStorage.setItem("tb-gh-" + k, $("#gh-" + k).value.trim())); $("#m-msg").textContent = "Paramètres GitHub enregistrés dans ce navigateur."; load(); }
     catch (e) { $("#m-msg").textContent = "Impossible d'enregistrer (stockage du navigateur indisponible)."; }
   });
 

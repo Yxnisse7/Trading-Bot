@@ -94,11 +94,15 @@ l'entrée, le TP et le SL sur la volatilité du moment, envoie la notification T
 suit le trade comme les siens ; le résultat est comptabilisé à part (source « manuel »), ce qui
 permet de comparer votre jugement à celui du bot.
 
-Sans serveur local (page ouverte depuis GitHub Pages ou depuis le fichier), la page lit
-`data/dashboard.json` en lecture seule et le bouton passe par GitHub Actions : renseignez une fois
-propriétaire, dépôt et un jeton fine-grained limité à ce dépôt avec la permission *Actions :
-lecture et écriture* (stocké uniquement dans votre navigateur). La demande déclenche le workflow
-avec la commande `manual` ; la notification arrive en 1 à 2 minutes.
+**Sans rien installer** : téléchargez `docs/index.html`, ouvrez-le dans votre navigateur, dépliez
+« Mode GitHub Actions » et renseignez propriétaire, dépôt et un jeton fine-grained limité à ce
+dépôt avec les permissions *Contents : lecture* et *Actions : lecture et écriture* (le jeton reste
+dans votre navigateur). La page lit alors `data/dashboard.json` via l'API GitHub (mis à jour par le
+bot toutes les 15 min) et le bouton déclenche le workflow avec la commande `manual` ; la
+notification arrive en 1 à 2 minutes.
+
+**En local** : créez un fichier `.env` à partir de `.env.example` avec vos clés Telegram pour que
+les demandes manuelles faites depuis l'interface locale envoient aussi la notification.
 
 ### Suivi automatique
 - À chaque passage (5 min en local, 15 min sur GitHub Actions), le bot récupère les bougies 1 min

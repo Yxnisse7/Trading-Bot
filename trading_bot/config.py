@@ -8,6 +8,26 @@ from pathlib import Path
 from typing import Any
 
 ROOT_DIR = Path(__file__).resolve().parent.parent
+
+
+def load_dotenv(path: Path | None = None) -> None:
+    """Charge un fichier .env (clé=valeur) sans écraser les variables déjà définies."""
+    path = path or ROOT_DIR / ".env"
+    if not path.exists():
+        return
+    for line in path.read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, value = line.split("=", 1)
+        key = key.strip()
+        value = value.strip().strip('"').strip("'")
+        if key and key not in os.environ:
+            os.environ[key] = value
+
+
+load_dotenv()
+
 DATA_DIR = Path(os.environ.get("TRADING_BOT_DATA_DIR", ROOT_DIR / "data"))
 CONFIG_FILE = Path(os.environ.get("TRADING_BOT_CONFIG", ROOT_DIR / "config.json"))
 

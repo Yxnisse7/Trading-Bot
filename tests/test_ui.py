@@ -46,3 +46,16 @@ def test_ui_serves_dashboard_and_manual(tmp_path, monkeypatch):
     finally:
         server.shutdown()
         server.server_close()
+
+
+def test_dotenv_loading(tmp_path, monkeypatch):
+    from trading_bot.config import load_dotenv
+    env = tmp_path / ".env"
+    env.write_text('TELEGRAM_BOT_TOKEN="abc:123"\n# commentaire\nTELEGRAM_CHAT_ID=42\nDEJA=nouveau\n', encoding="utf-8")
+    monkeypatch.delenv("TELEGRAM_BOT_TOKEN", raising=False)
+    monkeypatch.delenv("TELEGRAM_CHAT_ID", raising=False)
+    monkeypatch.setenv("DEJA", "existant")
+    load_dotenv(env)
+    import os
+    assert os.environ["TELEGRAM_BOT_TOKEN"] == "abc:123" and os.environ["TELEGRAM_CHAT_ID"] == "42"
+    assert os.environ["DEJA"] == "existant"
