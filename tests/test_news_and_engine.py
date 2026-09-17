@@ -23,7 +23,13 @@ def test_parse_rss_and_risk_score():
     score, hits = news.risk_score(items, ("fed", "bitcoin"))
     assert score == 4 and len(hits) == 2
     score2, _ = news.risk_score(items, ("gold",))
-    assert score2 == 2  # deux titres à risque, non liés à l'actif → 1 point chacun
+    assert score2 == 1  # macro critique non liée : 1 point ; piratage crypto non lié à l'or : 0
+    # titres hors sujet (finances personnelles, action isolée) : aucun point
+    noise = [news.NewsItem("I have $125,000 in credit-card debt. Will it affect my bankruptcy?", "", items[0].published, "x", "macro"),
+             news.NewsItem("Generac's stock soars 30% after Amazon deal", "", items[0].published, "x", "macro"),
+             news.NewsItem("Fed rate decision looms as Powell speaks", "", items[0].published, "y", "macro")]  # doublon
+    score3, hits3 = news.risk_score(items + noise, ("nasdaq", "fed"))
+    assert score3 == 2 and len(hits3) == 1
 
 
 def test_blackout_windows():
@@ -104,6 +110,7 @@ def test_news_risk_blocks_signal(tmp_path, monkeypatch):
     now = datetime(2026, 9, 17, 14, 0, tzinfo=timezone.utc)
     candles = make_candles(n=500, drift=0.0003, noise=0.0012, seed=7, start_ts=int(now.timestamp()) - 500 * 300)
     items = [news.NewsItem("Fed rate decision shocks Wall Street, Nasdaq plunges", "", now, "x", "macro"),
+             news.NewsItem("FOMC minutes: Powell warns on inflation data", "", now, "x", "macro"),
              news.NewsItem("Bitcoin ETF decision and exchange hack", "", now, "x", "crypto")]
     eng = _engine(tmp_path, monkeypatch, candles, candles[-1].close, rss_items=items)
     sigs = eng.scan(now)

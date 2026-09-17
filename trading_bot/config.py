@@ -78,7 +78,7 @@ class Config:
     news_lookback_minutes: int = 120
     news_blackout_before_minutes: int = 45   # avant une annonce macro majeure
     news_blackout_after_minutes: int = 30    # après
-    max_news_risk_score: int = 2             # au-delà : marché jugé incertain
+    max_news_risk_score: int = 3             # au-delà : marché jugé incertain
 
     # ---- Suivi ----
     track_interval_minutes: int = 5

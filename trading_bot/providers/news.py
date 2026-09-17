@@ -25,21 +25,25 @@ FEEDS: dict[str, list[str]] = {
         "https://cointelegraph.com/rss",                                    # Cointelegraph
     ],
     "gold": [
-        "https://www.kitco.com/rss/category/news",                          # Kitco (or)
-        "https://www.fxstreet.com/rss/news",                                # FXStreet (forex/or)
+        "https://www.fxstreet.com/rss/news",                                # FXStreet (forex / or / dollar)
     ],
 }
 
-# Mots-clés = actualité à fort impact potentiel dans l'heure qui vient
-HIGH_RISK_PATTERNS = [
-    r"\bfomc\b", r"\bfed (decision|meeting|rate)", r"\brate (hike|cut|decision)\b",
+# Actualité macro critique : compte pour tous les actifs (1 point, 2 si le titre cite l'actif)
+MACRO_CRITICAL_PATTERNS = [
+    r"\bfomc\b", r"\bfed (decision|meeting|rate)", r"\brate (hike|cut|decision)s?\b",
     r"\bcpi\b", r"\binflation (data|report|print)", r"\bnon-?farm\b", r"\bpayrolls\b",
     r"\bjobs report\b", r"\bpowell\b", r"\becb (decision|meeting)", r"\bflash crash\b",
-    r"\bcircuit breaker\b", r"\btrading halt", r"\bhack(ed)?\b", r"\bexploit\b",
-    r"\bbankrupt", r"\bdefault\b", r"\btariff", r"\bwar\b", r"\bmissile", r"\bstrike[s]? on\b",
-    r"\bemergency\b", r"\bplunge", r"\bcrash", r"\bsoar", r"\bsurge", r"\bliquidation",
-    r"\bsec (lawsuit|charges|sues)", r"\betf (approval|rejected|decision)",
+    r"\bcircuit breaker\b", r"\btrading halt", r"\bmarket crash", r"\bstocks? (plunge|crash|tumble)",
+    r"\btariffs?\b", r"\bmissile", r"\bstrikes? on\b", r"\bstate of emergency\b",
 ]
+# Actualité spécifique : ne compte (2 points) que si le titre cite l'actif concerné
+ASSET_SPECIFIC_PATTERNS = [
+    r"\bhack(ed|ers)?\b", r"\bexploit", r"\bbankrupt", r"\bdefaults?\b", r"\bliquidations?\b",
+    r"\bplunge", r"\bcrash", r"\bsoar", r"\bsurge", r"\btumble", r"\bhalt",
+    r"\bsec (lawsuit|charges|sues)", r"\betf (approval|rejected|decision)", r"\bwar\b",
+]
+HIGH_RISK_PATTERNS = MACRO_CRITICAL_PATTERNS + ASSET_SPECIFIC_PATTERNS  # compatibilité
 
 
 @dataclass
@@ -118,18 +122,29 @@ def fetch_news(categories: list[str], lookback_minutes: int = 120, now: datetime
 
 
 def risk_score(items: list[NewsItem], asset_keywords: tuple[str, ...]) -> tuple[int, list[str]]:
-    """Score de risque (0..n) : nombre de titres récents à fort impact liés à l'actif."""
+    """Score de risque : titres récents à fort impact.
+
+    - macro critique (FOMC, CPI, emploi, krach, tarifs, frappes…) : 1 point, 2 si l'actif est cité
+    - spécifique (piratage, faillite, envolée, effondrement…) : 2 points seulement si l'actif est cité
+    Les titres identiques repris par plusieurs flux ne comptent qu'une fois.
+    """
     score = 0
     hits: list[str] = []
+    seen: set[str] = set()
     for item in items:
-        t = item.title.lower()
-        high = any(re.search(p, t) for p in HIGH_RISK_PATTERNS)
+        t = item.title.lower().strip()
+        key = re.sub(r"\W+", " ", t)
+        if key in seen:
+            continue
+        seen.add(key)
         related = any(k in t for k in asset_keywords)
-        if high and related:
-            score += 2
+        macro = any(re.search(p, t) for p in MACRO_CRITICAL_PATTERNS)
+        specific = any(re.search(p, t) for p in ASSET_SPECIFIC_PATTERNS)
+        if macro:
+            score += 2 if related else 1
             hits.append(item.title)
-        elif high:
-            score += 1
+        elif specific and related:
+            score += 2
             hits.append(item.title)
     return score, hits[:5]
 
