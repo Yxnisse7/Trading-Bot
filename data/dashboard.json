@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-17T17:45:42.682794+02:00",
+  "updated_at": "2026-09-17T18:01:16.464083+02:00",
   "timezone": "Europe/Paris",
   "overview": {
     "visible": {
@@ -24,7 +24,7 @@
       "pnl_pct": 0,
       "avg_pnl_pct": 0.0
     },
-    "open": 0,
+    "open": 1,
     "open_shadow": 0
   },
   "by_source": {
@@ -131,7 +131,7 @@
         "pnl_pct": 0,
         "avg_pnl_pct": 0.0
       },
-      "open": 0,
+      "open": 1,
       "session_utc": [
         12,
         21
@@ -1223,7 +1223,39 @@
       "last_trades": []
     }
   ],
-  "open_signals": [],
+  "open_signals": [
+    {
+      "id": "6517f51a3c",
+      "asset": "sp500",
+      "asset_label": "S&P 500 (ES)",
+      "direction": "long",
+      "entry": 7703.5,
+      "take_profit": 7715.25,
+      "stop_loss": 7695.75,
+      "risk_reward": 1.52,
+      "confidence": "fort",
+      "score": 5.75,
+      "criteria": [
+        "adx",
+        "rsi",
+        "trend_15m",
+        "trend_1h",
+        "trend_5m",
+        "vwap"
+      ],
+      "source": "bot",
+      "status": "open",
+      "pnl_pct": null,
+      "pnl_gross_pct": null,
+      "duration_minutes": null,
+      "close_price": null,
+      "created_at": "2026-09-17T16:01:13Z",
+      "created_local": "17/09 18:01",
+      "expires_at": "2026-09-17T17:01:13Z",
+      "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range horaire moyen ≈ 19.68 (0.26 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 84%.",
+      "news_context": "actualité à surveiller (score 1) : 'Hostile act': Trump threatens EU with tariffs over Canada associate membership proposal"
+    }
+  ],
   "recent_trades": [
     {
       "id": "9fb3c875d8",
@@ -1460,8 +1492,8 @@
     "sample": 476
   },
   "state": {
-    "last_scan": "2026-09-17T15:45:39Z",
-    "last_scan_note": "0 signal(aux)",
+    "last_scan": "2026-09-17T16:01:13Z",
+    "last_scan_note": "1 signal(aux)",
     "last_summary": "2026-09-17T13:29:15Z",
     "telegram_offset": 630538278,
     "last_track": "2026-09-17T15:20:48Z"
