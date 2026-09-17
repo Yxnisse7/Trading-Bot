@@ -136,7 +136,11 @@ donc négative après coûts.
 
 Autrement dit : à l'horizon d'une heure, avec des cibles à quelques dixièmes de pour cent, les
 indicateurs classiques alignés ne prédisent pas mieux que pile ou face la direction de l'heure
-suivante sur cette période. Le bot le mesure lui-même et l'affiche (« hasard attendu » et
+suivante sur cette période. Sur les cryptomonnaies, le brut est parfois positif mais les frais
+(0,06 à 0,08 % par aller-retour) absorbent tout : d'où le filtre `min_tp_to_cost_ratio`, qui
+refuse une cible valant moins de 6 fois le coût. Le S&P 500 et l'Ethereum ont montré un léger
+avantage sur certaines configurations, non confirmé quand on change les filtres : à considérer
+comme du bruit tant que le paper trading ne le confirme pas. Le bot le mesure lui-même et l'affiche (« hasard attendu » et
 « avantage ») dans le rapport, le résumé quotidien et les backtests. Tant que l'avantage mesuré
 en paper trading n'est pas nettement positif sur plusieurs dizaines de trades, **ne passez pas
 en argent réel**. Les deux réglages expérimentaux (`max_extension`, `contrarian`) sont livrés
@@ -222,6 +226,7 @@ Valeurs par défaut dans `trading_bot/config.py`, surcharge via `config.json` (v
 | `min_risk_reward` | 1,2 | ratio minimal |
 | `min_resolution_probability` | 0,35 | faisabilité sous 1 h (simulation) |
 | `max_atr_ratio` | 2,5 | volatilité instantanée anormale |
+| `min_tp_to_cost_ratio` | 6 | la cible doit valoir au moins 6 × le coût aller-retour |
 | `max_news_risk_score` | 2 | tolérance à l'actualité |
 | `assets.<actif>.cost_pct` | 0,01 / 0,01 / 0,06 / 0,08 / 0,02 | coût aller-retour estimé (NQ / ES / BTC / ETH / or), déduit du P&L |
 | `assets.<actif>.session_utc` | voir ci-dessus | plage horaire de scan |

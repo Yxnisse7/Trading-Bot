@@ -137,6 +137,10 @@ def build_signal(asset: AssetConfig, a: Assessment, cfg: Config, news_context: s
     if rr < cfg.min_risk_reward:
         reasons.append(f"ratio risque / rendement insuffisant après arrondi ({rr:.2f})")
         return None, reasons
+    tp_pct = abs(tp - entry) / entry * 100.0
+    if asset.cost_pct > 0 and tp_pct < cfg.min_tp_to_cost_ratio * asset.cost_pct:
+        reasons.append(f"cible trop petite face aux coûts ({tp_pct:.2f} % pour {asset.cost_pct:.2f} % de frais)")
+        return None, reasons
 
     # Faisabilité statistique sous ~1 h (marche aléatoire, volatilité réalisée)
     p_res = p_tp = None

@@ -250,6 +250,7 @@ class Engine:
         relaxed.min_score = 0.0
         relaxed.min_confidence = "moyen"
         relaxed.min_resolution_probability = 0.0
+        relaxed.min_tp_to_cost_ratio = 0.0  # décision explicite de l'utilisateur : on avertit, on ne bloque pas
         # les niveaux clés ne doivent pas empêcher une demande explicite : on garde le calibrage sur le range
         a = replace(a, support=None, resistance=None)
         sig, why = build_signal(asset, a, relaxed, f"demande manuelle{(' : ' + note) if note else ''}", now)
@@ -259,6 +260,9 @@ class Engine:
         sig.confidence = "manuel"
         crit = ", ".join(sig.criteria) if sig.criteria else "aucun"
         sig.rationale = (f"Demande manuelle {direction}. Critères du bot alignés dans ce sens : {crit}. " + sig.rationale.split(". ", 1)[-1])
+        tp_pct = abs(sig.take_profit - sig.entry) / sig.entry * 100.0
+        if asset.cost_pct > 0 and tp_pct < self.cfg.min_tp_to_cost_ratio * asset.cost_pct:
+            sig.rationale += f" ⚠️ Cible petite face aux coûts estimés ({tp_pct:.2f} % pour {asset.cost_pct:.2f} % de frais)." 
         self.store.add_signal(sig)
         notify("🖐️ SIGNAL MANUEL\n" + format_signal(sig, self.cfg.timezone) + "\n\n" + DISCLAIMER)
         self.write_report()

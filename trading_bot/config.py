@@ -72,6 +72,7 @@ class Config:
     min_tp_range_fraction: float = 0.25 # en dessous : cible trop proche (bruit/spread)
     max_tp_range_fraction: float = 0.90 # au-dessus : cible irréaliste sous 1 h
     max_atr_ratio: float = 2.5          # ATR actuel / ATR moyen 24 h au-delà duquel on s'abstient
+    min_tp_to_cost_ratio: float = 6.0   # la cible doit valoir au moins N fois le coût aller-retour
 
     # ---- Actualité ----
     news_lookback_minutes: int = 120
