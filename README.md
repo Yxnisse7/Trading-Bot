@@ -1,13 +1,16 @@
-# Trading-Bot — signaux de scalping (Nasdaq, Bitcoin, Or) à coût zéro
+# Trading-Bot — signaux de scalping (Nasdaq, S&P 500, Bitcoin, Ethereum, Or) à coût zéro
 
-Générateur de **signaux courts (~1 h)** sur trois actifs, à partir de **données gratuites**,
-avec **suivi automatique** des issues, **apprentissage** sur l'historique, **backtest** et
-**résumé quotidien**. Le bot **n'exécute aucun ordre** : il propose, vous décidez.
+Générateur de **signaux courts (~1 h)** sur cinq actifs, à partir de **données gratuites**,
+avec **suivi automatique** des issues, **apprentissage** sur l'historique, **backtest**,
+**interface locale** et **résumé quotidien**. Le bot **n'exécute aucun ordre** : il propose,
+vous décidez.
 
 | Actif | Source principale | Repli |
 |---|---|---|
 | Nasdaq 100 (futures `NQ=F`) | Yahoo Finance (API chart publique) | — |
+| S&P 500 (futures `ES=F`) | Yahoo Finance | — |
 | Bitcoin (`BTC/USD`) | Binance API publique (`BTCUSDT`) | Yahoo `BTC-USD`, CoinGecko (prix) |
+| Ethereum (`ETH/USD`) | Binance API publique (`ETHUSDT`) | Yahoo `ETH-USD` |
 | Or (`XAU/USD` via `GC=F`) | Yahoo Finance | — |
 
 Actualité : flux RSS gratuits (MarketWatch, CNBC, Yahoo Finance, CoinDesk, Cointelegraph, Kitco,
@@ -51,12 +54,19 @@ macro, ou faible probabilité statistique d'atteindre TP ou SL sous 1 h.
   à 35 %, le signal est refusé.
 
 **Garde-fous de risque.**
-- Maximum 3 signaux par actif et par jour, un seul signal ouvert par actif, 2 positions
+- Maximum 5 signaux par actif et par jour, un seul signal ouvert par actif, 4 positions
   ouvertes au plus tous actifs confondus.
-- Refroidissement de 60 min entre deux signaux, 90 min après un stop.
-- Protection quotidienne : après 2 stops sur un actif, plus de signal ce jour-là.
-- Sessions : Nasdaq 12 h–21 h UTC, Or 7 h–20 h UTC, Bitcoin en continu.
+- Refroidissement de 30 min entre deux signaux, 60 min après un stop.
+- Protection quotidienne : après 3 stops sur un actif, plus de signal ce jour-là.
+- Sessions : Nasdaq et S&P 500 12 h–21 h UTC, Or 7 h–20 h UTC, Bitcoin et Ethereum en continu.
 - Seules les bougies **clôturées** sont analysées (jamais la bougie en formation).
+
+**Signaux fantômes (apprentissage accéléré).** Chaque setup qui a une direction et au moins
+2 critères alignés mais qui ne passe pas le filtre de confiance est suivi **en silence** : mêmes
+niveaux TP / SL, même suivi, mais aucune notification. Ces trades fantômes n'entrent pas dans vos
+statistiques de signaux, ils alimentent uniquement les statistiques par critère et l'apprentissage,
+ce qui multiplie les données disponibles sans vous inonder de messages. Les trades de backtest
+alimentent aussi l'apprentissage (`learn_from_backtest`).
 
 ## Fonctionnement
 
@@ -70,8 +80,25 @@ python run.py report       # régénère data/REPORT.md
 python run.py stats        # statistiques détaillées de l'historique (JSON)
 python run.py status       # signaux ouverts
 python run.py test-notify  # message de test Telegram / Discord
+python run.py manual --asset bitcoin --direction long   # signal demandé, notifié et suivi
+python run.py ui           # interface locale : http://127.0.0.1:8787
 python run.py loop         # boucle locale : un tick toutes les 5 min
 ```
+
+### Interface
+`python run.py ui` sert une page simple et visuelle (`docs/index.html`) : indicateurs clés,
+signaux ouverts, **résumé des derniers trades par indicateur** (taux de réussite contre hasard
+attendu, poids appris, derniers trades), statistiques par actif, derniers trades, backtests et
+notes d'apprentissage. Le bouton **« Demander un trade »** crée un signal manuel : le bot calibre
+l'entrée, le TP et le SL sur la volatilité du moment, envoie la notification Telegram / Discord et
+suit le trade comme les siens ; le résultat est comptabilisé à part (source « manuel »), ce qui
+permet de comparer votre jugement à celui du bot.
+
+Sans serveur local (page ouverte depuis GitHub Pages ou depuis le fichier), la page lit
+`data/dashboard.json` en lecture seule et le bouton passe par GitHub Actions : renseignez une fois
+propriétaire, dépôt et un jeton fine-grained limité à ce dépôt avec la permission *Actions :
+lecture et écriture* (stocké uniquement dans votre navigateur). La demande déclenche le workflow
+avec la commande `manual` ; la notification arrive en 1 à 2 minutes.
 
 ### Suivi automatique
 - À chaque passage (5 min en local, 15 min sur GitHub Actions), le bot récupère les bougies 1 min
@@ -155,7 +182,8 @@ Trois workflows sont fournis dans `.github/workflows/` :
 
 - `bot.yml` : `tick` toutes les 15 min (suivi des signaux ouverts puis scan) ; l'état
   (`data/*.json`, `data/REPORT.md`) est commité dans le dépôt pour persister entre deux exécutions.
-  Lancement manuel possible avec une autre commande (`scan`, `track`, `test-notify`, `backtest`).
+  Lancement manuel possible avec une autre commande (`scan`, `track`, `test-notify`, `backtest`,
+  `fetch-data`, `manual` avec les champs actif / sens / commentaire).
 - `daily-summary.yml` : résumé quotidien à 22:05 UTC.
 - `tests.yml` : tests à chaque push.
 
@@ -181,10 +209,12 @@ Valeurs par défaut dans `trading_bot/config.py`, surcharge via `config.json` (v
 
 | Clé | Défaut | Rôle |
 |---|---:|---|
-| `max_signals_per_asset_per_day` | 3 | plafond quotidien par actif |
-| `max_losses_per_asset_per_day` | 2 | stops avant arrêt pour la journée |
-| `max_open_signals` | 2 | positions ouvertes simultanées |
-| `cooldown_minutes` / `cooldown_after_loss_minutes` | 60 / 90 | délais entre signaux |
+| `max_signals_per_asset_per_day` | 5 | plafond quotidien par actif |
+| `max_losses_per_asset_per_day` | 3 | stops avant arrêt pour la journée |
+| `max_open_signals` | 4 | positions ouvertes simultanées |
+| `cooldown_minutes` / `cooldown_after_loss_minutes` | 30 / 60 | délais entre signaux |
+| `shadow_enabled` / `shadow_min_criteria` | true / 2 | signaux fantômes (suivi silencieux) |
+| `learn_from_backtest` | true | les trades de backtest alimentent l'apprentissage |
 | `min_criteria` / `min_score` / `strong_score` | 3 / 3,0 / 5,0 | seuils de confiance |
 | `min_confidence` | `moyen` | `fort` pour ne garder que les meilleurs signaux |
 | `min_adx` | 18 | force de tendance minimale |
@@ -193,7 +223,7 @@ Valeurs par défaut dans `trading_bot/config.py`, surcharge via `config.json` (v
 | `min_resolution_probability` | 0,35 | faisabilité sous 1 h (simulation) |
 | `max_atr_ratio` | 2,5 | volatilité instantanée anormale |
 | `max_news_risk_score` | 2 | tolérance à l'actualité |
-| `assets.<actif>.cost_pct` | 0,01 / 0,06 / 0,02 | coût aller-retour estimé (NQ / BTC / or), déduit du P&L |
+| `assets.<actif>.cost_pct` | 0,01 / 0,01 / 0,06 / 0,08 / 0,02 | coût aller-retour estimé (NQ / ES / BTC / ETH / or), déduit du P&L |
 | `assets.<actif>.session_utc` | voir ci-dessus | plage horaire de scan |
 
 Calendrier macro : `data/macro_calendar.json` (heures UTC). Blackout 45 min avant / 30 min après
@@ -215,10 +245,12 @@ trading_bot/
   learning.py               statistiques + ajustement des poids
   summary.py                résumé quotidien
   report.py                 rapport Markdown
-  engine.py                 orchestration scan / track / summary / tick / backtest
+  engine.py                 orchestration scan / track / summary / tick / backtest / manuel
+  ui.py                     serveur local de l'interface (bibliothèque standard)
   notify.py                 Telegram / Discord / console
   storage.py                persistance JSON
   providers/                yahoo, binance, coingecko, news (RSS + calendrier)
-data/                       état persistant (signaux, historique, ajustements, backtests, rapport)
+docs/index.html             interface (tableau de bord + demande de trade)
+data/                       état persistant (signaux, fantômes, historique, ajustements, backtests, rapport, dashboard)
 tests/                      tests unitaires (données synthétiques, sans réseau)
 ```

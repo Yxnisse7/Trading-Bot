@@ -31,7 +31,7 @@ def test_backtest_runs_without_lookahead_and_respects_policy():
     per_day = Counter(parse_iso(t["created_at"]).astimezone(tz).date() for t in trades)
     assert max(per_day.values()) <= cfg.max_signals_per_asset_per_day
     times = sorted(parse_iso(t["created_at"]) for t in trades)
-    assert all((b - a).total_seconds() >= 3600 for a, b in zip(times, times[1:]))
+    assert all((b - a).total_seconds() >= cfg.cooldown_minutes * 60 for a, b in zip(times, times[1:]))
     text = format_backtest(res)
     assert "BACKTEST" in text and "Taux de réussite" in text
 

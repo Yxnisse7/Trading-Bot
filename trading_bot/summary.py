@@ -27,6 +27,8 @@ def daily_summary(all_signals: list[Signal], cfg: Config, day: date | None = Non
                   adjustments: dict[str, Any] | None = None) -> str:
     tz = ZoneInfo(cfg.timezone)
     day = day or datetime.now(tz).date()
+    shadow_today = [s for s in all_signals if s.source == "shadow" and parse_iso(s.created_at).astimezone(tz).date() == day]
+    all_signals = [s for s in all_signals if s.source != "shadow"]
     todays = [s for s in all_signals if parse_iso(s.created_at).astimezone(tz).date() == day]
     closed_today = [s for s in todays if s.status != "open"]
     still_open = [s for s in todays if s.status == "open"]
@@ -46,6 +48,7 @@ def daily_summary(all_signals: list[Signal], cfg: Config, day: date | None = Non
         f"Taux de réussite cumulé : {_fmt_wr(win_rate(cumulative))} sur {len(cumulative)} trades clôturés"
         + (f" (hasard attendu {_fmt_wr(neutral_win_rate(cumulative))})" if cumulative else ""),
         f"P&L théorique net des coûts (somme des % par trade) : jour {pnl_day:+.2f} % | cumulé {pnl_cum:+.2f} %",
+        f"Signaux fantômes du jour (suivis en silence pour l'apprentissage) : {len(shadow_today)}",
         "",
     ]
     if todays:

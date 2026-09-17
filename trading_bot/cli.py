@@ -11,6 +11,8 @@
   python run.py backtest    # rejoue la stratégie sur l'historique 5 min (--days 30, --asset bitcoin)
   python run.py report      # régénère data/REPORT.md
   python run.py fetch-data  # enregistre 60 jours de bougies 5 min dans data/candles/ (backtest --offline)
+  python run.py manual --asset bitcoin --direction long   # signal demandé, notifié et suivi
+  python run.py ui          # interface locale : http://127.0.0.1:8787
 """
 from __future__ import annotations
 
@@ -31,7 +33,7 @@ from .signals import format_signal
 
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(description="Générateur de signaux de scalping (NQ, BTC, XAU) — données gratuites")
-    p.add_argument("command", choices=["scan", "track", "tick", "summary", "stats", "loop", "status", "test-notify", "backtest", "report", "fetch-data"])
+    p.add_argument("command", choices=["scan", "track", "tick", "summary", "stats", "loop", "status", "test-notify", "backtest", "report", "fetch-data", "manual", "ui"])
     p.add_argument("--dry-run", action="store_true", help="scan sans enregistrer les signaux")
     p.add_argument("--day", help="jour du résumé (AAAA-MM-JJ)")
     p.add_argument("--interval", type=int, default=5, help="minutes entre deux ticks (mode loop)")
@@ -39,6 +41,9 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--asset", action="append", help="limiter le backtest à un actif (répétable)")
     p.add_argument("--send", action="store_true", help="envoyer aussi le résultat du backtest en notification")
     p.add_argument("--offline", action="store_true", help="backtest sur les bougies de data/candles/ (sans réseau)")
+    p.add_argument("--direction", choices=["long", "short"], help="sens du signal manuel")
+    p.add_argument("--note", default="", help="commentaire du signal manuel")
+    p.add_argument("--port", type=int, default=8787, help="port de l'interface locale")
     p.add_argument("-v", "--verbose", action="store_true")
     args = p.parse_args(argv)
 
@@ -80,6 +85,16 @@ def main(argv: list[str] | None = None) -> int:
         print(json.dumps(out, ensure_ascii=False))
         if not out:
             return 1
+    elif args.command == "manual":
+        if not args.asset or not args.direction:
+            print("Usage : python run.py manual --asset <actif> --direction long|short [--note ...]")
+            return 2
+        sig = eng.manual(args.asset[0], args.direction, note=args.note)
+        print(json.dumps(sig.to_dict(), ensure_ascii=False, indent=2))
+    elif args.command == "ui":
+        from .ui import serve
+
+        serve(eng, port=args.port)
     elif args.command == "report":
         print(eng.write_report())
     elif args.command == "test-notify":

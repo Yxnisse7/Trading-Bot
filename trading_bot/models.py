@@ -56,6 +56,7 @@ class Signal:
     pnl_gross_pct: float | None = None    # brut (avant coûts)
     duration_minutes: int | None = None
     hourly_range: float | None = None
+    source: str = "bot"       # bot (notifié) | shadow (fantôme, silencieux) | manual (demandé) | backtest
     meta: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

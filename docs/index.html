@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trading-Bot — tableau de bord</title>
+<style>
+  :root {
+    --bg: #f6f7f9; --card: #ffffff; --text: #1a1d23; --muted: #6b7280; --line: #e5e7eb;
+    --accent: #2563eb; --accent-text: #ffffff; --good: #16a34a; --bad: #dc2626; --warn: #d97706;
+    --shadow: 0 1px 2px rgba(0,0,0,.06), 0 1px 8px rgba(0,0,0,.04);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0f1216; --card: #171b21; --text: #e8eaee; --muted: #9aa3b2; --line: #262c36;
+      --accent: #3b82f6; --good: #22c55e; --bad: #ef4444; --warn: #f59e0b; --shadow: none;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0f1216; --card: #171b21; --text: #e8eaee; --muted: #9aa3b2; --line: #262c36;
+    --accent: #3b82f6; --good: #22c55e; --bad: #ef4444; --warn: #f59e0b; --shadow: none;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 20px 16px 48px; }
+  header { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+  h1 { font-size: 22px; margin: 0; }
+  h2 { font-size: 17px; margin: 28px 0 10px; }
+  .muted { color: var(--muted); font-size: 13px; }
+  .grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; box-shadow: var(--shadow); }
+  .kpi .v { font-size: 26px; font-weight: 650; margin-top: 4px; }
+  .kpi .s { font-size: 12px; color: var(--muted); }
+  .good { color: var(--good); } .bad { color: var(--bad); } .warn { color: var(--warn); }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th, td { text-align: left; padding: 8px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font-weight: 600; color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .03em; }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+  .bar { height: 8px; border-radius: 4px; background: var(--line); overflow: hidden; margin-top: 4px; }
+  .bar > i { display: block; height: 100%; background: var(--accent); }
+  .pill { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 12px; border: 1px solid var(--line); color: var(--muted); }
+  .pill.tp { color: var(--good); border-color: var(--good); } .pill.sl { color: var(--bad); border-color: var(--bad); }
+  .pill.expired { color: var(--warn); border-color: var(--warn); } .pill.open { color: var(--accent); border-color: var(--accent); }
+  .crit { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+  .crit .card h3 { margin: 0 0 6px; font-size: 15px; display: flex; justify-content: space-between; gap: 8px; }
+  .crit .mini { font-size: 13px; margin-top: 8px; }
+  .crit .mini div { display: flex; justify-content: space-between; gap: 8px; padding: 3px 0; border-bottom: 1px dashed var(--line); }
+  form.manual { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); align-items: end; }
+  label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+  select, input, textarea { width: 100%; padding: 9px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); color: var(--text); font: inherit; }
+  button { padding: 10px 16px; border: 0; border-radius: 8px; background: var(--accent); color: var(--accent-text); font: inherit; font-weight: 600; cursor: pointer; }
+  button.secondary { background: transparent; color: var(--text); border: 1px solid var(--line); }
+  button:disabled { opacity: .6; cursor: wait; }
+  .msg { margin-top: 10px; font-size: 14px; white-space: pre-wrap; }
+  details { margin-top: 10px; } summary { cursor: pointer; color: var(--muted); font-size: 13px; }
+  .disclaimer { margin-top: 32px; padding: 12px 14px; border-left: 3px solid var(--warn); background: var(--card); border-radius: 8px; font-size: 13px; color: var(--muted); }
+  @media (max-width: 640px) { th:nth-child(n+6), td:nth-child(n+6) { display: none; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Trading-Bot — tableau de bord</h1>
+      <div class="muted" id="updated">Chargement…</div>
+    </div>
+    <div style="display:flex; gap:8px; flex-wrap:wrap">
+      <button class="secondary" id="btn-refresh" type="button">Actualiser</button>
+      <button class="secondary" id="btn-scan" type="button" title="Analyse immédiate (mode local)">Scanner maintenant</button>
+      <button class="secondary" id="btn-theme" type="button">Thème</button>
+    </div>
+  </header>
+
+  <section class="grid" id="kpis"></section>
+
+  <h2>Demander un trade</h2>
+  <div class="card">
+    <form class="manual" id="manual">
+      <div><label for="m-asset">Actif</label><select id="m-asset"></select></div>
+      <div><label for="m-dir">Sens</label><select id="m-dir"><option value="long">Long (achat)</option><option value="short">Short (vente)</option></select></div>
+      <div><label for="m-note">Commentaire (facultatif)</label><input id="m-note" maxlength="200" placeholder="ex. cassure du plus haut de la veille"></div>
+      <div><button type="submit" id="m-submit">Envoyer le signal</button></div>
+    </form>
+    <div class="muted" style="margin-top:8px">Le bot calibre l'entrée, le TP et le SL sur la volatilité du moment, envoie la notification et suit le trade comme les siens. Le résultat est comptabilisé à part (source « manuel »).</div>
+    <div class="msg" id="m-msg"></div>
+    <details id="gh-settings">
+      <summary>Mode GitHub Actions (quand l'interface n'est pas servie par <code>python run.py ui</code>)</summary>
+      <div class="manual" style="margin-top:10px; display:grid; gap:10px; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr))">
+        <div><label for="gh-owner">Propriétaire</label><input id="gh-owner" placeholder="Yxnisse7"></div>
+        <div><label for="gh-repo">Dépôt</label><input id="gh-repo" placeholder="Trading-Bot"></div>
+        <div><label for="gh-token">Jeton (fine-grained, Actions : lecture/écriture)</label><input id="gh-token" type="password" placeholder="github_pat_…"></div>
+        <div><button class="secondary" type="button" id="gh-save">Enregistrer dans ce navigateur</button></div>
+      </div>
+    </details>
+  </div>
+
+  <h2>Signaux ouverts</h2>
+  <div class="card"><table id="open"><thead><tr><th>Heure</th><th>Actif</th><th>Sens</th><th class="num">Entrée</th><th class="num">TP</th><th class="num">SL</th><th>Confiance</th><th>Source</th></tr></thead><tbody></tbody></table></div>
+
+  <h2>Par indicateur — résumé des derniers trades</h2>
+  <div class="muted" style="margin-bottom:8px">Taux de réussite des trades où l'indicateur était aligné (bot, manuels et fantômes confondus), comparé au hasard attendu. Le poids est celui appris.</div>
+  <section class="crit" id="criteria"></section>
+
+  <h2>Par actif</h2>
+  <div class="card"><table id="assets"><thead><tr><th>Actif</th><th class="num">Trades</th><th class="num">Réussite</th><th class="num">Hasard</th><th class="num">Avantage</th><th class="num">P&amp;L net</th><th class="num">Fantômes</th><th>Session (UTC)</th></tr></thead><tbody></tbody></table></div>
+
+  <h2>Derniers trades</h2>
+  <div class="card"><table id="trades"><thead><tr><th>Heure</th><th>Actif</th><th>Sens</th><th>Résultat</th><th class="num">P&amp;L net</th><th class="num">Durée</th><th>Confiance</th><th>Source</th><th>Critères</th></tr></thead><tbody></tbody></table></div>
+
+  <h2>Backtests</h2>
+  <div class="card"><table id="backtests"><thead><tr><th>Actif</th><th>Période</th><th class="num">Signaux</th><th class="num">Réussite</th><th class="num">Hasard</th><th class="num">Avantage</th><th class="num">P&amp;L net</th><th class="num">Espérance</th></tr></thead><tbody></tbody></table></div>
+
+  <h2>Apprentissage</h2>
+  <div class="card" id="learning"></div>
+
+  <div class="disclaimer">⚠️ Signaux générés automatiquement à partir de données publiques gratuites et d'une analyse algorithmique. Ceci n'est pas un conseil financier. Aucune stratégie ne garantit un gain. Validez en paper trading avant tout passage en argent réel. Vous seul décidez et exécutez vos trades.</div>
+</div>
+
+<script>
+(function () {
+  const $ = (s) => document.querySelector(s);
+  const pct = (v, d = 0) => (v === null || v === undefined) ? "n/a" : (v * 100).toFixed(d) + " %";
+  const signed = (v, d = 2, suffix = " %") => (v === null || v === undefined) ? "n/a" : ((v >= 0 ? "+" : "") + v.toFixed(d) + suffix);
+  const cls = (v) => (v === null || v === undefined) ? "" : (v > 0 ? "good" : v < 0 ? "bad" : "");
+  const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+  const SRC = { bot: "bot", manual: "manuel", shadow: "fantôme", backtest: "backtest" };
+  const RES = { tp: "TP", sl: "SL", expired: "expiré", open: "ouvert" };
+  let mode = "static";
+  let data = null;
+
+  // ---- thème
+  const themeBtn = $("#btn-theme");
+  try { const t = localStorage.getItem("tb-theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+  themeBtn.addEventListener("click", () => {
+    const cur = document.documentElement.dataset.theme;
+    const next = cur === "dark" ? "light" : "dark";
+    document.documentElement.dataset.theme = next;
+    try { localStorage.setItem("tb-theme", next); } catch (e) {}
+  });
+
+  // ---- chargement des données
+  async function load() {
+    $("#updated").textContent = "Chargement…";
+    try {
+      const ping = await fetch("/api/ping", { cache: "no-store" });
+      if (ping.ok) mode = "local";
+    } catch (e) { mode = "static"; }
+    const urls = mode === "local" ? ["/api/state"] : ["../data/dashboard.json", "dashboard.json"];
+    for (const u of urls) {
+      try {
+        const r = await fetch(u, { cache: "no-store" });
+        if (r.ok) { data = await r.json(); break; }
+      } catch (e) { /* essai suivant */ }
+    }
+    if (!data) { $("#updated").textContent = "Aucune donnée : lancez `python run.py report` ou `python run.py ui`."; return; }
+    render();
+  }
+
+  function render() {
+    const d = data;
+    const when = new Date(d.updated_at);
+    $("#updated").textContent = `Mis à jour le ${when.toLocaleString("fr-FR")} (${d.timezone}) — mode ${mode === "local" ? "local" : "lecture seule / GitHub"}` +
+      (d.state && d.state.last_scan ? ` — dernier scan ${new Date(d.state.last_scan).toLocaleTimeString("fr-FR")} (${esc(d.state.last_scan_note || "")})` : "");
+    $("#btn-scan").style.display = mode === "local" ? "" : "none";
+    $("#gh-settings").style.display = mode === "local" ? "none" : "";
+
+    const v = d.overview.visible, s = d.overview.shadow;
+    $("#kpis").innerHTML = [
+      kpi("Trades clôturés", v.n, `${v.tp} TP · ${v.sl} SL · ${v.expired} expirés`),
+      kpi("Taux de réussite", pct(v.win_rate), `hasard attendu ${pct(v.neutral_win_rate)}`),
+      kpi("Avantage", signed(v.edge === null ? null : v.edge * 100, 0, " pts"), "réussite − hasard", cls(v.edge)),
+      kpi("P&L net cumulé", signed(v.pnl_pct), "somme des % par trade", cls(v.pnl_pct)),
+      kpi("Signaux ouverts", d.overview.open, `${d.overview.open_shadow} fantômes ouverts`),
+      kpi("Fantômes clôturés", s.n, `réussite ${pct(s.win_rate)} · hasard ${pct(s.neutral_win_rate)}`),
+    ].join("");
+
+    // actifs (formulaire + tableau)
+    const sel = $("#m-asset");
+    sel.innerHTML = d.assets.map((a) => `<option value="${esc(a.key)}">${esc(a.label)}</option>`).join("");
+    $("#assets tbody").innerHTML = d.assets.map((a) => `<tr>
+      <td>${esc(a.label)}${a.open ? ` <span class="pill open">${a.open} ouvert(s)</span>` : ""}</td>
+      <td class="num">${a.stats.n}</td><td class="num">${pct(a.stats.win_rate)}</td><td class="num">${pct(a.stats.neutral_win_rate)}</td>
+      <td class="num ${cls(a.stats.edge)}">${a.stats.edge === null ? "n/a" : signed(a.stats.edge * 100, 0, " pts")}</td>
+      <td class="num ${cls(a.stats.pnl_pct)}">${signed(a.stats.pnl_pct)}</td>
+      <td class="num">${a.shadow.n} (${pct(a.shadow.win_rate)})</td>
+      <td>${a.session_utc ? a.session_utc[0] + "h–" + a.session_utc[1] + "h" : "24/7"}</td></tr>`).join("");
+
+    // signaux ouverts
+    $("#open tbody").innerHTML = d.open_signals.length ? d.open_signals.map((t) => `<tr>
+      <td>${esc(t.created_local)}</td><td>${esc(t.asset_label)}</td><td>${t.direction === "long" ? "🟢 long" : "🔴 short"}</td>
+      <td class="num">${t.entry}</td><td class="num">${t.take_profit}</td><td class="num">${t.stop_loss}</td>
+      <td>${esc(t.confidence)}</td><td><span class="pill">${SRC[t.source] || esc(t.source)}</span></td></tr>`).join("")
+      : `<tr><td colspan="8" class="muted">Aucun signal ouvert.</td></tr>`;
+
+    // critères
+    $("#criteria").innerHTML = d.criteria.map((c) => {
+      const st = c.stats;
+      const wr = st.win_rate === null ? 0 : st.win_rate;
+      const rows = c.last_trades.map((t) => `<div><span>${esc(t.created_local)} · ${esc(t.asset_label)} · ${t.direction}</span>
+        <span><span class="pill ${t.status}">${RES[t.status] || t.status}</span> <span class="${cls(t.pnl_pct)}">${signed(t.pnl_pct)}</span> <span class="muted">${SRC[t.source] || ""}</span></span></div>`).join("");
+      return `<div class="card"><h3><span>${esc(c.label)}</span><span class="muted">poids ${c.weight ?? "1.0"}</span></h3>
+        <div class="muted">${st.n} trades · réussite <b class="${cls(st.edge)}">${pct(st.win_rate)}</b> (hasard ${pct(st.neutral_win_rate)}) · P&L moyen <span class="${cls(st.avg_pnl_pct)}">${signed(st.avg_pnl_pct, 3)}</span></div>
+        <div class="bar"><i style="width:${(wr * 100).toFixed(0)}%"></i></div>
+        <div class="muted" style="font-size:12px;margin-top:4px">bot ${c.by_source.bot.n} · manuel ${c.by_source.manual.n} · fantôme ${c.by_source.shadow.n}</div>
+        <div class="mini">${rows || '<div class="muted">Pas encore de trade avec cet indicateur.</div>'}</div></div>`;
+    }).join("");
+
+    // trades
+    $("#trades tbody").innerHTML = d.recent_trades.length ? d.recent_trades.map((t) => `<tr>
+      <td>${esc(t.created_local)}</td><td>${esc(t.asset_label)}</td><td>${t.direction}</td>
+      <td><span class="pill ${t.status}">${RES[t.status] || t.status}</span></td>
+      <td class="num ${cls(t.pnl_pct)}">${signed(t.pnl_pct)}</td><td class="num">${t.duration_minutes ?? "-"} min</td>
+      <td>${esc(t.confidence)}</td><td>${SRC[t.source] || esc(t.source)}</td><td class="muted">${esc((t.criteria || []).join(", "))}</td></tr>`).join("")
+      : `<tr><td colspan="9" class="muted">Aucun trade clôturé pour l'instant.</td></tr>`;
+
+    // backtests
+    const bts = Object.values(d.backtests || {});
+    $("#backtests tbody").innerHTML = bts.length ? bts.map((b) => `<tr><td>${esc(b.asset_label)}</td><td>${esc(b.period)}</td>
+      <td class="num">${b.n}</td><td class="num">${pct(b.win_rate)}</td><td class="num">${pct(b.neutral_win_rate)}</td>
+      <td class="num ${cls(b.edge)}">${b.edge === null || b.edge === undefined ? "n/a" : signed(b.edge * 100, 0, " pts")}</td>
+      <td class="num ${cls(b.pnl_pct)}">${signed(b.pnl_pct)}</td><td class="num">${signed(b.expectancy_pct, 3)}</td></tr>`).join("")
+      : `<tr><td colspan="8" class="muted">Aucun backtest : lancez <code>python run.py backtest --offline</code>.</td></tr>`;
+
+    // apprentissage
+    const adj = d.adjustments || {};
+    $("#learning").innerHTML = `<div class="muted">Échantillon : ${adj.sample ?? 0} trades` +
+      (adj.avoid_hours_utc && adj.avoid_hours_utc.length ? ` · tranches évitées (UTC) : ${adj.avoid_hours_utc.join(", ")}h` : "") + `</div>` +
+      ((adj.notes || []).length ? "<ul>" + adj.notes.slice(-8).map((n) => `<li>${esc(n)}</li>`).join("") + "</ul>" : `<div class="muted" style="margin-top:6px">Aucun ajustement pour l'instant (10 trades par critère sont nécessaires).</div>`);
+  }
+
+  function kpi(label, value, sub, klass = "") {
+    return `<div class="card kpi"><div class="s">${esc(label)}</div><div class="v ${klass}">${esc(value)}</div><div class="s">${esc(sub)}</div></div>`;
+  }
+
+  // ---- actions
+  $("#btn-refresh").addEventListener("click", load);
+  $("#btn-scan").addEventListener("click", async () => {
+    const b = $("#btn-scan"); b.disabled = true;
+    try { await fetch("/api/scan", { method: "POST" }); await load(); } finally { b.disabled = false; }
+  });
+
+  const ghFields = ["owner", "repo", "token"];
+  try { ghFields.forEach((k) => { const v = localStorage.getItem("tb-gh-" + k); if (v) $("#gh-" + k).value = v; }); } catch (e) {}
+  $("#gh-save").addEventListener("click", () => {
+    try { ghFields.forEach((k) => localStorage.setItem("tb-gh-" + k, $("#gh-" + k).value.trim())); $("#m-msg").textContent = "Paramètres GitHub enregistrés dans ce navigateur."; }
+    catch (e) { $("#m-msg").textContent = "Impossible d'enregistrer (stockage du navigateur indisponible)."; }
+  });
+
+  $("#manual").addEventListener("submit", async (ev) => {
+    ev.preventDefault();
+    const btn = $("#m-submit"); const msg = $("#m-msg");
+    const payload = { asset: $("#m-asset").value, direction: $("#m-dir").value, note: $("#m-note").value.trim() };
+    btn.disabled = true; msg.textContent = "Envoi…";
+    try {
+      if (mode === "local") {
+        const r = await fetch("/api/manual", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+        const j = await r.json();
+        if (!r.ok || !j.ok) throw new Error(j.error || "erreur");
+        const s = j.signal;
+        msg.textContent = `Signal ${s.direction} ${s.asset_label} envoyé : entrée ${s.entry}, TP ${s.take_profit}, SL ${s.stop_loss} (ratio ${s.risk_reward}). Notification transmise.`;
+        await load();
+      } else {
+        const owner = $("#gh-owner").value.trim(), repo = $("#gh-repo").value.trim(), token = $("#gh-token").value.trim();
+        if (!owner || !repo || !token) throw new Error("Renseignez propriétaire, dépôt et jeton GitHub (section « Mode GitHub Actions »).");
+        const r = await fetch(`https://api.github.com/repos/${owner}/${repo}/actions/workflows/bot.yml/dispatches`, {
+          method: "POST",
+          headers: { "Authorization": "Bearer " + token, "Accept": "application/vnd.github+json", "Content-Type": "application/json" },
+          body: JSON.stringify({ ref: "main", inputs: { command: "manual", asset: payload.asset, direction: payload.direction, note: payload.note } }),
+        });
+        if (r.status !== 204) throw new Error(`GitHub a répondu ${r.status} : vérifiez le jeton (Actions : lecture/écriture) et le dépôt.`);
+        msg.textContent = "Demande transmise à GitHub Actions : la notification arrive dans 1 à 2 minutes, le tableau de bord se mettra à jour au prochain passage.";
+      }
+    } catch (e) { msg.textContent = "Échec : " + e.message; }
+    finally { btn.disabled = false; }
+  });
+
+  load();
+})();
+</script>
+</body>
+</html>

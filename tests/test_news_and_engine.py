@@ -42,6 +42,7 @@ def _engine(tmp_path, monkeypatch, candles, price, rss_items=None):
     cfg = Config(assets=default_assets())
     cfg.assets["nasdaq"].session_utc = None
     cfg.assets["gold"].session_utc = None
+    cfg.assets["sp500"].session_utc = None
     store = Store(tmp_path)
     eng = Engine(cfg, store)
     from trading_bot import engine as engmod
@@ -59,11 +60,11 @@ def test_full_cycle_scan_track_summary(tmp_path, monkeypatch):
                            start_ts=int(now.timestamp()) - 500 * 300)
     eng = _engine(tmp_path, monkeypatch, candles, candles[-1].close)
     sigs = eng.scan(now)
-    # même série pour les 3 actifs, mais plafond de 2 signaux ouverts simultanés
-    assert len(sigs) == 2
+    # même série pour les 5 actifs, mais plafond de 4 signaux ouverts simultanés
+    assert len(sigs) == 4
     assert all(s.direction == "long" for s in sigs)
-    assert len(eng.store.open_signals()) == 2
-    assert eng.store.report_file.exists()
+    assert len(eng.store.open_signals()) == 4
+    assert eng.store.report_file.exists() and eng.store.dashboard_file.exists()
 
     # un second scan immédiat ne produit rien (signal ouvert + cooldown)
     assert eng.scan(now + timedelta(minutes=5)) == []
@@ -72,14 +73,14 @@ def test_full_cycle_scan_track_summary(tmp_path, monkeypatch):
     from trading_bot import engine as engmod
     monkeypatch.setattr(engmod.market, "fetch_price", lambda asset: 10 ** 9)
     closed = eng.track(now + timedelta(minutes=20))
-    assert len(closed) == 2 and all(s.status == "tp" for s in closed)
-    assert eng.store.open_signals() == [] and len(eng.store.history()) == 2
-    assert eng.store.adjustments()["sample"] == 2
+    assert len(closed) == 4 and all(s.status == "tp" for s in closed)
+    assert eng.store.open_signals() == [] and len(eng.store.history()) == 4
+    assert eng.store.adjustments()["sample"] == 4
 
     text = eng.summary(now.date(), send=False)
-    assert "Signaux proposés : 2" in text and "Gagnants (TP) : 2" in text
+    assert "Signaux proposés : 4" in text and "Gagnants (TP) : 4" in text
     report = eng.store.report_file.read_text(encoding="utf-8")
-    assert "Trades clôturés : **2**" in report and "Par critère technique" in report
+    assert "Trades clôturés : **4**" in report and "Par critère technique" in report
 
 
 def test_daily_limit_and_cooldown(tmp_path, monkeypatch):
@@ -87,8 +88,8 @@ def test_daily_limit_and_cooldown(tmp_path, monkeypatch):
     candles = make_candles(n=500, drift=0.0003, noise=0.0012, seed=7, start_ts=int(now.timestamp()) - 500 * 300)
     eng = _engine(tmp_path, monkeypatch, candles, candles[-1].close)
     eng.cfg.max_signals_per_asset_per_day = 1
-    eng.cfg.max_open_signals = 3
-    assert len(eng.scan(now)) == 3
+    eng.cfg.max_open_signals = 5
+    assert len(eng.scan(now)) == 5
     from trading_bot import engine as engmod
     monkeypatch.setattr(engmod.market, "fetch_price", lambda asset: 10 ** 9)
     eng.track(now + timedelta(minutes=10))
@@ -121,7 +122,7 @@ def test_tick_scans_only_on_interval(tmp_path, monkeypatch):
     candles = make_candles(n=500, drift=0.0003, noise=0.0012, seed=7, start_ts=int(now.timestamp()) - 500 * 300)
     eng = _engine(tmp_path, monkeypatch, candles, candles[-1].close)
     r1 = eng.tick(now)
-    assert len(r1["new"]) == 2
+    assert len(r1["new"]) == 4
     r2 = eng.tick(now + timedelta(minutes=5))
     assert r2["new"] == [] and r2["closed"] == []
 
@@ -158,8 +159,8 @@ def test_loss_protection_and_cooldown_after_loss(tmp_path, monkeypatch):
     # stop touché
     monkeypatch.setattr(engmod.market, "fetch_price", lambda asset: 1.0)
     assert eng.track(now + timedelta(minutes=5))[0].status == "sl"
-    # cooldown après perte (90 min) : rien à +60 min même sur un autre passage
-    later = now + timedelta(minutes=60)
+    # cooldown après perte (60 min) : rien à +40 min même sur un autre passage
+    later = now + timedelta(minutes=40)
     candles2 = make_candles(n=500, drift=0.0003, noise=0.0012, seed=7, start_ts=int(later.timestamp()) - 500 * 300)
     monkeypatch.setattr(engmod.market, "fetch_candles_5m", lambda asset, days=5: candles2)
     sigs = eng.scan(later)
@@ -190,3 +191,47 @@ def test_forming_candle_is_dropped_before_analysis(tmp_path, monkeypatch):
     monkeypatch.setattr(engmod, "assess", spy)
     eng.scan(now)
     assert seen["last_ts"] == candles[-2].ts
+
+
+def test_shadow_signals_are_tracked_silently(tmp_path, monkeypatch):
+    now = datetime(2026, 9, 17, 14, 0, tzinfo=timezone.utc)
+    candles = make_candles(n=500, drift=0.0003, noise=0.0012, seed=7, start_ts=int(now.timestamp()) - 500 * 300)
+    eng = _engine(tmp_path, monkeypatch, candles, candles[-1].close)
+    notified = []
+    from trading_bot import engine as engmod
+    monkeypatch.setattr(engmod, "notify", lambda text, title=None: notified.append(text))
+    # seuil de confiance inatteignable → aucun signal notifié, mais des fantômes (≥ 2 critères)
+    eng.cfg.min_criteria = 20
+    assert eng.scan(now) == []
+    shadow = eng.store.open_shadow()
+    assert len(shadow) == 5 and all(s.source == "shadow" for s in shadow)
+    assert notified == []
+    # suivi : les fantômes se clôturent sans notification et alimentent l'historique
+    monkeypatch.setattr(engmod.market, "fetch_price", lambda asset: 10 ** 9)
+    assert eng.track(now + timedelta(minutes=10)) == []
+    assert eng.store.open_shadow() == [] and len(eng.store.history()) == 5
+    assert notified == []
+    # les fantômes n'apparaissent pas dans les compteurs du résumé, mais sont mentionnés à part
+    text = eng.summary(now.date(), send=False)
+    assert "Signaux proposés : 0" in text and "Signaux fantômes du jour" in text and ": 5" in text
+    dash = __import__("json").loads(eng.store.dashboard_file.read_text(encoding="utf-8"))
+    assert dash["overview"]["shadow"]["n"] == 5 and dash["overview"]["visible"]["n"] == 0
+    assert any(c["by_source"]["shadow"]["n"] > 0 for c in dash["criteria"])
+
+
+def test_manual_signal_is_notified_and_tracked(tmp_path, monkeypatch):
+    now = datetime(2026, 9, 17, 14, 0, tzinfo=timezone.utc)
+    candles = make_candles(n=500, drift=0.0, noise=0.0008, seed=9, start_ts=int(now.timestamp()) - 500 * 300)
+    eng = _engine(tmp_path, monkeypatch, candles, candles[-1].close)
+    notified = []
+    from trading_bot import engine as engmod
+    monkeypatch.setattr(engmod, "notify", lambda text, title=None: notified.append(text))
+    sig = eng.manual("bitcoin", "short", now, note="test")
+    assert sig.source == "manual" and sig.direction == "short" and sig.stop_loss > sig.entry > sig.take_profit
+    assert len(notified) == 1 and "SIGNAL MANUEL" in notified[0] and "test" in notified[0]
+    assert eng.store.open_signals()[0].id == sig.id
+    import pytest
+    with pytest.raises(ValueError):
+        eng.manual("inconnu", "long", now)
+    with pytest.raises(ValueError):
+        eng.manual("bitcoin", "haut", now)

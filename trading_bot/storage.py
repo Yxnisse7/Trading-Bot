@@ -19,7 +19,10 @@ class Store:
         self.adjust_file = self.dir / "adjustments.json"     # poids appris
         self.calendar_file = self.dir / "macro_calendar.json"
         self.backtest_file = self.dir / "backtests.json"      # derniers résultats de backtest
+        self.backtest_trades_file = self.dir / "backtest_trades.json"  # trades de backtest (apprentissage)
         self.report_file = self.dir / "REPORT.md"             # rapport lisible sur GitHub
+        self.shadow_file = self.dir / "shadow.json"           # signaux fantômes ouverts
+        self.dashboard_file = self.dir / "dashboard.json"     # données de l'interface
 
     # ---- helpers
     def _read(self, path: Path, default: Any) -> Any:
@@ -57,7 +60,20 @@ class Store:
         self._write(self.history_file, hist)
 
     def all_signals(self) -> list[Signal]:
-        return self.history() + self.open_signals()
+        """Historique + signaux ouverts (fantômes inclus, distingués par `source`)."""
+        return self.history() + self.open_signals() + self.open_shadow()
+
+    # ---- signaux fantômes ouverts
+    def open_shadow(self) -> list[Signal]:
+        return [Signal.from_dict(d) for d in self._read(self.shadow_file, [])]
+
+    def save_shadow(self, signals: list[Signal]) -> None:
+        self._write(self.shadow_file, [s.to_dict() for s in signals])
+
+    def add_shadow(self, sig: Signal) -> None:
+        sigs = self.open_shadow()
+        sigs.append(sig)
+        self.save_shadow(sigs)
 
     # ---- état
     def state(self) -> dict[str, Any]:
@@ -84,6 +100,29 @@ class Store:
     def save_backtests(self, results: dict[str, Any]) -> None:
         slim = {k: {kk: vv for kk, vv in v.items() if kk != "trades"} for k, v in results.items()}
         self._write(self.backtest_file, slim)
+        trades = self._read(self.backtest_trades_file, {})
+        for k, v in results.items():
+            trades[k] = [{f: t.get(f) for f in ("id", "asset", "direction", "entry", "take_profit", "stop_loss",
+                                                  "confidence", "criteria", "created_at", "status", "pnl_pct",
+                                                  "pnl_gross_pct", "duration_minutes", "news_context")}
+                         | {"source": "backtest", "asset_label": v.get("asset_label", k), "expires_at": t.get("expires_at"),
+                            "risk_reward": t.get("risk_reward"), "score": t.get("score"), "rationale": ""}
+                         for t in v.get("trades", [])]
+        self._write(self.backtest_trades_file, trades)
+
+    def backtest_trades(self) -> list[Signal]:
+        out = []
+        for rows in self._read(self.backtest_trades_file, {}).values():
+            for d in rows:
+                try:
+                    out.append(Signal.from_dict(d))
+                except TypeError:
+                    continue
+        return out
+
+    # ---- interface
+    def save_dashboard(self, data: dict[str, Any]) -> None:
+        self._write(self.dashboard_file, data)
 
     # ---- rapport
     def save_report(self, text: str) -> None:

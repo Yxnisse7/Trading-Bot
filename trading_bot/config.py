@@ -39,11 +39,19 @@ class Config:
     assets: dict[str, AssetConfig] = field(default_factory=dict)
 
     # ---- Politique de signaux ----
-    max_signals_per_asset_per_day: int = 3
-    max_losses_per_asset_per_day: int = 2   # après N stops sur un actif, plus de signal ce jour-là
-    max_open_signals: int = 2               # positions simultanées maximum, tous actifs confondus
-    cooldown_minutes: int = 60              # délai minimal entre deux signaux sur un même actif
-    cooldown_after_loss_minutes: int = 90   # délai après un stop touché
+    max_signals_per_asset_per_day: int = 5
+    max_losses_per_asset_per_day: int = 3   # après N stops sur un actif, plus de signal ce jour-là
+    max_open_signals: int = 4               # positions simultanées maximum, tous actifs confondus
+    cooldown_minutes: int = 30              # délai minimal entre deux signaux sur un même actif
+    cooldown_after_loss_minutes: int = 60   # délai après un stop touché
+
+    # ---- Signaux fantômes : setups rejetés pour confiance insuffisante, suivis en silence
+    #      (jamais notifiés) pour nourrir l'apprentissage et les statistiques par critère
+    shadow_enabled: bool = True
+    shadow_min_criteria: int = 2
+    shadow_max_per_asset_per_day: int = 12
+    shadow_max_open_per_asset: int = 3
+    learn_from_backtest: bool = True        # les trades de backtest alimentent aussi l'apprentissage
     signal_lifetime_minutes: int = 60       # durée de vie d'un signal (TP / SL sinon expiré)
     min_confidence: str = "moyen"           # moyen | fort
     min_score: float = 3.0                  # score pondéré minimal pour "moyen"
@@ -99,6 +107,15 @@ def default_assets() -> dict[str, AssetConfig]:
             news_keywords=("nasdaq", "wall street", "fed", "fomc", "inflation", "cpi",
                            "payrolls", "treasury", "yields", "tech stocks", "s&p"),
         ),
+        "sp500": AssetConfig(
+            key="sp500", label="S&P 500 (ES)", yahoo_symbol="ES=F",
+            price_decimals=2, tick_size=0.25,
+            min_hourly_range_pct=0.06, max_hourly_range_pct=2.0,
+            session_utc=(12, 21),
+            cost_pct=0.01,
+            news_keywords=("s&p", "wall street", "stocks", "fed", "fomc", "inflation", "cpi",
+                           "payrolls", "treasury", "yields", "earnings"),
+        ),
         "bitcoin": AssetConfig(
             key="bitcoin", label="Bitcoin (BTC/USD)", yahoo_symbol="BTC-USD",
             binance_symbol="BTCUSDT", price_decimals=1, tick_size=1.0,
@@ -107,6 +124,15 @@ def default_assets() -> dict[str, AssetConfig]:
             cost_pct=0.06,   # spread + frais taker typiques (0,03 % × 2)
             news_keywords=("bitcoin", "btc", "crypto", "etf", "sec", "binance", "coinbase",
                            "hack", "exploit", "stablecoin", "tether", "liquidation"),
+        ),
+        "ethereum": AssetConfig(
+            key="ethereum", label="Ethereum (ETH/USD)", yahoo_symbol="ETH-USD",
+            binance_symbol="ETHUSDT", price_decimals=2, tick_size=0.1,
+            min_hourly_range_pct=0.2, max_hourly_range_pct=5.0,
+            session_utc=None,
+            cost_pct=0.08,
+            news_keywords=("ethereum", "eth", "crypto", "etf", "sec", "binance", "coinbase",
+                           "hack", "exploit", "stablecoin", "liquidation", "vitalik"),
         ),
         "gold": AssetConfig(
             key="gold", label="Or (XAU/USD)", yahoo_symbol="GC=F",

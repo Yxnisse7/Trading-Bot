@@ -1,10 +1,13 @@
 {
   "_comment": "Copiez ce fichier en config.json pour surcharger les valeurs par défaut (trading_bot/config.py).",
-  "max_signals_per_asset_per_day": 3,
-  "max_losses_per_asset_per_day": 2,
-  "max_open_signals": 2,
-  "cooldown_minutes": 60,
-  "cooldown_after_loss_minutes": 90,
+  "max_signals_per_asset_per_day": 5,
+  "max_losses_per_asset_per_day": 3,
+  "max_open_signals": 4,
+  "cooldown_minutes": 30,
+  "cooldown_after_loss_minutes": 60,
+  "shadow_enabled": true,
+  "shadow_min_criteria": 2,
+  "learn_from_backtest": true,
   "signal_lifetime_minutes": 60,
   "min_confidence": "moyen",
   "min_criteria": 3,
@@ -20,7 +23,9 @@
   "timezone": "Europe/Paris",
   "assets": {
     "nasdaq": {"session_utc": [12, 21]},
+    "sp500": {"session_utc": [12, 21]},
     "gold": {"session_utc": [7, 20]},
-    "bitcoin": {"session_utc": null}
+    "bitcoin": {"session_utc": null},
+    "ethereum": {"session_utc": null}
   }
 }

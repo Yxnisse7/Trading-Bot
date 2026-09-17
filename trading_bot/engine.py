@@ -1,6 +1,7 @@
 """Orchestration : scan (génération de signaux), track (suivi), summary (bilan), tick, backtest."""
 from __future__ import annotations
 
+import copy
 import logging
 from datetime import datetime, timedelta
 from typing import Any
@@ -16,7 +17,7 @@ from .notify import notify
 from .providers import market
 from .providers import news as newsmod
 from .providers.http import ProviderError
-from .report import build_report
+from .report import build_dashboard, build_report
 from .signals import build_signal, format_signal
 from .storage import Store
 from .summary import daily_summary
@@ -24,7 +25,8 @@ from .tracker import format_outcome, update_signal
 
 log = logging.getLogger(__name__)
 
-NEWS_CATEGORIES = {"nasdaq": ["macro"], "bitcoin": ["crypto", "macro"], "gold": ["gold", "macro"]}
+NEWS_CATEGORIES = {"nasdaq": ["macro"], "sp500": ["macro"], "bitcoin": ["crypto", "macro"],
+                   "ethereum": ["crypto", "macro"], "gold": ["gold", "macro"]}
 
 
 class Engine:
@@ -92,6 +94,8 @@ class Engine:
             sig, why = build_signal(asset, a, self.cfg, news_ctx, now)
             if sig is None:
                 log.info("%s : pas de signal (%s)", asset.label, "; ".join(why))
+                if self.cfg.shadow_enabled and not dry_run:
+                    self._maybe_shadow(asset, a, news_ctx, now, all_sigs)
                 continue
             produced.append(sig)
             all_sigs.append(sig)
@@ -100,14 +104,37 @@ class Engine:
             notify(format_signal(sig, self.cfg.timezone) + "\n\n" + DISCLAIMER)
             log.info("%s : signal %s %s émis (id %s)", asset.label, sig.direction, sig.entry, sig.id)
         self._touch_state(now, note=f"{len(produced)} signal(aux)")
-        if produced and not dry_run:
+        if not dry_run:
             self.write_report()
         return produced
+
+    def _maybe_shadow(self, asset, a, news_ctx: str, now: datetime, all_sigs: list[Signal]) -> Signal | None:
+        """Signal fantôme : même construction TP / SL, seuils de confiance relâchés, jamais notifié."""
+        if a.direction is None or a.n_criteria < self.cfg.shadow_min_criteria:
+            return None
+        today = now.astimezone(self.tz).date()
+        mine = [s for s in all_sigs if s.asset == asset.key and s.source == "shadow"]
+        if sum(1 for s in mine if parse_iso(s.created_at).astimezone(self.tz).date() == today) >= self.cfg.shadow_max_per_asset_per_day:
+            return None
+        if sum(1 for s in mine if s.status == "open") >= self.cfg.shadow_max_open_per_asset:
+            return None
+        relaxed = copy.copy(self.cfg)
+        relaxed.min_criteria = self.cfg.shadow_min_criteria
+        relaxed.min_score = 0.0
+        relaxed.min_confidence = "moyen"
+        sig, why = build_signal(asset, a, relaxed, news_ctx, now)
+        if sig is None:
+            return None
+        sig.source = "shadow"
+        self.store.add_shadow(sig)
+        all_sigs.append(sig)
+        log.info("%s : signal fantôme %s %s (id %s, %d critères)", asset.label, sig.direction, sig.entry, sig.id, sig.score and a.n_criteria)
+        return sig
 
     def _policy_block(self, asset_key: str, all_sigs: list[Signal], now: datetime) -> list[str]:
         reasons = []
         today = now.astimezone(self.tz).date()
-        mine = sorted((s for s in all_sigs if s.asset == asset_key), key=lambda s: s.created_at)
+        mine = sorted((s for s in all_sigs if s.asset == asset_key and s.source != "shadow"), key=lambda s: s.created_at)
         todays = [s for s in mine if parse_iso(s.created_at).astimezone(self.tz).date() == today]
         if len(todays) >= self.cfg.max_signals_per_asset_per_day:
             reasons.append(f"maximum quotidien atteint ({self.cfg.max_signals_per_asset_per_day})")
@@ -115,7 +142,7 @@ class Engine:
             reasons.append(f"protection quotidienne : {self.cfg.max_losses_per_asset_per_day} stops déjà touchés")
         if any(s.status == "open" for s in mine):
             reasons.append("un signal est déjà ouvert sur cet actif")
-        if sum(1 for s in all_sigs if s.status == "open") >= self.cfg.max_open_signals:
+        if sum(1 for s in all_sigs if s.status == "open" and s.source != "shadow") >= self.cfg.max_open_signals:
             reasons.append(f"plafond de signaux ouverts atteint ({self.cfg.max_open_signals})")
         if mine:
             last = mine[-1]
@@ -132,24 +159,33 @@ class Engine:
 
     # ----------------------------------------------------------------- track
     def track(self, now: datetime | None = None) -> list[Signal]:
+        """Met à jour les signaux ouverts (notifiés, manuels et fantômes). Renvoie ceux clôturés."""
         now = now or utcnow()
         open_sigs = self.store.open_signals()
-        if not open_sigs:
+        shadow = self.store.open_shadow()
+        if not open_sigs and not shadow:
             return []
+        cache: dict[str, tuple[list | None, float | None]] = {}
+
+        def market_data(asset):
+            if asset.key not in cache:
+                candles = price = None
+                try:
+                    candles = market.fetch_candles_1m(asset)
+                except ProviderError as exc:
+                    log.warning("%s : bougies 1 min indisponibles (%s)", asset.label, exc)
+                try:
+                    price = market.fetch_price(asset)
+                except ProviderError as exc:
+                    log.warning("%s : prix indisponible (%s)", asset.label, exc)
+                cache[asset.key] = (candles, price)
+            return cache[asset.key]
+
         closed: list[Signal] = []
         remaining: list[Signal] = []
         for sig in open_sigs:
             asset = self.cfg.assets[sig.asset]
-            candles = None
-            price = None
-            try:
-                candles = market.fetch_candles_1m(asset)
-            except ProviderError as exc:
-                log.warning("%s : bougies 1 min indisponibles (%s)", asset.label, exc)
-            try:
-                price = market.fetch_price(asset)
-            except ProviderError as exc:
-                log.warning("%s : prix indisponible (%s)", asset.label, exc)
+            candles, price = market_data(asset)
             done = update_signal(sig, candles, price, now, asset.cost_pct)
             if done is None:
                 remaining.append(sig)
@@ -158,7 +194,23 @@ class Engine:
                 self.store.append_history(done)
                 notify(format_outcome(done, self.cfg.timezone))
         self.store.save_open(remaining)
-        if closed:
+
+        remaining_shadow: list[Signal] = []
+        closed_shadow = 0
+        for sig in shadow:
+            asset = self.cfg.assets[sig.asset]
+            candles, price = market_data(asset)
+            done = update_signal(sig, candles, price, now, asset.cost_pct)
+            if done is None:
+                remaining_shadow.append(sig)
+            else:
+                closed_shadow += 1
+                self.store.append_history(done)
+        self.store.save_shadow(remaining_shadow)
+        if closed_shadow:
+            log.info("%d signal(aux) fantôme(s) clôturé(s)", closed_shadow)
+
+        if closed or closed_shadow:
             self._relearn()
             self.write_report()
         st = self.store.state()
@@ -167,9 +219,50 @@ class Engine:
         return closed
 
     def _relearn(self) -> dict[str, Any]:
-        adj = learn(self.store.history(), self.cfg, self.store.adjustments())
+        sample = self.store.history()
+        if self.cfg.learn_from_backtest:
+            sample = sample + self.store.backtest_trades()
+        adj = learn(sample, self.cfg, self.store.adjustments())
         self.store.save_adjustments(adj)
         return adj
+
+    # ---------------------------------------------------------------- manuel
+    def manual(self, asset_key: str, direction: str, now: datetime | None = None, note: str = "") -> Signal:
+        """Signal demandé par l'utilisateur : niveaux calibrés par le bot, notifié et suivi comme les autres."""
+        from dataclasses import replace
+
+        now = now or utcnow()
+        if asset_key not in self.cfg.assets:
+            raise ValueError(f"actif inconnu : {asset_key}")
+        if direction not in ("long", "short"):
+            raise ValueError("direction attendue : long ou short")
+        asset = self.cfg.assets[asset_key]
+        raw = market.fetch_candles_5m(asset, days=5)
+        candles = ind.closed_candles(raw, int(now.timestamp()), 300) or raw
+        a = assess(asset, candles, self.cfg)
+        try:
+            a.price = market.fetch_price(asset)
+        except ProviderError:
+            pass
+        a = replace(a, direction=direction, reasons_rejected=[])
+        relaxed = copy.copy(self.cfg)
+        relaxed.min_criteria = 0
+        relaxed.min_score = 0.0
+        relaxed.min_confidence = "moyen"
+        relaxed.min_resolution_probability = 0.0
+        # les niveaux clés ne doivent pas empêcher une demande explicite : on garde le calibrage sur le range
+        a = replace(a, support=None, resistance=None)
+        sig, why = build_signal(asset, a, relaxed, f"demande manuelle{(' : ' + note) if note else ''}", now)
+        if sig is None:
+            raise RuntimeError("impossible de construire des niveaux réalistes : " + "; ".join(why))
+        sig.source = "manual"
+        sig.confidence = "manuel"
+        crit = ", ".join(sig.criteria) if sig.criteria else "aucun"
+        sig.rationale = (f"Demande manuelle {direction}. Critères du bot alignés dans ce sens : {crit}. " + sig.rationale.split(". ", 1)[-1])
+        self.store.add_signal(sig)
+        notify("🖐️ SIGNAL MANUEL\n" + format_signal(sig, self.cfg.timezone) + "\n\n" + DISCLAIMER)
+        self.write_report()
+        return sig
 
     # --------------------------------------------------------------- summary
     def summary(self, day=None, send: bool = True) -> str:
@@ -186,8 +279,11 @@ class Engine:
     # ---------------------------------------------------------------- report
     def write_report(self) -> str:
         backtests = self.store.backtests()
-        text = build_report(self.store.all_signals(), self.cfg, self.store.adjustments(), backtests)
+        all_sigs = self.store.all_signals()
+        adjustments = self.store.adjustments()
+        text = build_report(all_sigs, self.cfg, adjustments, backtests)
         self.store.save_report(text)
+        self.store.save_dashboard(build_dashboard(all_sigs, self.cfg, adjustments, backtests, self.store.state()))
         return text
 
     # ------------------------------------------------------------ données

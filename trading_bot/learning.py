@@ -104,10 +104,15 @@ def learn(history: list[Signal], cfg: Config, current: dict[str, Any] | None = N
         if n >= cfg.learning_min_trades and st["win_rate"] is not None and st["win_rate"] < 0.30:
             avoid_hours.append(int(hour[:2]))
             notes.append(f"tranche {hour} UTC : win rate {st['win_rate']:.0%} sur {n} trades → évitée")
+    closed = [s for s in history if s.status != "open"]
+    by_source = {}
+    for s in closed:
+        by_source[s.source] = by_source.get(s.source, 0) + 1
     return {
         "updated_at": datetime.now(timezone.utc).isoformat(),
         "weights": weights,
         "avoid_hours_utc": sorted(avoid_hours),
         "notes": notes[-20:],
         "sample": report["total"],
+        "sample_by_source": by_source,
     }
