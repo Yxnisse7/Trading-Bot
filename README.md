@@ -87,7 +87,7 @@ python run.py loop         # boucle locale : un tick toutes les 5 min
 
 ### Commandes Telegram
 Écrivez au bot depuis votre téléphone ; les commandes sont traitées au passage suivant (toutes les
-15 min sur GitHub Actions, 5 min en local) et seuls les messages du chat configuré sont acceptés :
+5 min) et seuls les messages du chat configuré sont acceptés :
 
 | Commande | Effet |
 |---|---|
@@ -108,19 +108,18 @@ l'entrée, le TP et le SL sur la volatilité du moment, envoie la notification T
 suit le trade comme les siens ; le résultat est comptabilisé à part (source « manuel »), ce qui
 permet de comparer votre jugement à celui du bot.
 
-**Sans rien installer** : téléchargez `docs/index.html`, ouvrez-le dans votre navigateur, dépliez
-« Mode GitHub Actions » et renseignez propriétaire, dépôt et un jeton fine-grained limité à ce
-dépôt avec les permissions *Contents : lecture* et *Actions : lecture et écriture* (le jeton reste
-dans votre navigateur). La page lit alors `data/dashboard.json` via l'API GitHub (mis à jour par le
-bot toutes les 15 min) et le bouton déclenche le workflow avec la commande `manual` ; la
-notification arrive en 1 à 2 minutes.
+**En ligne, via GitHub Pages** (dépôt public, *Settings → Pages*, branche `main`, dossier `/docs`) :
+la page est servie à `https://<propriétaire>.github.io/<dépôt>/`, lit `dashboard.json` publié à côté
+d'elle par le bot à chaque passage, et les boutons déclenchent le workflow via l'API GitHub avec un
+jeton fine-grained (*Actions : Read and write*) saisi une fois dans « Mode GitHub Actions » et
+conservé uniquement dans votre navigateur. La notification arrive en 1 à 2 minutes.
 
 **En local** : créez un fichier `.env` à partir de `.env.example` avec vos clés Telegram pour que
 les demandes manuelles faites depuis l'interface locale envoient aussi la notification.
 
 ### Suivi automatique
-- À chaque passage (5 min en local, 15 min sur GitHub Actions), le bot récupère les bougies 1 min
-  depuis l'émission du signal et le prix courant.
+- À chaque passage (5 min), le bot récupère les bougies 1 min depuis l'émission du signal et le
+  prix courant.
 - TP touché / SL touché (si les deux dans la même bougie : SL, par prudence) / **expiré** après 1 h
   (clôturé au prix courant pour les statistiques).
 - Notification immédiate avec l'heure exacte, le prix de clôture, le P&L brut et net des coûts
@@ -202,8 +201,9 @@ Sans configuration, les messages sont affichés en console et journalisés dans 
 
 Trois workflows sont fournis dans `.github/workflows/` :
 
-- `bot.yml` : `tick` toutes les 15 min (suivi des signaux ouverts puis scan) ; l'état
-  (`data/*.json`, `data/REPORT.md`) est commité dans le dépôt pour persister entre deux exécutions.
+- `bot.yml` : `tick` toutes les 5 min (commandes Telegram, suivi des signaux ouverts, scan toutes
+  les 15 min) ; l'état (`data/*.json`, `data/REPORT.md`, `docs/dashboard.json`) est commité dans
+  le dépôt pour persister entre deux exécutions.
   Lancement manuel possible avec une autre commande (`scan`, `track`, `test-notify`, `backtest`,
   `fetch-data`, `manual` avec les champs actif / sens / commentaire).
 - `daily-summary.yml` : résumé quotidien à 22:05 UTC.
@@ -212,12 +212,18 @@ Trois workflows sont fournis dans `.github/workflows/` :
 Ajoutez les secrets Telegram / Discord dans *Settings → Secrets and variables → Actions*, et vérifiez
 que `main` est la branche par défaut (les crons ne s'exécutent que sur celle-ci).
 
-**Coût.** Le cron est réglé sur 15 min car le dépôt est privé : le quota gratuit (2 000 min/mois)
-ne couvre pas un tick toutes les 5 min. Le suivi TP/SL reste exact (il s'appuie sur les bougies 1 min
-depuis l'émission du signal) mais la notification d'issue peut arriver avec jusqu'à 15 min de retard.
-Pour un suivi toutes les 5 min, exécutez `python run.py loop` sur une machine locale, ou passez le
-dépôt en public (minutes illimitées) et remettez `*/5`. Les crons GitHub sont exécutés « au mieux » :
-un retard de quelques minutes est normal.
+**Coût.** Le dépôt est public : les minutes GitHub Actions sont illimitées, d'où un passage toutes
+les 5 min. Sur un dépôt privé, chaque passage compte une minute entière sur un quota de 2 000 par
+mois : passez alors le cron à 30 min. Le planificateur GitHub peut ne jamais démarrer sur un dépôt
+récent ; un cron externe gratuit (cron-job.org) appelant l'API `workflow_dispatch` est une solution
+fiable, décrite dans la section suivante.
+
+**Cron externe (cron-job.org).** Créez un jeton fine-grained limité au dépôt avec la permission
+*Actions : Read and write*, puis un cronjob toutes les 5 min en POST sur
+`https://api.github.com/repos/<propriétaire>/<dépôt>/actions/workflows/bot.yml/dispatches` avec les
+en-têtes `Authorization: Bearer <jeton>`, `Accept: application/vnd.github+json`,
+`Content-Type: application/json` et le corps `{"ref":"main","inputs":{"command":"tick"}}`. Un second
+cronjob quotidien à 22:05 UTC sur `daily-summary.yml` avec le corps `{"ref":"main"}`.
 
 **Binance depuis GitHub Actions** : les serveurs GitHub sont situés aux États-Unis, Binance y
 répond « 451 ». Le bot bascule immédiatement sur Yahoo Finance pour le Bitcoin. Yahoo ne fournit
