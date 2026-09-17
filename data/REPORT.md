@@ -1,20 +1,61 @@
 # Trading-Bot — rapport
 
-_Mis à jour le 17/09/2026 à 16:30 (Europe/Paris)._
+_Mis à jour le 17/09/2026 à 16:40 (Europe/Paris)._
 
 ## Vue d'ensemble
 
-- Trades clôturés : **0**
-- Taux de réussite cumulé (TP / (TP+SL)) : **n/a** — hasard attendu n/a, avantage **n/a**
-- P&L théorique cumulé, net des coûts estimés (somme des % par trade, sans levier) : **+0.00 %** (brut +0.00 %)
-- Signaux ouverts : **1**
+- Trades clôturés : **1**
+- Taux de réussite cumulé (TP / (TP+SL)) : **100%** — hasard attendu 40%, avantage **+60%**
+- P&L théorique cumulé, net des coûts estimés (somme des % par trade, sans levier) : **+0.18 %** (brut +0.19 %)
+- Signaux ouverts : **0**
 - Signaux fantômes (suivis en silence pour l'apprentissage) : **0** clôturés, 0 ouverts, taux de réussite n/a (hasard attendu n/a)
 
-## Signaux ouverts
+## Statistiques
 
-| Heure | Actif | Sens | Entrée | TP | SL | Confiance | Source | Expire |
-|---|---|---|---:|---:|---:|---|---|---|
-| 17/09 16:15 | Nasdaq 100 (NQ) | long | 29674.5 | 29731.5 | 29636.5 | moyen | signaux du bot | 17:15 |
+### Par actif
+
+| Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
+|---|---:|---:|---:|---:|---:|---:|
+| nasdaq | 1 | 1 | 0 | 0 | 100% | +0.182 % |
+
+### Par sens
+
+| Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
+|---|---:|---:|---:|---:|---:|---:|
+| long | 1 | 1 | 0 | 0 | 100% | +0.182 % |
+
+### Par confiance
+
+| Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
+|---|---:|---:|---:|---:|---:|---:|
+| moyen | 1 | 1 | 0 | 0 | 100% | +0.182 % |
+
+### Par critère technique
+
+| Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
+|---|---:|---:|---:|---:|---:|---:|
+| adx | 1 | 1 | 0 | 0 | 100% | +0.182 % |
+| trend_15m | 1 | 1 | 0 | 0 | 100% | +0.182 % |
+| trend_1h | 1 | 1 | 0 | 0 | 100% | +0.182 % |
+| vwap | 1 | 1 | 0 | 0 | 100% | +0.182 % |
+
+### Par contexte d'actualité
+
+| Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
+|---|---:|---:|---:|---:|---:|---:|
+| actualité chargée | 1 | 1 | 0 | 0 | 100% | +0.182 % |
+
+### Par heure d'émission (UTC)
+
+| Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
+|---|---:|---:|---:|---:|---:|---:|
+| 14h | 1 | 1 | 0 | 0 | 100% | +0.182 % |
+
+### Par source
+
+| Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
+|---|---:|---:|---:|---:|---:|---:|
+| signaux du bot | 1 | 1 | 0 | 0 | 100% | +0.182 % |
 
 ## Apprentissage
 
@@ -27,16 +68,13 @@ _Mis à jour le 17/09/2026 à 16:30 (Europe/Paris)._
 | vwap | 0.75 |
 | rsi | 1.0 |
 | macd | 1.0 |
-| level | 0.85 |
-| volume | 0.637 |
-
-Tranches horaires évitées (UTC) : [9]
+| level | 0.722 |
+| volume | 0.541 |
 
 Dernières notes :
 
-- level: win rate 39% sur 67 trades → poids 1.0 → 0.85
-- volume: win rate 35% sur 26 trades → poids 0.75 → 0.637
-- tranche 09h UTC : win rate 25% sur 12 trades → évitée
+- level: win rate 39% sur 67 trades → poids 0.85 → 0.722
+- volume: win rate 35% sur 26 trades → poids 0.637 → 0.541
 
 ## Backtests (données historiques 5 min)
 
