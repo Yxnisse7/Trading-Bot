@@ -6,7 +6,7 @@ from typing import Any
 from zoneinfo import ZoneInfo
 
 from .config import DISCLAIMER, Config
-from .learning import analyze, win_rate
+from .learning import analyze, neutral_win_rate, win_rate
 from .models import Signal, parse_iso
 
 
@@ -43,8 +43,9 @@ def daily_summary(all_signals: list[Signal], cfg: Config, day: date | None = Non
         f"Signaux proposés : {len(todays)}",
         f"Gagnants (TP) : {tp} | Perdants (SL) : {sl} | Expirés sans issue : {exp} | Encore ouverts : {len(still_open)}",
         f"Taux de réussite du jour : {_fmt_wr(win_rate(closed_today))} (TP / (TP+SL))",
-        f"Taux de réussite cumulé : {_fmt_wr(win_rate(cumulative))} sur {len(cumulative)} trades clôturés",
-        f"P&L théorique (somme des % par trade) : jour {pnl_day:+.2f} % | cumulé {pnl_cum:+.2f} %",
+        f"Taux de réussite cumulé : {_fmt_wr(win_rate(cumulative))} sur {len(cumulative)} trades clôturés"
+        + (f" (hasard attendu {_fmt_wr(neutral_win_rate(cumulative))})" if cumulative else ""),
+        f"P&L théorique net des coûts (somme des % par trade) : jour {pnl_day:+.2f} % | cumulé {pnl_cum:+.2f} %",
         "",
     ]
     if todays:

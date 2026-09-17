@@ -43,14 +43,17 @@ def _policy_allows(asset: AssetConfig, sigs: list[Signal], now: datetime, cfg: C
 
 def run_backtest(asset: AssetConfig, candles: list[Candle], cfg: Config, *, step: int = 3,
                  warmup: int = 300, weights: dict[str, float] | None = None,
-                 simulate: bool = True) -> dict[str, Any]:
-    """Rejoue l'historique toutes les `step` bougies (3 = 15 min). Renvoie statistiques + trades."""
+                 simulate: bool = True, lookback: int = 1440) -> dict[str, Any]:
+    """Rejoue l'historique toutes les `step` bougies (3 = 15 min). Renvoie statistiques + trades.
+
+    `lookback` : nombre de bougies vues par l'analyse à chaque pas (1 440 = 5 jours, comme en production).
+    """
     horizon = max(1, cfg.signal_lifetime_minutes // 5)
     sigs: list[Signal] = []
     rejected: dict[str, int] = {}
     i = warmup
     while i < len(candles) - horizon:
-        window = candles[: i + 1]
+        window = candles[max(0, i + 1 - lookback): i + 1]
         now = datetime.fromtimestamp(candles[i].ts + 300, tz=timezone.utc)  # clôture de la bougie i
         if _policy_allows(asset, sigs, now, cfg):
             a = assess(asset, window, cfg, weights)
@@ -64,13 +67,23 @@ def run_backtest(asset: AssetConfig, candles: list[Candle], cfg: Config, *, step
                 outcome = resolve_with_candles(sig, future)
                 if outcome is None:
                     last = future[-1]
-                    close_signal(sig, "expired", last.close, datetime.fromtimestamp(last.ts + 300, tz=timezone.utc))
+                    close_signal(sig, "expired", last.close, datetime.fromtimestamp(last.ts + 300, tz=timezone.utc), asset.cost_pct)
                 else:
                     status, px, when = outcome
-                    close_signal(sig, status, px, when)
+                    close_signal(sig, status, px, when, asset.cost_pct)
                 sigs.append(sig)
         i += step
     return summarize(asset, candles, sigs, rejected)
+
+
+def neutral_win_rate(sigs: list[Signal]) -> float | None:
+    """Taux de réussite attendu sans aucun avantage (marche aléatoire) : SL / (TP + SL) en moyenne."""
+    vals = []
+    for s in sigs:
+        tp_d, sl_d = abs(s.take_profit - s.entry), abs(s.entry - s.stop_loss)
+        if tp_d + sl_d > 0:
+            vals.append(sl_d / (tp_d + sl_d))
+    return round(sum(vals) / len(vals), 4) if vals else None
 
 
 def summarize(asset: AssetConfig, candles: list[Candle], sigs: list[Signal], rejected: dict[str, int]) -> dict[str, Any]:
@@ -78,6 +91,9 @@ def summarize(asset: AssetConfig, candles: list[Candle], sigs: list[Signal], rej
     sl = sum(1 for s in sigs if s.status == "sl")
     exp = sum(1 for s in sigs if s.status == "expired")
     pnl = sum(s.pnl_pct or 0 for s in sigs)
+    pnl_gross = sum(s.pnl_gross_pct or 0 for s in sigs)
+    neutral = neutral_win_rate(sigs)
+    win_rate = (tp / (tp + sl)) if tp + sl else None
     start = datetime.fromtimestamp(candles[0].ts, tz=timezone.utc) if candles else None
     end = datetime.fromtimestamp(candles[-1].ts, tz=timezone.utc) if candles else None
     gains = [s.pnl_pct for s in sigs if (s.pnl_pct or 0) > 0]
@@ -92,8 +108,11 @@ def summarize(asset: AssetConfig, candles: list[Candle], sigs: list[Signal], rej
         "asset": asset.key, "asset_label": asset.label,
         "period": f"{start:%d/%m/%Y} → {end:%d/%m/%Y}" if start and end else "-",
         "n": len(sigs), "tp": tp, "sl": sl, "expired": exp,
-        "win_rate": (tp / (tp + sl)) if tp + sl else None,
+        "win_rate": win_rate,
+        "neutral_win_rate": neutral,
+        "edge": round(win_rate - neutral, 4) if (win_rate is not None and neutral is not None) else None,
         "pnl_pct": round(pnl, 4),
+        "pnl_gross_pct": round(pnl_gross, 4),
         "expectancy_pct": round(pnl / len(sigs), 4) if sigs else 0.0,
         "profit_factor": round(profit_factor, 2) if profit_factor is not None else None,
         "max_losing_streak": worst_streak,
@@ -105,10 +124,13 @@ def summarize(asset: AssetConfig, candles: list[Candle], sigs: list[Signal], rej
 def format_backtest(b: dict[str, Any]) -> str:
     wr = "n/a" if b["win_rate"] is None else f"{b['win_rate']:.0%}"
     pf = "n/a" if b["profit_factor"] is None else str(b["profit_factor"])
+    neutral = "n/a" if b.get("neutral_win_rate") is None else f"{b['neutral_win_rate']:.0%}"
+    edge = "n/a" if b.get("edge") is None else f"{b['edge']:+.0%}"
     lines = [
         f"🧪 BACKTEST — {b['asset_label']} ({b['period']})",
         f"Signaux : {b['n']} | TP : {b['tp']} | SL : {b['sl']} | Expirés : {b['expired']}",
-        f"Taux de réussite : {wr} | P&L cumulé : {b['pnl_pct']:+.2f} % | Espérance / trade : {b['expectancy_pct']:+.3f} %",
+        f"Taux de réussite : {wr} (hasard attendu {neutral}, avantage {edge})",
+        f"P&L net cumulé : {b['pnl_pct']:+.2f} % (brut {b.get('pnl_gross_pct', b['pnl_pct']):+.2f} %) | Espérance nette / trade : {b['expectancy_pct']:+.3f} %",
         f"Profit factor : {pf} | Pire série de stops : {b['max_losing_streak']}",
     ]
     if b["rejected"]:

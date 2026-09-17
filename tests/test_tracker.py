@@ -60,3 +60,11 @@ def test_candles_after_expiry_do_not_count():
     s = _sig()
     done = update_signal(s, [_candle(70, 100.5, 101.5)], 100.2, T0 + timedelta(minutes=75))
     assert done.status == "expired"
+
+
+def test_costs_are_deducted_from_pnl():
+    s = _sig()
+    done = update_signal(s, None, 101.0, T0 + timedelta(minutes=5), cost_pct=0.06)
+    assert done.status == "tp"
+    assert done.pnl_gross_pct == 1.0 and done.pnl_pct == 0.94
+    assert "net" in format_outcome(done) and "brut" in format_outcome(done)

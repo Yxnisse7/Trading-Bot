@@ -58,3 +58,14 @@ def test_daily_summary_content(cfg):
     assert "Taux de réussite du jour : 50%" in text
     assert "paper trading" in text
     assert "rsi: test" in text
+
+
+def test_neutral_win_rate_and_edge(cfg):
+    # TP à +0.5, SL à -0.3 → hasard attendu = 0.3 / 0.8 = 37.5 %
+    hist = [_closed(i, "tp", ["rsi"]) for i in range(6)] + [_closed(10 + i, "sl", ["rsi"]) for i in range(4)]
+    rep = analyze(hist)
+    assert rep["neutral_win_rate"] == 0.375
+    assert rep["overall"]["win_rate"] == 0.6
+    assert abs(rep["edge"] - 0.225) < 1e-9
+    text = daily_summary(hist, cfg, T0.date())
+    assert "hasard attendu 38%" in text

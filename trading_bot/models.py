@@ -52,7 +52,8 @@ class Signal:
     status: str = "open"      # open | tp | sl | expired
     closed_at: str | None = None
     close_price: float | None = None
-    pnl_pct: float | None = None
+    pnl_pct: float | None = None          # net des coûts estimés
+    pnl_gross_pct: float | None = None    # brut (avant coûts)
     duration_minutes: int | None = None
     hourly_range: float | None = None
     meta: dict[str, Any] = field(default_factory=dict)

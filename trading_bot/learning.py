@@ -39,11 +39,27 @@ def stats_by(sigs: list[Signal], key_fn) -> dict[str, dict[str, Any]]:
     return out
 
 
+def neutral_win_rate(sigs: list[Signal]) -> float | None:
+    """Taux de réussite attendu sans avantage (marche aléatoire) : moyenne de SL / (TP + SL)."""
+    vals = []
+    for s in sigs:
+        tp_d, sl_d = abs(s.take_profit - s.entry), abs(s.entry - s.stop_loss)
+        if tp_d + sl_d > 0:
+            vals.append(sl_d / (tp_d + sl_d))
+    return round(sum(vals) / len(vals), 4) if vals else None
+
+
 def analyze(history: list[Signal]) -> dict[str, Any]:
     closed = [s for s in history if s.status != "open"]
+    wr = win_rate(closed)
+    neutral = neutral_win_rate(closed)
     return {
         "total": len(closed),
         "overall": stats_by(closed, lambda s: ["tous"]).get("tous"),
+        "neutral_win_rate": neutral,
+        "edge": round(wr - neutral, 4) if (wr is not None and neutral is not None) else None,
+        "pnl_gross_pct": round(sum(s.pnl_gross_pct or 0 for s in closed), 4),
+        "pnl_net_pct": round(sum(s.pnl_pct or 0 for s in closed), 4),
         "by_asset": stats_by(closed, lambda s: [s.asset]),
         "by_direction": stats_by(closed, lambda s: [s.direction]),
         "by_confidence": stats_by(closed, lambda s: [s.confidence]),

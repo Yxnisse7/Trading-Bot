@@ -152,9 +152,16 @@ def assess(asset: AssetConfig, candles_5m: list[Candle], cfg: Config,
         else:
             reasons.append(f"pas de tendance exploitable (ADX 15 min {adx_last:.1f} < {cfg.min_adx})")
 
+    # --- Fiabilité du volume (Yahoo renvoie souvent 0 pour BTC-USD) : au-delà de 30 % de bougies
+    #     sans volume sur les 100 dernières, les critères volume et VWAP sont neutralisés
+    recent_vols = [c.volume for c in candles_5m[-100:]]
+    volume_reliable = sum(1 for v in recent_vols if v <= 0) <= 0.3 * len(recent_vols)
+    if not volume_reliable:
+        details["volume"] = "volume non fiable sur ce flux : critères volume / VWAP ignorés"
+
     # --- VWAP de la journée (UTC)
     day_start = candles_5m[-1].ts // 86400 * 86400
-    vw = ind.vwap(candles_5m, day_start)
+    vw = ind.vwap(candles_5m, day_start) if volume_reliable else None
     if vw is not None and vw > 0:
         details["vwap"] = f"VWAP jour {_fmt(vw)}"
         d = _dir_from(price > vw * 1.0003, price < vw * 0.9997)
@@ -209,7 +216,7 @@ def assess(asset: AssetConfig, candles_5m: list[Candle], cfg: Config,
 
     # --- Volume anormal confirmant la dernière bougie
     vols = [c.volume for c in candles_5m]
-    z = ind.volume_zscore(vols, 20)
+    z = ind.volume_zscore(vols, 20) if volume_reliable else None
     if z is not None and any(v > 0 for v in vols[-21:]):
         details["volume"] = f"z-score volume {z:.2f}"
         if z >= 1.5:
@@ -246,6 +253,12 @@ def assess(asset: AssetConfig, candles_5m: list[Candle], cfg: Config,
             direction = None
     if direction and any(r.startswith("pas de tendance") or r.startswith("RSI extrême") for r in reasons):
         direction = None
+    # Entrée trop étendue par rapport à l'EMA20 5 min : on ne court pas après le mouvement
+    if direction and cfg.max_extension is not None and hourly_range and e20[-1] is not None:
+        ext = abs(price - e20[-1]) / hourly_range
+        if ext > cfg.max_extension:
+            reasons.append(f"prix trop éloigné de l'EMA20 ({ext:.2f} range horaire) : mouvement déjà étendu")
+            direction = None
 
     score = round(total(direction), 2) if direction else 0.0
     criteria = sorted(votes[direction]) if direction else []

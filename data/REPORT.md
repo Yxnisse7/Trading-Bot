@@ -1,21 +1,21 @@
 # Trading-Bot — rapport
 
-_Mis à jour le 17/09/2026 à 12:24 (Europe/Paris)._
+_Mis à jour le 17/09/2026 à 12:38 (Europe/Paris)._
 
 ## Vue d'ensemble
 
 - Trades clôturés : **0**
-- Taux de réussite cumulé (TP / (TP+SL)) : **n/a**
-- P&L théorique cumulé (somme des % par trade, sans levier ni frais) : **+0.00 %**
+- Taux de réussite cumulé (TP / (TP+SL)) : **n/a** — hasard attendu n/a, avantage **n/a**
+- P&L théorique cumulé, net des coûts estimés (somme des % par trade, sans levier) : **+0.00 %** (brut +0.00 %)
 - Signaux ouverts : **0**
 
 ## Backtests (données historiques 5 min)
 
-| Actif | Période | Signaux | TP | SL | Expirés | Taux de réussite | P&L cumulé | Espérance / trade |
-|---|---|---:|---:|---:|---:|---:|---:|---:|
-| Nasdaq 100 (NQ) | 13/08/2026 → 17/09/2026 | 20 | 6 | 14 | 0 | 30% | -0.66 % | -0.033 % |
-| Bitcoin (BTC/USD) | 19/08/2026 → 17/09/2026 | 44 | 14 | 21 | 9 | 40% | -0.62 % | -0.014 % |
-| Or (XAU/USD) | 13/08/2026 → 17/09/2026 | 38 | 9 | 23 | 6 | 28% | -1.76 % | -0.046 % |
+| Actif | Période | Signaux | TP | SL | Expirés | Taux de réussite | Hasard attendu | Avantage | P&L net | Espérance nette / trade |
+|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Nasdaq 100 (NQ) | 19/07/2026 → 17/09/2026 | 75 | 21 | 44 | 10 | 32% | 42% | -9% | -2.40 % | -0.032 % |
+| Bitcoin (BTC/USD) | 20/07/2026 → 17/09/2026 | 142 | 41 | 75 | 26 | 35% | 42% | -7% | -10.46 % | -0.074 % |
+| Or (XAU/USD) | 19/07/2026 → 17/09/2026 | 85 | 22 | 43 | 20 | 34% | 42% | -8% | -3.70 % | -0.043 % |
 
 ---
 

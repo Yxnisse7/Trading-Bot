@@ -150,7 +150,7 @@ class Engine:
                 price = market.fetch_price(asset)
             except ProviderError as exc:
                 log.warning("%s : prix indisponible (%s)", asset.label, exc)
-            done = update_signal(sig, candles, price, now)
+            done = update_signal(sig, candles, price, now, asset.cost_pct)
             if done is None:
                 remaining.append(sig)
             else:

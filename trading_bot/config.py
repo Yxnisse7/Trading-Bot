@@ -31,6 +31,7 @@ class AssetConfig:
     max_hourly_range_pct: float = 3.0    # au-delà : volatilité anormale → pas de signal
     session_utc: tuple[int, int] | None = None  # plage horaire (heures UTC) où l'on scanne
     news_keywords: tuple[str, ...] = ()
+    cost_pct: float = 0.0         # coût aller-retour estimé (spread + commissions), en % du prix
 
 
 @dataclass
@@ -50,6 +51,9 @@ class Config:
     min_criteria: int = 3                   # nombre minimal de critères alignés
     min_risk_reward: float = 1.2
     min_adx: float = 18.0                   # force de tendance minimale (ADX 15 min)
+    # ---- Expérimental (désactivé par défaut ; aucun avantage démontré en backtest)
+    max_extension: float | None = None      # distance max prix / EMA20 5 min, en ranges horaires
+    contrarian: bool = False                # prendre le contre-pied de la direction détectée
     min_resolution_probability: float = 0.35  # P(TP ou SL touché sous 1 h) minimale (simulation sans dérive)
 
     # ---- Calibrage TP / SL sur la volatilité ----
@@ -91,6 +95,7 @@ def default_assets() -> dict[str, AssetConfig]:
             min_hourly_range_pct=0.08, max_hourly_range_pct=2.5,
             # Futures NQ : on évite la nuit/ouverture chaotique ; 13h-21h UTC = séance US + pré-ouverture
             session_utc=(12, 21),
+            cost_pct=0.01,   # ≈ 1 tick de spread + commissions sur un micro-contrat
             news_keywords=("nasdaq", "wall street", "fed", "fomc", "inflation", "cpi",
                            "payrolls", "treasury", "yields", "tech stocks", "s&p"),
         ),
@@ -99,6 +104,7 @@ def default_assets() -> dict[str, AssetConfig]:
             binance_symbol="BTCUSDT", price_decimals=1, tick_size=1.0,
             min_hourly_range_pct=0.15, max_hourly_range_pct=4.0,
             session_utc=None,  # 24/7
+            cost_pct=0.06,   # spread + frais taker typiques (0,03 % × 2)
             news_keywords=("bitcoin", "btc", "crypto", "etf", "sec", "binance", "coinbase",
                            "hack", "exploit", "stablecoin", "tether", "liquidation"),
         ),
@@ -107,6 +113,7 @@ def default_assets() -> dict[str, AssetConfig]:
             price_decimals=2, tick_size=0.1,
             min_hourly_range_pct=0.05, max_hourly_range_pct=2.0,
             session_utc=(7, 20),  # Londres + New York
+            cost_pct=0.02,   # spread CFD / futures typique
             news_keywords=("gold", "xau", "dollar", "dxy", "fed", "fomc", "treasury",
                            "yields", "inflation", "cpi", "geopolit", "central bank"),
         ),

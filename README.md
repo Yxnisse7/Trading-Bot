@@ -78,17 +78,42 @@ python run.py loop         # boucle locale : un tick toutes les 5 min
   depuis l'émission du signal et le prix courant.
 - TP touché / SL touché (si les deux dans la même bougie : SL, par prudence) / **expiré** après 1 h
   (clôturé au prix courant pour les statistiques).
-- Notification immédiate avec l'heure exacte, le prix de clôture, le P&L et la durée réelle.
+- Notification immédiate avec l'heure exacte, le prix de clôture, le P&L brut et net des coûts
+  estimés, et la durée réelle.
 - Chaque issue est enregistrée dans `data/history.json` (horodatages, résultat, durée, critères).
 
 ### Backtest
 `python run.py backtest --days 30` rejoue la même logique (analyse, niveaux, politique de risque)
 sur jusqu'à 60 jours de bougies 5 min, sans biais de futur : chaque signal est évalué sur les
-bougies clôturées, son issue sur l'heure suivante. Résultats : taux de réussite, P&L cumulé,
-espérance par trade, profit factor, pire série de stops, motifs de refus. Les résultats sont
-enregistrés dans `data/backtests.json` et repris dans le rapport. L'actualité n'étant pas
-disponible historiquement, elle n'est pas rejouée : les résultats sont légèrement optimistes sur
-ce point.
+bougies clôturées, son issue sur l'heure suivante. `python run.py fetch-data` enregistre
+l'historique dans `data/candles/` pour des backtests reproductibles hors ligne (`--offline`).
+
+Résultats : taux de réussite, **taux de réussite attendu par pur hasard** (SL / (TP + SL) : sans
+aucun avantage, un TP à 60 % du range et un SL à 40 % donnent mécaniquement ~40 % de réussite),
+**avantage** (écart entre les deux), P&L brut et **net des coûts estimés** (spread + commissions,
+`cost_pct` par actif), espérance par trade, profit factor, pire série de stops, motifs de refus.
+Les résultats sont enregistrés dans `data/backtests.json` et repris dans le rapport.
+
+Limites : l'actualité n'est pas rejouée (non disponible historiquement), et en réel le signal
+arrive jusqu'à 15 min après la clôture de la bougie analysée. Les résultats de backtest sont donc
+**optimistes** par rapport au réel.
+
+### Ce que disent les backtests (juillet → septembre 2026)
+
+Douze variantes ont été testées sur 70 jours de données réelles (calibrage sur juillet–août,
+validation sur septembre) : configuration de base, ratios TP / SL différents, confiance « fort »
+seulement, 4 critères minimum, ADX ≥ 25, filtre d'extension par rapport à l'EMA20, et version
+contrarienne. **Aucune ne montre d'avantage robuste** : le taux de réussite reste à peu près
+égal au hasard attendu et l'espérance par trade oscille entre −0,02 % et +0,01 % avant coûts,
+donc négative après coûts.
+
+Autrement dit : à l'horizon d'une heure, avec des cibles à quelques dixièmes de pour cent, les
+indicateurs classiques alignés ne prédisent pas mieux que pile ou face la direction de l'heure
+suivante sur cette période. Le bot le mesure lui-même et l'affiche (« hasard attendu » et
+« avantage ») dans le rapport, le résumé quotidien et les backtests. Tant que l'avantage mesuré
+en paper trading n'est pas nettement positif sur plusieurs dizaines de trades, **ne passez pas
+en argent réel**. Les deux réglages expérimentaux (`max_extension`, `contrarian`) sont livrés
+désactivés, pour vos propres tests.
 
 ### Apprentissage
 `trading_bot/learning.py` analyse l'historique par critère, actif, sens, confiance, tranche horaire
@@ -145,7 +170,9 @@ dépôt en public (minutes illimitées) et remettez `*/5`. Les crons GitHub sont
 un retard de quelques minutes est normal.
 
 **Binance depuis GitHub Actions** : les serveurs GitHub sont situés aux États-Unis, Binance y
-répond « 451 ». Le bot bascule immédiatement sur Yahoo Finance pour le Bitcoin.
+répond « 451 ». Le bot bascule immédiatement sur Yahoo Finance pour le Bitcoin. Yahoo ne fournit
+pas de volume fiable sur `BTC-USD` : les critères volume et VWAP sont alors neutralisés
+automatiquement.
 
 ## Configuration
 
@@ -166,6 +193,7 @@ Valeurs par défaut dans `trading_bot/config.py`, surcharge via `config.json` (v
 | `min_resolution_probability` | 0,35 | faisabilité sous 1 h (simulation) |
 | `max_atr_ratio` | 2,5 | volatilité instantanée anormale |
 | `max_news_risk_score` | 2 | tolérance à l'actualité |
+| `assets.<actif>.cost_pct` | 0,01 / 0,06 / 0,02 | coût aller-retour estimé (NQ / BTC / or), déduit du P&L |
 | `assets.<actif>.session_utc` | voir ci-dessus | plage horaire de scan |
 
 Calendrier macro : `data/macro_calendar.json` (heures UTC). Blackout 45 min avant / 30 min après

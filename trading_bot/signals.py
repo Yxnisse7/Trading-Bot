@@ -90,6 +90,9 @@ def build_signal(asset: AssetConfig, a: Assessment, cfg: Config, news_context: s
     if a.direction is None:
         reasons.append("aucune direction dominante")
         return None, reasons
+    if cfg.contrarian:
+        from dataclasses import replace
+        a = replace(a, direction="short" if a.direction == "long" else "long")
 
     conf = confidence_label(a.score, a.n_criteria, cfg)
     if conf is None:

@@ -50,18 +50,20 @@ def resolve_with_price(sig: Signal, price: float, now: datetime) -> tuple[str, f
     return None
 
 
-def close_signal(sig: Signal, status: str, price: float, when: datetime) -> Signal:
+def close_signal(sig: Signal, status: str, price: float, when: datetime, cost_pct: float = 0.0) -> Signal:
+    """Clôture le signal ; `cost_pct` = coût aller-retour estimé (spread + commissions) en %."""
     sig.status = status
     sig.closed_at = iso(when)
     sig.close_price = price
     sign = 1.0 if sig.direction == "long" else -1.0
-    sig.pnl_pct = round(sign * (price - sig.entry) / sig.entry * 100.0, 4)
+    sig.pnl_gross_pct = round(sign * (price - sig.entry) / sig.entry * 100.0, 4)
+    sig.pnl_pct = round(sig.pnl_gross_pct - cost_pct, 4)
     sig.duration_minutes = max(0, int((when - parse_iso(sig.created_at)).total_seconds() // 60))
     return sig
 
 
 def update_signal(sig: Signal, candles: list[Candle] | None, price: float | None,
-                  now: datetime | None = None) -> Signal | None:
+                  now: datetime | None = None, cost_pct: float = 0.0) -> Signal | None:
     """Renvoie le signal clôturé s'il vient d'être résolu, sinon None."""
     now = now or utcnow()
     outcome = None
@@ -71,7 +73,7 @@ def update_signal(sig: Signal, candles: list[Candle] | None, price: float | None
         outcome = resolve_with_price(sig, price, now)
     if outcome is not None:
         status, px, when = outcome
-        return close_signal(sig, status, px, when)
+        return close_signal(sig, status, px, when, cost_pct)
     if now >= parse_iso(sig.expires_at):
         if price is None:
             if candles:
@@ -79,7 +81,7 @@ def update_signal(sig: Signal, candles: list[Candle] | None, price: float | None
             else:
                 log.warning("expiration de %s sans prix disponible : clôture à l'entrée", sig.id)
                 price = sig.entry
-        return close_signal(sig, "expired", price, now)
+        return close_signal(sig, "expired", price, now, cost_pct)
     return None
 
 
@@ -89,6 +91,6 @@ def format_outcome(sig: Signal, tz: str = "Europe/Paris") -> str:
     lines = [f"{icon} — {sig.asset_label} {sig.direction.upper()} (id {sig.id})"]
     if closed:
         lines.append(f"Heure : {closed:%d/%m/%Y %H:%M:%S} ({tz})")
-    lines.append(f"Entrée {sig.entry} → clôture {sig.close_price} | P&L {sig.pnl_pct:+.3f} %")
+    lines.append(f"Entrée {sig.entry} → clôture {sig.close_price} | P&L net {sig.pnl_pct:+.3f} % (brut {sig.pnl_gross_pct:+.3f} %)")
     lines.append(f"Durée réelle : {sig.duration_minutes} min")
     return "\n".join(lines)

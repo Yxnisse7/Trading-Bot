@@ -34,6 +34,7 @@ def build_report(all_signals: list[Signal], cfg: Config, adjustments: dict[str, 
     rep = analyze(closed)
     overall = rep["overall"]
     pnl_cum = sum(s.pnl_pct or 0 for s in closed)
+    edge_txt = "n/a" if rep["edge"] is None else f"{rep['edge']:+.0%}"
 
     lines = [
         "# Trading-Bot — rapport",
@@ -43,8 +44,9 @@ def build_report(all_signals: list[Signal], cfg: Config, adjustments: dict[str, 
         "## Vue d'ensemble",
         "",
         f"- Trades clôturés : **{len(closed)}**",
-        f"- Taux de réussite cumulé (TP / (TP+SL)) : **{_pct(overall['win_rate']) if overall else 'n/a'}**",
-        f"- P&L théorique cumulé (somme des % par trade, sans levier ni frais) : **{pnl_cum:+.2f} %**",
+        f"- Taux de réussite cumulé (TP / (TP+SL)) : **{_pct(overall['win_rate']) if overall else 'n/a'}**"
+        f" — hasard attendu {_pct(rep['neutral_win_rate'])}, avantage **{edge_txt}**",
+        f"- P&L théorique cumulé, net des coûts estimés (somme des % par trade, sans levier) : **{pnl_cum:+.2f} %** (brut {rep['pnl_gross_pct']:+.2f} %)",
         f"- Signaux ouverts : **{len(open_sigs)}**",
         "",
     ]
@@ -79,9 +81,10 @@ def build_report(all_signals: list[Signal], cfg: Config, adjustments: dict[str, 
             lines += ["", "Dernières notes :", ""] + [f"- {n}" for n in adjustments["notes"][-8:]]
         lines.append("")
     if backtests:
-        lines += ["## Backtests (données historiques 5 min)", "", "| Actif | Période | Signaux | TP | SL | Expirés | Taux de réussite | P&L cumulé | Espérance / trade |", "|---|---|---:|---:|---:|---:|---:|---:|---:|"]
+        lines += ["## Backtests (données historiques 5 min)", "", "| Actif | Période | Signaux | TP | SL | Expirés | Taux de réussite | Hasard attendu | Avantage | P&L net | Espérance nette / trade |", "|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|"]
         for k, b in backtests.items():
-            lines.append(f"| {b.get('asset_label', k)} | {b.get('period', '-')} | {b['n']} | {b['tp']} | {b['sl']} | {b['expired']} | {_pct(b['win_rate'])} | {b['pnl_pct']:+.2f} % | {b['expectancy_pct']:+.3f} % |")
+            edge = "n/a" if b.get("edge") is None else f"{b['edge']:+.0%}"
+            lines.append(f"| {b.get('asset_label', k)} | {b.get('period', '-')} | {b['n']} | {b['tp']} | {b['sl']} | {b['expired']} | {_pct(b['win_rate'])} | {_pct(b.get('neutral_win_rate'))} | {edge} | {b['pnl_pct']:+.2f} % | {b['expectancy_pct']:+.3f} % |")
         lines.append("")
     lines += ["---", "", DISCLAIMER, ""]
     return "\n".join(lines)
