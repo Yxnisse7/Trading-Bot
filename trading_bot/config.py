@@ -1,0 +1,132 @@
+"""Configuration centrale du bot (valeurs par défaut + surcharge via config.json)."""
+from __future__ import annotations
+
+import json
+import os
+from dataclasses import dataclass, field
+from pathlib import Path
+from typing import Any
+
+ROOT_DIR = Path(__file__).resolve().parent.parent
+DATA_DIR = Path(os.environ.get("TRADING_BOT_DATA_DIR", ROOT_DIR / "data"))
+CONFIG_FILE = Path(os.environ.get("TRADING_BOT_CONFIG", ROOT_DIR / "config.json"))
+
+DISCLAIMER = (
+    "⚠️ Signaux générés automatiquement à partir de données publiques gratuites et "
+    "d'une analyse algorithmique. Ceci n'est PAS un conseil financier. Aucune stratégie "
+    "ne garantit un gain. Validez d'abord en paper trading (compte simulé) avant tout "
+    "passage en argent réel. Vous seul décidez et exécutez vos trades."
+)
+
+
+@dataclass
+class AssetConfig:
+    key: str                      # identifiant interne : nasdaq / bitcoin / gold
+    label: str                    # libellé affiché
+    yahoo_symbol: str             # symbole Yahoo Finance (NQ=F, BTC-USD, GC=F)
+    binance_symbol: str | None = None
+    price_decimals: int = 2
+    tick_size: float = 0.01       # arrondi des niveaux
+    min_hourly_range_pct: float = 0.05   # volatilité horaire minimale (%) pour trader
+    max_hourly_range_pct: float = 3.0    # au-delà : volatilité anormale → pas de signal
+    session_utc: tuple[int, int] | None = None  # plage horaire (heures UTC) où l'on scanne
+    news_keywords: tuple[str, ...] = ()
+
+
+@dataclass
+class Config:
+    assets: dict[str, AssetConfig] = field(default_factory=dict)
+
+    # ---- Politique de signaux ----
+    max_signals_per_asset_per_day: int = 3
+    cooldown_minutes: int = 60          # délai minimal entre deux signaux sur un même actif
+    signal_lifetime_minutes: int = 60   # durée de vie d'un signal (TP/SL sinon expiré)
+    min_confidence: str = "moyen"       # moyen | fort
+    min_score: float = 3.0              # score pondéré minimal pour "moyen"
+    strong_score: float = 4.5           # score pondéré à partir duquel "fort"
+    min_criteria: int = 3               # nombre minimal de critères alignés
+    min_risk_reward: float = 1.2
+
+    # ---- Calibrage TP / SL sur la volatilité ----
+    atr_period: int = 14
+    tp_range_fraction: float = 0.60     # TP = fraction du range horaire moyen
+    sl_range_fraction: float = 0.40     # SL = fraction du range horaire moyen
+    min_tp_range_fraction: float = 0.25 # en dessous : cible trop proche (bruit/spread)
+    max_tp_range_fraction: float = 0.90 # au-dessus : cible irréaliste sous 1h
+
+    # ---- Actualité ----
+    news_lookback_minutes: int = 120
+    news_blackout_before_minutes: int = 45   # avant une annonce macro majeure
+    news_blackout_after_minutes: int = 30    # après
+    max_news_risk_score: int = 2             # au-delà : marché jugé incertain
+
+    # ---- Suivi ----
+    track_interval_minutes: int = 5
+    scan_interval_minutes: int = 15
+
+    # ---- Apprentissage ----
+    learning_min_trades: int = 10
+    learning_weak_win_rate: float = 0.40
+    learning_strong_win_rate: float = 0.60
+
+    timezone: str = "Europe/Paris"
+    log_level: str = "INFO"
+
+    def asset(self, key: str) -> AssetConfig:
+        return self.assets[key]
+
+
+def default_assets() -> dict[str, AssetConfig]:
+    return {
+        "nasdaq": AssetConfig(
+            key="nasdaq", label="Nasdaq 100 (NQ)", yahoo_symbol="NQ=F",
+            price_decimals=2, tick_size=0.25,
+            min_hourly_range_pct=0.08, max_hourly_range_pct=2.5,
+            # Futures NQ : on évite la nuit/ouverture chaotique ; 13h-21h UTC = séance US + pré-ouverture
+            session_utc=(12, 21),
+            news_keywords=("nasdaq", "wall street", "fed", "fomc", "inflation", "cpi",
+                           "payrolls", "treasury", "yields", "tech stocks", "s&p"),
+        ),
+        "bitcoin": AssetConfig(
+            key="bitcoin", label="Bitcoin (BTC/USD)", yahoo_symbol="BTC-USD",
+            binance_symbol="BTCUSDT", price_decimals=1, tick_size=1.0,
+            min_hourly_range_pct=0.15, max_hourly_range_pct=4.0,
+            session_utc=None,  # 24/7
+            news_keywords=("bitcoin", "btc", "crypto", "etf", "sec", "binance", "coinbase",
+                           "hack", "exploit", "stablecoin", "tether", "liquidation"),
+        ),
+        "gold": AssetConfig(
+            key="gold", label="Or (XAU/USD)", yahoo_symbol="GC=F",
+            price_decimals=2, tick_size=0.1,
+            min_hourly_range_pct=0.05, max_hourly_range_pct=2.0,
+            session_utc=(7, 20),  # Londres + New York
+            news_keywords=("gold", "xau", "dollar", "dxy", "fed", "fomc", "treasury",
+                           "yields", "inflation", "cpi", "geopolit", "central bank"),
+        ),
+    }
+
+
+def _apply_overrides(cfg: Config, data: dict[str, Any]) -> Config:
+    for key, value in data.items():
+        if key == "assets" and isinstance(value, dict):
+            for akey, aval in value.items():
+                if akey in cfg.assets and isinstance(aval, dict):
+                    for f, v in aval.items():
+                        if hasattr(cfg.assets[akey], f):
+                            if f == "session_utc" and v is not None:
+                                v = tuple(v)
+                            if f == "news_keywords":
+                                v = tuple(v)
+                            setattr(cfg.assets[akey], f, v)
+        elif hasattr(cfg, key):
+            setattr(cfg, key, value)
+    return cfg
+
+
+def load_config(path: Path | None = None) -> Config:
+    cfg = Config(assets=default_assets())
+    path = path or CONFIG_FILE
+    if path.exists():
+        with open(path, encoding="utf-8") as fh:
+            _apply_overrides(cfg, json.load(fh))
+    return cfg
