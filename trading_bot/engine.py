@@ -2,6 +2,8 @@
 from __future__ import annotations
 
 import copy
+import re
+from dataclasses import replace
 import logging
 from datetime import datetime, timedelta
 from typing import Any
@@ -26,6 +28,8 @@ from .summary import daily_summary
 from .tracker import format_outcome, update_signal
 
 log = logging.getLogger(__name__)
+
+MAJOR_EVENT_RE = re.compile(r"FOMC|Fed\b|taux directeur|CPI|inflation|Non-?farm|NFP|emploi|payrolls", re.I)
 
 NEWS_CATEGORIES = {"nasdaq": ["macro"], "sp500": ["macro"], "bitcoin": ["crypto", "macro"],
                    "ethereum": ["crypto", "macro"], "gold": ["gold", "macro"]}
@@ -61,8 +65,16 @@ class Engine:
 
         news_cache: dict[str, list[newsmod.NewsItem]] = {}
         context = self.correlation_context(now) if self.cfg.correlation_enabled else {}
+        caution = self.post_event_caution(now, calendar)
+        scan_cfg = self.cfg
+        if caution:
+            # Lendemain de FOMC / CPI / emploi : les tendances lentes sont peu fiables (repositionnement),
+            # on exige un critère de plus et on suspend l'horizon 3 h.
+            scan_cfg = replace(self.cfg, min_criteria=self.cfg.min_criteria + 1, min_score=self.cfg.min_score + 1.0)
+            log.info("Prudence post-événement (%s, %s UTC) : %d critères exigés, horizon 3 h suspendu",
+                     caution.name, caution.at.strftime("%d/%m %H:%M"), scan_cfg.min_criteria)
         horizons = [("1h", 5)]
-        if self.cfg.long_horizon_enabled:
+        if self.cfg.long_horizon_enabled and not caution:
             horizons.append((f"{self.cfg.long_horizon_base_minutes * 12 // 60}h", self.cfg.long_horizon_base_minutes))
         # Bitcoin d'abord : sa direction sert de contexte à l'Ethereum
         ordered = sorted(self.cfg.assets.values(), key=lambda a: 0 if a.key == "bitcoin" else 1)
@@ -90,11 +102,15 @@ class Engine:
                 if blocked[hkey]:
                     log.info("%s [%s] : %s", asset.label, hkey, "; ".join(blocked[hkey]))
                     continue
-                a = assess(asset, candles, self.cfg, weights, base_minutes=base, context=context)
+                a = assess(asset, candles, scan_cfg, weights, base_minutes=base, context=context)
                 if asset.key == "bitcoin" and base == 5:
                     context["btc_dir"] = a.direction if a.direction else self._quick_direction(candles)
                 if a.direction is None:
                     log.info("%s [%s] : %s", asset.label, hkey, "; ".join(a.reasons_rejected) or "aucune direction")
+                    continue
+                stubborn = self._direction_block(asset.key, a.direction, all_sigs, now)
+                if stubborn:
+                    log.info("%s [%s] : %s", asset.label, hkey, stubborn)
                     continue
                 if news_ctx is None:
                     items: list[newsmod.NewsItem] = []
@@ -108,7 +124,9 @@ class Engine:
                 if risk is not None and risk > self.cfg.max_news_risk_score:
                     log.info("%s [%s] : actualité incertaine (score %d) → pas de signal", asset.label, hkey, risk)
                     continue
-                sig, why = build_signal(asset, a, self.cfg, news_ctx, now)
+                if caution:
+                    news_ctx = f"prudence post-{caution.name} : critères renforcés · " + (news_ctx or "")
+                sig, why = build_signal(asset, a, scan_cfg, news_ctx, now)
                 if sig is None:
                     log.info("%s [%s] : pas de signal (%s)", asset.label, hkey, "; ".join(why))
                     if self.cfg.shadow_enabled and not dry_run and base == 5:
@@ -171,10 +189,36 @@ class Engine:
             reasons.append(f"plafond de signaux ouverts atteint ({self.cfg.max_open_signals})")
         if mine:
             last = mine[-1]
-            cooldown = self.cfg.cooldown_after_loss_minutes if last.status == "sl" else self.cfg.cooldown_minutes
-            if now - parse_iso(last.created_at) < timedelta(minutes=cooldown):
+            if now - parse_iso(last.created_at) < timedelta(minutes=self.cfg.cooldown_minutes):
                 reasons.append("délai de refroidissement en cours")
+        # Après un stop (quel que soit l'horizon), délai compté depuis la clôture, pas depuis l'émission.
+        last_sl = max((parse_iso(s.closed_at) for s in visible if s.status == "sl" and s.closed_at), default=None)
+        if last_sl and now - last_sl < timedelta(minutes=self.cfg.cooldown_after_loss_minutes):
+            reasons.append("stop touché récemment sur cet actif : délai de refroidissement")
         return reasons
+
+    def _direction_block(self, asset_key: str, direction: str, all_sigs: list[Signal], now: datetime) -> str | None:
+        """Ne pas s'obstiner : après un stop dans un sens, pas de nouveau signal dans ce sens pendant N minutes."""
+        minutes = self.cfg.same_direction_after_loss_minutes
+        if minutes <= 0:
+            return None
+        recent = [s for s in all_sigs if s.asset == asset_key and s.source != "shadow" and s.status == "sl"
+                  and s.direction == direction and s.closed_at
+                  and now - parse_iso(s.closed_at) < timedelta(minutes=minutes)]
+        if not recent:
+            return None
+        since = int((now - parse_iso(max(s.closed_at for s in recent))).total_seconds() // 60)
+        return (f"stop {direction} touché il y a {since} min sur cet actif : pas de nouvelle tentative "
+                f"dans le même sens avant {minutes} min")
+
+    def post_event_caution(self, now: datetime, events: list[newsmod.MacroEvent]) -> newsmod.MacroEvent | None:
+        """Événement majeur (FOMC, CPI, emploi) passé depuis moins de N heures : marché en repositionnement."""
+        hours = self.cfg.post_event_caution_hours
+        if hours <= 0:
+            return None
+        major = [ev for ev in events if ev.impact == "high" and MAJOR_EVENT_RE.search(ev.name)
+                 and timedelta(0) <= now - ev.at <= timedelta(hours=hours)]
+        return max(major, key=lambda ev: ev.at) if major else None
 
     @staticmethod
     def _quick_direction(candles_5m: list) -> str | None:

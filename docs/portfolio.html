@@ -97,8 +97,8 @@
   <h2>Trades appliqués à la balance</h2>
   <div class="card tbl"><table id="hist"><thead><tr><th>Clôturé</th><th>Actif</th><th>Sens</th><th>Horizon</th><th>Résultat</th><th class="num">Entrée</th><th class="num">Sortie</th><th class="num">Lots</th><th class="num">Brut</th><th class="num">Coûts</th><th class="num">Net</th><th class="num">Balance après</th></tr></thead><tbody></tbody></table></div>
 
-  <h2>Trades non pris</h2>
-  <div class="card"><div id="skipped" class="muted"></div></div>
+  <h2>Trades risqués</h2>
+  <div class="card"><div class="muted" style="margin-bottom:6px">Aucun trade n'est refusé : quand la balance ne permet pas le lot minimal au risque choisi, le lot minimal est pris quand même et le trade est marqué ⚠️ (risque effectif et levier réels affichés).</div><div id="skipped" class="muted"></div></div>
 
   <div class="disclaimer">⚠️ Simulation sur des signaux automatiques et des données publiques gratuites : les résultats ne sont pas ceux d'un compte réel (exécution, glissement, marges, conversion de devise). Ceci n'est pas un conseil financier. Aucune stratégie ne garantit un gain.</div>
 </div>
@@ -200,17 +200,22 @@
 
     const open = Object.values(d.open || {});
     $("#open tbody").innerHTML = open.length ? open.map((o) => `<tr><td>${esc(new Date(o.opened_at).toLocaleString("fr-FR"))}</td><td>${esc(o.asset)}</td><td>${o.direction === "long" ? "🟢 long" : "🔴 short"}</td>
-      <td class="num">${o.entry}</td><td class="num">${o.stop_loss}</td><td class="num">${o.take_profit}</td><td class="num">${o.lots} ${esc(o.lot_label)}</td>
-      <td class="num">${money(o.risk_amount, cur)}</td><td class="num">${money(o.notional, cur)}</td><td class="num">×${o.leverage}${o.capped_by_leverage ? " (plafond)" : ""}</td></tr>`).join("")
+      <td class="num">${o.entry}</td><td class="num">${o.stop_loss}</td><td class="num">${o.take_profit}</td><td class="num">${o.lots} ${esc(o.lot_label)}${o.risky ? " ⚠️" : ""}</td>
+      <td class="num">${money(o.risk_amount, cur)}${o.risk_pct_effective != null ? ` (${Number(o.risk_pct_effective).toFixed(1)} %)` : ""}</td><td class="num">${money(o.notional, cur)}</td><td class="num">×${o.leverage}${o.capped_by_leverage ? " (plafond)" : ""}</td></tr>`).join("")
       : `<tr><td colspan="10" class="muted">Aucune position simulée ouverte.</td></tr>`;
 
     $("#hist tbody").innerHTML = hist.length ? hist.slice().reverse().map((h) => `<tr><td>${esc(new Date(h.closed_at).toLocaleString("fr-FR"))}</td><td>${esc(h.asset_label || h.asset)}</td><td>${h.direction}</td><td>${esc(h.horizon)}</td>
-      <td><span class="pill ${h.status}">${RES[h.status] || h.status}</span></td><td class="num">${h.entry}</td><td class="num">${h.exit}</td><td class="num">${h.lots} ${esc(h.lot_label)}</td>
+      <td><span class="pill ${h.status}">${RES[h.status] || h.status}</span></td><td class="num">${h.entry}</td><td class="num">${h.exit}</td><td class="num">${h.lots} ${esc(h.lot_label)}${h.risky ? " ⚠️" : ""}</td>
       <td class="num ${cls(h.pnl_gross)}">${signed(h.pnl_gross)}</td><td class="num">${Number(h.cost).toFixed(2)}</td><td class="num ${cls(h.pnl)}"><b>${signed(h.pnl, cur)}</b></td><td class="num">${money(h.balance_after, cur)}</td></tr>`).join("")
       : `<tr><td colspan="12" class="muted">Aucun trade clôturé depuis le début de la simulation.</td></tr>`;
 
+    const risky = [...open.filter((o) => o.risky).map((o) => ({ at: o.opened_at, asset: o.asset, txt: `${o.lots} ${o.lot_label} · risque ${Number(o.risk_pct_effective).toFixed(1)} % de la balance · levier ×${o.leverage} (position ouverte)` })),
+      ...hist.filter((h) => h.risky).map((h) => ({ at: h.closed_at, asset: h.asset_label || h.asset, txt: `${h.lots} ${h.lot_label} · risque ${Number(h.risk_pct_effective || 0).toFixed(1)} % · ${signed(h.pnl, cur)}` }))];
     const sk = d.skipped || [];
-    $("#skipped").innerHTML = sk.length ? sk.slice(-10).reverse().map((s) => `<div>${esc(new Date(s.at).toLocaleString("fr-FR"))} · ${esc(s.asset)} · ${esc(s.reason)}</div>`).join("") : "Aucun.";
+    $("#skipped").innerHTML = (risky.length || sk.length)
+      ? [...risky.slice(-10).reverse().map((r) => `<div>⚠️ ${esc(new Date(r.at).toLocaleString("fr-FR"))} · ${esc(r.asset)} · ${esc(r.txt)}</div>`),
+         ...sk.slice(-5).reverse().map((s) => `<div>⛔ ${esc(new Date(s.at).toLocaleString("fr-FR"))} · ${esc(s.asset)} · non dimensionnable : ${esc(s.reason)}</div>`)].join("")
+      : "Aucun.";
   }
   function kpi(label, value, sub, klass = "") { return `<div class="card kpi"><div class="s">${esc(label)}</div><div class="v ${klass}">${esc(value)}</div><div class="s">${esc(sub)}</div></div>`; }
 

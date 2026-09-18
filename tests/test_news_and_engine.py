@@ -403,7 +403,7 @@ def test_engine_applies_portfolio_and_balance_command(tmp_path, monkeypatch):
     eng.set_balance(50000, 1.0, now - timedelta(minutes=1))
     sigs = eng.scan(now)
     assert sigs and all("Simulation (balance" in s for s in sent if "SIGNAL" in s)
-    assert all(s.meta.get("sim", {}).get("lots", 0) > 0 or "insuffisante" in (s.meta.get("sim") or {}).get("reason", "") for s in sigs)
+    assert all(s.meta.get("sim", {}).get("lots", 0) > 0 for s in sigs)
     monkeypatch.setattr(engmod.market, "fetch_price", lambda asset: 10 ** 9)
     closed = eng.track(now + timedelta(minutes=10))
     assert closed
@@ -418,3 +418,48 @@ def test_engine_applies_portfolio_and_balance_command(tmp_path, monkeypatch):
     assert "Balance invalide" in eng.handle_command("/balance abc", now)
     text = eng.summary(now.date(), send=False)
     assert "SIMULATION DE COMPTE" in text
+
+
+def test_no_retry_in_same_direction_after_stop(tmp_path, monkeypatch):
+    now = datetime(2026, 9, 17, 14, 0, tzinfo=timezone.utc)
+    candles = make_candles(n=500, drift=0.0003, noise=0.0012, seed=7, start_ts=int(now.timestamp()) - 500 * 300)
+    eng = _engine(tmp_path, monkeypatch, candles, candles[-1].close)
+    eng.cfg.max_open_signals = 1
+    eng.cfg.cooldown_after_loss_minutes = 10
+    from trading_bot import engine as engmod
+    first = eng.scan(now)
+    assert len(first) == 1 and first[0].direction == "long"
+    monkeypatch.setattr(engmod.market, "fetch_price", lambda asset: 1.0)
+    assert eng.track(now + timedelta(minutes=5))[0].status == "sl"
+    sigs = eng.store.all_signals()
+    # le délai après perte (10 min) est compté depuis la clôture : bloqué à +12 min, libre à +16 min
+    assert any("stop touché récemment" in r for r in eng._policy_block("bitcoin", sigs, now + timedelta(minutes=12)))
+    assert not any("stop touché" in r for r in eng._policy_block("bitcoin", sigs, now + timedelta(minutes=16)))
+    # mais pas de nouvelle tentative dans le même sens pendant 120 min ; le sens inverse reste possible
+    assert eng._direction_block("bitcoin", "long", sigs, now + timedelta(minutes=60))
+    assert eng._direction_block("bitcoin", "long", sigs, now + timedelta(minutes=130)) is None
+    assert eng._direction_block("bitcoin", "short", sigs, now + timedelta(minutes=60)) is None
+    later = now + timedelta(minutes=60)
+    candles2 = make_candles(n=500, drift=0.0003, noise=0.0012, seed=7, start_ts=int(later.timestamp()) - 500 * 300)
+    monkeypatch.setattr(engmod.market, "fetch_candles_5m", lambda asset, days=5: candles2)
+    assert all(s.asset != "bitcoin" for s in eng.scan(later))
+
+
+def test_post_event_caution_raises_bar_and_suspends_long_horizon(tmp_path, monkeypatch):
+    from trading_bot.providers.news import MacroEvent
+    now = datetime(2026, 9, 17, 14, 0, tzinfo=timezone.utc)
+    candles = make_candles(n=500, drift=0.0003, noise=0.0012, seed=7, start_ts=int(now.timestamp()) - 500 * 300)
+    eng = _engine(tmp_path, monkeypatch, candles, candles[-1].close)
+    eng.cfg.long_horizon_enabled = True
+    fomc = MacroEvent(name="FOMC décision de taux", at=now - timedelta(hours=20))
+    other = MacroEvent(name="Ventes au détail", at=now - timedelta(hours=2))
+    assert eng.post_event_caution(now, [other]) is None
+    assert eng.post_event_caution(now, [fomc]).name.startswith("FOMC")
+    assert eng.post_event_caution(now + timedelta(hours=5), [fomc]) is None      # plus de 24 h après
+    assert eng.post_event_caution(now - timedelta(hours=21), [fomc]) is None     # avant l'événement
+    monkeypatch.setattr(eng, "macro_events", lambda when: [fomc])
+    sigs = eng.scan(now)
+    # aucun signal 3 h, et chaque signal 1 h porte au moins un critère de plus que le minimum normal
+    assert all((s.horizon or "1h") == "1h" for s in sigs)
+    assert all(len(s.criteria) >= eng.cfg.min_criteria + 1 for s in sigs)
+    assert all("prudence post-FOMC" in s.news_context for s in sigs)

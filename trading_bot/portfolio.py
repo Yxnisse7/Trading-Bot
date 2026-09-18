@@ -4,6 +4,8 @@ Règles :
 - la balance ne prend en compte que les trades ouverts APRÈS sa définition (aucune rétroactivité) ;
 - taille de position par risque fixe : perte au stop = `risk_pct` % de la balance courante,
   plafonnée par le levier maximal de l'actif ; lots arrondis au pas de l'actif ;
+- aucun trade n'est refusé : si la balance ne permet pas le lot minimal au risque demandé, le lot
+  minimal est pris quand même et le trade est marqué « risqué » (risque effectif et levier affichés) ;
 - au dénouement : P&L = sens × (sortie − entrée) × multiplicateur × lots − coûts estimés (cost_pct × notionnel) ;
 - signaux fantômes exclus ; signaux du bot, manuels et propositions inclus.
 """
@@ -39,16 +41,22 @@ def size_position(balance: float, risk_pct: float, asset: AssetConfig, entry: fl
     if lots > max_lots:
         lots = max_lots
         capped = True
+    warnings: list[str] = []
     if lots < asset.lot_min:
-        return {"lots": 0.0, "reason": f"balance insuffisante pour {asset.lot_min:g} {asset.lot_label} "
-                                        f"(risque {risk_amount:.2f}, perte par lot au stop {loss_per_lot:.2f})",
-                "risk_amount": round(risk_amount, 2)}
+        # Simulation : on prend toujours le trade, au lot minimal, en signalant le dépassement de risque.
+        lots = asset.lot_min
+        warnings.append(f"lot minimal {asset.lot_min:g} {asset.lot_label} imposé : risque au stop "
+                        f"{lots * loss_per_lot:.2f} au lieu de {risk_amount:.2f} visé")
+        if lots > max_lots:
+            warnings.append(f"levier ×{lots * notional_per_lot / balance:.1f} au-delà du plafond ×{asset.max_leverage:g}")
+    risk_eff = lots * loss_per_lot / balance * 100.0
+    risky = bool(warnings)
     notional = lots * notional_per_lot
     return {
         "lots": lots, "lot_label": asset.lot_label, "risk_amount": round(lots * loss_per_lot, 2),
-        "risk_pct_effective": round(lots * loss_per_lot / balance * 100.0, 3),
+        "risk_pct_effective": round(risk_eff, 3),
         "notional": round(notional, 2), "leverage": round(notional / balance, 2), "capped_by_leverage": capped,
-        "balance_at_open": round(balance, 2),
+        "balance_at_open": round(balance, 2), "risky": risky, "warnings": warnings,
     }
 
 
@@ -69,7 +77,7 @@ class Portfolio:
             "risk_pct": risk_pct, "started_at": iso(when), "is_default": default,
             "open": {},        # id du signal → dimensionnement
             "history": [],     # trades clôturés appliqués à la balance
-            "skipped": [],     # trades non pris (balance insuffisante)
+            "skipped": [],     # trades impossibles à dimensionner (paramètres invalides uniquement)
             "archives": [],    # simulations précédentes
             "updated_at": iso(when),
         }
@@ -132,6 +140,7 @@ class Portfolio:
             "id": sig.id, "asset": sig.asset, "asset_label": sig.asset_label, "direction": sig.direction,
             "horizon": sig.horizon or "1h", "source": sig.source, "status": sig.status,
             "entry": sig.entry, "exit": sig.close_price, "lots": pos["lots"], "lot_label": pos.get("lot_label", asset.lot_label),
+            "risky": bool(pos.get("risky")), "risk_pct_effective": pos.get("risk_pct_effective"),
             "notional": pos["notional"], "risk_amount": pos["risk_amount"],
             "pnl_gross": round(gross, 2), "cost": round(cost, 2), "pnl": pnl,
             "pnl_pct_balance": round(pnl / pos["balance_at_open"] * 100.0, 3) if pos.get("balance_at_open") else None,
@@ -161,6 +170,7 @@ class Portfolio:
             "avg_loss": round(sum(h["pnl"] for h in losses) / len(losses), 2) if losses else 0.0,
             "open_positions": len(d.get("open", {})),
             "skipped": len(d.get("skipped", [])),
+            "risky": sum(1 for h in hist if h.get("risky")) + sum(1 for p in d.get("open", {}).values() if p.get("risky")),
         }
 
     def format_sizing(self, sizing: dict[str, Any] | None, asset: AssetConfig) -> str:
@@ -170,15 +180,20 @@ class Portfolio:
         if sizing.get("lots", 0) <= 0:
             return f"Simulation (balance {float(self.data['balance']):,.2f} {cur}) : trade non pris — {sizing.get('reason', '')}"
         cap = " (plafonné par le levier)" if sizing.get("capped_by_leverage") else ""
-        return (f"Simulation (balance {sizing['balance_at_open']:,.2f} {cur}, risque {self.data['risk_pct']} %) : "
-                f"{sizing['lots']:g} {sizing['lot_label']} — risque au stop {sizing['risk_amount']:,.2f} {cur}, "
-                f"notionnel {sizing['notional']:,.0f} {cur}, levier ×{sizing['leverage']}{cap}")
+        text = (f"Simulation (balance {sizing['balance_at_open']:,.2f} {cur}, risque {self.data['risk_pct']} %) : "
+                f"{sizing['lots']:g} {sizing['lot_label']} — risque au stop {sizing['risk_amount']:,.2f} {cur} "
+                f"({sizing['risk_pct_effective']:.2f} % de la balance), notionnel {sizing['notional']:,.0f} {cur}, "
+                f"levier ×{sizing['leverage']}{cap}")
+        if sizing.get("risky"):
+            text += "\n⚠️ TRADE RISQUÉ (pris quand même) : " + " ; ".join(sizing.get("warnings", []))
+        return text
 
     def format_outcome(self, row: dict[str, Any] | None) -> str:
         if not row:
             return ""
         cur = self.data.get("currency", self.cfg.portfolio_currency)
-        return (f"Simulation : {row['lots']:g} {row['lot_label']} → {row['pnl']:+,.2f} {cur} "
+        flag = " ⚠️ (trade risqué)" if row.get("risky") else ""
+        return (f"Simulation : {row['lots']:g} {row['lot_label']}{flag} → {row['pnl']:+,.2f} {cur} "
                 f"(brut {row['pnl_gross']:+,.2f}, coûts {row['cost']:,.2f}) · balance {row['balance_after']:,.2f} {cur}")
 
     def format_summary(self) -> str:
@@ -190,6 +205,6 @@ class Portfolio:
             f"Balance : {s['balance']:,.2f} {cur} (départ {s['balance_initial']:,.2f} {cur} le {started})",
             f"Résultat : {s['pnl']:+,.2f} {cur} ({s['pnl_pct']:+.2f} %) · pic {s['peak']:,.2f} · repli max depuis le pic {s['drawdown_pct']:.2f} %",
             f"Trades : {s['trades']} ({s['wins']} gagnants, {s['losses']} perdants) · gain moyen {s['avg_win']:+,.2f} · perte moyenne {s['avg_loss']:+,.2f}",
-            f"Risque par trade : {s['risk_pct']} % · positions ouvertes : {s['open_positions']} · trades non pris : {s['skipped']}",
+            f"Risque par trade : {s['risk_pct']} % · positions ouvertes : {s['open_positions']} · trades risqués (lot minimal imposé) : {s['risky']}",
         ]
         return "\n".join(lines)

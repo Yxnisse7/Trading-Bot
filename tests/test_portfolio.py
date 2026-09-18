@@ -23,9 +23,15 @@ def test_size_position_risk_and_leverage():
     # risque 1 % de 10 000 = 100 ; perte par lot au stop = 40 pts × 2 $ = 80 $ → 1 lot (arrondi au pas)
     s = size_position(10000, 1.0, nq, 20000, 19960)
     assert s["lots"] == 1 and s["risk_amount"] == 80.0 and s["notional"] == 40000.0
-    # balance trop petite : 1 000 → risque 10 < 80 par lot → non pris
+    # balance trop petite : 1 000 → risque 10 < 80 par lot → lot minimal pris quand même, marqué risqué
     s2 = size_position(1000, 1.0, nq, 20000, 19960)
-    assert s2["lots"] == 0 and "insuffisante" in s2["reason"]
+    assert s2["lots"] == 1 and s2["risky"] and s2["risk_pct_effective"] == 8.0
+    assert any("lot minimal" in w for w in s2["warnings"])
+    # balance 100 : le lot minimal dépasse aussi le plafond de levier → second avertissement, trade pris
+    s2b = size_position(100, 1.0, nq, 20000, 19960)
+    assert s2b["lots"] == 1 and any("levier" in w for w in s2b["warnings"])
+    # paramètres invalides : seul cas sans lots
+    assert size_position(1000, 1.0, nq, 20000, 20000)["lots"] == 0
     # crypto : pas fin, plafond de levier ×3
     btc = cfg.asset("bitcoin")
     s3 = size_position(1000, 1.0, btc, 60000, 59700)   # risque 10 $, 300 $ par BTC → 0,033 BTC
@@ -64,14 +70,19 @@ def test_portfolio_lifecycle_and_no_retroactivity(tmp_path):
     assert summ["trades"] == 2 and summ["wins"] == 1 and summ["losses"] == 1 and summ["drawdown_pct"] > 0
     text = pf.format_summary()
     assert "Balance" in text and "Trades : 2" in text
-    # fantômes ignorés ; balance insuffisante → « non pris »
+    # fantômes ignorés ; balance insuffisante → trade pris au lot minimal et signalé « risqué »
     assert pf.on_open(_sig(created=T0 + timedelta(hours=2), source="shadow"), cfg.asset("nasdaq")) is None
     pf.set_balance(100, 1.0, T0 + timedelta(hours=3))
     assert len(pf.data["archives"]) == 1 and pf.data["history"] == []
     small = _sig(created=T0 + timedelta(hours=4))
-    assert pf.on_open(small, cfg.asset("nasdaq"))["lots"] == 0 and len(pf.data["skipped"]) == 1
+    sz_small = pf.on_open(small, cfg.asset("nasdaq"))
+    assert sz_small["lots"] == 1 and sz_small["risky"] and small.id in pf.data["open"] and pf.data["skipped"] == []
+    assert "TRADE RISQUÉ" in pf.format_sizing(sz_small, cfg.asset("nasdaq"))
+    close_signal(small, "sl", 19960.0, T0 + timedelta(hours=4, minutes=20), cfg.asset("nasdaq").cost_pct)
+    row_small = pf.on_close(small, cfg.asset("nasdaq"))
+    assert row_small["risky"] and "risqué" in pf.format_outcome(row_small) and pf.summary()["risky"] == 1
     # persistance
     again = Portfolio(Store(tmp_path), cfg)
-    assert again.data["balance"] == 100 and not again.data["is_default"]
+    assert again.data["balance"] == 16.0 and not again.data["is_default"]  # 100 − 80 (stop) − 4 (coûts)
     with pytest.raises(ValueError):
         pf.set_balance(-5)

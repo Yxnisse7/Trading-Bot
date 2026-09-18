@@ -70,7 +70,8 @@ class Config:
     max_losses_per_asset_per_day: int = 3   # après N stops sur un actif, plus de signal ce jour-là
     max_open_signals: int = 4               # positions simultanées maximum, tous actifs confondus
     cooldown_minutes: int = 30              # délai minimal entre deux signaux sur un même actif
-    cooldown_after_loss_minutes: int = 60   # délai après un stop touché
+    cooldown_after_loss_minutes: int = 60   # délai après un stop touché (compté depuis la clôture, tous horizons)
+    same_direction_after_loss_minutes: int = 120  # après un stop, pas de nouveau signal dans le MÊME sens sur l'actif
 
     # ---- Signaux fantômes : setups rejetés pour confiance insuffisante, suivis en silence
     #      (jamais notifiés) pour nourrir l'apprentissage et les statistiques par critère
@@ -124,6 +125,7 @@ class Config:
     news_blackout_before_minutes: int = 45   # avant une annonce macro majeure
     news_blackout_after_minutes: int = 30    # après
     max_news_risk_score: int = 3             # au-delà : marché jugé incertain
+    post_event_caution_hours: int = 24       # après FOMC / CPI / emploi : +1 critère exigé, horizon 3 h suspendu
 
     # ---- Suivi ----
     track_interval_minutes: int = 5

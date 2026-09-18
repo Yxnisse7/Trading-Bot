@@ -150,8 +150,10 @@ Page `docs/portfolio.html` (lien « Simulation de compte » sur le tableau de bo
   Le dimensionnement figure dans le message Telegram du signal.
 - À la clôture (TP, SL ou expiration), le résultat net des coûts estimés est appliqué à la balance et
   annoncé dans la notification d'issue ; la page montre la courbe de la balance, les positions
-  simulées, chaque trade avec lots, brut, coûts, net et balance après, et les trades non pris (balance
-  insuffisante pour le lot minimal).
+  simulées, chaque trade avec lots, brut, coûts, net et balance après.
+- **Aucun trade n'est refusé** : si la balance ne permet pas le lot minimal au risque choisi, le lot
+  minimal est pris quand même et le trade est marqué ⚠️ *risqué* (risque effectif et levier réels dans
+  le message Telegram et sur la page) ; la page liste ces trades à part.
 - Prix en dollars, aucune conversion de devise ; ni marge, ni glissement, ni financement overnight.
 
 ### Interface
@@ -295,7 +297,9 @@ Valeurs par défaut dans `trading_bot/config.py`, surcharge via `config.json` (v
 | `max_signals_per_asset_per_day` | 5 | plafond quotidien par actif |
 | `max_losses_per_asset_per_day` | 3 | stops avant arrêt pour la journée |
 | `max_open_signals` | 4 | positions ouvertes simultanées |
-| `cooldown_minutes` / `cooldown_after_loss_minutes` | 30 / 60 | délais entre signaux |
+| `cooldown_minutes` / `cooldown_after_loss_minutes` | 30 / 60 | délai entre signaux ; après un stop, compté depuis la clôture, tous horizons confondus |
+| `same_direction_after_loss_minutes` | 120 | après un stop, pas de nouveau signal dans le même sens sur l'actif (le sens inverse reste possible) |
+| `post_event_caution_hours` | 24 | après FOMC / CPI / emploi : un critère et un point de score de plus exigés, horizon 3 h suspendu |
 | `shadow_enabled` / `shadow_min_criteria` | true / 2 | signaux fantômes (suivi silencieux) |
 | `learn_from_backtest` | true | les trades de backtest alimentent l'apprentissage |
 | `min_criteria` / `min_score` / `strong_score` | 3 / 3,0 / 5,0 | seuils de confiance |
