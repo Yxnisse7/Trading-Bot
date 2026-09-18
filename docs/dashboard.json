@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-18T08:55:25.212907+02:00",
+  "updated_at": "2026-09-18T09:10:50.343116+02:00",
   "timezone": "Europe/Paris",
   "overview": {
     "visible": {
@@ -24,7 +24,7 @@
       "pnl_pct": 0,
       "avg_pnl_pct": 0.0
     },
-    "open": 0,
+    "open": 1,
     "open_shadow": 0
   },
   "by_source": {
@@ -221,7 +221,7 @@
         "pnl_pct": 0,
         "avg_pnl_pct": 0.0
       },
-      "open": 0,
+      "open": 1,
       "session_utc": [
         7,
         20
@@ -1781,7 +1781,39 @@
       "last_trades": []
     }
   ],
-  "open_signals": [],
+  "open_signals": [
+    {
+      "id": "5fbf67feee",
+      "asset": "gold",
+      "asset_label": "Or (XAU/USD)",
+      "direction": "long",
+      "entry": 4432.4,
+      "take_profit": 4443.7,
+      "stop_loss": 4424.9,
+      "risk_reward": 1.51,
+      "confidence": "fort",
+      "score": 5.75,
+      "criteria": [
+        "adx",
+        "rsi",
+        "trend_15m",
+        "trend_1h",
+        "trend_5m",
+        "vwap"
+      ],
+      "source": "bot",
+      "status": "open",
+      "pnl_pct": null,
+      "pnl_gross_pct": null,
+      "duration_minutes": null,
+      "close_price": null,
+      "created_at": "2026-09-18T07:10:47Z",
+      "created_local": "18/09 09:10",
+      "expires_at": "2026-09-18T08:10:47Z",
+      "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range horaire moyen ≈ 18.81 (0.42 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 74%.",
+      "news_context": "actualité à surveiller (score 2) : Forex Today: Japanese Yen falls despite BoJ's rate hike; Fedspeak in focus"
+    }
+  ],
   "recent_trades": [
     {
       "id": "0cde963e25",
@@ -2111,8 +2143,8 @@
     "sample": 479
   },
   "state": {
-    "last_scan": "2026-09-18T06:55:23Z",
-    "last_scan_note": "0 signal(aux)",
+    "last_scan": "2026-09-18T07:10:47Z",
+    "last_scan_note": "1 signal(aux)",
     "last_summary": "2026-09-18T00:08:54Z",
     "telegram_offset": 630538278,
     "last_track": "2026-09-17T20:10:46Z"
