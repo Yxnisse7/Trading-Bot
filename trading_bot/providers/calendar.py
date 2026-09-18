@@ -17,8 +17,7 @@ from .news import MacroEvent
 log = logging.getLogger(__name__)
 
 FEEDS = [
-    "https://nfs.faireconomy.media/ff_calendar_thisweek.json",
-    "https://nfs.faireconomy.media/ff_calendar_nextweek.json",
+    "https://nfs.faireconomy.media/ff_calendar_thisweek.json",   # semaine en cours (la « semaine prochaine » n'est pas publiée)
 ]
 # Devises dont les annonces à fort impact bloquent les signaux
 BLACKOUT_CURRENCIES = {"USD"}
