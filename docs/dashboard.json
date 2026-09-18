@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-18T14:40:40.969607+02:00",
+  "updated_at": "2026-09-18T14:55:34.793792+02:00",
   "timezone": "Europe/Paris",
   "overview": {
     "visible": {
@@ -24,7 +24,7 @@
       "pnl_pct": 0,
       "avg_pnl_pct": 0.0
     },
-    "open": 0,
+    "open": 1,
     "open_shadow": 0
   },
   "by_source": {
@@ -160,7 +160,7 @@
         "pnl_pct": 0,
         "avg_pnl_pct": 0.0
       },
-      "open": 0,
+      "open": 1,
       "session_utc": [
         12,
         21
@@ -2368,7 +2368,40 @@
       "last_trades": []
     }
   ],
-  "open_signals": [],
+  "open_signals": [
+    {
+      "id": "16efeb793e",
+      "asset": "sp500",
+      "asset_label": "S&P 500 (ES)",
+      "direction": "short",
+      "horizon": "1h",
+      "entry": 7702.5,
+      "take_profit": 7697.5,
+      "stop_loss": 7706.5,
+      "risk_reward": 1.25,
+      "confidence": "fort",
+      "score": 5.75,
+      "criteria": [
+        "adx",
+        "rsi",
+        "trend_15m",
+        "trend_1h",
+        "trend_5m",
+        "vwap"
+      ],
+      "source": "bot",
+      "status": "open",
+      "pnl_pct": null,
+      "pnl_gross_pct": null,
+      "duration_minutes": null,
+      "close_price": null,
+      "created_at": "2026-09-18T12:55:26Z",
+      "created_local": "18/09 14:55",
+      "expires_at": "2026-09-18T13:55:26Z",
+      "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 12.25 (0.16 %), TP = 40 % du range, SL = 34 % du range, probabilité de résolution sous 1 h ≈ 84%.",
+      "news_context": "actualité calme sur les 2 dernières heures"
+    }
+  ],
   "recent_trades": [
     {
       "id": "0eee8473e4",
@@ -2944,8 +2977,8 @@
     "sample": 677
   },
   "state": {
-    "last_scan": "2026-09-18T12:40:36Z",
-    "last_scan_note": "0 signal(aux)",
+    "last_scan": "2026-09-18T12:55:26Z",
+    "last_scan_note": "1 signal(aux)",
     "last_summary": "2026-09-18T00:08:54Z",
     "telegram_offset": 630538280,
     "last_track": "2026-09-18T12:30:57Z",
@@ -2973,6 +3006,6 @@
     "avg_win": 0.0,
     "avg_loss": 0.0,
     "open_positions": 0,
-    "skipped": 1
+    "skipped": 2
   }
 }
