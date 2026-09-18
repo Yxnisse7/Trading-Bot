@@ -1,6 +1,6 @@
 # Trading-Bot — rapport
 
-_Mis à jour le 18/09/2026 à 17:40 (Europe/Paris)._
+_Mis à jour le 18/09/2026 à 17:50 (Europe/Paris)._
 
 ## Vue d'ensemble
 
@@ -8,7 +8,7 @@ _Mis à jour le 18/09/2026 à 17:40 (Europe/Paris)._
 - Taux de réussite cumulé (TP / (TP+SL)) : **27%** — hasard attendu 41%, avantage **-14%**
 - P&L théorique cumulé, net des coûts estimés (somme des % par trade, sans levier) : **-1.47 %** (brut -1.22 %)
 - Signaux ouverts : **1**
-- Signaux fantômes (suivis en silence pour l'apprentissage) : **1** clôturés, 1 ouverts, taux de réussite 100% (hasard attendu 40%)
+- Signaux fantômes (suivis en silence pour l'apprentissage) : **2** clôturés, 0 ouverts, taux de réussite 100% (hasard attendu 40%)
 
 ## Signaux ouverts
 
@@ -99,14 +99,18 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 
 | Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
 |---|---:|---:|---:|---:|---:|---:|
-| adx | 1 | 1 | 0 | 0 | 100% | +0.084 % |
-| trend_15m | 1 | 1 | 0 | 0 | 100% | +0.084 % |
-| vwap | 1 | 1 | 0 | 0 | 100% | +0.084 % |
+| adx | 2 | 2 | 0 | 0 | 100% | +0.098 % |
+| level | 1 | 1 | 0 | 0 | 100% | +0.113 % |
+| orb | 1 | 1 | 0 | 0 | 100% | +0.113 % |
+| rsi | 1 | 1 | 0 | 0 | 100% | +0.113 % |
+| trend_15m | 2 | 2 | 0 | 0 | 100% | +0.098 % |
+| vwap | 2 | 2 | 0 | 0 | 100% | +0.098 % |
 
 ### Fantômes par actif
 
 | Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
 |---|---:|---:|---:|---:|---:|---:|
+| nasdaq | 1 | 1 | 0 | 0 | 100% | +0.113 % |
 | sp500 | 1 | 1 | 0 | 0 | 100% | +0.084 % |
 
 ## Derniers trades
@@ -141,14 +145,14 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 | macd | 1.0 |
 | level | 0.25 |
 | volume | 0.25 |
-| orb | 0.272 |
+| orb | 0.25 |
 | pdhl | 1.0 |
 | corr | 0.5 |
 
 Dernières notes :
 
-- level: win rate 37% sur 87 trades → poids 0.25 → 0.25
-- orb: win rate 32% sur 37 trades → poids 0.32 → 0.272
+- level: win rate 38% sur 88 trades → poids 0.25 → 0.25
+- orb: win rate 34% sur 38 trades → poids 0.272 → 0.25
 - volume: win rate 37% sur 52 trades → poids 0.25 → 0.25
 
 ## Backtests (données historiques 5 min)
