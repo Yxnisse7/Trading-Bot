@@ -59,6 +59,7 @@ class Portfolio:
         self.data = store.portfolio()
         if not self.data:
             self.data = self._fresh(cfg.portfolio_default_balance, cfg.portfolio_risk_pct, utcnow(), default=True)
+            self.save()
 
     # ---- état
     def _fresh(self, balance: float, risk_pct: float, when: datetime, default: bool = False) -> dict[str, Any]:

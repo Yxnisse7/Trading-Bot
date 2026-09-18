@@ -126,10 +126,17 @@ class Store:
     def portfolio(self) -> dict[str, Any]:
         return self._read(self.portfolio_file, {})
 
+    def _docs_dir(self) -> Path | None:
+        """Dossier docs/ à alimenter (GitHub Pages) — uniquement pour le dossier de données du projet."""
+        docs = ROOT_DIR / "docs"
+        if docs.is_dir() and self.dir.resolve() == (ROOT_DIR / "data").resolve():
+            return docs
+        return None
+
     def save_portfolio(self, data: dict[str, Any]) -> None:
         self._write(self.portfolio_file, data)
-        docs = ROOT_DIR / "docs"
-        if docs.is_dir():
+        docs = self._docs_dir()
+        if docs is not None:
             try:
                 self._write(docs / "portfolio.json", data)
             except OSError:
@@ -139,8 +146,8 @@ class Store:
     def save_dashboard(self, data: dict[str, Any]) -> None:
         self._write(self.dashboard_file, data)
         # copie à côté de docs/index.html pour GitHub Pages (dossier /docs)
-        docs = ROOT_DIR / "docs"
-        if docs.is_dir():
+        docs = self._docs_dir()
+        if docs is not None:
             try:
                 self._write(docs / "dashboard.json", data)
             except OSError:
