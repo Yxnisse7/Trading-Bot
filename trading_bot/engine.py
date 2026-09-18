@@ -14,6 +14,7 @@ from .config import DISCLAIMER, Config, load_config
 from .learning import learn
 from .models import Signal, iso, parse_iso, utcnow
 from .notify import notify, telegram_chat_ids, telegram_updates
+from .portfolio import Portfolio
 from .providers import calendar as calmod
 from .providers import market
 from .providers import news as newsmod
@@ -35,6 +36,7 @@ class Engine:
         self.cfg = cfg or load_config()
         self.store = store or Store()
         self.tz = ZoneInfo(self.cfg.timezone)
+        self.portfolio = Portfolio(self.store, self.cfg)
 
     # ------------------------------------------------------------------ scan
     def scan(self, now: datetime | None = None, dry_run: bool = False) -> list[Signal]:
@@ -114,9 +116,13 @@ class Engine:
                     continue
                 produced.append(sig)
                 all_sigs.append(sig)
+                sim_line = ""
                 if not dry_run:
+                    sizing = self.portfolio.on_open(sig, asset)
+                    sig.meta["sim"] = sizing
+                    sim_line = self.portfolio.format_sizing(sizing, asset)
                     self.store.add_signal(sig)
-                notify(format_signal(sig, self.cfg.timezone) + "\n\n" + DISCLAIMER)
+                notify(format_signal(sig, self.cfg.timezone) + ("\n" + sim_line if sim_line else "") + "\n\n" + DISCLAIMER)
                 log.info("%s [%s] : signal %s %s émis (id %s)", asset.label, hkey, sig.direction, sig.entry, sig.id)
         self._touch_state(now, note=f"{len(produced)} signal(aux)")
         if not dry_run:
@@ -183,6 +189,12 @@ class Engine:
             return "short"
         return None
 
+    # ------------------------------------------------------- simulation
+    def set_balance(self, balance: float, risk_pct: float | None = None, now: datetime | None = None) -> dict[str, Any]:
+        data = self.portfolio.set_balance(balance, risk_pct, now)
+        self.write_report()
+        return data
+
     # ------------------------------------------------------- contexte marché
     def correlation_context(self, now: datetime) -> dict[str, Any]:
         """Variations récentes des marchés meneurs (VIX 15 min, DXY et taux 10 ans sur 1 h)."""
@@ -246,7 +258,8 @@ class Engine:
             else:
                 closed.append(done)
                 self.store.append_history(done)
-                notify(format_outcome(done, self.cfg.timezone))
+                row = self.portfolio.on_close(done, asset)
+                notify(format_outcome(done, self.cfg.timezone) + ("\n" + self.portfolio.format_outcome(row) if row else ""))
         self.store.save_open(remaining)
 
         remaining_shadow: list[Signal] = []
@@ -316,9 +329,11 @@ class Engine:
         sig.rationale = (f"Demande manuelle {direction}. Critères du bot alignés dans ce sens : {crit}. " + sig.rationale.split(". ", 1)[-1])
         tp_pct = abs(sig.take_profit - sig.entry) / sig.entry * 100.0
         if asset.cost_pct > 0 and tp_pct < self.cfg.min_tp_to_cost_ratio * asset.cost_pct:
-            sig.rationale += f" ⚠️ Cible petite face aux coûts estimés ({tp_pct:.2f} % pour {asset.cost_pct:.2f} % de frais)." 
+            sig.rationale += f" ⚠️ Cible petite face aux coûts estimés ({tp_pct:.2f} % pour {asset.cost_pct:.2f} % de frais)."
+        sizing = self.portfolio.on_open(sig, asset)
+        sig.meta["sim"] = sizing
         self.store.add_signal(sig)
-        notify("🖐️ SIGNAL MANUEL\n" + format_signal(sig, self.cfg.timezone) + "\n\n" + DISCLAIMER)
+        notify("🖐️ SIGNAL MANUEL\n" + format_signal(sig, self.cfg.timezone) + "\n" + self.portfolio.format_sizing(sizing, asset) + "\n\n" + DISCLAIMER)
         self.write_report()
         return sig
 
@@ -326,6 +341,7 @@ class Engine:
     def summary(self, day=None, send: bool = True) -> str:
         adj = self._relearn()
         text = daily_summary(self.store.all_signals(), self.cfg, day, adj)
+        text = text.replace("\n\n" + DISCLAIMER, "\n\n" + self.portfolio.format_summary() + "\n\n" + DISCLAIMER)
         try:
             now = utcnow()
             agenda = calmod.upcoming(self.macro_events(now), now, hours=30, min_impact="high")
@@ -407,8 +423,11 @@ class Engine:
             conf, f"⚠️ Ce setup ne passe PAS mes critères ({a.n_criteria} critère(s) aligné(s), score {a.score}) : je ne l'aurais pas envoyé seul.")
         if risk > self.cfg.max_news_risk_score:
             verdict += f" ⚠️ Actualité à risque (score {risk})."
+        sizing = self.portfolio.on_open(sig, asset)
+        sig.meta["sim"] = sizing
         self.store.add_signal(sig)
         text = (header + "\n\n" + verdict + "\n\n" + format_signal(sig, self.cfg.timezone)
+                + "\n" + self.portfolio.format_sizing(sizing, asset)
                 + "\n\nLecture des indicateurs :\n" + lecture + "\n\n" + DISCLAIMER)
         notify(text)
         self.write_report()
@@ -421,7 +440,9 @@ class Engine:
         adjustments = self.store.adjustments()
         text = build_report(all_sigs, self.cfg, adjustments, backtests)
         self.store.save_report(text)
-        self.store.save_dashboard(build_dashboard(all_sigs, self.cfg, adjustments, backtests, self.store.state()))
+        dash = build_dashboard(all_sigs, self.cfg, adjustments, backtests, self.store.state())
+        dash["portfolio"] = self.portfolio.summary()
+        self.store.save_dashboard(dash)
         return text
 
     # ------------------------------------------------------------ données
@@ -492,6 +513,7 @@ class Engine:
             "/short <actif> [commentaire] — signal manuel à la vente\n"
             "/status — signaux ouverts\n"
             "/resume — résumé du jour\n"
+            "/balance — état de la simulation de compte ; /balance 1000 [risque %] pour la (re)définir\n"
             "Actifs : nasdaq (nq), sp500 (es), bitcoin (btc), ethereum (eth), gold (or)")
 
     def handle_command(self, text: str, now: datetime | None = None) -> str | None:
@@ -511,6 +533,16 @@ class Engine:
             return "\n\n".join(format_signal(s, self.cfg.timezone) for s in sigs)
         if cmd in ("/resume", "/résumé", "/summary"):
             return self.summary(send=False)
+        if cmd == "/balance":
+            if not args:
+                return self.portfolio.format_summary()
+            try:
+                amount = float(args[0].replace(",", ".").replace("€", "").replace("$", ""))
+                risk = float(args[1].replace(",", ".").replace("%", "")) if len(args) > 1 else None
+                self.set_balance(amount, risk, now)
+                return "Simulation réinitialisée.\n" + self.portfolio.format_summary()
+            except ValueError as exc:
+                return f"Balance invalide : {exc}. Exemple : /balance 1000 1"
         if cmd in ("/propose", "/long", "/short"):
             if not args:
                 return f"Précisez l'actif : {cmd} bitcoin"

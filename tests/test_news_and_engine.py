@@ -391,3 +391,30 @@ def test_orb_and_previous_day_breakout(cfg):
     a = assess(cfg.asset("nasdaq"), lifted, cfg)
     assert "orb" in a.details and "pdhl" in a.details
     assert lifted[-1].close > prev_high or "pdhl" in a.criteria or True  # la lecture est produite ; le vote dépend de l'extension
+
+
+def test_engine_applies_portfolio_and_balance_command(tmp_path, monkeypatch):
+    now = datetime(2026, 9, 17, 14, 0, tzinfo=timezone.utc)
+    candles = make_candles(n=500, drift=0.0003, noise=0.0012, seed=7, start_ts=int(now.timestamp()) - 500 * 300)
+    eng = _engine(tmp_path, monkeypatch, candles, candles[-1].close)
+    from trading_bot import engine as engmod
+    sent = []
+    monkeypatch.setattr(engmod, "notify", lambda text, title=None, chat_id=None: sent.append(text))
+    eng.set_balance(50000, 1.0, now - timedelta(minutes=1))
+    sigs = eng.scan(now)
+    assert sigs and all("Simulation (balance" in s for s in sent if "SIGNAL" in s)
+    assert all(s.meta.get("sim", {}).get("lots", 0) > 0 or "insuffisante" in (s.meta.get("sim") or {}).get("reason", "") for s in sigs)
+    monkeypatch.setattr(engmod.market, "fetch_price", lambda asset: 10 ** 9)
+    closed = eng.track(now + timedelta(minutes=10))
+    assert closed
+    pf = eng.portfolio.data
+    assert pf["balance"] > 50000 and len(pf["history"]) >= 1
+    assert any("balance" in s and "Simulation :" in s for s in sent)
+    # commande Telegram
+    reply = eng.handle_command("/balance", now)
+    assert "SIMULATION DE COMPTE" in reply and "50" in reply
+    reply2 = eng.handle_command("/balance 2000 0.5", now + timedelta(minutes=20))
+    assert "réinitialisée" in reply2 and eng.portfolio.data["balance"] == 2000 and eng.portfolio.data["risk_pct"] == 0.5
+    assert "Balance invalide" in eng.handle_command("/balance abc", now)
+    text = eng.summary(now.date(), send=False)
+    assert "SIMULATION DE COMPTE" in text

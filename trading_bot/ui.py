@@ -78,6 +78,9 @@ def make_handler(engine: Engine):
                         engine.write_report()
                 self._file(engine.store.dashboard_file)
                 return
+            if path == "/api/portfolio":
+                self._json(200, engine.portfolio.data)
+                return
             if path == "/api/ping":
                 self._json(200, {"ok": True, "mode": "local"})
                 return
@@ -102,6 +105,11 @@ def make_handler(engine: Engine):
                         sig = engine.manual(str(body.get("asset", "")), str(body.get("direction", "")),
                                             note=str(body.get("note", ""))[:200])
                     self._json(200, {"ok": True, "signal": sig.to_dict()})
+                elif path == "/api/portfolio":
+                    with lock:
+                        data = engine.set_balance(float(body.get("balance", 0)),
+                                                  float(body["risk_pct"]) if body.get("risk_pct") not in (None, "") else None)
+                    self._json(200, {"ok": True, "portfolio": data})
                 elif path == "/api/propose":
                     with lock:
                         res = engine.propose(str(body.get("asset", "")))

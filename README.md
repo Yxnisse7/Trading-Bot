@@ -121,6 +121,7 @@ python run.py loop         # boucle locale : un tick toutes les 5 min
 | `/long nq cassure` / `/short or` | signal manuel (le commentaire est facultatif), calibré par le bot, notifié et suivi |
 | `/status` | signaux ouverts |
 | `/resume` | résumé du jour |
+| `/balance` / `/balance 1000 1` | état de la simulation de compte / nouvelle balance (et risque %) |
 | `/help` | aide |
 
 Actifs : `nasdaq` (`nq`), `sp500` (`es`), `bitcoin` (`btc`), `ethereum` (`eth`), `gold` (`or`).
@@ -134,6 +135,24 @@ transmettre au propriétaire pour être ajouté au secret. Un groupe Telegram fo
 **Réactivité** : le workflow `commands.yml` ne fait que lire et traiter les commandes (quelques
 secondes) ; déclenché par un cron externe toutes les 1 à 2 minutes, il rend les commandes quasi
 immédiates sans alourdir le passage complet de 5 min.
+
+### Simulation de compte (lots et balance)
+Page `docs/portfolio.html` (lien « Simulation de compte » sur le tableau de bord), commande
+`/balance` sur Telegram et `python run.py portfolio --balance 1000 --risk 1`.
+
+- Vous définissez une **balance fictive** et un **risque par trade** (1 % par défaut). Définir une
+  balance démarre une nouvelle simulation : seuls les trades ouverts **après** ce moment comptent,
+  sans rétroactivité ; la simulation précédente est archivée. Sans définition, le bot simule sur la
+  balance par défaut (`portfolio_default_balance`, 1 000 $).
+- Pour chaque signal (bot, manuel, proposition ; jamais les fantômes), les **lots** sont calculés pour
+  que la perte au stop soit égale au risque choisi, arrondis au pas du contrat et plafonnés par le
+  levier de l'actif : MNQ (2 $/pt), MES (5 $/pt), MGC (10 $/pt) ×20 ; BTC et ETH (pas 0,001 / 0,01) ×3.
+  Le dimensionnement figure dans le message Telegram du signal.
+- À la clôture (TP, SL ou expiration), le résultat net des coûts estimés est appliqué à la balance et
+  annoncé dans la notification d'issue ; la page montre la courbe de la balance, les positions
+  simulées, chaque trade avec lots, brut, coûts, net et balance après, et les trades non pris (balance
+  insuffisante pour le lot minimal).
+- Prix en dollars, aucune conversion de devise ; ni marge, ni glissement, ni financement overnight.
 
 ### Interface
 `python run.py ui` sert une page simple et visuelle (`docs/index.html`) : indicateurs clés,

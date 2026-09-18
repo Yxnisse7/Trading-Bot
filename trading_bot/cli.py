@@ -14,6 +14,7 @@
   python run.py manual --asset bitcoin --direction long   # signal demandé, notifié et suivi
   python run.py propose --asset bitcoin                   # analyse à la demande + proposition
   python run.py commands    # traite les commandes Telegram reçues (/propose, /long, /short, /status)
+  python run.py portfolio [--balance 1000 --risk 1]   # simulation de compte : état, ou nouvelle balance
   python run.py ui          # interface locale : http://127.0.0.1:8787
 """
 from __future__ import annotations
@@ -35,7 +36,7 @@ from .signals import format_signal
 
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(description="Générateur de signaux de scalping (NQ, BTC, XAU) — données gratuites")
-    p.add_argument("command", choices=["scan", "track", "tick", "summary", "stats", "loop", "status", "test-notify", "backtest", "report", "fetch-data", "manual", "propose", "ui", "commands"])
+    p.add_argument("command", choices=["scan", "track", "tick", "summary", "stats", "loop", "status", "test-notify", "backtest", "report", "fetch-data", "manual", "propose", "ui", "commands", "portfolio"])
     p.add_argument("--dry-run", action="store_true", help="scan sans enregistrer les signaux")
     p.add_argument("--day", help="jour du résumé (AAAA-MM-JJ)")
     p.add_argument("--interval", type=int, default=5, help="minutes entre deux ticks (mode loop)")
@@ -46,6 +47,8 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--direction", choices=["long", "short"], help="sens du signal manuel")
     p.add_argument("--note", default="", help="commentaire du signal manuel")
     p.add_argument("--port", type=int, default=8787, help="port de l'interface locale")
+    p.add_argument("--balance", type=float, help="nouvelle balance de simulation")
+    p.add_argument("--risk", type=float, help="risque par trade en % de la balance")
     p.add_argument("-v", "--verbose", action="store_true")
     args = p.parse_args(argv)
 
@@ -93,6 +96,10 @@ def main(argv: list[str] | None = None) -> int:
             return 2
         sig = eng.manual(args.asset[0], args.direction, note=args.note)
         print(json.dumps(sig.to_dict(), ensure_ascii=False, indent=2))
+    elif args.command == "portfolio":
+        if args.balance:
+            eng.set_balance(args.balance, args.risk)
+        print(eng.portfolio.format_summary())
     elif args.command == "commands":
         print(f"{eng.process_commands()} commande(s) traitée(s).")
     elif args.command == "propose":

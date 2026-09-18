@@ -53,6 +53,12 @@ class AssetConfig:
     news_keywords: tuple[str, ...] = ()
     cost_pct: float = 0.0         # coût aller-retour estimé (spread + commissions), en % du prix
     long_horizon: bool = True     # analyser aussi l'horizon ~3 h sur cet actif
+    # ---- simulation de compte : 1 lot = `lot_multiplier` unités de compte par point de prix
+    lot_label: str = "lot"
+    lot_multiplier: float = 1.0   # MNQ 2 $/pt, MES 5 $/pt, MGC 10 $/pt, BTC 1 $/$, ETH 1 $/$
+    lot_step: float = 1.0         # granularité des lots (0,001 BTC, 0,01 ETH, 1 contrat micro)
+    lot_min: float = 1.0
+    max_leverage: float = 10.0    # notionnel maximal = balance × levier
 
 
 @dataclass
@@ -128,6 +134,11 @@ class Config:
     learning_weak_win_rate: float = 0.40
     learning_strong_win_rate: float = 0.60
 
+    # ---- Simulation de compte (paper trading chiffré)
+    portfolio_default_balance: float = 1000.0
+    portfolio_risk_pct: float = 1.0         # risque par trade, en % de la balance courante
+    portfolio_currency: str = "$"           # simple libellé : les prix sont en dollars, aucune conversion
+
     timezone: str = "Europe/Paris"
     log_level: str = "INFO"
 
@@ -144,6 +155,7 @@ def default_assets() -> dict[str, AssetConfig]:
             # Futures NQ : on évite la nuit/ouverture chaotique ; 13h-21h UTC = séance US + pré-ouverture
             session_utc=(12, 21),
             cost_pct=0.01,   # ≈ 1 tick de spread + commissions sur un micro-contrat
+            lot_label="MNQ", lot_multiplier=2.0, lot_step=1, lot_min=1, max_leverage=20,
             news_keywords=("nasdaq", "wall street", "fed", "fomc", "inflation", "cpi",
                            "payrolls", "treasury", "yields", "tech stocks", "s&p"),
         ),
@@ -153,6 +165,7 @@ def default_assets() -> dict[str, AssetConfig]:
             min_hourly_range_pct=0.06, max_hourly_range_pct=2.0,
             session_utc=(12, 21),
             cost_pct=0.01,
+            lot_label="MES", lot_multiplier=5.0, lot_step=1, lot_min=1, max_leverage=20,
             news_keywords=("s&p", "wall street", "stocks", "fed", "fomc", "inflation", "cpi",
                            "payrolls", "treasury", "yields", "earnings"),
         ),
@@ -163,6 +176,7 @@ def default_assets() -> dict[str, AssetConfig]:
             session_utc=None,  # 24/7
             cost_pct=0.06,   # spread + frais taker typiques (0,03 % × 2)
             long_horizon=False,  # backtest 60 j : horizon 3 h nettement perdant sur les cryptos
+            lot_label="BTC", lot_multiplier=1.0, lot_step=0.001, lot_min=0.001, max_leverage=3,
             news_keywords=("bitcoin", "btc", "crypto", "etf", "sec", "binance", "coinbase",
                            "hack", "exploit", "stablecoin", "tether", "liquidation"),
         ),
@@ -173,6 +187,7 @@ def default_assets() -> dict[str, AssetConfig]:
             session_utc=None,
             cost_pct=0.08,
             long_horizon=False,  # idem
+            lot_label="ETH", lot_multiplier=1.0, lot_step=0.01, lot_min=0.01, max_leverage=3,
             news_keywords=("ethereum", "eth", "crypto", "etf", "sec", "binance", "coinbase",
                            "hack", "exploit", "stablecoin", "liquidation", "vitalik"),
         ),
@@ -182,6 +197,7 @@ def default_assets() -> dict[str, AssetConfig]:
             min_hourly_range_pct=0.05, max_hourly_range_pct=2.0,
             session_utc=(7, 20),  # Londres + New York
             cost_pct=0.02,   # spread CFD / futures typique
+            lot_label="MGC", lot_multiplier=10.0, lot_step=1, lot_min=1, max_leverage=20,
             news_keywords=("gold", "xau", "dollar", "dxy", "fed", "fomc", "treasury",
                            "yields", "inflation", "cpi", "geopolit", "central bank"),
         ),

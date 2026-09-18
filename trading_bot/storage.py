@@ -23,6 +23,7 @@ class Store:
         self.report_file = self.dir / "REPORT.md"             # rapport lisible sur GitHub
         self.shadow_file = self.dir / "shadow.json"           # signaux fantômes ouverts
         self.calendar_cache_file = self.dir / "calendar_cache.json"  # calendrier économique (ForexFactory)
+        self.portfolio_file = self.dir / "portfolio.json"     # simulation de compte
         self.dashboard_file = self.dir / "dashboard.json"     # données de l'interface
 
     # ---- helpers
@@ -120,6 +121,19 @@ class Store:
                 except TypeError:
                     continue
         return out
+
+    # ---- simulation de compte
+    def portfolio(self) -> dict[str, Any]:
+        return self._read(self.portfolio_file, {})
+
+    def save_portfolio(self, data: dict[str, Any]) -> None:
+        self._write(self.portfolio_file, data)
+        docs = ROOT_DIR / "docs"
+        if docs.is_dir():
+            try:
+                self._write(docs / "portfolio.json", data)
+            except OSError:
+                pass
 
     # ---- interface
     def save_dashboard(self, data: dict[str, Any]) -> None:

@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
     inputs:
       command:
-        description: "Commande (tick, scan, track, test-notify, backtest, fetch-data, manual, propose)"
+        description: "Commande (tick, scan, track, test-notify, backtest, fetch-data, manual, propose, portfolio)"
         default: "tick"
       asset:
         description: "Actif pour `manual` / `propose` (nasdaq, sp500, bitcoin, ethereum, gold)"
@@ -20,6 +20,12 @@ on:
         required: false
       note:
         description: "Commentaire pour `manual`"
+        required: false
+      balance:
+        description: "Nouvelle balance de simulation pour `portfolio`"
+        required: false
+      risk:
+        description: "Risque par trade en % pour `portfolio` (facultatif)"
         required: false
 
 concurrency:
@@ -51,18 +57,21 @@ jobs:
           ASSET: ${{ github.event.inputs.asset }}
           DIRECTION: ${{ github.event.inputs.direction }}
           NOTE: ${{ github.event.inputs.note }}
+          BALANCE: ${{ github.event.inputs.balance }}
+          RISK: ${{ github.event.inputs.risk }}
         run: |
           case "$CMD" in
             fetch-data) python run.py fetch-data --days 60 ;;
             manual)     python run.py manual --asset "$ASSET" --direction "$DIRECTION" --note "$NOTE" ;;
             propose)    python run.py propose --asset "$ASSET" ;;
+            portfolio)  if [ -n "$RISK" ]; then python run.py portfolio --balance "$BALANCE" --risk "$RISK"; else python run.py portfolio --balance "$BALANCE"; fi ;;
             *)          python run.py "$CMD" ;;
           esac
       - name: Sauvegarder l'état (signaux, historique, apprentissage)
         run: |
           git config user.name "trading-bot[actions]"
           git config user.email "actions@users.noreply.github.com"
-          git add data/ docs/dashboard.json 2>/dev/null || git add data/
+          git add data/ docs/dashboard.json docs/portfolio.json 2>/dev/null || git add data/
           if git diff --cached --quiet; then
             echo "Aucun changement d'état."
             exit 0

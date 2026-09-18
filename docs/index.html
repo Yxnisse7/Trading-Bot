@@ -27,6 +27,7 @@
   h1 { font-size: 22px; margin: 0; }
   h2 { font-size: 17px; margin: 28px 0 10px; }
   .muted { color: var(--muted); font-size: 13px; }
+  a { color: var(--accent); }
   .grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); }
   .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; box-shadow: var(--shadow); }
   .kpi .v { font-size: 26px; font-weight: 650; margin-top: 4px; }
@@ -63,6 +64,7 @@
     <div>
       <h1>Yasuke Trading-Bot</h1>
       <div class="muted" id="updated">Chargement…</div>
+      <div class="muted"><a href="portfolio.html" id="link-portfolio">Simulation de compte →</a></div>
     </div>
     <div style="display:flex; gap:8px; flex-wrap:wrap">
       <button class="secondary" id="btn-refresh" type="button">Actualiser</button>
@@ -296,6 +298,8 @@
       kpi("P&L net cumulé", signed(v.pnl_pct), "somme des % par trade", cls(v.pnl_pct)),
       kpi("Signaux ouverts", d.overview.open, `${d.overview.open_shadow} fantômes ouverts`),
       kpi("Fantômes clôturés", s.n, `réussite ${pct(s.win_rate)} · hasard ${pct(s.neutral_win_rate)}`),
+      d.portfolio ? kpi("Simulation de compte", `${Number(d.portfolio.balance).toLocaleString("fr-FR", {maximumFractionDigits: 2})} ${d.portfolio.currency}`,
+        `${signed(d.portfolio.pnl, 2, " " + d.portfolio.currency)} · ${d.portfolio.trades} trade(s)${d.portfolio.is_default ? " · balance par défaut" : ""}`, cls(d.portfolio.pnl)) : "",
     ].join("");
 
     // actifs (formulaire + tableau)
