@@ -1,6 +1,6 @@
 # Trading-Bot — rapport
 
-_Mis à jour le 18/09/2026 à 15:55 (Europe/Paris)._
+_Mis à jour le 18/09/2026 à 16:00 (Europe/Paris)._
 
 ## Vue d'ensemble
 
@@ -8,7 +8,7 @@ _Mis à jour le 18/09/2026 à 15:55 (Europe/Paris)._
 - Taux de réussite cumulé (TP / (TP+SL)) : **22%** — hasard attendu 41%, avantage **-18%**
 - P&L théorique cumulé, net des coûts estimés (somme des % par trade, sans levier) : **-1.46 %** (brut -1.23 %)
 - Signaux ouverts : **0**
-- Signaux fantômes (suivis en silence pour l'apprentissage) : **0** clôturés, 1 ouverts, taux de réussite n/a (hasard attendu n/a)
+- Signaux fantômes (suivis en silence pour l'apprentissage) : **1** clôturés, 0 ouverts, taux de réussite 100% (hasard attendu 40%)
 
 ## Statistiques
 
@@ -84,6 +84,41 @@ _Mis à jour le 18/09/2026 à 15:55 (Europe/Paris)._
 
 Trades expirés : 3, 67% terminés dans le bon sens, P&L moyen -0.028 %.
 
+## Signaux fantômes (apprentissage)
+
+Setups rejetés pour confiance insuffisante, suivis sans notification. Ils servent uniquement aux statistiques par critère et à l'apprentissage.
+
+### Fantômes par critère
+
+| Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
+|---|---:|---:|---:|---:|---:|---:|
+| adx | 1 | 1 | 0 | 0 | 100% | +0.084 % |
+| trend_15m | 1 | 1 | 0 | 0 | 100% | +0.084 % |
+| vwap | 1 | 1 | 0 | 0 | 100% | +0.084 % |
+
+### Fantômes par actif
+
+| Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
+|---|---:|---:|---:|---:|---:|---:|
+| sp500 | 1 | 1 | 0 | 0 | 100% | +0.084 % |
+
+## Derniers trades
+
+| Émis | Actif | Sens | Entrée | Clôture | Résultat | P&L | Durée |
+|---|---|---|---:|---:|---|---:|---:|
+| 18/09 14:55 | S&P 500 (ES) | short | 7702.5 | 7697.5 | ✅ TP | +0.05 % | 29 min |
+| 18/09 14:10 | Nasdaq 100 (NQ) | long | 29825.75 | 29769.25 | ❌ SL | -0.20 % | 9 min |
+| 18/09 11:40 | Or (XAU/USD) | long | 4427.4 | 4420.3 | ❌ SL | -0.18 % | 0 min |
+| 18/09 10:36 | Or (XAU/USD) | long | 4429.4 | 4414.3 | ❌ SL | -0.36 % | 68 min |
+| 18/09 10:10 | Or (XAU/USD) | long | 4434.4 | 4427.2 | ❌ SL | -0.18 % | 20 min |
+| 18/09 09:10 | Or (XAU/USD) | long | 4432.4 | 4433.3 | ⏱️ expiré | +0.00 % | 60 min |
+| 17/09 22:01 | Nasdaq 100 (NQ) | long | 29781.0 | 29742.75 | ❌ SL | -0.14 % | 9 min |
+| 17/09 19:15 | Nasdaq 100 (NQ) | long | 29753.25 | 29727.5 | ⏱️ expiré | -0.10 % | 64 min |
+| 17/09 18:01 | S&P 500 (ES) | long | 7703.5 | 7705.25 | ⏱️ expiré | +0.01 % | 64 min |
+| 17/09 17:01 | Nasdaq 100 (NQ) | long | 29695.5 | 29657.25 | ❌ SL | -0.14 % | 4 min |
+| 17/09 16:45 | Ethereum (ETH/USD) | long | 2462.6 | 2454.3 | ❌ SL | -0.42 % | 15 min |
+| 17/09 16:15 | Nasdaq 100 (NQ) | long | 29674.5 | 29731.5 | ✅ TP | +0.18 % | 11 min |
+
 ## Apprentissage
 
 | Critère | Poids actuel |
@@ -97,14 +132,14 @@ Trades expirés : 3, 67% terminés dans le bon sens, P&L moyen -0.028 %.
 | macd | 1.0 |
 | level | 0.25 |
 | volume | 0.25 |
-| orb | 0.444 |
+| orb | 0.377 |
 | pdhl | 1.0 |
 | corr | 0.5 |
 
 Dernières notes :
 
 - level: win rate 37% sur 86 trades → poids 0.25 → 0.25
-- orb: win rate 33% sur 36 trades → poids 0.522 → 0.444
+- orb: win rate 33% sur 36 trades → poids 0.444 → 0.377
 - volume: win rate 37% sur 52 trades → poids 0.25 → 0.25
 
 ## Backtests (données historiques 5 min)
