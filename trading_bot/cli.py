@@ -24,7 +24,7 @@ import json
 import logging
 import sys
 import time
-from datetime import date
+from datetime import date, datetime
 
 from .config import DISCLAIMER, load_config
 from .models import utcnow
@@ -38,7 +38,7 @@ def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(description="Générateur de signaux de scalping (NQ, BTC, XAU) — données gratuites")
     p.add_argument("command", choices=["scan", "track", "tick", "summary", "stats", "loop", "status", "test-notify", "backtest", "report", "fetch-data", "manual", "propose", "ui", "commands", "portfolio", "flush-outbox"])
     p.add_argument("--dry-run", action="store_true", help="scan sans enregistrer les signaux")
-    p.add_argument("--day", help="jour du résumé (AAAA-MM-JJ)")
+    p.add_argument("--day", help="jour du résumé : AAAA-MM-JJ, « hier » ou « aujourd'hui » (défaut : dernière journée de trading, la veille avant midi)")
     p.add_argument("--interval", type=int, default=5, help="minutes entre deux ticks (mode loop)")
     p.add_argument("--days", type=int, default=30, help="profondeur du backtest en jours (max 60 sur Yahoo)")
     p.add_argument("--asset", action="append", help="limiter le backtest à un actif (répétable)")
@@ -68,7 +68,12 @@ def main(argv: list[str] | None = None) -> int:
     elif args.command == "tick":
         print(json.dumps(eng.tick(), ensure_ascii=False))
     elif args.command == "summary":
-        day = date.fromisoformat(args.day) if args.day else None
+        if args.day in ("hier", "yesterday"):
+            day = eng.summary_day(utcnow().replace(hour=0))
+        elif args.day in ("aujourd'hui", "today"):
+            day = datetime.now(eng.tz).date()
+        else:
+            day = date.fromisoformat(args.day) if args.day else None
         eng.summary(day)
     elif args.command == "stats":
         print(json.dumps(analyze(eng.store.history()), indent=2, ensure_ascii=False))

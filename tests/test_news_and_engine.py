@@ -463,3 +463,14 @@ def test_post_event_caution_raises_bar_and_suspends_long_horizon(tmp_path, monke
     assert all((s.horizon or "1h") == "1h" for s in sigs)
     assert all(len(s.criteria) >= eng.cfg.min_criteria + 1 for s in sigs)
     assert all("prudence post-FOMC" in s.news_context for s in sigs)
+
+
+def test_summary_day_is_previous_day_after_midnight(tmp_path, monkeypatch):
+    now = datetime(2026, 9, 17, 14, 0, tzinfo=timezone.utc)
+    candles = make_candles(n=500, drift=0.0003, noise=0.0012, seed=7, start_ts=int(now.timestamp()) - 500 * 300)
+    eng = _engine(tmp_path, monkeypatch, candles, candles[-1].close)
+    # 00:05 Paris le 19/09 = 22:05 UTC le 18/09 → résumé du 18/09 ; 21:00 Paris → jour même
+    assert eng.summary_day(datetime(2026, 9, 18, 22, 5, tzinfo=timezone.utc)).isoformat() == "2026-09-18"
+    assert eng.summary_day(datetime(2026, 9, 18, 19, 0, tzinfo=timezone.utc)).isoformat() == "2026-09-18"
+    assert eng.summary_day(datetime(2026, 9, 19, 8, 0, tzinfo=timezone.utc)).isoformat() == "2026-09-18"
+    assert eng.summary_day(datetime(2026, 9, 19, 12, 0, tzinfo=timezone.utc)).isoformat() == "2026-09-19"

@@ -382,7 +382,14 @@ class Engine:
         return sig
 
     # --------------------------------------------------------------- summary
+    def summary_day(self, now: datetime | None = None):
+        """Jour résumé par défaut : la journée de trading la plus récente. Lancé après minuit (jusqu'à
+        midi heure locale), le résumé porte sur la veille ; lancé l'après-midi ou le soir, sur le jour même."""
+        local = (now or utcnow()).astimezone(self.tz)
+        return (local - timedelta(days=1)).date() if local.hour < 12 else local.date()
+
     def summary(self, day=None, send: bool = True) -> str:
+        day = day or self.summary_day()
         adj = self._relearn()
         text = daily_summary(self.store.all_signals(), self.cfg, day, adj)
         text = text.replace("\n\n" + DISCLAIMER, "\n\n" + self.portfolio.format_summary() + "\n\n" + DISCLAIMER)

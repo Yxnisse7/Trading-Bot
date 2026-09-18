@@ -268,7 +268,7 @@ Trois workflows sont fournis dans `.github/workflows/` :
   le dépôt pour persister entre deux exécutions.
   Lancement manuel possible avec une autre commande (`scan`, `track`, `test-notify`, `backtest`,
   `fetch-data`, `manual` avec les champs actif / sens / commentaire).
-- `daily-summary.yml` : résumé quotidien à 22:05 UTC.
+- `daily-summary.yml` : résumé quotidien à 22:05 UTC (00:05 Paris en été) ; lancé avant midi heure locale, il porte sur la veille, sinon sur le jour même (`--day hier|aujourd'hui|AAAA-MM-JJ` pour forcer).
 - `tests.yml` : tests à chaque push.
 
 Ajoutez les secrets Telegram / Discord dans *Settings → Secrets and variables → Actions*, et vérifiez
