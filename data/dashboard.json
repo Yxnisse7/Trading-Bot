@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-19T01:25:27.070473+02:00",
+  "updated_at": "2026-09-19T01:30:44.230574+02:00",
   "timezone": "Europe/Paris",
   "equity_curve": [
     {
@@ -483,18 +483,18 @@
       "avg_pnl_pct": -0.0938
     },
     "shadow": {
-      "n": 2,
+      "n": 3,
       "tp": 2,
-      "sl": 0,
+      "sl": 1,
       "expired": 0,
-      "win_rate": 1.0,
-      "neutral_win_rate": 0.4017,
-      "edge": 0.5983,
-      "pnl_pct": 0.1968,
-      "avg_pnl_pct": 0.0984
+      "win_rate": 0.6666666666666666,
+      "neutral_win_rate": 0.4008,
+      "edge": 0.2659,
+      "pnl_pct": -0.2152,
+      "avg_pnl_pct": -0.0717
     },
     "open": 0,
-    "open_shadow": 3
+    "open_shadow": 2
   },
   "by_source": {
     "bot": {
@@ -531,15 +531,15 @@
       "avg_pnl_pct": 0.0
     },
     "shadow": {
-      "n": 2,
+      "n": 3,
       "tp": 2,
-      "sl": 0,
+      "sl": 1,
       "expired": 0,
-      "win_rate": 1.0,
-      "neutral_win_rate": 0.4017,
-      "edge": 0.5983,
-      "pnl_pct": 0.1968,
-      "avg_pnl_pct": 0.0984
+      "win_rate": 0.6666666666666666,
+      "neutral_win_rate": 0.4008,
+      "edge": 0.2659,
+      "pnl_pct": -0.2152,
+      "avg_pnl_pct": -0.0717
     }
   },
   "by_horizon": {
@@ -680,15 +680,15 @@
         "avg_pnl_pct": -0.4098
       },
       "shadow": {
-        "n": 0,
+        "n": 1,
         "tp": 0,
-        "sl": 0,
+        "sl": 1,
         "expired": 0,
-        "win_rate": null,
-        "neutral_win_rate": null,
-        "edge": null,
-        "pnl_pct": 0,
-        "avg_pnl_pct": 0.0
+        "win_rate": 0.0,
+        "neutral_win_rate": 0.3991,
+        "edge": -0.3991,
+        "pnl_pct": -0.412,
+        "avg_pnl_pct": -0.412
       },
       "open": 0,
       "session_utc": null,
@@ -1059,15 +1059,15 @@
       "label": "Tendance 15 min",
       "weight": 1.0,
       "stats": {
-        "n": 19,
+        "n": 20,
         "tp": 7,
-        "sl": 9,
+        "sl": 10,
         "expired": 3,
-        "win_rate": 0.4375,
-        "neutral_win_rate": 0.4107,
-        "edge": 0.0268,
-        "pnl_pct": -1.3972,
-        "avg_pnl_pct": -0.0735
+        "win_rate": 0.4117647058823529,
+        "neutral_win_rate": 0.4101,
+        "edge": 0.0017,
+        "pnl_pct": -1.8092,
+        "avg_pnl_pct": -0.0905
       },
       "by_source": {
         "bot": {
@@ -1104,18 +1104,49 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 2,
+          "n": 3,
           "tp": 2,
-          "sl": 0,
+          "sl": 1,
           "expired": 0,
-          "win_rate": 1.0,
-          "neutral_win_rate": 0.4017,
-          "edge": 0.5983,
-          "pnl_pct": 0.1968,
-          "avg_pnl_pct": 0.0984
+          "win_rate": 0.6666666666666666,
+          "neutral_win_rate": 0.4008,
+          "edge": 0.2659,
+          "pnl_pct": -0.2152,
+          "avg_pnl_pct": -0.0717
         }
       },
       "last_trades": [
+        {
+          "id": "a5f2ed67a9",
+          "asset": "ethereum",
+          "asset_label": "Ethereum (ETH/USD)",
+          "direction": "long",
+          "horizon": "1h",
+          "entry": 2620.7,
+          "take_profit": 2633.8,
+          "stop_loss": 2612.0,
+          "risk_reward": 1.51,
+          "confidence": "moyen",
+          "score": 4.25,
+          "criteria": [
+            "adx",
+            "corr",
+            "trend_15m",
+            "trend_1h",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.412,
+          "pnl_gross_pct": -0.332,
+          "duration_minutes": 34,
+          "close_price": 2612.0,
+          "created_at": "2026-09-18T22:55:25Z",
+          "created_local": "19/09 00:55",
+          "expires_at": "2026-09-18T23:55:25Z",
+          "rationale": "Achat : tendance forte (ADX), marché meneur favorable, tendance 15 min, tendance 1 h, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 21.79 (0.83 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 74%.",
+          "news_context": "actualité à surveiller (score 1) : Why investors shouldn’t be spooked by fears of an October stock-market crash"
+        },
         {
           "id": "dba08be94e",
           "asset": "nasdaq",
@@ -1341,38 +1372,6 @@
           "expires_at": "2026-09-18T14:55:29Z",
           "rationale": "Vente : tendance forte (ADX), tendance 15 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 11.83 (0.15 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 85%.",
           "news_context": "actualité calme sur les 2 dernières heures"
-        },
-        {
-          "id": "16efeb793e",
-          "asset": "sp500",
-          "asset_label": "S&P 500 (ES)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 7702.5,
-          "take_profit": 7697.5,
-          "stop_loss": 7706.5,
-          "risk_reward": 1.25,
-          "confidence": "fort",
-          "score": 5.75,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "bot",
-          "status": "tp",
-          "pnl_pct": 0.0549,
-          "pnl_gross_pct": 0.0649,
-          "duration_minutes": 29,
-          "close_price": 7697.5,
-          "created_at": "2026-09-18T12:55:26Z",
-          "created_local": "18/09 14:55",
-          "expires_at": "2026-09-18T13:55:26Z",
-          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 12.25 (0.16 %), TP = 40 % du range, SL = 34 % du range, probabilité de résolution sous 1 h ≈ 84%.",
-          "news_context": "actualité calme sur les 2 dernières heures"
         }
       ]
     },
@@ -1381,15 +1380,15 @@
       "label": "Tendance 1 h",
       "weight": 1.0,
       "stats": {
-        "n": 17,
+        "n": 18,
         "tp": 5,
-        "sl": 9,
+        "sl": 10,
         "expired": 3,
-        "win_rate": 0.35714285714285715,
-        "neutral_win_rate": 0.4117,
-        "edge": -0.0546,
-        "pnl_pct": -1.594,
-        "avg_pnl_pct": -0.0938
+        "win_rate": 0.3333333333333333,
+        "neutral_win_rate": 0.411,
+        "edge": -0.0777,
+        "pnl_pct": -2.006,
+        "avg_pnl_pct": -0.1114
       },
       "by_source": {
         "bot": {
@@ -1426,18 +1425,49 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 0,
+          "n": 1,
           "tp": 0,
-          "sl": 0,
+          "sl": 1,
           "expired": 0,
-          "win_rate": null,
-          "neutral_win_rate": null,
-          "edge": null,
-          "pnl_pct": 0,
-          "avg_pnl_pct": 0.0
+          "win_rate": 0.0,
+          "neutral_win_rate": 0.3991,
+          "edge": -0.3991,
+          "pnl_pct": -0.412,
+          "avg_pnl_pct": -0.412
         }
       },
       "last_trades": [
+        {
+          "id": "a5f2ed67a9",
+          "asset": "ethereum",
+          "asset_label": "Ethereum (ETH/USD)",
+          "direction": "long",
+          "horizon": "1h",
+          "entry": 2620.7,
+          "take_profit": 2633.8,
+          "stop_loss": 2612.0,
+          "risk_reward": 1.51,
+          "confidence": "moyen",
+          "score": 4.25,
+          "criteria": [
+            "adx",
+            "corr",
+            "trend_15m",
+            "trend_1h",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.412,
+          "pnl_gross_pct": -0.332,
+          "duration_minutes": 34,
+          "close_price": 2612.0,
+          "created_at": "2026-09-18T22:55:25Z",
+          "created_local": "19/09 00:55",
+          "expires_at": "2026-09-18T23:55:25Z",
+          "rationale": "Achat : tendance forte (ADX), marché meneur favorable, tendance 15 min, tendance 1 h, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 21.79 (0.83 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 74%.",
+          "news_context": "actualité à surveiller (score 1) : Why investors shouldn’t be spooked by fears of an October stock-market crash"
+        },
         {
           "id": "dba08be94e",
           "asset": "nasdaq",
@@ -1664,38 +1694,6 @@
           "expires_at": "2026-09-18T15:10:35Z",
           "rationale": "Achat : tendance forte (ADX), cassure des extrêmes de la veille, tendance 45 min, tendance 3 h. Range moyen sur 3 h ≈ 141.27 (0.47 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 40%.",
           "news_context": "actualité calme sur les 2 dernières heures"
-        },
-        {
-          "id": "d9e921d847",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "long",
-          "horizon": "1h",
-          "entry": 4427.4,
-          "take_profit": 4438.0,
-          "stop_loss": 4420.3,
-          "risk_reward": 1.49,
-          "confidence": "fort",
-          "score": 5.0,
-          "criteria": [
-            "adx",
-            "level",
-            "pdhl",
-            "trend_15m",
-            "trend_1h",
-            "vwap"
-          ],
-          "source": "bot",
-          "status": "sl",
-          "pnl_pct": -0.1804,
-          "pnl_gross_pct": -0.1604,
-          "duration_minutes": 0,
-          "close_price": 4420.3,
-          "created_at": "2026-09-18T09:40:40Z",
-          "created_local": "18/09 11:40",
-          "expires_at": "2026-09-18T10:40:40Z",
-          "rationale": "Achat : tendance forte (ADX), niveau clé favorable, cassure des extrêmes de la veille, tendance 15 min, tendance 1 h, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 17.69 (0.40 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 69%.",
-          "news_context": "actualité à surveiller (score 2) : US Dollar: Post-FOMC consolidation and data focus – OCBC"
         }
       ]
     },
@@ -1704,15 +1702,15 @@
       "label": "Force de tendance (ADX)",
       "weight": 1.0,
       "stats": {
-        "n": 19,
+        "n": 20,
         "tp": 7,
-        "sl": 9,
+        "sl": 10,
         "expired": 3,
-        "win_rate": 0.4375,
-        "neutral_win_rate": 0.4107,
-        "edge": 0.0268,
-        "pnl_pct": -1.3972,
-        "avg_pnl_pct": -0.0735
+        "win_rate": 0.4117647058823529,
+        "neutral_win_rate": 0.4101,
+        "edge": 0.0017,
+        "pnl_pct": -1.8092,
+        "avg_pnl_pct": -0.0905
       },
       "by_source": {
         "bot": {
@@ -1749,18 +1747,49 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 2,
+          "n": 3,
           "tp": 2,
-          "sl": 0,
+          "sl": 1,
           "expired": 0,
-          "win_rate": 1.0,
-          "neutral_win_rate": 0.4017,
-          "edge": 0.5983,
-          "pnl_pct": 0.1968,
-          "avg_pnl_pct": 0.0984
+          "win_rate": 0.6666666666666666,
+          "neutral_win_rate": 0.4008,
+          "edge": 0.2659,
+          "pnl_pct": -0.2152,
+          "avg_pnl_pct": -0.0717
         }
       },
       "last_trades": [
+        {
+          "id": "a5f2ed67a9",
+          "asset": "ethereum",
+          "asset_label": "Ethereum (ETH/USD)",
+          "direction": "long",
+          "horizon": "1h",
+          "entry": 2620.7,
+          "take_profit": 2633.8,
+          "stop_loss": 2612.0,
+          "risk_reward": 1.51,
+          "confidence": "moyen",
+          "score": 4.25,
+          "criteria": [
+            "adx",
+            "corr",
+            "trend_15m",
+            "trend_1h",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.412,
+          "pnl_gross_pct": -0.332,
+          "duration_minutes": 34,
+          "close_price": 2612.0,
+          "created_at": "2026-09-18T22:55:25Z",
+          "created_local": "19/09 00:55",
+          "expires_at": "2026-09-18T23:55:25Z",
+          "rationale": "Achat : tendance forte (ADX), marché meneur favorable, tendance 15 min, tendance 1 h, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 21.79 (0.83 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 74%.",
+          "news_context": "actualité à surveiller (score 1) : Why investors shouldn’t be spooked by fears of an October stock-market crash"
+        },
         {
           "id": "dba08be94e",
           "asset": "nasdaq",
@@ -1986,38 +2015,6 @@
           "expires_at": "2026-09-18T14:55:29Z",
           "rationale": "Vente : tendance forte (ADX), tendance 15 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 11.83 (0.15 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 85%.",
           "news_context": "actualité calme sur les 2 dernières heures"
-        },
-        {
-          "id": "16efeb793e",
-          "asset": "sp500",
-          "asset_label": "S&P 500 (ES)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 7702.5,
-          "take_profit": 7697.5,
-          "stop_loss": 7706.5,
-          "risk_reward": 1.25,
-          "confidence": "fort",
-          "score": 5.75,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "bot",
-          "status": "tp",
-          "pnl_pct": 0.0549,
-          "pnl_gross_pct": 0.0649,
-          "duration_minutes": 29,
-          "close_price": 7697.5,
-          "created_at": "2026-09-18T12:55:26Z",
-          "created_local": "18/09 14:55",
-          "expires_at": "2026-09-18T13:55:26Z",
-          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 12.25 (0.16 %), TP = 40 % du range, SL = 34 % du range, probabilité de résolution sous 1 h ≈ 84%.",
-          "news_context": "actualité calme sur les 2 dernières heures"
         }
       ]
     },
@@ -2026,15 +2023,15 @@
       "label": "VWAP",
       "weight": 0.75,
       "stats": {
-        "n": 17,
+        "n": 18,
         "tp": 7,
-        "sl": 7,
+        "sl": 8,
         "expired": 3,
-        "win_rate": 0.5,
-        "neutral_win_rate": 0.412,
-        "edge": 0.088,
-        "pnl_pct": -0.7808,
-        "avg_pnl_pct": -0.0459
+        "win_rate": 0.4666666666666667,
+        "neutral_win_rate": 0.4112,
+        "edge": 0.0555,
+        "pnl_pct": -1.1928,
+        "avg_pnl_pct": -0.0663
       },
       "by_source": {
         "bot": {
@@ -2071,18 +2068,49 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 2,
+          "n": 3,
           "tp": 2,
-          "sl": 0,
+          "sl": 1,
           "expired": 0,
-          "win_rate": 1.0,
-          "neutral_win_rate": 0.4017,
-          "edge": 0.5983,
-          "pnl_pct": 0.1968,
-          "avg_pnl_pct": 0.0984
+          "win_rate": 0.6666666666666666,
+          "neutral_win_rate": 0.4008,
+          "edge": 0.2659,
+          "pnl_pct": -0.2152,
+          "avg_pnl_pct": -0.0717
         }
       },
       "last_trades": [
+        {
+          "id": "a5f2ed67a9",
+          "asset": "ethereum",
+          "asset_label": "Ethereum (ETH/USD)",
+          "direction": "long",
+          "horizon": "1h",
+          "entry": 2620.7,
+          "take_profit": 2633.8,
+          "stop_loss": 2612.0,
+          "risk_reward": 1.51,
+          "confidence": "moyen",
+          "score": 4.25,
+          "criteria": [
+            "adx",
+            "corr",
+            "trend_15m",
+            "trend_1h",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.412,
+          "pnl_gross_pct": -0.332,
+          "duration_minutes": 34,
+          "close_price": 2612.0,
+          "created_at": "2026-09-18T22:55:25Z",
+          "created_local": "19/09 00:55",
+          "expires_at": "2026-09-18T23:55:25Z",
+          "rationale": "Achat : tendance forte (ADX), marché meneur favorable, tendance 15 min, tendance 1 h, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 21.79 (0.83 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 74%.",
+          "news_context": "actualité à surveiller (score 1) : Why investors shouldn’t be spooked by fears of an October stock-market crash"
+        },
         {
           "id": "dba08be94e",
           "asset": "nasdaq",
@@ -2307,38 +2335,6 @@
           "created_local": "18/09 15:55",
           "expires_at": "2026-09-18T14:55:29Z",
           "rationale": "Vente : tendance forte (ADX), tendance 15 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 11.83 (0.15 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 85%.",
-          "news_context": "actualité calme sur les 2 dernières heures"
-        },
-        {
-          "id": "16efeb793e",
-          "asset": "sp500",
-          "asset_label": "S&P 500 (ES)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 7702.5,
-          "take_profit": 7697.5,
-          "stop_loss": 7706.5,
-          "risk_reward": 1.25,
-          "confidence": "fort",
-          "score": 5.75,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "bot",
-          "status": "tp",
-          "pnl_pct": 0.0549,
-          "pnl_gross_pct": 0.0649,
-          "duration_minutes": 29,
-          "close_price": 7697.5,
-          "created_at": "2026-09-18T12:55:26Z",
-          "created_local": "18/09 14:55",
-          "expires_at": "2026-09-18T13:55:26Z",
-          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 12.25 (0.16 %), TP = 40 % du range, SL = 34 % du range, probabilité de résolution sous 1 h ≈ 84%.",
           "news_context": "actualité calme sur les 2 dernières heures"
         }
       ]
@@ -3118,37 +3114,6 @@
       "expires_at": "2026-09-19T00:10:31Z",
       "rationale": "Achat : tendance forte (ADX), marché meneur favorable, tendance 15 min, tendance 1 h, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 22.46 (0.86 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 71%.",
       "news_context": "actualité à surveiller (score 1) : Why investors shouldn’t be spooked by fears of an October stock-market crash"
-    },
-    {
-      "id": "a5f2ed67a9",
-      "asset": "ethereum",
-      "asset_label": "Ethereum (ETH/USD)",
-      "direction": "long",
-      "horizon": "1h",
-      "entry": 2620.7,
-      "take_profit": 2633.8,
-      "stop_loss": 2612.0,
-      "risk_reward": 1.51,
-      "confidence": "moyen",
-      "score": 4.25,
-      "criteria": [
-        "adx",
-        "corr",
-        "trend_15m",
-        "trend_1h",
-        "vwap"
-      ],
-      "source": "shadow",
-      "status": "open",
-      "pnl_pct": null,
-      "pnl_gross_pct": null,
-      "duration_minutes": null,
-      "close_price": null,
-      "created_at": "2026-09-18T22:55:25Z",
-      "created_local": "19/09 00:55",
-      "expires_at": "2026-09-18T23:55:25Z",
-      "rationale": "Achat : tendance forte (ADX), marché meneur favorable, tendance 15 min, tendance 1 h, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 21.79 (0.83 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 74%.",
-      "news_context": "actualité à surveiller (score 1) : Why investors shouldn’t be spooked by fears of an October stock-market crash"
     }
   ],
   "recent_trades": [
@@ -3920,7 +3885,7 @@
       "volume: win rate 37% sur 52 trades → poids 0.25 → 0.25"
     ],
     "avoid_hours_utc": [],
-    "sample": 685
+    "sample": 686
   },
   "state": {
     "last_scan": "2026-09-18T23:25:23Z",
