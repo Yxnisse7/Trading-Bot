@@ -158,6 +158,11 @@ Page `docs/portfolio.html` (lien « Simulation de compte » sur le tableau de bo
 
 ### Interface
 `python run.py ui` sert une page simple et visuelle (`docs/index.html`) : indicateurs clés,
+**graphiques** (SVG sans dépendance, infobulles au survol, thème clair / sombre, palette bleu / orange
+lisible en cas de daltonisme) : courbe du P&L net cumulé trade après trade, résultats TP / SL / expirés
+par actif, par sens, par horizon, par confiance et par source, trades par heure d'émission, et réussite
+par indicateur contre le hasard attendu (barre contre repère) ; chaque graphique porte une phrase
+« comment lire »,
 signaux ouverts, **résumé des derniers trades par indicateur** (taux de réussite contre hasard
 attendu, poids appris, derniers trades), statistiques par actif, derniers trades, backtests et
 notes d'apprentissage. Le bouton **« Demander un trade »** crée un signal manuel : le bot calibre
@@ -289,6 +294,9 @@ automatiquement.
 
 ## Configuration
 
+Le dépôt contient un `config.json` (réglages « moins de trades, mieux ciblés » du 18/09/2026 : seuls
+les signaux « fort », horizon 3 h suspendu, Nasdaq et S&P 500 limités à la session américaine
+13h-20h UTC) ; supprimez une ligne pour revenir à la valeur par défaut.
 Valeurs par défaut dans `trading_bot/config.py`, surcharge via `config.json` (voir
 `config.example.json`). Principaux réglages :
 

@@ -175,9 +175,23 @@ def build_dashboard(all_signals: list[Signal], cfg: Config, adjustments: dict[st
                        "session_utc": list(asset.session_utc) if asset.session_utc else None,
                        "cost_pct": asset.cost_pct})
 
+    # Séries pour les graphiques du tableau de bord (signaux visibles uniquement)
+    curve, cum = [], 0.0
+    for s in sorted(visible_closed, key=lambda s: s.closed_at or s.created_at):
+        cum += s.pnl_pct or 0.0
+        t = parse_iso(s.closed_at or s.created_at).astimezone(tz)
+        curve.append({"t": t.isoformat(), "label": f"{t:%d/%m %H:%M}", "asset_label": s.asset_label, "direction": s.direction,
+                      "status": s.status, "pnl_pct": s.pnl_pct, "cum_pnl_pct": round(cum, 4)})
+    by_hour = {f"{h:02d}": _stats([s for s in visible_closed if parse_iso(s.created_at).astimezone(tz).hour == h])
+               for h in range(24)}
+
     return {
         "updated_at": now.astimezone(tz).isoformat(),
         "timezone": cfg.timezone,
+        "equity_curve": curve,
+        "by_hour_local": by_hour,
+        "by_direction": {d: _stats([s for s in visible_closed if s.direction == d]) for d in ("long", "short")},
+        "by_confidence": {c: _stats([s for s in visible_closed if s.confidence == c]) for c in ("moyen", "fort")},
         "overview": {"visible": _stats(visible_closed), "shadow": _stats([s for s in closed_all if s.source == "shadow"]),
                      "open": len([s for s in open_sigs if s.source != "shadow"]),
                      "open_shadow": len([s for s in open_sigs if s.source == "shadow"])},

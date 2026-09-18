@@ -29,7 +29,7 @@
   .muted { color: var(--muted); font-size: 13px; }
   a { color: var(--accent); }
   .grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); }
-  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; box-shadow: var(--shadow); }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; box-shadow: var(--shadow); overflow-x: auto; }
   .kpi .v { font-size: 26px; font-weight: 650; margin-top: 4px; }
   .kpi .s { font-size: 12px; color: var(--muted); }
   .good { color: var(--good); } .bad { color: var(--bad); } .warn { color: var(--warn); }
@@ -56,6 +56,26 @@
   details { margin-top: 10px; } summary { cursor: pointer; color: var(--muted); font-size: 13px; }
   .disclaimer { margin-top: 32px; padding: 12px 14px; border-left: 3px solid var(--warn); background: var(--card); border-radius: 8px; font-size: 13px; color: var(--muted); }
   @media (max-width: 640px) { th:nth-child(n+6), td:nth-child(n+6) { display: none; } }
+  /* graphiques : palette validée (bleu / orange sûrs pour le daltonisme, gris neutre) */
+  :root { --c-tp: #2a78d6; --c-sl: #eb6834; --c-exp: #898781; --c-grid: #e1e0d9; --c-axis: #c3c2b7; --c-wash: rgba(42,120,214,.10); }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --c-tp: #3987e5; --c-sl: #d95926; --c-exp: #898781; --c-grid: #2c2c2a; --c-axis: #383835; --c-wash: rgba(57,135,229,.12); } }
+  :root[data-theme="dark"] { --c-tp: #3987e5; --c-sl: #d95926; --c-exp: #898781; --c-grid: #2c2c2a; --c-axis: #383835; --c-wash: rgba(57,135,229,.12); }
+  .charts { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); margin-bottom: 12px; }
+  .chart { min-width: 0; }
+  .chart h3 { margin: 0 0 2px; font-size: 15px; }
+  .chart .how { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
+  .chart svg { display: block; width: 100%; height: auto; font: 12px system-ui, -apple-system, "Segoe UI", sans-serif; }
+  .chart svg text { fill: var(--muted); }
+  .chart svg text.v { fill: var(--text); font-weight: 600; }
+  .chart .legend { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 12px; color: var(--muted); margin-top: 6px; }
+  .legend i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; vertical-align: -2px; margin-right: 5px; }
+  .legend i.line { height: 2px; width: 14px; border-radius: 1px; vertical-align: 2px; }
+  .legend i.tick { width: 2px; height: 12px; border-radius: 1px; background: var(--text); }
+  .chart .empty { font-size: 13px; color: var(--muted); padding: 18px 0; }
+  .mark { transition: opacity .1s; } .mark:hover { opacity: .75; }
+  #tip { position: fixed; z-index: 50; pointer-events: none; background: var(--card); color: var(--text); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; font-size: 12px; box-shadow: 0 4px 16px rgba(0,0,0,.12); display: none; max-width: 260px; }
+  #tip b { font-size: 14px; } #tip .r { display: flex; gap: 8px; justify-content: space-between; } #tip .k { display: inline-block; width: 12px; height: 2px; vertical-align: 3px; margin-right: 6px; }
+  .wide { grid-column: 1 / -1; }
 </style>
 </head>
 <body>
@@ -74,6 +94,18 @@
   </header>
 
   <section class="grid" id="kpis"></section>
+
+  <h2>Vue d'ensemble</h2>
+  <div class="muted" style="margin-bottom:8px">Comment lire : les graphiques ne portent que sur les signaux <b>notifiés</b> (bot, manuels, propositions), jamais sur les fantômes. « Hasard attendu » = taux de réussite qu'obtiendrait une pièce jetée avec les mêmes TP et SL ; c'est la barre à dépasser.</div>
+  <section class="charts">
+    <div class="card chart wide" id="ch-equity"></div>
+    <div class="card chart" id="ch-assets"></div>
+    <div class="card chart" id="ch-hours"></div>
+    <div class="card chart" id="ch-direction"></div>
+    <div class="card chart" id="ch-horizon"></div>
+    <div class="card chart" id="ch-confidence"></div>
+    <div class="card chart" id="ch-source"></div>
+  </section>
 
   <h2>Demander un trade</h2>
   <div class="card">
@@ -102,6 +134,7 @@
 
   <h2>Par indicateur — résumé des derniers trades</h2>
   <div class="muted" style="margin-bottom:8px">Taux de réussite des trades où l'indicateur était aligné (bot, manuels et fantômes confondus), comparé au hasard attendu. Le poids est celui appris.</div>
+  <section class="charts"><div class="card chart wide" id="ch-criteria"></div></section>
   <section class="crit" id="criteria"></section>
 
   <h2>Par actif</h2>
@@ -119,6 +152,7 @@
   <div class="disclaimer">⚠️ Signaux générés automatiquement à partir de données publiques gratuites et d'une analyse algorithmique. Ceci n'est pas un conseil financier. Aucune stratégie ne garantit un gain. Validez en paper trading avant tout passage en argent réel. Vous seul décidez et exécutez vos trades.</div>
 </div>
 
+<div id="tip" role="tooltip"></div>
 <script>
 (function () {
   const $ = (s) => document.querySelector(s);
@@ -235,6 +269,7 @@
     const next = cur === "dark" ? "light" : "dark";
     document.documentElement.dataset.theme = next;
     try { localStorage.setItem("tb-theme", next); } catch (e) {}
+    if (data) { try { renderCharts(data); } catch (e) { console.error("graphiques :", e); } }
   });
 
   // ---- chargement des données
@@ -283,6 +318,148 @@
     render();
   }
 
+  // ---------------------------------------------------------------- graphiques (SVG, sans dépendance)
+  const SVG = "http://www.w3.org/2000/svg";
+  const el = (tag, attrs = {}, parent = null) => { const n = document.createElementNS(SVG, tag); for (const [k, v] of Object.entries(attrs)) n.setAttribute(k, v); if (parent) parent.appendChild(n); return n; };
+  const txt = (parent, x, y, str, attrs = {}) => { const t = el("text", { x, y, ...attrs }, parent); t.textContent = str; return t; };
+  const tip = $("#tip");
+  function showTip(evt, title, rows) {
+    tip.replaceChildren();
+    const b = document.createElement("b"); b.textContent = title; tip.appendChild(b);
+    for (const [key, val, color] of rows) {
+      const r = document.createElement("div"); r.className = "r";
+      const k = document.createElement("span"); if (color) { const i = document.createElement("i"); i.className = "k"; i.style.background = color; k.appendChild(i); } k.appendChild(document.createTextNode(key));
+      const v = document.createElement("strong"); v.textContent = val;
+      r.append(k, v); tip.appendChild(r);
+    }
+    tip.style.display = "block"; moveTip(evt);
+  }
+  function moveTip(evt) { const w = tip.offsetWidth, h = tip.offsetHeight; let x = evt.clientX + 14, y = evt.clientY + 14; if (x + w > innerWidth - 8) x = evt.clientX - w - 14; if (y + h > innerHeight - 8) y = evt.clientY - h - 14; tip.style.left = x + "px"; tip.style.top = y + "px"; }
+  const hideTip = () => { tip.style.display = "none"; };
+  function chartFrame(root, title, how) {
+    root.replaceChildren();
+    const h3 = document.createElement("h3"); h3.textContent = title; root.appendChild(h3);
+    const p = document.createElement("div"); p.className = "how"; p.textContent = how; root.appendChild(p);
+    return root;
+  }
+  function legend(root, items) { const l = document.createElement("div"); l.className = "legend"; for (const [label, color, kind] of items) { const s = document.createElement("span"); const i = document.createElement("i"); if (kind) i.className = kind; if (color) i.style.background = color; s.append(i, document.createTextNode(label)); l.appendChild(s); } root.appendChild(l); }
+  function empty(root, msg = "Pas encore de trade clôturé.") { const d = document.createElement("div"); d.className = "empty"; d.textContent = msg; root.appendChild(d); }
+  const COL = () => { const c = getComputedStyle(document.documentElement); return { tp: c.getPropertyValue("--c-tp").trim(), sl: c.getPropertyValue("--c-sl").trim(), exp: c.getPropertyValue("--c-exp").trim(), grid: c.getPropertyValue("--c-grid").trim(), axis: c.getPropertyValue("--c-axis").trim(), wash: c.getPropertyValue("--c-wash").trim(), card: c.getPropertyValue("--card").trim() }; };
+  const RESULT_ROWS = (st) => [["TP (cible atteinte)", String(st.tp), COL().tp], ["SL (stop touché)", String(st.sl), COL().sl], ["Expirés", String(st.expired), COL().exp], ["Réussite", pct(st.win_rate), null], ["Hasard attendu", pct(st.neutral_win_rate), null], ["P&L net cumulé", signed(st.pnl_pct, 2), null]];
+
+  // Barres horizontales empilées TP / SL / expirés (une ligne par catégorie)
+  function stackedOutcomes(root, title, how, rows) {
+    chartFrame(root, title, how);
+    rows = rows.filter((r) => r.st && r.st.n > 0);
+    if (!rows.length) return empty(root);
+    const c = COL(), W = 420, rowH = 30, left = 96, right = 86, H = rows.length * rowH + 8;
+    const max = Math.max(...rows.map((r) => r.st.n));
+    const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": title }, root);
+    const x = (v) => left + v / max * (W - left - right);
+    rows.forEach((r, i) => {
+      const y = 4 + i * rowH, bh = 18;
+      txt(svg, left - 8, y + bh / 2 + 4, r.label, { "text-anchor": "end" });
+      let cursor = 0;
+      for (const [k, color] of [["tp", c.tp], ["sl", c.sl], ["expired", c.exp]]) {
+        const v = r.st[k]; if (!v) continue;
+        const x0 = x(cursor), x1 = x(cursor + v) - (cursor + v < r.st.n ? 2 : 0);
+        const g = el("rect", { class: "mark", x: x0, y, width: Math.max(1, x1 - x0), height: bh, fill: color, rx: cursor + v >= r.st.n ? 4 : 0 }, svg);
+        g.addEventListener("pointerenter", (e) => showTip(e, r.label, RESULT_ROWS(r.st))); g.addEventListener("pointermove", moveTip); g.addEventListener("pointerleave", hideTip);
+        if (x1 - x0 > 22) txt(svg, (x0 + x1) / 2, y + bh / 2 + 4, String(v), { "text-anchor": "middle", fill: "#fff", style: "fill:#fff;font-weight:600" });
+        cursor += v;
+      }
+      txt(svg, x(r.st.n) + 6, y + bh / 2 + 4, `${pct(r.st.win_rate)} · ${r.st.n} tr.`, { class: "v", style: "font-size:11px" });
+    });
+    legend(root, [["TP (cible atteinte)", c.tp], ["SL (stop touché)", c.sl], ["Expiré (ni l'un ni l'autre en 1 h / 3 h)", c.exp]]);
+  }
+
+  // Réussite par critère contre le hasard attendu (barre + repère)
+  function rateBars(root, title, how, rows) {
+    chartFrame(root, title, how);
+    rows = rows.filter((r) => r.st && r.st.n > 0).sort((a, b) => (b.st.edge ?? -1) - (a.st.edge ?? -1));
+    if (!rows.length) return empty(root, "Aucun trade clôturé avec ce critère pour l'instant.");
+    const c = COL(), W = Math.max(560, Math.round(root.clientWidth || 760) - 34), rowH = 28, left = 190, right = 92, H = rows.length * rowH + 22;
+    const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": title }, root);
+    const x = (v) => left + v * (W - left - right);
+    for (const g of [0, 0.25, 0.5, 0.75, 1]) { el("line", { x1: x(g), x2: x(g), y1: 2, y2: H - 18, stroke: c.grid }, svg); txt(svg, x(g), H - 4, `${g * 100} %`, { "text-anchor": "middle", style: "font-size:11px" }); }
+    rows.forEach((r, i) => {
+      const y = 4 + i * rowH, bh = 16;
+      txt(svg, left - 8, y + bh / 2 + 4, r.label, { "text-anchor": "end" });
+      const bar = el("rect", { class: "mark", x: x(0), y, width: Math.max(2, x(r.st.win_rate || 0) - x(0)), height: bh, fill: r.st.n >= 10 ? c.tp : c.exp, rx: 4 }, svg);
+      const rowsTip = [["Trades", String(r.st.n), null], ["Réussite", pct(r.st.win_rate), null], ["Hasard attendu", pct(r.st.neutral_win_rate), null], ["Avantage", signed((r.st.edge || 0) * 100, 1, " pt"), null], ["Poids appris", r.weight == null ? "n/a" : r.weight.toFixed(2), null]];
+      bar.addEventListener("pointerenter", (e) => showTip(e, r.label, rowsTip)); bar.addEventListener("pointermove", moveTip); bar.addEventListener("pointerleave", hideTip);
+      if (r.st.neutral_win_rate != null) el("rect", { x: x(r.st.neutral_win_rate) - 1, y: y - 3, width: 2, height: bh + 6, fill: "currentColor", style: "color:var(--text)" }, svg);
+      txt(svg, x(Math.max(r.st.win_rate || 0, r.st.neutral_win_rate || 0)) + 8, y + bh / 2 + 4, `${pct(r.st.win_rate)} (${r.st.n})`, { class: "v", style: "font-size:11px" });
+    });
+    legend(root, [["Réussite (≥ 10 trades)", c.tp], ["Réussite (moins de 10 trades : pas encore significatif)", c.exp], ["Hasard attendu", null, "tick"]]);
+  }
+
+  // Colonnes : trades par heure d'émission
+  function hourColumns(root, title, how, byHour) {
+    chartFrame(root, title, how);
+    const hours = Object.keys(byHour || {}).sort();
+    const total = hours.reduce((a, h) => a + byHour[h].n, 0);
+    if (!total) return empty(root);
+    const c = COL(), W = 420, H = 176, left = 30, bottom = 22, top = 16;
+    const max = Math.max(...hours.map((h) => byHour[h].n));
+    const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": title }, root);
+    const slot = (W - left) / 24, bw = Math.min(18, slot - 3);
+    const y = (v) => top + (1 - v / max) * (H - top - bottom);
+    el("line", { x1: left, x2: W, y1: y(0), y2: y(0), stroke: c.axis }, svg);
+    txt(svg, left - 6, y(max) + 4, String(max), { "text-anchor": "end", style: "font-size:11px" });
+    hours.forEach((h, i) => {
+      const st = byHour[h]; const x0 = left + i * slot + (slot - bw) / 2;
+      if (i % 3 === 0) txt(svg, left + i * slot + slot / 2, H - 6, `${h}h`, { "text-anchor": "middle", style: "font-size:11px" });
+      if (!st.n) return;
+      const hit = el("rect", { x: left + i * slot, y: top, width: slot, height: H - top - bottom, fill: "transparent" }, svg);
+      const bar = el("rect", { class: "mark", x: x0, y: y(st.n), width: bw, height: y(0) - y(st.n), fill: st.n >= 3 && st.win_rate > st.neutral_win_rate ? c.tp : c.exp, rx: 4 }, svg);
+      for (const t of [hit, bar]) { t.addEventListener("pointerenter", (e) => showTip(e, `${h}h (heure de Paris)`, RESULT_ROWS(st))); t.addEventListener("pointermove", moveTip); t.addEventListener("pointerleave", hideTip); }
+      if (st.n === max) txt(svg, x0 + bw / 2, y(st.n) - 4, String(st.n), { class: "v", "text-anchor": "middle", style: "font-size:11px" });
+    });
+    legend(root, [["Heure au-dessus du hasard (≥ 3 trades)", c.tp], ["Autres heures", c.exp]]);
+  }
+
+  // Courbe du P&L net cumulé (en % du prix, un point par trade clôturé)
+  function equityLine(root, title, how, pts) {
+    chartFrame(root, title, how);
+    if (!pts || pts.length < 2) return empty(root, "La courbe apparaît à partir de deux trades clôturés.");
+    const c = COL(), W = Math.max(360, Math.round(root.clientWidth || 900) - 34), H = W < 500 ? 200 : 220, left = 46, right = 70, top = 12, bottom = 24;
+    const vals = [0, ...pts.map((p) => p.cum_pnl_pct)], min = Math.min(...vals), max = Math.max(...vals), span = (max - min) || 1;
+    const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": title }, root);
+    const x = (i) => left + i / (pts.length - 1) * (W - left - right), y = (v) => top + (max - v) / span * (H - top - bottom);
+    const step = niceStep(span); for (let g = Math.ceil(min / step) * step; g <= max + 1e-9; g += step) { el("line", { x1: left, x2: W - right, y1: y(g), y2: y(g), stroke: Math.abs(g) < 1e-9 ? c.axis : c.grid }, svg); txt(svg, left - 6, y(g) + 4, signed(g, step < 1 ? 1 : 0), { "text-anchor": "end", style: "font-size:11px" }); }
+    const path = pts.map((p, i) => `${i ? "L" : "M"}${x(i).toFixed(1)},${y(p.cum_pnl_pct).toFixed(1)}`).join(" ");
+    el("path", { d: `${path} L${x(pts.length - 1).toFixed(1)},${y(0).toFixed(1)} L${x(0).toFixed(1)},${y(0).toFixed(1)} Z`, fill: c.wash }, svg);
+    el("path", { d: path, fill: "none", stroke: c.tp, "stroke-width": 2, "stroke-linejoin": "round", "stroke-linecap": "round" }, svg);
+    const last = pts[pts.length - 1];
+    el("circle", { cx: x(pts.length - 1), cy: y(last.cum_pnl_pct), r: 4, fill: c.tp, stroke: c.card, "stroke-width": 2 }, svg);
+    txt(svg, x(pts.length - 1) + 8, y(last.cum_pnl_pct) + 4, signed(last.cum_pnl_pct, 2), { class: "v" });
+    txt(svg, left, H - 6, pts[0].label, { style: "font-size:11px" }); txt(svg, W - right, H - 6, last.label, { "text-anchor": "end", style: "font-size:11px" });
+    const cross = el("line", { x1: 0, x2: 0, y1: top, y2: H - bottom, stroke: c.axis, "stroke-dasharray": "0", visibility: "hidden" }, svg);
+    const dot = el("circle", { r: 5, fill: c.tp, stroke: c.card, "stroke-width": 2, visibility: "hidden" }, svg);
+    const hit = el("rect", { x: left, y: top, width: W - left - right, height: H - top - bottom, fill: "transparent" }, svg);
+    hit.addEventListener("pointermove", (e) => {
+      const r = svg.getBoundingClientRect(); const px = (e.clientX - r.left) / r.width * W; const i = Math.max(0, Math.min(pts.length - 1, Math.round((px - left) / (W - left - right) * (pts.length - 1))));
+      const p = pts[i]; cross.setAttribute("x1", x(i)); cross.setAttribute("x2", x(i)); cross.setAttribute("visibility", "visible"); dot.setAttribute("cx", x(i)); dot.setAttribute("cy", y(p.cum_pnl_pct)); dot.setAttribute("visibility", "visible");
+      showTip(e, `${p.label} · ${p.asset_label} ${p.direction}`, [["Résultat", RES[p.status] || p.status, null], ["Ce trade", signed(p.pnl_pct, 3), null], ["Cumul net", signed(p.cum_pnl_pct, 3), c.tp]]);
+    });
+    hit.addEventListener("pointerleave", () => { hideTip(); cross.setAttribute("visibility", "hidden"); dot.setAttribute("visibility", "hidden"); });
+  }
+  function niceStep(span) { const raw = span / 4, p = Math.pow(10, Math.floor(Math.log10(raw))); const m = raw / p; return (m < 1.5 ? 1 : m < 3.5 ? 2 : m < 7.5 ? 5 : 10) * p; }
+
+  let resizeTimer = null;
+  addEventListener("resize", () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(() => { if (data) { try { renderCharts(data); } catch (e) { /* silencieux */ } } }, 200); });
+  function renderCharts(d) {
+    equityLine($("#ch-equity"), "P&L net cumulé, trade après trade", "Chaque point est un trade clôturé (en % du prix, coûts déduits). Une courbe qui monte régulièrement est le seul vrai signe d'avantage ; survolez pour voir chaque trade.", d.equity_curve || []);
+    stackedOutcomes($("#ch-assets"), "Résultats par actif", "Nombre de trades par issue. À droite : taux de réussite et nombre de trades.", d.assets.map((a) => ({ label: a.label.replace(/ \(.*\)/, ""), st: a.stats })));
+    hourColumns($("#ch-hours"), "Trades par heure d'émission", "Heure de Paris. Montre quand le bot trade ; une colonne bleue = heure où la réussite dépasse le hasard, avec au moins 3 trades.", d.by_hour_local);
+    stackedOutcomes($("#ch-direction"), "Par sens", "Longs (achat) contre shorts (vente). Un déséquilibre marqué signale un biais des indicateurs.", [["long", "Long"], ["short", "Short"]].map(([k, l]) => ({ label: l, st: (d.by_direction || {})[k] })));
+    stackedOutcomes($("#ch-horizon"), "Par horizon", "Scalp ~1 h (base 5 min) contre intraday ~3 h (base 15 min).", Object.entries(d.by_horizon || {}).map(([k, st]) => ({ label: k === "1h" ? "Scalp ~1 h" : `Intraday ~${k}`, st })));
+    stackedOutcomes($("#ch-confidence"), "Par confiance", "« Fort » = au moins 5 critères alignés et score ≥ 5 ; « moyen » = 3 ou 4 critères.", [["fort", "Fort"], ["moyen", "Moyen"]].map(([k, l]) => ({ label: l, st: (d.by_confidence || {})[k] })));
+    stackedOutcomes($("#ch-source"), "Par source", "Qui a demandé le trade : le bot seul, vous (manuel), une proposition, ou les fantômes suivis en silence.", [["bot", "Bot"], ["manual", "Manuel"], ["request", "Proposition"], ["shadow", "Fantôme"]].map(([k, l]) => ({ label: l, st: (d.by_source || {})[k] })));
+    rateBars($("#ch-criteria"), "Réussite par indicateur contre le hasard attendu", "Barre = taux de réussite des trades où l'indicateur était aligné ; le trait vertical = ce qu'aurait donné le hasard avec les mêmes TP / SL. Une barre qui dépasse son trait est un indicateur qui aide ; en gris, l'échantillon est trop petit pour conclure.", d.criteria.map((c) => ({ label: c.label, st: c.stats, weight: c.weight })));
+  }
+
   function render() {
     const d = data;
     const when = new Date(d.updated_at);
@@ -292,6 +469,7 @@
     $("#gh-settings").style.display = (mode === "local" || mode === "mcp") ? "none" : "";
 
     const v = d.overview.visible, s = d.overview.shadow;
+    try { renderCharts(d); } catch (e) { console.error("graphiques :", e); }
     $("#kpis").innerHTML = [
       kpi("Trades clôturés", v.n, `${v.tp} TP · ${v.sl} SL · ${v.expired} expirés`),
       kpi("Taux de réussite", pct(v.win_rate), `hasard attendu ${pct(v.neutral_win_rate)}`),
