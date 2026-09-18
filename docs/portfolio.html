@@ -79,11 +79,12 @@
     <details id="gh-settings">
       <summary>Mode GitHub Actions (page servie par GitHub Pages)</summary>
       <div class="set" style="margin-top:10px; display:grid; gap:10px; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr))">
-        <div><label for="gh-owner">Propriétaire</label><input id="gh-owner" placeholder="Yxnisse7"></div>
-        <div><label for="gh-repo">Dépôt</label><input id="gh-repo" placeholder="Trading-Bot"></div>
+        <div><label for="gh-owner">Propriétaire</label><input id="gh-owner" placeholder="Yxnisse7" value="Yxnisse7"></div>
+        <div><label for="gh-repo">Dépôt</label><input id="gh-repo" placeholder="Trading-Bot" value="Trading-Bot"></div>
         <div><label for="gh-token">Jeton (fine-grained, Actions : lecture/écriture)</label><input id="gh-token" type="password" placeholder="github_pat_…"></div>
-        <div><button class="secondary" type="button" id="gh-save">Enregistrer dans ce navigateur</button></div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap"><button class="secondary" type="button" id="gh-save">Enregistrer dans ce navigateur</button><button class="secondary" type="button" id="gh-test">Tester le jeton</button></div>
       </div>
+      <div class="muted" id="gh-status" style="margin-top:8px"></div>
     </details>
   </div>
 
@@ -120,8 +121,26 @@
   });
   const ghFields = ["owner", "repo", "token"];
   try { ghFields.forEach((k) => { const v = localStorage.getItem("tb-gh-" + k); if (v) $("#gh-" + k).value = v; }); } catch (e) {}
+  function ghStatus() {
+    const el = $("#gh-status"); if (!el) return;
+    const gh = ghSettings();
+    el.textContent = gh ? `Jeton GitHub enregistré dans ce navigateur pour ${gh.owner}/${gh.repo}.` : "Aucun jeton GitHub enregistré dans ce navigateur : les boutons ne peuvent pas déclencher le bot tant qu'il n'est pas renseigné puis enregistré.";
+  }
+  ghStatus();
+  $("#gh-test").addEventListener("click", async () => {
+    const el = $("#gh-status"); const gh = ghSettings();
+    if (!gh) { el.textContent = "Enregistrez d'abord le jeton."; return; }
+    el.textContent = "Test en cours…";
+    try {
+      const r = await fetch(`https://api.github.com/repos/${gh.owner}/${gh.repo}/actions/workflows`, { headers: { "Authorization": "Bearer " + gh.token, "Accept": "application/vnd.github+json" } });
+      if (r.status === 200) { const j = await r.json(); el.textContent = `Jeton valide : ${j.total_count} workflow(s) visibles. Vous pouvez utiliser les boutons.`; }
+      else if (r.status === 401) el.textContent = "Jeton refusé (401) : il est invalide ou expiré. Générez-en un nouveau (fine-grained, dépôt Trading-Bot, Actions : Read and write).";
+      else if (r.status === 403 || r.status === 404) el.textContent = `Accès refusé (${r.status}) : le jeton n'a pas la permission Actions sur ce dépôt, ou le dépôt est mal orthographié.`;
+      else el.textContent = `Réponse inattendue de GitHub (${r.status}).`;
+    } catch (e) { el.textContent = "Impossible de joindre GitHub : " + e.message; }
+  });
   $("#gh-save").addEventListener("click", () => {
-    try { ghFields.forEach((k) => localStorage.setItem("tb-gh-" + k, $("#gh-" + k).value.trim())); $("#s-msg").textContent = "Paramètres GitHub enregistrés dans ce navigateur."; }
+    try { ghFields.forEach((k) => localStorage.setItem("tb-gh-" + k, $("#gh-" + k).value.trim())); $("#s-msg").textContent = "Paramètres GitHub enregistrés dans ce navigateur."; ghStatus(); }
     catch (e) { $("#s-msg").textContent = "Impossible d'enregistrer (stockage du navigateur indisponible)."; }
   });
   function ghSettings() {
@@ -209,12 +228,14 @@
         const j = await r.json(); if (!r.ok || !j.ok) throw new Error(j.error || "erreur");
         msg.textContent = "Balance définie. Les prochains trades du bot seront simulés dessus."; await load();
       } else {
-        const gh = ghSettings(); if (!gh) throw new Error("Renseignez propriétaire, dépôt et jeton GitHub (section « Mode GitHub Actions »).");
+        const gh = ghSettings(); if (!gh) { $("#gh-settings").open = true; throw new Error("Aucun jeton GitHub enregistré dans ce navigateur : dépliez « Mode GitHub Actions », collez votre jeton, cliquez « Enregistrer », puis réessayez."); }
         const r = await fetch(`https://api.github.com/repos/${gh.owner}/${gh.repo}/actions/workflows/bot.yml/dispatches`, {
           method: "POST", headers: { "Authorization": "Bearer " + gh.token, "Accept": "application/vnd.github+json", "Content-Type": "application/json" },
           body: JSON.stringify({ ref: "main", inputs: { command: "portfolio", balance: String(balance), risk: risk === null ? "" : String(risk) } }) });
-        if (r.status !== 204) throw new Error(`GitHub a répondu ${r.status} : vérifiez le jeton et le dépôt.`);
-        msg.textContent = "Demande transmise : la balance sera définie dans 1 à 2 minutes (actualisez ensuite).";
+        if (r.status === 401) throw new Error("GitHub a refusé le jeton (401) : il est invalide ou expiré.");
+        if (r.status === 403 || r.status === 404) throw new Error(`GitHub a refusé la demande (${r.status}) : le jeton n'a pas la permission « Actions : Read and write » sur ce dépôt.`);
+        if (r.status !== 204) throw new Error(`GitHub a répondu ${r.status}.`);
+        msg.textContent = "Demande transmise à GitHub : la balance sera définie dans 1 à 2 minutes. Cliquez ensuite sur « Actualiser ».";
       }
     } catch (e) { msg.textContent = "Échec : " + e.message; }
     finally { btn.disabled = false; }
