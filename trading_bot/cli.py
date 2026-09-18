@@ -36,7 +36,7 @@ from .signals import format_signal
 
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(description="Générateur de signaux de scalping (NQ, BTC, XAU) — données gratuites")
-    p.add_argument("command", choices=["scan", "track", "tick", "summary", "stats", "loop", "status", "test-notify", "backtest", "report", "fetch-data", "manual", "propose", "ui", "commands", "portfolio"])
+    p.add_argument("command", choices=["scan", "track", "tick", "summary", "stats", "loop", "status", "test-notify", "backtest", "report", "fetch-data", "manual", "propose", "ui", "commands", "portfolio", "flush-outbox"])
     p.add_argument("--dry-run", action="store_true", help="scan sans enregistrer les signaux")
     p.add_argument("--day", help="jour du résumé (AAAA-MM-JJ)")
     p.add_argument("--interval", type=int, default=5, help="minutes entre deux ticks (mode loop)")
@@ -96,6 +96,10 @@ def main(argv: list[str] | None = None) -> int:
             return 2
         sig = eng.manual(args.asset[0], args.direction, note=args.note)
         print(json.dumps(sig.to_dict(), ensure_ascii=False, indent=2))
+    elif args.command == "flush-outbox":
+        from .notify import flush_outbox
+
+        print(f"{flush_outbox()} notification(s) envoyée(s).")
     elif args.command == "portfolio":
         if args.balance:
             eng.set_balance(args.balance, args.risk)

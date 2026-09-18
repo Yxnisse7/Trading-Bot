@@ -28,8 +28,11 @@ on:
         description: "Risque par trade en % pour `portfolio` (facultatif)"
         required: false
 
+# Les passages planifiés (tick) partagent un groupe : un tick en attente peut être remplacé par le
+# suivant, sans perte. Les demandes de l'utilisateur (manual, propose, portfolio…) ont chacune leur
+# propre groupe : elles ne sont jamais annulées.
 concurrency:
-  group: trading-bot-state
+  group: ${{ contains(fromJSON('["", "tick"]'), github.event.inputs.command || '') && 'trading-bot-tick' || format('trading-bot-run-{0}', github.run_id) }}
   cancel-in-progress: false
 
 permissions:
@@ -61,24 +64,9 @@ jobs:
           RISK: ${{ github.event.inputs.risk }}
         run: |
           case "$CMD" in
-            fetch-data) python run.py fetch-data --days 60 ;;
-            manual)     python run.py manual --asset "$ASSET" --direction "$DIRECTION" --note "$NOTE" ;;
-            propose)    python run.py propose --asset "$ASSET" ;;
-            portfolio)  if [ -n "$RISK" ]; then python run.py portfolio --balance "$BALANCE" --risk "$RISK"; else python run.py portfolio --balance "$BALANCE"; fi ;;
-            *)          python run.py "$CMD" ;;
+            fetch-data) bash scripts/run_and_push.sh python run.py fetch-data --days 60 ;;
+            manual)     bash scripts/run_and_push.sh python run.py manual --asset "$ASSET" --direction "$DIRECTION" --note "$NOTE" ;;
+            propose)    bash scripts/run_and_push.sh python run.py propose --asset "$ASSET" ;;
+            portfolio)  if [ -n "$RISK" ]; then bash scripts/run_and_push.sh python run.py portfolio --balance "$BALANCE" --risk "$RISK"; else bash scripts/run_and_push.sh python run.py portfolio --balance "$BALANCE"; fi ;;
+            *)          bash scripts/run_and_push.sh python run.py "$CMD" ;;
           esac
-      - name: Sauvegarder l'état (signaux, historique, apprentissage)
-        run: |
-          git config user.name "trading-bot[actions]"
-          git config user.email "actions@users.noreply.github.com"
-          git add data/ docs/dashboard.json docs/portfolio.json 2>/dev/null || git add data/
-          if git diff --cached --quiet; then
-            echo "Aucun changement d'état."
-            exit 0
-          fi
-          git commit -m "bot: état $(date -u +'%Y-%m-%d %H:%M UTC')"
-          for i in 1 2 3 4; do
-            git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin HEAD:"${GITHUB_REF_NAME}" && exit 0
-            sleep $((2 ** i))
-          done
-          exit 1

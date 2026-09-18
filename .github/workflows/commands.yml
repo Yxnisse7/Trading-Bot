@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: trading-bot-state
+  group: trading-bot-commands
   cancel-in-progress: false
 
 permissions:
@@ -30,16 +30,4 @@ jobs:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
-        run: python run.py commands
-      - name: Sauvegarder l'état
-        run: |
-          git config user.name "trading-bot[actions]"
-          git config user.email "actions@users.noreply.github.com"
-          git add data/ docs/dashboard.json docs/portfolio.json 2>/dev/null || git add data/
-          git diff --cached --quiet && exit 0
-          git commit -m "bot: commandes $(date -u +'%Y-%m-%d %H:%M UTC')"
-          for i in 1 2 3 4; do
-            git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin HEAD:"${GITHUB_REF_NAME}" && exit 0
-            sleep $((2 ** i))
-          done
-          exit 1
+        run: bash scripts/run_and_push.sh python run.py commands

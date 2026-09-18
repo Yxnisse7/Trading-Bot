@@ -1,6 +1,7 @@
 """Notifications gratuites : Telegram (bot), Discord (webhook), console + journal local."""
 from __future__ import annotations
 
+import json
 import logging
 import os
 from datetime import datetime, timezone
@@ -20,10 +21,27 @@ def telegram_chat_ids() -> list[str]:
 
 def notify(text: str, *, title: str | None = None, chat_id: str | None = None) -> None:
     """Envoie un message. `chat_id` : cible un seul chat Telegram (réponse à une commande) ;
-    sinon tous les chats configurés + Discord."""
+    sinon tous les chats configurés + Discord.
+
+    Si TRADING_BOT_OUTBOX désigne un fichier, le message y est mis en attente au lieu d'être
+    envoyé : `flush_outbox()` l'enverra une fois l'état du bot enregistré (exactement une fois,
+    même si le passage doit être rejoué après une collision d'écriture).
+    """
     body = f"{title}\n{text}" if title else text
     print(body, flush=True)
     _append_log(body)
+    outbox = os.environ.get("TRADING_BOT_OUTBOX")
+    if outbox:
+        try:
+            with open(outbox, "a", encoding="utf-8") as fh:
+                fh.write(json.dumps({"text": body, "chat_id": chat_id}, ensure_ascii=False) + "\n")
+            return
+        except OSError as exc:
+            log.warning("boîte d'envoi indisponible (%s) : envoi direct", exc)
+    _send(body, chat_id)
+
+
+def _send(body: str, chat_id: str | None) -> None:
     token = os.environ.get("TELEGRAM_BOT_TOKEN")
     if token:
         for cid in ([chat_id] if chat_id else telegram_chat_ids()):
@@ -32,6 +50,28 @@ def notify(text: str, *, title: str | None = None, chat_id: str | None = None) -
         webhook = os.environ.get("DISCORD_WEBHOOK_URL")
         if webhook:
             _discord(webhook, body)
+
+
+def flush_outbox(path: str | None = None) -> int:
+    """Envoie les messages en attente puis vide la boîte. Renvoie le nombre envoyé."""
+    path = path or os.environ.get("TRADING_BOT_OUTBOX")
+    if not path or not os.path.exists(path):
+        return 0
+    sent = 0
+    with open(path, encoding="utf-8") as fh:
+        lines = [ln for ln in fh.read().splitlines() if ln.strip()]
+    for ln in lines:
+        try:
+            item = json.loads(ln)
+        except ValueError:
+            continue
+        _send(item.get("text", ""), item.get("chat_id"))
+        sent += 1
+    try:
+        os.remove(path)
+    except OSError:
+        pass
+    return sent
 
 
 def _append_log(body: str) -> None:
