@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-18T16:25:35.986091+02:00",
+  "updated_at": "2026-09-18T16:40:39.034247+02:00",
   "timezone": "Europe/Paris",
   "equity_curve": [
     {
@@ -448,7 +448,7 @@
       "pnl_pct": 0.0841,
       "avg_pnl_pct": 0.0841
     },
-    "open": 0,
+    "open": 2,
     "open_shadow": 0
   },
   "by_source": {
@@ -552,7 +552,7 @@
         "pnl_pct": 0,
         "avg_pnl_pct": 0.0
       },
-      "open": 0,
+      "open": 1,
       "session_utc": [
         13,
         20
@@ -584,7 +584,7 @@
         "pnl_pct": 0.0841,
         "avg_pnl_pct": 0.0841
       },
-      "open": 0,
+      "open": 1,
       "session_utc": [
         13,
         20
@@ -2849,7 +2849,74 @@
       "last_trades": []
     }
   ],
-  "open_signals": [],
+  "open_signals": [
+    {
+      "id": "9fb2666afa",
+      "asset": "nasdaq",
+      "asset_label": "Nasdaq 100 (NQ)",
+      "direction": "short",
+      "horizon": "1h",
+      "entry": 29728.25,
+      "take_profit": 29707.25,
+      "stop_loss": 29745.75,
+      "risk_reward": 1.2,
+      "confidence": "fort",
+      "score": 5.75,
+      "criteria": [
+        "adx",
+        "rsi",
+        "trend_15m",
+        "trend_1h",
+        "trend_5m",
+        "vwap"
+      ],
+      "source": "bot",
+      "status": "open",
+      "pnl_pct": null,
+      "pnl_gross_pct": null,
+      "duration_minutes": null,
+      "close_price": null,
+      "created_at": "2026-09-18T14:40:34Z",
+      "created_local": "18/09 16:40",
+      "expires_at": "2026-09-18T15:40:34Z",
+      "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 62.83 (0.21 %), TP = 33 % du range, SL = 28 % du range, probabilité de résolution sous 1 h ≈ 99%.",
+      "news_context": "actualité à surveiller (score 1) : 2 Growth Stocks I Plan to Buy if the Stock Market Crashes"
+    },
+    {
+      "id": "f68da2d708",
+      "asset": "sp500",
+      "asset_label": "S&P 500 (ES)",
+      "direction": "short",
+      "horizon": "1h",
+      "entry": 7689.0,
+      "take_profit": 7683.0,
+      "stop_loss": 7693.5,
+      "risk_reward": 1.33,
+      "confidence": "fort",
+      "score": 6.38,
+      "criteria": [
+        "adx",
+        "level",
+        "orb",
+        "rsi",
+        "trend_15m",
+        "trend_1h",
+        "trend_5m",
+        "vwap"
+      ],
+      "source": "bot",
+      "status": "open",
+      "pnl_pct": null,
+      "pnl_gross_pct": null,
+      "duration_minutes": null,
+      "close_price": null,
+      "created_at": "2026-09-18T14:40:34Z",
+      "created_local": "18/09 16:40",
+      "expires_at": "2026-09-18T15:40:34Z",
+      "rationale": "Vente : tendance forte (ADX), niveau clé favorable, cassure du range d'ouverture, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 10.97 (0.14 %), TP = 55 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 94%.",
+      "news_context": "actualité à surveiller (score 2) : 2 Growth Stocks I Plan to Buy if the Stock Market Crashes"
+    }
+  ],
   "recent_trades": [
     {
       "id": "16efeb793e",
@@ -3457,8 +3524,8 @@
     "sample": 679
   },
   "state": {
-    "last_scan": "2026-09-18T14:25:29Z",
-    "last_scan_note": "0 signal(aux)",
+    "last_scan": "2026-09-18T14:40:34Z",
+    "last_scan_note": "2 signal(aux)",
     "last_summary": "2026-09-18T00:08:54Z",
     "telegram_offset": 630538280,
     "last_track": "2026-09-18T14:00:59Z",
@@ -3485,8 +3552,8 @@
     "losses": 0,
     "avg_win": 0.0,
     "avg_loss": 0.0,
-    "open_positions": 0,
+    "open_positions": 2,
     "skipped": 0,
-    "risky": 0
+    "risky": 2
   }
 }
