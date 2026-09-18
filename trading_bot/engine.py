@@ -14,6 +14,7 @@ from .config import DISCLAIMER, Config, load_config
 from .learning import learn
 from .models import Signal, iso, parse_iso, utcnow
 from .notify import notify, telegram_chat_ids, telegram_updates
+from .providers import calendar as calmod
 from .providers import market
 from .providers import news as newsmod
 from .providers.http import ProviderError
@@ -44,7 +45,7 @@ class Engine:
         weights = adj.get("weights") or None
         avoid_hours = set(adj.get("avoid_hours_utc") or [])
 
-        calendar = newsmod.load_calendar(self.store.calendar()) + newsmod.recurring_macro_events(now)
+        calendar = self.macro_events(now)
         blackout = newsmod.in_blackout(now, calendar, self.cfg.news_blackout_before_minutes,
                                        self.cfg.news_blackout_after_minutes)
         if blackout:
@@ -57,12 +58,20 @@ class Engine:
             return []
 
         news_cache: dict[str, list[newsmod.NewsItem]] = {}
-        for asset in self.cfg.assets.values():
-            reasons = self._policy_block(asset.key, all_sigs, now)
+        context = self.correlation_context(now) if self.cfg.correlation_enabled else {}
+        horizons = [("1h", 5)]
+        if self.cfg.long_horizon_enabled:
+            horizons.append((f"{self.cfg.long_horizon_base_minutes * 12 // 60}h", self.cfg.long_horizon_base_minutes))
+        # Bitcoin d'abord : sa direction sert de contexte à l'Ethereum
+        ordered = sorted(self.cfg.assets.values(), key=lambda a: 0 if a.key == "bitcoin" else 1)
+        for asset in ordered:
             if asset.session_utc and not (asset.session_utc[0] <= now.hour < asset.session_utc[1]):
-                reasons.append("hors session de trading configurée")
-            if reasons:
-                log.info("%s : pas de scan (%s)", asset.label, "; ".join(reasons))
+                log.info("%s : hors session de trading configurée", asset.label)
+                continue
+            blocked = {h: (self._policy_block(asset.key, all_sigs, now, horizon=h) if (base == 5 or asset.long_horizon)
+                           else ["horizon 3 h désactivé pour cet actif"]) for h, base in horizons}
+            if all(blocked.values()):
+                log.info("%s : pas de scan (%s)", asset.label, "; ".join(blocked["1h"]))
                 continue
             try:
                 raw = market.fetch_candles_5m(asset, days=5)
@@ -74,35 +83,41 @@ class Engine:
                 log.info("%s : dernière bougie clôturée trop ancienne (marché fermé ?)", asset.label)
                 continue
 
-            a = assess(asset, candles, self.cfg, weights)
-            if a.direction is None:
-                log.info("%s : %s", asset.label, "; ".join(a.reasons_rejected) or "aucune direction")
-                continue
-
-            items: list[newsmod.NewsItem] = []
-            for c in NEWS_CATEGORIES.get(asset.key, ["macro"]):
-                if c not in news_cache:
-                    news_cache[c] = newsmod.fetch_news([c], self.cfg.news_lookback_minutes, now)
-                items += news_cache[c]
-            risk, hits = newsmod.risk_score(items, asset.news_keywords)
-            if risk > self.cfg.max_news_risk_score:
-                log.info("%s : actualité incertaine (score %d) → pas de signal. %s", asset.label, risk, hits)
-                continue
-            news_ctx = ("actualité calme sur les 2 dernières heures" if risk == 0
-                        else f"actualité à surveiller (score {risk}) : " + " | ".join(hits[:2]))
-
-            sig, why = build_signal(asset, a, self.cfg, news_ctx, now)
-            if sig is None:
-                log.info("%s : pas de signal (%s)", asset.label, "; ".join(why))
-                if self.cfg.shadow_enabled and not dry_run:
-                    self._maybe_shadow(asset, a, news_ctx, now, all_sigs)
-                continue
-            produced.append(sig)
-            all_sigs.append(sig)
-            if not dry_run:
-                self.store.add_signal(sig)
-            notify(format_signal(sig, self.cfg.timezone) + "\n\n" + DISCLAIMER)
-            log.info("%s : signal %s %s émis (id %s)", asset.label, sig.direction, sig.entry, sig.id)
+            news_ctx = risk = None
+            for hkey, base in horizons:
+                if blocked[hkey]:
+                    log.info("%s [%s] : %s", asset.label, hkey, "; ".join(blocked[hkey]))
+                    continue
+                a = assess(asset, candles, self.cfg, weights, base_minutes=base, context=context)
+                if asset.key == "bitcoin" and base == 5:
+                    context["btc_dir"] = a.direction if a.direction else self._quick_direction(candles)
+                if a.direction is None:
+                    log.info("%s [%s] : %s", asset.label, hkey, "; ".join(a.reasons_rejected) or "aucune direction")
+                    continue
+                if news_ctx is None:
+                    items: list[newsmod.NewsItem] = []
+                    for c in NEWS_CATEGORIES.get(asset.key, ["macro"]):
+                        if c not in news_cache:
+                            news_cache[c] = newsmod.fetch_news([c], self.cfg.news_lookback_minutes, now)
+                        items += news_cache[c]
+                    risk, hits = newsmod.risk_score(items, asset.news_keywords)
+                    news_ctx = ("actualité calme sur les 2 dernières heures" if risk == 0
+                                else f"actualité à surveiller (score {risk}) : " + " | ".join(hits[:2]))
+                if risk is not None and risk > self.cfg.max_news_risk_score:
+                    log.info("%s [%s] : actualité incertaine (score %d) → pas de signal", asset.label, hkey, risk)
+                    continue
+                sig, why = build_signal(asset, a, self.cfg, news_ctx, now)
+                if sig is None:
+                    log.info("%s [%s] : pas de signal (%s)", asset.label, hkey, "; ".join(why))
+                    if self.cfg.shadow_enabled and not dry_run and base == 5:
+                        self._maybe_shadow(asset, a, news_ctx, now, all_sigs)
+                    continue
+                produced.append(sig)
+                all_sigs.append(sig)
+                if not dry_run:
+                    self.store.add_signal(sig)
+                notify(format_signal(sig, self.cfg.timezone) + "\n\n" + DISCLAIMER)
+                log.info("%s [%s] : signal %s %s émis (id %s)", asset.label, hkey, sig.direction, sig.entry, sig.id)
         self._touch_state(now, note=f"{len(produced)} signal(aux)")
         if not dry_run:
             self.write_report()
@@ -131,17 +146,21 @@ class Engine:
         log.info("%s : signal fantôme %s %s (id %s, %d critères)", asset.label, sig.direction, sig.entry, sig.id, sig.score and a.n_criteria)
         return sig
 
-    def _policy_block(self, asset_key: str, all_sigs: list[Signal], now: datetime) -> list[str]:
+    def _policy_block(self, asset_key: str, all_sigs: list[Signal], now: datetime, horizon: str = "1h") -> list[str]:
+        """Raisons de ne pas chercher de signal sur cet actif pour cet horizon (liste vide = autorisé)."""
         reasons = []
         today = now.astimezone(self.tz).date()
-        mine = sorted((s for s in all_sigs if s.asset == asset_key and s.source != "shadow"), key=lambda s: s.created_at)
+        visible = [s for s in all_sigs if s.asset == asset_key and s.source != "shadow"]
+        mine = sorted((s for s in visible if (s.horizon or "1h") == horizon), key=lambda s: s.created_at)
         todays = [s for s in mine if parse_iso(s.created_at).astimezone(self.tz).date() == today]
-        if len(todays) >= self.cfg.max_signals_per_asset_per_day:
-            reasons.append(f"maximum quotidien atteint ({self.cfg.max_signals_per_asset_per_day})")
-        if sum(1 for s in todays if s.status == "sl") >= self.cfg.max_losses_per_asset_per_day:
+        cap = self.cfg.max_signals_per_asset_per_day if horizon == "1h" else self.cfg.max_long_signals_per_asset_per_day
+        if len(todays) >= cap:
+            reasons.append(f"maximum quotidien atteint ({cap}, horizon {horizon})")
+        losses_today = sum(1 for s in visible if s.status == "sl" and parse_iso(s.created_at).astimezone(self.tz).date() == today)
+        if losses_today >= self.cfg.max_losses_per_asset_per_day:
             reasons.append(f"protection quotidienne : {self.cfg.max_losses_per_asset_per_day} stops déjà touchés")
         if any(s.status == "open" for s in mine):
-            reasons.append("un signal est déjà ouvert sur cet actif")
+            reasons.append(f"un signal {horizon} est déjà ouvert sur cet actif")
         if sum(1 for s in all_sigs if s.status == "open" and s.source != "shadow") >= self.cfg.max_open_signals:
             reasons.append(f"plafond de signaux ouverts atteint ({self.cfg.max_open_signals})")
         if mine:
@@ -150,6 +169,41 @@ class Engine:
             if now - parse_iso(last.created_at) < timedelta(minutes=cooldown):
                 reasons.append("délai de refroidissement en cours")
         return reasons
+
+    @staticmethod
+    def _quick_direction(candles_5m: list) -> str | None:
+        closes = [c.close for c in candles_5m]
+        e20 = ind.ema(closes, 20)
+        e50 = ind.ema(closes, 50)
+        if e20[-1] is None or e50[-1] is None:
+            return None
+        if e20[-1] > e50[-1] * 1.0005:
+            return "long"
+        if e20[-1] < e50[-1] * 0.9995:
+            return "short"
+        return None
+
+    # ------------------------------------------------------- contexte marché
+    def correlation_context(self, now: datetime) -> dict[str, Any]:
+        """Variations récentes des marchés meneurs (VIX 15 min, DXY et taux 10 ans sur 1 h)."""
+        ctx: dict[str, Any] = {}
+        for key, minutes, field in (("vix", 15, "vix_ret15"), ("dxy", 60, "dxy_ret60"), ("tnx", 60, "tnx_ret60")):
+            try:
+                candles = ind.closed_candles(market.fetch_leader_candles(key), int(now.timestamp()), 300)
+                if candles and now.timestamp() - candles[-1].ts <= 30 * 60:
+                    ctx[field] = ind.pct_change(candles, minutes)
+            except ProviderError as exc:
+                log.info("marché meneur %s indisponible (%s)", key, exc)
+        return ctx
+
+    def macro_events(self, now: datetime) -> list[newsmod.MacroEvent]:
+        """Calendrier : événements manuels + rapport emploi + calendrier économique en ligne (cache)."""
+        events = newsmod.load_calendar(self.store.calendar()) + newsmod.recurring_macro_events(now)
+        try:
+            events += calmod.fetch_events(self.store.calendar_cache_file)
+        except Exception as exc:  # noqa: BLE001 — le calendrier ne doit jamais bloquer un passage
+            log.warning("calendrier économique : %s", exc)
+        return events
 
     def _touch_state(self, now: datetime, note: str = "") -> None:
         st = self.store.state()
@@ -272,6 +326,13 @@ class Engine:
     def summary(self, day=None, send: bool = True) -> str:
         adj = self._relearn()
         text = daily_summary(self.store.all_signals(), self.cfg, day, adj)
+        try:
+            now = utcnow()
+            agenda = calmod.upcoming(self.macro_events(now), now, hours=30, min_impact="high")
+            text = text.replace("\n\n" + DISCLAIMER, "\n\nAnnonces à fort impact dans les 30 prochaines heures :\n"
+                                + calmod.format_agenda(agenda, self.cfg.timezone) + "\n\n" + DISCLAIMER)
+        except Exception as exc:  # noqa: BLE001
+            log.warning("agenda indisponible : %s", exc)
         if send:
             notify(text)
         self.write_report()
@@ -404,12 +465,14 @@ class Engine:
                 except ProviderError as exc:
                     log.warning("%s : données indisponibles pour le backtest (%s)", asset.label, exc)
                     continue
-            res = run_backtest(asset, candles, self.cfg)
-            results[key] = res
-            text = format_backtest(res)
-            print(text, flush=True)
-            if send:
-                notify(text)
+            bases = [5] + ([self.cfg.long_horizon_base_minutes] if (self.cfg.long_horizon_enabled and asset.long_horizon) else [])
+            for base in bases:
+                res = run_backtest(asset, candles, self.cfg, base_minutes=base)
+                results[key if base == 5 else f"{key}_{res['horizon']}"] = res
+                text = format_backtest(res)
+                print(text, flush=True)
+                if send:
+                    notify(text)
         if results:
             self.store.save_backtests(results)
             self.write_report()

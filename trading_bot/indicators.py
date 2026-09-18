@@ -328,3 +328,75 @@ def barrier_probabilities(price: float, tp: float, sl: float, sigma_per_step: fl
 def closed_candles(candles: Sequence[Candle], now_ts: int, step_seconds: int = 300) -> list[Candle]:
     """Écarte la bougie en cours de formation (son ouverture + durée dépasse `now_ts`)."""
     return [c for c in candles if c.ts + step_seconds <= now_ts]
+
+
+def average_range(candles: Sequence[Candle], bucket_seconds: int, buckets: int = 24, min_fill: float = 0.5) -> float | None:
+    """Range moyen (high - low) par tranche de `bucket_seconds`, sur les `buckets` dernières tranches.
+
+    Généralise `average_hourly_range` à un horizon quelconque (ex. 3 h = 10 800 s).
+    Une tranche n'est comptée que si elle contient au moins `min_fill` de ses bougies attendues.
+    """
+    if not candles or len(candles) < 2:
+        return None
+    step = min(b.ts - a.ts for a, b in zip(candles, candles[1:]) if b.ts > a.ts)
+    expected = max(1, bucket_seconds // step)
+    groups: dict[int, list[Candle]] = {}
+    for c in candles:
+        groups.setdefault(c.ts // bucket_seconds, []).append(c)
+    ranges = []
+    for key in sorted(groups)[-buckets:]:
+        g = groups[key]
+        if len(g) < expected * min_fill:
+            continue
+        ranges.append(max(x.high for x in g) - min(x.low for x in g))
+    if not ranges:
+        return None
+    return sum(ranges) / len(ranges)
+
+
+def activity_profile(candles_5m: Sequence[Candle]) -> dict[int, float]:
+    """Profil d'activité par heure UTC : range moyen relatif de l'heure / moyenne de toutes les heures.
+
+    1.0 = heure moyenne ; 0.5 = heure deux fois plus calme que la moyenne. Calculé sur les données
+    disponibles (5 jours en production, 60 jours en backtest hors ligne).
+    """
+    sums: dict[int, list[float]] = {}
+    for c in candles_5m:
+        if c.close > 0:
+            hour = (c.ts // 3600) % 24
+            sums.setdefault(hour, []).append((c.high - c.low) / c.close)
+    if not sums:
+        return {}
+    means = {h: sum(v) / len(v) for h, v in sums.items() if v}
+    overall = sum(means.values()) / len(means)
+    if overall <= 0:
+        return {}
+    return {h: round(m / overall, 3) for h, m in means.items()}
+
+
+def day_extremes(candles: Sequence[Candle], day_index: int) -> tuple[float, float] | None:
+    """Plus haut / plus bas d'un jour UTC (day_index = ts // 86400)."""
+    day = [c for c in candles if c.ts // 86400 == day_index]
+    if not day:
+        return None
+    return max(c.high for c in day), min(c.low for c in day)
+
+
+def session_range(candles: Sequence[Candle], start_ts: int, end_ts: int) -> tuple[float, float] | None:
+    """Plus haut / plus bas des bougies dont l'ouverture est dans [start_ts, end_ts[."""
+    part = [c for c in candles if start_ts <= c.ts < end_ts]
+    if not part:
+        return None
+    return max(c.high for c in part), min(c.low for c in part)
+
+
+def pct_change(candles: Sequence[Candle], minutes: int) -> float | None:
+    """Variation en % de la clôture sur les `minutes` dernières minutes (bougies 5 min)."""
+    if len(candles) < 2:
+        return None
+    last = candles[-1]
+    target = last.ts - minutes * 60
+    ref = next((c for c in reversed(candles) if c.ts <= target), None)
+    if ref is None or ref.close <= 0:
+        return None
+    return (last.close - ref.close) / ref.close * 100.0

@@ -20,11 +20,18 @@ from .config import AssetConfig, Config
 from .models import Signal, iso, parse_iso, utcnow
 
 _LABELS = {
-    "trend_5m": "tendance 5 min", "trend_15m": "tendance 15 min", "trend_1h": "tendance 1 h",
+    "trend_5m": "tendance de base", "trend_15m": "tendance ×3", "trend_1h": "tendance ×12",
     "adx": "tendance forte (ADX)", "vwap": "prix du bon côté du VWAP",
     "rsi": "RSI en momentum", "macd": "MACD en expansion", "level": "niveau clé favorable",
     "volume": "volume anormal",
+    "orb": "cassure du range d'ouverture",
+    "pdhl": "cassure des extrêmes de la veille",
+    "corr": "marché meneur favorable",
 }
+
+
+def horizon_label(minutes: int) -> str:
+    return f"{minutes // 60} h" if minutes % 60 == 0 else f"{minutes} min"
 
 
 def round_to_tick(value: float, tick: float) -> float:
@@ -33,7 +40,10 @@ def round_to_tick(value: float, tick: float) -> float:
     return round(round(value / tick) * tick, 6)
 
 
-def criterion_label(c: str) -> str:
+def criterion_label(c: str, base_minutes: int = 5) -> str:
+    if c in ("trend_5m", "trend_15m", "trend_1h"):
+        mult = {"trend_5m": 1, "trend_15m": 3, "trend_1h": 12}[c]
+        return f"tendance {horizon_label(base_minutes * mult)}"
     return _LABELS.get(c, c)
 
 
@@ -142,20 +152,22 @@ def build_signal(asset: AssetConfig, a: Assessment, cfg: Config, news_context: s
         reasons.append(f"cible trop petite face aux coûts ({tp_pct:.2f} % pour {asset.cost_pct:.2f} % de frais)")
         return None, reasons
 
-    # Faisabilité statistique sous ~1 h (marche aléatoire, volatilité réalisée)
+    # Faisabilité statistique sur l'horizon (marche aléatoire, volatilité réalisée par bougie de base)
+    horizon = a.horizon_minutes or cfg.signal_lifetime_minutes
+    hlabel = horizon_label(horizon)
     p_res = p_tp = None
     if simulate and a.sigma_5m:
-        steps = max(1, cfg.signal_lifetime_minutes // 5)
+        steps = max(1, horizon // max(1, a.base_minutes))
         p_res, p_tp = ind.barrier_probabilities(entry, tp, sl, a.sigma_5m, steps=steps)
         if p_res < cfg.min_resolution_probability:
-            reasons.append(f"faible probabilité de résolution sous 1 h ({p_res:.0%}) : marché trop calme pour ces niveaux")
+            reasons.append(f"faible probabilité de résolution sous {hlabel} ({p_res:.0%}) : marché trop calme pour ces niveaux")
             return None, reasons
 
-    tech = ", ".join(criterion_label(c) for c in a.criteria)
+    tech = ", ".join(criterion_label(c, a.base_minutes) for c in a.criteria)
     rationale = (f"{'Achat' if a.direction == 'long' else 'Vente'} : {tech}. "
-                 f"Range horaire moyen ≈ {hr:.{asset.price_decimals}f} ({hr_pct:.2f} %), "
+                 f"Range moyen sur {hlabel} ≈ {hr:.{asset.price_decimals}f} ({hr_pct:.2f} %), "
                  f"TP = {tp_dist / hr * 100:.0f} % du range, SL = {sl_dist / hr * 100:.0f} % du range"
-                 + (f", probabilité de résolution sous 1 h ≈ {p_res:.0%}" if p_res is not None else "") + ".")
+                 + (f", probabilité de résolution sous {hlabel} ≈ {p_res:.0%}" if p_res is not None else "") + ".")
 
     sig = Signal(
         id=uuid.uuid4().hex[:10],
@@ -163,11 +175,12 @@ def build_signal(asset: AssetConfig, a: Assessment, cfg: Config, news_context: s
         entry=entry, take_profit=tp, stop_loss=sl, risk_reward=round(rr, 2),
         confidence=conf, score=a.score, criteria=list(a.criteria),
         rationale=rationale, news_context=news_context,
-        created_at=iso(now), expires_at=iso(now + timedelta(minutes=cfg.signal_lifetime_minutes)),
-        hourly_range=round(hr, 6),
+        created_at=iso(now), expires_at=iso(now + timedelta(minutes=horizon)),
+        hourly_range=round(hr, 6), horizon=("1h" if horizon <= 60 else hlabel.replace(" ", "")), horizon_minutes=horizon,
         meta={"details": a.details, "support": a.support, "resistance": a.resistance,
               "atr_5m": a.atr, "atr_ratio": a.atr_ratio, "hourly_range_pct": round(hr_pct, 4), "adx_15m": a.adx_15m,
-              "sigma_5m": a.sigma_5m, "p_resolution": p_res, "p_tp_neutral": p_tp},
+              "sigma_5m": a.sigma_5m, "p_resolution": p_res, "p_tp_neutral": p_tp,
+              "activity_ratio": a.activity_ratio, "base_minutes": a.base_minutes},
     )
     return sig, reasons
 
@@ -177,10 +190,11 @@ def format_signal(sig: Signal, tz: str = "Europe/Paris") -> str:
     created = parse_iso(sig.created_at).astimezone(zone)
     expires = parse_iso(sig.expires_at).astimezone(zone)
     arrow = "🟢 LONG" if sig.direction == "long" else "🔴 SHORT"
+    kind = "SCALP ~1 h" if (sig.horizon_minutes or 60) <= 60 else f"INTRADAY ~{horizon_label(sig.horizon_minutes)}"
     risk_pct = abs(sig.entry - sig.stop_loss) / sig.entry * 100.0
     reward_pct = abs(sig.take_profit - sig.entry) / sig.entry * 100.0
     lines = [
-        f"📡 SIGNAL {arrow} — {sig.asset_label}",
+        f"📡 SIGNAL {arrow} — {sig.asset_label} — {kind}",
         f"Heure : {created:%d/%m/%Y %H:%M} ({tz}) — id {sig.id}",
         f"Entrée visée : {sig.entry}",
         f"Take Profit  : {sig.take_profit} (+{reward_pct:.2f} %)",
@@ -189,6 +203,6 @@ def format_signal(sig: Signal, tz: str = "Europe/Paris") -> str:
         f"Confiance : {sig.confidence.upper()} (score {sig.score}, {len(sig.criteria)} critères alignés)",
         f"Justification : {sig.rationale}",
         f"Actualité : {sig.news_context}",
-        f"Validité : jusqu'à {expires:%H:%M} ({tz}), puis expiration automatique",
+        f"Durée estimée : ~{horizon_label(sig.horizon_minutes or 60)} — valable jusqu'à {expires:%H:%M} ({tz}), puis expiration automatique",
     ]
     return "\n".join(lines)

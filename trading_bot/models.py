@@ -57,6 +57,8 @@ class Signal:
     duration_minutes: int | None = None
     hourly_range: float | None = None
     source: str = "bot"       # bot (notifié) | shadow (fantôme, silencieux) | manual (demandé) | backtest
+    horizon: str = "1h"       # 1h (scalping) | 3h (intraday plus long)
+    horizon_minutes: int = 60
     meta: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

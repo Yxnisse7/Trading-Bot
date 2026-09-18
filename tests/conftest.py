@@ -53,3 +53,16 @@ def choppy():
         f = 1 + 0.002 * math.sin(i / 6)
         out.append(Candle(c.ts, c.open * f, c.high * f, c.low * f, c.close * f, c.volume))
     return out
+
+
+@pytest.fixture(autouse=True)
+def _no_network(monkeypatch):
+    """Aucun test ne doit toucher au réseau : toute requête HTTP échoue immédiatement."""
+    import requests
+
+    def _blocked(*args, **kwargs):
+        raise requests.ConnectionError("réseau désactivé dans les tests")
+
+    monkeypatch.setattr(requests, "get", _blocked)
+    monkeypatch.setattr(requests, "post", _blocked)
+    monkeypatch.setattr("trading_bot.providers.http.time.sleep", lambda s: None)

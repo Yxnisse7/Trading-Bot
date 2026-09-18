@@ -13,6 +13,12 @@ Critères évalués (direction long / short) :
   macd       histogramme MACD 5 min du bon côté et en expansion
   level      proximité d'un support (long) / d'une résistance (short) avec de la place vers la cible
   volume     volume anormal confirmant la dernière bougie
+  orb        cassure du range d'ouverture US (actifs avec session), dans les 2 h qui suivent
+  pdhl       cassure du plus haut / plus bas de la veille, sans extension excessive
+  corr       marché meneur (VIX, dollar, taux, Bitcoin) qui confirme ; un meneur contraire est un veto
+
+Horizons : `base_minutes` = 5 (scalping ~1 h) ou 15 (intraday ~3 h) ; les unités de temps
+supérieures sont ×3 et ×12, le range de référence couvre 12 bougies de base.
 """
 from __future__ import annotations
 
@@ -33,6 +39,9 @@ DEFAULT_WEIGHTS: dict[str, float] = {
     "macd": 1.0,
     "level": 1.0,
     "volume": 0.75,
+    "orb": 1.0,
+    "pdhl": 1.0,
+    "corr": 0.5,
 }
 
 MIN_CANDLES_5M = 80
@@ -50,10 +59,13 @@ class Assessment:
     atr: float | None = None
     support: float | None = None
     resistance: float | None = None
-    sigma_5m: float | None = None    # volatilité réalisée par bougie 5 min (log-rendements)
+    sigma_5m: float | None = None    # volatilité réalisée par bougie de base (log-rendements)
     adx_15m: float | None = None
     atr_ratio: float | None = None   # ATR actuel / ATR moyen des 24 dernières heures
     reasons_rejected: list[str] = field(default_factory=list)
+    horizon_minutes: int = 60        # 12 bougies de base
+    base_minutes: int = 5
+    activity_ratio: float | None = None
 
     @property
     def n_criteria(self) -> int:
@@ -92,20 +104,31 @@ def key_levels(c15: list[Candle], c60: list[Candle], price: float, hourly_range:
 
 
 def assess(asset: AssetConfig, candles_5m: list[Candle], cfg: Config,
-           weights: dict[str, float] | None = None) -> Assessment:
-    """Évalue l'actif : direction dominante, critères alignés, score pondéré."""
+           weights: dict[str, float] | None = None, *, base_minutes: int = 5,
+           context: dict[str, float | str | None] | None = None) -> Assessment:
+    """Évalue l'actif : direction dominante, critères alignés, score pondéré.
+
+    `base_minutes` : 5 (horizon ~1 h) ou 15 (horizon ~3 h). `context` : mesures des marchés
+    meneurs (vix_ret15, dxy_ret60, tnx_ret60, btc_dir) pour le critère de corrélation.
+    """
     w = dict(DEFAULT_WEIGHTS)
     if weights:
         w.update({k: float(v) for k, v in weights.items() if k in w})
+    context = context or {}
+    horizon_minutes = 12 * base_minutes
+    raw_5m = candles_5m
+    candles = ind.resample(candles_5m, base_minutes) if base_minutes != 5 else candles_5m
 
-    if len(candles_5m) < MIN_CANDLES_5M:
-        return Assessment(asset.key, candles_5m[-1].close if candles_5m else 0.0, None, 0.0, [],
-                          reasons_rejected=["historique 5 min insuffisant"])
+    if len(candles) < MIN_CANDLES_5M:
+        return Assessment(asset.key, candles[-1].close if candles else 0.0, None, 0.0, [],
+                          reasons_rejected=[f"historique {base_minutes} min insuffisant"],
+                          horizon_minutes=horizon_minutes, base_minutes=base_minutes)
 
-    closes = [c.close for c in candles_5m]
+    closes = [c.close for c in candles]
     price = closes[-1]
-    c15 = ind.resample(candles_5m, 15)
-    c60 = ind.resample(candles_5m, 60)
+    c15 = ind.resample(candles, base_minutes * 3)
+    c60 = ind.resample(candles, base_minutes * 12)
+    candles_5m = candles  # les blocs ci-dessous travaillent sur la bougie de base
 
     votes: dict[str, dict[str, float]] = {"long": {}, "short": {}}
     details: dict[str, str] = {}
@@ -116,7 +139,7 @@ def assess(asset: AssetConfig, candles_5m: list[Candle], cfg: Config,
     e50 = ind.ema(closes, 50)
     if e20[-1] is not None and e50[-1] is not None:
         d = _dir_from(e20[-1] > e50[-1] and price > e20[-1], e20[-1] < e50[-1] and price < e20[-1])
-        details["trend_5m"] = f"EMA20 {_fmt(e20[-1])} / EMA50 {_fmt(e50[-1])}"
+        details["trend_5m"] = f"EMA20 {_fmt(e20[-1])} / EMA50 {_fmt(e50[-1])} ({base_minutes} min)"
         if d:
             votes[d]["trend_5m"] = w["trend_5m"]
 
@@ -160,8 +183,8 @@ def assess(asset: AssetConfig, candles_5m: list[Candle], cfg: Config,
         details["volume"] = "volume non fiable sur ce flux : critères volume / VWAP ignorés"
 
     # --- VWAP de la journée (UTC)
-    day_start = candles_5m[-1].ts // 86400 * 86400
-    vw = ind.vwap(candles_5m, day_start) if volume_reliable else None
+    day_start = raw_5m[-1].ts // 86400 * 86400
+    vw = ind.vwap(raw_5m, day_start) if volume_reliable else None
     if vw is not None and vw > 0:
         details["vwap"] = f"VWAP jour {_fmt(vw)}"
         d = _dir_from(price > vw * 1.0003, price < vw * 0.9997)
@@ -194,7 +217,7 @@ def assess(asset: AssetConfig, candles_5m: list[Candle], cfg: Config,
     atr_v = a[-1]
     recent = [x for x in a[-288:] if x is not None]
     atr_ratio = (atr_v / (sum(recent) / len(recent))) if (atr_v and recent and sum(recent) > 0) else None
-    hourly_range = ind.average_hourly_range(candles_5m, hours=24)
+    hourly_range = ind.average_range(raw_5m, horizon_minutes * 60, buckets=24 if base_minutes == 5 else 16)
     sigma = ind.realized_volatility(closes, 48)
 
     # --- Niveaux clés
@@ -226,6 +249,84 @@ def assess(asset: AssetConfig, candles_5m: list[Candle], cfg: Config,
             elif last.close < last.open:
                 votes["short"]["volume"] = w["volume"]
 
+    # --- Moments précis : range d'ouverture US et extrêmes de la veille (bougies 5 min brutes)
+    last_ts = raw_5m[-1].ts
+    if asset.session_utc and hourly_range:
+        day0 = last_ts // 86400 * 86400
+        open_ts = day0 + cfg.us_open_utc[0] * 3600 + cfg.us_open_utc[1] * 60
+        orb_end = open_ts + cfg.orb_minutes * 60
+        if orb_end <= last_ts + 300 <= orb_end + cfg.orb_window_minutes * 60:
+            rng = ind.session_range(raw_5m, open_ts, orb_end)
+            if rng:
+                orb_high, orb_low = rng
+                details["orb"] = f"range d'ouverture {orb_low:.{asset.price_decimals}f} – {orb_high:.{asset.price_decimals}f}"
+                if price > orb_high and price - orb_high <= 0.5 * hourly_range:
+                    votes["long"]["orb"] = w["orb"]
+                elif price < orb_low and orb_low - price <= 0.5 * hourly_range:
+                    votes["short"]["orb"] = w["orb"]
+    if hourly_range:
+        prev = ind.day_extremes(raw_5m, last_ts // 86400 - 1)
+        if prev:
+            pdh, pdl = prev
+            details["pdhl"] = f"veille : haut {pdh:.{asset.price_decimals}f} / bas {pdl:.{asset.price_decimals}f}"
+            if price > pdh and price - pdh <= 0.5 * hourly_range:
+                votes["long"]["pdhl"] = w["pdhl"]
+            elif price < pdl and pdl - price <= 0.5 * hourly_range:
+                votes["short"]["pdhl"] = w["pdhl"]
+
+    # --- Heures creuses (profil d'activité automatique) : pas de signal court quand le marché dort
+    activity = None
+    if base_minutes == 5 and cfg.activity_filter:
+        profile = ind.activity_profile(raw_5m)
+        activity = profile.get((last_ts // 3600) % 24)
+        if activity is not None:
+            details["activity"] = f"activité de l'heure {activity:.2f}× la moyenne"
+            if activity < cfg.min_activity_ratio:
+                reasons.append(f"heure creuse (activité {activity:.2f}× la moyenne)")
+
+    # --- Corrélations : le marché meneur confirme (léger) ou oppose son veto ; jamais un signal seul
+    corr_veto: dict[str, str] = {}
+    if cfg.correlation_enabled and context:
+        vix = context.get("vix_ret15")
+        dxy = context.get("dxy_ret60")
+        tnx = context.get("tnx_ret60")
+        btc_dir = context.get("btc_dir")
+        if asset.key in ("nasdaq", "sp500"):
+            if isinstance(vix, (int, float)):
+                details["corr"] = f"VIX {vix:+.1f} % sur 15 min"
+                if vix >= cfg.vix_veto_pct:
+                    corr_veto["long"] = "VIX en forte hausse"
+                elif vix <= -cfg.vix_veto_pct / 2:
+                    votes["long"]["corr"] = w["corr"]
+                if vix <= -cfg.vix_veto_pct:
+                    corr_veto["short"] = "VIX en forte baisse"
+                elif vix >= cfg.vix_veto_pct / 2:
+                    votes["short"]["corr"] = w["corr"]
+            if isinstance(tnx, (int, float)) and asset.key == "nasdaq" and tnx >= cfg.tnx_veto_pct:
+                corr_veto["long"] = "taux 10 ans en forte hausse"
+        elif asset.key == "gold":
+            parts = []
+            if isinstance(dxy, (int, float)):
+                parts.append(f"DXY {dxy:+.2f} % sur 1 h")
+                if dxy >= cfg.dxy_veto_pct:
+                    corr_veto["long"] = "dollar en forte hausse"
+                elif dxy <= -cfg.dxy_veto_pct / 2:
+                    votes["long"]["corr"] = w["corr"]
+                if dxy <= -cfg.dxy_veto_pct:
+                    corr_veto["short"] = "dollar en forte baisse"
+                elif dxy >= cfg.dxy_veto_pct / 2:
+                    votes["short"]["corr"] = w["corr"]
+            if isinstance(tnx, (int, float)):
+                parts.append(f"taux 10 ans {tnx:+.1f} % sur 1 h")
+                if tnx >= cfg.tnx_veto_pct:
+                    corr_veto["long"] = "taux 10 ans en forte hausse"
+            if parts:
+                details["corr"] = ", ".join(parts)
+        elif asset.key == "ethereum" and btc_dir in ("long", "short"):
+            details["corr"] = f"Bitcoin en tendance {btc_dir}"
+            votes[btc_dir]["corr"] = w["corr"]
+            corr_veto["short" if btc_dir == "long" else "long"] = "Bitcoin en tendance contraire"
+
     # --- Direction retenue : score dominant, sans ambiguïté ni contradiction majeure
     def total(d: str) -> float:
         return sum(votes[d].values())
@@ -251,7 +352,10 @@ def assess(asset: AssetConfig, candles_5m: list[Candle], cfg: Config,
         elif total(opposite) >= 0.5 * total(direction):
             reasons.append("trop de critères contradictoires")
             direction = None
-    if direction and any(r.startswith("pas de tendance") or r.startswith("RSI extrême") for r in reasons):
+    if direction and direction in corr_veto:
+        reasons.append(f"veto corrélation : {corr_veto[direction]}")
+        direction = None
+    if direction and any(r.startswith(("pas de tendance", "RSI extrême", "heure creuse")) for r in reasons):
         direction = None
     # Entrée trop étendue par rapport à l'EMA20 5 min : on ne court pas après le mouvement
     if direction and cfg.max_extension is not None and hourly_range and e20[-1] is not None:
@@ -263,7 +367,8 @@ def assess(asset: AssetConfig, candles_5m: list[Candle], cfg: Config,
     score = round(total(direction), 2) if direction else 0.0
     criteria = sorted(votes[direction]) if direction else []
     return Assessment(asset.key, price, direction, score, criteria, details,
-                      hourly_range, atr_v, support, resistance, sigma, adx_last, atr_ratio, reasons)
+                      hourly_range, atr_v, support, resistance, sigma, adx_last, atr_ratio, reasons,
+                      horizon_minutes=horizon_minutes, base_minutes=base_minutes, activity_ratio=activity)
 
 
 def confidence_label(score: float, n_criteria: int, cfg: Config) -> str | None:

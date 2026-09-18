@@ -66,7 +66,19 @@ def analyze(history: list[Signal]) -> dict[str, Any]:
         "by_criterion": stats_by(closed, lambda s: s.criteria),
         "by_news": stats_by(closed, lambda s: ["actualité calme" if "calme" in (s.news_context or "").lower() else "actualité chargée"]),
         "by_hour_utc": stats_by(closed, lambda s: [f"{parse_iso(s.created_at).hour:02d}h"]),
+        "by_horizon": stats_by(closed, lambda s: [s.horizon or "1h"]),
+        "expired": expired_stats(closed),
     }
+
+
+def expired_stats(closed: list[Signal]) -> dict[str, Any]:
+    """Trades expirés : part terminée dans le bon sens et P&L moyen (sortie au temps)."""
+    exp = [s for s in closed if s.status == "expired"]
+    if not exp:
+        return {"n": 0, "in_favor": None, "avg_pnl_pct": None}
+    favor = sum(1 for s in exp if (s.pnl_gross_pct or 0) > 0)
+    return {"n": len(exp), "in_favor": round(favor / len(exp), 4),
+            "avg_pnl_pct": round(sum(s.pnl_pct or 0 for s in exp) / len(exp), 4)}
 
 
 def learn(history: list[Signal], cfg: Config, current: dict[str, Any] | None = None) -> dict[str, Any]:

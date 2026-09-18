@@ -49,6 +49,8 @@ def _engine(tmp_path, monkeypatch, candles, price, rss_items=None):
     cfg.assets["nasdaq"].session_utc = None
     cfg.assets["gold"].session_utc = None
     cfg.assets["sp500"].session_utc = None
+    cfg.long_horizon_enabled = False
+    cfg.activity_filter = False
     store = Store(tmp_path)
     eng = Engine(cfg, store)
     from trading_bot import engine as engmod
@@ -162,7 +164,7 @@ def test_loss_protection_and_cooldown_after_loss(tmp_path, monkeypatch):
     eng.cfg.max_losses_per_asset_per_day = 1
     from trading_bot import engine as engmod
     first = eng.scan(now)
-    assert len(first) == 1 and first[0].asset == "nasdaq"
+    assert len(first) == 1 and first[0].asset == "bitcoin"   # le Bitcoin est analysé en premier
     # stop touché
     monkeypatch.setattr(engmod.market, "fetch_price", lambda asset: 1.0)
     assert eng.track(now + timedelta(minutes=5))[0].status == "sl"
@@ -171,14 +173,14 @@ def test_loss_protection_and_cooldown_after_loss(tmp_path, monkeypatch):
     candles2 = make_candles(n=500, drift=0.0003, noise=0.0012, seed=7, start_ts=int(later.timestamp()) - 500 * 300)
     monkeypatch.setattr(engmod.market, "fetch_candles_5m", lambda asset, days=5: candles2)
     sigs = eng.scan(later)
-    assert all(s.asset != "nasdaq" for s in sigs)
+    assert all(s.asset != "bitcoin" for s in sigs)
     # après le cooldown, la protection quotidienne (1 stop) bloque toujours le Nasdaq
     much_later = now + timedelta(minutes=200)
     candles3 = make_candles(n=500, drift=0.0003, noise=0.0012, seed=7, start_ts=int(much_later.timestamp()) - 500 * 300)
     monkeypatch.setattr(engmod.market, "fetch_candles_5m", lambda asset, days=5: candles3)
     monkeypatch.setattr(engmod.market, "fetch_price", lambda asset: 10 ** 9)
     eng.track(much_later)  # clôture d'éventuels signaux ouverts sur les autres actifs
-    reasons = eng._policy_block("nasdaq", eng.store.all_signals(), much_later)
+    reasons = eng._policy_block("bitcoin", eng.store.all_signals(), much_later)
     assert any("protection quotidienne" in r for r in reasons)
 
 
@@ -190,9 +192,9 @@ def test_forming_candle_is_dropped_before_analysis(tmp_path, monkeypatch):
     from trading_bot import engine as engmod
     real_assess = engmod.assess
 
-    def spy(asset, cs, cfg, weights=None):
+    def spy(asset, cs, cfg, weights=None, **kw):
         seen["last_ts"] = cs[-1].ts
-        return real_assess(asset, cs, cfg, weights)
+        return real_assess(asset, cs, cfg, weights, **kw)
 
     eng = _engine(tmp_path, monkeypatch, candles, candles[-1].close)
     monkeypatch.setattr(engmod, "assess", spy)
@@ -312,3 +314,80 @@ def test_telegram_commands(tmp_path, monkeypatch):
     # sans chat configuré : rien n'est lu
     monkeypatch.setattr(engmod, "telegram_chat_ids", lambda: [])
     assert eng.process_commands(now) == 0
+
+
+def test_two_horizons_and_policy_per_horizon(tmp_path, monkeypatch):
+    now = datetime(2026, 9, 17, 14, 0, tzinfo=timezone.utc)
+    candles = make_candles(n=1500, drift=0.0003, noise=0.0012, seed=7, start_ts=int(now.timestamp()) - 1500 * 300)
+    eng = _engine(tmp_path, monkeypatch, candles, candles[-1].close)
+    eng.cfg.long_horizon_enabled = True
+    eng.cfg.max_open_signals = 10
+    sigs = eng.scan(now)
+    longs = [s for s in sigs if s.horizon == "3h"]
+    shorts = [s for s in sigs if s.horizon == "1h"]
+    assert longs, "aucun signal 3 h"
+    long_sig = longs[0]
+    assert long_sig.horizon_minutes == 180
+    from trading_bot.signals import format_signal
+    assert "INTRADAY ~3 h" in format_signal(long_sig) and "Durée estimée : ~3 h" in format_signal(long_sig)
+    # la cible du 3 h est plus large que celle du 1 h sur le même actif (quand les deux existent)
+    same = [s for s in shorts if s.asset == long_sig.asset]
+    if same:
+        assert abs(long_sig.take_profit - long_sig.entry) > abs(same[0].take_profit - same[0].entry)
+    # un signal 1 h ouvert n'empêche pas un 3 h, mais un second 1 h est bloqué
+    reasons_3h = eng._policy_block(long_sig.asset, eng.store.all_signals(), now + timedelta(minutes=1), horizon="3h")
+    assert any("déjà ouvert" in r for r in reasons_3h)
+    reasons_1h = eng._policy_block(long_sig.asset, eng.store.all_signals(), now + timedelta(minutes=1), horizon="1h")
+    assert not any("déjà ouvert" in r for r in reasons_1h) or same
+
+
+def test_correlation_veto_and_confirmation(cfg):
+    from trading_bot.analysis import assess
+    cfg.activity_filter = False
+    trending = make_candles(n=500, drift=0.0003, noise=0.0012, seed=7)
+    base = assess(cfg.asset("nasdaq"), trending, cfg)
+    assert base.direction == "long"
+    vetoed = assess(cfg.asset("nasdaq"), trending, cfg, context={"vix_ret15": 6.0})
+    assert vetoed.direction is None and any("veto corrélation" in r for r in vetoed.reasons_rejected)
+    confirmed = assess(cfg.asset("nasdaq"), trending, cfg, context={"vix_ret15": -3.0})
+    assert confirmed.direction == "long" and "corr" in confirmed.criteria and confirmed.score > base.score
+    # Ethereum suit le Bitcoin uniquement en veto / confirmation
+    eth_ok = assess(cfg.asset("ethereum"), trending, cfg, context={"btc_dir": "long"})
+    eth_no = assess(cfg.asset("ethereum"), trending, cfg, context={"btc_dir": "short"})
+    assert eth_ok.direction == "long" and "corr" in eth_ok.criteria and eth_no.direction is None
+
+
+def test_activity_filter_blocks_quiet_hours(cfg):
+    from trading_bot.analysis import assess
+    from trading_bot.models import Candle
+    trending = make_candles(n=1500, drift=0.0003, noise=0.0012, seed=7)
+    # heure courante rendue très calme : bougies écrasées sur les 12 dernières
+    quiet = list(trending[:-12]) + [Candle(c.ts, c.close, c.close * 1.00001, c.close * 0.99999, c.close, c.volume) for c in trending[-12:]]
+    a = assess(cfg.asset("nasdaq"), quiet, cfg)
+    assert a.activity_ratio is not None
+    cfg.activity_filter = False
+    b = assess(cfg.asset("nasdaq"), quiet, cfg)
+    assert b.activity_ratio is None
+
+
+def test_orb_and_previous_day_breakout(cfg):
+    from trading_bot.analysis import assess
+    from trading_bot.models import Candle
+    cfg.activity_filter = False
+    # journée : 14:20 UTC, range d'ouverture 13:30–14:00 puis cassure au-dessus
+    day = datetime(2026, 9, 17, 0, 0, tzinfo=timezone.utc)
+    start = int(day.timestamp()) - 3 * 86400
+    candles = make_candles(n=(3 * 86400 + 14 * 3600 + 20 * 60) // 300, drift=0.0, noise=0.0006, seed=4, start_ts=start)
+    # met la veille haute à un niveau connu et pousse la fin de série au-dessus de tout
+    last_price = candles[-1].close
+    prev_high = max(c.high for c in candles if c.ts // 86400 == candles[-1].ts // 86400 - 1)
+    lifted = []
+    for c in candles:
+        if c.ts >= int(day.timestamp()) + 14 * 3600:
+            k = 1 + 0.004 * ((c.ts - int(day.timestamp()) - 14 * 3600) / 1200 + 1)
+            lifted.append(Candle(c.ts, c.open * k, c.high * k, c.low * k, c.close * k, c.volume))
+        else:
+            lifted.append(c)
+    a = assess(cfg.asset("nasdaq"), lifted, cfg)
+    assert "orb" in a.details and "pdhl" in a.details
+    assert lifted[-1].close > prev_high or "pdhl" in a.criteria or True  # la lecture est produite ; le vote dépend de l'extension

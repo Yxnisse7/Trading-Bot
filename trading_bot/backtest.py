@@ -23,11 +23,12 @@ from .tracker import resolve_with_candles, close_signal
 log = logging.getLogger(__name__)
 
 
-def _policy_allows(asset: AssetConfig, sigs: list[Signal], now: datetime, cfg: Config) -> bool:
+def _policy_allows(asset: AssetConfig, sigs: list[Signal], now: datetime, cfg: Config, base_minutes: int = 5) -> bool:
     tz = ZoneInfo(cfg.timezone)
     today = now.astimezone(tz).date()
     todays = [s for s in sigs if parse_iso(s.created_at).astimezone(tz).date() == today]
-    if len(todays) >= cfg.max_signals_per_asset_per_day:
+    cap = cfg.max_signals_per_asset_per_day if base_minutes == 5 else cfg.max_long_signals_per_asset_per_day
+    if len(todays) >= cap:
         return False
     if sum(1 for s in todays if s.status == "sl") >= cfg.max_losses_per_asset_per_day:
         return False
@@ -43,20 +44,21 @@ def _policy_allows(asset: AssetConfig, sigs: list[Signal], now: datetime, cfg: C
 
 def run_backtest(asset: AssetConfig, candles: list[Candle], cfg: Config, *, step: int = 3,
                  warmup: int = 300, weights: dict[str, float] | None = None,
-                 simulate: bool = True, lookback: int = 1440) -> dict[str, Any]:
-    """Rejoue l'historique toutes les `step` bougies (3 = 15 min). Renvoie statistiques + trades.
+                 simulate: bool = True, lookback: int = 1440, base_minutes: int = 5) -> dict[str, Any]:
+    """Rejoue l'historique toutes les `step` bougies 5 min (3 = 15 min). Renvoie statistiques + trades.
 
     `lookback` : nombre de bougies vues par l'analyse à chaque pas (1 440 = 5 jours, comme en production).
+    `base_minutes` : 5 (horizon ~1 h) ou 15 (horizon ~3 h, issue sur 36 bougies 5 min).
     """
-    horizon = max(1, cfg.signal_lifetime_minutes // 5)
+    horizon = max(1, 12 * base_minutes // 5)
     sigs: list[Signal] = []
     rejected: dict[str, int] = {}
     i = warmup
     while i < len(candles) - horizon:
         window = candles[max(0, i + 1 - lookback): i + 1]
         now = datetime.fromtimestamp(candles[i].ts + 300, tz=timezone.utc)  # clôture de la bougie i
-        if _policy_allows(asset, sigs, now, cfg):
-            a = assess(asset, window, cfg, weights)
+        if _policy_allows(asset, sigs, now, cfg, base_minutes):
+            a = assess(asset, window, cfg, weights, base_minutes=base_minutes)
             sig, why = build_signal(asset, a, cfg, "backtest (actualité non rejouée)", now, simulate=simulate)
             if sig is None:
                 key = why[-1].split(" (")[0] if why else "inconnu"
@@ -73,7 +75,9 @@ def run_backtest(asset: AssetConfig, candles: list[Candle], cfg: Config, *, step
                     close_signal(sig, status, px, when, asset.cost_pct)
                 sigs.append(sig)
         i += step
-    return summarize(asset, candles, sigs, rejected)
+    res = summarize(asset, candles, sigs, rejected)
+    res["horizon"] = "1h" if base_minutes == 5 else f"{12 * base_minutes // 60}h"
+    return res
 
 
 def neutral_win_rate(sigs: list[Signal]) -> float | None:
@@ -127,7 +131,7 @@ def format_backtest(b: dict[str, Any]) -> str:
     neutral = "n/a" if b.get("neutral_win_rate") is None else f"{b['neutral_win_rate']:.0%}"
     edge = "n/a" if b.get("edge") is None else f"{b['edge']:+.0%}"
     lines = [
-        f"🧪 BACKTEST — {b['asset_label']} ({b['period']})",
+        f"🧪 BACKTEST — {b['asset_label']} — horizon {b.get('horizon', '1h')} ({b['period']})",
         f"Signaux : {b['n']} | TP : {b['tp']} | SL : {b['sl']} | Expirés : {b['expired']}",
         f"Taux de réussite : {wr} (hasard attendu {neutral}, avantage {edge})",
         f"P&L net cumulé : {b['pnl_pct']:+.2f} % (brut {b.get('pnl_gross_pct', b['pnl_pct']):+.2f} %) | Espérance nette / trade : {b['expectancy_pct']:+.3f} %",

@@ -70,6 +70,14 @@ def daily_summary(all_signals: list[Signal], cfg: Config, day: date | None = Non
         _classify(good, bad, f"actif {asset}", st)
     for conf, st in rep["by_confidence"].items():
         _classify(good, bad, f"confiance {conf}", st)
+    ex = rep["expired"]
+    if ex["n"] >= 5:
+        lines.append(f"Trades expirés (cumul) : {ex['n']}, {ex['in_favor']:.0%} terminés dans le bon sens, "
+                     f"P&L moyen {ex['avg_pnl_pct']:+.3f} % → "
+                     + ("une sortie au temps serait favorable." if ex["avg_pnl_pct"] > 0 else "la sortie au temps n'apporte rien."))
+    for h, st in rep["by_horizon"].items():
+        if st["tp"] + st["sl"] >= 3:
+            lines.append(f"Horizon {h} : {st['n']} trades, réussite {st['win_rate']:.0%}, P&L moyen {st['avg_pnl_pct']:+.3f} %")
     lines.append("Ce qui a bien fonctionné : " + (", ".join(good) if good else "pas encore assez de données"))
     lines.append("Ce qui a mal fonctionné : " + (", ".join(bad) if bad else "rien de significatif"))
     lines.append("")

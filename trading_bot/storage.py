@@ -22,6 +22,7 @@ class Store:
         self.backtest_trades_file = self.dir / "backtest_trades.json"  # trades de backtest (apprentissage)
         self.report_file = self.dir / "REPORT.md"             # rapport lisible sur GitHub
         self.shadow_file = self.dir / "shadow.json"           # signaux fantômes ouverts
+        self.calendar_cache_file = self.dir / "calendar_cache.json"  # calendrier économique (ForexFactory)
         self.dashboard_file = self.dir / "dashboard.json"     # données de l'interface
 
     # ---- helpers

@@ -52,6 +52,7 @@ class AssetConfig:
     session_utc: tuple[int, int] | None = None  # plage horaire (heures UTC) où l'on scanne
     news_keywords: tuple[str, ...] = ()
     cost_pct: float = 0.0         # coût aller-retour estimé (spread + commissions), en % du prix
+    long_horizon: bool = True     # analyser aussi l'horizon ~3 h sur cet actif
 
 
 @dataclass
@@ -79,6 +80,24 @@ class Config:
     min_criteria: int = 3                   # nombre minimal de critères alignés
     min_risk_reward: float = 1.2
     min_adx: float = 18.0                   # force de tendance minimale (ADX 15 min)
+    # ---- Moments de marché
+    activity_filter: bool = True            # ignore les heures creuses (profil d'activité automatique)
+    min_activity_ratio: float = 0.6         # heure < 60 % de l'activité moyenne → pas de signal court
+    us_open_utc: tuple[int, int] = (13, 30) # ouverture cash US (13:30 UTC en heure d'été, 14:30 en hiver)
+    orb_minutes: int = 30                   # durée du range d'ouverture
+    orb_window_minutes: int = 120           # fenêtre après le range d'ouverture où la cassure compte
+
+    # ---- Corrélations (veto + confirmation légère, jamais un signal en soi)
+    correlation_enabled: bool = True
+    vix_veto_pct: float = 4.0               # VIX +4 % en 15 min → pas de long indices
+    dxy_veto_pct: float = 0.25              # DXY +0,25 % en 1 h → pas de long or
+    tnx_veto_pct: float = 2.0               # rendement 10 ans +2 % en 1 h → pas de long Nasdaq / or
+
+    # ---- Second horizon (intraday plus long, base 15 min → ~3 h)
+    long_horizon_enabled: bool = True
+    long_horizon_base_minutes: int = 15
+    max_long_signals_per_asset_per_day: int = 2
+
     # ---- Expérimental (désactivé par défaut ; aucun avantage démontré en backtest)
     max_extension: float | None = None      # distance max prix / EMA20 5 min, en ranges horaires
     contrarian: bool = False                # prendre le contre-pied de la direction détectée
@@ -143,6 +162,7 @@ def default_assets() -> dict[str, AssetConfig]:
             min_hourly_range_pct=0.15, max_hourly_range_pct=4.0,
             session_utc=None,  # 24/7
             cost_pct=0.06,   # spread + frais taker typiques (0,03 % × 2)
+            long_horizon=False,  # backtest 60 j : horizon 3 h nettement perdant sur les cryptos
             news_keywords=("bitcoin", "btc", "crypto", "etf", "sec", "binance", "coinbase",
                            "hack", "exploit", "stablecoin", "tether", "liquidation"),
         ),
@@ -152,6 +172,7 @@ def default_assets() -> dict[str, AssetConfig]:
             min_hourly_range_pct=0.2, max_hourly_range_pct=5.0,
             session_utc=None,
             cost_pct=0.08,
+            long_horizon=False,  # idem
             news_keywords=("ethereum", "eth", "crypto", "etf", "sec", "binance", "coinbase",
                            "hack", "exploit", "stablecoin", "liquidation", "vitalik"),
         ),

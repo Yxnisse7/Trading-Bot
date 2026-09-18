@@ -77,6 +77,10 @@ def build_report(all_signals: list[Signal], cfg: Config, adjustments: dict[str, 
         lines += _table("Par contexte d'actualité", rep["by_news"])
         lines += _table("Par heure d'émission (UTC)", rep["by_hour_utc"])
         lines += _table("Par source", stats_by(closed, lambda s: [SOURCE_LABELS.get(s.source, s.source)]))
+        lines += _table("Par horizon", rep["by_horizon"])
+        ex = rep["expired"]
+        if ex["n"]:
+            lines += [f"Trades expirés : {ex['n']}, {ex['in_favor']:.0%} terminés dans le bon sens, P&L moyen {ex['avg_pnl_pct']:+.3f} %.", ""]
     if shadow_closed:
         lines += ["## Signaux fantômes (apprentissage)", "",
                   "Setups rejetés pour confiance insuffisante, suivis sans notification. Ils servent uniquement aux statistiques par critère et à l'apprentissage.", ""]
@@ -121,7 +125,7 @@ CRITERION_LABELS = {
 def _sig_row(s: Signal, tz: ZoneInfo) -> dict[str, Any]:
     c = parse_iso(s.created_at).astimezone(tz)
     return {
-        "id": s.id, "asset": s.asset, "asset_label": s.asset_label, "direction": s.direction,
+        "id": s.id, "asset": s.asset, "asset_label": s.asset_label, "direction": s.direction, "horizon": s.horizon or "1h",
         "entry": s.entry, "take_profit": s.take_profit, "stop_loss": s.stop_loss, "risk_reward": s.risk_reward,
         "confidence": s.confidence, "score": s.score, "criteria": s.criteria, "source": s.source,
         "status": s.status, "pnl_pct": s.pnl_pct, "pnl_gross_pct": s.pnl_gross_pct,
@@ -178,6 +182,8 @@ def build_dashboard(all_signals: list[Signal], cfg: Config, adjustments: dict[st
                      "open": len([s for s in open_sigs if s.source != "shadow"]),
                      "open_shadow": len([s for s in open_sigs if s.source == "shadow"])},
         "by_source": {src: _stats([s for s in closed_all if s.source == src]) for src in ("bot", "manual", "request", "shadow")},
+        "by_horizon": {h: _stats([s for s in visible_closed if (s.horizon or "1h") == h]) for h in sorted({(s.horizon or "1h") for s in visible_closed})},
+        "expired": analyze(visible_closed)["expired"],
         "assets": assets,
         "criteria": criteria,
         "open_signals": [_sig_row(s, tz) for s in sorted(open_sigs, key=lambda s: s.created_at, reverse=True)],

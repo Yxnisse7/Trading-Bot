@@ -5,17 +5,22 @@ avec **suivi automatique** des issues, **apprentissage** sur l'historique, **bac
 **interface locale** et **résumé quotidien**. Le bot **n'exécute aucun ordre** : il propose,
 vous décidez.
 
-| Actif | Source principale | Repli |
+| Actif | Source principale | Replis (dans l'ordre) |
 |---|---|---|
 | Nasdaq 100 (futures `NQ=F`) | Yahoo Finance (API chart publique) | — |
 | S&P 500 (futures `ES=F`) | Yahoo Finance | — |
-| Bitcoin (`BTC/USD`) | Binance API publique (`BTCUSDT`) | Yahoo `BTC-USD`, CoinGecko (prix) |
-| Ethereum (`ETH/USD`) | Binance API publique (`ETHUSDT`) | Yahoo `ETH-USD` |
+| Bitcoin (`BTC/USD`) | Binance (`api.binance.com`, puis miroirs `data-api.binance.vision` et `api.binance.us`) | Coinbase Exchange, Kraken, Yahoo, CoinGecko (prix) |
+| Ethereum (`ETH/USD`) | Binance (idem) | Coinbase Exchange, Kraken, Yahoo |
 | Or (`XAU/USD` via `GC=F`) | Yahoo Finance | — |
 
-Actualité : flux RSS gratuits (MarketWatch, CNBC, Yahoo Finance, CoinDesk, Cointelegraph, Kitco,
-FXStreet) et calendrier macro (`data/macro_calendar.json` : FOMC et CPI 2026 pré-remplis, rapport
-emploi US détecté automatiquement).
+Marchés meneurs (corrélations, Yahoo) : VIX (`^VIX`), dollar (`DX-Y.NYB`), rendement 10 ans (`^TNX`).
+Binance refuse les adresses américaines (GitHub Actions) ; Coinbase et Kraken fournissent alors des
+bougies avec de vrais volumes, ce qui réactive les critères volume et VWAP sur les cryptos.
+
+Actualité : flux RSS gratuits (MarketWatch, CNBC, Yahoo Finance, CoinDesk, Cointelegraph, FXStreet),
+**calendrier économique ForexFactory** (flux JSON gratuit, sans clé, une requête par heure, cache
+disque en cas de panne : toutes les annonces USD à fort impact déclenchent un blackout, l'agenda des
+30 prochaines heures figure dans le résumé quotidien) et calendrier manuel (`data/macro_calendar.json`).
 
 > ⚠️ **Avertissement.** Les signaux sont générés automatiquement à partir de données publiques et
 > d'une analyse algorithmique. Ils ne constituent **pas un conseil financier** et aucune stratégie ne
@@ -38,6 +43,27 @@ emploi US détecté automatiquement).
 | MACD | Histogramme du bon côté et en expansion sur 3 barres |
 | Niveau clé | Proche d'un support (long) / d'une résistance (short), avec de la place vers la cible |
 | Volume | Volume anormal (z-score ≥ 1,5) confirmant la dernière bougie |
+| Range d'ouverture | Cassure du range des 30 premières minutes de la séance US, dans les 2 h qui suivent (indices, or) |
+| Extrêmes de la veille | Cassure du plus haut / plus bas de la veille, sans extension excessive |
+| Marché meneur | VIX (indices), dollar et taux (or), Bitcoin (Ethereum) : confirmation légère (poids 0,5) |
+
+**Moments de marché.** Un profil d'activité par heure est calculé automatiquement à partir des
+données (range moyen de chaque heure rapporté à la moyenne) : les heures creuses (< 60 % de
+l'activité moyenne) ne produisent pas de signal court. Les setups « cassure du range d'ouverture »
+et « cassure des extrêmes de la veille » ciblent les moments structurés de la séance.
+
+**Corrélations, sans suivre bêtement.** Un marché meneur n'émet jamais de signal : il ne peut
+qu'ajouter une confirmation légère ou opposer un **veto** (VIX +4 % en 15 min → pas de long
+indices ; dollar +0,25 % en 1 h ou taux 10 ans +2 % → pas de long or ; Bitcoin en tendance contraire
+→ pas de signal Ethereum dans l'autre sens). La direction vient toujours de l'actif lui-même.
+
+**Deux horizons.** Chaque actif est analysé en base 5 min (scalp, ~1 h) **et** en base 15 min
+(intraday, ~3 h : unités ×3 et ×12, range de référence sur 3 h, cibles plus larges). Les signaux
+intraday sont annoncés avec leur durée estimée (« INTRADAY ~3 h »), limités à 2 par actif et par
+jour, et comptés à part dans les statistiques (« par horizon »). Sur 60 jours de backtest, cet
+horizon est légèrement positif sur Nasdaq et or, négatif sur S&P 500 et nettement perdant sur les
+cryptos : il est donc désactivé par défaut sur Bitcoin et Ethereum (`assets.<actif>.long_horizon`). Le résumé indique aussi si les trades
+expirés finissent en moyenne dans le bon sens, ce qui dirait qu'une sortie au temps serait préférable.
 
 **Abstention par défaut.** Aucun signal si : marché sans tendance (ADX < 18), critères
 contradictoires, tendance 15 min ou directionnel ADX opposés, RSI extrême, volatilité trop faible
@@ -261,6 +287,10 @@ Valeurs par défaut dans `trading_bot/config.py`, surcharge via `config.json` (v
 | `min_resolution_probability` | 0,35 | faisabilité sous 1 h (simulation) |
 | `max_atr_ratio` | 2,5 | volatilité instantanée anormale |
 | `min_tp_to_cost_ratio` | 6 | la cible doit valoir au moins 6 × le coût aller-retour |
+| `activity_filter` / `min_activity_ratio` | true / 0,6 | heures creuses ignorées (profil automatique) |
+| `us_open_utc` / `orb_minutes` / `orb_window_minutes` | 13:30 / 30 / 120 | range d'ouverture US (13:30 UTC en heure d'été, 14:30 en hiver) |
+| `correlation_enabled`, `vix_veto_pct`, `dxy_veto_pct`, `tnx_veto_pct` | true, 4, 0,25, 2 | vetos de corrélation |
+| `long_horizon_enabled` / `long_horizon_base_minutes` / `max_long_signals_per_asset_per_day` | true / 15 / 2 | second horizon (~3 h) |
 | `max_news_risk_score` | 2 | tolérance à l'actualité |
 | `assets.<actif>.cost_pct` | 0,01 / 0,01 / 0,06 / 0,08 / 0,02 | coût aller-retour estimé (NQ / ES / BTC / ETH / or), déduit du P&L |
 | `assets.<actif>.session_utc` | voir ci-dessus | plage horaire de scan |
