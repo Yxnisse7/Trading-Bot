@@ -1,6 +1,6 @@
 # Trading-Bot — rapport
 
-_Mis à jour le 19/09/2026 à 02:12 (Europe/Paris)._
+_Mis à jour le 19/09/2026 à 02:25 (Europe/Paris)._
 
 ## Vue d'ensemble
 
@@ -8,7 +8,7 @@ _Mis à jour le 19/09/2026 à 02:12 (Europe/Paris)._
 - Taux de réussite cumulé (TP / (TP+SL)) : **36%** — hasard attendu 41%, avantage **-5%**
 - P&L théorique cumulé, net des coûts estimés (somme des % par trade, sans levier) : **-1.59 %** (brut -1.24 %)
 - Signaux ouverts : **0**
-- Signaux fantômes (suivis en silence pour l'apprentissage) : **4** clôturés, 1 ouverts, taux de réussite 50% (hasard attendu 40%)
+- Signaux fantômes (suivis en silence pour l'apprentissage) : **5** clôturés, 0 ouverts, taux de réussite 50% (hasard attendu 40%)
 
 ## Statistiques
 
@@ -96,20 +96,20 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 
 | Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
 |---|---:|---:|---:|---:|---:|---:|
-| adx | 4 | 2 | 2 | 0 | 50% | -0.160 % |
-| corr | 2 | 0 | 2 | 0 | 0% | -0.418 % |
+| adx | 5 | 2 | 2 | 1 | 50% | -0.154 % |
+| corr | 3 | 0 | 2 | 1 | 0% | -0.323 % |
 | level | 1 | 1 | 0 | 0 | 100% | +0.113 % |
 | orb | 1 | 1 | 0 | 0 | 100% | +0.113 % |
 | rsi | 1 | 1 | 0 | 0 | 100% | +0.113 % |
-| trend_15m | 4 | 2 | 2 | 0 | 50% | -0.160 % |
-| trend_1h | 2 | 0 | 2 | 0 | 0% | -0.418 % |
-| vwap | 4 | 2 | 2 | 0 | 50% | -0.160 % |
+| trend_15m | 5 | 2 | 2 | 1 | 50% | -0.154 % |
+| trend_1h | 3 | 0 | 2 | 1 | 0% | -0.323 % |
+| vwap | 5 | 2 | 2 | 1 | 50% | -0.154 % |
 
 ### Fantômes par actif
 
 | Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
 |---|---:|---:|---:|---:|---:|---:|
-| ethereum | 2 | 0 | 2 | 0 | 0% | -0.418 % |
+| ethereum | 3 | 0 | 2 | 1 | 0% | -0.323 % |
 | nasdaq | 1 | 1 | 0 | 0 | 100% | +0.113 % |
 | sp500 | 1 | 1 | 0 | 0 | 100% | +0.084 % |
 
