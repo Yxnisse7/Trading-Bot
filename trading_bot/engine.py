@@ -763,6 +763,41 @@ class Engine:
         self.store.save_state(st)
         return handled
 
+    # ------------------------------------------------------------- live
+    LIVE_CANDLES = 80          # ~6 h 40 d'historique en 5 min
+
+    def write_live_snapshot(self, now: datetime | None = None) -> list[str]:
+        """Publie, pour chaque actif, les dernières bougies 5 min et les niveaux des signaux ouverts.
+
+        Sert le graphique « live » du site : rafraîchi à chaque passage du bot (≈ 5 min).
+        """
+        now = now or utcnow()
+        open_sigs = [s for s in self.store.open_signals() if s.source != "shadow"]
+        written = []
+        for key, asset in self.cfg.assets.items():
+            try:
+                raw = market.fetch_candles_5m(asset, days=2)
+            except ProviderError as exc:
+                log.info("%s : instantané live indisponible (%s)", asset.label, exc)
+                continue
+            # closed_candles attend la DURÉE d'une bougie (5 min), pas un nombre : on tronque ensuite
+            candles = ind.closed_candles(raw, int(now.timestamp()), 300)[-self.LIVE_CANDLES:]
+            if not candles:
+                continue
+            digits = max(0, len(str(asset.tick_size).split(".")[-1])) if asset.tick_size < 1 else 2
+            r = lambda v: round(float(v), digits)  # noqa: E731
+            levels = [{"id": s.id, "direction": s.direction, "entry": s.entry, "take_profit": s.take_profit,
+                       "stop_loss": s.stop_loss, "source": s.source, "horizon": s.horizon or "1h",
+                       "created_at": s.created_at, "expires_at": s.expires_at}
+                      for s in open_sigs if s.asset == key]
+            self.store.save_live(key, {
+                "asset": key, "label": asset.label, "updated_at": iso(now), "interval": "5m",
+                "candles": [[c.ts, r(c.open), r(c.high), r(c.low), r(c.close)] for c in candles],
+                "last": r(candles[-1].close), "open_signals": levels,
+            })
+            written.append(key)
+        return written
+
     # ------------------------------------------------------------------ tick
     def tick(self, now: datetime | None = None) -> dict[str, Any]:
         """Un passage complet : commandes reçues, suivi des signaux ouverts, puis scan si l'intervalle est écoulé."""
@@ -776,6 +811,10 @@ class Engine:
         except Exception:  # noqa: BLE001
             log.exception("traitement des commandes Telegram")
         closed = self.track(now)
+        try:
+            self.write_live_snapshot(now)
+        except Exception:  # noqa: BLE001 — le graphique ne doit jamais casser un passage
+            log.exception("instantané live")
         st = self.store.state()
         last_scan = parse_iso(st["last_scan"]) if st.get("last_scan") else None
         new: list[Signal] = []

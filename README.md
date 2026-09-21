@@ -232,6 +232,12 @@ et contexte d'actualité. Un critère dont le taux de réussite est < 40 % sur �
 poids réduit ; > 60 % → augmenté. Les tranches horaires < 30 % sont évitées. Les poids sont stockés
 dans `data/adjustments.json` et appliqués aux scans suivants.
 
+### Graphique live
+À chaque passage (~5 min), le bot publie pour chaque actif un instantané des 80 dernières bougies
+5 min dans `data/live/<actif>.json`, copié dans `docs/live/` pour GitHub Pages. Le tableau de bord
+affiche ces bougies avec les niveaux des signaux ouverts (entrée, objectif, stop) et se rafraîchit
+toutes les minutes. Ce n'est pas un flux temps réel : la granularité est celle des passages du bot.
+
 ### Avertissement et vie privée
 L'avertissement complet (« pas un conseil financier, validez en paper trading ») n'est plus répété à
 chaque notification : il figure dans le guide `/help` que reçoit automatiquement chaque nouveau chat
@@ -277,6 +283,7 @@ Trois workflows sont fournis dans `.github/workflows/` :
   le dépôt pour persister entre deux exécutions.
   Lancement manuel possible avec une autre commande (`scan`, `track`, `test-notify`, `backtest`,
   `fetch-data`, `manual` avec les champs actif / sens / commentaire).
+- `bot.yml` accepte aussi `tp` et `sl` en entrée pour `manual` (objectif et stop imposés).
 - `daily-summary.yml` : résumé quotidien à 22:05 UTC (00:05 Paris en été) ; lancé avant midi heure locale, il porte sur la veille, sinon sur le jour même (`--day hier|aujourd'hui|AAAA-MM-JJ` pour forcer).
 - `tests.yml` : tests à chaque push.
 

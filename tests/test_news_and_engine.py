@@ -6,6 +6,7 @@ import pytest
 from trading_bot.config import Config, default_assets
 from trading_bot.engine import Engine
 from trading_bot.providers import news
+from trading_bot.providers.http import ProviderError
 from trading_bot.storage import Store
 
 from conftest import make_candles
@@ -583,3 +584,29 @@ def test_telegram_long_accepts_levels_then_comment(tmp_path, monkeypatch):
     # message mal formé : réponse explicite, pas d'exception
     reply = eng.handle_command("/long btc 1 2", now)
     assert reply and "objectif" in reply.lower()
+
+
+def test_live_snapshot_is_written_for_each_asset(tmp_path, monkeypatch):
+    """Instantané « live » : bougies récentes + niveaux des signaux ouverts, pour le graphique du site."""
+    now = datetime(2026, 9, 21, 14, 0, tzinfo=timezone.utc)
+    candles = make_candles(n=500, drift=0.0003, noise=0.0012, seed=7, start_ts=int(now.timestamp()) - 500 * 300)
+    eng = _engine(tmp_path, monkeypatch, candles, candles[-1].close)
+    from trading_bot import engine as engmod
+    monkeypatch.setattr(engmod, "notify", lambda text, title=None, chat_id=None: None)
+    sig = eng.manual("bitcoin", "long", now)
+    written = eng.write_live_snapshot(now)
+    assert set(written) == set(eng.cfg.assets)
+    snap = json.loads((tmp_path / "live" / "bitcoin.json").read_text(encoding="utf-8"))
+    assert snap["interval"] == "5m" and len(snap["candles"]) == eng.LIVE_CANDLES
+    assert all(len(c) == 5 for c in snap["candles"])                      # [ts, O, H, L, C]
+    assert snap["candles"] == sorted(snap["candles"])                     # ordre chronologique
+    assert snap["last"] == snap["candles"][-1][4]
+    assert [s["id"] for s in snap["open_signals"]] == [sig.id]
+    assert snap["open_signals"][0]["take_profit"] == sig.take_profit
+    # un actif sans signal ouvert : instantané présent, liste de niveaux vide
+    other = json.loads((tmp_path / "live" / "gold.json").read_text(encoding="utf-8"))
+    assert other["open_signals"] == []
+    # un fournisseur en panne ne doit pas empêcher les autres
+    monkeypatch.setattr(engmod.market, "fetch_candles_5m",
+                        lambda asset, days=5: (_ for _ in ()).throw(ProviderError("indisponible")) if asset.key == "gold" else candles)
+    assert "gold" not in eng.write_live_snapshot(now) and "bitcoin" in eng.write_live_snapshot(now)

@@ -153,6 +153,19 @@ class Store:
             except OSError:
                 pass
 
+    # ---- instantané « live » d'un actif (bougies récentes pour le graphique du site)
+    def save_live(self, asset_key: str, data: dict[str, Any]) -> None:
+        live = self.dir / "live"
+        live.mkdir(parents=True, exist_ok=True)
+        self._write(live / f"{asset_key}.json", data)
+        docs = self._docs_dir()
+        if docs is not None:
+            try:
+                (docs / "live").mkdir(parents=True, exist_ok=True)
+                self._write(docs / "live" / f"{asset_key}.json", data)
+            except OSError:
+                pass
+
     # ---- rapport
     def save_report(self, text: str) -> None:
         self.report_file.write_text(text, encoding="utf-8")
