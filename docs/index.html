@@ -112,10 +112,12 @@
     <form class="manual" id="manual">
       <div><label for="m-asset">Actif</label><select id="m-asset"></select></div>
       <div><label for="m-dir">Sens</label><select id="m-dir"><option value="long">Long (achat)</option><option value="short">Short (vente)</option></select></div>
+      <div><label for="m-tp">Objectif / TP (facultatif)</label><input id="m-tp" inputmode="decimal" placeholder="laisser vide = calibré par le bot"></div>
+      <div><label for="m-sl">Stop / SL (facultatif)</label><input id="m-sl" inputmode="decimal" placeholder="laisser vide = calibré par le bot"></div>
       <div><label for="m-note">Commentaire (facultatif)</label><input id="m-note" maxlength="200" placeholder="ex. cassure du plus haut de la veille"></div>
       <div style="display:flex; gap:8px; flex-wrap:wrap"><button type="submit" id="m-submit">Envoyer ce signal</button><button type="button" class="secondary" id="m-propose">Proposer un trade</button></div>
     </form>
-    <div class="muted" style="margin-top:8px"><b>Envoyer ce signal</b> : vous choisissez le sens, le bot calibre entrée / TP / SL, notifie et suit (source « manuel »).<br><b>Proposer un trade</b> : le bot analyse l'actif choisi maintenant, envoie sa lecture des indicateurs et, s'il voit une direction, une proposition calibrée avec son verdict honnête (passe ou non ses critères), suivie sous la source « proposition ».</div>
+    <div class="muted" style="margin-top:8px"><b>Envoyer ce signal</b> : vous choisissez le sens et, si vous voulez, vos propres objectif et stop ; laissés vides, le bot les calibre sur la volatilité du moment. Il notifie et suit le trade (source « manuel »).<br><b>Proposer un trade</b> : le bot analyse l'actif choisi maintenant, envoie sa lecture des indicateurs et, s'il voit une direction, une proposition calibrée avec son verdict honnête (passe ou non ses critères), suivie sous la source « proposition ».</div>
     <div class="msg" id="m-msg">Les boutons fonctionnent dès maintenant ; les statistiques apparaissent quand les données sont chargées.</div>
     <details id="gh-settings">
       <summary>Mode GitHub Actions (quand l'interface n'est pas servie par <code>python run.py ui</code>)</summary>
@@ -627,7 +629,10 @@
   $("#manual").addEventListener("submit", async (ev) => {
     ev.preventDefault();
     const btn = $("#m-submit"); const msg = $("#m-msg");
-    const payload = { asset: $("#m-asset").value, direction: $("#m-dir").value, note: $("#m-note").value.trim() };
+    const num = (sel) => { const raw = $(sel).value.trim().replace(",", "."); if (!raw) return null; const v = parseFloat(raw); return Number.isFinite(v) ? v : NaN; };
+    const tp = num("#m-tp"), sl = num("#m-sl");
+    if (Number.isNaN(tp) || Number.isNaN(sl)) { msg.textContent = "Objectif et stop doivent être des nombres (ou laissés vides)."; return; }
+    const payload = { asset: $("#m-asset").value, direction: $("#m-dir").value, note: $("#m-note").value.trim(), tp, sl };
     btn.disabled = true; msg.textContent = "Envoi…";
     try {
       if (mode === "local") {
@@ -638,7 +643,8 @@
         msg.textContent = `Signal ${s.direction} ${s.asset_label} envoyé : entrée ${s.entry}, TP ${s.take_profit}, SL ${s.stop_loss} (ratio ${s.risk_reward}). Notification transmise.`;
         await load();
       } else {
-        await dispatchGitHub({ command: "manual", asset: payload.asset, direction: payload.direction, note: payload.note });
+        await dispatchGitHub({ command: "manual", asset: payload.asset, direction: payload.direction, note: payload.note,
+                               tp: tp === null ? "" : String(tp), sl: sl === null ? "" : String(sl) });
         msg.textContent = "Demande transmise à GitHub Actions : la notification arrive dans 1 à 2 minutes, le tableau de bord se mettra à jour au prochain passage.";
       }
     } catch (e) { msg.textContent = "Échec : " + e.message; }

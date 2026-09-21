@@ -1,6 +1,8 @@
 import json
 from datetime import datetime, timedelta, timezone
 
+import pytest
+
 from trading_bot.config import Config, default_assets
 from trading_bot.engine import Engine
 from trading_bot.providers import news
@@ -533,3 +535,51 @@ def test_notification_log_redacts_chat_ids(tmp_path, monkeypatch):
     notifymod.notify("Ce bot est privé. Votre identifiant de chat est 123123123 : transmettez-le.", chat_id="123123123")
     logged = (tmp_path / "notifications.log").read_text(encoding="utf-8")
     assert "123123123" not in logged and "identifiant de chat est (masqué)" in logged
+
+
+def test_manual_signal_with_explicit_levels(tmp_path, monkeypatch):
+    """/long <actif> <TP> <SL> : ce sont les niveaux de l'utilisateur qui sont suivis."""
+    now = datetime(2026, 9, 21, 14, 0, tzinfo=timezone.utc)
+    candles = make_candles(n=500, drift=0.0003, noise=0.0012, seed=7, start_ts=int(now.timestamp()) - 500 * 300)
+    eng = _engine(tmp_path, monkeypatch, candles, candles[-1].close)
+    from trading_bot import engine as engmod
+    sent = []
+    monkeypatch.setattr(engmod, "notify", lambda text, title=None, chat_id=None: sent.append(text))
+    price = candles[-1].close
+
+    # niveaux imposés : repris tels quels, rapport gain/risque recalculé
+    sig = eng.manual("bitcoin", "long", now, take_profit=price * 1.02, stop_loss=price * 0.99)
+    assert sig.take_profit > sig.entry > sig.stop_loss
+    assert abs(sig.take_profit - price * 1.02) < 1 and abs(sig.stop_loss - price * 0.99) < 1
+    assert sig.risk_reward == round((sig.take_profit - sig.entry) / (sig.entry - sig.stop_loss), 2)
+    assert sig.meta.get("custom_levels") and "Niveaux fournis par vous" in sig.rationale
+    assert "SIGNAL MANUEL" in sent[-1]
+
+    # objectif seul : le stop reste calibré par le bot
+    sig2 = eng.manual("ethereum", "short", now, take_profit=price * 0.97)
+    assert abs(sig2.take_profit - price * 0.97) < 1 and sig2.stop_loss > sig2.entry
+    assert not sig2.meta.get("custom_levels") or "objectif imposé" in sig2.rationale
+
+    # niveaux du mauvais côté : refusés avec un message clair, aucun signal enregistré
+    before = len(eng.store.open_signals())
+    with pytest.raises(ValueError, match="objectif"):
+        eng.manual("bitcoin", "long", now, take_profit=price * 0.9, stop_loss=price * 0.95)
+    with pytest.raises(ValueError, match="stop"):
+        eng.manual("bitcoin", "long", now, take_profit=price * 1.05, stop_loss=price * 1.02)
+    assert len(eng.store.open_signals()) == before
+
+
+def test_telegram_long_accepts_levels_then_comment(tmp_path, monkeypatch):
+    now = datetime(2026, 9, 21, 14, 0, tzinfo=timezone.utc)
+    candles = make_candles(n=500, drift=0.0003, noise=0.0012, seed=7, start_ts=int(now.timestamp()) - 500 * 300)
+    eng = _engine(tmp_path, monkeypatch, candles, candles[-1].close)
+    from trading_bot import engine as engmod
+    monkeypatch.setattr(engmod, "notify", lambda text, title=None, chat_id=None: None)
+    price = candles[-1].close
+    eng.handle_command(f"/long btc {price * 1.02:.0f} {price * 0.99:.0f} cassure", now)
+    sig = eng.store.open_signals()[-1]
+    assert sig.source == "manual" and sig.meta.get("custom_levels")
+    assert "cassure" in sig.news_context and str(int(price * 1.02)) not in sig.news_context
+    # message mal formé : réponse explicite, pas d'exception
+    reply = eng.handle_command("/long btc 1 2", now)
+    assert reply and "objectif" in reply.lower()

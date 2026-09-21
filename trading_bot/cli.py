@@ -11,7 +11,7 @@
   python run.py backtest    # rejoue la stratégie sur l'historique 5 min (--days 30, --asset bitcoin)
   python run.py report      # régénère data/REPORT.md
   python run.py fetch-data  # enregistre 60 jours de bougies 5 min dans data/candles/ (backtest --offline)
-  python run.py manual --asset bitcoin --direction long   # signal demandé, notifié et suivi
+  python run.py manual --asset bitcoin --direction long [--tp 45000 --sl 43000]  # signal demandé, notifié et suivi
   python run.py propose --asset bitcoin                   # analyse à la demande + proposition
   python run.py commands    # traite les commandes Telegram reçues (/propose, /long, /short, /status)
   python run.py guide       # envoie le guide des commandes à tous les chats configurés
@@ -47,6 +47,8 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--offline", action="store_true", help="backtest sur les bougies de data/candles/ (sans réseau)")
     p.add_argument("--direction", choices=["long", "short"], help="sens du signal manuel")
     p.add_argument("--note", default="", help="commentaire du signal manuel")
+    p.add_argument("--tp", type=float, help="objectif imposé pour le signal manuel (sinon calibré par le bot)")
+    p.add_argument("--sl", type=float, help="stop imposé pour le signal manuel (sinon calibré par le bot)")
     p.add_argument("--port", type=int, default=8787, help="port de l'interface locale")
     p.add_argument("--balance", type=float, help="nouvelle balance de simulation")
     p.add_argument("--risk", type=float, help="risque par trade en % de la balance")
@@ -98,9 +100,9 @@ def main(argv: list[str] | None = None) -> int:
             return 1
     elif args.command == "manual":
         if not args.asset or not args.direction:
-            print("Usage : python run.py manual --asset <actif> --direction long|short [--note ...]")
+            print("Usage : python run.py manual --asset <actif> --direction long|short [--tp X] [--sl Y] [--note ...]")
             return 2
-        sig = eng.manual(args.asset[0], args.direction, note=args.note)
+        sig = eng.manual(args.asset[0], args.direction, note=args.note, take_profit=args.tp, stop_loss=args.sl)
         print(json.dumps(sig.to_dict(), ensure_ascii=False, indent=2))
     elif args.command == "flush-outbox":
         from .notify import flush_outbox

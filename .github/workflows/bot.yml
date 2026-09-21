@@ -21,6 +21,12 @@ on:
       note:
         description: "Commentaire pour `manual`"
         required: false
+      tp:
+        description: "Objectif imposé pour `manual` (facultatif : sinon calibré par le bot)"
+        required: false
+      sl:
+        description: "Stop imposé pour `manual` (facultatif : sinon calibré par le bot)"
+        required: false
       balance:
         description: "Nouvelle balance de simulation pour `portfolio`"
         required: false
@@ -60,12 +66,17 @@ jobs:
           ASSET: ${{ github.event.inputs.asset }}
           DIRECTION: ${{ github.event.inputs.direction }}
           NOTE: ${{ github.event.inputs.note }}
+          TP: ${{ github.event.inputs.tp }}
+          SL: ${{ github.event.inputs.sl }}
           BALANCE: ${{ github.event.inputs.balance }}
           RISK: ${{ github.event.inputs.risk }}
         run: |
           case "$CMD" in
             fetch-data) bash scripts/run_and_push.sh python run.py fetch-data --days 60 ;;
-            manual)     bash scripts/run_and_push.sh python run.py manual --asset "$ASSET" --direction "$DIRECTION" --note "$NOTE" ;;
+            manual)     ARGS=""
+                        if [ -n "$TP" ]; then ARGS="$ARGS --tp $TP"; fi
+                        if [ -n "$SL" ]; then ARGS="$ARGS --sl $SL"; fi
+                        bash scripts/run_and_push.sh python run.py manual --asset "$ASSET" --direction "$DIRECTION" --note "$NOTE" $ARGS ;;
             propose)    bash scripts/run_and_push.sh python run.py propose --asset "$ASSET" ;;
             portfolio)  if [ -n "$RISK" ]; then bash scripts/run_and_push.sh python run.py portfolio --balance "$BALANCE" --risk "$RISK"; else bash scripts/run_and_push.sh python run.py portfolio --balance "$BALANCE"; fi ;;
             *)          bash scripts/run_and_push.sh python run.py "$CMD" ;;

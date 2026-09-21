@@ -107,7 +107,7 @@ python run.py report       # régénère data/REPORT.md
 python run.py stats        # statistiques détaillées de l'historique (JSON)
 python run.py status       # signaux ouverts
 python run.py test-notify  # message de test Telegram / Discord
-python run.py manual --asset bitcoin --direction long   # signal demandé, notifié et suivi
+python run.py manual --asset bitcoin --direction long [--tp 45000 --sl 43000]  # signal demandé
 python run.py ui           # interface locale : http://127.0.0.1:8787
 python run.py loop         # boucle locale : un tick toutes les 5 min
 ```

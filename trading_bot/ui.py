@@ -102,8 +102,10 @@ def make_handler(engine: Engine):
             try:
                 if path == "/api/manual":
                     with lock:
+                        num = lambda k: float(body[k]) if body.get(k) not in (None, "") else None  # noqa: E731
                         sig = engine.manual(str(body.get("asset", "")), str(body.get("direction", "")),
-                                            note=str(body.get("note", ""))[:200])
+                                            note=str(body.get("note", ""))[:200],
+                                            take_profit=num("tp"), stop_loss=num("sl"))
                     self._json(200, {"ok": True, "signal": sig.to_dict()})
                 elif path == "/api/portfolio":
                     with lock:

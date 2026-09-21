@@ -23,7 +23,7 @@ from .providers import market
 from .providers import news as newsmod
 from .providers.http import ProviderError
 from .report import build_dashboard, build_report
-from .signals import build_signal, format_signal
+from .signals import build_signal, format_signal, round_to_tick
 from .storage import Store
 from .summary import daily_summary
 from .tracker import format_outcome, update_signal
@@ -351,8 +351,33 @@ class Engine:
         return adj
 
     # ---------------------------------------------------------------- manuel
-    def manual(self, asset_key: str, direction: str, now: datetime | None = None, note: str = "") -> Signal:
-        """Signal demandé par l'utilisateur : niveaux calibrés par le bot, notifié et suivi comme les autres."""
+    @staticmethod
+    def _apply_custom_levels(sig: Signal, asset, take_profit: float | None, stop_loss: float | None) -> list[str]:
+        """Remplace l'objectif et/ou le stop calculés par ceux demandés. Renvoie les mentions à afficher."""
+        entry = sig.entry
+        tp = round_to_tick(float(take_profit), asset.tick_size) if take_profit is not None else sig.take_profit
+        sl = round_to_tick(float(stop_loss), asset.tick_size) if stop_loss is not None else sig.stop_loss
+        side = "au-dessus" if sig.direction == "long" else "en dessous"
+        other = "en dessous" if sig.direction == "long" else "au-dessus"
+        ok_tp = tp > entry if sig.direction == "long" else tp < entry
+        ok_sl = sl < entry if sig.direction == "long" else sl > entry
+        if not ok_tp:
+            raise ValueError(f"pour un {sig.direction}, l'objectif ({tp:g}) doit être {side} de l'entrée ({entry:g})")
+        if not ok_sl:
+            raise ValueError(f"pour un {sig.direction}, le stop ({sl:g}) doit être {other} de l'entrée ({entry:g})")
+        sig.take_profit, sig.stop_loss = tp, sl
+        risk = abs(entry - sl)
+        sig.risk_reward = round(abs(tp - entry) / risk, 2) if risk else 0.0
+        mentions = []
+        if take_profit is not None:
+            mentions.append(f"objectif imposé {tp:g}")
+        if stop_loss is not None:
+            mentions.append(f"stop imposé {sl:g}")
+        return mentions
+
+    def manual(self, asset_key: str, direction: str, now: datetime | None = None, note: str = "",
+               take_profit: float | None = None, stop_loss: float | None = None) -> Signal:
+        """Signal demandé par l'utilisateur. Objectif et stop calibrés par le bot, ou imposés si fournis."""
         from dataclasses import replace
 
         now = now or utcnow()
@@ -382,8 +407,12 @@ class Engine:
             raise RuntimeError("impossible de construire des niveaux réalistes : " + "; ".join(why))
         sig.source = "manual"
         sig.confidence = "manuel"
+        custom = self._apply_custom_levels(sig, asset, take_profit, stop_loss) if (take_profit is not None or stop_loss is not None) else []
         crit = ", ".join(sig.criteria) if sig.criteria else "aucun"
         sig.rationale = (f"Demande manuelle {direction}. Critères du bot alignés dans ce sens : {crit}. " + sig.rationale.split(". ", 1)[-1])
+        if custom:
+            sig.rationale += f" Niveaux fournis par vous : {', '.join(custom)} (rapport gain/risque {sig.risk_reward})."
+            sig.meta["custom_levels"] = True
         tp_pct = abs(sig.take_profit - sig.entry) / sig.entry * 100.0
         if asset.cost_pct > 0 and tp_pct < self.cfg.min_tp_to_cost_ratio * asset.cost_pct:
             sig.rationale += f" ⚠️ Cible petite face aux coûts estimés ({tp_pct:.2f} % pour {asset.cost_pct:.2f} % de frais)."
@@ -584,11 +613,13 @@ class Engine:
         "\n"
         "▶️ DEMANDER UNE ANALYSE\n"
         "/propose <actif> — le bot analyse l'actif maintenant et propose un trade s'il en voit un\n"
-        "/long <actif> [commentaire] — signal manuel à l'achat, calibré et suivi comme les autres\n"
-        "/short <actif> [commentaire] — signal manuel à la vente\n"
+        "/long <actif> [objectif] [stop] [commentaire] — signal manuel à l'achat\n"
+        "/short <actif> [objectif] [stop] [commentaire] — signal manuel à la vente\n"
+        "Sans chiffres, le bot calibre l'objectif et le stop sur la volatilité du moment. "
+        "Avec, ce sont vos niveaux qui sont suivis : l'objectif d'abord, le stop ensuite.\n"
         "\n"
         "Actifs : nasdaq (nq) · sp500 (es) · bitcoin (btc) · ethereum (eth) · gold (or)\n"
-        "Exemples : /propose btc — /long nasdaq cassure du plus haut\n"
+        "Exemples : /propose btc — /long nasdaq cassure du plus haut — /short eth 2450 2530 rejet\n"
         "\n"
         "⛔ À NE PAS UTILISER\n"
         "/balance <montant> — ne changez PAS la balance. Suivie d'un montant, cette commande "
@@ -664,12 +695,30 @@ class Engine:
                 if cmd == "/propose":
                     self.propose(asset_key, now)   # envoie lui-même la notification
                     return None
-                note = " ".join(args[1:])[:200]
-                self.manual(asset_key, "long" if cmd == "/long" else "short", now, note=note)  # notifie lui-même
+                levels, rest = self._parse_levels(args[1:])
+                note = " ".join(rest)[:200]
+                self.manual(asset_key, "long" if cmd == "/long" else "short", now, note=note,
+                            take_profit=levels[0], stop_loss=levels[1])  # notifie lui-même
                 return None
             except (ProviderError, RuntimeError, ValueError) as exc:
                 return f"Impossible de traiter {cmd} {args[0]} : {exc}"
         return None
+
+    @staticmethod
+    def _parse_levels(args: list[str]) -> tuple[tuple[float | None, float | None], list[str]]:
+        """Lit « <TP> <SL> » en tête des arguments : les nombres sont des niveaux, le reste un commentaire."""
+        levels: list[float] = []
+        rest = list(args)
+        while rest and len(levels) < 2:
+            token = rest[0].replace(",", ".").replace("$", "").replace("€", "")
+            try:
+                levels.append(float(token))
+            except ValueError:
+                break
+            rest.pop(0)
+        tp = levels[0] if levels else None
+        sl = levels[1] if len(levels) > 1 else None
+        return (tp, sl), rest
 
     def process_commands(self, now: datetime | None = None) -> int:
         """Lit les messages Telegram reçus depuis le dernier passage et exécute les commandes.
