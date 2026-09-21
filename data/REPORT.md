@@ -1,13 +1,13 @@
 # Trading-Bot — rapport
 
-_Mis à jour le 22/09/2026 à 00:26 (Europe/Paris)._
+_Mis à jour le 22/09/2026 à 00:34 (Europe/Paris)._
 
 ## Vue d'ensemble
 
 - Trades clôturés : **34**
 - Taux de réussite cumulé (TP / (TP+SL)) : **45%** — hasard attendu 41%, avantage **+4%**
 - P&L théorique cumulé, net des coûts estimés (somme des % par trade, sans levier) : **-1.66 %** (brut -0.34 %)
-- Signaux ouverts : **1**
+- Signaux ouverts : **2**
 - Signaux fantômes (suivis en silence pour l'apprentissage) : **15** clôturés, 3 ouverts, taux de réussite 57% (hasard attendu 41%)
 
 ## Signaux ouverts
@@ -15,6 +15,7 @@ _Mis à jour le 22/09/2026 à 00:26 (Europe/Paris)._
 | Heure | Actif | Sens | Entrée | TP | SL | Confiance | Source | Expire |
 |---|---|---|---:|---:|---:|---|---|---|
 | 22/09 00:26 | Ethereum (ETH/USD) | long | 2776.6 | 2794.6 | 2764.6 | fort | signaux du bot | 01:26 |
+| 22/09 00:34 | Bitcoin (BTC/USD) | long | 86455.0 | 86851.0 | 85987.0 | manuel | demandes manuelles | 01:34 |
 
 ## Statistiques
 
