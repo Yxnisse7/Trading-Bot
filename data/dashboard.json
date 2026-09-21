@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-21T13:10:41.936956+02:00",
+  "updated_at": "2026-09-21T13:25:30.285921+02:00",
   "timezone": "Europe/Paris",
   "equity_curve": [
     {
@@ -547,7 +547,7 @@
       "pnl_pct": -0.7358,
       "avg_pnl_pct": -0.1051
     },
-    "open": 0,
+    "open": 2,
     "open_shadow": 0
   },
   "by_source": {
@@ -715,7 +715,7 @@
         "pnl_pct": 0,
         "avg_pnl_pct": 0.0
       },
-      "open": 0,
+      "open": 1,
       "session_utc": null,
       "cost_pct": 0.06
     },
@@ -744,7 +744,7 @@
         "pnl_pct": -0.9676,
         "avg_pnl_pct": -0.3225
       },
-      "open": 0,
+      "open": 1,
       "session_utc": null,
       "cost_pct": 0.08
     },
@@ -3290,7 +3290,73 @@
       ]
     }
   ],
-  "open_signals": [],
+  "open_signals": [
+    {
+      "id": "1f64615c37",
+      "asset": "bitcoin",
+      "asset_label": "Bitcoin (BTC/USD)",
+      "direction": "long",
+      "horizon": "1h",
+      "entry": 84597.0,
+      "take_profit": 84946.0,
+      "stop_loss": 84365.0,
+      "risk_reward": 1.5,
+      "confidence": "fort",
+      "score": 5.75,
+      "criteria": [
+        "adx",
+        "rsi",
+        "trend_15m",
+        "trend_1h",
+        "trend_5m",
+        "vwap"
+      ],
+      "source": "bot",
+      "status": "open",
+      "pnl_pct": null,
+      "pnl_gross_pct": null,
+      "duration_minutes": null,
+      "close_price": null,
+      "created_at": "2026-09-21T11:25:26Z",
+      "created_local": "21/09 13:25",
+      "expires_at": "2026-09-21T12:25:26Z",
+      "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 581.0 (0.69 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 95%.",
+      "news_context": "actualité à surveiller (score 2) : U.S.-listed Greenland stocks surge after Trump announces security deal with Denmark"
+    },
+    {
+      "id": "2dc6e85346",
+      "asset": "ethereum",
+      "asset_label": "Ethereum (ETH/USD)",
+      "direction": "long",
+      "horizon": "1h",
+      "entry": 2718.7,
+      "take_profit": 2734.9,
+      "stop_loss": 2707.9,
+      "risk_reward": 1.5,
+      "confidence": "fort",
+      "score": 6.25,
+      "criteria": [
+        "adx",
+        "corr",
+        "rsi",
+        "trend_15m",
+        "trend_1h",
+        "trend_5m",
+        "vwap"
+      ],
+      "source": "bot",
+      "status": "open",
+      "pnl_pct": null,
+      "pnl_gross_pct": null,
+      "duration_minutes": null,
+      "close_price": null,
+      "created_at": "2026-09-21T11:25:26Z",
+      "created_local": "21/09 13:25",
+      "expires_at": "2026-09-21T12:25:26Z",
+      "rationale": "Achat : tendance forte (ADX), marché meneur favorable, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 27.04 (0.99 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 76%.",
+      "news_context": "actualité à surveiller (score 2) : U.S.-listed Greenland stocks surge after Trump announces security deal with Denmark"
+    }
+  ],
   "recent_trades": [
     {
       "id": "17d61d9690",
@@ -4262,12 +4328,16 @@
     "sample": 696
   },
   "state": {
-    "last_scan": "2026-09-21T11:10:36Z",
-    "last_scan_note": "0 signal(aux)",
+    "last_scan": "2026-09-21T11:25:26Z",
+    "last_scan_note": "2 signal(aux)",
     "last_summary": "2026-09-21T00:10:15Z",
     "telegram_offset": 630538281,
     "last_track": "2026-09-21T09:40:31Z",
     "telegram_informed": [
+      "1471728168"
+    ],
+    "telegram_welcomed": [
+      "1416276909",
       "1471728168"
     ]
   },
@@ -4292,7 +4362,7 @@
     "losses": 5,
     "avg_win": 46.6,
     "avg_loss": -11.63,
-    "open_positions": 0,
+    "open_positions": 2,
     "skipped": 0,
     "risky": 5
   }
