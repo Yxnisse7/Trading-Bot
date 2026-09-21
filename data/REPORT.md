@@ -1,14 +1,20 @@
 # Trading-Bot — rapport
 
-_Mis à jour le 21/09/2026 à 21:35 (Europe/Paris)._
+_Mis à jour le 21/09/2026 à 21:40 (Europe/Paris)._
 
 ## Vue d'ensemble
 
 - Trades clôturés : **33**
 - Taux de réussite cumulé (TP / (TP+SL)) : **43%** — hasard attendu 41%, avantage **+2%**
 - P&L théorique cumulé, net des coûts estimés (somme des % par trade, sans levier) : **-2.08 %** (brut -0.82 %)
-- Signaux ouverts : **0**
-- Signaux fantômes (suivis en silence pour l'apprentissage) : **11** clôturés, 2 ouverts, taux de réussite 60% (hasard attendu 41%)
+- Signaux ouverts : **1**
+- Signaux fantômes (suivis en silence pour l'apprentissage) : **11** clôturés, 3 ouverts, taux de réussite 60% (hasard attendu 41%)
+
+## Signaux ouverts
+
+| Heure | Actif | Sens | Entrée | TP | SL | Confiance | Source | Expire |
+|---|---|---|---:|---:|---:|---|---|---|
+| 21/09 21:40 | Bitcoin (BTC/USD) | long | 86600.0 | 87020.0 | 86320.0 | fort | signaux du bot | 22:40 |
 
 ## Statistiques
 
