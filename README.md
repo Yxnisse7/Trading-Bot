@@ -102,6 +102,7 @@ python run.py track        # vérifie les signaux ouverts : TP / SL / expiration
 python run.py tick         # track puis scan — commande planifiée
 python run.py backtest     # rejoue la stratégie sur l'historique (--days 30, --asset bitcoin)
 python run.py summary      # résumé quotidien (jour + cumulé, enseignements, ajustements)
+python run.py guide        # envoie le guide des commandes à tous les chats Telegram configurés
 python run.py report       # régénère data/REPORT.md
 python run.py stats        # statistiques détaillées de l'historique (JSON)
 python run.py status       # signaux ouverts

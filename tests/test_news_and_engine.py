@@ -293,13 +293,13 @@ def test_telegram_commands(tmp_path, monkeypatch):
     assert seen_offsets == [None]
     assert eng.store.state()["telegram_offset"] == 8
     texts = [s for _, s in sent]
-    assert any("Commandes disponibles" in s for s in texts)
+    assert any("GUIDE DU BOT" in s for s in texts)
     assert any("Actif inconnu" in s for s in texts)
     assert any("SIGNAL MANUEL" in s and "Ethereum" in s for s in texts)
     assert texts[-1].startswith("📡 SIGNAL") and "Entrée visée" in texts[-1]   # /status
     assert not any("Nasdaq" in s for s in texts)
     # réponses aux commandes ciblées sur le chat demandeur ; signal manuel diffusé à tous (chat_id None)
-    assert ("42", texts[0]) in sent and all(c == "42" for c, s in sent if "Commandes disponibles" in s and "identifiant" not in s)
+    assert ("42", texts[0]) in sent and all(c == "42" for c, s in sent if "GUIDE DU BOT" in s and "identifiant" not in s)
     assert any(c is None and "SIGNAL MANUEL" in s for c, s in sent)
     # chat inconnu (99) : informé une seule fois de son identifiant
     unknown = [(c, s) for c, s in sent if c == "99"]
@@ -474,3 +474,28 @@ def test_summary_day_is_previous_day_after_midnight(tmp_path, monkeypatch):
     assert eng.summary_day(datetime(2026, 9, 18, 19, 0, tzinfo=timezone.utc)).isoformat() == "2026-09-18"
     assert eng.summary_day(datetime(2026, 9, 19, 8, 0, tzinfo=timezone.utc)).isoformat() == "2026-09-18"
     assert eng.summary_day(datetime(2026, 9, 19, 12, 0, tzinfo=timezone.utc)).isoformat() == "2026-09-19"
+
+
+def test_guide_is_sent_once_to_each_authorized_chat(tmp_path, monkeypatch):
+    now = datetime(2026, 9, 21, 14, 0, tzinfo=timezone.utc)
+    candles = make_candles(n=500, drift=0.0003, noise=0.0012, seed=7, start_ts=int(now.timestamp()) - 500 * 300)
+    eng = _engine(tmp_path, monkeypatch, candles, candles[-1].close)
+    from trading_bot import engine as engmod
+    sent = []
+    monkeypatch.setattr(engmod, "notify", lambda text, title=None, chat_id=None: sent.append((chat_id, text)))
+    monkeypatch.setattr(engmod, "telegram_chat_ids", lambda: ["111", "222"])
+    # le guide part une fois par chat, puis plus jamais
+    assert eng.welcome_new_chats() == ["111", "222"]
+    assert [c for c, _ in sent] == ["111", "222"]
+    assert all("GUIDE DU BOT" in t and "ne changez PAS la balance" in t for _, t in sent)
+    assert eng.welcome_new_chats() == []
+    # un chat ajouté ensuite reçoit le guide à son tour
+    monkeypatch.setattr(engmod, "telegram_chat_ids", lambda: ["111", "222", "333"])
+    assert eng.welcome_new_chats() == ["333"]
+    assert eng.store.state()["telegram_welcomed"] == ["111", "222", "333"]
+    # envoi manuel à tous (sans chat ciblé) ; les nouveaux chats sont marqués comme informés
+    sent.clear()
+    monkeypatch.setattr(engmod, "telegram_chat_ids", lambda: ["444"])
+    eng.send_help()
+    assert len(sent) == 1 and sent[0][0] is None and "GUIDE DU BOT" in sent[0][1]
+    assert eng.welcome_new_chats() == []

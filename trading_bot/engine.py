@@ -558,14 +558,58 @@ class Engine:
         "ethereum": "ethereum", "eth": "ethereum",
         "gold": "gold", "or": "gold", "xau": "gold", "xauusd": "gold",
     }
-    HELP = ("Commandes disponibles :\n"
-            "/propose <actif> — analyse immédiate et proposition de trade\n"
-            "/long <actif> [commentaire] — signal manuel à l'achat\n"
-            "/short <actif> [commentaire] — signal manuel à la vente\n"
-            "/status — signaux ouverts\n"
-            "/resume — résumé du jour\n"
-            "/balance — état de la simulation de compte ; /balance 1000 [risque %] pour la (re)définir\n"
-            "Actifs : nasdaq (nq), sp500 (es), bitcoin (btc), ethereum (eth), gold (or)")
+    HELP = (
+        "📖 GUIDE DU BOT — toutes les commandes\n"
+        "\n"
+        "Ce bot repère des opportunités de scalping sur 5 marchés et vous les envoie ici. "
+        "Il n'exécute AUCUN ordre réel : il propose, vous décidez.\n"
+        "\n"
+        "▶️ CONSULTER\n"
+        "/status — les signaux actuellement ouverts (entrée, objectif, stop)\n"
+        "/resume — le bilan de la dernière journée : trades, réussite, enseignements\n"
+        "/balance — l'état de la simulation de compte, sans rien modifier\n"
+        "/help — ce message\n"
+        "\n"
+        "▶️ DEMANDER UNE ANALYSE\n"
+        "/propose <actif> — le bot analyse l'actif maintenant et propose un trade s'il en voit un\n"
+        "/long <actif> [commentaire] — signal manuel à l'achat, calibré et suivi comme les autres\n"
+        "/short <actif> [commentaire] — signal manuel à la vente\n"
+        "\n"
+        "Actifs : nasdaq (nq) · sp500 (es) · bitcoin (btc) · ethereum (eth) · gold (or)\n"
+        "Exemples : /propose btc — /long nasdaq cassure du plus haut\n"
+        "\n"
+        "⛔ À NE PAS UTILISER\n"
+        "/balance <montant> — ne changez PAS la balance. Suivie d'un montant, cette commande "
+        "remet la simulation de compte à zéro pour tout le monde et archive les trades en cours. "
+        "Elle est réservée au propriétaire du bot. Un mode invité viendra l'empêcher ; "
+        "en attendant, tapez /balance seul pour consulter, jamais avec un montant.\n"
+        "\n"
+        "📊 Tableau de bord : https://yxnisse7.github.io/Trading-Bot/\n"
+        "💼 Simulation de compte : https://yxnisse7.github.io/Trading-Bot/portfolio.html"
+    )
+
+    def welcome_new_chats(self) -> list[str]:
+        """Envoie le guide aux chats autorisés qui ne l'ont jamais reçu (une fois par chat)."""
+        welcomed = list(self.store.state().get("telegram_welcomed", []))
+        new = [c for c in telegram_chat_ids() if c not in welcomed]
+        if not new:
+            return []
+        for chat in new:
+            notify(self.HELP + "\n\n" + DISCLAIMER, chat_id=chat)
+            welcomed.append(chat)
+            log.info("guide envoyé au chat %s", chat)
+        st = self.store.state()
+        st["telegram_welcomed"] = welcomed[-50:]
+        self.store.save_state(st)
+        return new
+
+    def send_help(self) -> str:
+        """Envoie le guide à tous les chats configurés (et les marque comme informés)."""
+        notify(self.HELP + "\n\n" + DISCLAIMER)
+        st = self.store.state()
+        st["telegram_welcomed"] = list(dict.fromkeys(list(st.get("telegram_welcomed", [])) + telegram_chat_ids()))[-50:]
+        self.store.save_state(st)
+        return self.HELP
 
     def handle_command(self, text: str, now: datetime | None = None) -> str | None:
         """Exécute une commande texte (Telegram). Renvoie la réponse à envoyer, ou None si ignorée."""
@@ -657,6 +701,10 @@ class Engine:
     def tick(self, now: datetime | None = None) -> dict[str, Any]:
         """Un passage complet : commandes reçues, suivi des signaux ouverts, puis scan si l'intervalle est écoulé."""
         now = now or utcnow()
+        try:
+            self.welcome_new_chats()
+        except Exception:  # noqa: BLE001 — un guide non envoyé ne doit pas casser le passage
+            log.exception("envoi du guide aux nouveaux chats")
         try:
             self.process_commands(now)
         except Exception:  # noqa: BLE001

@@ -14,6 +14,7 @@
   python run.py manual --asset bitcoin --direction long   # signal demandé, notifié et suivi
   python run.py propose --asset bitcoin                   # analyse à la demande + proposition
   python run.py commands    # traite les commandes Telegram reçues (/propose, /long, /short, /status)
+  python run.py guide       # envoie le guide des commandes à tous les chats configurés
   python run.py portfolio [--balance 1000 --risk 1]   # simulation de compte : état, ou nouvelle balance
   python run.py ui          # interface locale : http://127.0.0.1:8787
 """
@@ -36,7 +37,7 @@ from .signals import format_signal
 
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(description="Générateur de signaux de scalping (NQ, BTC, XAU) — données gratuites")
-    p.add_argument("command", choices=["scan", "track", "tick", "summary", "stats", "loop", "status", "test-notify", "backtest", "report", "fetch-data", "manual", "propose", "ui", "commands", "portfolio", "flush-outbox"])
+    p.add_argument("command", choices=["scan", "track", "tick", "summary", "stats", "loop", "status", "test-notify", "backtest", "report", "fetch-data", "manual", "propose", "ui", "commands", "portfolio", "guide", "flush-outbox"])
     p.add_argument("--dry-run", action="store_true", help="scan sans enregistrer les signaux")
     p.add_argument("--day", help="jour du résumé : AAAA-MM-JJ, « hier » ou « aujourd'hui » (défaut : dernière journée de trading, la veille avant midi)")
     p.add_argument("--interval", type=int, default=5, help="minutes entre deux ticks (mode loop)")
@@ -123,6 +124,8 @@ def main(argv: list[str] | None = None) -> int:
         serve(eng, port=args.port)
     elif args.command == "report":
         print(eng.write_report())
+    elif args.command == "guide":
+        eng.send_help()
     elif args.command == "test-notify":
         notify(f"🔔 Test de notification du Trading-Bot — {utcnow():%d/%m/%Y %H:%M} UTC.\n"
                "Si vous lisez ceci sur Telegram/Discord, les notifications sont opérationnelles.\n\n" + DISCLAIMER)
