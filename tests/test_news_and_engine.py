@@ -514,12 +514,12 @@ def test_public_files_never_expose_chat_ids(tmp_path, monkeypatch):
     eng = _engine(tmp_path, monkeypatch, candles, candles[-1].close)
     from trading_bot import engine as engmod
     monkeypatch.setattr(engmod, "notify", lambda text, title=None, chat_id=None: None)
-    monkeypatch.setattr(engmod, "telegram_chat_ids", lambda: ["1416276909"])
+    monkeypatch.setattr(engmod, "telegram_chat_ids", lambda: ["987654321"])
     eng.welcome_new_chats()
     eng._touch_state(now, note="test")
     eng.write_report()
     for path in (eng.store.state_file, eng.store.dashboard_file, eng.store.report_file):
-        assert "1416276909" not in path.read_text(encoding="utf-8"), path
+        assert "987654321" not in path.read_text(encoding="utf-8"), path
     # le tableau de bord publié ne contient aucun champ Telegram
     dash = json.loads(eng.store.dashboard_file.read_text(encoding="utf-8"))
     assert not [k for k in dash["state"] if k.startswith("telegram_")]
@@ -530,6 +530,6 @@ def test_notification_log_redacts_chat_ids(tmp_path, monkeypatch):
     from trading_bot import notify as notifymod
     monkeypatch.setattr(notifymod, "DATA_DIR", tmp_path)
     monkeypatch.setenv("TRADING_BOT_OUTBOX", str(tmp_path / "outbox.jsonl"))
-    notifymod.notify("Ce bot est privé. Votre identifiant de chat est 1471728168 : transmettez-le.", chat_id="1471728168")
+    notifymod.notify("Ce bot est privé. Votre identifiant de chat est 123123123 : transmettez-le.", chat_id="123123123")
     logged = (tmp_path / "notifications.log").read_text(encoding="utf-8")
-    assert "1471728168" not in logged and "identifiant de chat est (masqué)" in logged
+    assert "123123123" not in logged and "identifiant de chat est (masqué)" in logged
