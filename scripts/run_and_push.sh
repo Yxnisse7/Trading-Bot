@@ -16,7 +16,7 @@ for attempt in 1 2 3 4; do
   git reset -q --hard "origin/$BRANCH"
   echo "== tentative $attempt : $*"
   "$@"
-  git add data/ docs/dashboard.json docs/portfolio.json 2>/dev/null || git add data/
+  git add data/ docs/dashboard.json docs/portfolio.json docs/live 2>/dev/null || git add data/
   if git diff --cached --quiet; then
     echo "Aucun changement d'état."
     python run.py flush-outbox
