@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-21T21:55:33.228274+02:00",
+  "updated_at": "2026-09-21T22:01:05.727349+02:00",
   "timezone": "Europe/Paris",
   "equity_curve": [
     {
@@ -627,18 +627,18 @@
       "avg_pnl_pct": -0.0631
     },
     "shadow": {
-      "n": 13,
+      "n": 14,
       "tp": 8,
-      "sl": 4,
+      "sl": 5,
       "expired": 1,
-      "win_rate": 0.6666666666666666,
-      "neutral_win_rate": 0.4096,
-      "edge": 0.2571,
-      "pnl_pct": -0.2471,
-      "avg_pnl_pct": -0.019
+      "win_rate": 0.6153846153846154,
+      "neutral_win_rate": 0.409,
+      "edge": 0.2064,
+      "pnl_pct": -0.3795,
+      "avg_pnl_pct": -0.0271
     },
     "open": 1,
-    "open_shadow": 2
+    "open_shadow": 1
   },
   "by_source": {
     "bot": {
@@ -675,15 +675,15 @@
       "avg_pnl_pct": 0.0
     },
     "shadow": {
-      "n": 13,
+      "n": 14,
       "tp": 8,
-      "sl": 4,
+      "sl": 5,
       "expired": 1,
-      "win_rate": 0.6666666666666666,
-      "neutral_win_rate": 0.4096,
-      "edge": 0.2571,
-      "pnl_pct": -0.2471,
-      "avg_pnl_pct": -0.019
+      "win_rate": 0.6153846153846154,
+      "neutral_win_rate": 0.409,
+      "edge": 0.2064,
+      "pnl_pct": -0.3795,
+      "avg_pnl_pct": -0.0271
     }
   },
   "by_horizon": {
@@ -731,15 +731,15 @@
         "avg_pnl_pct": 0.0091
       },
       "shadow": {
-        "n": 6,
+        "n": 7,
         "tp": 6,
-        "sl": 0,
+        "sl": 1,
         "expired": 0,
-        "win_rate": 1.0,
-        "neutral_win_rate": 0.3997,
-        "edge": 0.6003,
-        "pnl_pct": 0.7649,
-        "avg_pnl_pct": 0.1275
+        "win_rate": 0.8571428571428571,
+        "neutral_win_rate": 0.3999,
+        "edge": 0.4572,
+        "pnl_pct": 0.6325,
+        "avg_pnl_pct": 0.0904
       },
       "open": 0,
       "session_utc": [
@@ -877,15 +877,15 @@
       "label": "Tendance 5 min",
       "weight": 1.0,
       "stats": {
-        "n": 33,
+        "n": 34,
         "tp": 16,
-        "sl": 12,
+        "sl": 13,
         "expired": 5,
-        "win_rate": 0.5714285714285714,
-        "neutral_win_rate": 0.4078,
-        "edge": 0.1636,
-        "pnl_pct": -0.6727,
-        "avg_pnl_pct": -0.0204
+        "win_rate": 0.5517241379310345,
+        "neutral_win_rate": 0.4076,
+        "edge": 0.1441,
+        "pnl_pct": -0.8051,
+        "avg_pnl_pct": -0.0237
       },
       "by_source": {
         "bot": {
@@ -922,18 +922,49 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 5,
+          "n": 6,
           "tp": 5,
-          "sl": 0,
+          "sl": 1,
           "expired": 0,
-          "win_rate": 1.0,
-          "neutral_win_rate": 0.3999,
-          "edge": 0.6001,
-          "pnl_pct": 0.6522,
-          "avg_pnl_pct": 0.1304
+          "win_rate": 0.8333333333333334,
+          "neutral_win_rate": 0.4,
+          "edge": 0.4333,
+          "pnl_pct": 0.5198,
+          "avg_pnl_pct": 0.0866
         }
       },
       "last_trades": [
+        {
+          "id": "899ae79ef8",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "long",
+          "horizon": "1h",
+          "entry": 30835.75,
+          "take_profit": 30879.5,
+          "stop_loss": 30806.5,
+          "risk_reward": 1.5,
+          "confidence": "moyen",
+          "score": 4.75,
+          "criteria": [
+            "adx",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.1324,
+          "pnl_gross_pct": -0.1224,
+          "duration_minutes": 5,
+          "close_price": 30798.0,
+          "created_at": "2026-09-21T19:55:26Z",
+          "created_local": "21/09 21:55",
+          "expires_at": "2026-09-21T20:55:26Z",
+          "rationale": "Achat : tendance forte (ADX), tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 72.91 (0.24 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 64%.",
+          "news_context": "actualité à surveiller (score 2) : Treasury yields ease as global borrowing costs tumble"
+        },
         {
           "id": "144ec42118",
           "asset": "nasdaq",
@@ -1153,39 +1184,6 @@
           "expires_at": "2026-09-21T19:10:31Z",
           "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 688.2 (0.80 %), TP = 52 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 78%.",
           "news_context": "actualité calme sur les 2 dernières heures"
-        },
-        {
-          "id": "c70f5df9d3",
-          "asset": "ethereum",
-          "asset_label": "Ethereum (ETH/USD)",
-          "direction": "long",
-          "horizon": "1h",
-          "entry": 2761.3,
-          "take_profit": 2778.9,
-          "stop_loss": 2749.6,
-          "risk_reward": 1.5,
-          "confidence": "fort",
-          "score": 6.75,
-          "criteria": [
-            "adx",
-            "macd",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "bot",
-          "status": "sl",
-          "pnl_pct": -0.5037,
-          "pnl_gross_pct": -0.4237,
-          "duration_minutes": 7,
-          "close_price": 2749.6,
-          "created_at": "2026-09-21T15:55:25Z",
-          "created_local": "21/09 17:55",
-          "expires_at": "2026-09-21T16:55:25Z",
-          "rationale": "Achat : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 29.28 (1.06 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 74%.",
-          "news_context": "actualité à surveiller (score 3) : U.S.-listed Greenland stocks surge after Trump announces security deal with Denmark | ‘It's awful’: How tariffs, soaring fuel costs and higher interest rates are squeezing American companies"
         }
       ]
     },
@@ -1194,15 +1192,15 @@
       "label": "Tendance 15 min",
       "weight": 1.0,
       "stats": {
-        "n": 46,
+        "n": 47,
         "tp": 20,
-        "sl": 20,
+        "sl": 21,
         "expired": 6,
-        "win_rate": 0.5,
-        "neutral_win_rate": 0.4089,
-        "edge": 0.0911,
-        "pnl_pct": -2.3283,
-        "avg_pnl_pct": -0.0506
+        "win_rate": 0.4878048780487805,
+        "neutral_win_rate": 0.4087,
+        "edge": 0.0791,
+        "pnl_pct": -2.4607,
+        "avg_pnl_pct": -0.0524
       },
       "by_source": {
         "bot": {
@@ -1239,18 +1237,49 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 13,
+          "n": 14,
           "tp": 8,
-          "sl": 4,
+          "sl": 5,
           "expired": 1,
-          "win_rate": 0.6666666666666666,
-          "neutral_win_rate": 0.4096,
-          "edge": 0.2571,
-          "pnl_pct": -0.2471,
-          "avg_pnl_pct": -0.019
+          "win_rate": 0.6153846153846154,
+          "neutral_win_rate": 0.409,
+          "edge": 0.2064,
+          "pnl_pct": -0.3795,
+          "avg_pnl_pct": -0.0271
         }
       },
       "last_trades": [
+        {
+          "id": "899ae79ef8",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "long",
+          "horizon": "1h",
+          "entry": 30835.75,
+          "take_profit": 30879.5,
+          "stop_loss": 30806.5,
+          "risk_reward": 1.5,
+          "confidence": "moyen",
+          "score": 4.75,
+          "criteria": [
+            "adx",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.1324,
+          "pnl_gross_pct": -0.1224,
+          "duration_minutes": 5,
+          "close_price": 30798.0,
+          "created_at": "2026-09-21T19:55:26Z",
+          "created_local": "21/09 21:55",
+          "expires_at": "2026-09-21T20:55:26Z",
+          "rationale": "Achat : tendance forte (ADX), tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 72.91 (0.24 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 64%.",
+          "news_context": "actualité à surveiller (score 2) : Treasury yields ease as global borrowing costs tumble"
+        },
         {
           "id": "144ec42118",
           "asset": "nasdaq",
@@ -1470,39 +1499,6 @@
           "expires_at": "2026-09-21T19:10:31Z",
           "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 688.2 (0.80 %), TP = 52 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 78%.",
           "news_context": "actualité calme sur les 2 dernières heures"
-        },
-        {
-          "id": "c70f5df9d3",
-          "asset": "ethereum",
-          "asset_label": "Ethereum (ETH/USD)",
-          "direction": "long",
-          "horizon": "1h",
-          "entry": 2761.3,
-          "take_profit": 2778.9,
-          "stop_loss": 2749.6,
-          "risk_reward": 1.5,
-          "confidence": "fort",
-          "score": 6.75,
-          "criteria": [
-            "adx",
-            "macd",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "bot",
-          "status": "sl",
-          "pnl_pct": -0.5037,
-          "pnl_gross_pct": -0.4237,
-          "duration_minutes": 7,
-          "close_price": 2749.6,
-          "created_at": "2026-09-21T15:55:25Z",
-          "created_local": "21/09 17:55",
-          "expires_at": "2026-09-21T16:55:25Z",
-          "rationale": "Achat : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 29.28 (1.06 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 74%.",
-          "news_context": "actualité à surveiller (score 3) : U.S.-listed Greenland stocks surge after Trump announces security deal with Denmark | ‘It's awful’: How tariffs, soaring fuel costs and higher interest rates are squeezing American companies"
         }
       ]
     },
@@ -1511,15 +1507,15 @@
       "label": "Tendance 1 h",
       "weight": 1.0,
       "stats": {
-        "n": 44,
+        "n": 45,
         "tp": 18,
-        "sl": 20,
+        "sl": 21,
         "expired": 6,
-        "win_rate": 0.47368421052631576,
-        "neutral_win_rate": 0.4092,
-        "edge": 0.0645,
-        "pnl_pct": -2.5251,
-        "avg_pnl_pct": -0.0574
+        "win_rate": 0.46153846153846156,
+        "neutral_win_rate": 0.409,
+        "edge": 0.0525,
+        "pnl_pct": -2.6575,
+        "avg_pnl_pct": -0.0591
       },
       "by_source": {
         "bot": {
@@ -1556,18 +1552,49 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 11,
+          "n": 12,
           "tp": 6,
-          "sl": 4,
+          "sl": 5,
           "expired": 1,
-          "win_rate": 0.6,
-          "neutral_win_rate": 0.411,
-          "edge": 0.189,
-          "pnl_pct": -0.4439,
-          "avg_pnl_pct": -0.0404
+          "win_rate": 0.5454545454545454,
+          "neutral_win_rate": 0.4102,
+          "edge": 0.1353,
+          "pnl_pct": -0.5763,
+          "avg_pnl_pct": -0.048
         }
       },
       "last_trades": [
+        {
+          "id": "899ae79ef8",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "long",
+          "horizon": "1h",
+          "entry": 30835.75,
+          "take_profit": 30879.5,
+          "stop_loss": 30806.5,
+          "risk_reward": 1.5,
+          "confidence": "moyen",
+          "score": 4.75,
+          "criteria": [
+            "adx",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.1324,
+          "pnl_gross_pct": -0.1224,
+          "duration_minutes": 5,
+          "close_price": 30798.0,
+          "created_at": "2026-09-21T19:55:26Z",
+          "created_local": "21/09 21:55",
+          "expires_at": "2026-09-21T20:55:26Z",
+          "rationale": "Achat : tendance forte (ADX), tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 72.91 (0.24 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 64%.",
+          "news_context": "actualité à surveiller (score 2) : Treasury yields ease as global borrowing costs tumble"
+        },
         {
           "id": "144ec42118",
           "asset": "nasdaq",
@@ -1787,39 +1814,6 @@
           "expires_at": "2026-09-21T19:10:31Z",
           "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 688.2 (0.80 %), TP = 52 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 78%.",
           "news_context": "actualité calme sur les 2 dernières heures"
-        },
-        {
-          "id": "c70f5df9d3",
-          "asset": "ethereum",
-          "asset_label": "Ethereum (ETH/USD)",
-          "direction": "long",
-          "horizon": "1h",
-          "entry": 2761.3,
-          "take_profit": 2778.9,
-          "stop_loss": 2749.6,
-          "risk_reward": 1.5,
-          "confidence": "fort",
-          "score": 6.75,
-          "criteria": [
-            "adx",
-            "macd",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "bot",
-          "status": "sl",
-          "pnl_pct": -0.5037,
-          "pnl_gross_pct": -0.4237,
-          "duration_minutes": 7,
-          "close_price": 2749.6,
-          "created_at": "2026-09-21T15:55:25Z",
-          "created_local": "21/09 17:55",
-          "expires_at": "2026-09-21T16:55:25Z",
-          "rationale": "Achat : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 29.28 (1.06 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 74%.",
-          "news_context": "actualité à surveiller (score 3) : U.S.-listed Greenland stocks surge after Trump announces security deal with Denmark | ‘It's awful’: How tariffs, soaring fuel costs and higher interest rates are squeezing American companies"
         }
       ]
     },
@@ -1828,15 +1822,15 @@
       "label": "Force de tendance (ADX)",
       "weight": 1.0,
       "stats": {
-        "n": 46,
+        "n": 47,
         "tp": 20,
-        "sl": 20,
+        "sl": 21,
         "expired": 6,
-        "win_rate": 0.5,
-        "neutral_win_rate": 0.4089,
-        "edge": 0.0911,
-        "pnl_pct": -2.3283,
-        "avg_pnl_pct": -0.0506
+        "win_rate": 0.4878048780487805,
+        "neutral_win_rate": 0.4087,
+        "edge": 0.0791,
+        "pnl_pct": -2.4607,
+        "avg_pnl_pct": -0.0524
       },
       "by_source": {
         "bot": {
@@ -1873,18 +1867,49 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 13,
+          "n": 14,
           "tp": 8,
-          "sl": 4,
+          "sl": 5,
           "expired": 1,
-          "win_rate": 0.6666666666666666,
-          "neutral_win_rate": 0.4096,
-          "edge": 0.2571,
-          "pnl_pct": -0.2471,
-          "avg_pnl_pct": -0.019
+          "win_rate": 0.6153846153846154,
+          "neutral_win_rate": 0.409,
+          "edge": 0.2064,
+          "pnl_pct": -0.3795,
+          "avg_pnl_pct": -0.0271
         }
       },
       "last_trades": [
+        {
+          "id": "899ae79ef8",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "long",
+          "horizon": "1h",
+          "entry": 30835.75,
+          "take_profit": 30879.5,
+          "stop_loss": 30806.5,
+          "risk_reward": 1.5,
+          "confidence": "moyen",
+          "score": 4.75,
+          "criteria": [
+            "adx",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.1324,
+          "pnl_gross_pct": -0.1224,
+          "duration_minutes": 5,
+          "close_price": 30798.0,
+          "created_at": "2026-09-21T19:55:26Z",
+          "created_local": "21/09 21:55",
+          "expires_at": "2026-09-21T20:55:26Z",
+          "rationale": "Achat : tendance forte (ADX), tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 72.91 (0.24 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 64%.",
+          "news_context": "actualité à surveiller (score 2) : Treasury yields ease as global borrowing costs tumble"
+        },
         {
           "id": "144ec42118",
           "asset": "nasdaq",
@@ -2104,39 +2129,6 @@
           "expires_at": "2026-09-21T19:10:31Z",
           "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 688.2 (0.80 %), TP = 52 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 78%.",
           "news_context": "actualité calme sur les 2 dernières heures"
-        },
-        {
-          "id": "c70f5df9d3",
-          "asset": "ethereum",
-          "asset_label": "Ethereum (ETH/USD)",
-          "direction": "long",
-          "horizon": "1h",
-          "entry": 2761.3,
-          "take_profit": 2778.9,
-          "stop_loss": 2749.6,
-          "risk_reward": 1.5,
-          "confidence": "fort",
-          "score": 6.75,
-          "criteria": [
-            "adx",
-            "macd",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "bot",
-          "status": "sl",
-          "pnl_pct": -0.5037,
-          "pnl_gross_pct": -0.4237,
-          "duration_minutes": 7,
-          "close_price": 2749.6,
-          "created_at": "2026-09-21T15:55:25Z",
-          "created_local": "21/09 17:55",
-          "expires_at": "2026-09-21T16:55:25Z",
-          "rationale": "Achat : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 29.28 (1.06 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 74%.",
-          "news_context": "actualité à surveiller (score 3) : U.S.-listed Greenland stocks surge after Trump announces security deal with Denmark | ‘It's awful’: How tariffs, soaring fuel costs and higher interest rates are squeezing American companies"
         }
       ]
     },
@@ -2145,15 +2137,15 @@
       "label": "VWAP",
       "weight": 0.75,
       "stats": {
-        "n": 44,
+        "n": 45,
         "tp": 20,
-        "sl": 18,
+        "sl": 19,
         "expired": 6,
-        "win_rate": 0.5263157894736842,
-        "neutral_win_rate": 0.4093,
-        "edge": 0.117,
-        "pnl_pct": -1.7119,
-        "avg_pnl_pct": -0.0389
+        "win_rate": 0.5128205128205128,
+        "neutral_win_rate": 0.4091,
+        "edge": 0.1037,
+        "pnl_pct": -1.8443,
+        "avg_pnl_pct": -0.041
       },
       "by_source": {
         "bot": {
@@ -2190,18 +2182,49 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 13,
+          "n": 14,
           "tp": 8,
-          "sl": 4,
+          "sl": 5,
           "expired": 1,
-          "win_rate": 0.6666666666666666,
-          "neutral_win_rate": 0.4096,
-          "edge": 0.2571,
-          "pnl_pct": -0.2471,
-          "avg_pnl_pct": -0.019
+          "win_rate": 0.6153846153846154,
+          "neutral_win_rate": 0.409,
+          "edge": 0.2064,
+          "pnl_pct": -0.3795,
+          "avg_pnl_pct": -0.0271
         }
       },
       "last_trades": [
+        {
+          "id": "899ae79ef8",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "long",
+          "horizon": "1h",
+          "entry": 30835.75,
+          "take_profit": 30879.5,
+          "stop_loss": 30806.5,
+          "risk_reward": 1.5,
+          "confidence": "moyen",
+          "score": 4.75,
+          "criteria": [
+            "adx",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.1324,
+          "pnl_gross_pct": -0.1224,
+          "duration_minutes": 5,
+          "close_price": 30798.0,
+          "created_at": "2026-09-21T19:55:26Z",
+          "created_local": "21/09 21:55",
+          "expires_at": "2026-09-21T20:55:26Z",
+          "rationale": "Achat : tendance forte (ADX), tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 72.91 (0.24 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 64%.",
+          "news_context": "actualité à surveiller (score 2) : Treasury yields ease as global borrowing costs tumble"
+        },
         {
           "id": "144ec42118",
           "asset": "nasdaq",
@@ -2421,39 +2444,6 @@
           "expires_at": "2026-09-21T19:10:31Z",
           "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 688.2 (0.80 %), TP = 52 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 78%.",
           "news_context": "actualité calme sur les 2 dernières heures"
-        },
-        {
-          "id": "c70f5df9d3",
-          "asset": "ethereum",
-          "asset_label": "Ethereum (ETH/USD)",
-          "direction": "long",
-          "horizon": "1h",
-          "entry": 2761.3,
-          "take_profit": 2778.9,
-          "stop_loss": 2749.6,
-          "risk_reward": 1.5,
-          "confidence": "fort",
-          "score": 6.75,
-          "criteria": [
-            "adx",
-            "macd",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "bot",
-          "status": "sl",
-          "pnl_pct": -0.5037,
-          "pnl_gross_pct": -0.4237,
-          "duration_minutes": 7,
-          "close_price": 2749.6,
-          "created_at": "2026-09-21T15:55:25Z",
-          "created_local": "21/09 17:55",
-          "expires_at": "2026-09-21T16:55:25Z",
-          "rationale": "Achat : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 29.28 (1.06 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 74%.",
-          "news_context": "actualité à surveiller (score 3) : U.S.-listed Greenland stocks surge after Trump announces security deal with Denmark | ‘It's awful’: How tariffs, soaring fuel costs and higher interest rates are squeezing American companies"
         }
       ]
     },
@@ -3435,37 +3425,6 @@
     }
   ],
   "open_signals": [
-    {
-      "id": "899ae79ef8",
-      "asset": "nasdaq",
-      "asset_label": "Nasdaq 100 (NQ)",
-      "direction": "long",
-      "horizon": "1h",
-      "entry": 30835.75,
-      "take_profit": 30879.5,
-      "stop_loss": 30806.5,
-      "risk_reward": 1.5,
-      "confidence": "moyen",
-      "score": 4.75,
-      "criteria": [
-        "adx",
-        "trend_15m",
-        "trend_1h",
-        "trend_5m",
-        "vwap"
-      ],
-      "source": "shadow",
-      "status": "open",
-      "pnl_pct": null,
-      "pnl_gross_pct": null,
-      "duration_minutes": null,
-      "close_price": null,
-      "created_at": "2026-09-21T19:55:26Z",
-      "created_local": "21/09 21:55",
-      "expires_at": "2026-09-21T20:55:26Z",
-      "rationale": "Achat : tendance forte (ADX), tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 72.91 (0.24 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 64%.",
-      "news_context": "actualité à surveiller (score 2) : Treasury yields ease as global borrowing costs tumble"
-    },
     {
       "id": "c2e2dd8bf2",
       "asset": "bitcoin",
@@ -4823,7 +4782,7 @@
       "volume: win rate 37% sur 54 trades → poids 0.25 → 0.25"
     ],
     "avoid_hours_utc": [],
-    "sample": 712
+    "sample": 713
   },
   "state": {
     "last_scan": "2026-09-21T19:55:26Z",
