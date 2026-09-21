@@ -549,7 +549,9 @@
                       ["Plus bas", Number(k[3]).toLocaleString("fr-FR"), null], ["Clôture", Number(k[4]).toLocaleString("fr-FR"), k[4] >= k[1] ? c.tp : c.sl]]);
     });
     hit.addEventListener("pointerleave", () => { hideTip(); cross.setAttribute("visibility", "hidden"); });
-    legend(root, [["Bougie haussière", c.tp], ["Bougie baissière", c.sl], ["Niveaux de vos signaux ouverts (en pointillés, étiquetés)", c.exp]]);
+    const keys = [["Bougie haussière", c.tp], ["Bougie baissière", c.sl]];
+    if (lvls.length) keys.push(["Niveaux de vos signaux ouverts (en pointillés, étiquetés)", c.exp]);
+    legend(root, keys);
   }
   function setupLive(assets) {
     const sel = $("#live-asset"); const cur = sel.value;
