@@ -56,7 +56,7 @@ def test_daily_summary_content(cfg):
     assert "Signaux proposés : 3" in text
     assert "Gagnants (TP) : 1 | Perdants (SL) : 1 | Expirés sans issue : 1" in text
     assert "Taux de réussite du jour : 50%" in text
-    assert "paper trading" in text
+    assert "paper trading" not in text   # l'avertissement complet n'est plus répété à chaque message, il est dans le guide
     assert "rsi: test" in text
 
 

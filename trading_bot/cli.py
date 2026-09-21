@@ -128,7 +128,7 @@ def main(argv: list[str] | None = None) -> int:
         eng.send_help()
     elif args.command == "test-notify":
         notify(f"🔔 Test de notification du Trading-Bot — {utcnow():%d/%m/%Y %H:%M} UTC.\n"
-               "Si vous lisez ceci sur Telegram/Discord, les notifications sont opérationnelles.\n\n" + DISCLAIMER)
+               "Si vous lisez ceci sur Telegram/Discord, les notifications sont opérationnelles.")
     elif args.command == "loop":
         print(f"Boucle locale : un tick toutes les {args.interval} min (Ctrl+C pour arrêter)")
         while True:

@@ -5,7 +5,7 @@ from datetime import date, datetime
 from typing import Any
 from zoneinfo import ZoneInfo
 
-from .config import DISCLAIMER, Config
+from .config import Config
 from .learning import analyze, neutral_win_rate, win_rate
 from .models import Signal, parse_iso
 
@@ -88,5 +88,4 @@ def daily_summary(all_signals: list[Signal], cfg: Config, day: date | None = Non
             lines.append(f"  • tranches horaires évitées (UTC) : {adjustments['avoid_hours_utc']}")
     else:
         lines.append("Ajustements prévus pour demain : aucun (critères actuels conservés).")
-    lines += ["", DISCLAIMER]
     return "\n".join(lines)

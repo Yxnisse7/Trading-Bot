@@ -1,3 +1,4 @@
+import json
 from datetime import datetime, timedelta, timezone
 
 from trading_bot.config import Config, default_assets
@@ -304,7 +305,7 @@ def test_telegram_commands(tmp_path, monkeypatch):
     # chat inconnu (99) : informé une seule fois de son identifiant
     unknown = [(c, s) for c, s in sent if c == "99"]
     assert len(unknown) == 1 and "99" in unknown[0][1] and "privé" in unknown[0][1]
-    assert eng.store.state()["telegram_informed"] == ["99"]
+    assert eng.store.state()["telegram_informed"] == [engmod.chat_key("99")]
     open_sigs = eng.store.open_signals()
     assert len(open_sigs) == 1 and open_sigs[0].asset == "ethereum" and open_sigs[0].source == "manual"
     # second passage avec le même inconnu : plus de message
@@ -492,10 +493,43 @@ def test_guide_is_sent_once_to_each_authorized_chat(tmp_path, monkeypatch):
     # un chat ajouté ensuite reçoit le guide à son tour
     monkeypatch.setattr(engmod, "telegram_chat_ids", lambda: ["111", "222", "333"])
     assert eng.welcome_new_chats() == ["333"]
-    assert eng.store.state()["telegram_welcomed"] == ["111", "222", "333"]
+    from trading_bot.engine import chat_key
+    # l'état est public : on n'y stocke que des empreintes, jamais les numéros
+    stored = eng.store.state()["telegram_welcomed"]
+    assert stored == [chat_key(c) for c in ("111", "222", "333")]
+    assert not any(c in json.dumps(stored) for c in ("111", "222", "333"))
     # envoi manuel à tous (sans chat ciblé) ; les nouveaux chats sont marqués comme informés
     sent.clear()
     monkeypatch.setattr(engmod, "telegram_chat_ids", lambda: ["444"])
     eng.send_help()
+    assert chat_key("444") in eng.store.state()["telegram_welcomed"]
     assert len(sent) == 1 and sent[0][0] is None and "GUIDE DU BOT" in sent[0][1]
     assert eng.welcome_new_chats() == []
+
+
+def test_public_files_never_expose_chat_ids(tmp_path, monkeypatch):
+    """L'état du bot est publié (dépôt public + site) : aucun identifiant de chat ne doit y figurer."""
+    now = datetime(2026, 9, 21, 14, 0, tzinfo=timezone.utc)
+    candles = make_candles(n=500, drift=0.0003, noise=0.0012, seed=7, start_ts=int(now.timestamp()) - 500 * 300)
+    eng = _engine(tmp_path, monkeypatch, candles, candles[-1].close)
+    from trading_bot import engine as engmod
+    monkeypatch.setattr(engmod, "notify", lambda text, title=None, chat_id=None: None)
+    monkeypatch.setattr(engmod, "telegram_chat_ids", lambda: ["1416276909"])
+    eng.welcome_new_chats()
+    eng._touch_state(now, note="test")
+    eng.write_report()
+    for path in (eng.store.state_file, eng.store.dashboard_file, eng.store.report_file):
+        assert "1416276909" not in path.read_text(encoding="utf-8"), path
+    # le tableau de bord publié ne contient aucun champ Telegram
+    dash = json.loads(eng.store.dashboard_file.read_text(encoding="utf-8"))
+    assert not [k for k in dash["state"] if k.startswith("telegram_")]
+    assert dash["state"]["last_scan"]
+
+
+def test_notification_log_redacts_chat_ids(tmp_path, monkeypatch):
+    from trading_bot import notify as notifymod
+    monkeypatch.setattr(notifymod, "DATA_DIR", tmp_path)
+    monkeypatch.setenv("TRADING_BOT_OUTBOX", str(tmp_path / "outbox.jsonl"))
+    notifymod.notify("Ce bot est privé. Votre identifiant de chat est 1471728168 : transmettez-le.", chat_id="1471728168")
+    logged = (tmp_path / "notifications.log").read_text(encoding="utf-8")
+    assert "1471728168" not in logged and "identifiant de chat est (masqué)" in logged

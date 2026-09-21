@@ -232,6 +232,14 @@ et contexte d'actualité. Un critère dont le taux de réussite est < 40 % sur �
 poids réduit ; > 60 % → augmenté. Les tranches horaires < 30 % sont évitées. Les poids sont stockés
 dans `data/adjustments.json` et appliqués aux scans suivants.
 
+### Avertissement et vie privée
+L'avertissement complet (« pas un conseil financier, validez en paper trading ») n'est plus répété à
+chaque notification : il figure dans le guide `/help` que reçoit automatiquement chaque nouveau chat
+autorisé, dans `REPORT.md` et sur les deux pages du site.
+Le dépôt et le site étant publics, aucun identifiant de chat Telegram n'est écrit dans les fichiers
+versionnés : `data/state.json` ne garde qu'une empreinte courte (SHA-256 tronqué), le tableau de bord
+publié ne contient aucun champ `telegram_*`, et le journal des notifications masque les identifiants.
+
 ### Rapport et résumé quotidien
 `data/REPORT.md` est régénéré à chaque événement (signal, clôture, résumé, backtest) : vue
 d'ensemble, signaux ouverts, statistiques par actif / sens / confiance / critère / heure, derniers

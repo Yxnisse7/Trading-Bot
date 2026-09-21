@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import copy
+import hashlib
 import re
 from dataclasses import replace
 import logging
@@ -28,6 +29,18 @@ from .summary import daily_summary
 from .tracker import format_outcome, update_signal
 
 log = logging.getLogger(__name__)
+
+
+def chat_key(chat_id: str) -> str:
+    """Empreinte courte d'un identifiant de chat : l'état du bot est public (dépôt + site),
+    on n'y écrit donc jamais le numéro lui-même, seulement de quoi le reconnaître."""
+    return hashlib.sha256(str(chat_id).encode("utf-8")).hexdigest()[:12]
+
+
+def chat_keys(values) -> list[str]:
+    """Normalise une liste stockée : les anciens identifiants bruts sont convertis en empreintes."""
+    return [chat_key(v) if str(v).isdigit() else str(v) for v in (values or [])]
+
 
 MAJOR_EVENT_RE = re.compile(r"FOMC|Fed\b|taux directeur|CPI|inflation|Non-?farm|NFP|emploi|payrolls", re.I)
 
@@ -140,7 +153,7 @@ class Engine:
                     sig.meta["sim"] = sizing
                     sim_line = self.portfolio.format_sizing(sizing, asset)
                     self.store.add_signal(sig)
-                notify(format_signal(sig, self.cfg.timezone) + ("\n" + sim_line if sim_line else "") + "\n\n" + DISCLAIMER)
+                notify(format_signal(sig, self.cfg.timezone) + ("\n" + sim_line if sim_line else ""))
                 log.info("%s [%s] : signal %s %s émis (id %s)", asset.label, hkey, sig.direction, sig.entry, sig.id)
         self._touch_state(now, note=f"{len(produced)} signal(aux)")
         if not dry_run:
@@ -377,7 +390,7 @@ class Engine:
         sizing = self.portfolio.on_open(sig, asset)
         sig.meta["sim"] = sizing
         self.store.add_signal(sig)
-        notify("🖐️ SIGNAL MANUEL\n" + format_signal(sig, self.cfg.timezone) + "\n" + self.portfolio.format_sizing(sizing, asset) + "\n\n" + DISCLAIMER)
+        notify("🖐️ SIGNAL MANUEL\n" + format_signal(sig, self.cfg.timezone) + "\n" + self.portfolio.format_sizing(sizing, asset))
         self.write_report()
         return sig
 
@@ -392,12 +405,12 @@ class Engine:
         day = day or self.summary_day()
         adj = self._relearn()
         text = daily_summary(self.store.all_signals(), self.cfg, day, adj)
-        text = text.replace("\n\n" + DISCLAIMER, "\n\n" + self.portfolio.format_summary() + "\n\n" + DISCLAIMER)
+        text += "\n\n" + self.portfolio.format_summary()
         try:
             now = utcnow()
             agenda = calmod.upcoming(self.macro_events(now), now, hours=30, min_impact="high")
-            text = text.replace("\n\n" + DISCLAIMER, "\n\nAnnonces à fort impact dans les 30 prochaines heures :\n"
-                                + calmod.format_agenda(agenda, self.cfg.timezone) + "\n\n" + DISCLAIMER)
+            text += ("\n\nAnnonces à fort impact dans les 30 prochaines heures :\n"
+                     + calmod.format_agenda(agenda, self.cfg.timezone))
         except Exception as exc:  # noqa: BLE001
             log.warning("agenda indisponible : %s", exc)
         if send:
@@ -450,8 +463,7 @@ class Engine:
             return {"proposed": False, "reason": "signal déjà ouvert", "text": text, "signal": already.to_dict()}
         if a.direction is None:
             why = "; ".join(a.reasons_rejected) or "aucune direction dominante"
-            text = (header + f"\n\n❌ Je m'abstiens : {why}.\nActualité : {news_ctx}\n\nLecture des indicateurs :\n" + lecture
-                    + "\n\n" + DISCLAIMER)
+            text = (header + f"\n\n❌ Je m'abstiens : {why}.\nActualité : {news_ctx}\n\nLecture des indicateurs :\n" + lecture)
             notify(text)
             return {"proposed": False, "reason": why, "text": text}
 
@@ -462,7 +474,7 @@ class Engine:
         sig, why = build_signal(asset, a, relaxed, news_ctx, now)
         if sig is None:
             text = (header + f"\n\n❌ Direction {a.direction} ({a.n_criteria} critère(s)) mais pas de niveaux réalistes : "
-                    + "; ".join(why) + f"\nActualité : {news_ctx}\n\nLecture des indicateurs :\n" + lecture + "\n\n" + DISCLAIMER)
+                    + "; ".join(why) + f"\nActualité : {news_ctx}\n\nLecture des indicateurs :\n" + lecture)
             notify(text)
             return {"proposed": False, "reason": "; ".join(why), "text": text}
 
@@ -479,7 +491,7 @@ class Engine:
         self.store.add_signal(sig)
         text = (header + "\n\n" + verdict + "\n\n" + format_signal(sig, self.cfg.timezone)
                 + "\n" + self.portfolio.format_sizing(sizing, asset)
-                + "\n\nLecture des indicateurs :\n" + lecture + "\n\n" + DISCLAIMER)
+                + "\n\nLecture des indicateurs :\n" + lecture)
         notify(text)
         self.write_report()
         return {"proposed": True, "verdict": verdict, "text": text, "signal": sig.to_dict()}
@@ -590,16 +602,19 @@ class Engine:
 
     def welcome_new_chats(self) -> list[str]:
         """Envoie le guide aux chats autorisés qui ne l'ont jamais reçu (une fois par chat)."""
-        welcomed = list(self.store.state().get("telegram_welcomed", []))
-        new = [c for c in telegram_chat_ids() if c not in welcomed]
-        if not new:
-            return []
+        st = self.store.state()
+        stored = list(st.get("telegram_welcomed", []))
+        welcomed = chat_keys(stored)
+        new = [c for c in telegram_chat_ids() if chat_key(c) not in welcomed]
         for chat in new:
             notify(self.HELP + "\n\n" + DISCLAIMER, chat_id=chat)
-            welcomed.append(chat)
-            log.info("guide envoyé au chat %s", chat)
+            welcomed.append(chat_key(chat))
+            log.info("guide envoyé à un nouveau chat (%s)", chat_key(chat))
+        if not new and welcomed == stored:
+            return []
         st = self.store.state()
         st["telegram_welcomed"] = welcomed[-50:]
+        st["telegram_informed"] = chat_keys(st.get("telegram_informed", []))
         self.store.save_state(st)
         return new
 
@@ -607,7 +622,8 @@ class Engine:
         """Envoie le guide à tous les chats configurés (et les marque comme informés)."""
         notify(self.HELP + "\n\n" + DISCLAIMER)
         st = self.store.state()
-        st["telegram_welcomed"] = list(dict.fromkeys(list(st.get("telegram_welcomed", [])) + telegram_chat_ids()))[-50:]
+        known = chat_keys(st.get("telegram_welcomed", [])) + [chat_key(c) for c in telegram_chat_ids()]
+        st["telegram_welcomed"] = list(dict.fromkeys(known))[-50:]
         self.store.save_state(st)
         return self.HELP
 
@@ -670,13 +686,13 @@ class Engine:
             return 0
         handled = 0
         last_id = offset
-        informed: list[str] = list(st.get("telegram_informed", []))
+        informed: list[str] = chat_keys(st.get("telegram_informed", []))
         for upd in updates:
             last_id = max(last_id or 0, (upd.get("update_id") or 0) + 1)
             if upd["chat_id"] not in allowed:
                 log.warning("message Telegram ignoré (chat %s non autorisé)", upd["chat_id"])
-                if upd["chat_id"] not in informed:
-                    informed.append(upd["chat_id"])
+                if chat_key(upd["chat_id"]) not in informed:
+                    informed.append(chat_key(upd["chat_id"]))
                     notify("Ce bot est privé. Votre identifiant de chat est " + upd["chat_id"]
                            + " : transmettez-le au propriétaire pour qu'il vous ajoute.", chat_id=upd["chat_id"])
                 continue
@@ -694,6 +710,7 @@ class Engine:
         st = self.store.state()
         st["telegram_offset"] = last_id
         st["telegram_informed"] = informed[-50:]
+        st["telegram_welcomed"] = chat_keys(st.get("telegram_welcomed", []))
         self.store.save_state(st)
         return handled
 

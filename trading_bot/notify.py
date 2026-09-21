@@ -4,6 +4,7 @@ from __future__ import annotations
 import json
 import logging
 import os
+import re
 from datetime import datetime, timezone
 
 import requests
@@ -74,7 +75,13 @@ def flush_outbox(path: str | None = None) -> int:
     return sent
 
 
+def _redact(body: str) -> str:
+    """Le journal est versionné dans un dépôt public : on masque les identifiants de chat."""
+    return re.sub(r"(identifiant de chat est )\d+", r"\1(masqué)", body)
+
+
 def _append_log(body: str) -> None:
+    body = _redact(body)
     try:
         DATA_DIR.mkdir(parents=True, exist_ok=True)
         with open(DATA_DIR / "notifications.log", "a", encoding="utf-8") as fh:
