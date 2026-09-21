@@ -1,20 +1,14 @@
 # Trading-Bot — rapport
 
-_Mis à jour le 21/09/2026 à 21:05 (Europe/Paris)._
+_Mis à jour le 21/09/2026 à 21:10 (Europe/Paris)._
 
 ## Vue d'ensemble
 
-- Trades clôturés : **32**
+- Trades clôturés : **33**
 - Taux de réussite cumulé (TP / (TP+SL)) : **43%** — hasard attendu 41%, avantage **+2%**
-- P&L théorique cumulé, net des coûts estimés (somme des % par trade, sans levier) : **-2.06 %** (brut -0.86 %)
-- Signaux ouverts : **1**
-- Signaux fantômes (suivis en silence pour l'apprentissage) : **10** clôturés, 1 ouverts, taux de réussite 56% (hasard attendu 41%)
-
-## Signaux ouverts
-
-| Heure | Actif | Sens | Entrée | TP | SL | Confiance | Source | Expire |
-|---|---|---|---:|---:|---:|---|---|---|
-| 21/09 20:10 | Bitcoin (BTC/USD) | long | 85955.0 | 86315.0 | 85680.0 | fort | signaux du bot | 21:10 |
+- P&L théorique cumulé, net des coûts estimés (somme des % par trade, sans levier) : **-2.08 %** (brut -0.82 %)
+- Signaux ouverts : **0**
+- Signaux fantômes (suivis en silence pour l'apprentissage) : **10** clôturés, 2 ouverts, taux de réussite 56% (hasard attendu 41%)
 
 ## Statistiques
 
@@ -22,7 +16,7 @@ _Mis à jour le 21/09/2026 à 21:05 (Europe/Paris)._
 
 | Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
 |---|---:|---:|---:|---:|---:|---:|
-| bitcoin | 4 | 2 | 2 | 0 | 50% | -0.010 % |
+| bitcoin | 5 | 2 | 2 | 1 | 50% | -0.013 % |
 | ethereum | 9 | 2 | 6 | 1 | 25% | -0.170 % |
 | gold | 5 | 1 | 3 | 1 | 25% | -0.116 % |
 | nasdaq | 9 | 5 | 3 | 1 | 62% | +0.009 % |
@@ -32,38 +26,38 @@ _Mis à jour le 21/09/2026 à 21:05 (Europe/Paris)._
 
 | Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
 |---|---:|---:|---:|---:|---:|---:|
-| long | 27 | 8 | 15 | 4 | 35% | -0.086 % |
+| long | 28 | 8 | 15 | 5 | 35% | -0.084 % |
 | short | 5 | 4 | 1 | 0 | 80% | +0.056 % |
 
 ### Par confiance
 
 | Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
 |---|---:|---:|---:|---:|---:|---:|
-| fort | 29 | 11 | 14 | 4 | 44% | -0.066 % |
+| fort | 30 | 11 | 14 | 5 | 44% | -0.064 % |
 | moyen | 3 | 1 | 2 | 0 | 33% | -0.052 % |
 
 ### Par critère technique
 
 | Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
 |---|---:|---:|---:|---:|---:|---:|
-| adx | 32 | 12 | 16 | 4 | 43% | -0.064 % |
+| adx | 33 | 12 | 16 | 5 | 43% | -0.063 % |
 | corr | 7 | 2 | 4 | 1 | 33% | -0.087 % |
 | level | 4 | 1 | 3 | 0 | 25% | -0.119 % |
 | macd | 6 | 1 | 5 | 0 | 17% | -0.258 % |
 | orb | 2 | 1 | 1 | 0 | 50% | +0.010 % |
 | pdhl | 5 | 1 | 4 | 0 | 20% | -0.170 % |
-| rsi | 24 | 9 | 11 | 4 | 45% | -0.061 % |
-| trend_15m | 32 | 12 | 16 | 4 | 43% | -0.064 % |
-| trend_1h | 32 | 12 | 16 | 4 | 43% | -0.064 % |
-| trend_5m | 27 | 11 | 12 | 4 | 48% | -0.048 % |
+| rsi | 25 | 9 | 11 | 5 | 45% | -0.059 % |
+| trend_15m | 33 | 12 | 16 | 5 | 43% | -0.063 % |
+| trend_1h | 33 | 12 | 16 | 5 | 43% | -0.063 % |
+| trend_5m | 28 | 11 | 12 | 5 | 48% | -0.047 % |
 | volume | 2 | 1 | 1 | 0 | 50% | -0.043 % |
-| vwap | 30 | 12 | 14 | 4 | 46% | -0.048 % |
+| vwap | 31 | 12 | 14 | 5 | 46% | -0.047 % |
 
 ### Par contexte d'actualité
 
 | Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
 |---|---:|---:|---:|---:|---:|---:|
-| actualité calme | 8 | 3 | 5 | 0 | 38% | -0.164 % |
+| actualité calme | 9 | 3 | 5 | 1 | 38% | -0.148 % |
 | actualité chargée | 24 | 9 | 11 | 4 | 45% | -0.031 % |
 
 ### Par heure d'émission (UTC)
@@ -82,7 +76,7 @@ _Mis à jour le 21/09/2026 à 21:05 (Europe/Paris)._
 | 15h | 4 | 1 | 3 | 0 | 25% | -0.232 % |
 | 16h | 1 | 0 | 0 | 1 | n/a | +0.013 % |
 | 17h | 1 | 0 | 0 | 1 | n/a | -0.097 % |
-| 18h | 2 | 2 | 0 | 0 | 100% | +0.104 % |
+| 18h | 3 | 2 | 0 | 1 | 100% | +0.062 % |
 | 19h | 2 | 1 | 1 | 0 | 50% | -0.106 % |
 | 20h | 1 | 0 | 1 | 0 | 0% | -0.138 % |
 
@@ -90,16 +84,16 @@ _Mis à jour le 21/09/2026 à 21:05 (Europe/Paris)._
 
 | Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
 |---|---:|---:|---:|---:|---:|---:|
-| signaux du bot | 32 | 12 | 16 | 4 | 43% | -0.064 % |
+| signaux du bot | 33 | 12 | 16 | 5 | 43% | -0.063 % |
 
 ### Par horizon
 
 | Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
 |---|---:|---:|---:|---:|---:|---:|
-| 1h | 30 | 12 | 14 | 4 | 46% | -0.050 % |
+| 1h | 31 | 12 | 14 | 5 | 46% | -0.049 % |
 | 3h | 2 | 0 | 2 | 0 | 0% | -0.280 % |
 
-Trades expirés : 4, 75% terminés dans le bon sens, P&L moyen +0.010 %.
+Trades expirés : 5, 80% terminés dans le bon sens, P&L moyen +0.004 %.
 
 ## Signaux fantômes (apprentissage)
 
@@ -134,6 +128,7 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 |---|---|---|---:|---:|---|---:|---:|
 | 21/09 20:10 | S&P 500 (ES) | long | 7828.25 | 7835.0 | ✅ TP | +0.08 % | 11 min |
 | 21/09 20:10 | Nasdaq 100 (NQ) | long | 30715.0 | 30758.75 | ✅ TP | +0.13 % | 17 min |
+| 21/09 20:10 | Bitcoin (BTC/USD) | long | 85955.0 | 85986.64 | ⏱️ expiré | -0.02 % | 60 min |
 | 21/09 17:55 | Ethereum (ETH/USD) | long | 2761.3 | 2749.6 | ❌ SL | -0.50 % | 7 min |
 | 21/09 17:40 | Bitcoin (BTC/USD) | long | 85983.0 | 85712.0 | ❌ SL | -0.38 % | 26 min |
 | 21/09 16:10 | S&P 500 (ES) | long | 7773.25 | 7769.0 | ❌ SL | -0.06 % | 5 min |
@@ -161,7 +156,6 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 | 17/09 22:01 | Nasdaq 100 (NQ) | long | 29781.0 | 29742.75 | ❌ SL | -0.14 % | 9 min |
 | 17/09 19:15 | Nasdaq 100 (NQ) | long | 29753.25 | 29727.5 | ⏱️ expiré | -0.10 % | 64 min |
 | 17/09 18:01 | S&P 500 (ES) | long | 7703.5 | 7705.25 | ⏱️ expiré | +0.01 % | 64 min |
-| 17/09 17:01 | Nasdaq 100 (NQ) | long | 29695.5 | 29657.25 | ❌ SL | -0.14 % | 4 min |
 
 ## Apprentissage
 
