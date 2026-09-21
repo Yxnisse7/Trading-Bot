@@ -411,6 +411,9 @@ class Engine:
         crit = ", ".join(sig.criteria) if sig.criteria else "aucun"
         sig.rationale = (f"Demande manuelle {direction}. Critères du bot alignés dans ce sens : {crit}. " + sig.rationale.split(". ", 1)[-1])
         if custom:
+            # le calibrage automatique (fractions du range, probabilité de résolution) ne décrit plus
+            # les niveaux réellement suivis : on le retire pour ne pas induire en erreur
+            sig.rationale = re.sub(r",\s*TP = .*?probabilité de résolution[^.]*\.", ".", sig.rationale)
             sig.rationale += f" Niveaux fournis par vous : {', '.join(custom)} (rapport gain/risque {sig.risk_reward})."
             sig.meta["custom_levels"] = True
         tp_pct = abs(sig.take_profit - sig.entry) / sig.entry * 100.0

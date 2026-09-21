@@ -554,6 +554,9 @@ def test_manual_signal_with_explicit_levels(tmp_path, monkeypatch):
     assert abs(sig.take_profit - price * 1.02) < 1 and abs(sig.stop_loss - price * 0.99) < 1
     assert sig.risk_reward == round((sig.take_profit - sig.entry) / (sig.entry - sig.stop_loss), 2)
     assert sig.meta.get("custom_levels") and "Niveaux fournis par vous" in sig.rationale
+    # le calibrage automatique ne doit plus être décrit : il ne correspond pas aux niveaux suivis
+    assert "TP = " not in sig.rationale and "probabilité de résolution" not in sig.rationale
+    assert "Range moyen" in sig.rationale   # le contexte de volatilité reste utile
     assert "SIGNAL MANUEL" in sent[-1]
 
     # objectif seul : le stop reste calibré par le bot
