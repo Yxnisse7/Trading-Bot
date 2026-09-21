@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-21T21:25:34.921193+02:00",
+  "updated_at": "2026-09-21T21:35:36.027601+02:00",
   "timezone": "Europe/Paris",
   "equity_curve": [
     {
@@ -627,18 +627,18 @@
       "avg_pnl_pct": -0.0631
     },
     "shadow": {
-      "n": 10,
-      "tp": 5,
+      "n": 11,
+      "tp": 6,
       "sl": 4,
       "expired": 1,
-      "win_rate": 0.5555555555555556,
-      "neutral_win_rate": 0.4126,
-      "edge": 0.143,
-      "pnl_pct": -0.6394,
-      "avg_pnl_pct": -0.0639
+      "win_rate": 0.6,
+      "neutral_win_rate": 0.4115,
+      "edge": 0.1885,
+      "pnl_pct": -0.508,
+      "avg_pnl_pct": -0.0462
     },
     "open": 0,
-    "open_shadow": 3
+    "open_shadow": 2
   },
   "by_source": {
     "bot": {
@@ -675,15 +675,15 @@
       "avg_pnl_pct": 0.0
     },
     "shadow": {
-      "n": 10,
-      "tp": 5,
+      "n": 11,
+      "tp": 6,
       "sl": 4,
       "expired": 1,
-      "win_rate": 0.5555555555555556,
-      "neutral_win_rate": 0.4126,
-      "edge": 0.143,
-      "pnl_pct": -0.6394,
-      "avg_pnl_pct": -0.0639
+      "win_rate": 0.6,
+      "neutral_win_rate": 0.4115,
+      "edge": 0.1885,
+      "pnl_pct": -0.508,
+      "avg_pnl_pct": -0.0462
     }
   },
   "by_horizon": {
@@ -731,15 +731,15 @@
         "avg_pnl_pct": 0.0091
       },
       "shadow": {
-        "n": 3,
-        "tp": 3,
+        "n": 4,
+        "tp": 4,
         "sl": 0,
         "expired": 0,
         "win_rate": 1.0,
         "neutral_win_rate": 0.4,
         "edge": 0.6,
-        "pnl_pct": 0.3726,
-        "avg_pnl_pct": 0.1242
+        "pnl_pct": 0.504,
+        "avg_pnl_pct": 0.126
       },
       "open": 0,
       "session_utc": [
@@ -877,15 +877,15 @@
       "label": "Tendance 5 min",
       "weight": 1.0,
       "stats": {
-        "n": 30,
-        "tp": 13,
+        "n": 31,
+        "tp": 14,
         "sl": 12,
         "expired": 5,
-        "win_rate": 0.52,
-        "neutral_win_rate": 0.4086,
-        "edge": 0.1114,
-        "pnl_pct": -1.065,
-        "avg_pnl_pct": -0.0355
+        "win_rate": 0.5384615384615384,
+        "neutral_win_rate": 0.4084,
+        "edge": 0.1301,
+        "pnl_pct": -0.9336,
+        "avg_pnl_pct": -0.0301
       },
       "by_source": {
         "bot": {
@@ -922,18 +922,49 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 2,
-          "tp": 2,
+          "n": 3,
+          "tp": 3,
           "sl": 0,
           "expired": 0,
           "win_rate": 1.0,
-          "neutral_win_rate": 0.4003,
-          "edge": 0.5997,
-          "pnl_pct": 0.2599,
-          "avg_pnl_pct": 0.13
+          "neutral_win_rate": 0.4002,
+          "edge": 0.5998,
+          "pnl_pct": 0.3913,
+          "avg_pnl_pct": 0.1304
         }
       },
       "last_trades": [
+        {
+          "id": "a5e71b7323",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "long",
+          "horizon": "1h",
+          "entry": 30765.5,
+          "take_profit": 30809.0,
+          "stop_loss": 30736.5,
+          "risk_reward": 1.5,
+          "confidence": "moyen",
+          "score": 4.75,
+          "criteria": [
+            "adx",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "tp",
+          "pnl_pct": 0.1314,
+          "pnl_gross_pct": 0.1414,
+          "duration_minutes": 26,
+          "close_price": 30809.0,
+          "created_at": "2026-09-21T18:55:28Z",
+          "created_local": "21/09 20:55",
+          "expires_at": "2026-09-21T19:55:28Z",
+          "rationale": "Achat : tendance forte (ADX), tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 72.40 (0.24 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 62%.",
+          "news_context": "actualité à surveiller (score 2) : Treasury yields ease as global borrowing costs tumble"
+        },
         {
           "id": "342dc0fe35",
           "asset": "nasdaq",
@@ -1156,39 +1187,6 @@
           "expires_at": "2026-09-21T15:55:29Z",
           "rationale": "Achat : tendance forte (ADX), tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 71.08 (0.23 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 86%.",
           "news_context": "actualité à surveiller (score 1) : Novo Nordisk’s stock tumbles as doubts persist about Ozempic maker’s goals for 2030"
-        },
-        {
-          "id": "d664ec3700",
-          "asset": "sp500",
-          "asset_label": "S&P 500 (ES)",
-          "direction": "long",
-          "horizon": "1h",
-          "entry": 7773.25,
-          "take_profit": 7779.25,
-          "stop_loss": 7769.25,
-          "risk_reward": 1.5,
-          "confidence": "fort",
-          "score": 6.75,
-          "criteria": [
-            "adx",
-            "macd",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "bot",
-          "status": "sl",
-          "pnl_pct": -0.0647,
-          "pnl_gross_pct": -0.0547,
-          "duration_minutes": 5,
-          "close_price": 7769.0,
-          "created_at": "2026-09-21T14:10:33Z",
-          "created_local": "21/09 16:10",
-          "expires_at": "2026-09-21T15:10:33Z",
-          "rationale": "Achat : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 9.85 (0.13 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 68%.",
-          "news_context": "actualité à surveiller (score 3) : Novo Nordisk’s stock tumbles as doubts persist about Ozempic maker’s goals for 2030 | Treasury yields ease as global borrowing costs tumble"
         }
       ]
     },
@@ -1197,15 +1195,15 @@
       "label": "Tendance 15 min",
       "weight": 1.0,
       "stats": {
-        "n": 43,
-        "tp": 17,
+        "n": 44,
+        "tp": 18,
         "sl": 20,
         "expired": 6,
-        "win_rate": 0.4594594594594595,
-        "neutral_win_rate": 0.4095,
-        "edge": 0.05,
-        "pnl_pct": -2.7206,
-        "avg_pnl_pct": -0.0633
+        "win_rate": 0.47368421052631576,
+        "neutral_win_rate": 0.4093,
+        "edge": 0.0644,
+        "pnl_pct": -2.5892,
+        "avg_pnl_pct": -0.0588
       },
       "by_source": {
         "bot": {
@@ -1242,18 +1240,49 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 10,
-          "tp": 5,
+          "n": 11,
+          "tp": 6,
           "sl": 4,
           "expired": 1,
-          "win_rate": 0.5555555555555556,
-          "neutral_win_rate": 0.4126,
-          "edge": 0.143,
-          "pnl_pct": -0.6394,
-          "avg_pnl_pct": -0.0639
+          "win_rate": 0.6,
+          "neutral_win_rate": 0.4115,
+          "edge": 0.1885,
+          "pnl_pct": -0.508,
+          "avg_pnl_pct": -0.0462
         }
       },
       "last_trades": [
+        {
+          "id": "a5e71b7323",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "long",
+          "horizon": "1h",
+          "entry": 30765.5,
+          "take_profit": 30809.0,
+          "stop_loss": 30736.5,
+          "risk_reward": 1.5,
+          "confidence": "moyen",
+          "score": 4.75,
+          "criteria": [
+            "adx",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "tp",
+          "pnl_pct": 0.1314,
+          "pnl_gross_pct": 0.1414,
+          "duration_minutes": 26,
+          "close_price": 30809.0,
+          "created_at": "2026-09-21T18:55:28Z",
+          "created_local": "21/09 20:55",
+          "expires_at": "2026-09-21T19:55:28Z",
+          "rationale": "Achat : tendance forte (ADX), tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 72.40 (0.24 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 62%.",
+          "news_context": "actualité à surveiller (score 2) : Treasury yields ease as global borrowing costs tumble"
+        },
         {
           "id": "342dc0fe35",
           "asset": "nasdaq",
@@ -1475,37 +1504,6 @@
           "expires_at": "2026-09-21T16:40:35Z",
           "rationale": "Vente : tendance forte (ADX), tendance 15 min, tendance 1 h, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 15.74 (0.36 %), TP = 48 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 98%.",
           "news_context": "actualité à surveiller (score 3) : Treasury yields ease as global borrowing costs tumble | ‘It's awful’: How tariffs, soaring fuel costs and higher interest rates are squeezing American companies"
-        },
-        {
-          "id": "e8ea0b7770",
-          "asset": "nasdaq",
-          "asset_label": "Nasdaq 100 (NQ)",
-          "direction": "long",
-          "horizon": "1h",
-          "entry": 30507.5,
-          "take_profit": 30550.25,
-          "stop_loss": 30479.0,
-          "risk_reward": 1.5,
-          "confidence": "moyen",
-          "score": 4.75,
-          "criteria": [
-            "adx",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "tp",
-          "pnl_pct": 0.1301,
-          "pnl_gross_pct": 0.1401,
-          "duration_minutes": 2,
-          "close_price": 30550.25,
-          "created_at": "2026-09-21T14:55:29Z",
-          "created_local": "21/09 16:55",
-          "expires_at": "2026-09-21T15:55:29Z",
-          "rationale": "Achat : tendance forte (ADX), tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 71.08 (0.23 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 86%.",
-          "news_context": "actualité à surveiller (score 1) : Novo Nordisk’s stock tumbles as doubts persist about Ozempic maker’s goals for 2030"
         }
       ]
     },
@@ -1514,15 +1512,15 @@
       "label": "Tendance 1 h",
       "weight": 1.0,
       "stats": {
-        "n": 41,
-        "tp": 15,
+        "n": 42,
+        "tp": 16,
         "sl": 20,
         "expired": 6,
-        "win_rate": 0.42857142857142855,
-        "neutral_win_rate": 0.4099,
-        "edge": 0.0187,
-        "pnl_pct": -2.9174,
-        "avg_pnl_pct": -0.0712
+        "win_rate": 0.4444444444444444,
+        "neutral_win_rate": 0.4097,
+        "edge": 0.0347,
+        "pnl_pct": -2.786,
+        "avg_pnl_pct": -0.0663
       },
       "by_source": {
         "bot": {
@@ -1559,18 +1557,49 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 8,
-          "tp": 3,
+          "n": 9,
+          "tp": 4,
           "sl": 4,
           "expired": 1,
-          "win_rate": 0.42857142857142855,
-          "neutral_win_rate": 0.4154,
-          "edge": 0.0132,
-          "pnl_pct": -0.8362,
-          "avg_pnl_pct": -0.1045
+          "win_rate": 0.5,
+          "neutral_win_rate": 0.4137,
+          "edge": 0.0863,
+          "pnl_pct": -0.7048,
+          "avg_pnl_pct": -0.0783
         }
       },
       "last_trades": [
+        {
+          "id": "a5e71b7323",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "long",
+          "horizon": "1h",
+          "entry": 30765.5,
+          "take_profit": 30809.0,
+          "stop_loss": 30736.5,
+          "risk_reward": 1.5,
+          "confidence": "moyen",
+          "score": 4.75,
+          "criteria": [
+            "adx",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "tp",
+          "pnl_pct": 0.1314,
+          "pnl_gross_pct": 0.1414,
+          "duration_minutes": 26,
+          "close_price": 30809.0,
+          "created_at": "2026-09-21T18:55:28Z",
+          "created_local": "21/09 20:55",
+          "expires_at": "2026-09-21T19:55:28Z",
+          "rationale": "Achat : tendance forte (ADX), tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 72.40 (0.24 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 62%.",
+          "news_context": "actualité à surveiller (score 2) : Treasury yields ease as global borrowing costs tumble"
+        },
         {
           "id": "342dc0fe35",
           "asset": "nasdaq",
@@ -1792,37 +1821,6 @@
           "expires_at": "2026-09-21T16:40:35Z",
           "rationale": "Vente : tendance forte (ADX), tendance 15 min, tendance 1 h, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 15.74 (0.36 %), TP = 48 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 98%.",
           "news_context": "actualité à surveiller (score 3) : Treasury yields ease as global borrowing costs tumble | ‘It's awful’: How tariffs, soaring fuel costs and higher interest rates are squeezing American companies"
-        },
-        {
-          "id": "e8ea0b7770",
-          "asset": "nasdaq",
-          "asset_label": "Nasdaq 100 (NQ)",
-          "direction": "long",
-          "horizon": "1h",
-          "entry": 30507.5,
-          "take_profit": 30550.25,
-          "stop_loss": 30479.0,
-          "risk_reward": 1.5,
-          "confidence": "moyen",
-          "score": 4.75,
-          "criteria": [
-            "adx",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "tp",
-          "pnl_pct": 0.1301,
-          "pnl_gross_pct": 0.1401,
-          "duration_minutes": 2,
-          "close_price": 30550.25,
-          "created_at": "2026-09-21T14:55:29Z",
-          "created_local": "21/09 16:55",
-          "expires_at": "2026-09-21T15:55:29Z",
-          "rationale": "Achat : tendance forte (ADX), tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 71.08 (0.23 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 86%.",
-          "news_context": "actualité à surveiller (score 1) : Novo Nordisk’s stock tumbles as doubts persist about Ozempic maker’s goals for 2030"
         }
       ]
     },
@@ -1831,15 +1829,15 @@
       "label": "Force de tendance (ADX)",
       "weight": 1.0,
       "stats": {
-        "n": 43,
-        "tp": 17,
+        "n": 44,
+        "tp": 18,
         "sl": 20,
         "expired": 6,
-        "win_rate": 0.4594594594594595,
-        "neutral_win_rate": 0.4095,
-        "edge": 0.05,
-        "pnl_pct": -2.7206,
-        "avg_pnl_pct": -0.0633
+        "win_rate": 0.47368421052631576,
+        "neutral_win_rate": 0.4093,
+        "edge": 0.0644,
+        "pnl_pct": -2.5892,
+        "avg_pnl_pct": -0.0588
       },
       "by_source": {
         "bot": {
@@ -1876,18 +1874,49 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 10,
-          "tp": 5,
+          "n": 11,
+          "tp": 6,
           "sl": 4,
           "expired": 1,
-          "win_rate": 0.5555555555555556,
-          "neutral_win_rate": 0.4126,
-          "edge": 0.143,
-          "pnl_pct": -0.6394,
-          "avg_pnl_pct": -0.0639
+          "win_rate": 0.6,
+          "neutral_win_rate": 0.4115,
+          "edge": 0.1885,
+          "pnl_pct": -0.508,
+          "avg_pnl_pct": -0.0462
         }
       },
       "last_trades": [
+        {
+          "id": "a5e71b7323",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "long",
+          "horizon": "1h",
+          "entry": 30765.5,
+          "take_profit": 30809.0,
+          "stop_loss": 30736.5,
+          "risk_reward": 1.5,
+          "confidence": "moyen",
+          "score": 4.75,
+          "criteria": [
+            "adx",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "tp",
+          "pnl_pct": 0.1314,
+          "pnl_gross_pct": 0.1414,
+          "duration_minutes": 26,
+          "close_price": 30809.0,
+          "created_at": "2026-09-21T18:55:28Z",
+          "created_local": "21/09 20:55",
+          "expires_at": "2026-09-21T19:55:28Z",
+          "rationale": "Achat : tendance forte (ADX), tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 72.40 (0.24 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 62%.",
+          "news_context": "actualité à surveiller (score 2) : Treasury yields ease as global borrowing costs tumble"
+        },
         {
           "id": "342dc0fe35",
           "asset": "nasdaq",
@@ -2109,37 +2138,6 @@
           "expires_at": "2026-09-21T16:40:35Z",
           "rationale": "Vente : tendance forte (ADX), tendance 15 min, tendance 1 h, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 15.74 (0.36 %), TP = 48 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 98%.",
           "news_context": "actualité à surveiller (score 3) : Treasury yields ease as global borrowing costs tumble | ‘It's awful’: How tariffs, soaring fuel costs and higher interest rates are squeezing American companies"
-        },
-        {
-          "id": "e8ea0b7770",
-          "asset": "nasdaq",
-          "asset_label": "Nasdaq 100 (NQ)",
-          "direction": "long",
-          "horizon": "1h",
-          "entry": 30507.5,
-          "take_profit": 30550.25,
-          "stop_loss": 30479.0,
-          "risk_reward": 1.5,
-          "confidence": "moyen",
-          "score": 4.75,
-          "criteria": [
-            "adx",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "tp",
-          "pnl_pct": 0.1301,
-          "pnl_gross_pct": 0.1401,
-          "duration_minutes": 2,
-          "close_price": 30550.25,
-          "created_at": "2026-09-21T14:55:29Z",
-          "created_local": "21/09 16:55",
-          "expires_at": "2026-09-21T15:55:29Z",
-          "rationale": "Achat : tendance forte (ADX), tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 71.08 (0.23 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 86%.",
-          "news_context": "actualité à surveiller (score 1) : Novo Nordisk’s stock tumbles as doubts persist about Ozempic maker’s goals for 2030"
         }
       ]
     },
@@ -2148,15 +2146,15 @@
       "label": "VWAP",
       "weight": 0.75,
       "stats": {
-        "n": 41,
-        "tp": 17,
+        "n": 42,
+        "tp": 18,
         "sl": 18,
         "expired": 6,
-        "win_rate": 0.4857142857142857,
-        "neutral_win_rate": 0.41,
-        "edge": 0.0757,
-        "pnl_pct": -2.1042,
-        "avg_pnl_pct": -0.0513
+        "win_rate": 0.5,
+        "neutral_win_rate": 0.4098,
+        "edge": 0.0902,
+        "pnl_pct": -1.9728,
+        "avg_pnl_pct": -0.047
       },
       "by_source": {
         "bot": {
@@ -2193,18 +2191,49 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 10,
-          "tp": 5,
+          "n": 11,
+          "tp": 6,
           "sl": 4,
           "expired": 1,
-          "win_rate": 0.5555555555555556,
-          "neutral_win_rate": 0.4126,
-          "edge": 0.143,
-          "pnl_pct": -0.6394,
-          "avg_pnl_pct": -0.0639
+          "win_rate": 0.6,
+          "neutral_win_rate": 0.4115,
+          "edge": 0.1885,
+          "pnl_pct": -0.508,
+          "avg_pnl_pct": -0.0462
         }
       },
       "last_trades": [
+        {
+          "id": "a5e71b7323",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "long",
+          "horizon": "1h",
+          "entry": 30765.5,
+          "take_profit": 30809.0,
+          "stop_loss": 30736.5,
+          "risk_reward": 1.5,
+          "confidence": "moyen",
+          "score": 4.75,
+          "criteria": [
+            "adx",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "tp",
+          "pnl_pct": 0.1314,
+          "pnl_gross_pct": 0.1414,
+          "duration_minutes": 26,
+          "close_price": 30809.0,
+          "created_at": "2026-09-21T18:55:28Z",
+          "created_local": "21/09 20:55",
+          "expires_at": "2026-09-21T19:55:28Z",
+          "rationale": "Achat : tendance forte (ADX), tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 72.40 (0.24 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 62%.",
+          "news_context": "actualité à surveiller (score 2) : Treasury yields ease as global borrowing costs tumble"
+        },
         {
           "id": "342dc0fe35",
           "asset": "nasdaq",
@@ -2426,37 +2455,6 @@
           "expires_at": "2026-09-21T16:40:35Z",
           "rationale": "Vente : tendance forte (ADX), tendance 15 min, tendance 1 h, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 15.74 (0.36 %), TP = 48 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 98%.",
           "news_context": "actualité à surveiller (score 3) : Treasury yields ease as global borrowing costs tumble | ‘It's awful’: How tariffs, soaring fuel costs and higher interest rates are squeezing American companies"
-        },
-        {
-          "id": "e8ea0b7770",
-          "asset": "nasdaq",
-          "asset_label": "Nasdaq 100 (NQ)",
-          "direction": "long",
-          "horizon": "1h",
-          "entry": 30507.5,
-          "take_profit": 30550.25,
-          "stop_loss": 30479.0,
-          "risk_reward": 1.5,
-          "confidence": "moyen",
-          "score": 4.75,
-          "criteria": [
-            "adx",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "tp",
-          "pnl_pct": 0.1301,
-          "pnl_gross_pct": 0.1401,
-          "duration_minutes": 2,
-          "close_price": 30550.25,
-          "created_at": "2026-09-21T14:55:29Z",
-          "created_local": "21/09 16:55",
-          "expires_at": "2026-09-21T15:55:29Z",
-          "rationale": "Achat : tendance forte (ADX), tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 71.08 (0.23 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 86%.",
-          "news_context": "actualité à surveiller (score 1) : Novo Nordisk’s stock tumbles as doubts persist about Ozempic maker’s goals for 2030"
         }
       ]
     },
@@ -3498,37 +3496,6 @@
       "created_local": "21/09 21:10",
       "expires_at": "2026-09-21T20:10:33Z",
       "rationale": "Achat : tendance forte (ADX), tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 72.17 (0.23 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 60%.",
-      "news_context": "actualité à surveiller (score 2) : Treasury yields ease as global borrowing costs tumble"
-    },
-    {
-      "id": "a5e71b7323",
-      "asset": "nasdaq",
-      "asset_label": "Nasdaq 100 (NQ)",
-      "direction": "long",
-      "horizon": "1h",
-      "entry": 30765.5,
-      "take_profit": 30809.0,
-      "stop_loss": 30736.5,
-      "risk_reward": 1.5,
-      "confidence": "moyen",
-      "score": 4.75,
-      "criteria": [
-        "adx",
-        "trend_15m",
-        "trend_1h",
-        "trend_5m",
-        "vwap"
-      ],
-      "source": "shadow",
-      "status": "open",
-      "pnl_pct": null,
-      "pnl_gross_pct": null,
-      "duration_minutes": null,
-      "close_price": null,
-      "created_at": "2026-09-21T18:55:28Z",
-      "created_local": "21/09 20:55",
-      "expires_at": "2026-09-21T19:55:28Z",
-      "rationale": "Achat : tendance forte (ADX), tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 72.40 (0.24 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 62%.",
       "news_context": "actualité à surveiller (score 2) : Treasury yields ease as global borrowing costs tumble"
     }
   ],
@@ -4824,14 +4791,14 @@
       "volume: win rate 37% sur 54 trades → poids 0.25 → 0.25"
     ],
     "avoid_hours_utc": [],
-    "sample": 709
+    "sample": 710
   },
   "state": {
     "last_scan": "2026-09-21T19:25:27Z",
     "last_scan_note": "0 signal(aux)",
     "last_summary": "2026-09-21T00:10:15Z",
     "telegram_offset": 630538283,
-    "last_track": "2026-09-21T19:25:27Z",
+    "last_track": "2026-09-21T19:30:49Z",
     "telegram_informed": [
       "1471728168"
     ],
