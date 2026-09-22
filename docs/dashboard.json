@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-22T20:05:26.758413+02:00",
+  "updated_at": "2026-09-22T20:15:42.866706+02:00",
   "timezone": "Europe/Paris",
   "equity_curve": [
     {
@@ -754,7 +754,7 @@
       "pnl_pct": -1.0869,
       "avg_pnl_pct": -0.0473
     },
-    "open": 0,
+    "open": 1,
     "open_shadow": 0
   },
   "by_source": {
@@ -858,7 +858,7 @@
         "pnl_pct": 0.6631,
         "avg_pnl_pct": 0.0737
       },
-      "open": 0,
+      "open": 1,
       "session_utc": [
         13,
         20
@@ -3709,7 +3709,40 @@
       ]
     }
   ],
-  "open_signals": [],
+  "open_signals": [
+    {
+      "id": "468527930f",
+      "asset": "nasdaq",
+      "asset_label": "Nasdaq 100 (NQ)",
+      "direction": "long",
+      "horizon": "1h",
+      "entry": 30970.0,
+      "take_profit": 30994.75,
+      "stop_loss": 30949.5,
+      "risk_reward": 1.21,
+      "confidence": "fort",
+      "score": 5.75,
+      "criteria": [
+        "adx",
+        "rsi",
+        "trend_15m",
+        "trend_1h",
+        "trend_5m",
+        "vwap"
+      ],
+      "source": "bot",
+      "status": "open",
+      "pnl_pct": null,
+      "pnl_gross_pct": null,
+      "duration_minutes": null,
+      "close_price": null,
+      "created_at": "2026-09-22T18:15:34Z",
+      "created_local": "22/09 20:15",
+      "expires_at": "2026-09-22T19:15:34Z",
+      "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 67.86 (0.22 %), TP = 36 % du range, SL = 30 % du range, probabilité de résolution sous 1 h ≈ 98%.",
+      "news_context": "actualité à surveiller (score 3) : If a Stock Market Crash Happens, History Says This Is How Long It Could Take Investors to Recover | Fed's Barkin says economy may be firming, inflation not limited to energy, tariff shocks"
+    }
+  ],
   "recent_trades": [
     {
       "id": "959e9625a0",
@@ -5238,10 +5271,10 @@
     "sample": 735
   },
   "state": {
-    "last_scan": "2026-09-22T18:01:00Z",
-    "last_scan_note": "0 signal(aux)",
+    "last_scan": "2026-09-22T18:15:34Z",
+    "last_scan_note": "1 signal(aux)",
     "last_summary": "2026-09-22T00:44:53Z",
-    "last_track": "2026-09-22T18:01:00Z"
+    "last_track": "2026-09-22T18:05:26Z"
   },
   "limits": {
     "max_signals_per_asset_per_day": 5,
@@ -5264,8 +5297,8 @@
     "losses": 20,
     "avg_win": 42.24,
     "avg_loss": -26.19,
-    "open_positions": 0,
+    "open_positions": 1,
     "skipped": 0,
-    "risky": 14
+    "risky": 15
   }
 }
