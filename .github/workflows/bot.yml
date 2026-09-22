@@ -1,7 +1,7 @@
 name: Trading bot — tick (suivi + scan)
 
 # Toutes les 5 minutes (dépôt public : minutes illimitées) : commandes Telegram, suivi des
-# signaux ouverts (TP / SL / expiration), puis scan toutes les ~15 min.
+# signaux ouverts (TP / SL / expiration), puis recherche de signaux à chaque passage.
 # Le planificateur GitHub étant capricieux, un cron externe (cron-job.org) déclenche aussi
 # ce workflow via workflow_dispatch ; les deux peuvent coexister.
 on:

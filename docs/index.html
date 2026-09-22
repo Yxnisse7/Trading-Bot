@@ -160,6 +160,7 @@
 
 <div id="tip" role="tooltip"></div>
 <script src="live-chart.js"></script>
+<script src="sections.js"></script>
 <script>
 (function () {
   const $ = (s) => document.querySelector(s);
@@ -472,7 +473,7 @@
   function render() {
     const d = data;
     const when = new Date(d.updated_at);
-    $("#updated").textContent = `Mis à jour le ${when.toLocaleString("fr-FR")} (${d.timezone}) — mode ${mode === "local" ? "local" : mode === "mcp" ? "connecté à GitHub via claude.ai (mise à jour toutes les 15 min)" : mode === "github" ? "GitHub (lecture via l'API, mise à jour toutes les 15 min)" : "lecture seule"}` +
+    $("#updated").textContent = `Mis à jour le ${when.toLocaleString("fr-FR")} (${d.timezone}) — mode ${mode === "local" ? "local" : mode === "mcp" ? "connecté à GitHub via claude.ai (mise à jour toutes les 5 min)" : mode === "github" ? "GitHub (lecture via l'API, mise à jour toutes les 5 min)" : "lecture seule"}` +
       (d.state && d.state.last_scan ? ` — dernier scan ${new Date(d.state.last_scan).toLocaleTimeString("fr-FR")} (${esc(d.state.last_scan_note || "")})` : "");
     $("#btn-scan").style.display = mode === "local" ? "" : "none";
     $("#gh-settings").style.display = (mode === "local" || mode === "mcp") ? "none" : "";

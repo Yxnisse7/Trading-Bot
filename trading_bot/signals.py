@@ -177,12 +177,47 @@ def build_signal(asset: AssetConfig, a: Assessment, cfg: Config, news_context: s
         rationale=rationale, news_context=news_context,
         created_at=iso(now), expires_at=iso(now + timedelta(minutes=horizon)),
         hourly_range=round(hr, 6), horizon=("1h" if horizon <= 60 else hlabel.replace(" ", "")), horizon_minutes=horizon,
-        meta={"details": a.details, "support": a.support, "resistance": a.resistance,
+        meta={"tick": asset.tick_size, "details": a.details, "support": a.support, "resistance": a.resistance,
               "atr_5m": a.atr, "atr_ratio": a.atr_ratio, "hourly_range_pct": round(hr_pct, 4), "adx_15m": a.adx_15m,
               "sigma_5m": a.sigma_5m, "p_resolution": p_res, "p_tp_neutral": p_tp,
               "activity_ratio": a.activity_ratio, "base_minutes": a.base_minutes},
     )
     return sig, reasons
+
+
+def _fmt_price(v: float) -> str:
+    return f"{v:.6f}".rstrip("0").rstrip(".")
+
+
+def entry_guidance(sig: Signal, now=None, tz: str = "Europe/Paris") -> list[str]:
+    """Aide à l'entrée pour qui suit le signal avec un peu de retard.
+
+    - âge du prix de référence (clôture de la dernière bougie connue), quand il est connu ;
+    - zone d'entrée : au-delà du milieu entre stop et objectif, le gain possible devient plus petit que
+      le risque ; de l'autre côté, un retour à mi-chemin du stop signale un scénario qui s'affaiblit.
+    """
+    lines = []
+    tick = float((sig.meta or {}).get("tick") or 0)
+    price_time = (sig.meta or {}).get("price_time")
+    if price_time:
+        age = max(0, int(((now or utcnow()) - parse_iso(price_time)).total_seconds() // 60))
+        lines.append(f"Prix de référence : clôture de {parse_iso(price_time).astimezone(ZoneInfo(tz)):%H:%M}, "
+                     f"il y a {age} min. Vérifiez le prix en direct avant d'entrer.")
+    e, t, s = sig.entry, sig.take_profit, sig.stop_loss
+    rnd = (lambda v: round_to_tick(v, tick)) if tick > 0 else (lambda v: v)
+    limit = rnd((t + s) / 2.0)               # gain possible = risque
+    against = rnd(e - 0.5 * (e - s))         # à mi-chemin du stop
+    if (sig.risk_reward or 0) < 1.0:
+        lines.append("⚠️ Au prix visé, le gain possible est déjà plus petit que le risque.")
+    elif sig.direction == "long":
+        lines.append(f"Zone d'entrée : de {_fmt_price(against)} à {_fmt_price(limit)}. Au-dessus de {_fmt_price(limit)}, "
+                     f"le gain possible devient plus petit que le risque : passez votre tour. "
+                     f"Sous {_fmt_price(against)}, le prix est déjà reparti vers le stop.")
+    else:
+        lines.append(f"Zone d'entrée : de {_fmt_price(limit)} à {_fmt_price(against)}. Sous {_fmt_price(limit)}, "
+                     f"le gain possible devient plus petit que le risque : passez votre tour. "
+                     f"Au-dessus de {_fmt_price(against)}, le prix est déjà reparti vers le stop.")
+    return lines
 
 
 def format_signal(sig: Signal, tz: str = "Europe/Paris") -> str:
@@ -200,6 +235,7 @@ def format_signal(sig: Signal, tz: str = "Europe/Paris") -> str:
         f"Take Profit  : {sig.take_profit} (+{reward_pct:.2f} %)",
         f"Stop Loss    : {sig.stop_loss} (−{risk_pct:.2f} %)",
         f"Risque / rendement : {sig.risk_reward}",
+        *entry_guidance(sig, tz=tz),
         f"Confiance : {sig.confidence.upper()} (score {sig.score}, {len(sig.criteria)} critères alignés)",
         f"Justification : {sig.rationale}",
         f"Actualité : {sig.news_context}",

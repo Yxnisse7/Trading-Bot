@@ -6,7 +6,7 @@ import hashlib
 import re
 from dataclasses import replace
 import logging
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Any
 from zoneinfo import ZoneInfo
 
@@ -179,6 +179,8 @@ class Engine:
                 if caution:
                     news_ctx = f"prudence post-{caution.name} : critères renforcés · " + (news_ctx or "")
                 sig, why = build_signal(asset, a, scan_cfg, news_ctx, now)
+                if sig is not None:
+                    sig.meta["price_time"] = self._candle_close_iso(candles)
                 if sig is None:
                     log.info("%s [%s] : pas de signal (%s)", asset.label, hkey, "; ".join(why))
                     if self.cfg.shadow_enabled and not dry_run and base == 5 and not variant:
@@ -203,6 +205,11 @@ class Engine:
         if not dry_run:
             self.write_report()
         return produced
+
+    @staticmethod
+    def _candle_close_iso(candles: list) -> str:
+        """Heure de clôture de la dernière bougie 5 min : l'heure du prix de référence du signal."""
+        return iso(datetime.fromtimestamp(candles[-1].ts + 300, tz=timezone.utc))
 
     @staticmethod
     def _weights_for(adj: dict[str, Any], asset_key: str) -> dict[str, float] | None:
@@ -493,8 +500,10 @@ class Engine:
         raw = market.fetch_candles_5m(asset, days=5)
         candles = ind.closed_candles(raw, int(now.timestamp()), 300) or raw
         a = assess(asset, candles, self.cfg)
+        price_time = self._candle_close_iso(candles)
         try:
             a.price = market.fetch_price(asset)
+            price_time = None                    # cotation instantanée : son âge exact n'est pas connu
         except ProviderError:
             pass
         a = replace(a, direction=direction, reasons_rejected=[])
@@ -511,6 +520,8 @@ class Engine:
             raise RuntimeError("impossible de construire des niveaux réalistes : " + "; ".join(why))
         sig.source = "manual"
         sig.confidence = "manuel"
+        if price_time:
+            sig.meta["price_time"] = price_time
         custom = self._apply_custom_levels(sig, asset, take_profit, stop_loss) if (take_profit is not None or stop_loss is not None) else []
         crit = ", ".join(sig.criteria) if sig.criteria else "aucun"
         sig.rationale = (f"Demande manuelle {direction}. Critères du bot alignés dans ce sens : {crit}. " + sig.rationale.split(". ", 1)[-1])

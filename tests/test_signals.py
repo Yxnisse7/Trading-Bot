@@ -76,3 +76,23 @@ def test_round_to_tick():
     assert round_to_tick(20000.13, 0.25) == 20000.25
     assert round_to_tick(65432.4, 1.0) == 65432.0
     assert round_to_tick(1.2345, 0) == 1.2345
+
+
+def test_entry_guidance_zone_and_price_age():
+    from datetime import datetime, timedelta, timezone
+    from trading_bot.models import Signal, iso
+    from trading_bot.signals import entry_guidance, format_signal
+    now = datetime(2026, 9, 22, 14, 37, tzinfo=timezone.utc)
+    sig = Signal(id="x", asset="nasdaq", asset_label="Nasdaq", direction="long", entry=30000.0, take_profit=30060.0,
+                 stop_loss=29960.0, risk_reward=1.5, confidence="fort", score=6, criteria=["rsi"], rationale="",
+                 news_context="", created_at=iso(now), expires_at=iso(now + timedelta(hours=1)),
+                 meta={"tick": 0.25, "price_time": iso(now - timedelta(minutes=12))})
+    lines = entry_guidance(sig, now)
+    assert "il y a 12 min" in lines[0]
+    # au milieu du stop et de l'objectif, gain possible = risque ; à mi-chemin du stop, scénario affaibli
+    assert "de 29980 à 30010" in lines[1]
+    short = Signal(**{**sig.__dict__, "direction": "short", "take_profit": 29940.0, "stop_loss": 30040.0, "meta": {"tick": 0.25}})
+    assert "de 29990 à 30020" in entry_guidance(short, now)[0]
+    weak = Signal(**{**sig.__dict__, "risk_reward": 0.8, "meta": {}})
+    assert "déjà plus petit que le risque" in entry_guidance(weak, now)[0]
+    assert "Zone d'entrée" in format_signal(sig)

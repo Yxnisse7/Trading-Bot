@@ -132,7 +132,7 @@ class Config:
 
     # ---- Suivi ----
     track_interval_minutes: int = 5
-    scan_interval_minutes: int = 15
+    scan_interval_minutes: int = 5          # recherche de signaux à chaque passage (jusqu'à 10 min gagnées)
 
     # ---- Apprentissage ----
     # Recalcul complet à chaque passage, à partir de TOUS les trades clôturés, sans mémoire des

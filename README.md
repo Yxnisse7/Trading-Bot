@@ -216,8 +216,14 @@ aucun avantage, un TP à 60 % du range et un SL à 40 % donnent mécaniquement ~
 Les résultats sont enregistrés dans `data/backtests.json` et repris dans le rapport.
 
 Limites : l'actualité n'est pas rejouée (non disponible historiquement), et en réel le signal
-arrive jusqu'à 15 min après la clôture de la bougie analysée. Les résultats de backtest sont donc
-**optimistes** par rapport au réel.
+arrive après la clôture de la bougie analysée : environ 6 à 12 min pour les contrats à terme, dont
+les données Yahoo ont une bougie de retard, et 1 à 7 min pour les cryptos. Les résultats de backtest
+sont donc **optimistes** par rapport au réel.
+
+**Aide à l'entrée dans chaque signal.** Le message indique l'heure du prix de référence et son âge,
+puis une **zone d'entrée** : au-delà du milieu entre stop et objectif, le gain possible devient plus
+petit que le risque, donc mieux vaut passer son tour ; de l'autre côté, un retour à mi-chemin du stop
+signale un scénario qui s'affaiblit.
 
 ### Ce que disent les backtests (juillet → septembre 2026)
 
@@ -278,6 +284,11 @@ Une variante passe **automatiquement en signaux réels** quand, sur au moins 100
 repasse en test si ses résultats retombent. Chaque promotion ou retrait est annoncé sur Telegram.
 Une seule variante est testée à la fois sur un même trade, pour ne pas mélanger deux changements.
 
+### Sections repliables
+Sur les deux pages, chaque section se replie ou se déplie d'un clic sur son titre, et un bouton
+« Tout replier / Tout déplier » s'ajoute à l'en-tête. L'état est mémorisé dans le navigateur, page
+par page (`docs/sections.js`).
+
 ### Graphique live
 À chaque passage (~5 min), le bot publie pour chaque actif un instantané des 80 dernières bougies
 5 min dans `data/live/<actif>.json`, copié dans `docs/live/` pour GitHub Pages. Le tableau de bord
@@ -326,8 +337,8 @@ Sans configuration, les messages sont affichés en console et journalisés dans 
 Les workflows sont dans `.github/workflows/`, dont `weekly-backtest.yml` qui relance le backtest
 chaque dimanche à 20:00 UTC :
 
-- `bot.yml` : `tick` toutes les 5 min (commandes Telegram, suivi des signaux ouverts, scan toutes
-  les 15 min) ; l'état (`data/*.json`, `data/REPORT.md`, `docs/dashboard.json`) est commité dans
+- `bot.yml` : `tick` toutes les 5 min (commandes Telegram, suivi des signaux ouverts, recherche de
+  signaux à chaque passage, `scan_interval_minutes`) ; l'état (`data/*.json`, `data/REPORT.md`, `docs/dashboard.json`) est commité dans
   le dépôt pour persister entre deux exécutions.
   Lancement manuel possible avec une autre commande (`scan`, `track`, `test-notify`, `backtest`,
   `fetch-data`, `manual` avec les champs actif / sens / commentaire).
