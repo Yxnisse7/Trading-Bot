@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-23T00:30:53.670679+02:00",
+  "updated_at": "2026-09-23T00:35:28.549197+02:00",
   "timezone": "Europe/Paris",
   "equity_curve": [
     {
@@ -762,18 +762,18 @@
       "avg_pnl_pct": -0.0632
     },
     "shadow": {
-      "n": 24,
+      "n": 25,
       "tp": 9,
       "sl": 9,
-      "expired": 6,
+      "expired": 7,
       "win_rate": 0.5,
-      "neutral_win_rate": 0.4089,
-      "edge": 0.0911,
-      "pnl_pct": -1.5555,
-      "avg_pnl_pct": -0.0648
+      "neutral_win_rate": 0.4086,
+      "edge": 0.0914,
+      "pnl_pct": -1.4171,
+      "avg_pnl_pct": -0.0567
     },
     "open": 0,
-    "open_shadow": 1
+    "open_shadow": 0
   },
   "by_source": {
     "bot": {
@@ -810,15 +810,15 @@
       "avg_pnl_pct": 0.0
     },
     "shadow": {
-      "n": 24,
+      "n": 25,
       "tp": 9,
       "sl": 9,
-      "expired": 6,
+      "expired": 7,
       "win_rate": 0.5,
-      "neutral_win_rate": 0.4089,
-      "edge": 0.0911,
-      "pnl_pct": -1.5555,
-      "avg_pnl_pct": -0.0648
+      "neutral_win_rate": 0.4086,
+      "edge": 0.0914,
+      "pnl_pct": -1.4171,
+      "avg_pnl_pct": -0.0567
     }
   },
   "by_horizon": {
@@ -866,15 +866,15 @@
         "avg_pnl_pct": 0.0165
       },
       "shadow": {
-        "n": 9,
+        "n": 10,
         "tp": 7,
         "sl": 2,
-        "expired": 0,
+        "expired": 1,
         "win_rate": 0.7777777777777778,
         "neutral_win_rate": 0.3998,
         "edge": 0.378,
-        "pnl_pct": 0.6631,
-        "avg_pnl_pct": 0.0737
+        "pnl_pct": 0.8015,
+        "avg_pnl_pct": 0.0801
       },
       "open": 0,
       "session_utc": [
@@ -1090,15 +1090,15 @@
       "label": "Tendance 5 min",
       "weight": 1.0,
       "stats": {
-        "n": 50,
+        "n": 51,
         "tp": 22,
         "sl": 19,
-        "expired": 9,
+        "expired": 10,
         "win_rate": 0.5365853658536586,
-        "neutral_win_rate": 0.4082,
-        "edge": 0.1284,
-        "pnl_pct": -1.8467,
-        "avg_pnl_pct": -0.0369
+        "neutral_win_rate": 0.4081,
+        "edge": 0.1285,
+        "pnl_pct": -1.7083,
+        "avg_pnl_pct": -0.0335
       },
       "by_source": {
         "bot": {
@@ -1135,15 +1135,15 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 9,
+          "n": 10,
           "tp": 6,
           "sl": 3,
-          "expired": 0,
+          "expired": 1,
           "win_rate": 0.6666666666666666,
           "neutral_win_rate": 0.4001,
           "edge": 0.2666,
-          "pnl_pct": 0.0818,
-          "avg_pnl_pct": 0.0091
+          "pnl_pct": 0.2202,
+          "avg_pnl_pct": 0.022
         }
       },
       "last_trades": [
@@ -1210,6 +1210,39 @@
           "created_local": "22/09 21:30",
           "expires_at": "2026-09-22T20:30:50Z",
           "rationale": "Achat : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 66.71 (0.22 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 73%.",
+          "news_context": "actualité calme sur les 2 dernières heures"
+        },
+        {
+          "id": "b2b7b0a5bf",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "long",
+          "horizon": "3h",
+          "entry": 31006.75,
+          "take_profit": 31086.5,
+          "stop_loss": 30953.5,
+          "risk_reward": 1.5,
+          "confidence": "fort",
+          "score": 6.75,
+          "criteria": [
+            "adx",
+            "macd",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "expired",
+          "pnl_pct": 0.1384,
+          "pnl_gross_pct": 0.1484,
+          "duration_minutes": 184,
+          "close_price": 31052.75,
+          "created_at": "2026-09-22T19:30:50Z",
+          "created_local": "22/09 21:30",
+          "expires_at": "2026-09-22T22:30:50Z",
+          "rationale": "Achat : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 133.00 (0.43 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 84%.",
           "news_context": "actualité calme sur les 2 dernières heures"
         },
         {
@@ -1373,38 +1406,6 @@
           "expires_at": "2026-09-22T12:40:36Z",
           "rationale": "Vente : tendance forte (ADX), cassure des extrêmes de la veille, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 19.09 (0.44 %), TP = 49 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 92%.",
           "news_context": "actualité calme sur les 2 dernières heures"
-        },
-        {
-          "id": "1c007c63a5",
-          "asset": "bitcoin",
-          "asset_label": "Bitcoin (BTC/USD)",
-          "direction": "long",
-          "horizon": "1h",
-          "entry": 85942.0,
-          "take_profit": 86305.0,
-          "stop_loss": 85700.0,
-          "risk_reward": 1.5,
-          "confidence": "fort",
-          "score": 5.75,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "bot",
-          "status": "expired",
-          "pnl_pct": -0.0982,
-          "pnl_gross_pct": -0.0382,
-          "duration_minutes": 60,
-          "close_price": 85909.14,
-          "created_at": "2026-09-22T10:55:24Z",
-          "created_local": "22/09 12:55",
-          "expires_at": "2026-09-22T11:55:24Z",
-          "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 604.4 (0.70 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 77%.",
-          "news_context": "actualité à surveiller (score 2) : White hats outrun Coldcard hackers in 52-Bitcoin evacuation"
         }
       ]
     },
@@ -1413,15 +1414,15 @@
       "label": "Tendance 15 min",
       "weight": 1.0,
       "stats": {
-        "n": 71,
+        "n": 72,
         "tp": 26,
         "sl": 30,
-        "expired": 15,
+        "expired": 16,
         "win_rate": 0.4642857142857143,
-        "neutral_win_rate": 0.4092,
-        "edge": 0.0551,
-        "pnl_pct": -4.4301,
-        "avg_pnl_pct": -0.0624
+        "neutral_win_rate": 0.409,
+        "edge": 0.0553,
+        "pnl_pct": -4.2917,
+        "avg_pnl_pct": -0.0596
       },
       "by_source": {
         "bot": {
@@ -1458,15 +1459,15 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 24,
+          "n": 25,
           "tp": 9,
           "sl": 9,
-          "expired": 6,
+          "expired": 7,
           "win_rate": 0.5,
-          "neutral_win_rate": 0.4089,
-          "edge": 0.0911,
-          "pnl_pct": -1.5555,
-          "avg_pnl_pct": -0.0648
+          "neutral_win_rate": 0.4086,
+          "edge": 0.0914,
+          "pnl_pct": -1.4171,
+          "avg_pnl_pct": -0.0567
         }
       },
       "last_trades": [
@@ -1533,6 +1534,39 @@
           "created_local": "22/09 21:30",
           "expires_at": "2026-09-22T20:30:50Z",
           "rationale": "Achat : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 66.71 (0.22 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 73%.",
+          "news_context": "actualité calme sur les 2 dernières heures"
+        },
+        {
+          "id": "b2b7b0a5bf",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "long",
+          "horizon": "3h",
+          "entry": 31006.75,
+          "take_profit": 31086.5,
+          "stop_loss": 30953.5,
+          "risk_reward": 1.5,
+          "confidence": "fort",
+          "score": 6.75,
+          "criteria": [
+            "adx",
+            "macd",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "expired",
+          "pnl_pct": 0.1384,
+          "pnl_gross_pct": 0.1484,
+          "duration_minutes": 184,
+          "close_price": 31052.75,
+          "created_at": "2026-09-22T19:30:50Z",
+          "created_local": "22/09 21:30",
+          "expires_at": "2026-09-22T22:30:50Z",
+          "rationale": "Achat : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 133.00 (0.43 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 84%.",
           "news_context": "actualité calme sur les 2 dernières heures"
         },
         {
@@ -1697,37 +1731,6 @@
           "expires_at": "2026-09-22T15:10:32Z",
           "rationale": "Achat : tendance forte (ADX), tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 73.13 (0.24 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 90%.",
           "news_context": "actualité à surveiller (score 1) : BMW CEO sees risk of cheap Chinese cars in Europe but opposes tariffs"
-        },
-        {
-          "id": "cdcb964ba1",
-          "asset": "bitcoin",
-          "asset_label": "Bitcoin (BTC/USD)",
-          "direction": "long",
-          "horizon": "1h",
-          "entry": 85900.0,
-          "take_profit": 86259.0,
-          "stop_loss": 85661.0,
-          "risk_reward": 1.5,
-          "confidence": "moyen",
-          "score": 4.0,
-          "criteria": [
-            "adx",
-            "level",
-            "trend_15m",
-            "trend_1h",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "expired",
-          "pnl_pct": 0.0448,
-          "pnl_gross_pct": 0.1048,
-          "duration_minutes": 60,
-          "close_price": 85990.0,
-          "created_at": "2026-09-22T11:55:25Z",
-          "created_local": "22/09 13:55",
-          "expires_at": "2026-09-22T12:55:25Z",
-          "rationale": "Achat : tendance forte (ADX), niveau clé favorable, tendance 15 min, tendance 1 h, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 598.2 (0.70 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 80%.",
-          "news_context": "actualité à surveiller (score 2) : U.S. strikes Greenland deal for 'permanent control over security,' will send forces to Danish dogsled outpost and reopen Cold War base: Report"
         }
       ]
     },
@@ -1736,15 +1739,15 @@
       "label": "Tendance 1 h",
       "weight": 1.0,
       "stats": {
-        "n": 69,
+        "n": 70,
         "tp": 24,
         "sl": 30,
-        "expired": 15,
+        "expired": 16,
         "win_rate": 0.4444444444444444,
-        "neutral_win_rate": 0.4094,
-        "edge": 0.035,
-        "pnl_pct": -4.6269,
-        "avg_pnl_pct": -0.0671
+        "neutral_win_rate": 0.4093,
+        "edge": 0.0351,
+        "pnl_pct": -4.4885,
+        "avg_pnl_pct": -0.0641
       },
       "by_source": {
         "bot": {
@@ -1781,15 +1784,15 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 22,
+          "n": 23,
           "tp": 7,
           "sl": 9,
-          "expired": 6,
+          "expired": 7,
           "win_rate": 0.4375,
-          "neutral_win_rate": 0.4096,
-          "edge": 0.0279,
-          "pnl_pct": -1.7523,
-          "avg_pnl_pct": -0.0796
+          "neutral_win_rate": 0.4092,
+          "edge": 0.0283,
+          "pnl_pct": -1.6139,
+          "avg_pnl_pct": -0.0702
         }
       },
       "last_trades": [
@@ -1856,6 +1859,39 @@
           "created_local": "22/09 21:30",
           "expires_at": "2026-09-22T20:30:50Z",
           "rationale": "Achat : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 66.71 (0.22 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 73%.",
+          "news_context": "actualité calme sur les 2 dernières heures"
+        },
+        {
+          "id": "b2b7b0a5bf",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "long",
+          "horizon": "3h",
+          "entry": 31006.75,
+          "take_profit": 31086.5,
+          "stop_loss": 30953.5,
+          "risk_reward": 1.5,
+          "confidence": "fort",
+          "score": 6.75,
+          "criteria": [
+            "adx",
+            "macd",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "expired",
+          "pnl_pct": 0.1384,
+          "pnl_gross_pct": 0.1484,
+          "duration_minutes": 184,
+          "close_price": 31052.75,
+          "created_at": "2026-09-22T19:30:50Z",
+          "created_local": "22/09 21:30",
+          "expires_at": "2026-09-22T22:30:50Z",
+          "rationale": "Achat : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 133.00 (0.43 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 84%.",
           "news_context": "actualité calme sur les 2 dernières heures"
         },
         {
@@ -2020,37 +2056,6 @@
           "expires_at": "2026-09-22T15:10:32Z",
           "rationale": "Achat : tendance forte (ADX), tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 73.13 (0.24 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 90%.",
           "news_context": "actualité à surveiller (score 1) : BMW CEO sees risk of cheap Chinese cars in Europe but opposes tariffs"
-        },
-        {
-          "id": "cdcb964ba1",
-          "asset": "bitcoin",
-          "asset_label": "Bitcoin (BTC/USD)",
-          "direction": "long",
-          "horizon": "1h",
-          "entry": 85900.0,
-          "take_profit": 86259.0,
-          "stop_loss": 85661.0,
-          "risk_reward": 1.5,
-          "confidence": "moyen",
-          "score": 4.0,
-          "criteria": [
-            "adx",
-            "level",
-            "trend_15m",
-            "trend_1h",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "expired",
-          "pnl_pct": 0.0448,
-          "pnl_gross_pct": 0.1048,
-          "duration_minutes": 60,
-          "close_price": 85990.0,
-          "created_at": "2026-09-22T11:55:25Z",
-          "created_local": "22/09 13:55",
-          "expires_at": "2026-09-22T12:55:25Z",
-          "rationale": "Achat : tendance forte (ADX), niveau clé favorable, tendance 15 min, tendance 1 h, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 598.2 (0.70 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 80%.",
-          "news_context": "actualité à surveiller (score 2) : U.S. strikes Greenland deal for 'permanent control over security,' will send forces to Danish dogsled outpost and reopen Cold War base: Report"
         }
       ]
     },
@@ -2059,15 +2064,15 @@
       "label": "Force de tendance (ADX)",
       "weight": 1.0,
       "stats": {
-        "n": 71,
+        "n": 72,
         "tp": 26,
         "sl": 30,
-        "expired": 15,
+        "expired": 16,
         "win_rate": 0.4642857142857143,
-        "neutral_win_rate": 0.4092,
-        "edge": 0.0551,
-        "pnl_pct": -4.4301,
-        "avg_pnl_pct": -0.0624
+        "neutral_win_rate": 0.409,
+        "edge": 0.0553,
+        "pnl_pct": -4.2917,
+        "avg_pnl_pct": -0.0596
       },
       "by_source": {
         "bot": {
@@ -2104,15 +2109,15 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 24,
+          "n": 25,
           "tp": 9,
           "sl": 9,
-          "expired": 6,
+          "expired": 7,
           "win_rate": 0.5,
-          "neutral_win_rate": 0.4089,
-          "edge": 0.0911,
-          "pnl_pct": -1.5555,
-          "avg_pnl_pct": -0.0648
+          "neutral_win_rate": 0.4086,
+          "edge": 0.0914,
+          "pnl_pct": -1.4171,
+          "avg_pnl_pct": -0.0567
         }
       },
       "last_trades": [
@@ -2179,6 +2184,39 @@
           "created_local": "22/09 21:30",
           "expires_at": "2026-09-22T20:30:50Z",
           "rationale": "Achat : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 66.71 (0.22 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 73%.",
+          "news_context": "actualité calme sur les 2 dernières heures"
+        },
+        {
+          "id": "b2b7b0a5bf",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "long",
+          "horizon": "3h",
+          "entry": 31006.75,
+          "take_profit": 31086.5,
+          "stop_loss": 30953.5,
+          "risk_reward": 1.5,
+          "confidence": "fort",
+          "score": 6.75,
+          "criteria": [
+            "adx",
+            "macd",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "expired",
+          "pnl_pct": 0.1384,
+          "pnl_gross_pct": 0.1484,
+          "duration_minutes": 184,
+          "close_price": 31052.75,
+          "created_at": "2026-09-22T19:30:50Z",
+          "created_local": "22/09 21:30",
+          "expires_at": "2026-09-22T22:30:50Z",
+          "rationale": "Achat : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 133.00 (0.43 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 84%.",
           "news_context": "actualité calme sur les 2 dernières heures"
         },
         {
@@ -2343,37 +2381,6 @@
           "expires_at": "2026-09-22T15:10:32Z",
           "rationale": "Achat : tendance forte (ADX), tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 73.13 (0.24 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 90%.",
           "news_context": "actualité à surveiller (score 1) : BMW CEO sees risk of cheap Chinese cars in Europe but opposes tariffs"
-        },
-        {
-          "id": "cdcb964ba1",
-          "asset": "bitcoin",
-          "asset_label": "Bitcoin (BTC/USD)",
-          "direction": "long",
-          "horizon": "1h",
-          "entry": 85900.0,
-          "take_profit": 86259.0,
-          "stop_loss": 85661.0,
-          "risk_reward": 1.5,
-          "confidence": "moyen",
-          "score": 4.0,
-          "criteria": [
-            "adx",
-            "level",
-            "trend_15m",
-            "trend_1h",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "expired",
-          "pnl_pct": 0.0448,
-          "pnl_gross_pct": 0.1048,
-          "duration_minutes": 60,
-          "close_price": 85990.0,
-          "created_at": "2026-09-22T11:55:25Z",
-          "created_local": "22/09 13:55",
-          "expires_at": "2026-09-22T12:55:25Z",
-          "rationale": "Achat : tendance forte (ADX), niveau clé favorable, tendance 15 min, tendance 1 h, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 598.2 (0.70 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 80%.",
-          "news_context": "actualité à surveiller (score 2) : U.S. strikes Greenland deal for 'permanent control over security,' will send forces to Danish dogsled outpost and reopen Cold War base: Report"
         }
       ]
     },
@@ -2382,15 +2389,15 @@
       "label": "VWAP",
       "weight": 0.75,
       "stats": {
-        "n": 68,
+        "n": 69,
         "tp": 26,
         "sl": 27,
-        "expired": 15,
+        "expired": 16,
         "win_rate": 0.49056603773584906,
-        "neutral_win_rate": 0.4092,
-        "edge": 0.0814,
-        "pnl_pct": -3.3259,
-        "avg_pnl_pct": -0.0489
+        "neutral_win_rate": 0.4091,
+        "edge": 0.0815,
+        "pnl_pct": -3.1875,
+        "avg_pnl_pct": -0.0462
       },
       "by_source": {
         "bot": {
@@ -2427,15 +2434,15 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 23,
+          "n": 24,
           "tp": 9,
           "sl": 8,
-          "expired": 6,
+          "expired": 7,
           "win_rate": 0.5294117647058824,
-          "neutral_win_rate": 0.4081,
-          "edge": 0.1213,
-          "pnl_pct": -1.0677,
-          "avg_pnl_pct": -0.0464
+          "neutral_win_rate": 0.4078,
+          "edge": 0.1216,
+          "pnl_pct": -0.9293,
+          "avg_pnl_pct": -0.0387
         }
       },
       "last_trades": [
@@ -2502,6 +2509,39 @@
           "created_local": "22/09 21:30",
           "expires_at": "2026-09-22T20:30:50Z",
           "rationale": "Achat : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 66.71 (0.22 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 73%.",
+          "news_context": "actualité calme sur les 2 dernières heures"
+        },
+        {
+          "id": "b2b7b0a5bf",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "long",
+          "horizon": "3h",
+          "entry": 31006.75,
+          "take_profit": 31086.5,
+          "stop_loss": 30953.5,
+          "risk_reward": 1.5,
+          "confidence": "fort",
+          "score": 6.75,
+          "criteria": [
+            "adx",
+            "macd",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "expired",
+          "pnl_pct": 0.1384,
+          "pnl_gross_pct": 0.1484,
+          "duration_minutes": 184,
+          "close_price": 31052.75,
+          "created_at": "2026-09-22T19:30:50Z",
+          "created_local": "22/09 21:30",
+          "expires_at": "2026-09-22T22:30:50Z",
+          "rationale": "Achat : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 133.00 (0.43 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 84%.",
           "news_context": "actualité calme sur les 2 dernières heures"
         },
         {
@@ -2666,37 +2706,6 @@
           "expires_at": "2026-09-22T15:10:32Z",
           "rationale": "Achat : tendance forte (ADX), tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 73.13 (0.24 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 90%.",
           "news_context": "actualité à surveiller (score 1) : BMW CEO sees risk of cheap Chinese cars in Europe but opposes tariffs"
-        },
-        {
-          "id": "cdcb964ba1",
-          "asset": "bitcoin",
-          "asset_label": "Bitcoin (BTC/USD)",
-          "direction": "long",
-          "horizon": "1h",
-          "entry": 85900.0,
-          "take_profit": 86259.0,
-          "stop_loss": 85661.0,
-          "risk_reward": 1.5,
-          "confidence": "moyen",
-          "score": 4.0,
-          "criteria": [
-            "adx",
-            "level",
-            "trend_15m",
-            "trend_1h",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "expired",
-          "pnl_pct": 0.0448,
-          "pnl_gross_pct": 0.1048,
-          "duration_minutes": 60,
-          "close_price": 85990.0,
-          "created_at": "2026-09-22T11:55:25Z",
-          "created_local": "22/09 13:55",
-          "expires_at": "2026-09-22T12:55:25Z",
-          "rationale": "Achat : tendance forte (ADX), niveau clé favorable, tendance 15 min, tendance 1 h, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 598.2 (0.70 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 80%.",
-          "news_context": "actualité à surveiller (score 2) : U.S. strikes Greenland deal for 'permanent control over security,' will send forces to Danish dogsled outpost and reopen Cold War base: Report"
         }
       ]
     },
@@ -2705,15 +2714,15 @@
       "label": "RSI",
       "weight": 1.0,
       "stats": {
-        "n": 39,
+        "n": 40,
         "tp": 15,
         "sl": 15,
-        "expired": 9,
+        "expired": 10,
         "win_rate": 0.5,
-        "neutral_win_rate": 0.4105,
-        "edge": 0.0895,
-        "pnl_pct": -1.9145,
-        "avg_pnl_pct": -0.0491
+        "neutral_win_rate": 0.4102,
+        "edge": 0.0898,
+        "pnl_pct": -1.7761,
+        "avg_pnl_pct": -0.0444
       },
       "by_source": {
         "bot": {
@@ -2750,15 +2759,15 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 1,
+          "n": 2,
           "tp": 1,
           "sl": 0,
-          "expired": 0,
+          "expired": 1,
           "win_rate": 1.0,
-          "neutral_win_rate": 0.3992,
-          "edge": 0.6008,
-          "pnl_pct": 0.1127,
-          "avg_pnl_pct": 0.1127
+          "neutral_win_rate": 0.3998,
+          "edge": 0.6002,
+          "pnl_pct": 0.2511,
+          "avg_pnl_pct": 0.1255
         }
       },
       "last_trades": [
@@ -2793,6 +2802,39 @@
           "created_local": "22/09 21:30",
           "expires_at": "2026-09-22T20:30:50Z",
           "rationale": "Achat : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 66.71 (0.22 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 73%.",
+          "news_context": "actualité calme sur les 2 dernières heures"
+        },
+        {
+          "id": "b2b7b0a5bf",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "long",
+          "horizon": "3h",
+          "entry": 31006.75,
+          "take_profit": 31086.5,
+          "stop_loss": 30953.5,
+          "risk_reward": 1.5,
+          "confidence": "fort",
+          "score": 6.75,
+          "criteria": [
+            "adx",
+            "macd",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "expired",
+          "pnl_pct": 0.1384,
+          "pnl_gross_pct": 0.1484,
+          "duration_minutes": 184,
+          "close_price": 31052.75,
+          "created_at": "2026-09-22T19:30:50Z",
+          "created_local": "22/09 21:30",
+          "expires_at": "2026-09-22T22:30:50Z",
+          "rationale": "Achat : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 133.00 (0.43 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 84%.",
           "news_context": "actualité calme sur les 2 dernières heures"
         },
         {
@@ -2991,38 +3033,6 @@
           "expires_at": "2026-09-22T11:55:24Z",
           "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 604.4 (0.70 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 77%.",
           "news_context": "actualité à surveiller (score 2) : White hats outrun Coldcard hackers in 52-Bitcoin evacuation"
-        },
-        {
-          "id": "65c95dce0a",
-          "asset": "bitcoin",
-          "asset_label": "Bitcoin (BTC/USD)",
-          "direction": "long",
-          "horizon": "1h",
-          "entry": 85960.0,
-          "take_profit": 86315.0,
-          "stop_loss": 85716.0,
-          "risk_reward": 1.45,
-          "confidence": "fort",
-          "score": 5.75,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "bot",
-          "status": "expired",
-          "pnl_pct": -0.1013,
-          "pnl_gross_pct": -0.0413,
-          "duration_minutes": 60,
-          "close_price": 85924.53,
-          "created_at": "2026-09-22T09:40:35Z",
-          "created_local": "22/09 11:40",
-          "expires_at": "2026-09-22T10:40:35Z",
-          "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 608.9 (0.71 %), TP = 58 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 77%.",
-          "news_context": "actualité à surveiller (score 2) : White hats outrun Coldcard hackers in 52-Bitcoin evacuation"
         }
       ]
     },
@@ -3031,15 +3041,15 @@
       "label": "MACD",
       "weight": 1.0,
       "stats": {
-        "n": 12,
+        "n": 13,
         "tp": 4,
         "sl": 8,
-        "expired": 0,
+        "expired": 1,
         "win_rate": 0.3333333333333333,
-        "neutral_win_rate": 0.4035,
-        "edge": -0.0702,
-        "pnl_pct": -2.0595,
-        "avg_pnl_pct": -0.1716
+        "neutral_win_rate": 0.4033,
+        "edge": -0.07,
+        "pnl_pct": -1.9211,
+        "avg_pnl_pct": -0.1478
       },
       "by_source": {
         "bot": {
@@ -3076,15 +3086,15 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 1,
+          "n": 2,
           "tp": 0,
           "sl": 1,
-          "expired": 0,
+          "expired": 1,
           "win_rate": 0.0,
-          "neutral_win_rate": 0.4021,
-          "edge": -0.4021,
-          "pnl_pct": -0.4686,
-          "avg_pnl_pct": -0.4686
+          "neutral_win_rate": 0.4012,
+          "edge": -0.4012,
+          "pnl_pct": -0.3302,
+          "avg_pnl_pct": -0.1651
         }
       },
       "last_trades": [
@@ -3151,6 +3161,39 @@
           "created_local": "22/09 21:30",
           "expires_at": "2026-09-22T20:30:50Z",
           "rationale": "Achat : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 66.71 (0.22 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 73%.",
+          "news_context": "actualité calme sur les 2 dernières heures"
+        },
+        {
+          "id": "b2b7b0a5bf",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "long",
+          "horizon": "3h",
+          "entry": 31006.75,
+          "take_profit": 31086.5,
+          "stop_loss": 30953.5,
+          "risk_reward": 1.5,
+          "confidence": "fort",
+          "score": 6.75,
+          "criteria": [
+            "adx",
+            "macd",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "expired",
+          "pnl_pct": 0.1384,
+          "pnl_gross_pct": 0.1484,
+          "duration_minutes": 184,
+          "close_price": 31052.75,
+          "created_at": "2026-09-22T19:30:50Z",
+          "created_local": "22/09 21:30",
+          "expires_at": "2026-09-22T22:30:50Z",
+          "rationale": "Achat : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 133.00 (0.43 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 84%.",
           "news_context": "actualité calme sur les 2 dernières heures"
         },
         {
@@ -3317,39 +3360,6 @@
           "expires_at": "2026-09-21T16:55:25Z",
           "rationale": "Achat : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 29.28 (1.06 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 74%.",
           "news_context": "actualité à surveiller (score 3) : U.S.-listed Greenland stocks surge after Trump announces security deal with Denmark | ‘It's awful’: How tariffs, soaring fuel costs and higher interest rates are squeezing American companies"
-        },
-        {
-          "id": "d664ec3700",
-          "asset": "sp500",
-          "asset_label": "S&P 500 (ES)",
-          "direction": "long",
-          "horizon": "1h",
-          "entry": 7773.25,
-          "take_profit": 7779.25,
-          "stop_loss": 7769.25,
-          "risk_reward": 1.5,
-          "confidence": "fort",
-          "score": 6.75,
-          "criteria": [
-            "adx",
-            "macd",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "bot",
-          "status": "sl",
-          "pnl_pct": -0.0647,
-          "pnl_gross_pct": -0.0547,
-          "duration_minutes": 5,
-          "close_price": 7769.0,
-          "created_at": "2026-09-21T14:10:33Z",
-          "created_local": "21/09 16:10",
-          "expires_at": "2026-09-21T15:10:33Z",
-          "rationale": "Achat : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 9.85 (0.13 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 68%.",
-          "news_context": "actualité à surveiller (score 3) : Novo Nordisk’s stock tumbles as doubts persist about Ozempic maker’s goals for 2030 | Treasury yields ease as global borrowing costs tumble"
         }
       ]
     },
@@ -3809,41 +3819,7 @@
       ]
     }
   ],
-  "open_signals": [
-    {
-      "id": "b2b7b0a5bf",
-      "asset": "nasdaq",
-      "asset_label": "Nasdaq 100 (NQ)",
-      "direction": "long",
-      "horizon": "3h",
-      "entry": 31006.75,
-      "take_profit": 31086.5,
-      "stop_loss": 30953.5,
-      "risk_reward": 1.5,
-      "confidence": "fort",
-      "score": 6.75,
-      "criteria": [
-        "adx",
-        "macd",
-        "rsi",
-        "trend_15m",
-        "trend_1h",
-        "trend_5m",
-        "vwap"
-      ],
-      "source": "shadow",
-      "status": "open",
-      "pnl_pct": null,
-      "pnl_gross_pct": null,
-      "duration_minutes": null,
-      "close_price": null,
-      "created_at": "2026-09-22T19:30:50Z",
-      "created_local": "22/09 21:30",
-      "expires_at": "2026-09-22T22:30:50Z",
-      "rationale": "Achat : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 133.00 (0.43 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 84%.",
-      "news_context": "actualité calme sur les 2 dernières heures"
-    }
-  ],
+  "open_signals": [],
   "recent_trades": [
     {
       "id": "0c54194103",
@@ -5354,15 +5330,15 @@
     "notes": [
       "trades réels : +0,05 R ± 0,33 R par trade avant frais sur 48 trades (0 R = hasard)",
       "aucun critère ne s'écarte du hasard au-delà de la marge de sécurité : poids par défaut conservés",
-      "oil, vwap : -0,16 R contre +0,05 R en global sur 118 trades éq. → poids ×0,98 sur cet actif",
-      "sp500, tendance (trend_5m, trend_15m, trend_1h, adx) : +0,29 R contre +0,02 R en global sur 74 trades éq. → poids ×1,00 sur cet actif",
+      "oil, vwap : -0,16 R contre +0,06 R en global sur 118 trades éq. → poids ×0,97 sur cet actif",
+      "variante « horizon ~3 h » en test : 1 trades, +0,81 R net, encore 99 trades avant décision",
       "variante « nouvel actif : Pétrole WTI (CL) » en test : 1 trades, -1,07 R net, encore 99 trades avant décision"
     ],
     "avoid_hours_utc": [],
-    "sample": 574,
+    "sample": 575,
     "sample_by_source": {
       "bot": 47,
-      "shadow": 24,
+      "shadow": 25,
       "manual": 1,
       "backtest": 502
     },
@@ -5457,7 +5433,7 @@
         "trend_15m": 1.0,
         "trend_1h": 1.0,
         "adx": 1.0,
-        "vwap": 0.736,
+        "vwap": 0.73,
         "rsi": 1.0,
         "macd": 1.0,
         "level": 1.0,
@@ -5467,10 +5443,10 @@
         "corr": 0.5
       },
       "sp500": {
-        "trend_5m": 1.002,
-        "trend_15m": 1.002,
-        "trend_1h": 1.002,
-        "adx": 1.002,
+        "trend_5m": 1.0,
+        "trend_15m": 1.0,
+        "trend_1h": 1.0,
+        "adx": 1.0,
         "vwap": 0.75,
         "rsi": 1.0,
         "macd": 1.0,
@@ -5489,40 +5465,40 @@
           "trend_1h",
           "adx"
         ],
-        "n": 573,
-        "n_eff": 401.4,
-        "mean_r": 0.0178,
-        "margin_r": 0.1101,
+        "n": 574,
+        "n_eff": 402.4,
+        "mean_r": 0.0205,
+        "margin_r": 0.1099,
         "multiplier": 1.0
       },
       "vwap": {
         "members": [
           "vwap"
         ],
-        "n": 477,
-        "n_eff": 329.0,
-        "mean_r": 0.0538,
-        "margin_r": 0.1231,
+        "n": 478,
+        "n_eff": 329.9,
+        "mean_r": 0.0568,
+        "margin_r": 0.1228,
         "multiplier": 1.0
       },
       "rsi": {
         "members": [
           "rsi"
         ],
-        "n": 463,
-        "n_eff": 322.4,
-        "mean_r": -0.001,
-        "margin_r": 0.1204,
+        "n": 464,
+        "n_eff": 323.3,
+        "mean_r": 0.0026,
+        "margin_r": 0.1202,
         "multiplier": 1.0
       },
       "macd": {
         "members": [
           "macd"
         ],
-        "n": 154,
-        "n_eff": 109.6,
-        "mean_r": -0.0106,
-        "margin_r": 0.2239,
+        "n": 155,
+        "n_eff": 110.5,
+        "mean_r": 0.0004,
+        "margin_r": 0.2224,
         "multiplier": 1.0
       },
       "level": {
@@ -5583,9 +5559,9 @@
         "margin_r": 0.3287
       },
       "fantômes": {
-        "n": 24,
-        "mean_r": 0.2384,
-        "margin_r": 0.4542
+        "n": 25,
+        "mean_r": 0.2634,
+        "margin_r": 0.4384
       },
       "backtest": {
         "n": 502,
@@ -5603,10 +5579,10 @@
       },
       "horizon_3h": {
         "label": "horizon ~3 h",
-        "n": 0,
-        "mean_net_r": null,
+        "n": 1,
+        "mean_net_r": 0.8059,
         "promoted": false,
-        "missing": 100
+        "missing": 99
       },
       "confiance_moyenne": {
         "label": "confiance moyenne",
@@ -5642,13 +5618,13 @@
       "mean_net_r": -0.0004
     },
     "promoted_variants": [],
-    "updated_at": "2026-09-22T22:05:24.726916+00:00"
+    "updated_at": "2026-09-22T22:35:24.171051+00:00"
   },
   "state": {
-    "last_scan": "2026-09-22T22:30:48Z",
+    "last_scan": "2026-09-22T22:35:23Z",
     "last_scan_note": "0 signal(aux)",
     "last_summary": "2026-09-22T22:05:24Z",
-    "last_track": "2026-09-22T22:30:48Z"
+    "last_track": "2026-09-22T22:35:23Z"
   },
   "limits": {
     "max_signals_per_asset_per_day": 5,
