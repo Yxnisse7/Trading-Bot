@@ -1,6 +1,6 @@
 # Trading-Bot — rapport
 
-_Mis à jour le 22/09/2026 à 20:53 (Europe/Paris)._
+_Mis à jour le 22/09/2026 à 21:01 (Europe/Paris)._
 
 ## Vue d'ensemble
 
@@ -181,6 +181,10 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 | pdhl | 1.0 |
 | corr | 0.5 |
 
+Corrections par actif :
+
+- ethereum : {'trend_5m': 0.807, 'trend_15m': 0.807, 'trend_1h': 0.807, 'adx': 0.807}
+
 | Variante testée en fantôme | Trades | Gain net moyen | Statut |
 |---|---:|---:|---|
 | indices le matin européen | 0 | n/a | en test |
@@ -191,6 +195,7 @@ Notes :
 
 - trades réels : +0,01 R ± 0,33 R par trade avant frais sur 47 trades (0 R = hasard)
 - aucun critère ne s'écarte du hasard au-delà de la marge de sécurité : poids par défaut conservés
+- ethereum, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,29 R contre +0,06 R en global sur 45 trades éq. → poids ×0,81 sur cet actif
 
 ## Backtests (données historiques 5 min)
 
