@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-22T16:25:32.305633+02:00",
+  "updated_at": "2026-09-22T16:45:27.812887+02:00",
   "timezone": "Europe/Paris",
   "equity_curve": [
     {
@@ -727,7 +727,7 @@
       "pnl_pct": -1.0869,
       "avg_pnl_pct": -0.0473
     },
-    "open": 0,
+    "open": 1,
     "open_shadow": 0
   },
   "by_source": {
@@ -831,7 +831,7 @@
         "pnl_pct": 0.6631,
         "avg_pnl_pct": 0.0737
       },
-      "open": 0,
+      "open": 1,
       "session_utc": [
         13,
         20
@@ -3639,7 +3639,41 @@
       ]
     }
   ],
-  "open_signals": [],
+  "open_signals": [
+    {
+      "id": "f2b365e5f8",
+      "asset": "nasdaq",
+      "asset_label": "Nasdaq 100 (NQ)",
+      "direction": "long",
+      "horizon": "1h",
+      "entry": 30953.75,
+      "take_profit": 30998.0,
+      "stop_loss": 30924.25,
+      "risk_reward": 1.5,
+      "confidence": "fort",
+      "score": 6.0,
+      "criteria": [
+        "adx",
+        "orb",
+        "rsi",
+        "trend_15m",
+        "trend_1h",
+        "trend_5m",
+        "vwap"
+      ],
+      "source": "bot",
+      "status": "open",
+      "pnl_pct": null,
+      "pnl_gross_pct": null,
+      "duration_minutes": null,
+      "close_price": null,
+      "created_at": "2026-09-22T14:45:22Z",
+      "created_local": "22/09 16:45",
+      "expires_at": "2026-09-22T15:45:22Z",
+      "rationale": "Achat : tendance forte (ADX), cassure du range d'ouverture, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 73.79 (0.24 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 93%.",
+      "news_context": "actualité calme sur les 2 dernières heures"
+    }
+  ],
   "recent_trades": [
     {
       "id": "60de069fd7",
@@ -5164,8 +5198,8 @@
     "sample": 732
   },
   "state": {
-    "last_scan": "2026-09-22T14:25:27Z",
-    "last_scan_note": "0 signal(aux)",
+    "last_scan": "2026-09-22T14:45:22Z",
+    "last_scan_note": "1 signal(aux)",
     "last_summary": "2026-09-22T00:44:53Z",
     "last_track": "2026-09-22T14:25:27Z"
   },
@@ -5190,8 +5224,8 @@
     "losses": 18,
     "avg_win": 39.58,
     "avg_loss": -18.3,
-    "open_positions": 0,
+    "open_positions": 1,
     "skipped": 0,
-    "risky": 11
+    "risky": 12
   }
 }
