@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-22T21:15:40.940263+02:00",
+  "updated_at": "2026-09-22T21:30:58.310072+02:00",
   "timezone": "Europe/Paris",
   "equity_curve": [
     {
@@ -763,8 +763,8 @@
       "pnl_pct": -1.0869,
       "avg_pnl_pct": -0.0473
     },
-    "open": 0,
-    "open_shadow": 0
+    "open": 1,
+    "open_shadow": 1
   },
   "by_source": {
     "bot": {
@@ -867,7 +867,7 @@
         "pnl_pct": 0.6631,
         "avg_pnl_pct": 0.0737
       },
-      "open": 0,
+      "open": 1,
       "session_utc": [
         13,
         20
@@ -3724,7 +3724,74 @@
       ]
     }
   ],
-  "open_signals": [],
+  "open_signals": [
+    {
+      "id": "0c54194103",
+      "asset": "nasdaq",
+      "asset_label": "Nasdaq 100 (NQ)",
+      "direction": "long",
+      "horizon": "1h",
+      "entry": 31006.75,
+      "take_profit": 31046.75,
+      "stop_loss": 30980.0,
+      "risk_reward": 1.5,
+      "confidence": "fort",
+      "score": 6.75,
+      "criteria": [
+        "adx",
+        "macd",
+        "rsi",
+        "trend_15m",
+        "trend_1h",
+        "trend_5m",
+        "vwap"
+      ],
+      "source": "bot",
+      "status": "open",
+      "pnl_pct": null,
+      "pnl_gross_pct": null,
+      "duration_minutes": null,
+      "close_price": null,
+      "created_at": "2026-09-22T19:30:50Z",
+      "created_local": "22/09 21:30",
+      "expires_at": "2026-09-22T20:30:50Z",
+      "rationale": "Achat : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 66.71 (0.22 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 73%.",
+      "news_context": "actualité calme sur les 2 dernières heures"
+    },
+    {
+      "id": "b2b7b0a5bf",
+      "asset": "nasdaq",
+      "asset_label": "Nasdaq 100 (NQ)",
+      "direction": "long",
+      "horizon": "3h",
+      "entry": 31006.75,
+      "take_profit": 31086.5,
+      "stop_loss": 30953.5,
+      "risk_reward": 1.5,
+      "confidence": "fort",
+      "score": 6.75,
+      "criteria": [
+        "adx",
+        "macd",
+        "rsi",
+        "trend_15m",
+        "trend_1h",
+        "trend_5m",
+        "vwap"
+      ],
+      "source": "shadow",
+      "status": "open",
+      "pnl_pct": null,
+      "pnl_gross_pct": null,
+      "duration_minutes": null,
+      "close_price": null,
+      "created_at": "2026-09-22T19:30:50Z",
+      "created_local": "22/09 21:30",
+      "expires_at": "2026-09-22T22:30:50Z",
+      "rationale": "Achat : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 133.00 (0.43 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 84%.",
+      "news_context": "actualité calme sur les 2 dernières heures"
+    }
+  ],
   "recent_trades": [
     {
       "id": "468527930f",
@@ -5419,8 +5486,8 @@
     "updated_at": "2026-09-22T18:54:14.871036+00:00"
   },
   "state": {
-    "last_scan": "2026-09-22T19:15:36Z",
-    "last_scan_note": "0 signal(aux)",
+    "last_scan": "2026-09-22T19:30:50Z",
+    "last_scan_note": "1 signal(aux)",
     "last_summary": "2026-09-22T00:44:53Z",
     "last_track": "2026-09-22T18:30:46Z"
   },
@@ -5445,8 +5512,8 @@
     "losses": 20,
     "avg_win": 42.31,
     "avg_loss": -26.19,
-    "open_positions": 0,
+    "open_positions": 1,
     "skipped": 0,
-    "risky": 15
+    "risky": 16
   }
 }
