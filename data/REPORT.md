@@ -1,20 +1,14 @@
 # Trading-Bot — rapport
 
-_Mis à jour le 22/09/2026 à 17:01 (Europe/Paris)._
+_Mis à jour le 22/09/2026 à 17:15 (Europe/Paris)._
 
 ## Vue d'ensemble
 
-- Trades clôturés : **44**
-- Taux de réussite cumulé (TP / (TP+SL)) : **41%** — hasard attendu 41%, avantage **-0%**
-- P&L théorique cumulé, net des coûts estimés (somme des % par trade, sans levier) : **-3.16 %** (brut -1.37 %)
-- Signaux ouverts : **1**
+- Trades clôturés : **45**
+- Taux de réussite cumulé (TP / (TP+SL)) : **40%** — hasard attendu 41%, avantage **-1%**
+- P&L théorique cumulé, net des coûts estimés (somme des % par trade, sans levier) : **-3.35 %** (brut -1.54 %)
+- Signaux ouverts : **0**
 - Signaux fantômes (suivis en silence pour l'apprentissage) : **23** clôturés, 0 ouverts, taux de réussite 53% (hasard attendu 41%)
-
-## Signaux ouverts
-
-| Heure | Actif | Sens | Entrée | TP | SL | Confiance | Source | Expire |
-|---|---|---|---:|---:|---:|---|---|---|
-| 22/09 17:01 | Or (XAU/USD) | short | 4358.8 | 4347.7 | 4366.2 | fort | signaux du bot | 18:01 |
 
 ## Statistiques
 
@@ -24,7 +18,7 @@ _Mis à jour le 22/09/2026 à 17:01 (Europe/Paris)._
 |---|---:|---:|---:|---:|---:|---:|
 | bitcoin | 10 | 3 | 3 | 4 | 50% | -0.046 % |
 | ethereum | 11 | 2 | 6 | 3 | 25% | -0.163 % |
-| gold | 8 | 2 | 5 | 1 | 29% | -0.102 % |
+| gold | 9 | 2 | 6 | 1 | 25% | -0.112 % |
 | nasdaq | 10 | 5 | 4 | 1 | 56% | -0.010 % |
 | sp500 | 5 | 2 | 2 | 1 | 50% | +0.002 % |
 
@@ -33,13 +27,13 @@ _Mis à jour le 22/09/2026 à 17:01 (Europe/Paris)._
 | Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
 |---|---:|---:|---:|---:|---:|---:|
 | long | 35 | 9 | 17 | 9 | 35% | -0.090 % |
-| short | 9 | 5 | 3 | 1 | 62% | +0.001 % |
+| short | 10 | 5 | 4 | 1 | 56% | -0.018 % |
 
 ### Par confiance
 
 | Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
 |---|---:|---:|---:|---:|---:|---:|
-| fort | 40 | 13 | 18 | 9 | 42% | -0.071 % |
+| fort | 41 | 13 | 19 | 9 | 41% | -0.074 % |
 | manuel | 1 | 0 | 0 | 1 | n/a | -0.159 % |
 | moyen | 3 | 1 | 2 | 0 | 33% | -0.052 % |
 
@@ -47,25 +41,25 @@ _Mis à jour le 22/09/2026 à 17:01 (Europe/Paris)._
 
 | Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
 |---|---:|---:|---:|---:|---:|---:|
-| adx | 43 | 14 | 20 | 9 | 41% | -0.070 % |
+| adx | 44 | 14 | 21 | 9 | 40% | -0.072 % |
 | corr | 10 | 2 | 5 | 3 | 29% | -0.113 % |
-| level | 4 | 1 | 3 | 0 | 25% | -0.119 % |
+| level | 5 | 1 | 4 | 0 | 20% | -0.133 % |
 | macd | 9 | 2 | 7 | 0 | 22% | -0.204 % |
-| orb | 3 | 1 | 2 | 0 | 33% | -0.053 % |
-| pdhl | 7 | 2 | 5 | 0 | 29% | -0.119 % |
-| rsi | 34 | 11 | 14 | 9 | 44% | -0.063 % |
-| trend_15m | 43 | 14 | 20 | 9 | 41% | -0.070 % |
-| trend_1h | 43 | 14 | 20 | 9 | 41% | -0.070 % |
+| orb | 4 | 1 | 3 | 0 | 25% | -0.087 % |
+| pdhl | 8 | 2 | 6 | 0 | 25% | -0.128 % |
+| rsi | 35 | 11 | 15 | 9 | 42% | -0.067 % |
+| trend_15m | 44 | 14 | 21 | 9 | 40% | -0.072 % |
+| trend_1h | 44 | 14 | 21 | 9 | 40% | -0.072 % |
 | trend_5m | 38 | 13 | 16 | 9 | 45% | -0.059 % |
 | volume | 2 | 1 | 1 | 0 | 50% | -0.043 % |
-| vwap | 41 | 14 | 18 | 9 | 44% | -0.058 % |
+| vwap | 42 | 14 | 19 | 9 | 42% | -0.061 % |
 
 ### Par contexte d'actualité
 
 | Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
 |---|---:|---:|---:|---:|---:|---:|
 | actualité calme | 17 | 5 | 9 | 3 | 36% | -0.120 % |
-| actualité chargée | 27 | 9 | 11 | 7 | 45% | -0.041 % |
+| actualité chargée | 28 | 9 | 12 | 7 | 43% | -0.046 % |
 
 ### Par heure d'émission (UTC)
 
@@ -82,7 +76,7 @@ _Mis à jour le 22/09/2026 à 17:01 (Europe/Paris)._
 | 11h | 3 | 1 | 1 | 1 | 50% | +0.094 % |
 | 12h | 4 | 2 | 2 | 0 | 50% | +0.009 % |
 | 14h | 6 | 2 | 4 | 0 | 33% | -0.081 % |
-| 15h | 4 | 1 | 3 | 0 | 25% | -0.232 % |
+| 15h | 5 | 1 | 4 | 0 | 20% | -0.224 % |
 | 16h | 1 | 0 | 0 | 1 | n/a | +0.013 % |
 | 17h | 1 | 0 | 0 | 1 | n/a | -0.097 % |
 | 18h | 3 | 2 | 0 | 1 | 100% | +0.062 % |
@@ -96,13 +90,13 @@ _Mis à jour le 22/09/2026 à 17:01 (Europe/Paris)._
 | Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
 |---|---:|---:|---:|---:|---:|---:|
 | demandes manuelles | 1 | 0 | 0 | 1 | n/a | -0.159 % |
-| signaux du bot | 43 | 14 | 20 | 9 | 41% | -0.070 % |
+| signaux du bot | 44 | 14 | 21 | 9 | 40% | -0.072 % |
 
 ### Par horizon
 
 | Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
 |---|---:|---:|---:|---:|---:|---:|
-| 1h | 42 | 14 | 18 | 10 | 44% | -0.062 % |
+| 1h | 43 | 14 | 19 | 10 | 42% | -0.065 % |
 | 3h | 2 | 0 | 2 | 0 | 0% | -0.280 % |
 
 Trades expirés : 10, 50% terminés dans le bon sens, P&L moyen -0.061 %.
@@ -139,6 +133,7 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 
 | Émis | Actif | Sens | Entrée | Clôture | Résultat | P&L | Durée |
 |---|---|---|---:|---:|---|---:|---:|
+| 22/09 17:01 | Or (XAU/USD) | short | 4358.8 | 4366.2 | ❌ SL | -0.19 % | 0 min |
 | 22/09 16:45 | Nasdaq 100 (NQ) | long | 30953.75 | 30901.0 | ❌ SL | -0.18 % | 7 min |
 | 22/09 13:40 | Or (XAU/USD) | short | 4354.2 | 4361.8 | ❌ SL | -0.19 % | 21 min |
 | 22/09 12:55 | Bitcoin (BTC/USD) | long | 85942.0 | 85909.14 | ⏱️ expiré | -0.10 % | 60 min |
@@ -168,7 +163,6 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 | 19/09 02:40 | Ethereum (ETH/USD) | long | 2619.5 | 2610.6 | ❌ SL | -0.42 % | 37 min |
 | 18/09 21:55 | Nasdaq 100 (NQ) | long | 29854.75 | 29914.75 | ✅ TP | +0.19 % | 10 min |
 | 18/09 21:55 | Ethereum (ETH/USD) | long | 2635.9 | 2627.4 | ❌ SL | -0.40 % | 31 min |
-| 18/09 17:40 | Nasdaq 100 (NQ) | short | 29737.75 | 29708.25 | ✅ TP | +0.09 % | 13 min |
 
 ## Apprentissage
 
@@ -190,8 +184,8 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 Dernières notes :
 
 - corr: win rate 20% sur 10 trades → poids 0.25 → 0.25
-- level: win rate 39% sur 90 trades → poids 0.25 → 0.25
-- orb: win rate 35% sur 40 trades → poids 0.25 → 0.25
+- level: win rate 38% sur 91 trades → poids 0.25 → 0.25
+- orb: win rate 34% sur 41 trades → poids 0.25 → 0.25
 - volume: win rate 37% sur 54 trades → poids 0.25 → 0.25
 
 ## Backtests (données historiques 5 min)
