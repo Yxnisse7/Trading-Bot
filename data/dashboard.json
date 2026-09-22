@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-22T13:40:44.766107+02:00",
+  "updated_at": "2026-09-22T13:45:44.054164+02:00",
   "timezone": "Europe/Paris",
   "equity_curve": [
     {
@@ -699,18 +699,18 @@
       "avg_pnl_pct": -0.0654
     },
     "shadow": {
-      "n": 20,
+      "n": 21,
       "tp": 8,
       "sl": 8,
-      "expired": 4,
+      "expired": 5,
       "win_rate": 0.5,
-      "neutral_win_rate": 0.409,
-      "edge": 0.091,
-      "pnl_pct": -1.4117,
-      "avg_pnl_pct": -0.0706
+      "neutral_win_rate": 0.4101,
+      "edge": 0.0899,
+      "pnl_pct": -1.264,
+      "avg_pnl_pct": -0.0602
     },
     "open": 2,
-    "open_shadow": 1
+    "open_shadow": 0
   },
   "by_source": {
     "bot": {
@@ -747,15 +747,15 @@
       "avg_pnl_pct": 0.0
     },
     "shadow": {
-      "n": 20,
+      "n": 21,
       "tp": 8,
       "sl": 8,
-      "expired": 4,
+      "expired": 5,
       "win_rate": 0.5,
-      "neutral_win_rate": 0.409,
-      "edge": 0.091,
-      "pnl_pct": -1.4117,
-      "avg_pnl_pct": -0.0706
+      "neutral_win_rate": 0.4101,
+      "edge": 0.0899,
+      "pnl_pct": -1.264,
+      "avg_pnl_pct": -0.0602
     }
   },
   "by_horizon": {
@@ -867,15 +867,15 @@
         "avg_pnl_pct": -0.0399
       },
       "shadow": {
-        "n": 2,
+        "n": 3,
         "tp": 0,
         "sl": 0,
-        "expired": 2,
+        "expired": 3,
         "win_rate": null,
-        "neutral_win_rate": 0.4003,
+        "neutral_win_rate": 0.4114,
         "edge": null,
-        "pnl_pct": -0.156,
-        "avg_pnl_pct": -0.078
+        "pnl_pct": -0.0083,
+        "avg_pnl_pct": -0.0028
       },
       "open": 1,
       "session_utc": null,
@@ -1272,15 +1272,15 @@
       "label": "Tendance 15 min",
       "weight": 1.0,
       "stats": {
-        "n": 60,
+        "n": 61,
         "tp": 22,
         "sl": 26,
-        "expired": 12,
+        "expired": 13,
         "win_rate": 0.4583333333333333,
-        "neutral_win_rate": 0.4086,
-        "edge": 0.0497,
-        "pnl_pct": -3.9364,
-        "avg_pnl_pct": -0.0656
+        "neutral_win_rate": 0.409,
+        "edge": 0.0493,
+        "pnl_pct": -3.7887,
+        "avg_pnl_pct": -0.0621
       },
       "by_source": {
         "bot": {
@@ -1317,18 +1317,48 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 20,
+          "n": 21,
           "tp": 8,
           "sl": 8,
-          "expired": 4,
+          "expired": 5,
           "win_rate": 0.5,
-          "neutral_win_rate": 0.409,
-          "edge": 0.091,
-          "pnl_pct": -1.4117,
-          "avg_pnl_pct": -0.0706
+          "neutral_win_rate": 0.4101,
+          "edge": 0.0899,
+          "pnl_pct": -1.264,
+          "avg_pnl_pct": -0.0602
         }
       },
       "last_trades": [
+        {
+          "id": "8109c43906",
+          "asset": "bitcoin",
+          "asset_label": "Bitcoin (BTC/USD)",
+          "direction": "long",
+          "horizon": "1h",
+          "entry": 85912.0,
+          "take_profit": 86275.0,
+          "stop_loss": 85634.0,
+          "risk_reward": 1.31,
+          "confidence": "moyen",
+          "score": 3.75,
+          "criteria": [
+            "adx",
+            "trend_15m",
+            "trend_1h",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "expired",
+          "pnl_pct": 0.1477,
+          "pnl_gross_pct": 0.2077,
+          "duration_minutes": 65,
+          "close_price": 86090.46,
+          "created_at": "2026-09-22T10:40:38Z",
+          "created_local": "22/09 12:40",
+          "expires_at": "2026-09-22T11:40:38Z",
+          "rationale": "Achat : tendance forte (ADX), tendance 15 min, tendance 1 h, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 604.4 (0.70 %), TP = 60 % du range, SL = 46 % du range, probabilité de résolution sous 1 h ≈ 72%.",
+          "news_context": "actualité à surveiller (score 2) : White hats outrun Coldcard hackers in 52-Bitcoin evacuation"
+        },
         {
           "id": "65c95dce0a",
           "asset": "bitcoin",
@@ -1551,39 +1581,6 @@
           "created_local": "22/09 01:55",
           "expires_at": "2026-09-22T00:55:38Z",
           "rationale": "Achat : tendance forte (ADX), marché meneur favorable, tendance 15 min, tendance 1 h, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 29.70 (1.07 %), TP = 60 % du range, SL = 44 % du range, probabilité de résolution sous 1 h ≈ 68%.",
-          "news_context": "actualité calme sur les 2 dernières heures"
-        },
-        {
-          "id": "ef305d792c",
-          "asset": "ethereum",
-          "asset_label": "Ethereum (ETH/USD)",
-          "direction": "long",
-          "horizon": "1h",
-          "entry": 2776.6,
-          "take_profit": 2794.6,
-          "stop_loss": 2764.6,
-          "risk_reward": 1.5,
-          "confidence": "fort",
-          "score": 6.25,
-          "criteria": [
-            "adx",
-            "corr",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "bot",
-          "status": "expired",
-          "pnl_pct": -0.2323,
-          "pnl_gross_pct": -0.1523,
-          "duration_minutes": 65,
-          "close_price": 2772.37,
-          "created_at": "2026-09-21T22:26:07Z",
-          "created_local": "22/09 00:26",
-          "expires_at": "2026-09-21T23:26:07Z",
-          "rationale": "Achat : tendance forte (ADX), marché meneur favorable, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 30.08 (1.08 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 75%.",
           "news_context": "actualité calme sur les 2 dernières heures"
         }
       ]
@@ -1593,15 +1590,15 @@
       "label": "Tendance 1 h",
       "weight": 1.0,
       "stats": {
-        "n": 58,
+        "n": 59,
         "tp": 20,
         "sl": 26,
-        "expired": 12,
+        "expired": 13,
         "win_rate": 0.43478260869565216,
-        "neutral_win_rate": 0.4089,
-        "edge": 0.0259,
-        "pnl_pct": -4.1332,
-        "avg_pnl_pct": -0.0713
+        "neutral_win_rate": 0.4093,
+        "edge": 0.0255,
+        "pnl_pct": -3.9855,
+        "avg_pnl_pct": -0.0676
       },
       "by_source": {
         "bot": {
@@ -1638,18 +1635,48 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 18,
+          "n": 19,
           "tp": 6,
           "sl": 8,
-          "expired": 4,
+          "expired": 5,
           "win_rate": 0.42857142857142855,
-          "neutral_win_rate": 0.4098,
-          "edge": 0.0188,
-          "pnl_pct": -1.6085,
-          "avg_pnl_pct": -0.0894
+          "neutral_win_rate": 0.411,
+          "edge": 0.0176,
+          "pnl_pct": -1.4608,
+          "avg_pnl_pct": -0.0769
         }
       },
       "last_trades": [
+        {
+          "id": "8109c43906",
+          "asset": "bitcoin",
+          "asset_label": "Bitcoin (BTC/USD)",
+          "direction": "long",
+          "horizon": "1h",
+          "entry": 85912.0,
+          "take_profit": 86275.0,
+          "stop_loss": 85634.0,
+          "risk_reward": 1.31,
+          "confidence": "moyen",
+          "score": 3.75,
+          "criteria": [
+            "adx",
+            "trend_15m",
+            "trend_1h",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "expired",
+          "pnl_pct": 0.1477,
+          "pnl_gross_pct": 0.2077,
+          "duration_minutes": 65,
+          "close_price": 86090.46,
+          "created_at": "2026-09-22T10:40:38Z",
+          "created_local": "22/09 12:40",
+          "expires_at": "2026-09-22T11:40:38Z",
+          "rationale": "Achat : tendance forte (ADX), tendance 15 min, tendance 1 h, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 604.4 (0.70 %), TP = 60 % du range, SL = 46 % du range, probabilité de résolution sous 1 h ≈ 72%.",
+          "news_context": "actualité à surveiller (score 2) : White hats outrun Coldcard hackers in 52-Bitcoin evacuation"
+        },
         {
           "id": "65c95dce0a",
           "asset": "bitcoin",
@@ -1872,39 +1899,6 @@
           "created_local": "22/09 01:55",
           "expires_at": "2026-09-22T00:55:38Z",
           "rationale": "Achat : tendance forte (ADX), marché meneur favorable, tendance 15 min, tendance 1 h, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 29.70 (1.07 %), TP = 60 % du range, SL = 44 % du range, probabilité de résolution sous 1 h ≈ 68%.",
-          "news_context": "actualité calme sur les 2 dernières heures"
-        },
-        {
-          "id": "ef305d792c",
-          "asset": "ethereum",
-          "asset_label": "Ethereum (ETH/USD)",
-          "direction": "long",
-          "horizon": "1h",
-          "entry": 2776.6,
-          "take_profit": 2794.6,
-          "stop_loss": 2764.6,
-          "risk_reward": 1.5,
-          "confidence": "fort",
-          "score": 6.25,
-          "criteria": [
-            "adx",
-            "corr",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "bot",
-          "status": "expired",
-          "pnl_pct": -0.2323,
-          "pnl_gross_pct": -0.1523,
-          "duration_minutes": 65,
-          "close_price": 2772.37,
-          "created_at": "2026-09-21T22:26:07Z",
-          "created_local": "22/09 00:26",
-          "expires_at": "2026-09-21T23:26:07Z",
-          "rationale": "Achat : tendance forte (ADX), marché meneur favorable, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 30.08 (1.08 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 75%.",
           "news_context": "actualité calme sur les 2 dernières heures"
         }
       ]
@@ -1914,15 +1908,15 @@
       "label": "Force de tendance (ADX)",
       "weight": 1.0,
       "stats": {
-        "n": 60,
+        "n": 61,
         "tp": 22,
         "sl": 26,
-        "expired": 12,
+        "expired": 13,
         "win_rate": 0.4583333333333333,
-        "neutral_win_rate": 0.4086,
-        "edge": 0.0497,
-        "pnl_pct": -3.9364,
-        "avg_pnl_pct": -0.0656
+        "neutral_win_rate": 0.409,
+        "edge": 0.0493,
+        "pnl_pct": -3.7887,
+        "avg_pnl_pct": -0.0621
       },
       "by_source": {
         "bot": {
@@ -1959,18 +1953,48 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 20,
+          "n": 21,
           "tp": 8,
           "sl": 8,
-          "expired": 4,
+          "expired": 5,
           "win_rate": 0.5,
-          "neutral_win_rate": 0.409,
-          "edge": 0.091,
-          "pnl_pct": -1.4117,
-          "avg_pnl_pct": -0.0706
+          "neutral_win_rate": 0.4101,
+          "edge": 0.0899,
+          "pnl_pct": -1.264,
+          "avg_pnl_pct": -0.0602
         }
       },
       "last_trades": [
+        {
+          "id": "8109c43906",
+          "asset": "bitcoin",
+          "asset_label": "Bitcoin (BTC/USD)",
+          "direction": "long",
+          "horizon": "1h",
+          "entry": 85912.0,
+          "take_profit": 86275.0,
+          "stop_loss": 85634.0,
+          "risk_reward": 1.31,
+          "confidence": "moyen",
+          "score": 3.75,
+          "criteria": [
+            "adx",
+            "trend_15m",
+            "trend_1h",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "expired",
+          "pnl_pct": 0.1477,
+          "pnl_gross_pct": 0.2077,
+          "duration_minutes": 65,
+          "close_price": 86090.46,
+          "created_at": "2026-09-22T10:40:38Z",
+          "created_local": "22/09 12:40",
+          "expires_at": "2026-09-22T11:40:38Z",
+          "rationale": "Achat : tendance forte (ADX), tendance 15 min, tendance 1 h, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 604.4 (0.70 %), TP = 60 % du range, SL = 46 % du range, probabilité de résolution sous 1 h ≈ 72%.",
+          "news_context": "actualité à surveiller (score 2) : White hats outrun Coldcard hackers in 52-Bitcoin evacuation"
+        },
         {
           "id": "65c95dce0a",
           "asset": "bitcoin",
@@ -2194,39 +2218,6 @@
           "expires_at": "2026-09-22T00:55:38Z",
           "rationale": "Achat : tendance forte (ADX), marché meneur favorable, tendance 15 min, tendance 1 h, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 29.70 (1.07 %), TP = 60 % du range, SL = 44 % du range, probabilité de résolution sous 1 h ≈ 68%.",
           "news_context": "actualité calme sur les 2 dernières heures"
-        },
-        {
-          "id": "ef305d792c",
-          "asset": "ethereum",
-          "asset_label": "Ethereum (ETH/USD)",
-          "direction": "long",
-          "horizon": "1h",
-          "entry": 2776.6,
-          "take_profit": 2794.6,
-          "stop_loss": 2764.6,
-          "risk_reward": 1.5,
-          "confidence": "fort",
-          "score": 6.25,
-          "criteria": [
-            "adx",
-            "corr",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "bot",
-          "status": "expired",
-          "pnl_pct": -0.2323,
-          "pnl_gross_pct": -0.1523,
-          "duration_minutes": 65,
-          "close_price": 2772.37,
-          "created_at": "2026-09-21T22:26:07Z",
-          "created_local": "22/09 00:26",
-          "expires_at": "2026-09-21T23:26:07Z",
-          "rationale": "Achat : tendance forte (ADX), marché meneur favorable, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 30.08 (1.08 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 75%.",
-          "news_context": "actualité calme sur les 2 dernières heures"
         }
       ]
     },
@@ -2235,15 +2226,15 @@
       "label": "VWAP",
       "weight": 0.75,
       "stats": {
-        "n": 57,
+        "n": 58,
         "tp": 22,
         "sl": 23,
-        "expired": 12,
+        "expired": 13,
         "win_rate": 0.4888888888888889,
-        "neutral_win_rate": 0.4086,
-        "edge": 0.0803,
-        "pnl_pct": -2.8322,
-        "avg_pnl_pct": -0.0497
+        "neutral_win_rate": 0.409,
+        "edge": 0.0799,
+        "pnl_pct": -2.6845,
+        "avg_pnl_pct": -0.0463
       },
       "by_source": {
         "bot": {
@@ -2280,18 +2271,48 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 19,
+          "n": 20,
           "tp": 8,
           "sl": 7,
-          "expired": 4,
+          "expired": 5,
           "win_rate": 0.5333333333333333,
-          "neutral_win_rate": 0.408,
-          "edge": 0.1253,
-          "pnl_pct": -0.9239,
-          "avg_pnl_pct": -0.0486
+          "neutral_win_rate": 0.4092,
+          "edge": 0.1241,
+          "pnl_pct": -0.7762,
+          "avg_pnl_pct": -0.0388
         }
       },
       "last_trades": [
+        {
+          "id": "8109c43906",
+          "asset": "bitcoin",
+          "asset_label": "Bitcoin (BTC/USD)",
+          "direction": "long",
+          "horizon": "1h",
+          "entry": 85912.0,
+          "take_profit": 86275.0,
+          "stop_loss": 85634.0,
+          "risk_reward": 1.31,
+          "confidence": "moyen",
+          "score": 3.75,
+          "criteria": [
+            "adx",
+            "trend_15m",
+            "trend_1h",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "expired",
+          "pnl_pct": 0.1477,
+          "pnl_gross_pct": 0.2077,
+          "duration_minutes": 65,
+          "close_price": 86090.46,
+          "created_at": "2026-09-22T10:40:38Z",
+          "created_local": "22/09 12:40",
+          "expires_at": "2026-09-22T11:40:38Z",
+          "rationale": "Achat : tendance forte (ADX), tendance 15 min, tendance 1 h, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 604.4 (0.70 %), TP = 60 % du range, SL = 46 % du range, probabilité de résolution sous 1 h ≈ 72%.",
+          "news_context": "actualité à surveiller (score 2) : White hats outrun Coldcard hackers in 52-Bitcoin evacuation"
+        },
         {
           "id": "65c95dce0a",
           "asset": "bitcoin",
@@ -2518,36 +2539,6 @@
           "created_local": "22/09 00:26",
           "expires_at": "2026-09-21T23:26:07Z",
           "rationale": "Achat : tendance forte (ADX), marché meneur favorable, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 30.08 (1.08 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 75%.",
-          "news_context": "actualité calme sur les 2 dernières heures"
-        },
-        {
-          "id": "3b1e1518f5",
-          "asset": "bitcoin",
-          "asset_label": "Bitcoin (BTC/USD)",
-          "direction": "long",
-          "horizon": "1h",
-          "entry": 86507.0,
-          "take_profit": 86949.0,
-          "stop_loss": 86212.0,
-          "risk_reward": 1.5,
-          "confidence": "moyen",
-          "score": 3.75,
-          "criteria": [
-            "adx",
-            "trend_15m",
-            "trend_1h",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "expired",
-          "pnl_pct": -0.1053,
-          "pnl_gross_pct": -0.0453,
-          "duration_minutes": 65,
-          "close_price": 86467.78,
-          "created_at": "2026-09-21T22:26:07Z",
-          "created_local": "22/09 00:26",
-          "expires_at": "2026-09-21T23:26:07Z",
-          "rationale": "Achat : tendance forte (ADX), tendance 15 min, tendance 1 h, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 736.9 (0.85 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 69%.",
           "news_context": "actualité calme sur les 2 dernières heures"
         }
       ]
@@ -3661,36 +3652,6 @@
       "created_local": "22/09 12:55",
       "expires_at": "2026-09-22T11:55:24Z",
       "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 604.4 (0.70 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 77%.",
-      "news_context": "actualité à surveiller (score 2) : White hats outrun Coldcard hackers in 52-Bitcoin evacuation"
-    },
-    {
-      "id": "8109c43906",
-      "asset": "bitcoin",
-      "asset_label": "Bitcoin (BTC/USD)",
-      "direction": "long",
-      "horizon": "1h",
-      "entry": 85912.0,
-      "take_profit": 86275.0,
-      "stop_loss": 85634.0,
-      "risk_reward": 1.31,
-      "confidence": "moyen",
-      "score": 3.75,
-      "criteria": [
-        "adx",
-        "trend_15m",
-        "trend_1h",
-        "vwap"
-      ],
-      "source": "shadow",
-      "status": "open",
-      "pnl_pct": null,
-      "pnl_gross_pct": null,
-      "duration_minutes": null,
-      "close_price": null,
-      "created_at": "2026-09-22T10:40:38Z",
-      "created_local": "22/09 12:40",
-      "expires_at": "2026-09-22T11:40:38Z",
-      "rationale": "Achat : tendance forte (ADX), tendance 15 min, tendance 1 h, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 604.4 (0.70 %), TP = 60 % du range, SL = 46 % du range, probabilité de résolution sous 1 h ≈ 72%.",
       "news_context": "actualité à surveiller (score 2) : White hats outrun Coldcard hackers in 52-Bitcoin evacuation"
     }
   ],
@@ -5206,13 +5167,13 @@
   },
   "adjustments": {
     "notes": [
-      "corr: win rate 20% sur 10 trades → poids 0.425 → 0.361",
+      "corr: win rate 20% sur 10 trades → poids 0.361 → 0.307",
       "level: win rate 39% sur 90 trades → poids 0.25 → 0.25",
       "orb: win rate 36% sur 39 trades → poids 0.25 → 0.25",
       "volume: win rate 37% sur 54 trades → poids 0.25 → 0.25"
     ],
     "avoid_hours_utc": [],
-    "sample": 727
+    "sample": 728
   },
   "state": {
     "last_scan": "2026-09-22T11:40:36Z",

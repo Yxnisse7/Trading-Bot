@@ -1,6 +1,6 @@
 # Trading-Bot — rapport
 
-_Mis à jour le 22/09/2026 à 13:40 (Europe/Paris)._
+_Mis à jour le 22/09/2026 à 13:45 (Europe/Paris)._
 
 ## Vue d'ensemble
 
@@ -8,7 +8,7 @@ _Mis à jour le 22/09/2026 à 13:40 (Europe/Paris)._
 - Taux de réussite cumulé (TP / (TP+SL)) : **44%** — hasard attendu 41%, avantage **+3%**
 - P&L théorique cumulé, net des coûts estimés (somme des % par trade, sans levier) : **-2.68 %** (brut -0.98 %)
 - Signaux ouverts : **2**
-- Signaux fantômes (suivis en silence pour l'apprentissage) : **20** clôturés, 1 ouverts, taux de réussite 50% (hasard attendu 41%)
+- Signaux fantômes (suivis en silence pour l'apprentissage) : **21** clôturés, 0 ouverts, taux de réussite 50% (hasard attendu 41%)
 
 ## Signaux ouverts
 
@@ -115,21 +115,21 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 
 | Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
 |---|---:|---:|---:|---:|---:|---:|
-| adx | 20 | 8 | 8 | 4 | 50% | -0.071 % |
+| adx | 21 | 8 | 8 | 5 | 50% | -0.060 % |
 | corr | 5 | 0 | 3 | 2 | 0% | -0.251 % |
 | level | 2 | 2 | 0 | 0 | 100% | +0.145 % |
 | orb | 1 | 1 | 0 | 0 | 100% | +0.113 % |
 | rsi | 1 | 1 | 0 | 0 | 100% | +0.113 % |
-| trend_15m | 20 | 8 | 8 | 4 | 50% | -0.071 % |
-| trend_1h | 18 | 6 | 8 | 4 | 43% | -0.089 % |
+| trend_15m | 21 | 8 | 8 | 5 | 50% | -0.060 % |
+| trend_1h | 19 | 6 | 8 | 5 | 43% | -0.077 % |
 | trend_5m | 7 | 5 | 2 | 0 | 71% | +0.060 % |
-| vwap | 19 | 8 | 7 | 4 | 53% | -0.049 % |
+| vwap | 20 | 8 | 7 | 5 | 53% | -0.039 % |
 
 ### Fantômes par actif
 
 | Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
 |---|---:|---:|---:|---:|---:|---:|
-| bitcoin | 2 | 0 | 0 | 2 | n/a | -0.078 % |
+| bitcoin | 3 | 0 | 0 | 3 | n/a | -0.003 % |
 | ethereum | 6 | 0 | 4 | 2 | 0% | -0.290 % |
 | gold | 3 | 1 | 2 | 0 | 33% | -0.043 % |
 | nasdaq | 8 | 6 | 2 | 0 | 75% | +0.066 % |
@@ -185,11 +185,11 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 | volume | 0.25 |
 | orb | 0.25 |
 | pdhl | 1.0 |
-| corr | 0.361 |
+| corr | 0.307 |
 
 Dernières notes :
 
-- corr: win rate 20% sur 10 trades → poids 0.425 → 0.361
+- corr: win rate 20% sur 10 trades → poids 0.361 → 0.307
 - level: win rate 39% sur 90 trades → poids 0.25 → 0.25
 - orb: win rate 36% sur 39 trades → poids 0.25 → 0.25
 - volume: win rate 37% sur 54 trades → poids 0.25 → 0.25
