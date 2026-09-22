@@ -142,3 +142,11 @@ def test_neutral_win_rate_and_edge(cfg):
     assert abs(rep["edge"] - 0.225) < 1e-9
     text = daily_summary(hist, cfg, T0.date())
     assert "hasard attendu 38%" in text
+
+
+def test_variant_baseline_excludes_trial_assets(cfg):
+    cfg.assets["ethereum"].trial = True
+    good = [_trade(i, "tp", ["rsi"], asset="nasdaq") for i in range(30)]
+    bad_eth = [_trade(100 + i, "sl", ["rsi"], asset="ethereum") for i in range(30)]
+    adj = learn(good + bad_eth, cfg)
+    assert adj["baseline"]["n"] == 30 and adj["baseline"]["mean_net_r"] > 1     # seuls les trades Nasdaq

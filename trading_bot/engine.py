@@ -729,8 +729,7 @@ class Engine:
         "Avec, ce sont vos niveaux qui sont suivis : l'objectif d'abord, le stop ensuite.\n"
         "\n"
         "Actifs : nasdaq (nq) · sp500 (es) · bitcoin (btc) · ethereum (eth) · gold (or) · "
-        "petrole (wti) · euro (eurusd). Le pétrole et l'euro sont à l'essai : le bot les suit en silence "
-        "et ne les annoncera qu'une fois qu'ils auront fait leurs preuves.\n"
+        "petrole (wti) · euro (eurusd).{trial}\n"
         "Exemples : /propose btc — /long nasdaq cassure du plus haut — /short eth 2450 2530 rejet\n"
         "\n"
         "⛔ À NE PAS UTILISER\n"
@@ -743,6 +742,14 @@ class Engine:
         "💼 Simulation de compte : https://yxnisse7.github.io/Trading-Bot/portfolio.html"
     )
 
+    def help_text(self) -> str:
+        """Guide des commandes, avec la liste à jour des actifs à l'essai."""
+        promoted = set(self.store.adjustments().get("promoted_variants") or [])
+        trial = [a.label for k, a in self.cfg.assets.items() if a.trial and f"essai_{k}" not in promoted]
+        line = (f" À l'essai : {', '.join(trial)}. Le bot les suit en silence et ne les annoncera qu'une fois "
+                f"qu'ils auront fait leurs preuves." if trial else "")
+        return self.HELP.replace("{trial}", line)
+
     def welcome_new_chats(self) -> list[str]:
         """Envoie le guide aux chats autorisés qui ne l'ont jamais reçu (une fois par chat)."""
         st = self.store.state()
@@ -750,7 +757,7 @@ class Engine:
         welcomed = chat_keys(stored)
         new = [c for c in telegram_chat_ids() if chat_key(c) not in welcomed]
         for chat in new:
-            notify(self.HELP + "\n\n" + DISCLAIMER, chat_id=chat)
+            notify(self.help_text() + "\n\n" + DISCLAIMER, chat_id=chat)
             welcomed.append(chat_key(chat))
             log.info("guide envoyé à un nouveau chat (%s)", chat_key(chat))
         if not new and welcomed == stored:
@@ -763,12 +770,12 @@ class Engine:
 
     def send_help(self) -> str:
         """Envoie le guide à tous les chats configurés (et les marque comme informés)."""
-        notify(self.HELP + "\n\n" + DISCLAIMER)
+        notify(self.help_text() + "\n\n" + DISCLAIMER)
         st = self.store.state()
         known = chat_keys(st.get("telegram_welcomed", [])) + [chat_key(c) for c in telegram_chat_ids()]
         st["telegram_welcomed"] = list(dict.fromkeys(known))[-50:]
         self.store.save_state(st)
-        return self.HELP
+        return self.help_text()
 
     def handle_command(self, text: str, now: datetime | None = None) -> str | None:
         """Exécute une commande texte (Telegram). Renvoie la réponse à envoyer, ou None si ignorée."""
@@ -779,7 +786,7 @@ class Engine:
         cmd = parts[0].lower().split("@", 1)[0]
         args = parts[1:]
         if cmd in ("/help", "/start", "/aide"):
-            return self.HELP
+            return self.help_text()
         if cmd == "/status":
             sigs = self.store.open_signals()
             if not sigs:
@@ -802,7 +809,7 @@ class Engine:
                 return f"Précisez l'actif : {cmd} bitcoin"
             asset_key = self.ASSET_ALIASES.get(args[0].lower())
             if asset_key is None:
-                return f"Actif inconnu « {args[0]} ». " + self.HELP
+                return f"Actif inconnu « {args[0]} ». " + self.help_text()
             try:
                 if cmd == "/propose":
                     self.propose(asset_key, now)   # envoie lui-même la notification

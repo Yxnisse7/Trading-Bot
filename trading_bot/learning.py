@@ -162,7 +162,10 @@ def _fmt_m(v: float) -> str:
 
 def variant_report(closed: list[Signal], cfg: Config) -> dict[str, Any]:
     """Compare chaque variante testée en fantôme aux signaux réels du bot, sur le gain net."""
-    base = [trade_r(s, net=True) for s in closed if s.source == "bot"]
+    # Référence : les signaux réels des actifs annoncés aujourd'hui (les actifs à l'essai en sont exclus,
+    # sinon un actif mis de côté pour ses mauvais résultats abaisserait la barre des variantes)
+    trial_assets = {k for k, a in cfg.assets.items() if a.trial}
+    base = [trade_r(s, net=True) for s in closed if s.source == "bot" and s.asset not in trial_assets]
     base = [r for r in base if r is not None]
     base_mean = sum(base) / len(base) if base else None
     out: dict[str, Any] = {"baseline": {"n": len(base), "mean_net_r": round(base_mean, 4) if base_mean is not None else None},

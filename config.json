@@ -1,9 +1,22 @@
 {
-  "_comment": "Réglages « moins de trades, mieux ciblés » (18/09/2026) : seuls les signaux « fort » sont émis, l'horizon 3 h est suspendu, Nasdaq et S&P 500 ne sont analysés que pendant la session américaine (13h-20h UTC). Supprimez une ligne pour revenir à la valeur par défaut de trading_bot/config.py.",
+  "_comment": "Réglages « moins de trades, mieux ciblés » (18/09/2026) : seuls les signaux « fort » sont émis, l'horizon 3 h est suspendu, Nasdaq et S&P 500 ne sont analysés que pendant la session américaine (13h-20h UTC). Supprimez une ligne pour revenir à la valeur par défaut de trading_bot/config.py. 22/09/2026 : Ethereum remis à l'essai (pire actif en backtest et en réel) : suivi en silence, de nouveau annoncé seulement s'il fait ses preuves.",
   "min_confidence": "fort",
   "long_horizon_enabled": false,
   "assets": {
-    "nasdaq": {"session_utc": [13, 20]},
-    "sp500": {"session_utc": [13, 20]}
+    "nasdaq": {
+      "session_utc": [
+        13,
+        20
+      ]
+    },
+    "sp500": {
+      "session_utc": [
+        13,
+        20
+      ]
+    },
+    "ethereum": {
+      "trial": true
+    }
   }
 }

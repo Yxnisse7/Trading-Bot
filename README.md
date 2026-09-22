@@ -19,7 +19,9 @@ vous décidez.
 sont suivis **en silence**, comme une variante (`essai_<actif>`). Il ne devient un actif annoncé
 qu'une fois promu : au moins 100 trades suivis, avec un gain net moyen égal ou supérieur à celui des
 signaux réels. Le pétrole et l'euro ont été choisis pour leurs moteurs propres, peu liés aux indices
-et aux cryptos, leur liquidité et leurs frais faibles.
+et aux cryptos, leur liquidité et leurs frais faibles. La sélection marche aussi dans l'autre sens :
+l'Ethereum, pire actif en backtest comme en réel, a été remis à l'essai le 22/09/2026 dans
+`config.json` (supprimez la ligne pour l'annuler).
 
 Marchés meneurs (corrélations, Yahoo) : VIX (`^VIX`), dollar (`DX-Y.NYB`), rendement 10 ans (`^TNX`).
 Binance refuse les adresses américaines (GitHub Actions) ; Coinbase et Kraken fournissent alors des
