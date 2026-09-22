@@ -16,7 +16,8 @@
   const SVG = "http://www.w3.org/2000/svg";
   const STORE_KEY = "tb-live-asset";
   const DEFAULT_ASSETS = [["nasdaq", "Nasdaq 100 (NQ)"], ["sp500", "S&P 500 (ES)"], ["bitcoin", "Bitcoin (BTC/USD)"],
-                          ["ethereum", "Ethereum (ETH/USD)"], ["gold", "Or (XAU/USD)"]];
+                          ["ethereum", "Ethereum (ETH/USD)"], ["gold", "Or (XAU/USD)"],
+                          ["oil", "Pétrole WTI (CL)"], ["euro", "Euro / dollar (6E)"]];
 
   // Palette validée (bleu / orange lisibles en cas de daltonisme), mêmes valeurs que le tableau de bord.
   const CSS = `

@@ -59,6 +59,9 @@ class AssetConfig:
     lot_step: float = 1.0         # granularité des lots (0,001 BTC, 0,01 ETH, 1 contrat micro)
     lot_min: float = 1.0
     max_leverage: float = 10.0    # notionnel maximal = balance × levier
+    # Nouvel actif à l'essai : ses signaux sont suivis en silence (fantômes) et ne deviennent réels
+    # qu'une fois la variante « essai_<actif> » promue, comme les autres variantes.
+    trial: bool = False
 
 
 @dataclass
@@ -221,6 +224,29 @@ def default_assets() -> dict[str, AssetConfig]:
             lot_label="MGC", lot_multiplier=10.0, lot_step=1, lot_min=1, max_leverage=20,
             news_keywords=("gold", "xau", "dollar", "dxy", "fed", "fomc", "treasury",
                            "yields", "inflation", "cpi", "geopolit", "central bank"),
+        ),
+        # ---- Nouveaux actifs, à l'essai : moteurs propres, peu liés aux indices et aux cryptos
+        "oil": AssetConfig(
+            key="oil", label="Pétrole WTI (CL)", yahoo_symbol="CL=F",
+            price_decimals=2, tick_size=0.01,
+            min_hourly_range_pct=0.10, max_hourly_range_pct=2.5,
+            session_utc=(7, 20),  # Londres + New York (NYMEX)
+            cost_pct=0.03,        # micro-contrat MCL : ≈ 1 tick de spread + commissions
+            lot_label="MCL", lot_multiplier=100.0, lot_step=1, lot_min=1, max_leverage=20,  # 100 barils
+            trial=True,
+            news_keywords=("oil", "crude", "wti", "brent", "opec", "barrel", "eia", "inventor",
+                           "saudi", "pipeline", "refinery", "hormuz"),
+        ),
+        "euro": AssetConfig(
+            key="euro", label="Euro / dollar (6E)", yahoo_symbol="6E=F",  # contrat à terme : volume réel
+            price_decimals=5, tick_size=0.00005,
+            min_hourly_range_pct=0.03, max_hourly_range_pct=0.6,
+            session_utc=(6, 17),  # Londres + chevauchement New York
+            cost_pct=0.01,        # micro-contrat M6E : ≈ 1 tick de spread + commissions
+            lot_label="M6E", lot_multiplier=12500.0, lot_step=1, lot_min=1, max_leverage=20,  # 12 500 €
+            trial=True,
+            news_keywords=("euro", "eur/usd", "eurusd", "ecb", "lagarde", "eurozone", "euro area",
+                           "germany", "bund", "dollar", "fed", "fomc"),
         ),
     }
 

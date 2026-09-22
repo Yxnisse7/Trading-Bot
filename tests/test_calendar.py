@@ -19,8 +19,26 @@ def test_parse_events_levels_and_utc():
     assert cpi.at == datetime(2026, 9, 18, 16, 30, tzinfo=timezone.utc)
     assert cpi.impact == "high" and "prévu 0.3%" in cpi.name and cpi.name.startswith("USD CPI")
     assert events[1].impact == "medium"          # USD Medium → medium (pas de blackout)
-    assert events[2].impact == "medium"          # EUR High → medium (hors devise de blackout)
+    # EUR High : bloque seulement l'euro, pas les autres actifs
+    assert events[2].impact == "high" and events[2].assets == ("euro",)
     assert events[3].impact == "low"
+
+
+def test_asset_specific_blackouts():
+    from trading_bot.providers.news import in_blackout
+    rows = [
+        {"title": "Main Refinancing Rate", "country": "EUR", "date": "2026-09-24T12:15:00+00:00", "impact": "High"},
+        {"title": "Crude Oil Inventories", "country": "USD", "date": "2026-09-23T14:30:00+00:00", "impact": "Medium"},
+    ]
+    ecb, eia = cal.parse_events(rows)
+    assert eia.impact == "high" and eia.assets == ("oil",)
+    at_ecb = datetime(2026, 9, 24, 12, 0, tzinfo=timezone.utc)
+    assert in_blackout(at_ecb, [ecb], 45, 30) is None                       # pas de pause générale
+    assert in_blackout(at_ecb, [ecb], 45, 30, asset_key="euro") is ecb      # pause pour l'euro
+    assert in_blackout(at_ecb, [ecb], 45, 30, asset_key="nasdaq") is None
+    at_eia = datetime(2026, 9, 23, 14, 40, tzinfo=timezone.utc)
+    assert in_blackout(at_eia, [eia], 45, 30, asset_key="oil") is eia
+    assert in_blackout(at_eia, [eia], 45, 30, asset_key="gold") is None
 
 
 def test_upcoming_and_agenda_and_cache(tmp_path):

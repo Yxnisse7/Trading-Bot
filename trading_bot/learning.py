@@ -167,7 +167,11 @@ def variant_report(closed: list[Signal], cfg: Config) -> dict[str, Any]:
     base_mean = sum(base) / len(base) if base else None
     out: dict[str, Any] = {"baseline": {"n": len(base), "mean_net_r": round(base_mean, 4) if base_mean is not None else None},
                            "variants": {}, "promoted": []}
-    for key, label in VARIANT_LABELS.items():
+    labels = dict(VARIANT_LABELS)
+    for key, asset in cfg.assets.items():
+        if asset.trial:
+            labels[f"essai_{key}"] = f"nouvel actif : {asset.label}"
+    for key, label in labels.items():
         rs = [trade_r(s, net=True) for s in closed if s.source == "shadow" and (s.meta or {}).get("variant") == key]
         rs = [r for r in rs if r is not None]
         mean = sum(rs) / len(rs) if rs else None

@@ -183,7 +183,8 @@ def build_dashboard(all_signals: list[Signal], cfg: Config, adjustments: dict[st
                        "shadow": _stats([s for s in closed_all if s.asset == key and s.source == "shadow"]),
                        "open": sum(1 for s in open_sigs if s.asset == key and s.source != "shadow"),
                        "session_utc": list(asset.session_utc) if asset.session_utc else None,
-                       "cost_pct": asset.cost_pct})
+                       "cost_pct": asset.cost_pct, "trial": asset.trial,
+                       "trial_promoted": f"essai_{key}" in ((adjustments or {}).get("promoted_variants") or [])})
 
     # Séries pour les graphiques du tableau de bord (signaux visibles uniquement)
     curve, cum = [], 0.0

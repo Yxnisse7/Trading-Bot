@@ -174,7 +174,7 @@
   let mcp = null;            // capacité claude.ai : connecteur GitHub du lecteur (page hébergée)
   let mcpWatching = false;
   const GH_DEFAULT = { owner: "Yxnisse7", repo: "Trading-Bot" };
-  const ASSETS_DEFAULT = [["nasdaq", "Nasdaq 100 (NQ)"], ["sp500", "S&P 500 (ES)"], ["bitcoin", "Bitcoin (BTC/USD)"], ["ethereum", "Ethereum (ETH/USD)"], ["gold", "Or (XAU/USD)"]];
+  const ASSETS_DEFAULT = [["nasdaq", "Nasdaq 100 (NQ)"], ["sp500", "S&P 500 (ES)"], ["bitcoin", "Bitcoin (BTC/USD)"], ["ethereum", "Ethereum (ETH/USD)"], ["gold", "Or (XAU/USD)"], ["oil", "Pétrole WTI (CL)"], ["euro", "Euro / dollar (6E)"]];
   function fillAssets(list) {
     const sel = $("#m-asset"); const cur = sel.value;
     sel.innerHTML = list.map(([k, l]) => `<option value="${esc(k)}">${esc(l)}</option>`).join("");
@@ -494,7 +494,7 @@
     fillAssets(d.assets.map((a) => [a.key, a.label]));
     if (live) live.setAssets(d.assets.map((a) => [a.key, a.label]));
     $("#assets tbody").innerHTML = d.assets.map((a) => `<tr>
-      <td>${esc(a.label)}${a.open ? ` <span class="pill open">${a.open} ouvert(s)</span>` : ""}</td>
+      <td>${esc(a.label)}${a.trial && !a.trial_promoted ? ` <span class="pill" title="Suivi en silence : annoncé seulement après avoir fait ses preuves">à l'essai</span>` : ""}${a.open ? ` <span class="pill open">${a.open} ouvert(s)</span>` : ""}</td>
       <td class="num">${a.stats.n}</td><td class="num">${pct(a.stats.win_rate)}</td><td class="num">${pct(a.stats.neutral_win_rate)}</td>
       <td class="num ${cls(a.stats.edge)}">${a.stats.edge === null ? "n/a" : signed(a.stats.edge * 100, 0, " pts")}</td>
       <td class="num ${cls(a.stats.pnl_pct)}">${signed(a.stats.pnl_pct)}</td>

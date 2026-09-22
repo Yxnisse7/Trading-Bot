@@ -90,7 +90,11 @@ def test_full_cycle_scan_track_summary(tmp_path, monkeypatch):
     assert eng.store.open_signals() == [] and len(real) == 4
     # horizon 3 h désactivé : testé en silence comme variante, uniquement sur les actifs où il est permis
     variants = [s for s in eng.store.history() if s.source == "shadow"]
-    assert variants and all(s.meta.get("variant") == "horizon_3h" and s.asset in ("nasdaq", "sp500", "gold") for s in variants)
+    assert all((s.meta.get("variant") == "horizon_3h" and s.asset in ("nasdaq", "sp500", "gold"))
+               or (s.meta.get("variant") == f"essai_{s.asset}" and eng.cfg.assets[s.asset].trial) for s in variants)
+    assert any(s.meta.get("variant") == "horizon_3h" for s in variants)
+    # les actifs à l'essai ne produisent jamais de signal réel tant qu'ils ne sont pas promus
+    assert not any(eng.cfg.assets[s.asset].trial for s in real)
     assert eng.store.adjustments()["sample"] == 4 + len(variants)
 
     text = eng.summary(now.date(), send=False)
@@ -677,3 +681,34 @@ def test_relearn_announces_promotions(tmp_path, monkeypatch):
     sent.clear()
     eng._relearn()                                  # pas de nouvelle annonce si rien ne change
     assert not any("VARIANTE" in t for t in sent)
+
+
+def test_trial_asset_is_silent_until_promoted(tmp_path, monkeypatch):
+    now = datetime(2026, 9, 17, 14, 0, tzinfo=timezone.utc)
+    candles = make_candles(n=500, drift=0.0003, noise=0.0012, seed=7, start_ts=int(now.timestamp()) - 500 * 300)
+    eng = _engine(tmp_path, monkeypatch, candles, candles[-1].close)
+    eng.cfg.max_open_signals = 10
+    from trading_bot import engine as engmod
+    sent = []
+    monkeypatch.setattr(engmod, "notify", lambda text, title=None, chat_id=None: sent.append(text))
+    sigs = eng.scan(now)
+    assert "oil" not in {s.asset for s in sigs} and not any("Pétrole" in t for t in sent)
+    assert any(s.asset == "oil" and s.meta.get("variant") == "essai_oil" for s in eng.store.open_shadow())
+    # promu : le pétrole devient un actif comme les autres
+    eng2 = _engine(tmp_path / "b", monkeypatch, candles, candles[-1].close)
+    eng2.cfg.max_open_signals = 10
+    eng2.store.save_adjustments({"weights": {}, "promoted_variants": ["essai_oil"]})
+    assert "oil" in {s.asset for s in eng2.scan(now)}
+
+
+def test_asset_blackout_blocks_only_that_asset(tmp_path, monkeypatch):
+    from trading_bot.providers.news import MacroEvent
+    now = datetime(2026, 9, 17, 14, 0, tzinfo=timezone.utc)
+    candles = make_candles(n=500, drift=0.0003, noise=0.0012, seed=7, start_ts=int(now.timestamp()) - 500 * 300)
+    eng = _engine(tmp_path, monkeypatch, candles, candles[-1].close)
+    eng.cfg.max_open_signals = 10
+    eng.store.save_adjustments({"weights": {}, "promoted_variants": ["essai_oil"]})
+    monkeypatch.setattr(eng, "macro_events", lambda when: [MacroEvent("USD Crude Oil Inventories", now + timedelta(minutes=10),
+                                                                      "high", ("oil",))])
+    assets = {s.asset for s in eng.scan(now)}
+    assert "oil" not in assets and "nasdaq" in assets

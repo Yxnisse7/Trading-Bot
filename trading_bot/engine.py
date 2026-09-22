@@ -44,8 +44,10 @@ def chat_keys(values) -> list[str]:
 
 MAJOR_EVENT_RE = re.compile(r"FOMC|Fed\b|taux directeur|CPI|inflation|Non-?farm|NFP|emploi|payrolls", re.I)
 
+# « gold » = flux FXStreet (devises, matières premières, dollar) : pertinent aussi pour le pétrole et l'euro
 NEWS_CATEGORIES = {"nasdaq": ["macro"], "sp500": ["macro"], "bitcoin": ["crypto", "macro"],
-                   "ethereum": ["crypto", "macro"], "gold": ["gold", "macro"]}
+                   "ethereum": ["crypto", "macro"], "gold": ["gold", "macro"],
+                   "oil": ["gold", "macro"], "euro": ["gold", "macro"]}
 
 
 class Engine:
@@ -101,6 +103,10 @@ class Engine:
         # Bitcoin d'abord : sa direction sert de contexte à l'Ethereum
         ordered = sorted(self.cfg.assets.values(), key=lambda a: 0 if a.key == "bitcoin" else 1)
         for asset in ordered:
+            trial_key = f"essai_{asset.key}" if asset.trial and f"essai_{asset.key}" not in promoted else None
+            if trial_key and not variants_on:
+                log.info("%s : actif à l'essai, suivi en silence uniquement", asset.label)
+                continue
             session_variant = None
             if asset.session_utc and not (asset.session_utc[0] <= now.hour < asset.session_utc[1]):
                 ext = (self.cfg.variant_extended_sessions or {}).get(asset.key)
@@ -112,11 +118,23 @@ class Engine:
                 else:
                     log.info("%s : hors session de trading configurée", asset.label)
                     continue
+            own_event = newsmod.in_blackout(now, calendar, self.cfg.news_blackout_before_minutes,
+                                            self.cfg.news_blackout_after_minutes, asset_key=asset.key)
+            if own_event:
+                log.info("%s : annonce propre à l'actif (%s) → pas de signal", asset.label, own_event.name)
+                continue
             weights = self._weights_for(adj, asset.key)
-            # Une seule variante à la fois : hors session, seul l'horizon standard est testé, pour que
-            # les statistiques de chaque variante ne mélangent pas deux changements.
-            plan = ([(h, base, session_variant) for h, base, v in horizons if base == 5 and v is None]
-                    if session_variant else list(horizons))
+            # Une seule variante à la fois : un actif à l'essai n'est testé que dans ses réglages normaux,
+            # et hors session seul l'horizon standard est testé, pour que les statistiques de chaque
+            # variante ne mélangent pas deux changements.
+            if trial_key:
+                plan = [(h, base, trial_key) for h, base, v in horizons if v is None and not session_variant]
+            elif session_variant:
+                plan = [(h, base, session_variant) for h, base, v in horizons if base == 5 and v is None]
+            else:
+                plan = list(horizons)
+            if not plan:
+                continue
             blocked = {h: self._scan_block(asset, h, base, variant, all_sigs, now) for h, base, variant in plan}
             if all(blocked.values()):
                 log.info("%s : pas de scan (%s)", asset.label, "; ".join(blocked["1h"]))
@@ -301,7 +319,7 @@ class Engine:
         hours = self.cfg.post_event_caution_hours
         if hours <= 0:
             return None
-        major = [ev for ev in events if ev.impact == "high" and MAJOR_EVENT_RE.search(ev.name)
+        major = [ev for ev in events if ev.impact == "high" and not ev.assets and MAJOR_EVENT_RE.search(ev.name)
                  and timedelta(0) <= now - ev.at <= timedelta(hours=hours)]
         return max(major, key=lambda ev: ev.at) if major else None
 
@@ -688,6 +706,8 @@ class Engine:
         "bitcoin": "bitcoin", "btc": "bitcoin",
         "ethereum": "ethereum", "eth": "ethereum",
         "gold": "gold", "or": "gold", "xau": "gold", "xauusd": "gold",
+        "oil": "oil", "petrole": "oil", "pétrole": "oil", "wti": "oil", "cl": "oil", "mcl": "oil", "crude": "oil",
+        "euro": "euro", "eur": "euro", "eurusd": "euro", "eur/usd": "euro", "6e": "euro", "m6e": "euro",
     }
     HELP = (
         "📖 GUIDE DU BOT — toutes les commandes\n"
@@ -708,7 +728,9 @@ class Engine:
         "Sans chiffres, le bot calibre l'objectif et le stop sur la volatilité du moment. "
         "Avec, ce sont vos niveaux qui sont suivis : l'objectif d'abord, le stop ensuite.\n"
         "\n"
-        "Actifs : nasdaq (nq) · sp500 (es) · bitcoin (btc) · ethereum (eth) · gold (or)\n"
+        "Actifs : nasdaq (nq) · sp500 (es) · bitcoin (btc) · ethereum (eth) · gold (or) · "
+        "petrole (wti) · euro (eurusd). Le pétrole et l'euro sont à l'essai : le bot les suit en silence "
+        "et ne les annoncera qu'une fois qu'ils auront fait leurs preuves.\n"
         "Exemples : /propose btc — /long nasdaq cassure du plus haut — /short eth 2450 2530 rejet\n"
         "\n"
         "⛔ À NE PAS UTILISER\n"

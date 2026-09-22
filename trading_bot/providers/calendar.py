@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import json
 import logging
+import re
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
@@ -19,8 +20,12 @@ log = logging.getLogger(__name__)
 FEEDS = [
     "https://nfs.faireconomy.media/ff_calendar_thisweek.json",   # semaine en cours (la « semaine prochaine » n'est pas publiée)
 ]
-# Devises dont les annonces à fort impact bloquent les signaux
+# Devises dont les annonces à fort impact bloquent les signaux de tous les actifs
 BLACKOUT_CURRENCIES = {"USD"}
+# Devises dont les annonces à fort impact ne bloquent que certains actifs
+CURRENCY_ASSETS = {"EUR": ("euro",)}
+# Annonces qui font bouger un actif précis, quel que soit l'impact affiché par le calendrier
+ASSET_EVENTS = [(re.compile(r"crude oil inventories|eia .*(crude|petroleum)", re.I), ("oil",))]
 CACHE_TTL_HOURS = 6
 
 
@@ -47,8 +52,16 @@ def parse_events(rows: list[dict]) -> list[MacroEvent]:
             extra.append(f"précédent {r['previous']}")
         if extra:
             name += " (" + ", ".join(extra) + ")"
-        out.append(MacroEvent(name=name, at=at.astimezone(timezone.utc),
-                              impact=level if country in BLACKOUT_CURRENCIES else ("medium" if level == "high" else "low")))
+        at = at.astimezone(timezone.utc)
+        specific = next((assets for pat, assets in ASSET_EVENTS if pat.search(title)), None)
+        if specific:
+            out.append(MacroEvent(name=name, at=at, impact="high", assets=specific))
+        elif country in BLACKOUT_CURRENCIES:
+            out.append(MacroEvent(name=name, at=at, impact=level))
+        elif country in CURRENCY_ASSETS and level == "high":
+            out.append(MacroEvent(name=name, at=at, impact="high", assets=CURRENCY_ASSETS[country]))
+        else:
+            out.append(MacroEvent(name=name, at=at, impact="medium" if level == "high" else "low"))
     return out
 
 
@@ -69,8 +82,9 @@ def fetch_events(cache_file: Path | None = None) -> list[MacroEvent]:
             try:
                 cache_file.parent.mkdir(parents=True, exist_ok=True)
                 cache_file.write_text(json.dumps({"fetched_at": datetime.now(timezone.utc).isoformat(),
-                                                  "events": [{"name": e.name, "at": e.at.isoformat(), "impact": e.impact}
-                                                             for e in events]}, ensure_ascii=False, indent=1),
+                                                  "events": [{"name": e.name, "at": e.at.isoformat(), "impact": e.impact,
+                                                              "assets": list(e.assets)} for e in events]},
+                                                 ensure_ascii=False, indent=1),
                                       encoding="utf-8")
             except OSError:
                 pass
@@ -84,7 +98,8 @@ def load_cache(cache_file: Path | None) -> list[MacroEvent]:
         return []
     try:
         data = json.loads(cache_file.read_text(encoding="utf-8"))
-        return [MacroEvent(e["name"], datetime.fromisoformat(e["at"]), e.get("impact", "high")) for e in data.get("events", [])]
+        return [MacroEvent(e["name"], datetime.fromisoformat(e["at"]), e.get("impact", "high"), tuple(e.get("assets") or ()))
+                for e in data.get("events", [])]
     except (ValueError, KeyError, TypeError):
         return []
 

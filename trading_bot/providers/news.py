@@ -60,6 +60,7 @@ class MacroEvent:
     name: str
     at: datetime          # UTC
     impact: str = "high"  # high | medium
+    assets: tuple[str, ...] = ()   # vide : tous les actifs ; sinon seulement ceux-ci (BCE → euro, stocks EIA → pétrole)
 
 
 def parse_rss(xml_text: str, source: str, category: str) -> list[NewsItem]:
@@ -165,15 +166,20 @@ def load_calendar(events_raw: list[dict]) -> list[MacroEvent]:
     for e in events_raw:
         try:
             at = datetime.fromisoformat(e["at"].replace("Z", "+00:00")).astimezone(timezone.utc)
-            out.append(MacroEvent(e["name"], at, e.get("impact", "high")))
+            out.append(MacroEvent(e["name"], at, e.get("impact", "high"), tuple(e.get("assets") or ())))
         except (KeyError, ValueError):
             continue
     return out
 
 
-def in_blackout(now: datetime, events: list[MacroEvent], before_min: int, after_min: int) -> MacroEvent | None:
+def in_blackout(now: datetime, events: list[MacroEvent], before_min: int, after_min: int,
+                asset_key: str | None = None) -> MacroEvent | None:
+    """Annonce à fort impact en cours. Sans `asset_key`, seules les annonces qui concernent tous les
+    actifs comptent ; avec, s'y ajoutent celles propres à cet actif."""
     for ev in events:
         if ev.impact != "high":
+            continue
+        if ev.assets and (asset_key is None or asset_key not in ev.assets):
             continue
         if ev.at - timedelta(minutes=before_min) <= now <= ev.at + timedelta(minutes=after_min):
             return ev

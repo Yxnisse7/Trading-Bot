@@ -31,7 +31,7 @@ def test_ui_serves_dashboard_and_manual(tmp_path, monkeypatch):
         c = HTTPConnection("127.0.0.1", port, timeout=5)
         c.request("GET", "/api/ping"); r = c.getresponse(); assert r.status == 200 and json.loads(r.read())["mode"] == "local"
         c.request("GET", "/api/state"); r = c.getresponse(); assert r.status == 200
-        state = json.loads(r.read()); assert "criteria" in state and len(state["assets"]) == 5
+        state = json.loads(r.read()); assert "criteria" in state and len(state["assets"]) == 7
         c.request("GET", "/docs/index.html"); r = c.getresponse(); body = r.read().decode("utf-8")
         assert r.status == 200 and "Demander un trade" in body
         c.request("GET", "/docs/../trading_bot/config.py"); r = c.getresponse(); r.read(); assert r.status == 404

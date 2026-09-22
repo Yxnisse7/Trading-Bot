@@ -1,6 +1,6 @@
-# Trading-Bot — signaux de scalping (Nasdaq, S&P 500, Bitcoin, Ethereum, Or) à coût zéro
+# Trading-Bot — signaux de scalping (Nasdaq, S&P 500, Bitcoin, Ethereum, Or, Pétrole, Euro) à coût zéro
 
-Générateur de **signaux courts (~1 h)** sur cinq actifs, à partir de **données gratuites**,
+Générateur de **signaux courts (~1 h)** sur sept actifs, dont deux à l'essai, à partir de **données gratuites**,
 avec **suivi automatique** des issues, **apprentissage** sur l'historique, **backtest**,
 **interface locale** et **résumé quotidien**. Le bot **n'exécute aucun ordre** : il propose,
 vous décidez.
@@ -12,6 +12,14 @@ vous décidez.
 | Bitcoin (`BTC/USD`) | Binance (`api.binance.com`, puis miroirs `data-api.binance.vision` et `api.binance.us`) | Coinbase Exchange, Kraken, Yahoo, CoinGecko (prix) |
 | Ethereum (`ETH/USD`) | Binance (idem) | Coinbase Exchange, Kraken, Yahoo |
 | Or (`XAU/USD` via `GC=F`) | Yahoo Finance | — |
+| Pétrole WTI (futures `CL=F`), **à l'essai** | Yahoo Finance | — |
+| Euro / dollar (futures `6E=F`, pour avoir un vrai volume), **à l'essai** | Yahoo Finance | — |
+
+**Actifs à l'essai.** Un nouvel actif (`trial: true`) est analysé comme les autres mais ses signaux
+sont suivis **en silence**, comme une variante (`essai_<actif>`). Il ne devient un actif annoncé
+qu'une fois promu : au moins 100 trades suivis, avec un gain net moyen égal ou supérieur à celui des
+signaux réels. Le pétrole et l'euro ont été choisis pour leurs moteurs propres, peu liés aux indices
+et aux cryptos, leur liquidité et leurs frais faibles.
 
 Marchés meneurs (corrélations, Yahoo) : VIX (`^VIX`), dollar (`DX-Y.NYB`), rendement 10 ans (`^TNX`).
 Binance refuse les adresses américaines (GitHub Actions) ; Coinbase et Kraken fournissent alors des
@@ -19,7 +27,9 @@ bougies avec de vrais volumes, ce qui réactive les critères volume et VWAP sur
 
 Actualité : flux RSS gratuits (MarketWatch, CNBC, Yahoo Finance, CoinDesk, Cointelegraph, FXStreet),
 **calendrier économique ForexFactory** (flux JSON gratuit, sans clé, une requête par heure, cache
-disque en cas de panne : toutes les annonces USD à fort impact déclenchent un blackout, l'agenda des
+disque en cas de panne : toutes les annonces USD à fort impact déclenchent un blackout ; les annonces
+EUR à fort impact bloquent seulement l'euro, et les stocks de pétrole américains du mercredi seulement
+le pétrole ; l'agenda des
 30 prochaines heures figure dans le résumé quotidien) et calendrier manuel (`data/macro_calendar.json`).
 
 > ⚠️ **Avertissement.** Les signaux sont générés automatiquement à partir de données publiques et
@@ -148,7 +158,8 @@ Page `docs/portfolio.html` (lien « Simulation de compte » sur le tableau de bo
   balance par défaut (`portfolio_default_balance`, 1 000 $).
 - Pour chaque signal (bot, manuel, proposition ; jamais les fantômes), les **lots** sont calculés pour
   que la perte au stop soit égale au risque choisi, arrondis au pas du contrat et plafonnés par le
-  levier de l'actif : MNQ (2 $/pt), MES (5 $/pt), MGC (10 $/pt) ×20 ; BTC et ETH (pas 0,001 / 0,01) ×3.
+  levier de l'actif : MNQ (2 $/pt), MES (5 $/pt), MGC (10 $/pt), MCL (100 barils, 1 $ par cent),
+  M6E (12 500 €) ×20 ; BTC et ETH (pas 0,001 / 0,01) ×3.
   Le dimensionnement figure dans le message Telegram du signal.
 - À la clôture (TP, SL ou expiration), le résultat net des coûts estimés est appliqué à la balance et
   annoncé dans la notification d'issue ; la page montre la courbe de la balance, les positions
