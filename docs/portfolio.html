@@ -88,6 +88,9 @@
     </details>
   </div>
 
+  <h2>Graphique live</h2>
+  <div class="card" id="live"></div>
+
   <h2>Courbe de la balance</h2>
   <div class="card"><svg id="equity" viewBox="0 0 800 220" preserveAspectRatio="none" role="img" aria-label="Courbe de la balance"></svg><div class="muted" id="equity-note"></div></div>
 
@@ -103,9 +106,15 @@
   <div class="disclaimer">⚠️ Simulation sur des signaux automatiques et des données publiques gratuites : les résultats ne sont pas ceux d'un compte réel (exécution, glissement, marges, conversion de devise). Ceci n'est pas un conseil financier. Aucune stratégie ne garantit un gain.</div>
 </div>
 
+<script src="live-chart.js"></script>
 <script>
 (function () {
   const $ = (s) => document.querySelector(s);
+  // Graphique live : sans choix mémorisé, il montre l'actif de la première position simulée ouverte
+  const live = window.LiveChart ? window.LiveChart.mount($("#live"), {
+    how: "Bougies de 5 minutes. Les traits horizontaux sont les positions ouvertes sur cet actif : entrée, objectif et stop. "
+       + "Mis à jour à chaque passage du bot, soit environ toutes les 5 minutes : ce n'est pas un flux temps réel.",
+  }) : null;
   const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
   const money = (v, cur) => (v === null || v === undefined) ? "n/a" : (Number(v).toLocaleString("fr-FR", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " " + cur);
   const signed = (v, cur) => (v === null || v === undefined) ? "n/a" : ((v >= 0 ? "+" : "") + Number(v).toLocaleString("fr-FR", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + (cur ? " " + cur : ""));
@@ -199,6 +208,7 @@
     }
 
     const open = Object.values(d.open || {});
+    if (live && open.length && !live.hasSavedChoice()) live.select(open[0].asset);
     $("#open tbody").innerHTML = open.length ? open.map((o) => `<tr><td>${esc(new Date(o.opened_at).toLocaleString("fr-FR"))}</td><td>${esc(o.asset)}</td><td>${o.direction === "long" ? "🟢 long" : "🔴 short"}</td>
       <td class="num">${o.entry}</td><td class="num">${o.stop_loss}</td><td class="num">${o.take_profit}</td><td class="num">${o.lots} ${esc(o.lot_label)}${o.risky ? " ⚠️" : ""}</td>
       <td class="num">${money(o.risk_amount, cur)}${o.risk_pct_effective != null ? ` (${Number(o.risk_pct_effective).toFixed(1)} %)` : ""}</td><td class="num">${money(o.notional, cur)}</td><td class="num">×${o.leverage}${o.capped_by_leverage ? " (plafond)" : ""}</td></tr>`).join("")

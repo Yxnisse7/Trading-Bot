@@ -236,7 +236,8 @@ dans `data/adjustments.json` et appliqués aux scans suivants.
 À chaque passage (~5 min), le bot publie pour chaque actif un instantané des 80 dernières bougies
 5 min dans `data/live/<actif>.json`, copié dans `docs/live/` pour GitHub Pages. Le tableau de bord
 affiche ces bougies avec les niveaux des signaux ouverts (entrée, objectif, stop) et se rafraîchit
-toutes les minutes. Ce n'est pas un flux temps réel : la granularité est celle des passages du bot.
+toutes les minutes. Le même graphique figure sur la page de simulation de compte (module partagé
+`docs/live-chart.js`) ; l'actif choisi est mémorisé et commun aux deux pages. Ce n'est pas un flux temps réel : la granularité est celle des passages du bot.
 
 ### Avertissement et vie privée
 L'avertissement complet (« pas un conseil financier, validez en paper trading ») n'est plus répété à

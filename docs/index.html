@@ -76,13 +76,7 @@
   #tip { position: fixed; z-index: 50; pointer-events: none; background: var(--card); color: var(--text); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; font-size: 12px; box-shadow: 0 4px 16px rgba(0,0,0,.12); display: none; max-width: 260px; }
   #tip b { font-size: 14px; } #tip .r { display: flex; gap: 8px; justify-content: space-between; } #tip .k { display: inline-block; width: 12px; height: 2px; vertical-align: 3px; margin-right: 6px; }
   .wide { grid-column: 1 / -1; }
-  .live-head { display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: center; justify-content: space-between; margin-bottom: 8px; }
-  .live-head select { width: auto; min-width: 180px; }
-  .live-price { font-size: 22px; font-weight: 650; }
-  .live-meta { font-size: 12px; color: var(--muted); }
-  .candle-up { fill: var(--c-tp); }
-  .candle-down { fill: var(--c-sl); }
-  .lvl { stroke-dasharray: 5 4; stroke-width: 1.5; fill: none; }
+
 </style>
 </head>
 <body>
@@ -103,14 +97,7 @@
   <section class="grid" id="kpis"></section>
 
   <h2>Graphique live</h2>
-  <div class="card chart" id="ch-live">
-    <div class="live-head">
-      <div><select id="live-asset" aria-label="Actif du graphique live"></select></div>
-      <div style="text-align:right"><div class="live-price" id="live-price">—</div><div class="live-meta" id="live-meta">Chargement…</div></div>
-    </div>
-    <div id="live-plot"></div>
-    <div class="how">Bougies de 5 minutes. Les traits horizontaux sont vos signaux ouverts sur cet actif : entrée, objectif et stop. L'image se met à jour à chaque passage du bot, soit environ toutes les 5 minutes : ce n'est pas un flux temps réel.</div>
-  </div>
+  <div class="card" id="ch-live"></div>
 
   <h2>Vue d'ensemble</h2>
   <div class="muted" style="margin-bottom:8px">Comment lire : les graphiques ne portent que sur les signaux <b>notifiés</b> (bot, manuels, propositions), jamais sur les fantômes. « Hasard attendu » = taux de réussite qu'obtiendrait une pièce jetée avec les mêmes TP et SL ; c'est la barre à dépasser.</div>
@@ -172,6 +159,7 @@
 </div>
 
 <div id="tip" role="tooltip"></div>
+<script src="live-chart.js"></script>
 <script>
 (function () {
   const $ = (s) => document.querySelector(s);
@@ -193,6 +181,8 @@
     if (cur && list.some(([k]) => k === cur)) sel.value = cur;
   }
   fillAssets(ASSETS_DEFAULT);
+  // Graphique live partagé avec la page simulation (docs/live-chart.js)
+  const live = window.LiveChart ? window.LiveChart.mount($("#ch-live"), { assets: ASSETS_DEFAULT }) : null;
   const MCP_FIX = {
     needs_reauth: "Reconnectez GitHub dans claude.ai → Paramètres → Connecteurs, puis actualisez.",
     server_not_connected: "Ajoutez le connecteur GitHub dans claude.ai → Paramètres → Connecteurs, puis actualisez.",
@@ -289,7 +279,6 @@
     document.documentElement.dataset.theme = next;
     try { localStorage.setItem("tb-theme", next); } catch (e) {}
     if (data) { try { renderCharts(data); } catch (e) { console.error("graphiques :", e); } }
-    renderLive();
   });
 
   // ---- chargement des données
@@ -468,105 +457,7 @@
   function niceStep(span) { const raw = span / 4, p = Math.pow(10, Math.floor(Math.log10(raw))); const m = raw / p; return (m < 1.5 ? 1 : m < 3.5 ? 2 : m < 7.5 ? 5 : 10) * p; }
 
   let resizeTimer = null;
-  addEventListener("resize", () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(() => { if (data) { try { renderCharts(data); } catch (e) { /* silencieux */ } } renderLive(); }, 200); });
-  // ------------------------------------------------- graphique live (bougies 5 min + niveaux)
-  let liveTimer = null, liveData = null;
-  async function fetchLive(key) {
-    for (const u of [`live/${key}.json`, `../data/live/${key}.json`, `/data/live/${key}.json`]) {
-      try { const r = await fetch(u + "?t=" + Date.now(), { cache: "no-store" }); if (r.ok) return await r.json(); } catch (e) { /* suivant */ }
-    }
-    return null;
-  }
-  function liveAge(iso) {
-    const min = Math.max(0, Math.round((Date.now() - new Date(iso).getTime()) / 60000));
-    if (min < 1) return "à l'instant";
-    if (min < 60) return `il y a ${min} min`;
-    const h = Math.floor(min / 60);
-    return `il y a ${h} h ${String(min % 60).padStart(2, "0")}`;
-  }
-  async function renderLive() {
-    const root = $("#live-plot"), key = $("#live-asset").value;
-    if (!key) return;
-    const d = await fetchLive(key);
-    liveData = d;
-    root.replaceChildren();
-    if (!d || !(d.candles || []).length) {
-      $("#live-price").textContent = "—";
-      $("#live-meta").textContent = "Pas encore d'instantané : il est publié au prochain passage du bot.";
-      return empty(root, "Aucune bougie disponible pour cet actif.");
-    }
-    const cs = d.candles, c = COL();
-    $("#live-price").textContent = Number(d.last).toLocaleString("fr-FR");
-    $("#live-meta").textContent = `${esc(d.label)} · bougies 5 min · mis à jour ${liveAge(d.updated_at)}`;
-    const W = Math.max(360, Math.round(root.clientWidth || 900)), H = W < 500 ? 260 : 320;
-    const left = 6, right = 74, top = 12, bottom = 26;
-    const lows = cs.map((k) => k[3]), highs = cs.map((k) => k[2]);
-    const lvls = d.open_signals || [];
-    for (const s of lvls) { lows.push(s.stop_loss, s.take_profit, s.entry); highs.push(s.stop_loss, s.take_profit, s.entry); }
-    let min = Math.min(...lows), max = Math.max(...highs);
-    const pad = (max - min) * 0.06 || 1; min -= pad; max += pad;
-    const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": `Bougies 5 minutes ${d.label}` }, root);
-    const band = (W - left - right) / cs.length;
-    const x = (i) => left + i * band + band / 2;
-    const y = (v) => top + (max - v) / (max - min) * (H - top - bottom);
-    const step = niceStep(max - min);
-    for (let g = Math.ceil(min / step) * step; g <= max; g += step) {
-      el("line", { x1: left, x2: W - right, y1: y(g), y2: y(g), stroke: c.grid }, svg);
-      txt(svg, W - right + 6, y(g) + 4, g.toLocaleString("fr-FR"), { style: "font-size:11px" });
-    }
-    const bw = Math.max(1.5, Math.min(11, band - 2));
-    cs.forEach((k, i) => {
-      const [ts, o, h, l, cl] = k, up = cl >= o;
-      el("line", { x1: x(i), x2: x(i), y1: y(h), y2: y(l), stroke: up ? c.tp : c.sl, "stroke-width": 1 }, svg);
-      const y0 = y(Math.max(o, cl)), y1 = y(Math.min(o, cl));
-      el("rect", { class: "mark " + (up ? "candle-up" : "candle-down"), x: x(i) - bw / 2, y: y0, width: bw, height: Math.max(1, y1 - y0), rx: 1 }, svg);
-      if (i % Math.ceil(cs.length / 6) === 0) {
-        const t = new Date(ts * 1000);
-        const anchor = x(i) < 24 ? "start" : "middle";   // la première étiquette ne doit pas être coupée
-        txt(svg, anchor === "start" ? left : x(i), H - 8, t.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }),
-            { "text-anchor": anchor, style: "font-size:11px" });
-      }
-    });
-    // niveaux des signaux ouverts : identifiés par leur étiquette, jamais par la couleur seule
-    for (const s of lvls) {
-      for (const [val, label, color] of [[s.entry, "Entrée", c.exp], [s.take_profit, "Objectif", c.tp], [s.stop_loss, "Stop", c.sl]]) {
-        if (val == null) continue;
-        el("line", { class: "lvl", x1: left, x2: W - right, y1: y(val), y2: y(val), stroke: color }, svg);
-        txt(svg, left + 4, y(val) - 5, `${label} ${Number(val).toLocaleString("fr-FR")}`, { class: "v", style: "font-size:11px" });
-      }
-    }
-    const last = cs[cs.length - 1];
-    el("circle", { cx: x(cs.length - 1), cy: y(last[4]), r: 4, fill: last[4] >= last[1] ? c.tp : c.sl, stroke: c.card, "stroke-width": 2 }, svg);
-    // survol : la bougie la plus proche
-    const cross = el("line", { y1: top, y2: H - bottom, stroke: c.axis, visibility: "hidden" }, svg);
-    const hit = el("rect", { x: left, y: top, width: W - left - right, height: H - top - bottom, fill: "transparent" }, svg);
-    hit.addEventListener("pointermove", (ev) => {
-      const r = svg.getBoundingClientRect(); const px = (ev.clientX - r.left) / r.width * W;
-      const i = Math.max(0, Math.min(cs.length - 1, Math.floor((px - left) / band)));
-      const k = cs[i]; cross.setAttribute("x1", x(i)); cross.setAttribute("x2", x(i)); cross.setAttribute("visibility", "visible");
-      const t = new Date(k[0] * 1000).toLocaleString("fr-FR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" });
-      showTip(ev, t, [["Ouverture", Number(k[1]).toLocaleString("fr-FR"), null], ["Plus haut", Number(k[2]).toLocaleString("fr-FR"), null],
-                      ["Plus bas", Number(k[3]).toLocaleString("fr-FR"), null], ["Clôture", Number(k[4]).toLocaleString("fr-FR"), k[4] >= k[1] ? c.tp : c.sl]]);
-    });
-    hit.addEventListener("pointerleave", () => { hideTip(); cross.setAttribute("visibility", "hidden"); });
-    const keys = [["Bougie haussière", c.tp], ["Bougie baissière", c.sl]];
-    if (lvls.length) keys.push(["Niveaux de vos signaux ouverts (en pointillés, étiquetés)", c.exp]);
-    legend(root, keys);
-  }
-  function setupLive(assets) {
-    const sel = $("#live-asset"); const cur = sel.value;
-    sel.innerHTML = assets.map(([k, l]) => `<option value="${esc(k)}">${esc(l)}</option>`).join("");
-    if (cur && assets.some(([k]) => k === cur)) sel.value = cur;
-    else { try { const saved = localStorage.getItem("tb-live-asset"); if (saved && assets.some(([k]) => k === saved)) sel.value = saved; } catch (e) { /* stockage indisponible */ } }
-    if (!sel.dataset.bound) {
-      sel.dataset.bound = "1";
-      sel.addEventListener("change", () => { try { localStorage.setItem("tb-live-asset", sel.value); } catch (e) { /* ignoré */ } renderLive(); });
-    }
-    renderLive();
-    if (liveTimer) clearInterval(liveTimer);
-    liveTimer = setInterval(renderLive, 60000);
-  }
-
+  addEventListener("resize", () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(() => { if (data) { try { renderCharts(data); } catch (e) { /* silencieux */ } } }, 200); });
   function renderCharts(d) {
     equityLine($("#ch-equity"), "P&L net cumulé, trade après trade", "Chaque point est un trade clôturé (en % du prix, coûts déduits). Une courbe qui monte régulièrement est le seul vrai signe d'avantage ; survolez pour voir chaque trade.", d.equity_curve || []);
     stackedOutcomes($("#ch-assets"), "Résultats par actif", "Nombre de trades par issue. À droite : taux de réussite et nombre de trades.", d.assets.map((a) => ({ label: a.label.replace(/ \(.*\)/, ""), st: a.stats })));
@@ -601,7 +492,7 @@
 
     // actifs (formulaire + tableau)
     fillAssets(d.assets.map((a) => [a.key, a.label]));
-    setupLive(d.assets.map((a) => [a.key, a.label]));
+    if (live) live.setAssets(d.assets.map((a) => [a.key, a.label]));
     $("#assets tbody").innerHTML = d.assets.map((a) => `<tr>
       <td>${esc(a.label)}${a.open ? ` <span class="pill open">${a.open} ouvert(s)</span>` : ""}</td>
       <td class="num">${a.stats.n}</td><td class="num">${pct(a.stats.win_rate)}</td><td class="num">${pct(a.stats.neutral_win_rate)}</td>
@@ -768,7 +659,6 @@
     finally { btn.disabled = false; }
   });
 
-  setupLive(ASSETS_DEFAULT);   // le graphique live ne dépend pas du tableau de bord
   load();
 })();
 </script>
