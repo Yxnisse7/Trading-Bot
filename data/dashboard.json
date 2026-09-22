@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-22T02:10:39.156921+02:00",
+  "updated_at": "2026-09-22T02:25:34.216276+02:00",
   "timezone": "Europe/Paris",
   "equity_curve": [
     {
@@ -665,7 +665,7 @@
       "avg_pnl_pct": -0.0204
     },
     "open": 1,
-    "open_shadow": 1
+    "open_shadow": 2
   },
   "by_source": {
     "bot": {
@@ -3484,6 +3484,35 @@
   ],
   "open_signals": [
     {
+      "id": "01020a51f3",
+      "asset": "ethereum",
+      "asset_label": "Ethereum (ETH/USD)",
+      "direction": "long",
+      "horizon": "1h",
+      "entry": 2771.2,
+      "take_profit": 2786.3,
+      "stop_loss": 2759.9,
+      "risk_reward": 1.34,
+      "confidence": "moyen",
+      "score": 3.0,
+      "criteria": [
+        "adx",
+        "trend_15m",
+        "trend_1h"
+      ],
+      "source": "shadow",
+      "status": "open",
+      "pnl_pct": null,
+      "pnl_gross_pct": null,
+      "duration_minutes": null,
+      "close_price": null,
+      "created_at": "2026-09-22T00:25:26Z",
+      "created_local": "22/09 02:25",
+      "expires_at": "2026-09-22T01:25:26Z",
+      "rationale": "Achat : tendance forte (ADX), tendance 15 min, tendance 1 h. Range moyen sur 1 h ≈ 28.25 (1.02 %), TP = 53 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 61%.",
+      "news_context": "actualité calme sur les 2 dernières heures"
+    },
+    {
       "id": "1e1f1c6f73",
       "asset": "bitcoin",
       "asset_label": "Bitcoin (BTC/USD)",
@@ -4934,10 +4963,10 @@
     "sample": 720
   },
   "state": {
-    "last_scan": "2026-09-22T00:10:32Z",
+    "last_scan": "2026-09-22T00:25:26Z",
     "last_scan_note": "0 signal(aux)",
     "last_summary": "2026-09-21T22:05:28Z",
-    "last_track": "2026-09-22T00:10:32Z"
+    "last_track": "2026-09-22T00:25:26Z"
   },
   "limits": {
     "max_signals_per_asset_per_day": 5,
