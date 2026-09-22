@@ -5,4 +5,5 @@
 set -euo pipefail
 python run.py fetch-data --days 60
 python run.py backtest --days 60 --offline
+python run.py learn          # les poids tiennent compte du nouveau backtest sans attendre
 git checkout -- data/candles 2>/dev/null || true

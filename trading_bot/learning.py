@@ -208,7 +208,7 @@ def learn(history: list[Signal], cfg: Config, current: dict[str, Any] | None = N
                            "multiplier": round(mult, 3)}
             if mult != 1.0:
                 moved.append(f"{_unit_label(unit)} : {_fmt_r(st['mean'])} {_fmt_m(cfg.learning_z * st['se'])} sur "
-                             f"{st['n_eff']:.0f} trades éq. → poids ×{mult:.2f}")
+                             f"{st['n_eff']:.0f} trades éq. → poids " + f"×{mult:.2f}".replace(".", ","))
 
     # --- Correction par actif : seulement si l'écart au global dépasse sa propre marge
     by_asset: dict[str, dict[str, float]] = {}
@@ -227,7 +227,7 @@ def learn(history: list[Signal], cfg: Config, current: dict[str, Any] | None = N
             for c in members:
                 aw[c] = round(min(1.5, max(min(0.25, DEFAULT_WEIGHTS[c]), weights[c] * mult)), 3)
             asset_notes.append(f"{asset}, {_unit_label(unit)} : {_fmt_r(st['mean'])} contre {_fmt_r(g['mean_r'])} "
-                               f"en global sur {st['n_eff']:.0f} trades éq. → poids ×{mult:.2f} sur cet actif")
+                               f"en global sur {st['n_eff']:.0f} trades éq. → poids " + f"×{mult:.2f}".replace(".", ",") + " sur cet actif")
         by_asset[asset] = aw
 
     # --- Tranches horaires nettement perdantes (brut, donc pires que le hasard)
