@@ -132,9 +132,28 @@ class Config:
     scan_interval_minutes: int = 15
 
     # ---- Apprentissage ----
-    learning_min_trades: int = 10
-    learning_weak_win_rate: float = 0.40
-    learning_strong_win_rate: float = 0.60
+    # Recalcul complet à chaque passage, à partir de TOUS les trades clôturés, sans mémoire des
+    # poids précédents : les mêmes trades donnent toujours les mêmes poids.
+    learning_min_trades: int = 30           # trades équivalents minimum avant de bouger un poids
+    learning_z: float = 1.96                # marge de sécurité : écart prouvé à 95 %
+    learning_gain: float = 2.5              # +0,2 R d'avantage prouvé → poids ×1,5 (plafonné)
+    learning_source_weights: dict[str, float] = field(default_factory=lambda: {
+        "bot": 1.0, "manual": 1.0, "request": 1.0,   # trades réels : la référence
+        "shadow": 0.6,                                # temps réel, mais setups non envoyés
+        "backtest": 0.25,                             # passé rejoué : utile, mais figé
+    })
+    learning_asset_min_trades: int = 30     # correction par actif seulement au-delà
+    learning_hours_z: float = 2.5           # 24 tranches testées : marge plus large
+
+    # ---- Variantes testées en fantôme (jamais notifiées tant qu'elles ne sont pas promues)
+    # Promotion automatique si, sur au moins `variant_min_trades` trades, la variante fait au moins
+    # aussi bien (gain net moyen) que les signaux réels du bot.
+    variants_enabled: bool = True
+    variant_extended_sessions: dict[str, tuple[int, int]] = field(default_factory=lambda: {
+        "nasdaq": (7, 13), "sp500": (7, 13),          # indices : matinée européenne (UTC)
+    })
+    variant_min_trades: int = 100
+    variant_baseline_min_trades: int = 30
 
     # ---- Simulation de compte (paper trading chiffré)
     portfolio_default_balance: float = 1000.0

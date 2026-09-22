@@ -98,8 +98,18 @@ def build_report(all_signals: list[Signal], cfg: Config, adjustments: dict[str, 
             lines.append(f"| {k} | {v} |")
         if adjustments.get("avoid_hours_utc"):
             lines.append(f"\nTranches horaires évitées (UTC) : {adjustments['avoid_hours_utc']}")
+        corrections = {a: {c: w for c, w in ws.items() if w != adjustments["weights"].get(c)}
+                       for a, ws in (adjustments.get("weights_by_asset") or {}).items()}
+        corrections = {a: d for a, d in corrections.items() if d}
+        if corrections:
+            lines += ["", "Corrections par actif :", ""] + [f"- {a} : {d}" for a, d in corrections.items()]
+        if adjustments.get("variants"):
+            lines += ["", "| Variante testée en fantôme | Trades | Gain net moyen | Statut |", "|---|---:|---:|---|"]
+            for v in adjustments["variants"].values():
+                m = "n/a" if v.get("mean_net_r") is None else f"{v['mean_net_r']:+.2f} R"
+                lines.append(f"| {v['label']} | {v['n']} | {m} | {'promue' if v['promoted'] else 'en test'} |")
         if adjustments.get("notes"):
-            lines += ["", "Dernières notes :", ""] + [f"- {n}" for n in adjustments["notes"][-8:]]
+            lines += ["", "Notes :", ""] + [f"- {n}" for n in adjustments["notes"]]
         lines.append("")
     if backtests:
         lines += ["## Backtests (données historiques 5 min)", "", "| Actif | Période | Signaux | TP | SL | Expirés | Taux de réussite | Hasard attendu | Avantage | P&L net | Espérance nette / trade |", "|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|"]
@@ -203,8 +213,9 @@ def build_dashboard(all_signals: list[Signal], cfg: Config, adjustments: dict[st
         "open_signals": [_sig_row(s, tz) for s in sorted(open_sigs, key=lambda s: s.created_at, reverse=True)],
         "recent_trades": [_sig_row(s, tz) for s in sorted(visible_closed, key=lambda s: s.created_at, reverse=True)[:40]],
         "backtests": backtests or {},
-        "adjustments": {"notes": (adjustments or {}).get("notes", []), "avoid_hours_utc": (adjustments or {}).get("avoid_hours_utc", []),
-                        "sample": (adjustments or {}).get("sample")},
+        "adjustments": {k: (adjustments or {}).get(k) for k in
+                        ("notes", "avoid_hours_utc", "sample", "sample_by_source", "method", "weights", "weights_by_asset",
+                         "stats", "overview", "variants", "baseline", "promoted_variants", "updated_at")},
         # l'état est publié sur le site : on en retire tout ce qui touche aux chats Telegram
         "state": {k: v for k, v in (state or {}).items() if not k.startswith("telegram_")},
         "limits": {"max_signals_per_asset_per_day": cfg.max_signals_per_asset_per_day,

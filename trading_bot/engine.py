@@ -59,10 +59,12 @@ class Engine:
     def scan(self, now: datetime | None = None, dry_run: bool = False) -> list[Signal]:
         now = now or utcnow()
         produced: list[Signal] = []
-        all_sigs = self.store.history() + self.store.open_signals()
+        # fantômes ouverts inclus : les plafonds des fantômes doivent les voir d'un passage à l'autre
+        all_sigs = self.store.all_signals()
         adj = self.store.adjustments()
-        weights = adj.get("weights") or None
         avoid_hours = set(adj.get("avoid_hours_utc") or [])
+        promoted = set(adj.get("promoted_variants") or []) if self.cfg.variants_enabled else set()
+        variants_on = self.cfg.variants_enabled and self.cfg.shadow_enabled and not dry_run
 
         calendar = self.macro_events(now)
         blackout = newsmod.in_blackout(now, calendar, self.cfg.news_blackout_before_minutes,
@@ -86,17 +88,36 @@ class Engine:
             scan_cfg = replace(self.cfg, min_criteria=self.cfg.min_criteria + 1, min_score=self.cfg.min_score + 1.0)
             log.info("Prudence post-événement (%s, %s UTC) : %d critères exigés, horizon 3 h suspendu",
                      caution.name, caution.at.strftime("%d/%m %H:%M"), scan_cfg.min_criteria)
-        horizons = [("1h", 5)]
-        if self.cfg.long_horizon_enabled and not caution:
-            horizons.append((f"{self.cfg.long_horizon_base_minutes * 12 // 60}h", self.cfg.long_horizon_base_minutes))
+        if "confiance_moyenne" in promoted and scan_cfg.min_confidence == "fort":
+            scan_cfg = replace(scan_cfg, min_confidence="moyen")
+        # (horizon, base en minutes, variante testée en fantôme ou None pour un signal réel)
+        horizons: list[tuple[str, int, str | None]] = [("1h", 5, None)]
+        long_key = f"{self.cfg.long_horizon_base_minutes * 12 // 60}h"
+        if not caution:
+            if self.cfg.long_horizon_enabled or "horizon_3h" in promoted:
+                horizons.append((long_key, self.cfg.long_horizon_base_minutes, None))
+            elif variants_on:
+                horizons.append((long_key, self.cfg.long_horizon_base_minutes, "horizon_3h"))
         # Bitcoin d'abord : sa direction sert de contexte à l'Ethereum
         ordered = sorted(self.cfg.assets.values(), key=lambda a: 0 if a.key == "bitcoin" else 1)
         for asset in ordered:
+            session_variant = None
             if asset.session_utc and not (asset.session_utc[0] <= now.hour < asset.session_utc[1]):
-                log.info("%s : hors session de trading configurée", asset.label)
-                continue
-            blocked = {h: (self._policy_block(asset.key, all_sigs, now, horizon=h) if (base == 5 or asset.long_horizon)
-                           else ["horizon 3 h désactivé pour cet actif"]) for h, base in horizons}
+                ext = (self.cfg.variant_extended_sessions or {}).get(asset.key)
+                in_ext = bool(ext) and ext[0] <= now.hour < ext[1]
+                if in_ext and "hors_session" in promoted:
+                    pass                                   # variante promue : traitée comme la session normale
+                elif in_ext and variants_on:
+                    session_variant = "hors_session"       # testée en fantôme, jamais notifiée
+                else:
+                    log.info("%s : hors session de trading configurée", asset.label)
+                    continue
+            weights = self._weights_for(adj, asset.key)
+            # Une seule variante à la fois : hors session, seul l'horizon standard est testé, pour que
+            # les statistiques de chaque variante ne mélangent pas deux changements.
+            plan = ([(h, base, session_variant) for h, base, v in horizons if base == 5 and v is None]
+                    if session_variant else list(horizons))
+            blocked = {h: self._scan_block(asset, h, base, variant, all_sigs, now) for h, base, variant in plan}
             if all(blocked.values()):
                 log.info("%s : pas de scan (%s)", asset.label, "; ".join(blocked["1h"]))
                 continue
@@ -111,7 +132,7 @@ class Engine:
                 continue
 
             news_ctx = risk = None
-            for hkey, base in horizons:
+            for hkey, base, variant in plan:
                 if blocked[hkey]:
                     log.info("%s [%s] : %s", asset.label, hkey, "; ".join(blocked[hkey]))
                     continue
@@ -142,8 +163,13 @@ class Engine:
                 sig, why = build_signal(asset, a, scan_cfg, news_ctx, now)
                 if sig is None:
                     log.info("%s [%s] : pas de signal (%s)", asset.label, hkey, "; ".join(why))
-                    if self.cfg.shadow_enabled and not dry_run and base == 5:
-                        self._maybe_shadow(asset, a, news_ctx, now, all_sigs)
+                    if self.cfg.shadow_enabled and not dry_run and base == 5 and not variant:
+                        self._maybe_shadow(asset, a, news_ctx, now, all_sigs, scan_cfg)
+                    continue
+                if variant:
+                    # même exigence qu'un signal réel, mais suivi en silence pour mesurer la variante
+                    self._record_shadow(sig, variant, all_sigs)
+                    log.info("%s [%s] : variante « %s » testée en fantôme (id %s)", asset.label, hkey, variant, sig.id)
                     continue
                 produced.append(sig)
                 all_sigs.append(sig)
@@ -160,8 +186,50 @@ class Engine:
             self.write_report()
         return produced
 
-    def _maybe_shadow(self, asset, a, news_ctx: str, now: datetime, all_sigs: list[Signal]) -> Signal | None:
-        """Signal fantôme : même construction TP / SL, seuils de confiance relâchés, jamais notifié."""
+    @staticmethod
+    def _weights_for(adj: dict[str, Any], asset_key: str) -> dict[str, float] | None:
+        """Poids appris pour cet actif : socle global, corrigé pour l'actif s'il a assez de preuves."""
+        return (adj.get("weights_by_asset") or {}).get(asset_key) or adj.get("weights") or None
+
+    def _scan_block(self, asset, horizon: str, base: int, variant: str | None, all_sigs: list[Signal],
+                    now: datetime) -> list[str]:
+        if base != 5 and not asset.long_horizon:
+            return ["horizon 3 h désactivé pour cet actif"]
+        if variant:
+            return self._variant_block(asset.key, variant, horizon, all_sigs, now)
+        return self._policy_block(asset.key, all_sigs, now, horizon=horizon)
+
+    def _variant_block(self, asset_key: str, variant: str, horizon: str, all_sigs: list[Signal],
+                       now: datetime) -> list[str]:
+        """Contraintes d'une variante en test : les mêmes que pour un signal réel, sur ses propres fantômes."""
+        today = now.astimezone(self.tz).date()
+        # compteurs propres à la variante : les fantômes « faibles » ne doivent pas l'évincer
+        mine = sorted((s for s in all_sigs if s.asset == asset_key and s.source == "shadow"
+                       and (s.meta or {}).get("variant") == variant and (s.horizon or "1h") == horizon),
+                      key=lambda s: s.created_at)
+        reasons = []
+        if sum(1 for s in mine if parse_iso(s.created_at).astimezone(self.tz).date() == today) >= self.cfg.shadow_max_per_asset_per_day:
+            reasons.append("plafond quotidien de la variante atteint")
+        if any(s.status == "open" for s in mine):
+            reasons.append(f"variante « {variant} » déjà ouverte sur cet actif")
+        if mine and now - parse_iso(mine[-1].created_at) < timedelta(minutes=self.cfg.cooldown_minutes):
+            reasons.append("délai de refroidissement de la variante")
+        return reasons
+
+    def _record_shadow(self, sig: Signal, variant: str, all_sigs: list[Signal]) -> Signal:
+        sig.source = "shadow"
+        sig.meta["variant"] = variant
+        self.store.add_shadow(sig)
+        all_sigs.append(sig)
+        return sig
+
+    def _maybe_shadow(self, asset, a, news_ctx: str, now: datetime, all_sigs: list[Signal],
+                      cfg: Config | None = None) -> Signal | None:
+        """Signal fantôme : même construction TP / SL, seuils de confiance relâchés, jamais notifié.
+
+        Étiquette « confiance_moyenne » s'il aurait passé la barre « moyen » (variante testée pour
+        une éventuelle promotion), « faible » sinon (sert seulement à l'apprentissage)."""
+        cfg = cfg or self.cfg
         if a.direction is None or a.n_criteria < self.cfg.shadow_min_criteria:
             return None
         today = now.astimezone(self.tz).date()
@@ -170,16 +238,20 @@ class Engine:
             return None
         if sum(1 for s in mine if s.status == "open") >= self.cfg.shadow_max_open_per_asset:
             return None
-        relaxed = copy.copy(self.cfg)
-        relaxed.min_criteria = self.cfg.shadow_min_criteria
-        relaxed.min_score = 0.0
-        relaxed.min_confidence = "moyen"
-        sig, why = build_signal(asset, a, relaxed, news_ctx, now)
+        sig, variant = None, "faible"
+        if cfg.min_confidence == "fort":
+            sig, _ = build_signal(asset, a, replace(cfg, min_confidence="moyen"), news_ctx, now)
+            variant = "confiance_moyenne" if sig is not None else "faible"
+        if sig is None:
+            relaxed = copy.copy(cfg)
+            relaxed.min_criteria = self.cfg.shadow_min_criteria
+            relaxed.min_score = 0.0
+            relaxed.min_confidence = "moyen"
+            sig, why = build_signal(asset, a, relaxed, news_ctx, now)
+            variant = "faible"
         if sig is None:
             return None
-        sig.source = "shadow"
-        self.store.add_shadow(sig)
-        all_sigs.append(sig)
+        self._record_shadow(sig, variant, all_sigs)
         log.info("%s : signal fantôme %s %s (id %s, %d critères)", asset.label, sig.direction, sig.entry, sig.id, sig.score and a.n_criteria)
         return sig
 
@@ -343,11 +415,25 @@ class Engine:
         return closed
 
     def _relearn(self) -> dict[str, Any]:
+        """Recalcule entièrement les poids à partir de tous les trades clôturés (réels, fantômes,
+        backtest) et annonce les variantes promues ou retirées."""
+        before = set(self.store.adjustments().get("promoted_variants") or [])
         sample = self.store.history()
         if self.cfg.learn_from_backtest:
             sample = sample + self.store.backtest_trades()
-        adj = learn(sample, self.cfg, self.store.adjustments())
+        adj = learn(sample, self.cfg)
         self.store.save_adjustments(adj)
+        if self.cfg.variants_enabled:
+            after = set(adj.get("promoted_variants") or [])
+            for key in sorted(after - before):
+                v = adj["variants"][key]
+                notify(f"🧪 VARIANTE PROMUE : {v['label']}\nSur {v['n']} trades suivis en silence, elle fait au moins "
+                       f"aussi bien que les signaux réels ({v['mean_net_r']:+.2f} R net par trade). "
+                       f"Elle passe désormais en signaux réels.")
+            for key in sorted(before - after):
+                v = (adj.get("variants") or {}).get(key, {"label": key})
+                notify(f"🧪 VARIANTE RETIRÉE : {v['label']}\nSes résultats sont repassés sous ceux des signaux "
+                       f"réels : elle retourne en test silencieux.")
         return adj
 
     # ---------------------------------------------------------------- manuel
@@ -468,7 +554,7 @@ class Engine:
         raw = market.fetch_candles_5m(asset, days=5)
         candles = ind.closed_candles(raw, int(now.timestamp()), 300) or raw
         stale = now.timestamp() - candles[-1].ts > 30 * 60
-        a = assess(asset, candles, self.cfg, self.store.adjustments().get("weights") or None)
+        a = assess(asset, candles, self.cfg, self._weights_for(self.store.adjustments(), asset.key))
         try:
             a.price = market.fetch_price(asset)
         except ProviderError:
@@ -590,7 +676,8 @@ class Engine:
                 if send:
                     notify(text)
         if results:
-            self.store.save_backtests(results)
+            # backtest complet (tous les actifs) : il remplace l'ancien, rien de figé ne subsiste
+            self.store.save_backtests(results, replace=not asset_keys)
             self.write_report()
         return results
 

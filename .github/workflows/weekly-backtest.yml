@@ -1,0 +1,31 @@
+name: Trading bot — backtest hebdomadaire
+
+# Chaque dimanche à 20:00 UTC (marchés fermés) : backtest sur 60 jours de données fraîches, pour que
+# l'apprentissage ne s'appuie pas sur un backtest figé. Lançable aussi à la main.
+on:
+  schedule:
+    - cron: "0 20 * * 0"
+  workflow_dispatch:
+
+concurrency:
+  group: trading-bot-backtest
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Backtest sur 60 jours
+        run: bash scripts/run_and_push.sh bash scripts/weekly_backtest.sh

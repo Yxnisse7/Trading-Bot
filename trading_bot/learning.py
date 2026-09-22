@@ -1,11 +1,12 @@
 """Analyse de l'historique : quels setups gagnent, et ajustement des poids de sélection."""
 from __future__ import annotations
 
+import math
 from collections import defaultdict
 from datetime import datetime, timezone
 from typing import Any
 
-from .analysis import DEFAULT_WEIGHTS
+from .analysis import CRITERION_FAMILIES, DEFAULT_WEIGHTS
 from .config import Config
 from .models import Signal, parse_iso
 
@@ -81,50 +82,201 @@ def expired_stats(closed: list[Signal]) -> dict[str, Any]:
             "avg_pnl_pct": round(sum(s.pnl_pct or 0 for s in exp) / len(exp), 4)}
 
 
-def learn(history: list[Signal], cfg: Config, current: dict[str, Any] | None = None) -> dict[str, Any]:
-    """Ajuste les poids des critères en fonction de leur taux de réussite historique.
+# ------------------------------------------------------------------ apprentissage v2
+#
+# Principes :
+# 1. Recalcul complet : à chaque passage, les poids sont recalculés à partir de TOUS les trades
+#    clôturés, en partant des poids par défaut. Aucune mémoire des poids précédents : les mêmes
+#    trades donnent toujours les mêmes poids, et aucun trade n'est compté deux fois.
+# 2. Marge de sécurité : un poids ne bouge que de la part de l'écart qui dépasse ce que le bruit
+#    peut expliquer (écart − z × erreur type). Peu de trades → grande marge → poids par défaut.
+# 3. Résultat en R : gain ou perte rapporté au risque pris, trades expirés compris. Sous le hasard,
+#    l'espérance brute d'un trade est nulle quelle que soit la position du TP et du SL : c'est la
+#    référence. Comparer le brut à zéro revient à comparer le net au coût du hasard, frais compris.
+# 4. Sources pondérées : un trade réel compte plus qu'un fantôme, qui compte plus qu'un backtest.
+# 5. Familles : les critères qui mesurent la même information sont jugés ensemble.
+# 6. Socle global + correction par actif : un actif ne s'écarte du global que si sa différence
+#    dépasse, elle aussi, la marge de sécurité.
 
-    - critère avec win rate < seuil faible (sur >= N trades) → poids réduit (min 0.25)
-    - critère avec win rate > seuil fort → poids augmenté (max 1.5)
-    - sinon retour progressif vers le poids par défaut
-    """
-    current = current or {"weights": {}, "notes": []}
-    weights = {k: float(current.get("weights", {}).get(k, v)) for k, v in DEFAULT_WEIGHTS.items()}
-    report = analyze(history)
-    notes: list[str] = []
-    for crit, st in report["by_criterion"].items():
-        if crit not in weights:
-            continue
-        n = st["tp"] + st["sl"]
-        wr = st["win_rate"]
-        if n < cfg.learning_min_trades or wr is None:
-            continue
-        old = weights[crit]
-        if wr < cfg.learning_weak_win_rate:
-            weights[crit] = max(0.25, round(old * 0.85, 3))
-            notes.append(f"{crit}: win rate {wr:.0%} sur {n} trades → poids {old} → {weights[crit]}")
-        elif wr > cfg.learning_strong_win_rate:
-            weights[crit] = min(1.5, round(old * 1.10, 3))
-            notes.append(f"{crit}: win rate {wr:.0%} sur {n} trades → poids {old} → {weights[crit]}")
-        else:
-            target = DEFAULT_WEIGHTS[crit]
-            weights[crit] = round(old + (target - old) * 0.5, 3)
-    # Tranches horaires à éviter : win rate < 30 % sur >= N trades
-    avoid_hours = []
-    for hour, st in report["by_hour_utc"].items():
-        n = st["tp"] + st["sl"]
-        if n >= max(20, 2 * cfg.learning_min_trades) and st["win_rate"] is not None and st["win_rate"] < 0.30:
-            avoid_hours.append(int(hour[:2]))
-            notes.append(f"tranche {hour} UTC : win rate {st['win_rate']:.0%} sur {n} trades → évitée")
+REAL_SOURCES = ("bot", "manual", "request")
+VARIANT_LABELS = {
+    "hors_session": "indices le matin européen",
+    "horizon_3h": "horizon ~3 h",
+    "confiance_moyenne": "confiance moyenne",
+}
+
+
+def trade_r(s: Signal, net: bool = False) -> float | None:
+    """Résultat d'un trade clôturé en multiples du risque pris (R). Brut de frais par défaut."""
+    if s.status not in ("tp", "sl", "expired") or not s.entry:
+        return None
+    risk_pct = abs(s.entry - s.stop_loss) / s.entry * 100.0
+    pnl = s.pnl_pct if net else (s.pnl_gross_pct if s.pnl_gross_pct is not None else s.pnl_pct)
+    if not risk_pct or pnl is None:
+        return None
+    return pnl / risk_pct
+
+
+def weighted_stats(pairs: list[tuple[float, float]]) -> dict[str, float] | None:
+    """Moyenne pondérée, taille d'échantillon équivalente et erreur type de la moyenne."""
+    pairs = [(r, w) for r, w in pairs if w > 0]
+    total = sum(w for _, w in pairs)
+    if total <= 0:
+        return None
+    mean = sum(r * w for r, w in pairs) / total
+    n_eff = total * total / sum(w * w for _, w in pairs)
+    var = sum(w * (r - mean) ** 2 for r, w in pairs) / total
+    if n_eff > 1:
+        var *= n_eff / (n_eff - 1)
+    se = math.sqrt(var / n_eff) if n_eff > 0 else float("inf")
+    return {"n": len(pairs), "n_eff": round(n_eff, 1), "mean": mean, "se": se}
+
+
+def proven(mean: float, se: float, z: float) -> float:
+    """Part de l'écart au-delà de la marge de sécurité (0 si l'écart s'explique par le bruit)."""
+    return math.copysign(max(0.0, abs(mean) - z * se), mean)
+
+
+def _units() -> dict[str, tuple[str, ...]]:
+    """Unités évaluées : chaque famille d'un bloc, puis chaque critère isolé."""
+    in_family = {c for members in CRITERION_FAMILIES.values() for c in members}
+    units = dict(CRITERION_FAMILIES)
+    for c in DEFAULT_WEIGHTS:
+        if c not in in_family:
+            units[c] = (c,)
+    return units
+
+
+def _unit_label(unit: str) -> str:
+    members = CRITERION_FAMILIES.get(unit)
+    return f"{unit} ({', '.join(members)})" if members else unit
+
+
+def _fmt_r(v: float) -> str:
+    return f"{v:+.2f} R".replace(".", ",")
+
+
+def _fmt_m(v: float) -> str:
+    return f"± {v:.2f} R".replace(".", ",")
+
+
+def variant_report(closed: list[Signal], cfg: Config) -> dict[str, Any]:
+    """Compare chaque variante testée en fantôme aux signaux réels du bot, sur le gain net."""
+    base = [trade_r(s, net=True) for s in closed if s.source == "bot"]
+    base = [r for r in base if r is not None]
+    base_mean = sum(base) / len(base) if base else None
+    out: dict[str, Any] = {"baseline": {"n": len(base), "mean_net_r": round(base_mean, 4) if base_mean is not None else None},
+                           "variants": {}, "promoted": []}
+    for key, label in VARIANT_LABELS.items():
+        rs = [trade_r(s, net=True) for s in closed if s.source == "shadow" and (s.meta or {}).get("variant") == key]
+        rs = [r for r in rs if r is not None]
+        mean = sum(rs) / len(rs) if rs else None
+        ready = (len(rs) >= cfg.variant_min_trades and len(base) >= cfg.variant_baseline_min_trades
+                 and mean is not None and base_mean is not None and mean >= base_mean)
+        out["variants"][key] = {"label": label, "n": len(rs), "mean_net_r": round(mean, 4) if mean is not None else None,
+                                "promoted": ready, "missing": max(0, cfg.variant_min_trades - len(rs))}
+        if ready:
+            out["promoted"].append(key)
+    return out
+
+
+def learn(history: list[Signal], cfg: Config, current: dict[str, Any] | None = None) -> dict[str, Any]:
+    """Recalcule entièrement les poids à partir de tous les trades clôturés (`current` est ignoré :
+    aucune mémoire des poids précédents, par construction)."""
     closed = [s for s in history if s.status != "open"]
-    by_source = {}
+    src_w = cfg.learning_source_weights
+    rows = [(s, r, float(src_w.get(s.source, 0.0))) for s in closed for r in [trade_r(s)] if r is not None]
+    units = _units()
+    weights = dict(DEFAULT_WEIGHTS)
+    stats: dict[str, Any] = {}
+    moved: list[str] = []
+
+    # --- Socle global
+    unit_mult: dict[str, float] = {}
+    for unit, members in units.items():
+        st = weighted_stats([(r, w) for s, r, w in rows if set(members) & set(s.criteria)])
+        mult = 1.0
+        if st and st["n_eff"] >= cfg.learning_min_trades:
+            p = proven(st["mean"], st["se"], cfg.learning_z)
+            mult = min(1.5, max(0.25, 1.0 + cfg.learning_gain * p))
+        unit_mult[unit] = mult
+        for c in members:
+            weights[c] = round(min(1.5, max(min(0.25, DEFAULT_WEIGHTS[c]), DEFAULT_WEIGHTS[c] * mult)), 3)
+        if st:
+            stats[unit] = {"members": list(members), "n": st["n"], "n_eff": st["n_eff"],
+                           "mean_r": round(st["mean"], 4), "margin_r": round(cfg.learning_z * st["se"], 4),
+                           "multiplier": round(mult, 3)}
+            if mult != 1.0:
+                moved.append(f"{_unit_label(unit)} : {_fmt_r(st['mean'])} {_fmt_m(cfg.learning_z * st['se'])} sur "
+                             f"{st['n_eff']:.0f} trades éq. → poids ×{mult:.2f}")
+
+    # --- Correction par actif : seulement si l'écart au global dépasse sa propre marge
+    by_asset: dict[str, dict[str, float]] = {}
+    asset_notes: list[str] = []
+    for asset in sorted({s.asset for s, _, _ in rows}):
+        aw = dict(weights)
+        for unit, members in units.items():
+            g = stats.get(unit)
+            st = weighted_stats([(r, w) for s, r, w in rows if s.asset == asset and set(members) & set(s.criteria)])
+            if not g or not st or st["n_eff"] < cfg.learning_asset_min_trades:
+                continue
+            p = proven(st["mean"] - g["mean_r"], st["se"], cfg.learning_z)
+            if p == 0.0:
+                continue
+            mult = min(1.5, max(0.5, 1.0 + cfg.learning_gain * p))
+            for c in members:
+                aw[c] = round(min(1.5, max(min(0.25, DEFAULT_WEIGHTS[c]), weights[c] * mult)), 3)
+            asset_notes.append(f"{asset}, {_unit_label(unit)} : {_fmt_r(st['mean'])} contre {_fmt_r(g['mean_r'])} "
+                               f"en global sur {st['n_eff']:.0f} trades éq. → poids ×{mult:.2f} sur cet actif")
+        by_asset[asset] = aw
+
+    # --- Tranches horaires nettement perdantes (brut, donc pires que le hasard)
+    avoid_hours = []
+    for hour in range(24):
+        st = weighted_stats([(r, w) for s, r, w in rows if parse_iso(s.created_at).hour == hour])
+        if st and st["n_eff"] >= cfg.learning_min_trades and st["mean"] + cfg.learning_hours_z * st["se"] < 0:
+            avoid_hours.append(hour)
+            moved.append(f"tranche {hour:02d}h UTC : {_fmt_r(st['mean'])} sur {st['n_eff']:.0f} trades éq. → évitée")
+
+    # --- Vue d'ensemble par source et variantes
+    overview = {}
+    for label, pred in (("réels", lambda s: s.source in REAL_SOURCES), ("fantômes", lambda s: s.source == "shadow"),
+                        ("backtest", lambda s: s.source == "backtest")):
+        st = weighted_stats([(r, 1.0) for s, r, _ in rows if pred(s)])
+        if st:
+            overview[label] = {"n": st["n"], "mean_r": round(st["mean"], 4), "margin_r": round(cfg.learning_z * st["se"], 4)}
+    variants = variant_report(closed, cfg) if cfg.variants_enabled else {"variants": {}, "promoted": []}
+
+    notes: list[str] = []
+    real = overview.get("réels")
+    if real:
+        notes.append(f"trades réels : {_fmt_r(real['mean_r'])} {_fmt_m(real['margin_r'])} par trade avant frais "
+                     f"sur {real['n']} trades (0 R = hasard)")
+    notes += moved or ["aucun critère ne s'écarte du hasard au-delà de la marge de sécurité : poids par défaut conservés"]
+    notes += asset_notes
+    for key, v in variants.get("variants", {}).items():
+        if v["promoted"]:
+            notes.append(f"variante « {v['label']} » promue : {_fmt_r(v['mean_net_r'])} net sur {v['n']} trades, "
+                         f"au moins aussi bien que les signaux réels")
+        elif v["n"]:
+            notes.append(f"variante « {v['label']} » en test : {v['n']} trades, {_fmt_r(v['mean_net_r'])} net"
+                         + (f", encore {v['missing']} trades avant décision" if v["missing"] else ", pas meilleure que les signaux réels"))
+
+    by_source: dict[str, int] = {}
     for s in closed:
         by_source[s.source] = by_source.get(s.source, 0) + 1
     return {
         "updated_at": datetime.now(timezone.utc).isoformat(),
+        "method": "v2 : recalcul complet, marge de sécurité, résultats en R, sources pondérées",
         "weights": weights,
-        "avoid_hours_utc": sorted(avoid_hours),
-        "notes": notes[-20:],
-        "sample": report["total"],
+        "weights_by_asset": by_asset,
+        "avoid_hours_utc": avoid_hours,
+        "stats": stats,
+        "overview": overview,
+        "variants": variants.get("variants", {}),
+        "baseline": variants.get("baseline"),
+        "promoted_variants": variants.get("promoted", []),
+        "notes": notes[:20],
+        "sample": len(closed),
         "sample_by_source": by_source,
     }

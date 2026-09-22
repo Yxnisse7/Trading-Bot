@@ -86,8 +86,12 @@ def test_full_cycle_scan_track_summary(tmp_path, monkeypatch):
     monkeypatch.setattr(engmod.market, "fetch_price", lambda asset: 10 ** 9)
     closed = eng.track(now + timedelta(minutes=20))
     assert len(closed) == 4 and all(s.status == "tp" for s in closed)
-    assert eng.store.open_signals() == [] and len(eng.store.history()) == 4
-    assert eng.store.adjustments()["sample"] == 4
+    real = [s for s in eng.store.history() if s.source != "shadow"]
+    assert eng.store.open_signals() == [] and len(real) == 4
+    # horizon 3 h désactivé : testé en silence comme variante, uniquement sur les actifs où il est permis
+    variants = [s for s in eng.store.history() if s.source == "shadow"]
+    assert variants and all(s.meta.get("variant") == "horizon_3h" and s.asset in ("nasdaq", "sp500", "gold") for s in variants)
+    assert eng.store.adjustments()["sample"] == 4 + len(variants)
 
     text = eng.summary(now.date(), send=False)
     assert "Signaux proposés : 4" in text and "Gagnants (TP) : 4" in text
@@ -613,3 +617,63 @@ def test_live_snapshot_is_written_for_each_asset(tmp_path, monkeypatch):
     monkeypatch.setattr(engmod.market, "fetch_candles_5m",
                         lambda asset, days=5: (_ for _ in ()).throw(ProviderError("indisponible")) if asset.key == "gold" else candles)
     assert "gold" not in eng.write_live_snapshot(now) and "bitcoin" in eng.write_live_snapshot(now)
+
+
+def test_session_variant_is_shadow_until_promoted(tmp_path, monkeypatch):
+    """Indices le matin européen : suivis en silence, puis signaux réels une fois la variante promue."""
+    now = datetime(2026, 9, 17, 8, 0, tzinfo=timezone.utc)          # 8 h UTC : hors session US (13-20 h)
+    candles = make_candles(n=500, drift=0.0003, noise=0.0012, seed=7, start_ts=int(now.timestamp()) - 500 * 300)
+    eng = _engine(tmp_path, monkeypatch, candles, candles[-1].close)
+    eng.cfg.assets["nasdaq"].session_utc = (13, 20)
+    eng.cfg.assets["sp500"].session_utc = (13, 20)
+    from trading_bot import engine as engmod
+    sent = []
+    monkeypatch.setattr(engmod, "notify", lambda text, title=None, chat_id=None: sent.append(text))
+    sigs = eng.scan(now)
+    assert all(s.asset not in ("nasdaq", "sp500") for s in sigs)            # aucun signal réel sur les indices
+    assert not any("Nasdaq" in t or "S&P" in t for t in sent)               # et rien de notifié
+    shadows = [s for s in eng.store.open_shadow() if s.meta.get("variant") == "hors_session"]
+    assert {s.asset for s in shadows} == {"nasdaq", "sp500"}
+    assert all(s.horizon == "1h" for s in shadows)                          # une seule variante à la fois
+    # un second passage ne double pas la variante tant qu'elle est ouverte
+    eng.scan(now + timedelta(minutes=35))
+    assert sum(1 for s in eng.store.open_shadow() if s.meta.get("variant") == "hors_session" and s.asset == "nasdaq") == 1
+
+    # variante promue : les indices le matin européen deviennent des signaux réels
+    eng2 = _engine(tmp_path / "b", monkeypatch, candles, candles[-1].close)
+    eng2.cfg.assets["nasdaq"].session_utc = (13, 20)
+    eng2.store.save_adjustments({"weights": {}, "promoted_variants": ["hors_session"]})
+    sigs2 = eng2.scan(now)
+    assert "nasdaq" in {s.asset for s in sigs2}
+
+
+def test_shadow_labels_medium_confidence_as_variant(tmp_path, monkeypatch):
+    """Avec « fort » exigé, un setup « moyen » devient une variante testée, pas un simple fantôme."""
+    now = datetime(2026, 9, 17, 14, 0, tzinfo=timezone.utc)
+    candles = make_candles(n=500, drift=0.0003, noise=0.0012, seed=7, start_ts=int(now.timestamp()) - 500 * 300)
+    eng = _engine(tmp_path, monkeypatch, candles, candles[-1].close)
+    eng.cfg.min_confidence = "fort"
+    eng.cfg.strong_score = 99.0                 # plus aucun setup n'atteint « fort »
+    assert eng.scan(now) == []
+    labels = {s.meta.get("variant") for s in eng.store.open_shadow()}
+    assert "confiance_moyenne" in labels and None not in labels
+
+
+def test_relearn_announces_promotions(tmp_path, monkeypatch):
+    from tests.test_learning_summary import _trade
+    now = datetime(2026, 9, 17, 14, 0, tzinfo=timezone.utc)
+    candles = make_candles(n=500, drift=0.0003, noise=0.0012, seed=7, start_ts=int(now.timestamp()) - 500 * 300)
+    eng = _engine(tmp_path, monkeypatch, candles, candles[-1].close)
+    from trading_bot import engine as engmod
+    sent = []
+    monkeypatch.setattr(engmod, "notify", lambda text, title=None, chat_id=None: sent.append(text))
+    for i in range(40):
+        eng.store.append_history(_trade(i, "tp" if i % 8 < 3 else "sl", ["rsi"]))
+    for i in range(100):
+        eng.store.append_history(_trade(100 + i, "tp" if i % 2 else "sl", ["rsi"], source="shadow", variant="horizon_3h"))
+    adj = eng._relearn()
+    assert adj["promoted_variants"] == ["horizon_3h"]
+    assert any("VARIANTE PROMUE" in t and "horizon" in t for t in sent)
+    sent.clear()
+    eng._relearn()                                  # pas de nouvelle annonce si rien ne change
+    assert not any("VARIANTE" in t for t in sent)

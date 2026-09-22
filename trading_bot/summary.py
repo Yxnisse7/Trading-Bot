@@ -82,10 +82,10 @@ def daily_summary(all_signals: list[Signal], cfg: Config, day: date | None = Non
     lines.append("Ce qui a mal fonctionné : " + (", ".join(bad) if bad else "rien de significatif"))
     lines.append("")
     if adjustments and adjustments.get("notes"):
-        lines.append("Ajustements prévus pour demain :")
-        lines.extend(f"  • {n}" for n in adjustments["notes"][-5:])
+        lines.append("Apprentissage (recalculé sur tous les trades) :")
+        lines.extend(f"  • {n}" for n in adjustments["notes"][:8])
         if adjustments.get("avoid_hours_utc"):
             lines.append(f"  • tranches horaires évitées (UTC) : {adjustments['avoid_hours_utc']}")
     else:
-        lines.append("Ajustements prévus pour demain : aucun (critères actuels conservés).")
+        lines.append("Apprentissage : aucun ajustement (critères actuels conservés).")
     return "\n".join(lines)

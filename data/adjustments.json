@@ -1,5 +1,6 @@
 {
-  "updated_at": "2026-09-22T18:30:46.738276+00:00",
+  "updated_at": "2026-09-22T18:48:49.085941+00:00",
+  "method": "v2 : recalcul complet, marge de sécurité, résultats en R, sources pondérées",
   "weights": {
     "trend_5m": 1.0,
     "trend_15m": 1.0,
@@ -8,18 +9,228 @@
     "vwap": 0.75,
     "rsi": 1.0,
     "macd": 1.0,
-    "level": 0.25,
-    "volume": 0.25,
-    "orb": 0.25,
+    "level": 1.0,
+    "volume": 0.75,
+    "orb": 1.0,
     "pdhl": 1.0,
-    "corr": 0.25
+    "corr": 0.5
+  },
+  "weights_by_asset": {
+    "bitcoin": {
+      "trend_5m": 1.0,
+      "trend_15m": 1.0,
+      "trend_1h": 1.0,
+      "adx": 1.0,
+      "vwap": 0.75,
+      "rsi": 1.0,
+      "macd": 1.0,
+      "level": 1.0,
+      "volume": 0.75,
+      "orb": 1.0,
+      "pdhl": 1.0,
+      "corr": 0.5
+    },
+    "ethereum": {
+      "trend_5m": 1.0,
+      "trend_15m": 1.0,
+      "trend_1h": 1.0,
+      "adx": 1.0,
+      "vwap": 0.75,
+      "rsi": 1.0,
+      "macd": 1.0,
+      "level": 1.0,
+      "volume": 0.75,
+      "orb": 1.0,
+      "pdhl": 1.0,
+      "corr": 0.5
+    },
+    "gold": {
+      "trend_5m": 1.0,
+      "trend_15m": 1.0,
+      "trend_1h": 1.0,
+      "adx": 1.0,
+      "vwap": 0.75,
+      "rsi": 1.0,
+      "macd": 1.0,
+      "level": 1.0,
+      "volume": 0.75,
+      "orb": 1.0,
+      "pdhl": 1.0,
+      "corr": 0.5
+    },
+    "nasdaq": {
+      "trend_5m": 1.0,
+      "trend_15m": 1.0,
+      "trend_1h": 1.0,
+      "adx": 1.0,
+      "vwap": 0.75,
+      "rsi": 1.0,
+      "macd": 1.0,
+      "level": 1.0,
+      "volume": 0.75,
+      "orb": 1.0,
+      "pdhl": 1.0,
+      "corr": 0.5
+    },
+    "sp500": {
+      "trend_5m": 1.0,
+      "trend_15m": 1.0,
+      "trend_1h": 1.0,
+      "adx": 1.0,
+      "vwap": 0.75,
+      "rsi": 1.0,
+      "macd": 1.0,
+      "level": 1.0,
+      "volume": 0.75,
+      "orb": 1.0,
+      "pdhl": 1.0,
+      "corr": 0.5
+    }
   },
   "avoid_hours_utc": [],
+  "stats": {
+    "tendance": {
+      "members": [
+        "trend_5m",
+        "trend_15m",
+        "trend_1h",
+        "adx"
+      ],
+      "n": 735,
+      "n_eff": 534.0,
+      "mean_r": 0.0525,
+      "margin_r": 0.0963,
+      "multiplier": 1.0
+    },
+    "vwap": {
+      "members": [
+        "vwap"
+      ],
+      "n": 617,
+      "n_eff": 440.1,
+      "mean_r": 0.0734,
+      "margin_r": 0.1066,
+      "multiplier": 1.0
+    },
+    "rsi": {
+      "members": [
+        "rsi"
+      ],
+      "n": 451,
+      "n_eff": 314.0,
+      "mean_r": 0.0647,
+      "margin_r": 0.1248,
+      "multiplier": 1.0
+    },
+    "macd": {
+      "members": [
+        "macd"
+      ],
+      "n": 177,
+      "n_eff": 131.0,
+      "mean_r": 0.0546,
+      "margin_r": 0.2046,
+      "multiplier": 1.0
+    },
+    "level": {
+      "members": [
+        "level"
+      ],
+      "n": 115,
+      "n_eff": 88.2,
+      "mean_r": 0.0353,
+      "margin_r": 0.2445,
+      "multiplier": 1.0
+    },
+    "volume": {
+      "members": [
+        "volume"
+      ],
+      "n": 60,
+      "n_eff": 48.4,
+      "mean_r": -0.0728,
+      "margin_r": 0.3223,
+      "multiplier": 1.0
+    },
+    "orb": {
+      "members": [
+        "orb"
+      ],
+      "n": 43,
+      "n_eff": 29.5,
+      "mean_r": -0.2115,
+      "margin_r": 0.4362,
+      "multiplier": 1.0
+    },
+    "pdhl": {
+      "members": [
+        "pdhl"
+      ],
+      "n": 116,
+      "n_eff": 83.1,
+      "mean_r": 0.0704,
+      "margin_r": 0.2494,
+      "multiplier": 1.0
+    },
+    "corr": {
+      "members": [
+        "corr"
+      ],
+      "n": 15,
+      "n_eff": 14.3,
+      "mean_r": -0.2735,
+      "margin_r": 0.5213,
+      "multiplier": 1.0
+    }
+  },
+  "overview": {
+    "réels": {
+      "n": 47,
+      "mean_r": 0.0143,
+      "margin_r": 0.3301
+    },
+    "fantômes": {
+      "n": 23,
+      "mean_r": 0.2923,
+      "margin_r": 0.4614
+    },
+    "backtest": {
+      "n": 666,
+      "mean_r": 0.042,
+      "margin_r": 0.0858
+    }
+  },
+  "variants": {
+    "hors_session": {
+      "label": "indices le matin européen",
+      "n": 0,
+      "mean_net_r": null,
+      "promoted": false,
+      "missing": 100
+    },
+    "horizon_3h": {
+      "label": "horizon ~3 h",
+      "n": 0,
+      "mean_net_r": null,
+      "promoted": false,
+      "missing": 100
+    },
+    "confiance_moyenne": {
+      "label": "confiance moyenne",
+      "n": 0,
+      "mean_net_r": null,
+      "promoted": false,
+      "missing": 100
+    }
+  },
+  "baseline": {
+    "n": 46,
+    "mean_net_r": -0.1418
+  },
+  "promoted_variants": [],
   "notes": [
-    "corr: win rate 20% sur 10 trades → poids 0.25 → 0.25",
-    "level: win rate 38% sur 91 trades → poids 0.25 → 0.25",
-    "orb: win rate 34% sur 41 trades → poids 0.25 → 0.25",
-    "volume: win rate 37% sur 54 trades → poids 0.25 → 0.25"
+    "trades réels : +0,01 R ± 0,33 R par trade avant frais sur 47 trades (0 R = hasard)",
+    "aucun critère ne s'écarte du hasard au-delà de la marge de sécurité : poids par défaut conservés"
   ],
   "sample": 736,
   "sample_by_source": {

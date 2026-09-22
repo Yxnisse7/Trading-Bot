@@ -92,7 +92,8 @@ macro, ou faible probabilité statistique d'atteindre TP ou SL sous 1 h.
 niveaux TP / SL, même suivi, mais aucune notification. Ces trades fantômes n'entrent pas dans vos
 statistiques de signaux, ils alimentent uniquement les statistiques par critère et l'apprentissage,
 ce qui multiplie les données disponibles sans vous inonder de messages. Les trades de backtest
-alimentent aussi l'apprentissage (`learn_from_backtest`).
+alimentent aussi l'apprentissage (`learn_from_backtest`). Chaque fantôme porte une étiquette :
+variante en test (voir « Variantes testées en fantôme ») ou simple setup faible.
 
 ## Fonctionnement
 
@@ -227,10 +228,42 @@ en argent réel**. Les deux réglages expérimentaux (`max_extension`, `contrari
 désactivés, pour vos propres tests.
 
 ### Apprentissage
-`trading_bot/learning.py` analyse l'historique par critère, actif, sens, confiance, tranche horaire
-et contexte d'actualité. Un critère dont le taux de réussite est < 40 % sur ≥ 10 trades voit son
-poids réduit ; > 60 % → augmenté. Les tranches horaires < 30 % sont évitées. Les poids sont stockés
-dans `data/adjustments.json` et appliqués aux scans suivants.
+`trading_bot/learning.py` recalcule les poids des critères **entièrement, à chaque passage, à
+partir de tous les trades clôturés** : réels, fantômes et backtest. Il n'a aucune mémoire des poids
+précédents : les mêmes trades donnent toujours les mêmes poids, et aucun trade n'est compté deux fois.
+
+- **Résultat en R** : chaque trade est mesuré en multiples du risque pris, trades expirés compris.
+  Sous le hasard, l'espérance brute d'un trade est nulle quelle que soit la place du TP et du SL :
+  c'est la référence. Comparer le brut à zéro revient à comparer le net au coût du hasard.
+- **Marge de sécurité** : un poids ne bouge que de la part de l'écart qui dépasse ce que le bruit
+  peut expliquer, à 95 % (`learning_z`), et seulement au-delà de 30 trades équivalents
+  (`learning_min_trades`). Avec peu de données, le poids reste à sa valeur par défaut.
+- **Sources pondérées** (`learning_source_weights`) : trade réel 1, fantôme 0,6, backtest 0,25.
+- **Familles** : les trois tendances et l'ADX mesurent la même information et sont jugés ensemble.
+- **Socle global + correction par actif** : chaque actif part des poids globaux et ne s'en écarte
+  que si sa propre différence dépasse, elle aussi, la marge de sécurité (`weights_by_asset`).
+- **Tranches horaires** évitées seulement si elles sont nettement pires que le hasard.
+- Le backtest est **relancé chaque dimanche** sur 60 jours de données fraîches
+  (`weekly-backtest.yml`) et remplace le précédent : l'apprentissage ne s'appuie jamais sur un
+  backtest figé.
+
+Les poids, statistiques et notes sont dans `data/adjustments.json`, affichés dans le résumé
+quotidien, le rapport et le tableau de bord.
+
+### Variantes testées en fantôme
+Pour gagner des trades sans baisser l'exigence, trois variantes tournent en silence, avec la même
+barre de qualité qu'un signal réel, et alimentent l'apprentissage dès maintenant :
+
+| Variante | Ce qui est testé |
+|---|---|
+| `hors_session` | Nasdaq et S&P 500 le matin européen, 7h-13h UTC (`variant_extended_sessions`) |
+| `horizon_3h` | l'horizon ~3 h sur le Nasdaq, le S&P 500 et l'or |
+| `confiance_moyenne` | les setups « moyen » quand « fort » est exigé |
+
+Une variante passe **automatiquement en signaux réels** quand, sur au moins 100 trades
+(`variant_min_trades`), son gain net moyen égale ou dépasse celui des signaux réels du bot ; elle
+repasse en test si ses résultats retombent. Chaque promotion ou retrait est annoncé sur Telegram.
+Une seule variante est testée à la fois sur un même trade, pour ne pas mélanger deux changements.
 
 ### Graphique live
 À chaque passage (~5 min), le bot publie pour chaque actif un instantané des 80 dernières bougies
@@ -277,7 +310,8 @@ Sans configuration, les messages sont affichés en console et journalisés dans 
 
 ## Planification sans infrastructure : GitHub Actions
 
-Trois workflows sont fournis dans `.github/workflows/` :
+Les workflows sont dans `.github/workflows/`, dont `weekly-backtest.yml` qui relance le backtest
+chaque dimanche à 20:00 UTC :
 
 - `bot.yml` : `tick` toutes les 5 min (commandes Telegram, suivi des signaux ouverts, scan toutes
   les 15 min) ; l'état (`data/*.json`, `data/REPORT.md`, `docs/dashboard.json`) est commité dans

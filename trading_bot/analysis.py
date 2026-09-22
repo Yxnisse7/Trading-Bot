@@ -44,6 +44,12 @@ DEFAULT_WEIGHTS: dict[str, float] = {
     "corr": 0.5,
 }
 
+# Critères qui mesurent la même information : jugés ensemble par l'apprentissage, pour ne pas
+# compter quatre fois la même tendance ni multiplier les tests sur une seule idée.
+CRITERION_FAMILIES: dict[str, tuple[str, ...]] = {
+    "tendance": ("trend_5m", "trend_15m", "trend_1h", "adx"),
+}
+
 MIN_CANDLES_5M = 80
 
 

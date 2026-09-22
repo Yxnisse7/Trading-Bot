@@ -539,9 +539,17 @@
 
     // apprentissage
     const adj = d.adjustments || {};
-    $("#learning").innerHTML = `<div class="muted">Échantillon : ${adj.sample ?? 0} trades` +
+    const src = adj.sample_by_source || {};
+    const srcTxt = Object.keys(src).length ? " (" + Object.entries(src).map(([k, n]) => `${SRC[k] || k} ${n}`).join(", ") + ")" : "";
+    const vr = Object.values(adj.variants || {});
+    const r2 = (v) => v == null ? "n/a" : (v >= 0 ? "+" : "") + Number(v).toFixed(2).replace(".", ",") + " R";
+    $("#learning").innerHTML = `<div class="muted">Échantillon : ${adj.sample ?? 0} trades${esc(srcTxt)}` +
       (adj.avoid_hours_utc && adj.avoid_hours_utc.length ? ` · tranches évitées (UTC) : ${adj.avoid_hours_utc.join(", ")}h` : "") + `</div>` +
-      ((adj.notes || []).length ? "<ul>" + adj.notes.slice(-8).map((n) => `<li>${esc(n)}</li>`).join("") + "</ul>" : `<div class="muted" style="margin-top:6px">Aucun ajustement pour l'instant (10 trades par critère sont nécessaires).</div>`);
+      `<div class="muted" style="margin-top:4px">Méthode : les poids sont recalculés à chaque passage à partir de tous les trades, et ne bougent que si l'écart avec le hasard dépasse la marge de sécurité. Un trade réel compte pour 1, un fantôme pour 0,6, un trade de backtest pour 0,25.</div>` +
+      ((adj.notes || []).length ? "<ul>" + adj.notes.map((n) => `<li>${esc(n)}</li>`).join("") + "</ul>" : `<div class="muted" style="margin-top:6px">Pas encore de données.</div>`) +
+      (vr.length ? `<table style="margin-top:8px"><thead><tr><th>Variante testée en fantôme</th><th class="num">Trades</th><th class="num">Gain net moyen</th><th>Statut</th></tr></thead><tbody>` +
+        vr.map((v) => `<tr><td>${esc(v.label)}</td><td class="num">${v.n}</td><td class="num">${r2(v.mean_net_r)}</td><td>${v.promoted ? "promue en signaux réels" : `en test${v.missing ? ` (encore ${v.missing} trades)` : ""}`}</td></tr>`).join("") +
+        `</tbody></table><div class="muted" style="margin-top:4px">Une variante passe en signaux réels quand, sur au moins 100 trades, elle fait au moins aussi bien que les signaux réels du bot${adj.baseline && adj.baseline.mean_net_r != null ? ` (actuellement ${r2(adj.baseline.mean_net_r)} net par trade sur ${adj.baseline.n})` : ""}.</div>` : "");
   }
 
   function ghSettings() {

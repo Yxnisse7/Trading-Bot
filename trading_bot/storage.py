@@ -99,10 +99,12 @@ class Store:
     def backtests(self) -> dict[str, Any]:
         return self._read(self.backtest_file, {})
 
-    def save_backtests(self, results: dict[str, Any]) -> None:
+    def save_backtests(self, results: dict[str, Any], replace: bool = False) -> None:
+        """Enregistre résultats et trades. `replace` : repart de zéro (backtest complet, par ex. hebdomadaire),
+        pour qu'aucun ancien trade de backtest ne survive à un horizon ou un réglage abandonné."""
         slim = {k: {kk: vv for kk, vv in v.items() if kk != "trades"} for k, v in results.items()}
         self._write(self.backtest_file, slim)
-        trades = self._read(self.backtest_trades_file, {})
+        trades = {} if replace else self._read(self.backtest_trades_file, {})
         for k, v in results.items():
             trades[k] = [{f: t.get(f) for f in ("id", "asset", "direction", "entry", "take_profit", "stop_loss",
                                                   "confidence", "criteria", "created_at", "status", "pnl_pct",
