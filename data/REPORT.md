@@ -1,6 +1,6 @@
 # Trading-Bot — rapport
 
-_Mis à jour le 22/09/2026 à 21:30 (Europe/Paris)._
+_Mis à jour le 22/09/2026 à 21:34 (Europe/Paris)._
 
 ## Vue d'ensemble
 
@@ -189,29 +189,33 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 
 Corrections par actif :
 
-- ethereum : {'trend_5m': 0.807, 'trend_15m': 0.807, 'trend_1h': 0.807, 'adx': 0.807}
+- sp500 : {'trend_5m': 1.013, 'trend_15m': 1.013, 'trend_1h': 1.013, 'adx': 1.013}
 
 | Variante testée en fantôme | Trades | Gain net moyen | Statut |
 |---|---:|---:|---|
 | indices le matin européen | 0 | n/a | en test |
 | horizon ~3 h | 0 | n/a | en test |
 | confiance moyenne | 0 | n/a | en test |
+| nouvel actif : Pétrole WTI (CL) | 0 | n/a | en test |
+| nouvel actif : Euro / dollar (6E) | 0 | n/a | en test |
 
 Notes :
 
 - trades réels : +0,01 R ± 0,33 R par trade avant frais sur 47 trades (0 R = hasard)
 - aucun critère ne s'écarte du hasard au-delà de la marge de sécurité : poids par défaut conservés
-- ethereum, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,29 R contre +0,06 R en global sur 45 trades éq. → poids ×0,81 sur cet actif
+- sp500, tendance (trend_5m, trend_15m, trend_1h, adx) : +0,29 R contre +0,01 R en global sur 74 trades éq. → poids ×1,01 sur cet actif
 
 ## Backtests (données historiques 5 min)
 
 | Actif | Période | Signaux | TP | SL | Expirés | Taux de réussite | Hasard attendu | Avantage | P&L net | Espérance nette / trade |
 |---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| Nasdaq 100 (NQ) | 24/07/2026 → 22/09/2026 | 65 | 19 | 38 | 8 | 33% | 41% | -8% | -1.34 % | -0.021 % |
-| S&P 500 (ES) | 24/07/2026 → 22/09/2026 | 97 | 41 | 47 | 9 | 47% | 41% | +6% | +0.14 % | +0.001 % |
-| Bitcoin (BTC/USD) | 24/07/2026 → 22/09/2026 | 46 | 20 | 15 | 11 | 57% | 41% | +16% | +1.61 % | +0.035 % |
-| Ethereum (ETH/USD) | 24/07/2026 → 22/09/2026 | 50 | 10 | 27 | 13 | 27% | 40% | -13% | -8.77 % | -0.175 % |
-| Or (XAU/USD) | 24/07/2026 → 22/09/2026 | 111 | 42 | 44 | 25 | 49% | 42% | +7% | +0.05 % | +0.001 % |
+| Nasdaq 100 (NQ) | 24/07/2026 → 22/09/2026 | 65 | 19 | 38 | 8 | 33% | 41% | -8% | -1.33 % | -0.021 % |
+| S&P 500 (ES) | 24/07/2026 → 22/09/2026 | 92 | 46 | 42 | 4 | 52% | 41% | +11% | +1.07 % | +0.012 % |
+| Bitcoin (BTC/USD) | 24/07/2026 → 22/09/2026 | 44 | 14 | 20 | 10 | 41% | 41% | +1% | -1.70 % | -0.039 % |
+| Ethereum (ETH/USD) | 24/07/2026 → 22/09/2026 | 52 | 11 | 27 | 14 | 29% | 40% | -11% | -6.64 % | -0.128 % |
+| Or (XAU/USD) | 24/07/2026 → 22/09/2026 | 112 | 27 | 48 | 37 | 36% | 42% | -6% | -3.06 % | -0.027 % |
+| Pétrole WTI (CL) | 24/07/2026 → 22/09/2026 | 122 | 36 | 73 | 13 | 33% | 41% | -8% | -7.77 % | -0.064 % |
+| Euro / dollar (6E) | 24/07/2026 → 22/09/2026 | 15 | 5 | 8 | 2 | 38% | 40% | -2% | -0.20 % | -0.013 % |
 
 ---
 

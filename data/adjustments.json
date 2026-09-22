@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-22T18:54:14.871036+00:00",
+  "updated_at": "2026-09-22T19:34:21.067683+00:00",
   "method": "v2 : recalcul complet, marge de sécurité, résultats en R, sources pondérées",
   "weights": {
     "trend_5m": 1.0,
@@ -31,10 +31,24 @@
       "corr": 0.5
     },
     "ethereum": {
-      "trend_5m": 0.807,
-      "trend_15m": 0.807,
-      "trend_1h": 0.807,
-      "adx": 0.807,
+      "trend_5m": 1.0,
+      "trend_15m": 1.0,
+      "trend_1h": 1.0,
+      "adx": 1.0,
+      "vwap": 0.75,
+      "rsi": 1.0,
+      "macd": 1.0,
+      "level": 1.0,
+      "volume": 0.75,
+      "orb": 1.0,
+      "pdhl": 1.0,
+      "corr": 0.5
+    },
+    "euro": {
+      "trend_5m": 1.0,
+      "trend_15m": 1.0,
+      "trend_1h": 1.0,
+      "adx": 1.0,
       "vwap": 0.75,
       "rsi": 1.0,
       "macd": 1.0,
@@ -72,11 +86,25 @@
       "pdhl": 1.0,
       "corr": 0.5
     },
-    "sp500": {
+    "oil": {
       "trend_5m": 1.0,
       "trend_15m": 1.0,
       "trend_1h": 1.0,
       "adx": 1.0,
+      "vwap": 0.75,
+      "rsi": 1.0,
+      "macd": 1.0,
+      "level": 1.0,
+      "volume": 0.75,
+      "orb": 1.0,
+      "pdhl": 1.0,
+      "corr": 0.5
+    },
+    "sp500": {
+      "trend_5m": 1.013,
+      "trend_15m": 1.013,
+      "trend_1h": 1.013,
+      "adx": 1.013,
       "vwap": 0.75,
       "rsi": 1.0,
       "macd": 1.0,
@@ -96,80 +124,80 @@
         "trend_1h",
         "adx"
       ],
-      "n": 438,
-      "n_eff": 298.9,
-      "mean_r": 0.0648,
-      "margin_r": 0.1276,
+      "n": 571,
+      "n_eff": 400.9,
+      "mean_r": 0.0132,
+      "margin_r": 0.11,
       "multiplier": 1.0
     },
     "vwap": {
       "members": [
         "vwap"
       ],
-      "n": 353,
-      "n_eff": 238.0,
-      "mean_r": 0.087,
-      "margin_r": 0.1442,
+      "n": 475,
+      "n_eff": 328.1,
+      "mean_r": 0.0487,
+      "margin_r": 0.123,
       "multiplier": 1.0
     },
     "rsi": {
       "members": [
         "rsi"
       ],
-      "n": 355,
-      "n_eff": 238.8,
-      "mean_r": 0.0509,
-      "margin_r": 0.1395,
+      "n": 462,
+      "n_eff": 322.9,
+      "mean_r": -0.0114,
+      "margin_r": 0.12,
       "multiplier": 1.0
     },
     "macd": {
       "members": [
         "macd"
       ],
-      "n": 107,
-      "n_eff": 73.0,
-      "mean_r": -0.0381,
-      "margin_r": 0.2803,
+      "n": 152,
+      "n_eff": 109.7,
+      "mean_r": -0.0306,
+      "margin_r": 0.2228,
       "multiplier": 1.0
     },
     "level": {
       "members": [
         "level"
       ],
-      "n": 65,
-      "n_eff": 46.0,
-      "mean_r": -0.0057,
-      "margin_r": 0.3414,
+      "n": 79,
+      "n_eff": 57.3,
+      "mean_r": -0.0908,
+      "margin_r": 0.3038,
       "multiplier": 1.0
     },
     "volume": {
       "members": [
         "volume"
       ],
-      "n": 30,
-      "n_eff": 21.6,
-      "mean_r": -0.0787,
-      "margin_r": 0.4918,
+      "n": 46,
+      "n_eff": 35.6,
+      "mean_r": -0.0481,
+      "margin_r": 0.3855,
       "multiplier": 1.0
     },
     "orb": {
       "members": [
         "orb"
       ],
-      "n": 20,
-      "n_eff": 13.2,
-      "mean_r": -0.3489,
-      "margin_r": 0.6748,
+      "n": 26,
+      "n_eff": 17.1,
+      "mean_r": -0.3754,
+      "margin_r": 0.5598,
       "multiplier": 1.0
     },
     "pdhl": {
       "members": [
         "pdhl"
       ],
-      "n": 51,
-      "n_eff": 32.9,
-      "mean_r": -0.1808,
-      "margin_r": 0.3765,
+      "n": 61,
+      "n_eff": 39.9,
+      "mean_r": -0.2249,
+      "margin_r": 0.3468,
       "multiplier": 1.0
     },
     "corr": {
@@ -195,9 +223,9 @@
       "margin_r": 0.4614
     },
     "backtest": {
-      "n": 369,
-      "mean_r": 0.0539,
-      "margin_r": 0.1132
+      "n": 502,
+      "mean_r": -0.0195,
+      "margin_r": 0.097
     }
   },
   "variants": {
@@ -221,6 +249,20 @@
       "mean_net_r": null,
       "promoted": false,
       "missing": 100
+    },
+    "essai_oil": {
+      "label": "nouvel actif : Pétrole WTI (CL)",
+      "n": 0,
+      "mean_net_r": null,
+      "promoted": false,
+      "missing": 100
+    },
+    "essai_euro": {
+      "label": "nouvel actif : Euro / dollar (6E)",
+      "n": 0,
+      "mean_net_r": null,
+      "promoted": false,
+      "missing": 100
     }
   },
   "baseline": {
@@ -231,13 +273,13 @@
   "notes": [
     "trades réels : +0,01 R ± 0,33 R par trade avant frais sur 47 trades (0 R = hasard)",
     "aucun critère ne s'écarte du hasard au-delà de la marge de sécurité : poids par défaut conservés",
-    "ethereum, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,29 R contre +0,06 R en global sur 45 trades éq. → poids ×0,81 sur cet actif"
+    "sp500, tendance (trend_5m, trend_15m, trend_1h, adx) : +0,29 R contre +0,01 R en global sur 74 trades éq. → poids ×1,01 sur cet actif"
   ],
-  "sample": 439,
+  "sample": 572,
   "sample_by_source": {
     "bot": 46,
     "shadow": 23,
     "manual": 1,
-    "backtest": 369
+    "backtest": 502
   }
 }
