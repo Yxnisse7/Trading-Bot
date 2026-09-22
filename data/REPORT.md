@@ -1,6 +1,6 @@
 # Trading-Bot — rapport
 
-_Mis à jour le 22/09/2026 à 14:41 (Europe/Paris)._
+_Mis à jour le 22/09/2026 à 14:55 (Europe/Paris)._
 
 ## Vue d'ensemble
 
@@ -8,7 +8,7 @@ _Mis à jour le 22/09/2026 à 14:41 (Europe/Paris)._
 - Taux de réussite cumulé (TP / (TP+SL)) : **42%** — hasard attendu 41%, avantage **+1%**
 - P&L théorique cumulé, net des coûts estimés (somme des % par trade, sans levier) : **-2.98 %** (brut -1.20 %)
 - Signaux ouverts : **0**
-- Signaux fantômes (suivis en silence pour l'apprentissage) : **21** clôturés, 1 ouverts, taux de réussite 50% (hasard attendu 41%)
+- Signaux fantômes (suivis en silence pour l'apprentissage) : **22** clôturés, 0 ouverts, taux de réussite 50% (hasard attendu 41%)
 
 ## Statistiques
 
@@ -109,21 +109,21 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 
 | Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
 |---|---:|---:|---:|---:|---:|---:|
-| adx | 21 | 8 | 8 | 5 | 50% | -0.060 % |
+| adx | 22 | 8 | 8 | 6 | 50% | -0.055 % |
 | corr | 5 | 0 | 3 | 2 | 0% | -0.251 % |
-| level | 2 | 2 | 0 | 0 | 100% | +0.145 % |
+| level | 3 | 2 | 0 | 1 | 100% | +0.112 % |
 | orb | 1 | 1 | 0 | 0 | 100% | +0.113 % |
 | rsi | 1 | 1 | 0 | 0 | 100% | +0.113 % |
-| trend_15m | 21 | 8 | 8 | 5 | 50% | -0.060 % |
-| trend_1h | 19 | 6 | 8 | 5 | 43% | -0.077 % |
+| trend_15m | 22 | 8 | 8 | 6 | 50% | -0.055 % |
+| trend_1h | 20 | 6 | 8 | 6 | 43% | -0.071 % |
 | trend_5m | 7 | 5 | 2 | 0 | 71% | +0.060 % |
-| vwap | 20 | 8 | 7 | 5 | 53% | -0.039 % |
+| vwap | 21 | 8 | 7 | 6 | 53% | -0.035 % |
 
 ### Fantômes par actif
 
 | Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
 |---|---:|---:|---:|---:|---:|---:|
-| bitcoin | 3 | 0 | 0 | 3 | n/a | -0.003 % |
+| bitcoin | 4 | 0 | 0 | 4 | n/a | +0.009 % |
 | ethereum | 6 | 0 | 4 | 2 | 0% | -0.290 % |
 | gold | 3 | 1 | 2 | 0 | 33% | -0.043 % |
 | nasdaq | 8 | 6 | 2 | 0 | 75% | +0.066 % |
@@ -183,7 +183,7 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 
 Dernières notes :
 
-- corr: win rate 20% sur 10 trades → poids 0.261 → 0.25
+- corr: win rate 20% sur 10 trades → poids 0.25 → 0.25
 - level: win rate 39% sur 90 trades → poids 0.25 → 0.25
 - orb: win rate 36% sur 39 trades → poids 0.25 → 0.25
 - volume: win rate 37% sur 54 trades → poids 0.25 → 0.25

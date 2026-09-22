@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-22T14:41:15.934426+02:00",
+  "updated_at": "2026-09-22T14:55:31.847045+02:00",
   "timezone": "Europe/Paris",
   "equity_curve": [
     {
@@ -717,18 +717,18 @@
       "avg_pnl_pct": -0.0692
     },
     "shadow": {
-      "n": 21,
+      "n": 22,
       "tp": 8,
       "sl": 8,
-      "expired": 5,
+      "expired": 6,
       "win_rate": 0.5,
-      "neutral_win_rate": 0.4101,
-      "edge": 0.0899,
-      "pnl_pct": -1.264,
-      "avg_pnl_pct": -0.0602
+      "neutral_win_rate": 0.4097,
+      "edge": 0.0903,
+      "pnl_pct": -1.2192,
+      "avg_pnl_pct": -0.0554
     },
     "open": 0,
-    "open_shadow": 1
+    "open_shadow": 0
   },
   "by_source": {
     "bot": {
@@ -765,15 +765,15 @@
       "avg_pnl_pct": 0.0
     },
     "shadow": {
-      "n": 21,
+      "n": 22,
       "tp": 8,
       "sl": 8,
-      "expired": 5,
+      "expired": 6,
       "win_rate": 0.5,
-      "neutral_win_rate": 0.4101,
-      "edge": 0.0899,
-      "pnl_pct": -1.264,
-      "avg_pnl_pct": -0.0602
+      "neutral_win_rate": 0.4097,
+      "edge": 0.0903,
+      "pnl_pct": -1.2192,
+      "avg_pnl_pct": -0.0554
     }
   },
   "by_horizon": {
@@ -885,15 +885,15 @@
         "avg_pnl_pct": -0.0457
       },
       "shadow": {
-        "n": 3,
+        "n": 4,
         "tp": 0,
         "sl": 0,
-        "expired": 3,
+        "expired": 4,
         "win_rate": null,
-        "neutral_win_rate": 0.4114,
+        "neutral_win_rate": 0.4085,
         "edge": null,
-        "pnl_pct": -0.0083,
-        "avg_pnl_pct": -0.0028
+        "pnl_pct": 0.0365,
+        "avg_pnl_pct": 0.0091
       },
       "open": 0,
       "session_utc": null,
@@ -1293,15 +1293,15 @@
       "label": "Tendance 15 min",
       "weight": 1.0,
       "stats": {
-        "n": 63,
+        "n": 64,
         "tp": 22,
         "sl": 27,
-        "expired": 14,
+        "expired": 15,
         "win_rate": 0.4489795918367347,
-        "neutral_win_rate": 0.4095,
-        "edge": 0.0395,
-        "pnl_pct": -4.0814,
-        "avg_pnl_pct": -0.0648
+        "neutral_win_rate": 0.4093,
+        "edge": 0.0397,
+        "pnl_pct": -4.0366,
+        "avg_pnl_pct": -0.0631
       },
       "by_source": {
         "bot": {
@@ -1338,18 +1338,49 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 21,
+          "n": 22,
           "tp": 8,
           "sl": 8,
-          "expired": 5,
+          "expired": 6,
           "win_rate": 0.5,
-          "neutral_win_rate": 0.4101,
-          "edge": 0.0899,
-          "pnl_pct": -1.264,
-          "avg_pnl_pct": -0.0602
+          "neutral_win_rate": 0.4097,
+          "edge": 0.0903,
+          "pnl_pct": -1.2192,
+          "avg_pnl_pct": -0.0554
         }
       },
       "last_trades": [
+        {
+          "id": "cdcb964ba1",
+          "asset": "bitcoin",
+          "asset_label": "Bitcoin (BTC/USD)",
+          "direction": "long",
+          "horizon": "1h",
+          "entry": 85900.0,
+          "take_profit": 86259.0,
+          "stop_loss": 85661.0,
+          "risk_reward": 1.5,
+          "confidence": "moyen",
+          "score": 4.0,
+          "criteria": [
+            "adx",
+            "level",
+            "trend_15m",
+            "trend_1h",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "expired",
+          "pnl_pct": 0.0448,
+          "pnl_gross_pct": 0.1048,
+          "duration_minutes": 60,
+          "close_price": 85990.0,
+          "created_at": "2026-09-22T11:55:25Z",
+          "created_local": "22/09 13:55",
+          "expires_at": "2026-09-22T12:55:25Z",
+          "rationale": "Achat : tendance forte (ADX), niveau clé favorable, tendance 15 min, tendance 1 h, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 598.2 (0.70 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 80%.",
+          "news_context": "actualité à surveiller (score 2) : U.S. strikes Greenland deal for 'permanent control over security,' will send forces to Danish dogsled outpost and reopen Cold War base: Report"
+        },
         {
           "id": "60de069fd7",
           "asset": "gold",
@@ -1574,35 +1605,6 @@
           "created_local": "22/09 05:55",
           "expires_at": "2026-09-22T04:55:25Z",
           "rationale": "Vente : tendance forte (ADX), marché meneur favorable, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 26.22 (0.96 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 71%.",
-          "news_context": "actualité calme sur les 2 dernières heures"
-        },
-        {
-          "id": "01020a51f3",
-          "asset": "ethereum",
-          "asset_label": "Ethereum (ETH/USD)",
-          "direction": "long",
-          "horizon": "1h",
-          "entry": 2771.2,
-          "take_profit": 2786.3,
-          "stop_loss": 2759.9,
-          "risk_reward": 1.34,
-          "confidence": "moyen",
-          "score": 3.0,
-          "criteria": [
-            "adx",
-            "trend_15m",
-            "trend_1h"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.4878,
-          "pnl_gross_pct": -0.4078,
-          "duration_minutes": 29,
-          "close_price": 2759.9,
-          "created_at": "2026-09-22T00:25:26Z",
-          "created_local": "22/09 02:25",
-          "expires_at": "2026-09-22T01:25:26Z",
-          "rationale": "Achat : tendance forte (ADX), tendance 15 min, tendance 1 h. Range moyen sur 1 h ≈ 28.25 (1.02 %), TP = 53 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 61%.",
           "news_context": "actualité calme sur les 2 dernières heures"
         }
       ]
@@ -1612,15 +1614,15 @@
       "label": "Tendance 1 h",
       "weight": 1.0,
       "stats": {
-        "n": 61,
+        "n": 62,
         "tp": 20,
         "sl": 27,
-        "expired": 14,
+        "expired": 15,
         "win_rate": 0.425531914893617,
-        "neutral_win_rate": 0.4097,
-        "edge": 0.0158,
-        "pnl_pct": -4.2782,
-        "avg_pnl_pct": -0.0701
+        "neutral_win_rate": 0.4096,
+        "edge": 0.0159,
+        "pnl_pct": -4.2334,
+        "avg_pnl_pct": -0.0683
       },
       "by_source": {
         "bot": {
@@ -1657,18 +1659,49 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 19,
+          "n": 20,
           "tp": 6,
           "sl": 8,
-          "expired": 5,
+          "expired": 6,
           "win_rate": 0.42857142857142855,
-          "neutral_win_rate": 0.411,
-          "edge": 0.0176,
-          "pnl_pct": -1.4608,
-          "avg_pnl_pct": -0.0769
+          "neutral_win_rate": 0.4105,
+          "edge": 0.0181,
+          "pnl_pct": -1.416,
+          "avg_pnl_pct": -0.0708
         }
       },
       "last_trades": [
+        {
+          "id": "cdcb964ba1",
+          "asset": "bitcoin",
+          "asset_label": "Bitcoin (BTC/USD)",
+          "direction": "long",
+          "horizon": "1h",
+          "entry": 85900.0,
+          "take_profit": 86259.0,
+          "stop_loss": 85661.0,
+          "risk_reward": 1.5,
+          "confidence": "moyen",
+          "score": 4.0,
+          "criteria": [
+            "adx",
+            "level",
+            "trend_15m",
+            "trend_1h",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "expired",
+          "pnl_pct": 0.0448,
+          "pnl_gross_pct": 0.1048,
+          "duration_minutes": 60,
+          "close_price": 85990.0,
+          "created_at": "2026-09-22T11:55:25Z",
+          "created_local": "22/09 13:55",
+          "expires_at": "2026-09-22T12:55:25Z",
+          "rationale": "Achat : tendance forte (ADX), niveau clé favorable, tendance 15 min, tendance 1 h, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 598.2 (0.70 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 80%.",
+          "news_context": "actualité à surveiller (score 2) : U.S. strikes Greenland deal for 'permanent control over security,' will send forces to Danish dogsled outpost and reopen Cold War base: Report"
+        },
         {
           "id": "60de069fd7",
           "asset": "gold",
@@ -1893,35 +1926,6 @@
           "created_local": "22/09 05:55",
           "expires_at": "2026-09-22T04:55:25Z",
           "rationale": "Vente : tendance forte (ADX), marché meneur favorable, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 26.22 (0.96 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 71%.",
-          "news_context": "actualité calme sur les 2 dernières heures"
-        },
-        {
-          "id": "01020a51f3",
-          "asset": "ethereum",
-          "asset_label": "Ethereum (ETH/USD)",
-          "direction": "long",
-          "horizon": "1h",
-          "entry": 2771.2,
-          "take_profit": 2786.3,
-          "stop_loss": 2759.9,
-          "risk_reward": 1.34,
-          "confidence": "moyen",
-          "score": 3.0,
-          "criteria": [
-            "adx",
-            "trend_15m",
-            "trend_1h"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.4878,
-          "pnl_gross_pct": -0.4078,
-          "duration_minutes": 29,
-          "close_price": 2759.9,
-          "created_at": "2026-09-22T00:25:26Z",
-          "created_local": "22/09 02:25",
-          "expires_at": "2026-09-22T01:25:26Z",
-          "rationale": "Achat : tendance forte (ADX), tendance 15 min, tendance 1 h. Range moyen sur 1 h ≈ 28.25 (1.02 %), TP = 53 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 61%.",
           "news_context": "actualité calme sur les 2 dernières heures"
         }
       ]
@@ -1931,15 +1935,15 @@
       "label": "Force de tendance (ADX)",
       "weight": 1.0,
       "stats": {
-        "n": 63,
+        "n": 64,
         "tp": 22,
         "sl": 27,
-        "expired": 14,
+        "expired": 15,
         "win_rate": 0.4489795918367347,
-        "neutral_win_rate": 0.4095,
-        "edge": 0.0395,
-        "pnl_pct": -4.0814,
-        "avg_pnl_pct": -0.0648
+        "neutral_win_rate": 0.4093,
+        "edge": 0.0397,
+        "pnl_pct": -4.0366,
+        "avg_pnl_pct": -0.0631
       },
       "by_source": {
         "bot": {
@@ -1976,18 +1980,49 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 21,
+          "n": 22,
           "tp": 8,
           "sl": 8,
-          "expired": 5,
+          "expired": 6,
           "win_rate": 0.5,
-          "neutral_win_rate": 0.4101,
-          "edge": 0.0899,
-          "pnl_pct": -1.264,
-          "avg_pnl_pct": -0.0602
+          "neutral_win_rate": 0.4097,
+          "edge": 0.0903,
+          "pnl_pct": -1.2192,
+          "avg_pnl_pct": -0.0554
         }
       },
       "last_trades": [
+        {
+          "id": "cdcb964ba1",
+          "asset": "bitcoin",
+          "asset_label": "Bitcoin (BTC/USD)",
+          "direction": "long",
+          "horizon": "1h",
+          "entry": 85900.0,
+          "take_profit": 86259.0,
+          "stop_loss": 85661.0,
+          "risk_reward": 1.5,
+          "confidence": "moyen",
+          "score": 4.0,
+          "criteria": [
+            "adx",
+            "level",
+            "trend_15m",
+            "trend_1h",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "expired",
+          "pnl_pct": 0.0448,
+          "pnl_gross_pct": 0.1048,
+          "duration_minutes": 60,
+          "close_price": 85990.0,
+          "created_at": "2026-09-22T11:55:25Z",
+          "created_local": "22/09 13:55",
+          "expires_at": "2026-09-22T12:55:25Z",
+          "rationale": "Achat : tendance forte (ADX), niveau clé favorable, tendance 15 min, tendance 1 h, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 598.2 (0.70 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 80%.",
+          "news_context": "actualité à surveiller (score 2) : U.S. strikes Greenland deal for 'permanent control over security,' will send forces to Danish dogsled outpost and reopen Cold War base: Report"
+        },
         {
           "id": "60de069fd7",
           "asset": "gold",
@@ -2213,35 +2248,6 @@
           "expires_at": "2026-09-22T04:55:25Z",
           "rationale": "Vente : tendance forte (ADX), marché meneur favorable, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 26.22 (0.96 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 71%.",
           "news_context": "actualité calme sur les 2 dernières heures"
-        },
-        {
-          "id": "01020a51f3",
-          "asset": "ethereum",
-          "asset_label": "Ethereum (ETH/USD)",
-          "direction": "long",
-          "horizon": "1h",
-          "entry": 2771.2,
-          "take_profit": 2786.3,
-          "stop_loss": 2759.9,
-          "risk_reward": 1.34,
-          "confidence": "moyen",
-          "score": 3.0,
-          "criteria": [
-            "adx",
-            "trend_15m",
-            "trend_1h"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.4878,
-          "pnl_gross_pct": -0.4078,
-          "duration_minutes": 29,
-          "close_price": 2759.9,
-          "created_at": "2026-09-22T00:25:26Z",
-          "created_local": "22/09 02:25",
-          "expires_at": "2026-09-22T01:25:26Z",
-          "rationale": "Achat : tendance forte (ADX), tendance 15 min, tendance 1 h. Range moyen sur 1 h ≈ 28.25 (1.02 %), TP = 53 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 61%.",
-          "news_context": "actualité calme sur les 2 dernières heures"
         }
       ]
     },
@@ -2250,15 +2256,15 @@
       "label": "VWAP",
       "weight": 0.75,
       "stats": {
-        "n": 60,
+        "n": 61,
         "tp": 22,
         "sl": 24,
-        "expired": 14,
+        "expired": 15,
         "win_rate": 0.4782608695652174,
-        "neutral_win_rate": 0.4095,
-        "edge": 0.0688,
-        "pnl_pct": -2.9772,
-        "avg_pnl_pct": -0.0496
+        "neutral_win_rate": 0.4094,
+        "edge": 0.0689,
+        "pnl_pct": -2.9324,
+        "avg_pnl_pct": -0.0481
       },
       "by_source": {
         "bot": {
@@ -2295,18 +2301,49 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 20,
+          "n": 21,
           "tp": 8,
           "sl": 7,
-          "expired": 5,
+          "expired": 6,
           "win_rate": 0.5333333333333333,
-          "neutral_win_rate": 0.4092,
-          "edge": 0.1241,
-          "pnl_pct": -0.7762,
-          "avg_pnl_pct": -0.0388
+          "neutral_win_rate": 0.4088,
+          "edge": 0.1245,
+          "pnl_pct": -0.7314,
+          "avg_pnl_pct": -0.0348
         }
       },
       "last_trades": [
+        {
+          "id": "cdcb964ba1",
+          "asset": "bitcoin",
+          "asset_label": "Bitcoin (BTC/USD)",
+          "direction": "long",
+          "horizon": "1h",
+          "entry": 85900.0,
+          "take_profit": 86259.0,
+          "stop_loss": 85661.0,
+          "risk_reward": 1.5,
+          "confidence": "moyen",
+          "score": 4.0,
+          "criteria": [
+            "adx",
+            "level",
+            "trend_15m",
+            "trend_1h",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "expired",
+          "pnl_pct": 0.0448,
+          "pnl_gross_pct": 0.1048,
+          "duration_minutes": 60,
+          "close_price": 85990.0,
+          "created_at": "2026-09-22T11:55:25Z",
+          "created_local": "22/09 13:55",
+          "expires_at": "2026-09-22T12:55:25Z",
+          "rationale": "Achat : tendance forte (ADX), niveau clé favorable, tendance 15 min, tendance 1 h, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 598.2 (0.70 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 80%.",
+          "news_context": "actualité à surveiller (score 2) : U.S. strikes Greenland deal for 'permanent control over security,' will send forces to Danish dogsled outpost and reopen Cold War base: Report"
+        },
         {
           "id": "60de069fd7",
           "asset": "gold",
@@ -2531,39 +2568,6 @@
           "created_local": "22/09 05:55",
           "expires_at": "2026-09-22T04:55:25Z",
           "rationale": "Vente : tendance forte (ADX), marché meneur favorable, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 26.22 (0.96 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 71%.",
-          "news_context": "actualité calme sur les 2 dernières heures"
-        },
-        {
-          "id": "1e1f1c6f73",
-          "asset": "bitcoin",
-          "asset_label": "Bitcoin (BTC/USD)",
-          "direction": "long",
-          "horizon": "1h",
-          "entry": 86554.0,
-          "take_profit": 86993.0,
-          "stop_loss": 86208.0,
-          "risk_reward": 1.27,
-          "confidence": "fort",
-          "score": 6.75,
-          "criteria": [
-            "adx",
-            "macd",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "bot",
-          "status": "sl",
-          "pnl_pct": -0.4598,
-          "pnl_gross_pct": -0.3998,
-          "duration_minutes": 44,
-          "close_price": 86208.0,
-          "created_at": "2026-09-21T23:55:38Z",
-          "created_local": "22/09 01:55",
-          "expires_at": "2026-09-22T00:55:38Z",
-          "rationale": "Achat : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 731.2 (0.84 %), TP = 60 % du range, SL = 47 % du range, probabilité de résolution sous 1 h ≈ 47%.",
           "news_context": "actualité calme sur les 2 dernières heures"
         }
       ]
@@ -3228,15 +3232,15 @@
       "label": "Niveau clé",
       "weight": 0.25,
       "stats": {
-        "n": 6,
+        "n": 7,
         "tp": 3,
         "sl": 3,
-        "expired": 0,
+        "expired": 1,
         "win_rate": 0.5,
-        "neutral_win_rate": 0.4073,
-        "edge": 0.0927,
-        "pnl_pct": -0.1841,
-        "avg_pnl_pct": -0.0307
+        "neutral_win_rate": 0.4062,
+        "edge": 0.0938,
+        "pnl_pct": -0.1393,
+        "avg_pnl_pct": -0.0199
       },
       "by_source": {
         "bot": {
@@ -3273,18 +3277,49 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 2,
+          "n": 3,
           "tp": 2,
           "sl": 0,
-          "expired": 0,
+          "expired": 1,
           "win_rate": 1.0,
-          "neutral_win_rate": 0.4076,
-          "edge": 0.5924,
-          "pnl_pct": 0.2908,
-          "avg_pnl_pct": 0.1454
+          "neutral_win_rate": 0.405,
+          "edge": 0.595,
+          "pnl_pct": 0.3356,
+          "avg_pnl_pct": 0.1119
         }
       },
       "last_trades": [
+        {
+          "id": "cdcb964ba1",
+          "asset": "bitcoin",
+          "asset_label": "Bitcoin (BTC/USD)",
+          "direction": "long",
+          "horizon": "1h",
+          "entry": 85900.0,
+          "take_profit": 86259.0,
+          "stop_loss": 85661.0,
+          "risk_reward": 1.5,
+          "confidence": "moyen",
+          "score": 4.0,
+          "criteria": [
+            "adx",
+            "level",
+            "trend_15m",
+            "trend_1h",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "expired",
+          "pnl_pct": 0.0448,
+          "pnl_gross_pct": 0.1048,
+          "duration_minutes": 60,
+          "close_price": 85990.0,
+          "created_at": "2026-09-22T11:55:25Z",
+          "created_local": "22/09 13:55",
+          "expires_at": "2026-09-22T12:55:25Z",
+          "rationale": "Achat : tendance forte (ADX), niveau clé favorable, tendance 15 min, tendance 1 h, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 598.2 (0.70 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 80%.",
+          "news_context": "actualité à surveiller (score 2) : U.S. strikes Greenland deal for 'permanent control over security,' will send forces to Danish dogsled outpost and reopen Cold War base: Report"
+        },
         {
           "id": "3cf14500fc",
           "asset": "gold",
@@ -3614,39 +3649,7 @@
       ]
     }
   ],
-  "open_signals": [
-    {
-      "id": "cdcb964ba1",
-      "asset": "bitcoin",
-      "asset_label": "Bitcoin (BTC/USD)",
-      "direction": "long",
-      "horizon": "1h",
-      "entry": 85900.0,
-      "take_profit": 86259.0,
-      "stop_loss": 85661.0,
-      "risk_reward": 1.5,
-      "confidence": "moyen",
-      "score": 4.0,
-      "criteria": [
-        "adx",
-        "level",
-        "trend_15m",
-        "trend_1h",
-        "vwap"
-      ],
-      "source": "shadow",
-      "status": "open",
-      "pnl_pct": null,
-      "pnl_gross_pct": null,
-      "duration_minutes": null,
-      "close_price": null,
-      "created_at": "2026-09-22T11:55:25Z",
-      "created_local": "22/09 13:55",
-      "expires_at": "2026-09-22T12:55:25Z",
-      "rationale": "Achat : tendance forte (ADX), niveau clé favorable, tendance 15 min, tendance 1 h, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 598.2 (0.70 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 80%.",
-      "news_context": "actualité à surveiller (score 2) : U.S. strikes Greenland deal for 'permanent control over security,' will send forces to Danish dogsled outpost and reopen Cold War base: Report"
-    }
-  ],
+  "open_signals": [],
   "recent_trades": [
     {
       "id": "60de069fd7",
@@ -5162,19 +5165,19 @@
   },
   "adjustments": {
     "notes": [
-      "corr: win rate 20% sur 10 trades → poids 0.261 → 0.25",
+      "corr: win rate 20% sur 10 trades → poids 0.25 → 0.25",
       "level: win rate 39% sur 90 trades → poids 0.25 → 0.25",
       "orb: win rate 36% sur 39 trades → poids 0.25 → 0.25",
       "volume: win rate 37% sur 54 trades → poids 0.25 → 0.25"
     ],
     "avoid_hours_utc": [],
-    "sample": 730
+    "sample": 731
   },
   "state": {
-    "last_scan": "2026-09-22T12:41:09Z",
+    "last_scan": "2026-09-22T12:55:26Z",
     "last_scan_note": "0 signal(aux)",
     "last_summary": "2026-09-22T00:44:53Z",
-    "last_track": "2026-09-22T12:41:09Z"
+    "last_track": "2026-09-22T12:55:26Z"
   },
   "limits": {
     "max_signals_per_asset_per_day": 5,
