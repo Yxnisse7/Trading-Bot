@@ -88,6 +88,7 @@ def halal_config(path: Path | None = None) -> Config:
     cfg.scan_bases = [60]                   # bougie 1 h → horizon ~12 h
     cfg.scan_days = 30                      # 1 h × 30 jours : assez d'historique pour les tendances
     cfg.scan_interval_minutes = 15          # sur une bougie 1 h, analyser toutes les 15 min suffit
+    cfg.max_candle_age_minutes = 90         # ETF de Londres peu échangés : bougies 5 min clairsemées
     cfg.min_confidence = "moyen"
     cfg.min_tp_to_cost_ratio = 4.0
     cfg.max_open_signals = 4

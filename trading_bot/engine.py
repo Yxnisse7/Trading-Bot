@@ -144,7 +144,7 @@ class Engine:
                 log.warning("%s : données indisponibles (%s)", asset.label, exc)
                 continue
             candles = ind.closed_candles(raw, int(now.timestamp()), 300)
-            if not candles or now.timestamp() - candles[-1].ts > 30 * 60:
+            if not candles or now.timestamp() - candles[-1].ts > self.cfg.max_candle_age_minutes * 60:
                 log.info("%s : dernière bougie clôturée trop ancienne (marché fermé ?)", asset.label)
                 continue
 

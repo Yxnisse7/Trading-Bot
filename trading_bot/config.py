@@ -170,6 +170,7 @@ class Config:
     cash_only: bool = False                 # simulation au comptant : jamais plus que les liquidités disponibles
     scan_bases: list[int] | None = None     # bougies de base analysées (ex. [60] → horizon ~12 h) ; None = réglage standard
     scan_days: int = 5                      # profondeur d'historique chargée à chaque analyse
+    max_candle_age_minutes: int = 30        # au-delà, dernière bougie jugée trop ancienne (marché fermé)
 
     timezone: str = "Europe/Paris"
     # adresse du site (boutons « Graphique » et « Simulation » sous les messages Telegram ; vide = pas de boutons)

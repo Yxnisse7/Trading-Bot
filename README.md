@@ -351,7 +351,7 @@ l'avis majoritaire, et à l'avis malikite en particulier. Page du site : `halal.
 - **Au comptant, sans levier** : la simulation n'engage jamais plus que les liquidités disponibles ; sans
   liquidités pour une part, le trade n'est pas pris.
 - **Actifs au comptant** : ETF USA islamique (ISDU, MSCI USA Islamic, l'équivalent halal du Nasdaq et
-  du S&P 500), ETF Monde islamique (ISWD), or physique Royal Mint (RMAU, endossé conforme par Amanie
+  du S&P 500), ETF Monde islamique (ISDW), or physique Royal Mint (RMAU, endossé conforme par Amanie
   Advisors), Bitcoin et Ethereum au comptant (avis divergents : à voir avec un savant). **Aucun contrat
   à terme** (prix et marchandise reportés tous les deux), aucun CFD, aucune option.
 - **Trades plus longs** : bougie de base 1 h, horizon ~12 h, analyse toutes les 15 min. Sans levier, un
