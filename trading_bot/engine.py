@@ -136,7 +136,8 @@ class Engine:
                 continue
             blocked = {h: self._scan_block(asset, h, base, variant, all_sigs, now) for h, base, variant in plan}
             if all(blocked.values()):
-                log.info("%s : pas de scan (%s)", asset.label, "; ".join(blocked["1h"]))
+                # (motifs du premier horizon : « 1h » pour le bot principal, « 12h » pour le mode halal)
+                log.info("%s : pas de scan (%s)", asset.label, "; ".join(next(iter(blocked.values()))))
                 continue
             try:
                 raw = market.fetch_candles_5m(asset, days=self.cfg.scan_days)

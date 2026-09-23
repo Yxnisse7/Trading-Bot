@@ -147,3 +147,19 @@ def test_sparse_session_data_still_gives_a_range():
     sparse = [c for i, c in enumerate(base) if 7 <= (c.ts // 3600) % 24 < 15 and i % 2 == 0]
     assert ind.average_range(sparse, 12 * 3600, buckets=16) is None           # réglage du bot principal
     assert ind.average_range(sparse, 12 * 3600, buckets=16, min_fill=halal_config().range_min_fill) > 0
+
+
+def test_scan_survives_an_asset_fully_blocked_by_the_policy(halal):
+    """Après un stop, l'actif est bloqué par le refroidissement : le passage halal ne doit pas planter
+    (il cherchait les motifs de l'horizon « 1h », absent en mode halal)."""
+    from datetime import timedelta
+    from trading_bot.models import iso
+    eng, sent, mp = halal
+    mp.setattr(engmod, "assess", lambda asset, candles, cfg, weights=None, **kw: _assessment(asset.key, None))
+    stopped = Signal(id="x1", asset="bitcoin", asset_label="Bitcoin (BTC)", direction="long", entry=100.0,
+                     take_profit=102.0, stop_loss=99.0, risk_reward=2.0, confidence="moyen", score=4.0, criteria=[],
+                     rationale="", news_context="", created_at=iso(NOW - timedelta(minutes=40)),
+                     expires_at=iso(NOW + timedelta(hours=11)), status="sl", closed_at=iso(NOW - timedelta(minutes=5)),
+                     close_price=99.0, pnl_pct=-1.0, horizon="12h", horizon_minutes=720)
+    eng.store.append_history(stopped)
+    assert eng.scan(NOW) == []
