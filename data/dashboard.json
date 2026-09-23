@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-23T17:50:49.021533+02:00",
+  "updated_at": "2026-09-23T17:55:42.386473+02:00",
   "timezone": "Europe/Paris",
   "equity_curve": [
     {
@@ -862,7 +862,7 @@
       "pnl_pct": -0.5602,
       "avg_pnl_pct": -0.0147
     },
-    "open": 0,
+    "open": 1,
     "open_shadow": 1
   },
   "by_source": {
@@ -1007,7 +1007,7 @@
         "pnl_pct": 0.1413,
         "avg_pnl_pct": 0.0471
       },
-      "open": 0,
+      "open": 1,
       "session_utc": [
         13,
         20
@@ -4085,6 +4085,40 @@
   ],
   "open_signals": [
     {
+      "id": "0b480f5fc8",
+      "asset": "sp500",
+      "asset_label": "S&P 500 (ES)",
+      "direction": "short",
+      "horizon": "1h",
+      "entry": 7785.75,
+      "take_profit": 7778.75,
+      "stop_loss": 7791.5,
+      "risk_reward": 1.22,
+      "confidence": "fort",
+      "score": 5.75,
+      "criteria": [
+        "adx",
+        "rsi",
+        "trend_15m",
+        "trend_1h",
+        "trend_5m",
+        "vwap"
+      ],
+      "source": "bot",
+      "status": "open",
+      "pnl_pct": null,
+      "pnl_gross_pct": null,
+      "duration_minutes": null,
+      "close_price": null,
+      "created_at": "2026-09-23T15:55:30Z",
+      "closed_at": null,
+      "created_local": "23/09 17:55",
+      "expires_at": "2026-09-23T16:55:30Z",
+      "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 15.67 (0.20 %), TP = 45 % du range, SL = 37 % du range, probabilité de résolution sous 1 h ≈ 88%.",
+      "news_context": "actualité à surveiller (score 2) : 10-year Treasury yield hits highest level since 2007 as market prices in another Fed rate hike",
+      "manual_exit": null
+    },
+    {
       "id": "c65ca803f8",
       "asset": "oil",
       "asset_label": "Pétrole WTI (CL)",
@@ -6016,10 +6050,10 @@
     "updated_at": "2026-09-23T15:50:41.353042+00:00"
   },
   "state": {
-    "last_scan": "2026-09-23T15:50:38Z",
-    "last_scan_note": "0 signal(aux)",
+    "last_scan": "2026-09-23T15:55:30Z",
+    "last_scan_note": "1 signal(aux)",
     "last_summary": "2026-09-23T00:22:36Z",
-    "last_track": "2026-09-23T15:50:38Z"
+    "last_track": "2026-09-23T15:55:30Z"
   },
   "limits": {
     "max_signals_per_asset_per_day": 5,
@@ -6042,8 +6076,8 @@
     "losses": 24,
     "avg_win": 49.21,
     "avg_loss": -28.02,
-    "open_positions": 0,
+    "open_positions": 1,
     "skipped": 0,
-    "risky": 25
+    "risky": 26
   }
 }
