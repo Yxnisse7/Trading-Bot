@@ -141,12 +141,7 @@
   const RES = { tp: "TP", sl: "SL", expired: "Expiré" };
   let dash = null, port = null, histLimit = 10;
 
-  async function getJson(name) {
-    for (const u of [`halal/${name}`, `../data/halal/${name}`, `/data/halal/${name}`]) {
-      try { const r = await fetch(u + "?t=" + Date.now(), { cache: "no-store" }); if (r.ok) return await r.json(); } catch (e) { /* suivant */ }
-    }
-    return null;
-  }
+  const getJson = (name) => Y.getJson(`halal/${name}`);
   const lastRun = (st) => { const t = [st && st.last_tick, st && st.last_scan].filter(Boolean).sort(); return t[t.length - 1] || null; };
   async function load() {
     $("#updated").textContent = "Chargement…";
@@ -280,7 +275,7 @@
   $("#btn-refresh").addEventListener("click", () => { load(); if (live) live.refresh(); });
   let rt = null; addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(drawEquity, 200); });
   setInterval(() => { if (dash) Y.status(lastRun(dash.state), dash.state && dash.state.last_scan_note); }, 60000);
-  setInterval(load, 120000);
+  Y.poll(load);
   load();
 })();
 </script>

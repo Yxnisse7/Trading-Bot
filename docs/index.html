@@ -179,9 +179,9 @@
       },
     });
     portfolio = null;
-    for (const u of (mode === "local" ? ["/api/portfolio"] : ["portfolio.json", "../data/portfolio.json"])) {
-      try { const r = await fetch(u + (mode === "local" ? "" : "?t=" + Date.now()), { cache: "no-store" }); if (r.ok) { portfolio = await r.json(); break; } } catch (e) { /* suivant */ }
-    }
+    if (mode === "local") {
+      try { const r = await fetch("/api/portfolio", { cache: "no-store" }); if (r.ok) portfolio = await r.json(); } catch (e) { /* rien */ }
+    } else portfolio = await Y.getJson("portfolio.json");
     if (data) renderTiles();
   }
 
@@ -546,7 +546,7 @@
   addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => { if (data) { try { YKCharts.equityLine($("#ch-equity"), data.equity_curve || [], { height: 220 }); } catch (e) { /* silencieux */ } } }, 200); });
   document.addEventListener("yk:theme", () => { if (data) YKCharts.equityLine($("#ch-equity"), data.equity_curve || [], { height: 220 }); });
   // les pages publiées changent toutes les 5 min : on relit toutes les 2 min (et l'état du bot chaque minute)
-  setInterval(() => { if (mode === "static" || mode === "github") load(); }, 120000);
+  Y.poll(() => { if (mode === "static" || mode === "github") load(); });
   setInterval(() => { if (data) Y.status(data.state && data.state.last_scan, data.state && data.state.last_scan_note); }, 60000);
   update();
   load();

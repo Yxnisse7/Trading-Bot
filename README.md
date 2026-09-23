@@ -318,6 +318,14 @@ simulation ; l'actif et l'unité de temps choisis sont mémorisés. Si la biblio
 un graphique SVG simple prend le relais. Ce n'est pas un flux temps réel : la granularité est celle
 des passages du bot.
 
+**Délai d'affichage** : Telegram reçoit les messages dès que le passage est enregistré. Le site,
+lui, passe par GitHub Pages, qui met environ 3 minutes à publier, et se rafraîchit toutes les
+2 minutes : il affiche les nouveautés 3 à 5 minutes après Telegram. Dans un navigateur où un jeton
+GitHub est enregistré (« Mode GitHub Actions »), les pages lisent les fichiers directement dans le
+dépôt, sans attendre GitHub Pages, et se rafraîchissent chaque minute : environ 1 minute après
+Telegram (la pastille d'état affiche « direct »). Sans jeton, ou si GitHub le refuse, GitHub Pages
+prend le relais automatiquement.
+
 ### Avertissement et vie privée
 L'avertissement complet (« pas un conseil financier, validez en paper trading ») n'est plus répété à
 chaque notification : il figure dans le guide `/help` que reçoit automatiquement chaque nouveau chat

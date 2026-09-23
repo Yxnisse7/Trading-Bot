@@ -103,14 +103,14 @@
   async function load() {
     $("#updated").textContent = "Chargement…";
     try { const p = await fetch("/api/ping", { cache: "no-store" }); mode = p.ok ? "local" : "static"; } catch (e) { mode = "static"; }
-    data = null;
-    for (const u of (mode === "local" ? ["/api/portfolio"] : ["portfolio.json", "../data/portfolio.json"])) {
-      try { const r = await fetch(u + (mode === "local" ? "" : "?t=" + Date.now()), { cache: "no-store" }); if (r.ok) { data = await r.json(); break; } } catch (e) { /* suivant */ }
-    }
+    const get = async (api, file) => {
+      if (mode !== "local") return Y.getJson(file);
+      try { const r = await fetch(api, { cache: "no-store" }); return r.ok ? await r.json() : null; } catch (e) { return null; }
+    };
+    data = await get("/api/portfolio", "portfolio.json");
     // état du bot pour l'en-tête
-    for (const u of (mode === "local" ? ["/api/state"] : ["dashboard.json", "../data/dashboard.json"])) {
-      try { const r = await fetch(u + (mode === "local" ? "" : "?t=" + Date.now()), { cache: "no-store" }); if (r.ok) { const d = await r.json(); Y.status(d.state && d.state.last_scan, d.state && d.state.last_scan_note); window.__st = d.state; if (live) live.setAssets(d.assets.map((a) => [a.key, a.label, !!(a.trial && !a.trial_promoted)])); break; } } catch (e) { /* suivant */ }
-    }
+    const d = await get("/api/state", "dashboard.json");
+    if (d) { Y.status(d.state && d.state.last_scan, d.state && d.state.last_scan_note); window.__st = d.state; if (live) live.setAssets(d.assets.map((a) => [a.key, a.label, !!(a.trial && !a.trial_promoted)])); }
     if (!data || !data.balance) { $("#updated").textContent = "Aucune simulation encore enregistrée : définissez une balance, ou attendez le prochain passage du bot."; return; }
     render();
   }
@@ -236,7 +236,7 @@
     finally { btn.disabled = false; }
   });
   setInterval(() => { if (window.__st) Y.status(window.__st.last_scan, window.__st.last_scan_note); }, 60000);
-  setInterval(() => { if (mode === "static") load(); }, 120000);
+  Y.poll(() => { if (mode === "static") load(); });
   load();
 })();
 </script>

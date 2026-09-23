@@ -94,6 +94,9 @@
     const c = cache.get(base + key);
     if (c && Date.now() - c.t < maxAgeMs) return c.p;
     const p = (async () => {
+      // lecture directe sur GitHub quand ce navigateur a un jeton (voir yasuke.js), sinon GitHub Pages
+      const direct = window.YK && window.YK.ghRaw ? await window.YK.ghRaw(`${base}live/${key}.json`) : null;
+      if (direct) return direct;
       for (const u of [`${base}live/${key}.json`, `../data/${base}live/${key}.json`, `/data/${base}live/${key}.json`]) {
         try { const r = await fetch(u + "?t=" + Date.now(), { cache: "no-store" }); if (r.ok) return await r.json(); } catch (e) { /* suivant */ }
       }

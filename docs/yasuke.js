@@ -147,8 +147,10 @@
     const late = min > 15;
     el.className = "yk-status " + (late ? "late" : "ok");
     b.textContent = late ? "Bot en retard" : "Bot actif";
-    sub.textContent = late ? `aucun passage depuis ${min < 120 ? min + " min" : Math.round(min / 60) + " h"}` : `dernier passage ${ago(lastIso)}`;
-    el.title = (late ? "Le bot tourne normalement toutes les 5 minutes. " : "") + (note ? "Dernier passage : " + note : "");
+    sub.textContent = (late ? `aucun passage depuis ${min < 120 ? min + " min" : Math.round(min / 60) + " h"}` : `dernier passage ${ago(lastIso)}`)
+      + (S.direct ? " · direct" : "");
+    el.title = (late ? "Le bot tourne normalement toutes les 5 minutes. " : "") + (note ? "Dernier passage : " + note + ". " : "")
+      + (S.direct ? "Données lues directement sur GitHub (jeton de ce navigateur) : environ 1 min après Telegram." : "Données publiées par GitHub Pages : 3 à 5 min après Telegram.");
   }
 
   // ------------------------------------------------------------------ notifications
@@ -199,6 +201,32 @@
     const owner = (store.get("tb-gh-owner") || "").trim(), repo = (store.get("tb-gh-repo") || "").trim(), token = (store.get("tb-gh-token") || "").trim();
     return owner && repo && token ? { owner, repo, token } : null;
   }
+  // Lecture directe sur GitHub (navigateur avec jeton enregistré) : les fichiers publiés par le bot sont lus
+  // dans le dépôt dès leur enregistrement, sans attendre la mise en ligne de GitHub Pages (≈ 3 min).
+  // Sans jeton, ou si GitHub refuse (jeton expiré, quota), les fichiers de GitHub Pages prennent le relais.
+  let directOff = 0;
+  async function ghRaw(path) {
+    const gh = ghSettings();
+    if (!gh || Date.now() < directOff) return null;
+    try {
+      const r = await fetch(`https://api.github.com/repos/${gh.owner}/${gh.repo}/contents/docs/${path}?ref=main`,
+        { headers: { Authorization: "Bearer " + gh.token, Accept: "application/vnd.github.raw+json" }, cache: "no-store" });
+      if (r.ok) { S.direct = true; return await r.json(); }
+      if (r.status === 401 || r.status === 403 || r.status === 429) { directOff = Date.now() + 10 * 60000; S.direct = false; }
+    } catch (e) { /* réseau : GitHub Pages prend le relais */ }
+    return null;
+  }
+  // Fichier publié (chemin relatif à docs/) : lecture directe si possible, sinon GitHub Pages, sinon data/ (fichier local)
+  async function getJson(path) {
+    const d = await ghRaw(path);
+    if (d) return d;
+    for (const u of [path, `../data/${path}`]) {
+      try { const r = await fetch(u + "?t=" + Date.now(), { cache: "no-store" }); if (r.ok) return await r.json(); } catch (e) { /* suivant */ }
+    }
+    return null;
+  }
+  // Rafraîchissement : toutes les minutes en lecture directe, toutes les 2 min sur GitHub Pages
+  function poll(fn) { let n = 0; setInterval(() => { n++; if (S.direct || n % 2 === 0) fn(); }, 60000); }
   function ghRepo() { const s = ghSettings(); return { owner: (s && s.owner) || GH_DEFAULT.owner, repo: (s && s.repo) || GH_DEFAULT.repo }; }
   // Branche le bloc « Mode GitHub Actions » (champs gh-owner, gh-repo, gh-token, boutons gh-save, gh-test, texte gh-status)
   function bindGhSettings(onSaved) {
@@ -308,21 +336,12 @@
     if (window.claude) return "static";   // vue claude.ai sans connecteur : message déjà affiché
     try { const ping = await fetch("/api/ping", { cache: "no-store" }); S.mode = ping.ok ? "local" : "static"; } catch (e) { S.mode = "static"; }
     let data = null;
-    for (const u of (S.mode === "local" ? ["/api/state"] : ["dashboard.json", "../data/dashboard.json"])) {
-      try { const r = await fetch(u + (S.mode === "local" ? "" : "?t=" + Date.now()), { cache: "no-store" }); if (r.ok) { data = await r.json(); break; } } catch (e) { /* essai suivant */ }
-    }
-    if (!data && S.mode !== "local") {
-      const gh = ghSettings();
-      if (gh) {
-        try {
-          const r = await fetch(`https://api.github.com/repos/${gh.owner}/${gh.repo}/contents/data/dashboard.json?ref=main`, { headers: { "Authorization": "Bearer " + gh.token, "Accept": "application/vnd.github+json" }, cache: "no-store" });
-          if (r.ok) {
-            const j = await r.json();
-            const bytes = Uint8Array.from(atob(j.content.replace(/\n/g, "")), (c) => c.charCodeAt(0));
-            data = JSON.parse(new TextDecoder("utf-8").decode(bytes)); S.mode = "github";
-          } else say(`GitHub a répondu ${r.status} : vérifiez le jeton et le dépôt dans « Mode GitHub Actions ».`);
-        } catch (e) { /* message ci-dessous */ }
-      }
+    if (S.mode === "local") {
+      try { const r = await fetch("/api/state", { cache: "no-store" }); if (r.ok) data = await r.json(); } catch (e) { /* rien */ }
+    } else {
+      data = await ghRaw("dashboard.json");
+      if (data) S.mode = "github";
+      else data = await getJson("dashboard.json");
     }
     if (!data) { if (onNoData) onNoData(); return S.mode; }
     onData(data, S.mode);
@@ -355,7 +374,7 @@
     if (r.status === 403 || r.status === 404) throw new Error(`GitHub a refusé la demande (${r.status}) : le jeton n'a pas la permission « Actions : Read and write » sur ce dépôt.`);
     if (r.status !== 204) throw new Error(`GitHub a répondu ${r.status} : vérifiez le jeton et le dépôt.`);
   }
-  const modeText = (m) => ({ local: "serveur local", mcp: "connecté à GitHub via claude.ai", github: "lecture via l'API GitHub", static: "GitHub Pages" }[m] || m);
+  const modeText = (m) => ({ local: "serveur local", mcp: "connecté à GitHub via claude.ai", github: "lecture directe sur GitHub", static: "GitHub Pages" }[m] || m);
 
   applyStoredTheme();
   // l'en-tête est dessiné tout de suite (le script est chargé en fin de page), avant sections.js
@@ -363,6 +382,6 @@
   window.YK = {
     $, esc, store, num, signed, pct, pctv, money, smoney, price, decimals, tone, ago, hhmm, ddmm, CRIT, SRC, RES, shortLabel,
     critTags, resultPill, dirHtml, I, header, isDark, status, toast, countTo, spark, ghSettings, bindGhSettings,
-    loadDashboard, dispatch, modeText, state: S, MINUS, NB,
+    loadDashboard, dispatch, modeText, state: S, MINUS, NB, ghRaw, getJson, poll,
   };
 })();
