@@ -68,7 +68,7 @@ def halal_assets() -> dict[str, AssetConfig]:
             news_keywords=KEYWORDS_US, **common_etf,
         ),
         "monde_islamique": AssetConfig(
-            key="monde_islamique", label="ETF Monde islamique (ISWD)", yahoo_symbol="ISWD.L",
+            key="monde_islamique", label="ETF Monde islamique (ISDW)", yahoo_symbol="ISDW.L",
             min_hourly_range_pct=0.3, max_hourly_range_pct=4.0, cost_pct=0.12,
             news_keywords=KEYWORDS_US + ("europe", "ecb", "china", "japan"), **common_etf,
         ),
