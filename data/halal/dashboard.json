@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-23T15:31:04.832715+02:00",
+  "updated_at": "2026-09-23T15:35:37.379759+02:00",
   "timezone": "Europe/Paris",
   "equity_curve": [],
   "by_hour_local": {
@@ -339,7 +339,7 @@
       "pnl_pct": 0,
       "avg_pnl_pct": 0.0
     },
-    "open": 0,
+    "open": 1,
     "open_shadow": 0
   },
   "by_source": {
@@ -420,7 +420,7 @@
         "pnl_pct": 0,
         "avg_pnl_pct": 0.0
       },
-      "open": 0,
+      "open": 1,
       "session_utc": null,
       "cost_pct": 0.25,
       "trial": false,
@@ -1159,7 +1159,40 @@
       "last_trades": []
     }
   ],
-  "open_signals": [],
+  "open_signals": [
+    {
+      "id": "8343fc95cd",
+      "asset": "bitcoin",
+      "asset_label": "Bitcoin (BTC)",
+      "direction": "long",
+      "horizon": "12h",
+      "entry": 85577.0,
+      "take_profit": 86560.0,
+      "stop_loss": 84921.0,
+      "risk_reward": 1.5,
+      "confidence": "moyen",
+      "score": 4.75,
+      "criteria": [
+        "adx",
+        "level",
+        "trend_15m",
+        "trend_1h",
+        "volume"
+      ],
+      "source": "bot",
+      "status": "open",
+      "pnl_pct": null,
+      "pnl_gross_pct": null,
+      "duration_minutes": null,
+      "close_price": null,
+      "created_at": "2026-09-23T13:35:34Z",
+      "closed_at": null,
+      "created_local": "23/09 15:35",
+      "expires_at": "2026-09-24T01:35:34Z",
+      "rationale": "Achat : tendance forte (ADX), niveau clé favorable, tendance 3 h, tendance 12 h, volume anormal. Range moyen sur 12 h ≈ 1639.0 (1.92 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 12 h ≈ 64%.",
+      "news_context": "actualité à surveiller (score 2) : Stablecoin cross-border flows surge 78%, defying crypto bear market"
+    }
+  ],
   "recent_trades": [],
   "backtests": {
     "bitcoin_12h": {
@@ -1485,9 +1518,9 @@
     "updated_at": "2026-09-23T09:19:54.273144+00:00"
   },
   "state": {
-    "last_tick": "2026-09-23T13:30:58Z",
-    "last_scan": "2026-09-23T13:20:49Z",
-    "last_scan_note": "0 signal(aux)"
+    "last_tick": "2026-09-23T13:35:34Z",
+    "last_scan": "2026-09-23T13:35:34Z",
+    "last_scan_note": "1 signal(aux)"
   },
   "limits": {
     "max_signals_per_asset_per_day": 5,
@@ -1510,7 +1543,7 @@
     "losses": 0,
     "avg_win": 0.0,
     "avg_loss": 0.0,
-    "open_positions": 0,
+    "open_positions": 1,
     "skipped": 0,
     "risky": 0
   }
