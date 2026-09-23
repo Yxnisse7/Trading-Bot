@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-23T17:20:42.852827+02:00",
+  "updated_at": "2026-09-23T17:25:39.738161+02:00",
   "timezone": "Europe/Paris",
   "equity_curve": [
     {
@@ -844,8 +844,8 @@
       "pnl_pct": -1.4973,
       "avg_pnl_pct": -0.044
     },
-    "open": 0,
-    "open_shadow": 3
+    "open": 2,
+    "open_shadow": 4
   },
   "by_source": {
     "bot": {
@@ -948,7 +948,7 @@
         "pnl_pct": 0.6178,
         "avg_pnl_pct": 0.0515
       },
-      "open": 0,
+      "open": 1,
       "session_utc": [
         13,
         20
@@ -989,7 +989,7 @@
         "pnl_pct": 0.0294,
         "avg_pnl_pct": 0.0147
       },
-      "open": 0,
+      "open": 1,
       "session_utc": [
         13,
         20
@@ -4061,6 +4061,109 @@
   ],
   "open_signals": [
     {
+      "id": "162fb94e0c",
+      "asset": "nasdaq",
+      "asset_label": "Nasdaq 100 (NQ)",
+      "direction": "short",
+      "horizon": "1h",
+      "entry": 30794.5,
+      "take_profit": 30760.25,
+      "stop_loss": 30822.5,
+      "risk_reward": 1.22,
+      "confidence": "fort",
+      "score": 5.75,
+      "criteria": [
+        "adx",
+        "rsi",
+        "trend_15m",
+        "trend_1h",
+        "trend_5m",
+        "vwap"
+      ],
+      "source": "bot",
+      "status": "open",
+      "pnl_pct": null,
+      "pnl_gross_pct": null,
+      "duration_minutes": null,
+      "close_price": null,
+      "created_at": "2026-09-23T15:25:29Z",
+      "closed_at": null,
+      "created_local": "23/09 17:25",
+      "expires_at": "2026-09-23T16:25:29Z",
+      "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 69.92 (0.23 %), TP = 49 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 99%.",
+      "news_context": "actualité à surveiller (score 2) : Fed's Barr says further rate hikes will likely be needed",
+      "manual_exit": null
+    },
+    {
+      "id": "f2e5291f4a",
+      "asset": "sp500",
+      "asset_label": "S&P 500 (ES)",
+      "direction": "short",
+      "horizon": "1h",
+      "entry": 7792.25,
+      "take_profit": 7782.75,
+      "stop_loss": 7798.5,
+      "risk_reward": 1.52,
+      "confidence": "fort",
+      "score": 6.75,
+      "criteria": [
+        "adx",
+        "orb",
+        "rsi",
+        "trend_15m",
+        "trend_1h",
+        "trend_5m",
+        "vwap"
+      ],
+      "source": "bot",
+      "status": "open",
+      "pnl_pct": null,
+      "pnl_gross_pct": null,
+      "duration_minutes": null,
+      "close_price": null,
+      "created_at": "2026-09-23T15:25:29Z",
+      "closed_at": null,
+      "created_local": "23/09 17:25",
+      "expires_at": "2026-09-23T16:25:29Z",
+      "rationale": "Vente : tendance forte (ADX), cassure du range d'ouverture, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 15.92 (0.20 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 77%.",
+      "news_context": "actualité à surveiller (score 2) : Fed's Barr says further rate hikes will likely be needed",
+      "manual_exit": null
+    },
+    {
+      "id": "8abec2d77b",
+      "asset": "bitcoin",
+      "asset_label": "Bitcoin (BTC/USD)",
+      "direction": "short",
+      "horizon": "1h",
+      "entry": 84559.0,
+      "take_profit": 84241.0,
+      "stop_loss": 84771.0,
+      "risk_reward": 1.5,
+      "confidence": "fort",
+      "score": 5.75,
+      "criteria": [
+        "adx",
+        "rsi",
+        "trend_15m",
+        "trend_1h",
+        "trend_5m",
+        "vwap"
+      ],
+      "source": "shadow",
+      "status": "open",
+      "pnl_pct": null,
+      "pnl_gross_pct": null,
+      "duration_minutes": null,
+      "close_price": null,
+      "created_at": "2026-09-23T15:25:29Z",
+      "closed_at": null,
+      "created_local": "23/09 17:25",
+      "expires_at": "2026-09-23T16:25:29Z",
+      "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 530.0 (0.63 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 94%.",
+      "news_context": "actualité à surveiller (score 3) : Bitcoin long liquidations hit $280M as BTC price dips under $84K | Fed's Barr says further rate hikes will likely be needed",
+      "manual_exit": null
+    },
+    {
       "id": "65ce0b4cea",
       "asset": "nasdaq",
       "asset_label": "Nasdaq 100 (NQ)",
@@ -6058,10 +6161,10 @@
     "updated_at": "2026-09-23T15:20:38.878511+00:00"
   },
   "state": {
-    "last_scan": "2026-09-23T15:20:35Z",
-    "last_scan_note": "0 signal(aux)",
+    "last_scan": "2026-09-23T15:25:29Z",
+    "last_scan_note": "2 signal(aux)",
     "last_summary": "2026-09-23T00:22:36Z",
-    "last_track": "2026-09-23T15:20:35Z"
+    "last_track": "2026-09-23T15:25:29Z"
   },
   "limits": {
     "max_signals_per_asset_per_day": 5,
@@ -6084,8 +6187,8 @@
     "losses": 24,
     "avg_win": 48.83,
     "avg_loss": -28.02,
-    "open_positions": 0,
+    "open_positions": 2,
     "skipped": 0,
-    "risky": 23
+    "risky": 25
   }
 }
