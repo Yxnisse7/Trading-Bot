@@ -348,12 +348,12 @@
     return S.mode;
   }
   // Déclenche le workflow du bot (commande manual, propose, portfolio…)
-  async function dispatch(inputs, { retryOnce = false } = {}) {
+  async function dispatch(inputs, { retryOnce = false, workflow = "bot.yml" } = {}) {
     if (S.mcp) {
       const consent = await ensureConsent();
       if (consent === "denied") throw new Error("Accès GitHub refusé pour cette page. Rechargez la page et acceptez l'invite d'autorisation de claude.ai.");
       const { owner, repo } = ghRepo();
-      const call = () => S.mcp.callTool("github", "actions_run_trigger", { method: "run_workflow", owner, repo, workflow_id: "bot.yml", ref: "main", inputs });
+      const call = () => S.mcp.callTool("github", "actions_run_trigger", { method: "run_workflow", owner, repo, workflow_id: workflow, ref: "main", inputs });
       try { await call(); }
       catch (err) {
         if (retryOnce && err && err.retryable) {
@@ -366,13 +366,86 @@
     }
     const gh = ghSettings();
     if (!gh) throw new Error("Aucun jeton GitHub enregistré dans ce navigateur : dépliez « Mode GitHub Actions », collez votre jeton, cliquez « Enregistrer », puis réessayez.");
-    const r = await fetch(`https://api.github.com/repos/${gh.owner}/${gh.repo}/actions/workflows/bot.yml/dispatches`, {
+    const r = await fetch(`https://api.github.com/repos/${gh.owner}/${gh.repo}/actions/workflows/${workflow}/dispatches`, {
       method: "POST", headers: { "Authorization": "Bearer " + gh.token, "Accept": "application/vnd.github+json", "Content-Type": "application/json" },
       body: JSON.stringify({ ref: "main", inputs }),
     });
     if (r.status === 401) throw new Error("GitHub a refusé le jeton (401) : il est invalide ou expiré.");
     if (r.status === 403 || r.status === 404) throw new Error(`GitHub a refusé la demande (${r.status}) : le jeton n'a pas la permission « Actions : Read and write » sur ce dépôt.`);
     if (r.status !== 204) throw new Error(`GitHub a répondu ${r.status} : vérifiez le jeton et le dépôt.`);
+  }
+  // ------------------------------------------------------------------ positions ouvertes : estimation et arrêt
+  // Taux EUR/USD : dernier cours du contrat euro/dollar suivi par le bot (docs/live/euro.json), mis en cache 1 min
+  let eurCache = null;
+  async function eurRate() {
+    if (eurCache && Date.now() - eurCache.t < 60000) return eurCache.v;
+    const d = await getJson("live/euro.json");
+    const v = d && Number(d.last) > 0.5 && Number(d.last) < 2 ? Number(d.last) : null;
+    eurCache = { t: Date.now(), v };
+    return v;
+  }
+  // Résultat d'une position simulée au prix `last` (mêmes règles que la simulation : coûts et frais d'ordre déduits)
+  function estimate(pos, asset, last) {
+    if (!pos || last == null || !pos.lots) return null;
+    const sign = pos.direction === "long" ? 1 : -1, mult = Number((asset && asset.lot_multiplier) || 1);
+    const gross = sign * (last - pos.entry) * mult * pos.lots;
+    const cost = (Number(asset && asset.cost_pct) || 0) / 100 * Number(pos.notional || 0) + 2 * (Number(asset && asset.fee_per_order) || 0);
+    return { gross, net: gross - cost, pct: sign * (last / pos.entry - 1) * 100 };
+  }
+  // « +8,20 € » (converti depuis les dollars de la simulation), ou en dollars sans taux de change
+  const eur = (usd, rate, d = 2) => rate ? smoney(usd / rate, "€", d) : smoney(usd, "$", d);
+  // Cellule « Estimation » : remplie après coup (dernier prix du graphique live, taux de change, position simulée)
+  async function fillEstimates(root, { positions = {}, assets = [], base = "" } = {}) {
+    const cells = [...root.querySelectorAll("[data-est]")];
+    if (!cells.length) return;
+    const rate = await eurRate();
+    for (const el of cells) {
+      const id = el.dataset.est, key = el.dataset.asset, pos = positions[id];
+      const snap = window.LiveChart ? await window.LiveChart.snapshot(key, 55000, base) : null;
+      const last = snap && Number(snap.last);
+      if (!snap || !Number.isFinite(last)) { el.innerHTML = `<span class="faint">n/a</span>`; continue; }
+      const when = snap.candles && snap.candles.length ? hhmm(snap.candles[snap.candles.length - 1][0] * 1000 + 300000) : "";
+      const e = estimate(pos, assets.find((a) => a.key === key), last);
+      if (e) {
+        el.innerHTML = `<b class="${tone(e.net)}">${eur(e.net, rate)}</b> <span class="muted" style="font-size:12px">${pctv(e.pct, 2)}</span>`;
+        el.title = `Au dernier prix connu (${fmtNum(last)}, clôture ${when}), frais estimés déduits${rate ? ` · ${smoney(e.net, "$")} au taux ${num(rate, 4)} $ pour 1 €` : ""}.`;
+      } else {
+        const dir = el.dataset.dir === "short" ? -1 : 1, entry = Number(el.dataset.entry);
+        el.innerHTML = `<span class="${tone(dir * (last - entry))}">${pctv(dir * (last / entry - 1) * 100, 2)}</span>`;
+        el.title = "Pas de position simulée pour ce signal : variation depuis l'entrée seulement.";
+      }
+    }
+  }
+  const fmtNum = (v) => num(v, Math.min(5, Math.max(2, decimals(v))));
+  // Arrêt manuel : serveur local, ou workflow GitHub (bot principal ou mode halal)
+  async function stopTrade(id, { halal = false } = {}) {
+    if (S.mode === "local" && !halal) {
+      const r = await fetch("/api/stop", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id }) });
+      const j = await r.json().catch(() => ({}));
+      if (!r.ok || !j.ok) throw new Error(j.error || "erreur");
+      return "local";
+    }
+    await dispatch({ command: "stop", signal: id }, { workflow: halal ? "halal.yml" : "bot.yml" });
+    return "github";
+  }
+  // Branche les boutons « Arrêter » d'un conteneur (délégation : survit aux re-rendus)
+  function bindStopButtons(root, { halal = false, onDone } = {}) {
+    root.addEventListener("click", async (ev) => {
+      const b = ev.target.closest("[data-stop]"); if (!b) return;
+      const label = b.dataset.label || "ce trade";
+      if (!confirm(`Arrêter ${label} au prix du moment ?\n\nLa simulation encaisse la sortie maintenant. Le bot continue ensuite de suivre le trade en silence jusqu'au TP, au SL ou à l'expiration, pour apprendre de son vrai résultat.`)) return;
+      b.disabled = true; b.textContent = "Envoi…";
+      try {
+        const how = await stopTrade(b.dataset.stop, { halal });
+        toast({ title: "Arrêt demandé", text: how === "local" ? `${label} arrêté.` : `${label} sera arrêté au prix du moment dans 1 à 2 minutes.`,
+                meta: "Confirmation sur Telegram, avec le résultat en euros.", timeout: 9000 });
+        b.textContent = "Demandé";
+        if (onDone) onDone();
+      } catch (e) {
+        b.disabled = false; b.textContent = "Arrêter";
+        toast({ title: "Arrêt impossible", text: e.message, timeout: 12000 });
+      }
+    });
   }
   const modeText = (m) => ({ local: "serveur local", mcp: "connecté à GitHub via claude.ai", github: "lecture directe sur GitHub", static: "GitHub Pages" }[m] || m);
 
@@ -383,5 +456,6 @@
     $, esc, store, num, signed, pct, pctv, money, smoney, price, decimals, tone, ago, hhmm, ddmm, CRIT, SRC, RES, shortLabel,
     critTags, resultPill, dirHtml, I, header, isDark, status, toast, countTo, spark, ghSettings, bindGhSettings,
     loadDashboard, dispatch, modeText, state: S, MINUS, NB, ghRaw, getJson, poll,
+    eurRate, estimate, eur, fillEstimates, stopTrade, bindStopButtons,
   };
 })();

@@ -116,6 +116,10 @@ def make_handler(engine: Engine):
                     with lock:
                         res = engine.propose(str(body.get("asset", "")))
                     self._json(200, {"ok": True, **res})
+                elif path == "/api/stop":
+                    with lock:
+                        res = engine.stop_trade(str(body.get("id") or "") or None)
+                    self._json(200, {"ok": True, **res})
                 elif path == "/api/scan":
                     with lock:
                         sigs = engine.scan()

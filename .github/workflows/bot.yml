@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
     inputs:
       command:
-        description: "Commande (tick, scan, track, guide, test-notify, backtest, fetch-data, manual, propose, portfolio)"
+        description: "Commande (tick, scan, track, guide, test-notify, backtest, fetch-data, manual, propose, portfolio, stop)"
         default: "tick"
       asset:
         description: "Actif pour `manual` / `propose` (nasdaq, sp500, bitcoin, ethereum, gold)"
@@ -32,6 +32,9 @@ on:
         required: false
       risk:
         description: "Risque par trade en % pour `portfolio` (facultatif)"
+        required: false
+      signal:
+        description: "Trade à arrêter pour `stop` (identifiant ou actif ; vide = le seul trade ouvert)"
         required: false
 
 # Les passages planifiés (tick) partagent un groupe : un tick en attente peut être remplacé par le
@@ -70,6 +73,7 @@ jobs:
           SL: ${{ github.event.inputs.sl }}
           BALANCE: ${{ github.event.inputs.balance }}
           RISK: ${{ github.event.inputs.risk }}
+          SIGNAL: ${{ github.event.inputs.signal }}
         run: |
           case "$CMD" in
             fetch-data) bash scripts/run_and_push.sh python run.py fetch-data --days 60 ;;
@@ -78,6 +82,7 @@ jobs:
                         if [ -n "$SL" ]; then ARGS="$ARGS --sl $SL"; fi
                         bash scripts/run_and_push.sh python run.py manual --asset "$ASSET" --direction "$DIRECTION" --note "$NOTE" $ARGS ;;
             propose)    bash scripts/run_and_push.sh python run.py propose --asset "$ASSET" ;;
+            stop)       bash scripts/run_and_push.sh python run.py stop --signal "$SIGNAL" ;;
             portfolio)  if [ -n "$RISK" ]; then bash scripts/run_and_push.sh python run.py portfolio --balance "$BALANCE" --risk "$RISK"; else bash scripts/run_and_push.sh python run.py portfolio --balance "$BALANCE"; fi ;;
             *)          bash scripts/run_and_push.sh python run.py "$CMD" ;;
           esac

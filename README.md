@@ -384,6 +384,22 @@ check-data`. Sur GitHub, le workflow « Trading bot — mode halal » (lancé à
 (`check-data`), définit la balance (`portfolio`) ou relance un backtest ; il rejoue aussi la stratégie
 chaque dimanche soir. Réglages : `config.halal.json` (facultatif, même format que `config.json`).
 
+### Positions ouvertes : estimation et arrêt manuel
+Sur le tableau de bord, la simulation et la page halal, chaque position ouverte affiche une
+**estimation en euros** : le résultat de la position simulée au dernier prix connu (graphique live),
+frais déduits, converti au cours euro/dollar suivi par le bot.
+
+Le bouton **« Arrêter »** (ou `/stop [actif]` sur Telegram, `python run.py stop --signal <id>`) solde la
+position simulée au prix du moment ; la confirmation arrive sur Telegram, en réponse au signal, avec le
+résultat en dollars et en euros. Le bot **continue de suivre le trade en silence** jusqu'au TP, au SL ou
+à l'expiration (message sans son à la fin), et l'apprentissage retient :
+- son vrai résultat s'il touche le TP (un TP reste un TP, même si vous étiez sorti avant) ;
+- votre sortie si vous êtes sorti **en gain** et qu'il finit plus bas (le signal offrait une vraie fenêtre de gain) ;
+- son vrai résultat si vous êtes sorti en perte.
+
+Un trade arrêté ne bloque plus de nouveau signal sur l'actif. Sur le site, le bouton passe par le
+workflow GitHub (jeton du « Mode GitHub Actions ») : l'arrêt a lieu 1 à 2 minutes plus tard.
+
 ### Rapport et résumé quotidien
 `data/REPORT.md` est régénéré à chaque événement (signal, clôture, résumé, backtest) : vue
 d'ensemble, signaux ouverts, statistiques par actif / sens / confiance / critère / heure, derniers

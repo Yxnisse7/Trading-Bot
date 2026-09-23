@@ -98,6 +98,9 @@ def daily_summary(all_signals: list[Signal], cfg: Config, day: date | None = Non
                 detail.append(f"{s.duration_minutes} min")
             if s.source != "bot":
                 detail.append({"manual": "manuel", "request": "proposition"}.get(s.source, s.source))
+            me = (s.meta or {}).get("manual_exit")
+            if me:
+                detail.append(f"arrêté à la main à {pct(me.get('pnl_pct'))}")
             lines.append(f"{t:%H:%M} {arrow} {esc(name)} {word} {price(s.entry, dg)} · " + " · ".join(detail))
 
     rep = analyze(all_signals)

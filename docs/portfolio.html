@@ -7,14 +7,15 @@
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
-<link rel="stylesheet" href="yasuke.css?v=5c51909884">
+<link rel="stylesheet" href="yasuke.css?v=c360eee81f">
 <script>try { const t = localStorage.getItem("tb-theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}</script>
 <style>
   form.set { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); align-items: end; }
   .risky-list { display: grid; gap: 8px; font-size: 13px; }
   .risky-list div { display: flex; gap: 10px; align-items: flex-start; }
   .risky-list svg { flex: none; color: var(--dn-text); margin-top: 2px; }
-  @media (max-width: 760px) { #hist th:nth-child(4), #hist td:nth-child(4), #hist th:nth-child(6), #hist td:nth-child(6), #hist th:nth-child(7), #hist td:nth-child(7), #hist th:nth-child(9), #hist td:nth-child(9), #hist th:nth-child(10), #hist td:nth-child(10) { display: none; } }
+  @media (max-width: 760px) { #hist th:nth-child(4), #hist td:nth-child(4), #hist th:nth-child(6), #hist td:nth-child(6), #hist th:nth-child(7), #hist td:nth-child(7), #hist th:nth-child(9), #hist td:nth-child(9), #hist th:nth-child(10), #hist td:nth-child(10) { display: none; }
+    #open th:nth-child(1), #open td:nth-child(1), #open th:nth-child(5), #open td:nth-child(5), #open th:nth-child(6), #open td:nth-child(6), #open th:nth-child(7), #open td:nth-child(7), #open th:nth-child(8), #open td:nth-child(8), #open th:nth-child(9), #open td:nth-child(9), #open th:nth-child(10), #open td:nth-child(10), #open th:nth-child(11), #open td:nth-child(11) { display: none; } }
 </style>
 </head>
 <body data-page="simulation">
@@ -46,7 +47,7 @@
   </div>
 
   <h2 id="positions" data-hint="aucune position ouverte">Positions ouvertes</h2>
-  <div class="card tbl"><table id="open"><thead><tr><th>Ouverte</th><th>Actif</th><th>Sens</th><th class="num">Entrée</th><th class="num">TP</th><th class="num">SL</th><th class="num">Lots</th><th class="num">Risque au stop</th><th class="num">Notionnel</th><th class="num">Levier</th></tr></thead><tbody></tbody></table></div>
+  <div class="card tbl"><table id="open"><thead><tr><th>Ouverte</th><th>Actif</th><th>Sens</th><th class="num">Estimation</th><th class="num">Entrée</th><th class="num">TP</th><th class="num">SL</th><th class="num">Lots</th><th class="num">Risque au stop</th><th class="num">Notionnel</th><th class="num">Levier</th><th></th></tr></thead><tbody></tbody></table></div>
 
   <h2 id="historique">Trades appliqués à la balance</h2>
   <div class="card">
@@ -87,7 +88,7 @@
 
 <div id="tip" role="tooltip"></div>
 <script src="vendor/lightweight-charts.standalone.production.js"></script>
-<script src="yasuke.js?v=844b890fab"></script>
+<script src="yasuke.js?v=fa270e79d2"></script>
 <script src="charts.js?v=232a285ab5"></script>
 <script src="live-chart.js?v=974fc956eb"></script>
 <script src="sections.js?v=0d56d6cb86"></script>
@@ -110,7 +111,7 @@
     data = await get("/api/portfolio", "portfolio.json");
     // état du bot pour l'en-tête
     const d = await get("/api/state", "dashboard.json");
-    if (d) { Y.status(d.state && d.state.last_scan, d.state && d.state.last_scan_note); window.__st = d.state; if (live) live.setAssets(d.assets.map((a) => [a.key, a.label, !!(a.trial && !a.trial_promoted)])); }
+    if (d) { Y.status(d.state && d.state.last_scan, d.state && d.state.last_scan_note); window.__st = d.state; window.__assets = d.assets; if (live) live.setAssets(d.assets.map((a) => [a.key, a.label, !!(a.trial && !a.trial_promoted)])); }
     if (!data || !data.balance) { $("#updated").textContent = "Aucune simulation encore enregistrée : définissez une balance, ou attendez le prochain passage du bot."; return; }
     render();
   }
@@ -152,10 +153,15 @@
 
     if (live && open.length && !live.hasSavedChoice()) live.select(open[0].asset);
     const det = document.getElementById("positions"); if (det && det.setHint) det.setHint(open.length ? `${open.length} position${open.length > 1 ? "s" : ""} ouverte${open.length > 1 ? "s" : ""}` : "aucune position ouverte");
-    $("#open tbody").innerHTML = open.length ? open.map((o) => `<tr><td class="mono nowrap" style="font-size:12px">${esc(new Date(o.opened_at).toLocaleString("fr-FR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }))}</td><td class="nowrap"><b style="font-weight:500">${esc(Y.shortLabel(o.asset_label || o.asset))}</b></td><td>${Y.dirHtml(o.direction)}</td>
+    const ids = Object.keys(d.open || {});
+    const lab = (o) => Y.shortLabel(o.asset_label || ((window.__assets || []).find((a) => a.key === o.asset) || {}).label || o.asset);
+    $("#open tbody").innerHTML = open.length ? open.map((o, i) => `<tr><td class="mono nowrap" style="font-size:12px">${esc(new Date(o.opened_at).toLocaleString("fr-FR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }))}</td><td class="nowrap"><b style="font-weight:500">${esc(lab(o))}</b></td><td>${Y.dirHtml(o.direction)}</td>
+      <td class="num nowrap" data-est="${esc(ids[i])}" data-asset="${esc(o.asset)}" data-dir="${esc(o.direction)}" data-entry="${o.entry}"><span class="faint">…</span></td>
       <td class="num">${Y.price(o.entry)}</td><td class="num up">${Y.price(o.take_profit)}</td><td class="num dn">${Y.price(o.stop_loss)}</td><td class="num">${Y.num(o.lots, o.lots % 1 ? 3 : 0)} ${esc(o.lot_label)}${o.risky ? ' <span class="pill dn">risqué</span>' : ""}</td>
-      <td class="num">${Y.money(o.risk_amount, cur)}${o.risk_pct_effective != null ? ` <span class="muted">(${Y.num(o.risk_pct_effective, 1)}${Y.NB}%)</span>` : ""}</td><td class="num">${Y.money(o.notional, cur, 0)}</td><td class="num">×${Y.num(o.leverage, 1)}${o.capped_by_leverage ? " (plafond)" : ""}</td></tr>`).join("")
-      : `<tr><td colspan="10" class="empty">Aucune position simulée ouverte.</td></tr>`;
+      <td class="num">${Y.money(o.risk_amount, cur)}${o.risk_pct_effective != null ? ` <span class="muted">(${Y.num(o.risk_pct_effective, 1)}${Y.NB}%)</span>` : ""}</td><td class="num">${Y.money(o.notional, cur, 0)}</td><td class="num">×${Y.num(o.leverage, 1)}${o.capped_by_leverage ? " (plafond)" : ""}</td>
+      <td><button type="button" class="secondary" data-stop="${esc(ids[i])}" data-label="${esc(lab(o))} (${o.direction === "long" ? "achat" : "vente"})">Arrêter</button></td></tr>`).join("")
+      : `<tr><td colspan="12" class="empty">Aucune position simulée ouverte.</td></tr>`;
+    Y.fillEstimates($("#open"), { positions: d.open || {}, assets: window.__assets || [] });
 
     renderHist();
 
@@ -215,6 +221,7 @@
 
   Y.bindGhSettings(() => { $("#s-msg").textContent = "Paramètres GitHub enregistrés dans ce navigateur."; });
   $("#btn-refresh").addEventListener("click", () => { load(); if (live) live.refresh(); });
+  Y.bindStopButtons($("#open"), { onDone: () => setTimeout(load, 90000) });
   let rt = null; addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(drawEquity, 200); });
   $("#set").addEventListener("submit", async (ev) => {
     ev.preventDefault();

@@ -142,6 +142,7 @@ def _sig_row(s: Signal, tz: ZoneInfo) -> dict[str, Any]:
         "duration_minutes": s.duration_minutes, "close_price": s.close_price,
         "created_at": s.created_at, "closed_at": s.closed_at, "created_local": f"{c:%d/%m %H:%M}",
         "expires_at": s.expires_at, "rationale": s.rationale, "news_context": s.news_context,
+        "manual_exit": (s.meta or {}).get("manual_exit"),
     }
 
 
@@ -187,6 +188,7 @@ def build_dashboard(all_signals: list[Signal], cfg: Config, adjustments: dict[st
                        # dimensionnement, pour l'aperçu du formulaire de trade (mêmes règles que portfolio.size_position)
                        "tick_size": asset.tick_size, "lot_multiplier": asset.lot_multiplier, "lot_min": asset.lot_min,
                        "lot_step": asset.lot_step, "lot_label": asset.lot_label, "max_leverage": asset.max_leverage,
+                       "fee_per_order": asset.fee_per_order,
                        "trial_promoted": f"essai_{key}" in ((adjustments or {}).get("promoted_variants") or [])})
 
     # Séries pour les graphiques du tableau de bord (signaux visibles uniquement)

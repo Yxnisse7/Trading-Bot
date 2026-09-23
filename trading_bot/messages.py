@@ -277,3 +277,50 @@ def streak_text(history: list[Signal]) -> str:
     if n < 2:
         return ""
     return f"{n}e gain d'affilée" if last == "tp" else f"{n}e perte d'affilée"
+
+
+# ----------------------------------------------------------------- arrêt manuel
+def euros(v: float | None, eur_rate: float | None, sign: bool = True) -> str:
+    """Montant en dollars converti en euros (« ≈ +8,20 € »), vide sans taux de change."""
+    if v is None or not eur_rate:
+        return ""
+    return "≈ " + money(v / eur_rate, "€", sign=sign)
+
+
+def manual_stop_text(sig: Signal, row: dict[str, Any] | None, currency: str = "$", digits: int | None = None,
+                     eur_rate: float | None = None) -> str:
+    """Confirmation d'un arrêt manuel (en réponse au signal)."""
+    dg = digits if digits is not None else decimals_of((sig.meta or {}).get("tick"), sig.entry)
+    me = (sig.meta or {}).get("manual_exit") or {}
+    word = "Achat" if sig.direction == "long" else "Vente"
+    head = f"<b>✋ ARRÊTÉ À LA MAIN · {esc(sig.asset_label)} {word}</b>"
+    if row:
+        eur = euros(row["pnl"], eur_rate)
+        head += f" · <b>{money(row['pnl'], currency, sign=True)}</b>" + (f" ({eur})" if eur else "")
+    lines = [head, f"{price(sig.entry, dg)} à {price(me.get('price'), dg)} · {pct(me.get('pnl_pct'))} net"]
+    if row:
+        lines.append(f"Balance {money(row['balance_after'], currency)}")
+        lines.append(f"<i>brut {money(row['pnl_gross'], currency, sign=True)}, coûts {money(row['cost'], currency)}</i>")
+    else:
+        lines.append("Ce trade n'était pas dans la simulation : rien ne change sur la balance.")
+    lines.append("Le bot continue de suivre ce trade en silence jusqu'au TP, au SL ou à l'expiration, pour apprendre "
+                 "de son vrai résultat. Si vous êtes sorti en gain et qu'il finit plus bas, c'est votre gain qui compte.")
+    return "\n".join(lines)
+
+
+def after_manual_text(sig: Signal, digits: int | None = None) -> str:
+    """Fin réelle d'un trade arrêté à la main (message silencieux, en réponse au signal)."""
+    dg = digits if digits is not None else decimals_of((sig.meta or {}).get("tick"), sig.entry)
+    me = (sig.meta or {}).get("manual_exit") or {}
+    end = {"tp": "a touché le TP", "sl": "a touché le SL", "expired": "a expiré"}.get(sig.status, sig.status)
+    mine, final = me.get("pnl_pct"), sig.pnl_pct
+    lines = [f"<b>🔎 Suite du trade arrêté · {esc(sig.asset_label)}</b>",
+             f"Après votre sortie à {price(me.get('price'), dg)} ({pct(mine)}), il {end} à {price(sig.close_price, dg)} ({pct(final)})."]
+    if mine is not None and final is not None:
+        if mine > final:
+            lines.append(f"Bonne sortie : {pct(mine - final)} de mieux que d'attendre.")
+        elif final > mine:
+            lines.append(f"Attendre aurait rapporté {pct(final - mine)} de plus.")
+    learned = max(mine, final) if (mine is not None and final is not None and mine > 0) else final
+    lines.append(f"<i>Pour l'apprentissage : {pct(learned)} {'(votre sortie en gain)' if learned == mine and learned != final else '(résultat réel)'}.</i>")
+    return "\n".join(lines)

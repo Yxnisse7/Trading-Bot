@@ -141,11 +141,20 @@ class Portfolio:
 
     def on_close(self, sig: Signal, asset: AssetConfig) -> dict[str, Any] | None:
         """Applique le résultat d'un trade clôturé à la balance. Renvoie la ligne d'historique."""
+        if sig.close_price is None:
+            return None
+        return self._close(sig, asset, sig.close_price, sig.status, sig.closed_at)
+
+    def close_manual(self, sig: Signal, asset: AssetConfig, price: float, when: datetime) -> dict[str, Any] | None:
+        """Arrêt manuel : la position simulée est soldée au prix donné (le signal reste suivi pour l'apprentissage)."""
+        return self._close(sig, asset, price, "manual", iso(when))
+
+    def _close(self, sig: Signal, asset: AssetConfig, exit_price: float, status: str, closed_at: str | None) -> dict[str, Any] | None:
         pos = self.data.get("open", {}).pop(sig.id, None)
-        if pos is None or sig.close_price is None:
+        if pos is None:
             return None
         sign = 1.0 if sig.direction == "long" else -1.0
-        gross = sign * (sig.close_price - sig.entry) * asset.lot_multiplier * pos["lots"]
+        gross = sign * (exit_price - sig.entry) * asset.lot_multiplier * pos["lots"]
         cost = asset.cost_pct / 100.0 * pos["notional"] + 2 * asset.fee_per_order
         pnl = round(gross - cost, 2)
         balance = round(float(self.data["balance"]) + pnl, 2)
@@ -153,13 +162,13 @@ class Portfolio:
         self.data["peak"] = max(float(self.data.get("peak", balance)), balance)
         row = {
             "id": sig.id, "asset": sig.asset, "asset_label": sig.asset_label, "direction": sig.direction,
-            "horizon": sig.horizon or "1h", "source": sig.source, "status": sig.status,
-            "entry": sig.entry, "exit": sig.close_price, "lots": pos["lots"], "lot_label": pos.get("lot_label", asset.lot_label),
+            "horizon": sig.horizon or "1h", "source": sig.source, "status": status,
+            "entry": sig.entry, "exit": exit_price, "lots": pos["lots"], "lot_label": pos.get("lot_label", asset.lot_label),
             "risky": bool(pos.get("risky")), "risk_pct_effective": pos.get("risk_pct_effective"),
             "notional": pos["notional"], "risk_amount": pos["risk_amount"],
             "pnl_gross": round(gross, 2), "cost": round(cost, 2), "pnl": pnl,
             "pnl_pct_balance": round(pnl / pos["balance_at_open"] * 100.0, 3) if pos.get("balance_at_open") else None,
-            "balance_after": balance, "opened_at": pos.get("opened_at", sig.created_at), "closed_at": sig.closed_at,
+            "balance_after": balance, "opened_at": pos.get("opened_at", sig.created_at), "closed_at": closed_at,
         }
         self.data.setdefault("history", []).append(row)
         self.save()

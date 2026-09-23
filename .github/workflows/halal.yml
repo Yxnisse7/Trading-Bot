@@ -9,13 +9,16 @@ on:
   workflow_dispatch:
     inputs:
       command:
-        description: "Commande : check-data, backtest, portfolio, summary, report, tick"
+        description: "Commande : check-data, backtest, portfolio, summary, report, tick, stop"
         default: "check-data"
       balance:
         description: "Nouvelle balance de la simulation halal pour `portfolio`"
         required: false
       risk:
         description: "Risque par trade en % pour `portfolio` (facultatif)"
+        required: false
+      signal:
+        description: "Trade à arrêter pour `stop` (identifiant ou actif ; vide = le seul trade ouvert)"
         required: false
 
 concurrency:
@@ -48,6 +51,7 @@ jobs:
           CMD: ${{ github.event.inputs.command || 'backtest' }}
           BALANCE: ${{ github.event.inputs.balance }}
           RISK: ${{ github.event.inputs.risk }}
+          SIGNAL: ${{ github.event.inputs.signal }}
         run: |
           case "$CMD" in
             check-data) python run.py --halal check-data ;;
@@ -56,5 +60,6 @@ jobs:
             summary)    bash scripts/run_and_push.sh python run.py --halal summary --force ;;
             report)     bash scripts/run_and_push.sh python run.py --halal report ;;
             tick)       bash scripts/run_and_push.sh python run.py --halal tick ;;
+            stop)       bash scripts/run_and_push.sh python run.py --halal stop --signal "$SIGNAL" ;;
             *)          echo "Commande inconnue : $CMD" >&2; exit 2 ;;
           esac

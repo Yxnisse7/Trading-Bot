@@ -8,7 +8,7 @@
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
-<link rel="stylesheet" href="yasuke.css?v=5c51909884">
+<link rel="stylesheet" href="yasuke.css?v=c360eee81f">
 <script>try { const t = localStorage.getItem("tb-theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}</script>
 <style>
   .asset-rows { display: grid; gap: 12px; }
@@ -19,7 +19,9 @@
   .asset-row .bar i { display: block; height: 100%; }
   .asset-row .n { text-align: right; color: var(--muted); font-size: 12px; }
   .asset-row .r { text-align: right; font-weight: 500; white-space: nowrap; }
-  @media (max-width: 760px) { .asset-row { grid-template-columns: 96px minmax(0, 1fr) 22px 66px; gap: 8px; } }
+  @media (max-width: 760px) { .asset-row { grid-template-columns: 96px minmax(0, 1fr) 22px 66px; gap: 8px; }
+    #open-tbl th:nth-child(1), #open-tbl td:nth-child(1), #open-tbl th:nth-child(5), #open-tbl td:nth-child(5), #open-tbl th:nth-child(6), #open-tbl td:nth-child(6), #open-tbl th:nth-child(7), #open-tbl td:nth-child(7),
+    #open-tbl th:nth-child(8), #open-tbl td:nth-child(8), #open-tbl th:nth-child(9), #open-tbl td:nth-child(9), #open-tbl th:nth-child(10), #open-tbl td:nth-child(10) { display: none; } }
 </style>
 </head>
 <body data-page="dashboard">
@@ -149,7 +151,7 @@
 
 <div id="tip" role="tooltip"></div>
 <script src="vendor/lightweight-charts.standalone.production.js"></script>
-<script src="yasuke.js?v=844b890fab"></script>
+<script src="yasuke.js?v=fa270e79d2"></script>
 <script src="charts.js?v=232a285ab5"></script>
 <script src="live-chart.js?v=974fc956eb"></script>
 <script src="sections.js?v=0d56d6cb86"></script>
@@ -182,7 +184,7 @@
     if (mode === "local") {
       try { const r = await fetch("/api/portfolio", { cache: "no-store" }); if (r.ok) portfolio = await r.json(); } catch (e) { /* rien */ }
     } else portfolio = await Y.getJson("portfolio.json");
-    if (data) renderTiles();
+    if (data) { renderTiles(); estimates(); }
   }
 
   // ------------------------------------------------------------------ rendu
@@ -275,6 +277,9 @@
   }
 
   // ------------------------------------------------------------------ signaux en cours (et notification des nouveaux)
+  function estimates() {
+    if (data) Y.fillEstimates($("#open-card"), { positions: (portfolio && portfolio.open) || {}, assets: data.assets || [] });
+  }
   function seenIds() { try { return JSON.parse(Y.store.get("tb-seen-signals") || "null"); } catch (e) { return null; } }
   function renderOpen() {
     const sigs = data.open_signals || [];
@@ -290,11 +295,16 @@
     Y.store.set("tb-seen-signals", JSON.stringify([...(seen || []), ...sigs.map((s) => s.id)].slice(-200)));
     const det = document.getElementById("en-cours");
     if (det && det.setHint) det.setHint(sigs.length ? `${sigs.length} signal${sigs.length > 1 ? "s" : ""} en cours` : "aucun signal en cours");
-    $("#open-card").innerHTML = sigs.length ? `<div class="tbl"><table><thead><tr><th>Ouvert</th><th>Actif</th><th>Sens</th><th class="num">Entrée</th><th class="num">TP</th><th class="num">SL</th><th>Gain/risque</th><th>Expire</th><th>Source</th></tr></thead><tbody>${
-      sigs.map((s) => `<tr class="${fresh.has(s.id) ? "fresh" : ""}"><td class="mono nowrap">${esc(s.created_local)}</td><td class="nowrap"><b>${esc(Y.shortLabel(s.asset_label))}</b>${fresh.has(s.id) ? ' <span class="pill solid">Nouveau</span>' : ""}</td><td>${Y.dirHtml(s.direction)}</td>
+    $("#open-card").innerHTML = sigs.length ? `<div class="tbl"><table id="open-tbl"><thead><tr><th>Ouvert</th><th>Actif</th><th>Sens</th><th class="num">Estimation</th><th class="num">Entrée</th><th class="num">TP</th><th class="num">SL</th><th>Gain/risque</th><th>Expire</th><th>Source</th><th></th></tr></thead><tbody>${
+      sigs.map((s) => { const me = s.manual_exit;
+        return `<tr class="${fresh.has(s.id) ? "fresh" : ""}"><td class="mono nowrap">${esc(s.created_local)}</td><td class="nowrap"><b>${esc(Y.shortLabel(s.asset_label))}</b>${fresh.has(s.id) ? ' <span class="pill solid">Nouveau</span>' : ""}</td><td>${Y.dirHtml(s.direction)}</td>
+        <td class="num nowrap" ${me ? "" : `data-est="${esc(s.id)}" data-asset="${esc(s.asset)}" data-dir="${esc(s.direction)}" data-entry="${s.entry}"`}>${me ? `<span class="muted">sorti à ${Y.pctv(me.pnl_pct, 2)}</span>` : `<span class="faint">…</span>`}</td>
         <td class="num">${Y.price(s.entry)}</td><td class="num up">${Y.price(s.take_profit)}</td><td class="num dn">${Y.price(s.stop_loss)}</td><td class="mono">${Y.num(s.risk_reward, 2)}</td>
-        <td class="nowrap">${s.expires_at ? Y.hhmm(s.expires_at) : ""}</td><td><span class="pill open"><span class="d"></span>${esc(Y.SRC[s.source] || s.source)}</span></td></tr>`).join("")}</tbody></table></div>`
+        <td class="nowrap">${s.expires_at ? Y.hhmm(s.expires_at) : ""}</td><td><span class="pill open"><span class="d"></span>${esc(Y.SRC[s.source] || s.source)}</span></td>
+        <td class="nowrap">${me ? `<span class="pill neu" title="Arrêté à la main : suivi en silence jusqu'au TP, au SL ou à l'expiration, pour l'apprentissage">arrêté</span>` : `<button type="button" class="secondary" data-stop="${esc(s.id)}" data-label="${esc(Y.shortLabel(s.asset_label))} (${s.direction === "long" ? "achat" : "vente"})">Arrêter</button>`}</td></tr>`; }).join("")}</tbody></table></div>
+      <div class="muted" style="margin-top:10px;font-size:12px">Estimation : résultat de la position simulée au dernier prix connu, frais déduits, en euros. « Arrêter » solde la position au prix du moment ; le bot suit ensuite le trade en silence pour apprendre de son vrai résultat.</div>`
       : `<div class="empty" style="padding:0">Aucun signal en cours. Le bot analyse les marchés toutes les 5 minutes.</div>`;
+    estimates();
     if (fresh.size) setTimeout(() => document.querySelectorAll("#open-card tr.fresh").forEach((r) => r.classList.remove("fresh")), 4000);
   }
 
@@ -538,6 +548,7 @@
   // ------------------------------------------------------------------ actions
   Y.bindGhSettings(() => { $("#m-msg").textContent = "Paramètres GitHub enregistrés dans ce navigateur."; load(); });
   $("#btn-refresh").addEventListener("click", () => { load(); if (live) live.refresh(); });
+  Y.bindStopButtons($("#open-card"), { onDone: () => setTimeout(load, 90000) });
   $("#btn-scan").addEventListener("click", async () => {
     const b = $("#btn-scan"); b.disabled = true;
     try { await fetch("/api/scan", { method: "POST" }); await load(); } finally { b.disabled = false; }

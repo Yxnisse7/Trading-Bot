@@ -237,6 +237,10 @@ class Engine:
         return text
 
     def _notify_outcome(self, sig: Signal, row: dict[str, Any] | None) -> None:
+        if (sig.meta or {}).get("manual_exit"):
+            # déjà arrêté à la main : la fin réelle est donnée pour information, sans son
+            notify(msg.after_manual_text(sig, digits=self._digits(sig.asset)), html=True, silent=True, reply_to=sig.id)
+            return
         cur = self.portfolio.data.get("currency", self.cfg.portfolio_currency)
         visible = sorted((s for s in self.store.history() if s.source != "shadow" and s.closed_at),
                          key=lambda s: s.closed_at)
@@ -323,6 +327,8 @@ class Engine:
         reasons = []
         today = now.astimezone(self.tz).date()
         visible = [s for s in all_sigs if s.asset == asset_key and s.source != "shadow"]
+        # un trade arrêté à la main n'est plus qu'un suivi silencieux : il ne bloque pas un nouveau signal
+        live = lambda s: s.status == "open" and not (s.meta or {}).get("manual_exit")  # noqa: E731
         mine = sorted((s for s in visible if (s.horizon or "1h") == horizon), key=lambda s: s.created_at)
         todays = [s for s in mine if parse_iso(s.created_at).astimezone(self.tz).date() == today]
         cap = self.cfg.max_signals_per_asset_per_day if horizon == "1h" else self.cfg.max_long_signals_per_asset_per_day
@@ -331,9 +337,9 @@ class Engine:
         losses_today = sum(1 for s in visible if s.status == "sl" and parse_iso(s.created_at).astimezone(self.tz).date() == today)
         if losses_today >= self.cfg.max_losses_per_asset_per_day:
             reasons.append(f"protection quotidienne : {self.cfg.max_losses_per_asset_per_day} stops déjà touchés")
-        if any(s.status == "open" for s in mine):
+        if any(live(s) for s in mine):
             reasons.append(f"un signal {horizon} est déjà ouvert sur cet actif")
-        if sum(1 for s in all_sigs if s.status == "open" and s.source != "shadow") >= self.cfg.max_open_signals:
+        if sum(1 for s in all_sigs if live(s) and s.source != "shadow") >= self.cfg.max_open_signals:
             reasons.append(f"plafond de signaux ouverts atteint ({self.cfg.max_open_signals})")
         if mine:
             last = mine[-1]
@@ -579,6 +585,65 @@ class Engine:
         self.write_report()
         return sig
 
+    # ------------------------------------------------------------ arrêt manuel
+    def eur_rate(self) -> float | None:
+        """Dollars par euro (EUR/USD), pour les montants en euros ; None si indisponible."""
+        from .providers import yahoo
+        try:
+            return yahoo.fetch_price("EURUSD=X")
+        except ProviderError:
+            pass
+        if "euro" in self.cfg.assets:
+            try:
+                return market.fetch_price(self.cfg.assets["euro"])
+            except ProviderError:
+                pass
+        return None
+
+    def find_open(self, ref: str | None) -> Signal:
+        """Trade ouvert désigné par son identifiant (ou son début), ou par son actif ; sans référence,
+        le seul trade ouvert. Les trades déjà arrêtés à la main sont exclus."""
+        sigs = [s for s in self.store.open_signals() if not (s.meta or {}).get("manual_exit")]
+        if not sigs:
+            raise ValueError("aucun trade ouvert à arrêter")
+        if not ref:
+            if len(sigs) == 1:
+                return sigs[0]
+            raise ValueError("plusieurs trades ouverts, précisez lequel : "
+                             + " · ".join(f"/stop {s.id} ({s.asset_label})" for s in sigs))
+        ref = ref.strip().lower()
+        by_id = [s for s in sigs if s.id.lower().startswith(ref)]
+        if len(by_id) == 1:
+            return by_id[0]
+        key = self.ASSET_ALIASES.get(ref, ref)
+        by_asset = sorted((s for s in sigs if s.asset == key), key=lambda s: s.created_at)
+        if by_asset:
+            return by_asset[-1]
+        raise ValueError(f"aucun trade ouvert pour « {ref} »")
+
+    def stop_trade(self, ref: str | None = None, now: datetime | None = None, price: float | None = None) -> dict[str, Any]:
+        """Arrêt manuel d'un trade : la simulation encaisse la sortie au prix du moment, et le signal
+        reste suivi en silence jusqu'à son vrai dénouement (TP, SL, expiration) pour l'apprentissage."""
+        now = now or utcnow()
+        sig = self.find_open(ref)
+        asset = self.cfg.assets[sig.asset]
+        if price is None:
+            try:
+                price = market.fetch_price(asset)
+            except ProviderError as exc:
+                raise RuntimeError(f"prix de {asset.label} indisponible, arrêt impossible pour l'instant ({exc})")
+        sign = 1.0 if sig.direction == "long" else -1.0
+        gross = sign * (price - sig.entry) / sig.entry * 100.0
+        sig.meta["manual_exit"] = {"price": price, "at": iso(now), "pnl_gross_pct": round(gross, 4),
+                                   "pnl_pct": round(gross - asset.cost_pct, 4)}
+        self.store.save_open([sig if s.id == sig.id else s for s in self.store.open_signals()])
+        row = self.portfolio.close_manual(sig, asset, price, now)
+        cur = self.portfolio.data.get("currency", self.cfg.portfolio_currency)
+        notify(msg.manual_stop_text(sig, row, cur, digits=self._digits(sig.asset), eur_rate=self.eur_rate()),
+               html=True, reply_to=sig.id)
+        self.write_report()
+        return {"signal": sig.to_dict(), "row": row}
+
     # --------------------------------------------------------------- summary
     def summary_day(self, now: datetime | None = None):
         """Jour résumé par défaut : la journée de trading la plus récente. Lancé après minuit (jusqu'à
@@ -803,6 +868,7 @@ class Engine:
         "/propose <actif> — le bot analyse l'actif maintenant et propose un trade s'il en voit un\n"
         "/long <actif> [objectif] [stop] [commentaire] — signal manuel à l'achat\n"
         "/short <actif> [objectif] [stop] [commentaire] — signal manuel à la vente\n"
+        "/stop [actif] — arrêter un trade ouvert au prix du moment (le bot le suit ensuite en silence pour apprendre)\n"
         "Sans chiffres, le bot calibre l'objectif et le stop sur la volatilité du moment. "
         "Avec, ce sont vos niveaux qui sont suivis : l'objectif d'abord, le stop ensuite.\n"
         "\n"
@@ -866,7 +932,7 @@ class Engine:
         if cmd in ("/help", "/start", "/aide"):
             return self.help_text()
         if cmd == "/status":
-            sigs = self.store.open_signals()
+            sigs = [s for s in self.store.open_signals() if not (s.meta or {}).get("manual_exit")]
             if not sigs:
                 return "Aucun signal ouvert."
             return Message("\n\n".join(self._signal_text(s, s.meta.get("sim") if s.meta else None) for s in sigs), html=True)
@@ -882,6 +948,12 @@ class Engine:
                 return "Simulation réinitialisée.\n" + self.portfolio.format_summary()
             except ValueError as exc:
                 return f"Balance invalide : {exc}. Exemple : /balance 1000 1"
+        if cmd in ("/stop", "/arreter", "/arrêter"):
+            try:
+                self.stop_trade(args[0] if args else None, now)   # notifie lui-même
+                return None
+            except (ProviderError, RuntimeError, ValueError) as exc:
+                return f"Arrêt impossible : {exc}"
         if cmd in ("/propose", "/long", "/short"):
             if not args:
                 return f"Précisez l'actif : {cmd} bitcoin"
@@ -989,7 +1061,8 @@ class Engine:
             r = lambda v: round(float(v), digits)  # noqa: E731
             levels = [{"id": s.id, "direction": s.direction, "entry": s.entry, "take_profit": s.take_profit,
                        "stop_loss": s.stop_loss, "source": s.source, "horizon": s.horizon or "1h",
-                       "created_at": s.created_at, "expires_at": s.expires_at}
+                       "created_at": s.created_at, "expires_at": s.expires_at,
+                       "manual_exit": (s.meta or {}).get("manual_exit")}
                       for s in open_sigs if s.asset == key]
             # trades clôturés pendant la fenêtre affichée : flèches d'entrée et de sortie sur le graphique
             first = candles[0].ts

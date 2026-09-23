@@ -7,7 +7,7 @@
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
-<link rel="stylesheet" href="yasuke.css?v=5c51909884">
+<link rel="stylesheet" href="yasuke.css?v=c360eee81f">
 <script>try { const t = localStorage.getItem("tb-theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}</script>
 <style>
   .rules { display: grid; gap: 20px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -25,7 +25,7 @@
     .asset-row { grid-template-columns: 1fr auto; } .asset-row .why { grid-column: 1 / -1; }
     #hist th:nth-child(1), #hist td:nth-child(1), #hist th:nth-child(4), #hist td:nth-child(4), #hist th:nth-child(5), #hist td:nth-child(5),
     #hist th:nth-child(6), #hist td:nth-child(6), #hist th:nth-child(7), #hist td:nth-child(7), #hist th:nth-child(8), #hist td:nth-child(8) { display: none; }
-    #open th:nth-child(1), #open td:nth-child(1), #open th:nth-child(6), #open td:nth-child(6), #open th:nth-child(7), #open td:nth-child(7) { display: none; }
+    #open th:nth-child(1), #open td:nth-child(1), #open th:nth-child(5), #open td:nth-child(5), #open th:nth-child(6), #open td:nth-child(6), #open th:nth-child(7), #open td:nth-child(7), #open th:nth-child(8), #open td:nth-child(8) { display: none; }
   }
 </style>
 </head>
@@ -55,7 +55,7 @@
   <div class="card" id="live"></div>
 
   <h2 id="positions" data-hint="aucune position ouverte">Signaux et positions ouverts</h2>
-  <div class="card tbl"><table id="open"><thead><tr><th>Émis</th><th>Actif</th><th class="num">Entrée</th><th class="num">TP</th><th class="num">SL</th><th>Expire</th><th class="num">Simulation</th></tr></thead><tbody></tbody></table></div>
+  <div class="card tbl"><table id="open"><thead><tr><th>Émis</th><th>Actif</th><th class="num">Estimation</th><th class="num">Entrée</th><th class="num">TP</th><th class="num">SL</th><th>Expire</th><th class="num">Simulation</th><th></th></tr></thead><tbody></tbody></table></div>
 
   <div class="card" style="margin-top:20px">
     <div class="card-head"><div><h3>Courbe de la balance</h3><div class="sub" id="equity-note">Balance après chaque trade clôturé</div></div><span id="eq-pill"></span></div>
@@ -119,7 +119,7 @@
 
 <div id="tip" role="tooltip"></div>
 <script src="vendor/lightweight-charts.standalone.production.js"></script>
-<script src="yasuke.js?v=844b890fab"></script>
+<script src="yasuke.js?v=fa270e79d2"></script>
 <script src="charts.js?v=232a285ab5"></script>
 <script src="live-chart.js?v=974fc956eb"></script>
 <script src="sections.js?v=0d56d6cb86"></script>
@@ -204,11 +204,16 @@
   function renderOpen() {
     const sigs = (dash && dash.open_signals) || [], pos = (port && port.open) || {}, cur = (port && port.currency) || "$";
     const det = document.getElementById("positions"); if (det && det.setHint) det.setHint(sigs.length ? `${sigs.length} ouvert${sigs.length > 1 ? "s" : ""}` : "aucune position ouverte");
-    $("#open tbody").innerHTML = sigs.length ? sigs.map((s) => { const p = pos[s.id];
-      const sim = p ? `${Y.num(p.lots, p.lots % 1 ? 4 : 0)} ${esc(p.lot_label)} · ${Y.money(p.notional, cur, 0)}` : `<span class="muted">non pris (liquidités)</span>`;
-      return `<tr><td class="mono nowrap" style="font-size:12px">${esc(when(s.created_at))}</td><td class="nowrap"><b style="font-weight:500">${esc(Y.shortLabel(s.asset_label))}</b> ${Y.dirHtml(s.direction)}</td>
-        <td class="num">${Y.price(s.entry, dg(s.asset))}</td><td class="num up">${Y.price(s.take_profit, dg(s.asset))}</td><td class="num dn">${Y.price(s.stop_loss, dg(s.asset))}</td><td class="mono nowrap" style="font-size:12px">${esc(when(s.expires_at))}</td><td class="num nowrap">${sim}</td></tr>`; }).join("")
-      : `<tr><td colspan="7" class="empty">Aucun signal ouvert. Le bot n'achète que lorsque la tendance est haussière sur plusieurs unités de temps.</td></tr>`;
+    $("#open tbody").innerHTML = sigs.length ? sigs.map((s) => { const p = pos[s.id], me = s.manual_exit;
+      const sim = p ? `${Y.num(p.lots, p.lots % 1 ? 4 : 0)} ${esc(p.lot_label)} · ${Y.money(p.notional, cur, 0)}` : me ? `<span class="muted">soldée</span>` : `<span class="muted">non pris (liquidités)</span>`;
+      const est = me ? `<td class="num nowrap"><span class="muted">sorti à ${Y.pctv(me.pnl_pct, 2)}</span></td>`
+                     : `<td class="num nowrap" data-est="${esc(s.id)}" data-asset="${esc(s.asset)}" data-dir="${esc(s.direction)}" data-entry="${s.entry}"><span class="faint">…</span></td>`;
+      const act = me ? `<span class="pill neu" title="Arrêté à la main : suivi en silence jusqu'au TP, au SL ou à l'expiration, pour l'apprentissage">arrêté</span>`
+                     : `<button type="button" class="secondary" data-stop="${esc(s.id)}" data-label="${esc(Y.shortLabel(s.asset_label))}">Arrêter</button>`;
+      return `<tr><td class="mono nowrap" style="font-size:12px">${esc(when(s.created_at))}</td><td class="nowrap"><b style="font-weight:500">${esc(Y.shortLabel(s.asset_label))}</b> ${Y.dirHtml(s.direction)}</td>${est}
+        <td class="num">${Y.price(s.entry, dg(s.asset))}</td><td class="num up">${Y.price(s.take_profit, dg(s.asset))}</td><td class="num dn">${Y.price(s.stop_loss, dg(s.asset))}</td><td class="mono nowrap" style="font-size:12px">${esc(when(s.expires_at))}</td><td class="num nowrap">${sim}</td><td class="nowrap">${act}</td></tr>`; }).join("")
+      : `<tr><td colspan="9" class="empty">Aucun signal ouvert. Le bot n'achète que lorsque la tendance est haussière sur plusieurs unités de temps.</td></tr>`;
+    Y.fillEstimates($("#open"), { positions: pos, assets: (dash && dash.assets) || [], base: "halal/" });
   }
   function dur(m) { if (m == null) return ""; if (m < 60) return `${m} min`; return `${Math.floor(m / 60)} h ${String(m % 60).padStart(2, "0")}`; }
   function renderHist() {
@@ -273,6 +278,7 @@
   }
 
   $("#btn-refresh").addEventListener("click", () => { load(); if (live) live.refresh(); });
+  Y.bindStopButtons($("#open"), { halal: true, onDone: () => setTimeout(load, 90000) });
   let rt = null; addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(drawEquity, 200); });
   setInterval(() => { if (dash) Y.status(lastRun(dash.state), dash.state && dash.state.last_scan_note); }, 60000);
   Y.poll(load);

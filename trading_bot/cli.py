@@ -19,6 +19,7 @@
   python run.py portfolio [--balance 1000 --risk 1]   # simulation de compte : état, ou nouvelle balance
   python run.py ui          # interface locale : http://127.0.0.1:8787
   python run.py check-data  # vérifie que chaque actif répond (bougies, dernier prix)
+  python run.py stop [--signal ID]  # arrête un trade au prix du moment (suivi ensuite en silence pour l'apprentissage)
 
 Mode halal (second bot séparé, données dans data/halal) : ajoutez --halal, par ex.
   python run.py --halal tick | summary | status | portfolio --balance 1000 | backtest --days 60 | check-data
@@ -45,7 +46,8 @@ HALAL_REFUSED = {"manual", "propose", "commands", "guide", "ui", "loop", "fetch-
 
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(description="Générateur de signaux de scalping (NQ, BTC, XAU) — données gratuites")
-    p.add_argument("command", choices=["scan", "track", "tick", "summary", "stats", "loop", "status", "test-notify", "backtest", "report", "fetch-data", "manual", "propose", "ui", "commands", "portfolio", "guide", "learn", "flush-outbox", "check-data"])
+    p.add_argument("command", choices=["scan", "track", "tick", "summary", "stats", "loop", "status", "test-notify", "backtest", "report", "fetch-data", "manual", "propose", "ui", "commands", "portfolio", "guide", "learn", "flush-outbox", "check-data", "stop"])
+    p.add_argument("--signal", help="stop : identifiant (ou début) du trade à arrêter, ou son actif ; sans valeur, le seul trade ouvert")
     p.add_argument("--halal", action="store_true", help="mode halal : second bot séparé (achat seulement, sans levier, data/halal)")
     p.add_argument("--dry-run", action="store_true", help="scan sans enregistrer les signaux")
     p.add_argument("--force", action="store_true", help="summary : renvoyer le résumé même s'il a déjà été envoyé pour ce jour")
@@ -129,6 +131,15 @@ def main(argv: list[str] | None = None) -> int:
             return 2
         sig = eng.manual(args.asset[0], args.direction, note=args.note, take_profit=args.tp, stop_loss=args.sl)
         print(json.dumps(sig.to_dict(), ensure_ascii=False, indent=2))
+    elif args.command == "stop":
+        try:
+            res = eng.stop_trade(args.signal)
+        except (ValueError, RuntimeError) as exc:
+            print(f"Arrêt impossible : {exc}")
+            return 1
+        row = res["row"]
+        print(f"Trade {res['signal']['id']} arrêté à {res['signal']['meta']['manual_exit']['price']}"
+              + (f" : {row['pnl']:+.2f} {eng.portfolio.data.get('currency', '$')}" if row else ""))
     elif args.command == "check-data":
         out = eng.check_data()
         print(json.dumps(out, ensure_ascii=False, indent=2))
