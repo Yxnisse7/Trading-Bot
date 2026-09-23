@@ -43,7 +43,7 @@ def test_build_signal_levels_and_rr(cfg, trending_up):
     assert abs(sig.take_profit - sig.entry) >= cfg.min_tp_range_fraction * sig.hourly_range - asset.tick_size
     assert sig.expires_at.endswith("Z") and "15:00" in sig.expires_at
     text = format_signal(sig)
-    for needle in ("LONG", "Entrée", "Take Profit", "Stop Loss", "Risque / rendement", "Confiance", "Actualité"):
+    for needle in ("ACHAT", "Entrée", "TP ", "SL ", "Gain/risque", "Pourquoi", "Actualité", "Zone d'entrée"):
         assert needle in text
 
 
@@ -96,3 +96,29 @@ def test_entry_guidance_zone_and_price_age():
     weak = Signal(**{**sig.__dict__, "risk_reward": 0.8, "meta": {}})
     assert "déjà plus petit que le risque" in entry_guidance(weak, now)[0]
     assert "Zone d'entrée" in format_signal(sig)
+
+
+def test_telegram_message_formats():
+    from datetime import datetime, timedelta, timezone
+    from trading_bot import messages as m
+    from trading_bot.models import Signal, iso
+    now = datetime(2026, 9, 22, 19, 30, tzinfo=timezone.utc)
+    sig = Signal(id="x", asset="sp500", asset_label="S&P 500 (ES)", direction="short", entry=7832.5, take_profit=7822.5,
+                 stop_loss=7839.25, risk_reward=1.48, confidence="fort", score=6, criteria=["trend_5m", "trend_1h", "adx", "pdhl"],
+                 rationale="… probabilité de résolution sous 1 h ≈ 95%.", news_context="actualité à surveiller (score 3) : Fed's Barkin | autre",
+                 created_at=iso(now), expires_at=iso(now + timedelta(hours=1)), meta={"tick": 0.25, "price_time": iso(now - timedelta(minutes=6))})
+    text = m.signal_text(sig, now=now, history=m.history_line(sig.asset_label, {"n": 12, "tp": 7, "sl": 4, "win_rate": 7 / 11, "neutral_win_rate": 0.41}))
+    assert "S&amp;P 500" in text and "<code>7832,50</code>" in text          # HTML échappé, prix copiables
+    assert "↘️ VENTE" in text and "−0,13 %" in text and "+0,09 %" in text
+    assert "il y a 6 min" in text and "expire à 22:30" in text
+    assert "tendance 5 min · 1 h, tendance forte, niveaux de la veille" in text
+    assert "probabilité" not in text and "Fed's Barkin" in text and "autre" not in text
+    assert "64 % gagnants sur 11, hasard 41 %" in text
+    assert "sous 7831,00" in text and "Actualité : ⚠️ à surveiller : Fed's Barkin" in text                                             # zone d'entrée d'une vente
+    assert m.history_line("Or (XAU/USD)", {"n": 2, "tp": 1, "sl": 1}).endswith("pas encore de recul")
+    line = m.sizing_line({"lots": 1, "lot_label": "MNQ", "risk_amount": 53.5, "risk_pct_effective": 8.76, "risky": True,
+                          "leverage": 101.52, "warnings": ["lot minimal 1 MNQ imposé : risque au stop 53.50 au lieu de 61.09 visé",
+                                                           "levier ×101.5 au-delà du plafond ×20"]})
+    assert line == "Simulation : 1 MNQ · risque 53,50 $ (8,8 %) · ⚠️ levier ×102"
+    assert m.streak_text([sig.__class__(**{**sig.__dict__, "status": st}) for st in ("sl", "tp", "tp", "tp")]) == "3e gain d'affilée"
+    assert m.strip_html("<b>A</b> &amp; <code>1</code>") == "A & 1"

@@ -221,24 +221,6 @@ def entry_guidance(sig: Signal, now=None, tz: str = "Europe/Paris") -> list[str]
 
 
 def format_signal(sig: Signal, tz: str = "Europe/Paris") -> str:
-    zone = ZoneInfo(tz)
-    created = parse_iso(sig.created_at).astimezone(zone)
-    expires = parse_iso(sig.expires_at).astimezone(zone)
-    arrow = "🟢 LONG" if sig.direction == "long" else "🔴 SHORT"
-    kind = "SCALP ~1 h" if (sig.horizon_minutes or 60) <= 60 else f"INTRADAY ~{horizon_label(sig.horizon_minutes)}"
-    risk_pct = abs(sig.entry - sig.stop_loss) / sig.entry * 100.0
-    reward_pct = abs(sig.take_profit - sig.entry) / sig.entry * 100.0
-    lines = [
-        f"📡 SIGNAL {arrow} — {sig.asset_label} — {kind}",
-        f"Heure : {created:%d/%m/%Y %H:%M} ({tz}) — id {sig.id}",
-        f"Entrée visée : {sig.entry}",
-        f"Take Profit  : {sig.take_profit} (+{reward_pct:.2f} %)",
-        f"Stop Loss    : {sig.stop_loss} (−{risk_pct:.2f} %)",
-        f"Risque / rendement : {sig.risk_reward}",
-        *entry_guidance(sig, tz=tz),
-        f"Confiance : {sig.confidence.upper()} (score {sig.score}, {len(sig.criteria)} critères alignés)",
-        f"Justification : {sig.rationale}",
-        f"Actualité : {sig.news_context}",
-        f"Durée estimée : ~{horizon_label(sig.horizon_minutes or 60)} — valable jusqu'à {expires:%H:%M} ({tz}), puis expiration automatique",
-    ]
-    return "\n".join(lines)
+    """Texte brut du signal (console, commande `status`) : même contenu que le message Telegram."""
+    from .messages import signal_text, strip_html
+    return strip_html(signal_text(sig, tz))

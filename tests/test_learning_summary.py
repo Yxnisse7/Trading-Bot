@@ -127,8 +127,8 @@ def test_daily_summary_content(cfg):
     hist = [_closed(0, "tp", ["rsi"]), _closed(1, "sl", ["rsi"]), _closed(2, "expired", ["rsi"])]
     text = daily_summary(hist, cfg, T0.date(), {"notes": ["rsi: test"], "avoid_hours_utc": []})
     assert "Signaux proposés : 3" in text
-    assert "Gagnants (TP) : 1 | Perdants (SL) : 1 | Expirés sans issue : 1" in text
-    assert "Taux de réussite du jour : 50%" in text
+    assert "Jour : 1 TP, 1 SL, 1 expirés" in text
+    assert "Réussite du jour : 50\u00a0%" in text
     assert "paper trading" not in text   # l'avertissement complet n'est plus répété à chaque message, il est dans le guide
     assert "rsi: test" in text
 
@@ -141,7 +141,7 @@ def test_neutral_win_rate_and_edge(cfg):
     assert rep["overall"]["win_rate"] == 0.6
     assert abs(rep["edge"] - 0.225) < 1e-9
     text = daily_summary(hist, cfg, T0.date())
-    assert "hasard attendu 38%" in text
+    assert "hasard attendu 38\u00a0%" in text
 
 
 def test_variant_baseline_excludes_trial_assets(cfg):

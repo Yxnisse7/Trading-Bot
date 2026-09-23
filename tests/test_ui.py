@@ -20,7 +20,7 @@ def test_ui_serves_dashboard_and_manual(tmp_path, monkeypatch):
     from trading_bot import engine as engmod
     monkeypatch.setattr(engmod.market, "fetch_candles_5m", lambda asset, days=5: candles)
     monkeypatch.setattr(engmod.market, "fetch_price", lambda asset: candles[-1].close)
-    monkeypatch.setattr(engmod, "notify", lambda text, title=None: None)
+    monkeypatch.setattr(engmod, "notify", lambda text, title=None, **kw: None)
     monkeypatch.setattr(engmod, "utcnow", lambda: now)
 
     server = ThreadingHTTPServer(("127.0.0.1", 0), make_handler(eng))

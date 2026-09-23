@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 import copy
-import hashlib
 import re
 from dataclasses import replace
 import logging
@@ -16,25 +15,21 @@ from .backtest import format_backtest, run_backtest
 from .config import DISCLAIMER, Config, load_config
 from .learning import learn
 from .models import Signal, iso, parse_iso, utcnow
-from .notify import notify, telegram_chat_ids, telegram_updates
+from . import messages as msg
+from .learning import neutral_win_rate, win_rate
+from .notify import Message, chat_key, notify, telegram_chat_ids, telegram_updates
 from .portfolio import Portfolio
 from .providers import calendar as calmod
 from .providers import market
 from .providers import news as newsmod
 from .providers.http import ProviderError
 from .report import build_dashboard, build_report
-from .signals import build_signal, format_signal, round_to_tick
+from .signals import build_signal, round_to_tick
 from .storage import Store
 from .summary import daily_summary
-from .tracker import format_outcome, update_signal
+from .tracker import update_signal
 
 log = logging.getLogger(__name__)
-
-
-def chat_key(chat_id: str) -> str:
-    """Empreinte courte d'un identifiant de chat : l'état du bot est public (dépôt + site),
-    on n'y écrit donc jamais le numéro lui-même, seulement de quoi le reconnaître."""
-    return hashlib.sha256(str(chat_id).encode("utf-8")).hexdigest()[:12]
 
 
 def chat_keys(values) -> list[str]:
@@ -193,18 +188,54 @@ class Engine:
                     continue
                 produced.append(sig)
                 all_sigs.append(sig)
-                sim_line = ""
+                sizing = None
                 if not dry_run:
                     sizing = self.portfolio.on_open(sig, asset)
                     sig.meta["sim"] = sizing
-                    sim_line = self.portfolio.format_sizing(sizing, asset)
                     self.store.add_signal(sig)
-                notify(format_signal(sig, self.cfg.timezone) + ("\n" + sim_line if sim_line else ""))
+                self._notify_signal(sig, sizing, now=now)
                 log.info("%s [%s] : signal %s %s émis (id %s)", asset.label, hkey, sig.direction, sig.entry, sig.id)
         self._touch_state(now, note=f"{len(produced)} signal(aux)")
         if not dry_run:
             self.write_report()
         return produced
+
+    # --------------------------------------------------------- messages Telegram
+    def _asset_stats(self, asset_key: str) -> dict[str, Any]:
+        """Trades notifiés et clôturés sur cet actif : base de la ligne « Historique » du signal."""
+        closed = [s for s in self.store.history() if s.asset == asset_key and s.source != "shadow" and s.status != "open"]
+        return {"n": len(closed), "tp": sum(1 for s in closed if s.status == "tp"),
+                "sl": sum(1 for s in closed if s.status == "sl"),
+                "win_rate": win_rate(closed), "neutral_win_rate": neutral_win_rate(closed)}
+
+    def _digits(self, asset_key: str) -> int:
+        asset = self.cfg.assets.get(asset_key)
+        return max(2, asset.price_decimals) if asset else 2
+
+    def _signal_text(self, sig: Signal, sizing: dict[str, Any] | None, header: str | None = None,
+                     now: datetime | None = None) -> str:
+        cur = self.portfolio.data.get("currency", self.cfg.portfolio_currency)
+        asset = self.cfg.assets.get(sig.asset)
+        return msg.signal_text(sig, self.cfg.timezone, header=header, now=now, digits=self._digits(sig.asset),
+                               tick=asset.tick_size if asset else None,
+                               history=msg.history_line(sig.asset_label, self._asset_stats(sig.asset)),
+                               sim=msg.sizing_line(sizing, cur))
+
+    def _notify_signal(self, sig: Signal, sizing: dict[str, Any] | None, header: str | None = None,
+                       footer: str | None = None, now: datetime | None = None) -> str:
+        text = self._signal_text(sig, sizing, header=header, now=now)
+        if footer:
+            text += "\n\n" + footer
+        notify(text, html=True, key=sig.id, buttons=msg.site_buttons(self.cfg.site_url, sig.asset))
+        return text
+
+    def _notify_outcome(self, sig: Signal, row: dict[str, Any] | None) -> None:
+        cur = self.portfolio.data.get("currency", self.cfg.portfolio_currency)
+        visible = sorted((s for s in self.store.history() if s.source != "shadow" and s.closed_at),
+                         key=lambda s: s.closed_at)
+        text = msg.outcome_text(sig, row, cur, streak=msg.streak_text(visible), digits=self._digits(sig.asset),
+                                initial=float(self.portfolio.data.get("balance_initial") or 0) or None)
+        notify(text, html=True, reply_to=sig.id)
 
     @staticmethod
     def _candle_close_iso(candles: list) -> str:
@@ -413,7 +444,7 @@ class Engine:
                 closed.append(done)
                 self.store.append_history(done)
                 row = self.portfolio.on_close(done, asset)
-                notify(format_outcome(done, self.cfg.timezone) + ("\n" + self.portfolio.format_outcome(row) if row else ""))
+                self._notify_outcome(done, row)
         self.store.save_open(remaining)
 
         remaining_shadow: list[Signal] = []
@@ -537,7 +568,7 @@ class Engine:
         sizing = self.portfolio.on_open(sig, asset)
         sig.meta["sim"] = sizing
         self.store.add_signal(sig)
-        notify("🖐️ SIGNAL MANUEL\n" + format_signal(sig, self.cfg.timezone) + "\n" + self.portfolio.format_sizing(sizing, asset))
+        self._notify_signal(sig, sizing, header="🖐️ <b>TRADE MANUEL</b>" + (" · niveaux fournis par vous" if custom else ""))
         self.write_report()
         return sig
 
@@ -548,23 +579,32 @@ class Engine:
         local = (now or utcnow()).astimezone(self.tz)
         return (local - timedelta(days=1)).date() if local.hour < 12 else local.date()
 
-    def summary(self, day=None, send: bool = True) -> str:
+    def summary(self, day=None, send: bool = True, force: bool = False) -> str:
+        """Résumé quotidien (HTML). Envoyé une seule fois par jour résumé : le planificateur de GitHub
+        et le cron externe le déclenchent tous les deux, le second passage ne renvoie rien
+        (sauf `force`, et sauf la commande /resume qui répond toujours sans diffuser)."""
         day = day or self.summary_day()
+        st = self.store.state()
+        if send and not force and st.get("last_summary_day") == day.isoformat():
+            log.info("résumé du %s déjà envoyé (%s) : rien à renvoyer", day, st.get("last_summary"))
+            return ""
         adj = self._relearn()
         text = daily_summary(self.store.all_signals(), self.cfg, day, adj)
-        text += "\n\n" + self.portfolio.format_summary()
+        text += "\n\n" + self.portfolio.format_summary(html=True)
         try:
             now = utcnow()
             agenda = calmod.upcoming(self.macro_events(now), now, hours=30, min_impact="high")
-            text += ("\n\nAnnonces à fort impact dans les 30 prochaines heures :\n"
-                     + calmod.format_agenda(agenda, self.cfg.timezone))
+            text += ("\n\n<b>Annonces à fort impact dans les 30 prochaines heures</b>\n"
+                     + msg.esc(calmod.format_agenda(agenda, self.cfg.timezone)))
         except Exception as exc:  # noqa: BLE001
             log.warning("agenda indisponible : %s", exc)
         if send:
-            notify(text)
+            notify(text, html=True, silent=True, buttons=msg.site_buttons(self.cfg.site_url))
         self.write_report()
         st = self.store.state()
         st["last_summary"] = iso(utcnow())
+        if send:
+            st["last_summary_day"] = day.isoformat()
         self.store.save_state(st)
         return text
 
@@ -636,10 +676,8 @@ class Engine:
         sizing = self.portfolio.on_open(sig, asset)
         sig.meta["sim"] = sizing
         self.store.add_signal(sig)
-        text = (header + "\n\n" + verdict + "\n\n" + format_signal(sig, self.cfg.timezone)
-                + "\n" + self.portfolio.format_sizing(sizing, asset)
-                + "\n\nLecture des indicateurs :\n" + lecture)
-        notify(text)
+        text = self._notify_signal(sig, sizing, header=msg.esc(header) + "\n" + msg.esc(verdict),
+                                   footer="<b>Lecture des indicateurs</b>\n" + msg.esc(lecture))
         self.write_report()
         return {"proposed": True, "verdict": verdict, "text": text, "signal": sig.to_dict()}
 
@@ -802,9 +840,9 @@ class Engine:
             sigs = self.store.open_signals()
             if not sigs:
                 return "Aucun signal ouvert."
-            return "\n\n".join(format_signal(s, self.cfg.timezone) for s in sigs)
+            return Message("\n\n".join(self._signal_text(s, s.meta.get("sim") if s.meta else None) for s in sigs), html=True)
         if cmd in ("/resume", "/résumé", "/summary"):
-            return self.summary(send=False)
+            return Message(self.summary(send=False), html=True)
         if cmd == "/balance":
             if not args:
                 return self.portfolio.format_summary()
@@ -883,7 +921,9 @@ class Engine:
             except Exception as exc:  # noqa: BLE001 — une commande ne doit pas casser le passage
                 log.exception("commande en erreur : %s", upd["text"])
                 reply = f"Erreur en traitant « {upd['text']} » : {exc}"
-            if reply:
+            if isinstance(reply, Message):
+                notify(reply.text, chat_id=upd["chat_id"], html=reply.html, buttons=reply.buttons)
+            elif reply:
                 notify(reply, chat_id=upd["chat_id"])
             handled += 1
         st = self.store.state()

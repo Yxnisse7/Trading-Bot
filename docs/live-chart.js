@@ -356,7 +356,10 @@
       const next = (list && list.length) ? list : DEFAULT_ASSETS;
       const same = JSON.stringify(next) === JSON.stringify(assets);
       assets = next;
-      const pick = [current, saved(), opts.prefer].find((k) => k && assets.some(([a]) => a === k)) || assets[0][0];
+      // lien depuis Telegram (index.html?actif=nasdaq) : l'actif du message passe en premier, sans être mémorisé
+      let fromUrl = null;
+      try { fromUrl = new URLSearchParams(location.search).get("actif"); } catch (e) { /* ancienne adresse */ }
+      const pick = [current, fromUrl, saved(), opts.prefer].find((k) => k && assets.some(([a]) => a === k)) || assets[0][0];
       current = pick;
       if (!same) paintChips();
       refresh();

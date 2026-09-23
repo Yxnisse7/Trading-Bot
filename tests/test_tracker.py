@@ -25,7 +25,7 @@ def test_tp_hit_with_candles():
     assert done is not None and done.status == "tp"
     assert done.close_price == 101.0 and done.duration_minutes == 10
     assert done.pnl_pct == 1.0
-    assert "TP TOUCHÉ" in format_outcome(done)
+    assert "✅ TP" in format_outcome(done)
 
 
 def test_sl_wins_when_both_touched_same_candle():
@@ -53,7 +53,7 @@ def test_expiry_closes_at_current_price():
     done = update_signal(s, None, 100.3, T0 + timedelta(minutes=60))
     assert done.status == "expired" and done.close_price == 100.3
     assert abs(done.pnl_pct - 0.3) < 1e-6 and done.duration_minutes == 60
-    assert "EXPIRÉ" in format_outcome(done)
+    assert "Expiré" in format_outcome(done)
 
 
 def test_candles_after_expiry_do_not_count():
@@ -67,4 +67,4 @@ def test_costs_are_deducted_from_pnl():
     done = update_signal(s, None, 101.0, T0 + timedelta(minutes=5), cost_pct=0.06)
     assert done.status == "tp"
     assert done.pnl_gross_pct == 1.0 and done.pnl_pct == 0.94
-    assert "net" in format_outcome(done) and "brut" in format_outcome(done)
+    assert "net" in format_outcome(done)

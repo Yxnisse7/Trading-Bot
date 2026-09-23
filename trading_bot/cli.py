@@ -40,6 +40,7 @@ def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(description="Générateur de signaux de scalping (NQ, BTC, XAU) — données gratuites")
     p.add_argument("command", choices=["scan", "track", "tick", "summary", "stats", "loop", "status", "test-notify", "backtest", "report", "fetch-data", "manual", "propose", "ui", "commands", "portfolio", "guide", "learn", "flush-outbox"])
     p.add_argument("--dry-run", action="store_true", help="scan sans enregistrer les signaux")
+    p.add_argument("--force", action="store_true", help="summary : renvoyer le résumé même s'il a déjà été envoyé pour ce jour")
     p.add_argument("--day", help="jour du résumé : AAAA-MM-JJ, « hier » ou « aujourd'hui » (défaut : dernière journée de trading, la veille avant midi)")
     p.add_argument("--interval", type=int, default=5, help="minutes entre deux ticks (mode loop)")
     p.add_argument("--days", type=int, default=30, help="profondeur du backtest en jours (max 60 sur Yahoo)")
@@ -78,7 +79,8 @@ def main(argv: list[str] | None = None) -> int:
             day = datetime.now(eng.tz).date()
         else:
             day = date.fromisoformat(args.day) if args.day else None
-        eng.summary(day)
+        if not eng.summary(day, force=args.force):
+            print("Résumé déjà envoyé pour ce jour : rien à renvoyer (--force pour le renvoyer).")
     elif args.command == "stats":
         print(json.dumps(analyze(eng.store.history()), indent=2, ensure_ascii=False))
     elif args.command == "status":

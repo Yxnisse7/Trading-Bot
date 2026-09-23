@@ -69,7 +69,7 @@ def test_portfolio_lifecycle_and_no_retroactivity(tmp_path):
     summ = pf.summary()
     assert summ["trades"] == 2 and summ["wins"] == 1 and summ["losses"] == 1 and summ["drawdown_pct"] > 0
     text = pf.format_summary()
-    assert "Balance" in text and "Trades : 2" in text
+    assert "Balance" in text and "Trades : 2" in text and "," in text
     # fantômes ignorés ; balance insuffisante → trade pris au lot minimal et signalé « risqué »
     assert pf.on_open(_sig(created=T0 + timedelta(hours=2), source="shadow"), cfg.asset("nasdaq")) is None
     pf.set_balance(100, 1.0, T0 + timedelta(hours=3))
@@ -77,7 +77,7 @@ def test_portfolio_lifecycle_and_no_retroactivity(tmp_path):
     small = _sig(created=T0 + timedelta(hours=4))
     sz_small = pf.on_open(small, cfg.asset("nasdaq"))
     assert sz_small["lots"] == 1 and sz_small["risky"] and small.id in pf.data["open"] and pf.data["skipped"] == []
-    assert "TRADE RISQUÉ" in pf.format_sizing(sz_small, cfg.asset("nasdaq"))
+    assert "⚠️" in pf.format_sizing(sz_small, cfg.asset("nasdaq"))
     close_signal(small, "sl", 19960.0, T0 + timedelta(hours=4, minutes=20), cfg.asset("nasdaq").cost_pct)
     row_small = pf.on_close(small, cfg.asset("nasdaq"))
     assert row_small["risky"] and "risqué" in pf.format_outcome(row_small) and pf.summary()["risky"] == 1

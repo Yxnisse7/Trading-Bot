@@ -164,6 +164,8 @@ class Config:
     portfolio_currency: str = "$"           # simple libellé : les prix sont en dollars, aucune conversion
 
     timezone: str = "Europe/Paris"
+    # adresse du site (boutons « Graphique » et « Simulation » sous les messages Telegram ; vide = pas de boutons)
+    site_url: str = "https://yxnisse7.github.io/Trading-Bot/"
     log_level: str = "INFO"
 
     def asset(self, key: str) -> AssetConfig:

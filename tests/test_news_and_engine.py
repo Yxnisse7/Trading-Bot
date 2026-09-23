@@ -62,7 +62,7 @@ def _engine(tmp_path, monkeypatch, candles, price, rss_items=None):
     monkeypatch.setattr(engmod.market, "fetch_candles_1m", lambda asset: [])
     monkeypatch.setattr(engmod.market, "fetch_price", lambda asset: price)
     monkeypatch.setattr(engmod.newsmod, "fetch_news", lambda cats, lb, now: rss_items or [])
-    monkeypatch.setattr(engmod, "notify", lambda text, title=None: None)
+    monkeypatch.setattr(engmod, "notify", lambda text, title=None, **kw: None)
     return eng
 
 
@@ -98,7 +98,7 @@ def test_full_cycle_scan_track_summary(tmp_path, monkeypatch):
     assert eng.store.adjustments()["sample"] == 4 + len(variants)
 
     text = eng.summary(now.date(), send=False)
-    assert "Signaux proposés : 4" in text and "Gagnants (TP) : 4" in text
+    assert "Signaux proposés : 4" in text and "4 TP" in text
     report = eng.store.report_file.read_text(encoding="utf-8")
     assert "Trades clôturés : **4**" in report and "Par critère technique" in report
 
@@ -220,7 +220,7 @@ def test_shadow_signals_are_tracked_silently(tmp_path, monkeypatch):
     eng = _engine(tmp_path, monkeypatch, candles, candles[-1].close)
     notified = []
     from trading_bot import engine as engmod
-    monkeypatch.setattr(engmod, "notify", lambda text, title=None: notified.append(text))
+    monkeypatch.setattr(engmod, "notify", lambda text, title=None, **kw: notified.append(text))
     # seuil de confiance inatteignable → aucun signal notifié, mais des fantômes (≥ 2 critères)
     eng.cfg.min_criteria = 20
     assert eng.scan(now) == []
@@ -234,7 +234,7 @@ def test_shadow_signals_are_tracked_silently(tmp_path, monkeypatch):
     assert notified == []
     # les fantômes n'apparaissent pas dans les compteurs du résumé, mais sont mentionnés à part
     text = eng.summary(now.date(), send=False)
-    assert "Signaux proposés : 0" in text and "Signaux fantômes du jour" in text and ": 5" in text
+    assert "Signaux proposés : 0" in text and "Trades testés en ombre aujourd'hui, sans toucher au compte : 5" in text
     dash = __import__("json").loads(eng.store.dashboard_file.read_text(encoding="utf-8"))
     assert dash["overview"]["shadow"]["n"] == 5 and dash["overview"]["visible"]["n"] == 0
     assert any(c["by_source"]["shadow"]["n"] > 0 for c in dash["criteria"])
@@ -246,10 +246,10 @@ def test_manual_signal_is_notified_and_tracked(tmp_path, monkeypatch):
     eng = _engine(tmp_path, monkeypatch, candles, candles[-1].close)
     notified = []
     from trading_bot import engine as engmod
-    monkeypatch.setattr(engmod, "notify", lambda text, title=None: notified.append(text))
+    monkeypatch.setattr(engmod, "notify", lambda text, title=None, **kw: notified.append(text))
     sig = eng.manual("bitcoin", "short", now, note="test")
     assert sig.source == "manual" and sig.direction == "short" and sig.stop_loss > sig.entry > sig.take_profit
-    assert len(notified) == 1 and "SIGNAL MANUEL" in notified[0] and "test" in notified[0]
+    assert len(notified) == 1 and "TRADE MANUEL" in notified[0] and "test" in notified[0]
     assert eng.store.open_signals()[0].id == sig.id
     import pytest
     with pytest.raises(ValueError):
@@ -264,7 +264,7 @@ def test_propose_with_and_without_direction(tmp_path, monkeypatch):
     eng = _engine(tmp_path, monkeypatch, trending, trending[-1].close)
     notified = []
     from trading_bot import engine as engmod
-    monkeypatch.setattr(engmod, "notify", lambda text, title=None: notified.append(text))
+    monkeypatch.setattr(engmod, "notify", lambda text, title=None, **kw: notified.append(text))
     res = eng.propose("bitcoin", now)
     assert res["proposed"] and res["signal"]["source"] == "request"
     assert "ANALYSE À LA DEMANDE" in notified[-1] and "Lecture des indicateurs" in notified[-1]
@@ -286,7 +286,7 @@ def test_telegram_commands(tmp_path, monkeypatch):
     eng = _engine(tmp_path, monkeypatch, candles, candles[-1].close)
     sent = []
     from trading_bot import engine as engmod
-    monkeypatch.setattr(engmod, "notify", lambda text, title=None, chat_id=None: sent.append((chat_id, text)))
+    monkeypatch.setattr(engmod, "notify", lambda text, title=None, chat_id=None, **kw: sent.append((chat_id, text)))
     monkeypatch.setattr(engmod, "telegram_chat_ids", lambda: ["42", "43"])
     ts = int(now.timestamp())
     updates = [
@@ -307,12 +307,12 @@ def test_telegram_commands(tmp_path, monkeypatch):
     texts = [s for _, s in sent]
     assert any("GUIDE DU BOT" in s for s in texts)
     assert any("Actif inconnu" in s for s in texts)
-    assert any("SIGNAL MANUEL" in s and "Ethereum" in s for s in texts)
-    assert texts[-1].startswith("📡 SIGNAL") and "Entrée visée" in texts[-1]   # /status
+    assert any("TRADE MANUEL" in s and "Ethereum" in s for s in texts)
+    assert "ACHAT" in texts[-1] and "Entrée <code>" in texts[-1]   # /status
     assert not any("Nasdaq" in s for s in texts)
     # réponses aux commandes ciblées sur le chat demandeur ; signal manuel diffusé à tous (chat_id None)
     assert ("42", texts[0]) in sent and all(c == "42" for c, s in sent if "GUIDE DU BOT" in s and "identifiant" not in s)
-    assert any(c is None and "SIGNAL MANUEL" in s for c, s in sent)
+    assert any(c is None and "TRADE MANUEL" in s for c, s in sent)
     # chat inconnu (99) : informé une seule fois de son identifiant
     unknown = [(c, s) for c, s in sent if c == "99"]
     assert len(unknown) == 1 and "99" in unknown[0][1] and "privé" in unknown[0][1]
@@ -341,7 +341,7 @@ def test_two_horizons_and_policy_per_horizon(tmp_path, monkeypatch):
     long_sig = longs[0]
     assert long_sig.horizon_minutes == 180
     from trading_bot.signals import format_signal
-    assert "INTRADAY ~3 h" in format_signal(long_sig) and "Durée estimée : ~3 h" in format_signal(long_sig)
+    assert "intraday ~3 h" in format_signal(long_sig) and "expire à" in format_signal(long_sig)
     # la cible du 3 h est plus large que celle du 1 h sur le même actif (quand les deux existent)
     same = [s for s in shorts if s.asset == long_sig.asset]
     if same:
@@ -411,17 +411,17 @@ def test_engine_applies_portfolio_and_balance_command(tmp_path, monkeypatch):
     eng = _engine(tmp_path, monkeypatch, candles, candles[-1].close)
     from trading_bot import engine as engmod
     sent = []
-    monkeypatch.setattr(engmod, "notify", lambda text, title=None, chat_id=None: sent.append(text))
+    monkeypatch.setattr(engmod, "notify", lambda text, title=None, chat_id=None, **kw: sent.append(text))
     eng.set_balance(50000, 1.0, now - timedelta(minutes=1))
     sigs = eng.scan(now)
-    assert sigs and all("Simulation (balance" in s for s in sent if "SIGNAL" in s)
+    assert sigs and all("Simulation : " in s for s in sent if "ACHAT" in s or "VENTE" in s)
     assert all(s.meta.get("sim", {}).get("lots", 0) > 0 for s in sigs)
     monkeypatch.setattr(engmod.market, "fetch_price", lambda asset: 10 ** 9)
     closed = eng.track(now + timedelta(minutes=10))
     assert closed
     pf = eng.portfolio.data
     assert pf["balance"] > 50000 and len(pf["history"]) >= 1
-    assert any("balance" in s and "Simulation :" in s for s in sent)
+    assert any("Balance " in s and "TP ·" in s for s in sent)
     # commande Telegram
     reply = eng.handle_command("/balance", now)
     assert "SIMULATION DE COMPTE" in reply and "50" in reply
@@ -494,7 +494,7 @@ def test_guide_is_sent_once_to_each_authorized_chat(tmp_path, monkeypatch):
     eng = _engine(tmp_path, monkeypatch, candles, candles[-1].close)
     from trading_bot import engine as engmod
     sent = []
-    monkeypatch.setattr(engmod, "notify", lambda text, title=None, chat_id=None: sent.append((chat_id, text)))
+    monkeypatch.setattr(engmod, "notify", lambda text, title=None, chat_id=None, **kw: sent.append((chat_id, text)))
     monkeypatch.setattr(engmod, "telegram_chat_ids", lambda: ["111", "222"])
     # le guide part une fois par chat, puis plus jamais
     assert eng.welcome_new_chats() == ["111", "222"]
@@ -524,7 +524,7 @@ def test_public_files_never_expose_chat_ids(tmp_path, monkeypatch):
     candles = make_candles(n=500, drift=0.0003, noise=0.0012, seed=7, start_ts=int(now.timestamp()) - 500 * 300)
     eng = _engine(tmp_path, monkeypatch, candles, candles[-1].close)
     from trading_bot import engine as engmod
-    monkeypatch.setattr(engmod, "notify", lambda text, title=None, chat_id=None: None)
+    monkeypatch.setattr(engmod, "notify", lambda text, title=None, chat_id=None, **kw: None)
     monkeypatch.setattr(engmod, "telegram_chat_ids", lambda: ["987654321"])
     eng.welcome_new_chats()
     eng._touch_state(now, note="test")
@@ -553,7 +553,7 @@ def test_manual_signal_with_explicit_levels(tmp_path, monkeypatch):
     eng = _engine(tmp_path, monkeypatch, candles, candles[-1].close)
     from trading_bot import engine as engmod
     sent = []
-    monkeypatch.setattr(engmod, "notify", lambda text, title=None, chat_id=None: sent.append(text))
+    monkeypatch.setattr(engmod, "notify", lambda text, title=None, chat_id=None, **kw: sent.append(text))
     price = candles[-1].close
 
     # niveaux imposés : repris tels quels, rapport gain/risque recalculé
@@ -565,7 +565,7 @@ def test_manual_signal_with_explicit_levels(tmp_path, monkeypatch):
     # le calibrage automatique ne doit plus être décrit : il ne correspond pas aux niveaux suivis
     assert "TP = " not in sig.rationale and "probabilité de résolution" not in sig.rationale
     assert "Range moyen" in sig.rationale   # le contexte de volatilité reste utile
-    assert "SIGNAL MANUEL" in sent[-1]
+    assert "TRADE MANUEL" in sent[-1]
 
     # objectif seul : le stop reste calibré par le bot
     sig2 = eng.manual("ethereum", "short", now, take_profit=price * 0.97)
@@ -586,7 +586,7 @@ def test_telegram_long_accepts_levels_then_comment(tmp_path, monkeypatch):
     candles = make_candles(n=500, drift=0.0003, noise=0.0012, seed=7, start_ts=int(now.timestamp()) - 500 * 300)
     eng = _engine(tmp_path, monkeypatch, candles, candles[-1].close)
     from trading_bot import engine as engmod
-    monkeypatch.setattr(engmod, "notify", lambda text, title=None, chat_id=None: None)
+    monkeypatch.setattr(engmod, "notify", lambda text, title=None, chat_id=None, **kw: None)
     price = candles[-1].close
     eng.handle_command(f"/long btc {price * 1.02:.0f} {price * 0.99:.0f} cassure", now)
     sig = eng.store.open_signals()[-1]
@@ -603,7 +603,7 @@ def test_live_snapshot_is_written_for_each_asset(tmp_path, monkeypatch):
     candles = make_candles(n=500, drift=0.0003, noise=0.0012, seed=7, start_ts=int(now.timestamp()) - 500 * 300)
     eng = _engine(tmp_path, monkeypatch, candles, candles[-1].close)
     from trading_bot import engine as engmod
-    monkeypatch.setattr(engmod, "notify", lambda text, title=None, chat_id=None: None)
+    monkeypatch.setattr(engmod, "notify", lambda text, title=None, chat_id=None, **kw: None)
     sig = eng.manual("bitcoin", "long", now)
     written = eng.write_live_snapshot(now)
     assert set(written) == set(eng.cfg.assets)
@@ -640,7 +640,7 @@ def test_session_variant_is_shadow_until_promoted(tmp_path, monkeypatch):
     eng.cfg.assets["sp500"].session_utc = (13, 20)
     from trading_bot import engine as engmod
     sent = []
-    monkeypatch.setattr(engmod, "notify", lambda text, title=None, chat_id=None: sent.append(text))
+    monkeypatch.setattr(engmod, "notify", lambda text, title=None, chat_id=None, **kw: sent.append(text))
     sigs = eng.scan(now)
     assert all(s.asset not in ("nasdaq", "sp500") for s in sigs)            # aucun signal réel sur les indices
     assert not any("Nasdaq" in t or "S&P" in t for t in sent)               # et rien de notifié
@@ -678,7 +678,7 @@ def test_relearn_announces_promotions(tmp_path, monkeypatch):
     eng = _engine(tmp_path, monkeypatch, candles, candles[-1].close)
     from trading_bot import engine as engmod
     sent = []
-    monkeypatch.setattr(engmod, "notify", lambda text, title=None, chat_id=None: sent.append(text))
+    monkeypatch.setattr(engmod, "notify", lambda text, title=None, chat_id=None, **kw: sent.append(text))
     for i in range(40):
         eng.store.append_history(_trade(i, "tp" if i % 8 < 3 else "sl", ["rsi"]))
     for i in range(100):
@@ -698,7 +698,7 @@ def test_trial_asset_is_silent_until_promoted(tmp_path, monkeypatch):
     eng.cfg.max_open_signals = 10
     from trading_bot import engine as engmod
     sent = []
-    monkeypatch.setattr(engmod, "notify", lambda text, title=None, chat_id=None: sent.append(text))
+    monkeypatch.setattr(engmod, "notify", lambda text, title=None, chat_id=None, **kw: sent.append(text))
     sigs = eng.scan(now)
     assert "oil" not in {s.asset for s in sigs} and not any("Pétrole" in t for t in sent)
     assert any(s.asset == "oil" and s.meta.get("variant") == "essai_oil" for s in eng.store.open_shadow())
@@ -720,3 +720,20 @@ def test_asset_blackout_blocks_only_that_asset(tmp_path, monkeypatch):
                                                                       "high", ("oil",))])
     assets = {s.asset for s in eng.scan(now)}
     assert "oil" not in assets and "nasdaq" in assets
+
+
+def test_daily_summary_is_sent_once_per_day(tmp_path, monkeypatch):
+    """Le planificateur GitHub et le cron externe lancent tous deux le résumé : un seul envoi par jour."""
+    now = datetime(2026, 9, 17, 14, 0, tzinfo=timezone.utc)
+    candles = make_candles(n=500, drift=0.0003, noise=0.0012, seed=7, start_ts=int(now.timestamp()) - 500 * 300)
+    eng = _engine(tmp_path, monkeypatch, candles, candles[-1].close)
+    from trading_bot import engine as engmod
+    sent = []
+    monkeypatch.setattr(engmod, "notify", lambda text, title=None, chat_id=None, **kw: sent.append((text, kw)))
+    day = now.date()
+    assert eng.summary(day) and len(sent) == 1
+    assert sent[0][1]["silent"] and sent[0][1]["html"] and "RÉSUMÉ QUOTIDIEN" in sent[0][0]
+    assert eng.summary(day) == "" and len(sent) == 1               # second déclenchement : rien
+    assert eng.summary(day, send=False) and len(sent) == 1         # /resume répond toujours, sans diffuser
+    assert eng.summary(day, force=True) and len(sent) == 2
+    assert eng.summary(day + timedelta(days=1)) and len(sent) == 3  # jour suivant : envoyé

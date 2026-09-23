@@ -174,37 +174,35 @@ class Portfolio:
         }
 
     def format_sizing(self, sizing: dict[str, Any] | None, asset: AssetConfig) -> str:
-        if not sizing:
-            return ""
-        cur = self.data.get("currency", self.cfg.portfolio_currency)
-        if sizing.get("lots", 0) <= 0:
-            return f"Simulation (balance {float(self.data['balance']):,.2f} {cur}) : trade non pris — {sizing.get('reason', '')}"
-        cap = " (plafonné par le levier)" if sizing.get("capped_by_leverage") else ""
-        text = (f"Simulation (balance {sizing['balance_at_open']:,.2f} {cur}, risque {self.data['risk_pct']} %) : "
-                f"{sizing['lots']:g} {sizing['lot_label']} — risque au stop {sizing['risk_amount']:,.2f} {cur} "
-                f"({sizing['risk_pct_effective']:.2f} % de la balance), notionnel {sizing['notional']:,.0f} {cur}, "
-                f"levier ×{sizing['leverage']}{cap}")
-        if sizing.get("risky"):
-            text += "\n⚠️ TRADE RISQUÉ (pris quand même) : " + " ; ".join(sizing.get("warnings", []))
-        return text
+        from .messages import sizing_line, strip_html
+        return strip_html(sizing_line(sizing, self.data.get("currency", self.cfg.portfolio_currency)))
 
     def format_outcome(self, row: dict[str, Any] | None) -> str:
+        from .messages import money
         if not row:
             return ""
         cur = self.data.get("currency", self.cfg.portfolio_currency)
-        flag = " ⚠️ (trade risqué)" if row.get("risky") else ""
-        return (f"Simulation : {row['lots']:g} {row['lot_label']}{flag} → {row['pnl']:+,.2f} {cur} "
-                f"(brut {row['pnl_gross']:+,.2f}, coûts {row['cost']:,.2f}) · balance {row['balance_after']:,.2f} {cur}")
+        flag = " ⚠️ trade risqué" if row.get("risky") else ""
+        return (f"Simulation : {row['lots']:g} {row['lot_label']}{flag} · {money(row['pnl'], cur, sign=True)} "
+                f"(brut {money(row['pnl_gross'], cur, sign=True)}, coûts {money(row['cost'], cur)}) · balance {money(row['balance_after'], cur)}")
 
-    def format_summary(self) -> str:
+    def format_summary(self, html: bool = False) -> str:
+        from .messages import money, num, pct
         s = self.summary()
         cur = s["currency"]
-        started = parse_iso(s["started_at"]).strftime("%d/%m/%Y %H:%M UTC") if s.get("started_at") else "-"
+        started = parse_iso(s["started_at"]).strftime("%d/%m/%Y") if s.get("started_at") else "-"
+        title = "💼 SIMULATION DE COMPTE" + (" (balance par défaut, non définie)" if s["is_default"] else "")
         lines = [
-            f"💼 SIMULATION DE COMPTE{' (balance par défaut, non définie)' if s['is_default'] else ''}",
-            f"Balance : {s['balance']:,.2f} {cur} (départ {s['balance_initial']:,.2f} {cur} le {started})",
-            f"Résultat : {s['pnl']:+,.2f} {cur} ({s['pnl_pct']:+.2f} %) · pic {s['peak']:,.2f} · repli max depuis le pic {s['drawdown_pct']:.2f} %",
-            f"Trades : {s['trades']} ({s['wins']} gagnants, {s['losses']} perdants) · gain moyen {s['avg_win']:+,.2f} · perte moyenne {s['avg_loss']:+,.2f}",
-            f"Risque par trade : {s['risk_pct']} % · positions ouvertes : {s['open_positions']} · trades risqués (lot minimal imposé) : {s['risky']}",
+            f"<b>{title}</b>" if html else title,
+            f"Balance : {money(s['balance'], cur)} (départ {money(s['balance_initial'], cur)} le {started})",
+            f"Résultat : {money(s['pnl'], cur, sign=True)}, soit {pct(s['pnl_pct'])} · plus haut {money(s['peak'], cur)} · "
+            f"repli depuis le plus haut {num(s['drawdown_pct'], 1)} %",
+            f"Trades : {s['trades']} ({s['wins']} gagnants, {s['losses']} perdants) · gain moyen {money(s['avg_win'], cur, sign=True)} · "
+            f"perte moyenne {money(s['avg_loss'], cur, sign=True)}",
+            f"Risque par trade : {num(s['risk_pct'], 1)} % · positions ouvertes : {s['open_positions']} · trades risqués : {s['risky']}",
         ]
+        if s["risky"]:
+            lines.append("⚠️ Trades risqués : avec cette balance, un seul micro-contrat dépasse souvent le levier maximal "
+                         "ou le risque visé. Le trade est pris quand même et signalé ; seule une balance plus grande "
+                         "les ferait disparaître.")
         return "\n".join(lines)

@@ -326,12 +326,32 @@ Le dépôt et le site étant publics, aucun identifiant de chat Telegram n'est �
 versionnés : `data/state.json` ne garde qu'une empreinte courte (SHA-256 tronqué), le tableau de bord
 publié ne contient aucun champ `telegram_*`, et le journal des notifications masque les identifiants.
 
+### Messages Telegram
+Mêmes règles que le site (`trading_bot/messages.py`) : nombres à la française, Achat / Vente avec
+↗️ / ↘️, prix en « code » (un appui les copie, sans séparateur de milliers), boutons « Graphique »
+(ouvre le site sur le bon actif) et « Simulation » sous chaque signal (`site_url` dans la config).
+
+- **Signal** : sens, actif, horizon ; entrée avec l'heure et l'âge du prix, TP et SL avec leur écart
+  en %, gain/risque, heure d'expiration, zone d'entrée ; « Pourquoi » (critères en clair),
+  historique réel de l'actif face au hasard, actualité en une ligne, et la ligne de simulation
+  (lots, risque, ⚠️ levier ou lot minimal si le trade est risqué). Aucune formulation ne peut passer
+  pour une probabilité de gain.
+- **Issue** : envoyée **en réponse au message du signal** (le numéro du message est gardé dans
+  `data/telegram_messages.json`, indexé par une empreinte du chat, jamais le numéro de chat), avec le
+  résultat en dollars d'abord, le trajet du prix, la durée, la balance et une série éventuelle
+  (« 3e gain d'affilée »).
+- Si Telegram refuse la mise en forme, le message repart aussitôt en texte brut.
+
 ### Rapport et résumé quotidien
 `data/REPORT.md` est régénéré à chaque événement (signal, clôture, résumé, backtest) : vue
 d'ensemble, signaux ouverts, statistiques par actif / sens / confiance / critère / heure, derniers
-trades, poids appris, backtests. Le résumé quotidien (Telegram) reprend le nombre de signaux,
-gagnants / perdants / expirés, taux du jour et cumulé, ce qui a fonctionné ou non, ajustements
-prévus et rappel des limites.
+trades, poids appris, backtests. Le résumé quotidien (Telegram, **sans son** à minuit) donne le bilan
+du jour, chaque trade de la journée, la réussite cumulée face au hasard, ce qui est **significatif**
+(écart au hasard au-delà de 1,96 écart-type) et, à part, les pistes encore trop peu fournies pour
+conclure, l'apprentissage, la simulation de compte et les annonces à venir. Il n'est **envoyé qu'une
+fois par jour** : le planificateur de GitHub (souvent en retard d'une à deux heures) et le cron externe
+le déclenchent tous deux, le second passage ne renvoie rien (`python run.py summary --force` pour le
+renvoyer). La commande `/resume` répond toujours.
 
 ## Installation locale
 

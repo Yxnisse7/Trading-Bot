@@ -86,11 +86,6 @@ def update_signal(sig: Signal, candles: list[Candle] | None, price: float | None
 
 
 def format_outcome(sig: Signal, tz: str = "Europe/Paris") -> str:
-    closed = parse_iso(sig.closed_at).astimezone(ZoneInfo(tz)) if sig.closed_at else None
-    icon = {"tp": "✅ TP TOUCHÉ", "sl": "❌ SL TOUCHÉ", "expired": "⏱️ EXPIRÉ (sans issue)"}[sig.status]
-    lines = [f"{icon} — {sig.asset_label} {sig.direction.upper()} (id {sig.id})"]
-    if closed:
-        lines.append(f"Heure : {closed:%d/%m/%Y %H:%M:%S} ({tz})")
-    lines.append(f"Entrée {sig.entry} → clôture {sig.close_price} | P&L net {sig.pnl_pct:+.3f} % (brut {sig.pnl_gross_pct:+.3f} %)")
-    lines.append(f"Durée réelle : {sig.duration_minutes} min")
-    return "\n".join(lines)
+    """Texte brut de l'issue d'un signal : même contenu que le message Telegram (sans la simulation)."""
+    from .messages import outcome_text, strip_html
+    return strip_html(outcome_text(sig))
