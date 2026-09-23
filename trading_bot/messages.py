@@ -147,7 +147,8 @@ def signal_text(sig: Signal, tz: str = "Europe/Paris", *, header: str | None = N
     long = sig.direction == "long"
     word = "↗️ ACHAT" if long else "↘️ VENTE"
     base = int((sig.meta or {}).get("base_minutes") or 5)
-    kind = "scalp ~1 h" if (sig.horizon_minutes or 60) <= 60 else f"intraday ~{horizon_text(sig.horizon_minutes)}"
+    hm = sig.horizon_minutes or 60
+    kind = "scalp ~1 h" if hm <= 60 else (f"intraday ~{horizon_text(hm)}" if hm < 360 else f"swing ~{horizon_text(hm)}")
     tp_chg = (sig.take_profit / sig.entry - 1) * 100.0
     sl_chg = (sig.stop_loss / sig.entry - 1) * 100.0
     expires = parse_iso(sig.expires_at).astimezone(zone)
@@ -166,7 +167,8 @@ def signal_text(sig: Signal, tz: str = "Europe/Paris", *, header: str | None = N
     lines.append(f"Entrée {code_price(sig.entry, dg)}{when}")
     lines.append(f"TP     {code_price(sig.take_profit, dg)}  {pct(tp_chg)}")
     lines.append(f"SL     {code_price(sig.stop_loss, dg)}  {pct(sl_chg)}")
-    lines.append(f"Gain/risque <b>{num(rr, 2)}</b> · expire à {expires:%H:%M}")
+    until = f"le {expires:%d/%m} à {expires:%H:%M}" if hm >= 360 else f"à {expires:%H:%M}"
+    lines.append(f"Gain/risque <b>{num(rr, 2)}</b> · expire {until}")
     z = entry_zone(sig, tick)
     if z is None:
         lines.append("⚠️ Au prix visé, le gain possible est déjà plus petit que le risque.")

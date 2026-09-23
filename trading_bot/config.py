@@ -62,6 +62,8 @@ class AssetConfig:
     # Nouvel actif à l'essai : ses signaux sont suivis en silence (fantômes) et ne deviennent réels
     # qu'une fois la variante « essai_<actif> » promue, comme les autres variantes.
     trial: bool = False
+    # Frais fixes par ordre (courtier à 1 € l'ordre, par ex.) : comptés deux fois par trade dans la simulation
+    fee_per_order: float = 0.0
 
 
 @dataclass
@@ -162,6 +164,12 @@ class Config:
     portfolio_default_balance: float = 1000.0
     portfolio_risk_pct: float = 1.0         # risque par trade, en % de la balance courante
     portfolio_currency: str = "$"           # simple libellé : les prix sont en dollars, aucune conversion
+
+    # ---- Modes restreints (mode halal) : tous désactivés par défaut, sans effet sur le bot principal
+    long_only: bool = False                 # achat seulement : aucune vente à découvert
+    cash_only: bool = False                 # simulation au comptant : jamais plus que les liquidités disponibles
+    scan_bases: list[int] | None = None     # bougies de base analysées (ex. [60] → horizon ~12 h) ; None = réglage standard
+    scan_days: int = 5                      # profondeur d'historique chargée à chaque analyse
 
     timezone: str = "Europe/Paris"
     # adresse du site (boutons « Graphique » et « Simulation » sous les messages Telegram ; vide = pas de boutons)

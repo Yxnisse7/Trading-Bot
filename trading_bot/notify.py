@@ -19,6 +19,7 @@ import os
 import re
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
+from pathlib import Path
 
 import requests
 
@@ -124,8 +125,13 @@ def flush_outbox(path: str | None = None) -> int:
 
 
 # ----------------------------------------------------------------- numéros des messages envoyés
+def _dir():
+    """Dossier du journal et des numéros de messages (celui du mode halal pour ses propres messages)."""
+    return Path(os.environ.get("TRADING_BOT_NOTIFY_DIR") or DATA_DIR)
+
+
 def _ids_path():
-    return DATA_DIR / MESSAGES_FILE
+    return _dir() / MESSAGES_FILE
 
 
 def _load_ids() -> dict:
@@ -138,7 +144,7 @@ def _load_ids() -> dict:
 def _save_ids(ids: dict) -> None:
     keys = list(ids)[-MAX_KEYS:]
     try:
-        DATA_DIR.mkdir(parents=True, exist_ok=True)
+        _dir().mkdir(parents=True, exist_ok=True)
         _ids_path().write_text(json.dumps({k: ids[k] for k in keys}, ensure_ascii=False, indent=1), encoding="utf-8")
     except OSError as exc:
         log.warning("numéros des messages non enregistrés : %s", exc)
@@ -152,8 +158,8 @@ def _redact(body: str) -> str:
 def _append_log(body: str) -> None:
     body = _redact(body)
     try:
-        DATA_DIR.mkdir(parents=True, exist_ok=True)
-        with open(DATA_DIR / "notifications.log", "a", encoding="utf-8") as fh:
+        _dir().mkdir(parents=True, exist_ok=True)
+        with open(_dir() / "notifications.log", "a", encoding="utf-8") as fh:
             fh.write(f"--- {datetime.now(timezone.utc).isoformat()} ---\n{body}\n\n")
     except OSError as exc:
         log.warning("journal de notifications indisponible: %s", exc)

@@ -342,6 +342,35 @@ Mêmes règles que le site (`trading_bot/messages.py`) : nombres à la français
   (« 3e gain d'affilée »).
 - Si Telegram refuse la mise en forme, le message repart aussitôt en texte brut.
 
+### Mode halal (avis malikite)
+Un **second bot, entièrement séparé** du bot principal, qui ne propose que des trades conformes à
+l'avis majoritaire, et à l'avis malikite en particulier. Page du site : `halal.html` (onglet « Halal »).
+
+- **Achat seulement** : aucune vente à découvert (vendre ce qu'on ne possède pas est interdit). Quand
+  la tendance baisse, il s'abstient.
+- **Au comptant, sans levier** : la simulation n'engage jamais plus que les liquidités disponibles ; sans
+  liquidités pour une part, le trade n'est pas pris.
+- **Actifs au comptant** : ETF USA islamique (ISDU, MSCI USA Islamic, l'équivalent halal du Nasdaq et
+  du S&P 500), ETF Monde islamique (ISWD), or physique Royal Mint (RMAU, endossé conforme par Amanie
+  Advisors), Bitcoin et Ethereum au comptant (avis divergents : à voir avec un savant). **Aucun contrat
+  à terme** (prix et marchandise reportés tous les deux), aucun CFD, aucune option.
+- **Trades plus longs** : bougie de base 1 h, horizon ~12 h, analyse toutes les 15 min. Sans levier, un
+  scalp ne couvre pas les frais.
+- **Frais réels** : écart acheteur-vendeur, plus 1 € par ordre pour les ETF (courtier type Trade Republic).
+
+Séparation complète : données dans `data/halal/` (signaux, historique, apprentissage, simulation, état,
+numéros des messages), copie publiée dans `docs/halal/`, messages Telegram marqués 🌙 (signaux, issues,
+résumé quotidien à part). Il ne lit jamais les commandes Telegram (le bot principal s'en charge), n'a ni
+fantômes ni variantes, et apprend de ses seuls trades. Il tourne dans une étape à part du workflow
+« tick », après le bot principal : si elle échoue, le bot principal n'est pas touché. Les options qu'il
+utilise (`long_only`, `cash_only`, `scan_bases`, `scan_days`, `fee_per_order`) sont désactivées par
+défaut : le bot principal garde exactement son comportement.
+
+Commandes : `python run.py --halal tick | summary | status | portfolio --balance 1000 | backtest --days 60 |
+check-data`. Sur GitHub, le workflow « Trading bot — mode halal » (lancé à la main) vérifie les données
+(`check-data`), définit la balance (`portfolio`) ou relance un backtest ; il rejoue aussi la stratégie
+chaque dimanche soir. Réglages : `config.halal.json` (facultatif, même format que `config.json`).
+
 ### Rapport et résumé quotidien
 `data/REPORT.md` est régénéré à chaque événement (signal, clôture, résumé, backtest) : vue
 d'ensemble, signaux ouverts, statistiques par actif / sens / confiance / critère / heure, derniers
@@ -463,13 +492,15 @@ trading_bot/
   summary.py                résumé quotidien
   report.py                 rapport Markdown
   engine.py                 orchestration scan / track / summary / tick / backtest / manuel
+  halal.py                  mode halal : second bot séparé (achat seulement, comptant, sans levier)
   ui.py                     serveur local de l'interface (bibliothèque standard)
   notify.py                 Telegram / Discord / console
   storage.py                persistance JSON
   providers/                yahoo, binance, coingecko, news (RSS + calendrier)
-docs/                       site : index.html (tableau de bord), portfolio.html (simulation), apprentissage.html,
+docs/                       site : index.html (tableau de bord), portfolio.html (simulation), apprentissage.html, halal.html,
                             yasuke.css / yasuke.js (charte et outils communs), charts.js, live-chart.js, sections.js,
                             vendor/ (TradingView Lightweight Charts), live/ et *.json publiés par le bot
-data/                       état persistant (signaux, fantômes, historique, ajustements, backtests, rapport, dashboard)
+data/                       état persistant (signaux, fantômes, historique, ajustements, backtests, rapport, dashboard) ;
+                            data/halal/ : état du mode halal, jamais mélangé
 tests/                      tests unitaires (données synthétiques, sans réseau)
 ```

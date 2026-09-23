@@ -8,15 +8,17 @@ set -euo pipefail
 
 # Après l'envoi, les numéros des messages Telegram (pour que l'issue d'un trade réponde à son signal)
 # sont enregistrés par un petit commit à part ; s'il échoue, seul le fil de réponse est perdu.
+# (mode halal : TRADING_BOT_DATA_DIR=data/halal, ses messages ont leur propre fichier)
+IDS_FILE="${TRADING_BOT_DATA_DIR:-data}/telegram_messages.json"
 save_message_ids() {
-  if [ -n "$(git status --porcelain data/telegram_messages.json 2>/dev/null)" ]; then
-    git add data/telegram_messages.json
+  if [ -n "$(git status --porcelain "$IDS_FILE" 2>/dev/null)" ]; then
+    git add "$IDS_FILE"
     git commit -q -m "bot: numéros des messages Telegram" || return 0
     git push -q origin "HEAD:$BRANCH" || echo "Numéros des messages non enregistrés (dépôt modifié entre-temps)."
   fi
 }
 BRANCH="${GITHUB_REF_NAME:-main}"
-export TRADING_BOT_OUTBOX="${RUNNER_TEMP:-/tmp}/outbox.jsonl"
+export TRADING_BOT_OUTBOX="${TRADING_BOT_OUTBOX:-${RUNNER_TEMP:-/tmp}/outbox.jsonl}"
 git config user.name "trading-bot[actions]"
 git config user.email "actions@users.noreply.github.com"
 
@@ -26,7 +28,11 @@ for attempt in 1 2 3 4; do
   git reset -q --hard "origin/$BRANCH"
   echo "== tentative $attempt : $*"
   "$@"
-  git add data/ docs/dashboard.json docs/portfolio.json docs/live 2>/dev/null || git add data/
+  git add data/
+  # copies publiées sur le site (docs/halal n'existe qu'après le premier passage du mode halal)
+  for p in docs/dashboard.json docs/portfolio.json docs/live docs/halal; do
+    if [ -e "$p" ]; then git add "$p"; fi
+  done
   if git diff --cached --quiet; then
     echo "Aucun changement d'état."
     python run.py flush-outbox

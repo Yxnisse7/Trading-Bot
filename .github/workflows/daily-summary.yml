@@ -32,3 +32,12 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
         run: bash scripts/run_and_push.sh python run.py summary
+      - name: Résumé du mode halal (bot séparé)
+        continue-on-error: true
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          TRADING_BOT_DATA_DIR: data/halal
+          TRADING_BOT_OUTBOX: ${{ runner.temp }}/outbox-halal.jsonl
+        run: bash scripts/run_and_push.sh python run.py --halal summary

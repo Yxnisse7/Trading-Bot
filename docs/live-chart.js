@@ -9,6 +9,8 @@
  *   const live = LiveChart.mount(conteneur, { assets: [["bitcoin", "Bitcoin (BTC/USD)", essai?], …] });
  *   live.setAssets(liste); live.select("bitcoin"); live.refresh();
  *   LiveChart.snapshot("bitcoin") → promesse des dernières données (mise en cache 1 min)
+ *   Mode halal : LiveChart.mount(conteneur, { base: "halal/", tf: "60", assets: … }) lit docs/halal/live/,
+ *   avec ses propres choix mémorisés (actif, unité de temps), séparés de ceux du bot principal.
  *
  * Le choix d'actif et d'unité de temps est mémorisé dans le navigateur et partagé entre les pages.
  * Si la bibliothèque ne se charge pas, un graphique SVG simple prend le relais.
@@ -88,16 +90,16 @@
 
   // ------------------------------------------------------------------ données
   const cache = new Map();   // actif → { t, p }
-  function snapshot(key, maxAgeMs = 55000) {
-    const c = cache.get(key);
+  function snapshot(key, maxAgeMs = 55000, base = "") {
+    const c = cache.get(base + key);
     if (c && Date.now() - c.t < maxAgeMs) return c.p;
     const p = (async () => {
-      for (const u of [`live/${key}.json`, `../data/live/${key}.json`, `/data/live/${key}.json`]) {
+      for (const u of [`${base}live/${key}.json`, `../data/${base}live/${key}.json`, `/data/${base}live/${key}.json`]) {
         try { const r = await fetch(u + "?t=" + Date.now(), { cache: "no-store" }); if (r.ok) return await r.json(); } catch (e) { /* suivant */ }
       }
       return null;
     })();
-    cache.set(key, { t: Date.now(), p });
+    cache.set(base + key, { t: Date.now(), p });
     return p;
   }
   function digitsOf(d) {
@@ -114,7 +116,8 @@
     }
     return out;
   }
-  const change = (d) => { const c = d && d.candles; return c && c.length > 1 ? (c[c.length - 1][4] / c[0][1] - 1) * 100 : null; };
+  // variation sur les 288 dernières bougies 5 min (24 h de cotation), même si l'instantané en contient plus
+  const change = (d) => { const c = d && d.candles && d.candles.slice(-288); return c && c.length > 1 ? (c[c.length - 1][4] / c[0][1] - 1) * 100 : null; };
   // Zone d'entrée : même règle que les messages Telegram (signals.entry_guidance)
   function zoneOf(s) {
     const e = s.entry, t = s.take_profit, sl = s.stop_loss;
@@ -149,9 +152,11 @@
     const ov = root.querySelector(".lc-ov"), zonesEl = root.querySelector(".lc-zones");
     const tfBtns = [...root.querySelectorAll("[data-tf]")];
 
-    let assets = [], current = null, tf = TF[store.get(TF_KEY)] ? store.get(TF_KEY) : "5", seq = 0;
+    const base = opts.base || "", suffix = base ? "-" + base.replace(/[^a-z0-9]/gi, "") : "";
+    const assetKey = STORE_KEY + suffix, tfKey = TF_KEY + suffix;
+    let assets = [], current = null, tf = TF[store.get(tfKey)] ? store.get(tfKey) : (TF[opts.tf] ? opts.tf : "5"), seq = 0;
     let data = null, bars = [], digits = 2, chart = null, series = null, priceLines = [], lastKey = "", svgMode = false;
-    const saved = () => store.get(STORE_KEY);
+    const saved = () => store.get(assetKey);
     const paintTf = () => tfBtns.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.tf === tf)));
     paintTf();
 
@@ -327,7 +332,7 @@
     async function refresh(force) {
       const key = current, mine = ++seq;
       if (!key) return;
-      const d = await snapshot(key, force ? 0 : 55000);
+      const d = await snapshot(key, force ? 0 : 55000, base);
       if (mine !== seq) return;               // un choix plus récent est en cours de chargement
       if (!d || !(d.candles || []).length) { empty("Pas encore d'instantané pour cet actif : il est publié au prochain passage du bot."); lastKey = ""; return; }
       const sig = key + "|" + tf;
@@ -340,7 +345,7 @@
     async function paintChips() {
       chipsEl.innerHTML = assets.map(([k, l, trial]) => `<button type="button" class="lc-chip" data-k="${escHtml(k)}" aria-pressed="${k === current}">${escHtml(shortLabel(l))}<span class="ch"></span>${trial ? '<span class="es">essai</span>' : ""}</button>`).join("");
       await Promise.all(assets.map(async ([k]) => {
-        const d = await snapshot(k); const v = change(d);
+        const d = await snapshot(k, 55000, base); const v = change(d);
         const el = chipsEl.querySelector(`[data-k="${CSS.escape(k)}"] .ch`);
         if (el && v !== null) { el.textContent = sgnPct(v); el.style.color = `var(${v >= 0 ? "--up-text" : "--dn-text"})`; el.title = "Variation sur les dernières 24 h de cotation"; }
       }));
@@ -348,7 +353,7 @@
     function choose(key, remember) {
       if (!assets.some(([a]) => a === key)) return;
       current = key;
-      if (remember) store.set(STORE_KEY, key);
+      if (remember) store.set(assetKey, key);
       chipsEl.querySelectorAll(".lc-chip").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.k === key)));
       refresh();
     }
@@ -365,7 +370,7 @@
       refresh();
     }
     chipsEl.addEventListener("click", (ev) => { const b = ev.target.closest(".lc-chip"); if (b) choose(b.dataset.k, true); });
-    tfBtns.forEach((b) => b.addEventListener("click", () => { tf = b.dataset.tf; store.set(TF_KEY, tf); paintTf(); if (data) { lastKey = current + "|" + tf; render(true); } }));
+    tfBtns.forEach((b) => b.addEventListener("click", () => { tf = b.dataset.tf; store.set(tfKey, tf); paintTf(); if (data) { lastKey = current + "|" + tf; render(true); } }));
 
     // Mise à jour : chaque minute (le bot publie toutes les 5 min), au changement de thème et de taille
     setInterval(() => { refresh(); paintChips(); }, 60000);

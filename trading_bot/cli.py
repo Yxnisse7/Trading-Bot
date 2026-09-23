@@ -18,6 +18,10 @@
   python run.py learn       # recalcule l'apprentissage sur tous les trades clôturés
   python run.py portfolio [--balance 1000 --risk 1]   # simulation de compte : état, ou nouvelle balance
   python run.py ui          # interface locale : http://127.0.0.1:8787
+  python run.py check-data  # vérifie que chaque actif répond (bougies, dernier prix)
+
+Mode halal (second bot séparé, données dans data/halal) : ajoutez --halal, par ex.
+  python run.py --halal tick | summary | status | portfolio --balance 1000 | backtest --days 60 | check-data
 """
 from __future__ import annotations
 
@@ -36,9 +40,13 @@ from .learning import analyze
 from .signals import format_signal
 
 
+HALAL_REFUSED = {"manual", "propose", "commands", "guide", "ui", "loop", "fetch-data"}
+
+
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(description="Générateur de signaux de scalping (NQ, BTC, XAU) — données gratuites")
-    p.add_argument("command", choices=["scan", "track", "tick", "summary", "stats", "loop", "status", "test-notify", "backtest", "report", "fetch-data", "manual", "propose", "ui", "commands", "portfolio", "guide", "learn", "flush-outbox"])
+    p.add_argument("command", choices=["scan", "track", "tick", "summary", "stats", "loop", "status", "test-notify", "backtest", "report", "fetch-data", "manual", "propose", "ui", "commands", "portfolio", "guide", "learn", "flush-outbox", "check-data"])
+    p.add_argument("--halal", action="store_true", help="mode halal : second bot séparé (achat seulement, sans levier, data/halal)")
     p.add_argument("--dry-run", action="store_true", help="scan sans enregistrer les signaux")
     p.add_argument("--force", action="store_true", help="summary : renvoyer le résumé même s'il a déjà été envoyé pour ce jour")
     p.add_argument("--day", help="jour du résumé : AAAA-MM-JJ, « hier » ou « aujourd'hui » (défaut : dernière journée de trading, la veille avant midi)")
@@ -57,10 +65,24 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("-v", "--verbose", action="store_true")
     args = p.parse_args(argv)
 
-    cfg = load_config()
+    if args.halal:
+        from .halal import HalalEngine, halal_config, use_halal_notify_dir
+
+        if args.command in HALAL_REFUSED:
+            print(f"« {args.command} » n'existe pas en mode halal : il ne traite ni commandes Telegram ni trades manuels.")
+            return 2
+        use_halal_notify_dir()
+        cfg = halal_config()
+    else:
+        cfg = load_config()
     logging.basicConfig(level=logging.DEBUG if args.verbose else getattr(logging, cfg.log_level, logging.INFO),
                         format="%(asctime)s %(levelname)s %(name)s: %(message)s")
-    eng = Engine(cfg)
+    if args.command == "flush-outbox":
+        from .notify import flush_outbox
+
+        print(f"{flush_outbox()} notification(s) envoyée(s).")
+        return 0
+    eng = HalalEngine(cfg) if args.halal else Engine(cfg)
 
     if args.command == "scan":
         sigs = eng.scan(dry_run=args.dry_run)
@@ -107,10 +129,11 @@ def main(argv: list[str] | None = None) -> int:
             return 2
         sig = eng.manual(args.asset[0], args.direction, note=args.note, take_profit=args.tp, stop_loss=args.sl)
         print(json.dumps(sig.to_dict(), ensure_ascii=False, indent=2))
-    elif args.command == "flush-outbox":
-        from .notify import flush_outbox
-
-        print(f"{flush_outbox()} notification(s) envoyée(s).")
+    elif args.command == "check-data":
+        out = eng.check_data()
+        print(json.dumps(out, ensure_ascii=False, indent=2))
+        if any("error" in v for v in out.values()):
+            return 1
     elif args.command == "portfolio":
         if args.balance:
             eng.set_balance(args.balance, args.risk)

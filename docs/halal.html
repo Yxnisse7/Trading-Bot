@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Yasuke · Mode halal</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="yasuke.css">
+<script>try { const t = localStorage.getItem("tb-theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}</script>
+<style>
+  .rules { display: grid; gap: 20px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .rules ul { margin: 8px 0 0; padding-left: 18px; display: grid; gap: 6px; font-size: 14px; }
+  .rules h3 { margin: 0; font-size: 16px; }
+  .rules .yes li::marker { color: var(--up); } .rules .no li::marker { color: var(--dn); }
+  .assets { display: grid; gap: 10px; }
+  .asset-row { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--line); font-size: 13px; }
+  .asset-row:last-child { border-bottom: 0; }
+  .asset-row b { font-weight: 600; font-size: 14px; }
+  .asset-row .why { color: var(--muted); }
+  .badge-h { display: inline-flex; align-items: center; gap: 6px; }
+  @media (max-width: 760px) {
+    .rules { grid-template-columns: 1fr; }
+    .asset-row { grid-template-columns: 1fr auto; } .asset-row .why { grid-column: 1 / -1; }
+    #hist th:nth-child(1), #hist td:nth-child(1), #hist th:nth-child(4), #hist td:nth-child(4), #hist th:nth-child(5), #hist td:nth-child(5),
+    #hist th:nth-child(6), #hist td:nth-child(6), #hist th:nth-child(7), #hist td:nth-child(7), #hist th:nth-child(8), #hist td:nth-child(8) { display: none; }
+    #open th:nth-child(1), #open td:nth-child(1), #open th:nth-child(6), #open td:nth-child(6), #open th:nth-child(7), #open td:nth-child(7) { display: none; }
+  }
+</style>
+</head>
+<body data-page="halal">
+<header id="yk-header"></header>
+<div class="wrap">
+  <div class="pagehead">
+    <div><h1>Mode halal</h1><div class="sub" id="updated">Chargement…</div></div>
+    <div class="actions"><span class="faint">Bot séparé · simulation, aucun ordre réel</span><button class="btn-icon" id="btn-refresh" type="button" aria-label="Actualiser" title="Actualiser"></button></div>
+  </div>
+
+  <div class="note-box ok" style="margin-bottom:20px"><span id="ok-ic"></span><span>Selon l'avis malikite : <b>achat seulement</b>, <b>au comptant</b>, <b>sans levier</b>, sur des actifs au comptant. Aucun contrat à terme, aucun CFD, aucune vente à découvert. Ce mode a ses propres données, sa propre simulation et son propre apprentissage : rien ne se mélange avec le bot principal.</span></div>
+
+  <section class="hero-row">
+    <div class="card hero" id="hero" aria-busy="true"><span class="sk t" style="width:140px"></span><span class="sk big"></span><span class="sk t" style="width:80%"></span><span class="sk bar"></span><span class="sk t" style="width:60%"></span></div>
+    <div>
+      <div class="tiles" id="tiles">
+        <div class="card tile"><span class="sk t" style="width:110px"></span><span class="sk" style="height:30px;width:140px"></span></div>
+        <div class="card tile"><span class="sk t" style="width:110px"></span><span class="sk" style="height:30px;width:90px"></span></div>
+        <div class="card tile"><span class="sk t" style="width:110px"></span><span class="sk" style="height:30px;width:60px"></span></div>
+        <div class="card tile"><span class="sk t" style="width:110px"></span><span class="sk" style="height:30px;width:60px"></span></div>
+      </div>
+      <div class="dots" id="tile-dots" aria-hidden="true"><i class="on"></i><i></i><i></i></div>
+    </div>
+  </section>
+
+  <div class="card" id="live"></div>
+
+  <h2 id="positions" data-hint="aucune position ouverte">Signaux et positions ouverts</h2>
+  <div class="card tbl"><table id="open"><thead><tr><th>Émis</th><th>Actif</th><th class="num">Entrée</th><th class="num">TP</th><th class="num">SL</th><th>Expire</th><th class="num">Simulation</th></tr></thead><tbody></tbody></table></div>
+
+  <div class="card" style="margin-top:20px">
+    <div class="card-head"><div><h3>Courbe de la balance</h3><div class="sub" id="equity-note">Balance après chaque trade clôturé</div></div><span id="eq-pill"></span></div>
+    <div class="chart" id="equity"></div>
+  </div>
+
+  <h2 id="historique">Trades clôturés</h2>
+  <div class="card">
+    <div class="tbl"><table id="hist"><thead><tr><th>Clôturé</th><th>Actif</th><th>Résultat</th><th class="num">Entrée</th><th class="num">Sortie</th><th class="num">Quantité</th><th class="num">Frais</th><th class="num">Durée</th><th class="num">Net</th><th class="num">Balance après</th></tr></thead><tbody></tbody></table></div>
+    <div class="tbl-foot"><span id="hist-count"></span><button type="button" class="secondary" id="hist-more" hidden>Afficher 10 de plus</button></div>
+  </div>
+
+  <h2 id="regles">Les règles de ce mode</h2>
+  <div class="card">
+    <div class="rules">
+      <div><h3>Ce que le bot respecte</h3><ul class="yes">
+        <li><b>Achat seulement</b> : vendre ce qu'on ne possède pas est interdit. Quand la tendance baisse, il s'abstient.</li>
+        <li><b>Au comptant, sans levier</b> : la simulation n'engage jamais plus que les liquidités disponibles. Sans liquidités, le trade n'est pas pris.</li>
+        <li><b>Actifs réels au comptant</b> : ETF islamiques (sociétés filtrées charia), or physique certifié charia, Bitcoin et Ethereum au comptant.</li>
+        <li><b>Trades plus longs</b> (bougie 1 h, horizon ~12 h) : sans levier, un scalp ne couvre pas les frais.</li>
+        <li><b>Frais réels</b> : écart acheteur-vendeur et 1 € par ordre pour les ETF, comptés dans chaque résultat.</li>
+      </ul></div>
+      <div><h3>Ce qu'il exclut</h3><ul class="no">
+        <li>Contrats à terme (futures) : prix et marchandise reportés tous les deux, sans livraison (Académie islamique du fiqh, AAOIFI).</li>
+        <li>CFD, forex et or avec levier, y compris les « comptes islamiques » sans swap.</li>
+        <li>Vente à découvert et options.</li>
+        <li>L'or « papier » non alloué : l'or s'échange de la main à la main, règle que les malikites appliquent strictement.</li>
+      </ul></div>
+    </div>
+    <div class="note-box warn" style="margin-top:16px"><span id="warn-ic"></span><span><b>Crypto</b> : les avis des savants divergent (Taqi Usmani les a déclarées non permises en juin 2026, d'autres les autorisent au comptant). Aucun avis malikite officiel trouvé : à décider avec un savant de confiance. Ce mode n'est pas une fatwa.</span></div>
+  </div>
+
+  <h2 id="actifs">Actifs suivis</h2>
+  <div class="card"><div class="assets" id="assets"></div></div>
+
+  <h2 id="plateformes" data-closed data-hint="où passer ces ordres en France">Plateformes et purification</h2>
+  <div class="card">
+    <div class="rules">
+      <div><h3>Plateformes (France)</h3><ul>
+        <li><b>Trade Republic</b> : 1 € par ordre, ne prête pas vos titres. Les intérêts versés sur les espèces sont à donner en aumône.</li>
+        <li><b>Degiro</b> : aucun intérêt sur les espèces. Le prêt de titres est optionnel : ne l'activez pas.</li>
+        <li><b>Interactive Brokers</b> : accès à Londres (ISDU, ISWD, RMAU). Compte « cash », pas « margin », prêt de titres désactivé.</li>
+        <li><b>Crypto</b> : plateforme au comptant (Coinbase, Kraken), sans marge, futures, perpétuels ni « earn ».</li>
+      </ul></div>
+      <div><h3>Purification</h3><ul>
+        <li>Donnez les intérêts éventuels versés par le courtier sur l'argent non investi.</li>
+        <li>Donnez la part non conforme des dividendes des ETF (indiquée par le fonds ou par Musaffa, Zoya).</li>
+        <li>Vérifiez la conformité des fonds de temps en temps : les filtres charia évoluent.</li>
+      </ul></div>
+    </div>
+  </div>
+
+  <h2 id="backtest" data-closed data-hint="stratégie rejouée sur 60 jours, chaque dimanche">Backtest</h2>
+  <div class="card tbl"><table id="bt"><thead><tr><th>Actif</th><th>Période</th><th class="num">Trades</th><th class="num">Réussite</th><th class="num">Hasard</th><th class="num">Résultat net</th></tr></thead><tbody></tbody></table></div>
+
+  <div class="foot">
+    <div>Simulation sur des signaux automatiques et des données publiques gratuites. Ce n'est ni un conseil financier ni un avis religieux : pour une décision qui engage votre argent, consultez un savant de confiance.</div>
+    <div>Graphique : <a href="https://www.tradingview.com/lightweight-charts/" rel="noopener" target="_blank">TradingView Lightweight Charts</a>, licence Apache 2.0.</div>
+  </div>
+</div>
+
+<div id="tip" role="tooltip"></div>
+<script src="vendor/lightweight-charts.standalone.production.js"></script>
+<script src="yasuke.js"></script>
+<script src="charts.js"></script>
+<script src="live-chart.js"></script>
+<script src="sections.js"></script>
+<script>
+(function () {
+  const Y = window.YK, $ = Y.$, esc = Y.esc;
+  $("#btn-refresh").innerHTML = Y.I.refresh; $("#warn-ic").innerHTML = Y.I.warn; $("#ok-ic").innerHTML = Y.I.info;
+  const HALAL_ASSETS = [["bitcoin", "Bitcoin (BTC)"], ["ethereum", "Ethereum (ETH)"], ["usa_islamique", "ETF USA islamique (ISDU)"],
+                        ["monde_islamique", "ETF Monde islamique (ISWD)"], ["or_physique", "Or physique Royal Mint (RMAU)"]];
+  const WHY = {
+    bitcoin: "Au comptant, sans levier. Avis divergents : à voir avec un savant.",
+    ethereum: "Au comptant, sans levier. Avis divergents : à voir avec un savant.",
+    usa_islamique: "Actions américaines filtrées charia (indice MSCI USA Islamic) : l'équivalent halal du Nasdaq et du S&P 500.",
+    monde_islamique: "Actions des pays développés filtrées charia (indice MSCI World Islamic).",
+    or_physique: "Or physique alloué, endossé conforme à la charia (Amanie Advisors) : à la place du contrat à terme sur l'or.",
+  };
+  const live = window.LiveChart ? window.LiveChart.mount($("#live"), { base: "halal/", tf: "60", assets: HALAL_ASSETS,
+    how: "Bougies 5 min, 15 min ou 1 h sur 3 jours. Le bot raisonne en bougies de 1 h, pour des trades d'environ 12 h." }) : null;
+  const RES = { tp: "TP", sl: "SL", expired: "Expiré" };
+  let dash = null, port = null, histLimit = 10;
+
+  async function getJson(name) {
+    for (const u of [`halal/${name}`, `../data/halal/${name}`, `/data/halal/${name}`]) {
+      try { const r = await fetch(u + "?t=" + Date.now(), { cache: "no-store" }); if (r.ok) return await r.json(); } catch (e) { /* suivant */ }
+    }
+    return null;
+  }
+  const lastRun = (st) => { const t = [st && st.last_tick, st && st.last_scan].filter(Boolean).sort(); return t[t.length - 1] || null; };
+  async function load() {
+    $("#updated").textContent = "Chargement…";
+    [dash, port] = await Promise.all([getJson("dashboard.json"), getJson("portfolio.json")]);
+    if (dash) {
+      Y.status(lastRun(dash.state), dash.state && dash.state.last_scan_note);
+      if (live && dash.assets && dash.assets.length) live.setAssets(dash.assets.map((a) => [a.key, a.label]));
+    } else Y.status(null);
+    if (!port || !port.balance) {
+      $("#updated").textContent = "Le mode halal démarre : ses premières données sont publiées au prochain passage du bot (toutes les 5 min).";
+      $("#hero").removeAttribute("aria-busy");
+      $("#hero").innerHTML = `<div class="lab">Balance simulée</div><div class="big"><b>…</b></div><p>En attente du premier passage du mode halal.</p>`;
+      renderAssets(); renderOpen(); renderHist(); renderBt();
+      return;
+    }
+    render();
+  }
+
+  function tile(label, value, sub, extra) {
+    return `<div class="card tile"><div><div class="th"><span>${label}</span></div><div class="v">${value}</div></div><div class="s">${sub}</div>${extra || ""}</div>`;
+  }
+  function render() {
+    const d = port, cur = d.currency || "$";
+    const hist = d.history || [], open = Object.values(d.open || {});
+    const initial = Number(d.balance_initial), bal = Number(d.balance), peak = Number(d.peak || initial), pnl = bal - initial;
+    const wins = hist.filter((h) => h.pnl > 0).length, losses = hist.filter((h) => h.pnl < 0).length;
+    const engaged = open.reduce((a, o) => a + Number(o.notional || 0), 0), cash = bal - engaged;
+    const dd = peak ? (peak - bal) / peak * 100 : 0;
+    $("#updated").textContent = `Mise à jour à ${Y.hhmm(d.updated_at)} · simulation démarrée le ${new Date(d.started_at).toLocaleDateString("fr-FR", { day: "numeric", month: "long" })}`;
+
+    const h = $("#hero"); h.removeAttribute("aria-busy");
+    h.innerHTML = `<div class="lab"><span class="badge-h">${Y.I.crescent}</span>Balance simulée, au comptant</div><div class="big"><b id="h-bal"></b></div>
+      <p>Départ ${Y.money(initial, cur)} · <span class="${Y.tone(pnl)}">${Y.smoney(pnl, cur)}</span>, soit <span class="${Y.tone(pnl)}">${Y.signed(initial ? pnl / initial * 100 : 0, 1)}${Y.NB}%</span></p>
+      <div class="cmp"><div class="h"><span>Trades gagnants</span><span class="up">${wins} sur ${hist.length}</span></div><div class="track"><i style="width:${hist.length ? (wins / hist.length * 100).toFixed(1) : 0}%"></i></div></div>
+      <hr><div class="rel"><span>Repli depuis le plus haut</span><span class="pill ${dd > 20 ? "dn" : "neu"}">${Y.num(dd, 1)}${Y.NB}%</span></div>
+      <div class="muted">Sans levier : la perte maximale d'un trade est limitée par le stop et par l'argent engagé.</div>`;
+    Y.countTo($("#h-bal"), bal, (x) => Y.money(x, cur));
+
+    const v = (dash && dash.overview && dash.overview.visible) || {};
+    const pts = [initial, ...hist.map((x) => Number(x.balance_after))];
+    const fees = hist.reduce((a, x) => a + Number(x.cost || 0), 0);
+    $("#tiles").innerHTML = [
+      tile("Résultat net", `<span class="${Y.tone(pnl)}">${Y.smoney(pnl, cur)}</span>`, `frais déduits : ${Y.money(fees, cur)}`, Y.spark(pts, pnl >= 0 ? "var(--up)" : "var(--dn)")),
+      tile("Liquidités disponibles", Y.money(cash, cur, 0), `${Y.money(engaged, cur, 0)} engagés dans ${open.length} position${open.length > 1 ? "s" : ""}`),
+      tile("Trades", String(hist.length), hist.length ? `<div class="stackbar" style="margin:4px 0 8px"><i style="flex:${wins};background:var(--up)"></i><i style="flex:${losses};background:var(--dn)"></i></div>${wins} gagnants · ${losses} perdants` : "Aucun trade clôturé"),
+      (v.tp || 0) + (v.sl || 0) < 5
+        ? tile("Réussite face au hasard", "trop tôt", `${(v.tp || 0) + (v.sl || 0)} trade${(v.tp || 0) + (v.sl || 0) > 1 ? "s" : ""} décidé${(v.tp || 0) + (v.sl || 0) > 1 ? "s" : ""} (TP ou SL) : il en faut au moins 5`)
+        : tile("Réussite face au hasard", Y.pct(v.win_rate, 0), `hasard ${Y.pct(v.neutral_win_rate, 0)} · ${v.tp + v.sl} trades décidés`),
+    ].join("");
+    const tiles = $("#tiles"), dots = $("#tile-dots");
+    tiles.onscroll = () => { const i = Math.round(tiles.scrollLeft / Math.max(1, tiles.scrollWidth - tiles.clientWidth) * 2); dots.querySelectorAll("i").forEach((x, k) => x.classList.toggle("on", k === i)); };
+    if (live && open.length && !live.hasSavedChoice()) live.select(open[0].asset);
+    renderOpen(); drawEquity(); renderHist(); renderAssets(); renderBt();
+  }
+
+  // décimales d'un actif, d'après son pas de cotation (ETF : 2, Bitcoin : 1 → 2 minimum)
+  function dg(key) { const a = ((dash && dash.assets) || []).find((x) => x.key === key); const t = a && a.tick_size;
+    return t && t < 1 ? Math.max(2, String(t).split(".")[1].length) : 2; }
+  const when = (iso) => new Date(iso).toLocaleString("fr-FR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" });
+  function renderOpen() {
+    const sigs = (dash && dash.open_signals) || [], pos = (port && port.open) || {}, cur = (port && port.currency) || "$";
+    const det = document.getElementById("positions"); if (det && det.setHint) det.setHint(sigs.length ? `${sigs.length} ouvert${sigs.length > 1 ? "s" : ""}` : "aucune position ouverte");
+    $("#open tbody").innerHTML = sigs.length ? sigs.map((s) => { const p = pos[s.id];
+      const sim = p ? `${Y.num(p.lots, p.lots % 1 ? 4 : 0)} ${esc(p.lot_label)} · ${Y.money(p.notional, cur, 0)}` : `<span class="muted">non pris (liquidités)</span>`;
+      return `<tr><td class="mono nowrap" style="font-size:12px">${esc(when(s.created_at))}</td><td class="nowrap"><b style="font-weight:500">${esc(Y.shortLabel(s.asset_label))}</b> ${Y.dirHtml(s.direction)}</td>
+        <td class="num">${Y.price(s.entry, dg(s.asset))}</td><td class="num up">${Y.price(s.take_profit, dg(s.asset))}</td><td class="num dn">${Y.price(s.stop_loss, dg(s.asset))}</td><td class="mono nowrap" style="font-size:12px">${esc(when(s.expires_at))}</td><td class="num nowrap">${sim}</td></tr>`; }).join("")
+      : `<tr><td colspan="7" class="empty">Aucun signal ouvert. Le bot n'achète que lorsque la tendance est haussière sur plusieurs unités de temps.</td></tr>`;
+  }
+  function dur(m) { if (m == null) return ""; if (m < 60) return `${m} min`; return `${Math.floor(m / 60)} h ${String(m % 60).padStart(2, "0")}`; }
+  function renderHist() {
+    const cur = (port && port.currency) || "$", hist = ((port && port.history) || []).slice().reverse(), shown = hist.slice(0, histLimit);
+    const durations = Object.fromEntries(((dash && dash.recent_trades) || []).map((t) => [t.id, t.duration_minutes]));
+    $("#hist tbody").innerHTML = shown.length ? shown.map((x) => `<tr><td class="mono nowrap" style="font-size:12px">${esc(when(x.closed_at))}</td><td class="nowrap"><b style="font-weight:500">${esc(Y.shortLabel(x.asset_label || x.asset))}</b></td>
+      <td>${Y.resultPill(x.status, null)}</td><td class="num">${Y.price(x.entry, dg(x.asset))}</td><td class="num">${Y.price(x.exit, dg(x.asset))}</td><td class="num nowrap">${Y.num(x.lots, x.lots % 1 ? 4 : 0)} ${esc(x.lot_label)}</td>
+      <td class="num muted">${Y.num(x.cost, 2)}</td><td class="num muted">${dur(durations[x.id])}</td><td class="num ${Y.tone(x.pnl)}"><b>${Y.smoney(x.pnl, cur)}</b></td><td class="num">${Y.money(x.balance_after, cur)}</td></tr>`).join("")
+      : `<tr><td colspan="10" class="empty">Aucun trade clôturé pour l'instant.</td></tr>`;
+    $("#hist-count").textContent = hist.length ? `${shown.length} affichés sur ${hist.length}` : "";
+    $("#hist-more").hidden = hist.length <= histLimit;
+  }
+  $("#hist-more").addEventListener("click", () => { histLimit += 10; renderHist(); });
+
+  function renderAssets() {
+    const list = (dash && dash.assets) || HALAL_ASSETS.map(([key, label]) => ({ key, label }));
+    $("#assets").innerHTML = list.map((a) => { const st = a.stats || {};
+      const res = st.n ? `<span class="pill ${Y.tone(st.pnl_pct)}">${st.n} trade${st.n > 1 ? "s" : ""} · ${Y.pctv(st.pnl_pct, 2)}</span>` : `<span class="pill neu">aucun trade</span>`;
+      const hours = a.session_utc ? "Bourse de Londres, 9 h-17 h 30 heure de Paris" : "24 h/24, 7 j/7";
+      const cost = a.cost_pct != null ? ` · frais estimés ${Y.num(a.cost_pct, 2)}${Y.NB}%` : "";
+      return `<div class="asset-row"><div><b>${esc(a.label)}</b><div class="muted">${hours}${cost}</div></div><div class="why">${esc(WHY[a.key] || "")}</div><div>${res}</div></div>`; }).join("");
+  }
+  function renderBt() {
+    const bt = (dash && dash.backtests) || {}, rows = Object.values(bt);
+    $("#bt tbody").innerHTML = rows.length ? rows.map((b) => `<tr><td class="nowrap"><b style="font-weight:500">${esc(Y.shortLabel(b.asset_label))}</b></td><td class="muted nowrap">${esc(b.period || "")}</td>
+      <td class="num">${b.n}</td><td class="num">${b.win_rate == null ? "n/a" : Y.pct(b.win_rate, 0)}</td><td class="num muted">${b.neutral_win_rate == null ? "n/a" : Y.pct(b.neutral_win_rate, 0)}</td>
+      <td class="num ${Y.tone(b.pnl_pct)}">${Y.pctv(b.pnl_pct, 2)}</td></tr>`).join("")
+      : `<tr><td colspan="6" class="empty">Pas encore de backtest : il tourne chaque dimanche soir (ou à la demande, workflow « mode halal »).</td></tr>`;
+  }
+
+  // Courbe de la balance (même dessin que la page Simulation)
+  function drawEquity() {
+    const root = $("#equity"), d = port; if (!d) return;
+    const cur = d.currency || "$", hist = d.history || [], initial = Number(d.balance_initial);
+    const pts = [initial, ...hist.map((x) => Number(x.balance_after))];
+    root.replaceChildren();
+    if (pts.length < 2) { root.innerHTML = `<div class="empty">La courbe apparaît après le premier trade clôturé.</div>`; $("#eq-pill").innerHTML = ""; return; }
+    const bal = pts[pts.length - 1];
+    $("#eq-pill").innerHTML = `<span class="pill ${Y.tone(bal - initial)}"><b>${Y.smoney(bal - initial, cur)}</b></span>`;
+    const W = Math.max(320, root.clientWidth || 900), H = W < 500 ? 200 : 240, left = 4, right = 74, top = 10, bottom = 12;
+    const mn = Math.min(...pts), mx = Math.max(...pts), sp = (mx - mn) || 1;
+    const x = (i) => left + i / (pts.length - 1) * (W - left - right), y = (v) => top + (mx - v) / sp * (H - top - bottom);
+    const line = pts.map((v, i) => `${i ? "L" : "M"}${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(" ");
+    const tone = bal >= initial ? "var(--up)" : "var(--dn)";
+    root.innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Courbe de la balance du mode halal">
+      ${[mx, (mx + mn) / 2, mn].map((v) => `<line x1="${left}" x2="${W - right}" y1="${y(v)}" y2="${y(v)}" stroke="var(--grid)" stroke-dasharray="2 4"/><text class="mono" x="${W - right + 8}" y="${y(v) + 4}" style="font-size:11px">${Y.money(v, cur, 0)}</text>`).join("")}
+      <line x1="${left}" x2="${W - right}" y1="${y(initial)}" y2="${y(initial)}" stroke="var(--c-axis)" stroke-dasharray="5 4"/>
+      <path d="${line} L${x(pts.length - 1)},${y(initial)} L${x(0)},${y(initial)} Z" fill="${tone}" fill-opacity=".08"/>
+      <path d="${line}" fill="none" stroke="var(--text)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+      <circle cx="${x(pts.length - 1)}" cy="${y(bal)}" r="4.5" fill="${tone}" stroke="var(--card)" stroke-width="2"/>
+      <line id="eq-x" y1="${top}" y2="${H - bottom}" stroke="var(--c-axis)" visibility="hidden"/>
+      <rect id="eq-hit" x="${left}" y="0" width="${W - left - right}" height="${H}" fill="transparent"/></svg>`;
+    $("#equity-note").textContent = `Balance après chacun des ${pts.length - 1} trades clôturés`;
+    const svg = root.querySelector("svg"), cross = root.querySelector("#eq-x");
+    root.querySelector("#eq-hit").addEventListener("pointermove", (e) => {
+      const r = svg.getBoundingClientRect(), px = (e.clientX - r.left) / r.width * W;
+      const i = Math.max(1, Math.min(pts.length - 1, Math.round((px - left) / (W - left - right) * (pts.length - 1)))), hh = hist[i - 1];
+      cross.setAttribute("x1", x(i)); cross.setAttribute("x2", x(i)); cross.setAttribute("visibility", "visible");
+      YKCharts.showTip(e, `${Y.shortLabel(hh.asset_label || hh.asset)} · ${RES[hh.status] || hh.status}`, [["Net", Y.smoney(hh.pnl, cur), null], ["Balance après", Y.money(hh.balance_after, cur), null], ["Clôturé", when(hh.closed_at), null]]);
+    });
+    root.querySelector("#eq-hit").addEventListener("pointerleave", () => { YKCharts.hideTip(); cross.setAttribute("visibility", "hidden"); });
+  }
+
+  $("#btn-refresh").addEventListener("click", () => { load(); if (live) live.refresh(); });
+  let rt = null; addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(drawEquity, 200); });
+  setInterval(() => { if (dash) Y.status(lastRun(dash.state), dash.state && dash.state.last_scan_note); }, 60000);
+  setInterval(load, 120000);
+  load();
+})();
+</script>
+</body>
+</html>

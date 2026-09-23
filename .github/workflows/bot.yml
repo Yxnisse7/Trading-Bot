@@ -47,7 +47,7 @@ permissions:
 jobs:
   tick:
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
         with:
@@ -81,3 +81,16 @@ jobs:
             portfolio)  if [ -n "$RISK" ]; then bash scripts/run_and_push.sh python run.py portfolio --balance "$BALANCE" --risk "$RISK"; else bash scripts/run_and_push.sh python run.py portfolio --balance "$BALANCE"; fi ;;
             *)          bash scripts/run_and_push.sh python run.py "$CMD" ;;
           esac
+      # Mode halal : second bot entièrement séparé (données dans data/halal, page halal.html, messages 🌙).
+      # Étape indépendante : si elle échoue, le bot principal (déjà enregistré ci-dessus) n'est pas touché.
+      - name: Mode halal (bot séparé)
+        if: ${{ (github.event.inputs.command || 'tick') == 'tick' }}
+        continue-on-error: true
+        timeout-minutes: 4
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          TRADING_BOT_DATA_DIR: data/halal
+          TRADING_BOT_OUTBOX: ${{ runner.temp }}/outbox-halal.jsonl
+        run: bash scripts/run_and_push.sh python run.py --halal tick

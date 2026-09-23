@@ -1,0 +1,61 @@
+name: Trading bot — mode halal
+
+# Commandes du mode halal (second bot séparé : données dans data/halal, page halal.html).
+# Le passage courant (suivi + analyse) tourne dans le workflow « tick », juste après le bot principal.
+# Ici : vérification des données, backtest (chaque dimanche et à la demande), balance, résumé, rapport.
+on:
+  schedule:
+    - cron: "30 20 * * 0"     # dimanche 20:30 UTC, après le backtest du bot principal
+  workflow_dispatch:
+    inputs:
+      command:
+        description: "Commande : check-data, backtest, portfolio, summary, report, tick"
+        default: "check-data"
+      balance:
+        description: "Nouvelle balance de la simulation halal pour `portfolio`"
+        required: false
+      risk:
+        description: "Risque par trade en % pour `portfolio` (facultatif)"
+        required: false
+
+concurrency:
+  group: trading-bot-halal
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  halal:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+      TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+      TRADING_BOT_DATA_DIR: data/halal
+      TRADING_BOT_OUTBOX: ${{ runner.temp }}/outbox-halal.jsonl
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Mode halal
+        env:
+          CMD: ${{ github.event.inputs.command || 'backtest' }}
+          BALANCE: ${{ github.event.inputs.balance }}
+          RISK: ${{ github.event.inputs.risk }}
+        run: |
+          case "$CMD" in
+            check-data) python run.py --halal check-data ;;
+            backtest)   bash scripts/run_and_push.sh bash -c "python run.py --halal backtest --days 60 && python run.py --halal learn" ;;
+            portfolio)  if [ -n "$RISK" ]; then bash scripts/run_and_push.sh python run.py --halal portfolio --balance "$BALANCE" --risk "$RISK"; else bash scripts/run_and_push.sh python run.py --halal portfolio --balance "$BALANCE"; fi ;;
+            summary)    bash scripts/run_and_push.sh python run.py --halal summary --force ;;
+            report)     bash scripts/run_and_push.sh python run.py --halal report ;;
+            tick)       bash scripts/run_and_push.sh python run.py --halal tick ;;
+            *)          echo "Commande inconnue : $CMD" >&2; exit 2 ;;
+          esac

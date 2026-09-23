@@ -59,6 +59,9 @@ def run_backtest(asset: AssetConfig, candles: list[Candle], cfg: Config, *, step
         now = datetime.fromtimestamp(candles[i].ts + 300, tz=timezone.utc)  # clôture de la bougie i
         if _policy_allows(asset, sigs, now, cfg, base_minutes):
             a = assess(asset, window, cfg, weights, base_minutes=base_minutes)
+            if cfg.long_only and a.direction == "short":
+                a.reasons_rejected.append("achat seulement : tendance baissière ignorée")
+                a.direction = None
             sig, why = build_signal(asset, a, cfg, "backtest (actualité non rejouée)", now, simulate=simulate)
             if sig is None:
                 key = why[-1].split(" (")[0] if why else "inconnu"

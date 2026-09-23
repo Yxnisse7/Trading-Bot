@@ -42,7 +42,8 @@ MAJOR_EVENT_RE = re.compile(r"FOMC|Fed\b|taux directeur|CPI|inflation|Non-?farm|
 # « gold » = flux FXStreet (devises, matières premières, dollar) : pertinent aussi pour le pétrole et l'euro
 NEWS_CATEGORIES = {"nasdaq": ["macro"], "sp500": ["macro"], "bitcoin": ["crypto", "macro"],
                    "ethereum": ["crypto", "macro"], "gold": ["gold", "macro"],
-                   "oil": ["gold", "macro"], "euro": ["gold", "macro"]}
+                   "oil": ["gold", "macro"], "euro": ["gold", "macro"],
+                   "or_physique": ["gold", "macro"]}  # mode halal
 
 
 class Engine:
@@ -90,7 +91,10 @@ class Engine:
         # (horizon, base en minutes, variante testée en fantôme ou None pour un signal réel)
         horizons: list[tuple[str, int, str | None]] = [("1h", 5, None)]
         long_key = f"{self.cfg.long_horizon_base_minutes * 12 // 60}h"
-        if not caution:
+        if self.cfg.scan_bases:
+            # réglage imposé (mode halal : bougie 1 h, horizon ~12 h) : ni horizon standard ni variante
+            horizons = [("1h" if b == 5 else f"{b * 12 // 60}h", b, None) for b in self.cfg.scan_bases]
+        elif not caution:
             if self.cfg.long_horizon_enabled or "horizon_3h" in promoted:
                 horizons.append((long_key, self.cfg.long_horizon_base_minutes, None))
             elif variants_on:
@@ -135,7 +139,7 @@ class Engine:
                 log.info("%s : pas de scan (%s)", asset.label, "; ".join(blocked["1h"]))
                 continue
             try:
-                raw = market.fetch_candles_5m(asset, days=5)
+                raw = market.fetch_candles_5m(asset, days=self.cfg.scan_days)
             except ProviderError as exc:
                 log.warning("%s : données indisponibles (%s)", asset.label, exc)
                 continue
@@ -154,6 +158,9 @@ class Engine:
                     context["btc_dir"] = a.direction if a.direction else self._quick_direction(candles)
                 if a.direction is None:
                     log.info("%s [%s] : %s", asset.label, hkey, "; ".join(a.reasons_rejected) or "aucune direction")
+                    continue
+                if self.cfg.long_only and a.direction != "long":
+                    log.info("%s [%s] : tendance baissière, achat seulement → pas de signal", asset.label, hkey)
                     continue
                 stubborn = self._direction_block(asset.key, a.direction, all_sigs, now)
                 if stubborn:
@@ -713,6 +720,19 @@ class Engine:
             log.info("%s : %d bougies 5 min enregistrées", asset.label, len(merged))
         return out
 
+    def check_data(self) -> dict[str, Any]:
+        """Vérifie que chaque actif répond (nombre de bougies, dernier prix) : utile après un changement de symbole."""
+        out: dict[str, Any] = {}
+        for key, asset in self.cfg.assets.items():
+            try:
+                candles = market.fetch_candles_5m(asset, days=self.cfg.scan_days)
+                out[key] = {"symbol": asset.yahoo_symbol, "candles": len(candles), "last": candles[-1].close,
+                            "last_at": iso(datetime.fromtimestamp(candles[-1].ts, tz=timezone.utc)),
+                            "zero_volume_last_300": sum(1 for c in candles[-300:] if c.volume <= 0)}
+            except ProviderError as exc:
+                out[key] = {"symbol": asset.yahoo_symbol, "error": str(exc)[:300]}
+        return out
+
     # -------------------------------------------------------------- backtest
     def backtest(self, days: int = 30, asset_keys: list[str] | None = None, send: bool = False,
                  offline: bool = False) -> dict[str, Any]:
@@ -735,8 +755,17 @@ class Engine:
                     log.warning("%s : données indisponibles pour le backtest (%s)", asset.label, exc)
                     continue
             bases = [5] + ([self.cfg.long_horizon_base_minutes] if (self.cfg.long_horizon_enabled and asset.long_horizon) else [])
+            extra: dict[str, Any] = {}
+            if self.cfg.scan_bases:
+                # réglage imposé : même historique qu'en production, départ après une demi-profondeur d'historique
+                bases = list(self.cfg.scan_bases)
+                start = candles[0].ts + self.cfg.scan_days * 86400 // 2
+                extra = {"lookback": self.cfg.scan_days * 288,
+                         "warmup": next((i for i, c in enumerate(candles) if c.ts >= start), len(candles))}
             for base in bases:
-                res = run_backtest(asset, candles, self.cfg, base_minutes=base)
+                if extra:
+                    extra["step"] = max(3, base // 5)
+                res = run_backtest(asset, candles, self.cfg, base_minutes=base, **extra)
                 results[key if base == 5 else f"{key}_{res['horizon']}"] = res
                 text = format_backtest(res)
                 print(text, flush=True)
@@ -935,6 +964,7 @@ class Engine:
 
     # ------------------------------------------------------------- live
     LIVE_CANDLES = 288         # 24 h de bougies 5 min (le site en tire aussi les vues 15 min et 1 h)
+    LIVE_DAYS = 2              # historique chargé pour l'instantané
 
     def write_live_snapshot(self, now: datetime | None = None) -> list[str]:
         """Publie, pour chaque actif, les dernières bougies 5 min et les niveaux des signaux ouverts.
@@ -947,7 +977,7 @@ class Engine:
         written = []
         for key, asset in self.cfg.assets.items():
             try:
-                raw = market.fetch_candles_5m(asset, days=2)
+                raw = market.fetch_candles_5m(asset, days=self.LIVE_DAYS)
             except ProviderError as exc:
                 log.info("%s : instantané live indisponible (%s)", asset.label, exc)
                 continue

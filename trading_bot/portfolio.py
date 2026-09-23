@@ -6,7 +6,10 @@ Règles :
   plafonnée par le levier maximal de l'actif ; lots arrondis au pas de l'actif ;
 - aucun trade n'est refusé : si la balance ne permet pas le lot minimal au risque demandé, le lot
   minimal est pris quand même et le trade est marqué « risqué » (risque effectif et levier affichés) ;
-- au dénouement : P&L = sens × (sortie − entrée) × multiplicateur × lots − coûts estimés (cost_pct × notionnel) ;
+- au dénouement : P&L = sens × (sortie − entrée) × multiplicateur × lots − coûts estimés (cost_pct × notionnel,
+  plus deux fois les frais fixes par ordre de l'actif s'il en a) ;
+- mode comptant (`cash_only`, mode halal) : jamais plus que les liquidités disponibles (balance moins les
+  positions ouvertes), aucun levier ; sans liquidités suffisantes pour le lot minimal, le trade n'est pas pris ;
 - signaux fantômes exclus ; signaux du bot, manuels et propositions inclus.
 """
 from __future__ import annotations
@@ -27,8 +30,11 @@ def _floor_step(value: float, step: float) -> float:
     return round(n * step, 6)
 
 
-def size_position(balance: float, risk_pct: float, asset: AssetConfig, entry: float, stop: float) -> dict[str, Any]:
-    """Lots « optimaux » pour la balance : risque fixe au stop, plafond de levier, pas de lot."""
+def size_position(balance: float, risk_pct: float, asset: AssetConfig, entry: float, stop: float,
+                  cash: float | None = None) -> dict[str, Any]:
+    """Lots « optimaux » pour la balance : risque fixe au stop, plafond de levier, pas de lot.
+
+    `cash` (mode comptant) : liquidités disponibles, que la position ne peut pas dépasser."""
     stop_dist = abs(entry - stop)
     if balance <= 0 or stop_dist <= 0 or asset.lot_multiplier <= 0:
         return {"lots": 0.0, "reason": "paramètres invalides"}
@@ -37,6 +43,12 @@ def size_position(balance: float, risk_pct: float, asset: AssetConfig, entry: fl
     lots = _floor_step(risk_amount / loss_per_lot, asset.lot_step)
     notional_per_lot = entry * asset.lot_multiplier
     max_lots = _floor_step(balance * asset.max_leverage / notional_per_lot, asset.lot_step)
+    if cash is not None:
+        max_lots = min(max_lots, _floor_step(max(0.0, cash) / notional_per_lot, asset.lot_step))
+        if max_lots < asset.lot_min:
+            from .messages import num
+            return {"lots": 0.0, "reason": f"liquidités insuffisantes ({num(max(0.0, cash))} disponibles, "
+                                           f"{num(asset.lot_min * notional_per_lot)} pour le lot minimal)"}
     capped = False
     if lots > max_lots:
         lots = max_lots
@@ -111,7 +123,10 @@ class Portfolio:
             return None
         if parse_iso(sig.created_at) < parse_iso(self.data["started_at"]):
             return None
-        sizing = size_position(float(self.data["balance"]), float(self.data["risk_pct"]), asset, sig.entry, sig.stop_loss)
+        cash = None
+        if self.cfg.cash_only:
+            cash = float(self.data["balance"]) - sum(float(p.get("notional") or 0) for p in self.data.get("open", {}).values())
+        sizing = size_position(float(self.data["balance"]), float(self.data["risk_pct"]), asset, sig.entry, sig.stop_loss, cash)
         if sizing.get("lots", 0) <= 0:
             self.data.setdefault("skipped", []).append({"id": sig.id, "asset": sig.asset, "reason": sizing.get("reason"),
                                                         "at": sig.created_at})
@@ -131,7 +146,7 @@ class Portfolio:
             return None
         sign = 1.0 if sig.direction == "long" else -1.0
         gross = sign * (sig.close_price - sig.entry) * asset.lot_multiplier * pos["lots"]
-        cost = asset.cost_pct / 100.0 * pos["notional"]
+        cost = asset.cost_pct / 100.0 * pos["notional"] + 2 * asset.fee_per_order
         pnl = round(gross - cost, 2)
         balance = round(float(self.data["balance"]) + pnl, 2)
         self.data["balance"] = balance

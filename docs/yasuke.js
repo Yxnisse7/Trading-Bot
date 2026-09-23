@@ -83,17 +83,18 @@
     home: `<svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="3" width="6.5" height="8" rx="1.8"/><rect x="12.5" y="3" width="6.5" height="5" rx="1.8"/><rect x="3" y="14" width="6.5" height="5" rx="1.8"/><rect x="12.5" y="11" width="6.5" height="8" rx="1.8"/></g></svg>`,
     wallet: `<svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><path d="M3 7.5A2.5 2.5 0 0 1 5.5 5h11A2.5 2.5 0 0 1 19 7.5v8a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 3 15.5z" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M14 11.5h2.5" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>`,
     learn: `<svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><path d="M3 17l5-6 4 3.5L19 5M14.5 5H19v4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+    crescent: `<svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><path d="M17.5 13.6A7 7 0 0 1 8.4 4.5a7 7 0 1 0 9.1 9.1z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>`,
     plusBig: `<svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><path d="M11 4.5v13M4.5 11h13" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>`,
   };
 
   // ------------------------------------------------------------------ en-tête, onglets, navigation du bas
   const PAGES = [["dashboard", "index.html", "Tableau de bord", "Tableau", "home"], ["simulation", "portfolio.html", "Simulation", "Simulation", "wallet"],
-                 ["learning", "apprentissage.html", "Apprentissage", "Apprendre", "learn"]];
+                 ["learning", "apprentissage.html", "Apprentissage", "Apprendre", "learn"], ["halal", "halal.html", "Halal", "Halal", "crescent"]];
   function header(page) {
     const host = document.getElementById("yk-header");
     if (!host) return;
     const onDash = page === "dashboard";
-    const trade = onDash ? `<button type="button" id="btn-trade">${I.plus}<span class="btn-lbl">Nouveau trade</span></button>`
+    const trade = page === "halal" ? "" : onDash ? `<button type="button" id="btn-trade">${I.plus}<span class="btn-lbl">Nouveau trade</span></button>`
                          : `<a class="btn" id="btn-trade" href="index.html#trade">${I.plus}<span class="btn-lbl">Nouveau trade</span></a>`;
     host.className = "yk-top";
     host.innerHTML = `<div class="yk-top-in">
@@ -111,7 +112,7 @@
     const item = ([k, href, , short, ic]) => `<a href="${href}" class="${k === page ? "active" : ""}"${k === page ? ' aria-current="page"' : ""}>${I[ic]}<span>${short}</span></a>`;
     nav.innerHTML = item(PAGES[0]) + item(PAGES[1]) +
       (onDash ? `<button type="button" class="plus" id="bnav-trade"><span class="pb">${I.plusBig}</span><span>Trade</span></button>`
-              : `<a class="plus" href="index.html#trade"><span class="pb">${I.plusBig}</span><span>Trade</span></a>`) + item(PAGES[2]);
+              : `<a class="plus" href="index.html#trade"><span class="pb">${I.plusBig}</span><span>Trade</span></a>`) + item(PAGES[2]) + item(PAGES[3]);
     document.body.appendChild(nav);
     themeButton();
   }

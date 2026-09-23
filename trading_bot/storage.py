@@ -10,8 +10,9 @@ from .models import Signal
 
 
 class Store:
-    def __init__(self, data_dir: Path | None = None):
+    def __init__(self, data_dir: Path | None = None, docs_dir: Path | None = None):
         self.dir = Path(data_dir or DATA_DIR)
+        self.docs = Path(docs_dir) if docs_dir else None   # copie publiée sur le site (mode halal : docs/halal)
         self.dir.mkdir(parents=True, exist_ok=True)
         self.signals_file = self.dir / "signals.json"        # signaux ouverts
         self.history_file = self.dir / "history.json"        # signaux clôturés
@@ -132,6 +133,9 @@ class Store:
 
     def _docs_dir(self) -> Path | None:
         """Dossier docs/ à alimenter (GitHub Pages) — uniquement pour le dossier de données du projet."""
+        if self.docs is not None:
+            self.docs.mkdir(parents=True, exist_ok=True)
+            return self.docs
         docs = ROOT_DIR / "docs"
         if docs.is_dir() and self.dir.resolve() == (ROOT_DIR / "data").resolve():
             return docs
