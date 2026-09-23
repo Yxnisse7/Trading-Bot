@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-23T07:15:37.247557+00:00",
+  "updated_at": "2026-09-23T07:25:29.509481+00:00",
   "method": "v2 : recalcul complet, marge de sécurité, résultats en R, sources pondérées",
   "weights": {
     "trend_5m": 1.0,
@@ -91,7 +91,7 @@
       "trend_15m": 1.0,
       "trend_1h": 1.0,
       "adx": 1.0,
-      "vwap": 0.738,
+      "vwap": 0.724,
       "rsi": 1.0,
       "macd": 1.0,
       "level": 1.0,
@@ -101,10 +101,10 @@
       "corr": 0.5
     },
     "sp500": {
-      "trend_5m": 1.003,
-      "trend_15m": 1.003,
-      "trend_1h": 1.003,
-      "adx": 1.003,
+      "trend_5m": 1.0,
+      "trend_15m": 1.0,
+      "trend_1h": 1.0,
+      "adx": 1.0,
       "vwap": 0.75,
       "rsi": 1.0,
       "macd": 1.0,
@@ -124,19 +124,19 @@
         "trend_1h",
         "adx"
       ],
-      "n": 575,
-      "n_eff": 403.3,
-      "mean_r": 0.0173,
-      "margin_r": 0.1097,
+      "n": 576,
+      "n_eff": 403.0,
+      "mean_r": 0.0239,
+      "margin_r": 0.1099,
       "multiplier": 1.0
     },
     "vwap": {
       "members": [
         "vwap"
       ],
-      "n": 479,
-      "n_eff": 330.9,
-      "mean_r": 0.0529,
+      "n": 480,
+      "n_eff": 330.8,
+      "mean_r": 0.0603,
       "margin_r": 0.1226,
       "multiplier": 1.0
     },
@@ -144,10 +144,10 @@
       "members": [
         "rsi"
       ],
-      "n": 465,
-      "n_eff": 324.1,
-      "mean_r": -0.0015,
-      "margin_r": 0.12,
+      "n": 466,
+      "n_eff": 323.7,
+      "mean_r": 0.0071,
+      "margin_r": 0.1202,
       "multiplier": 1.0
     },
     "macd": {
@@ -213,9 +213,9 @@
   },
   "overview": {
     "réels": {
-      "n": 48,
-      "mean_r": 0.0451,
-      "margin_r": 0.3287
+      "n": 49,
+      "mean_r": 0.07,
+      "margin_r": 0.3256
     },
     "fantômes": {
       "n": 26,
@@ -273,22 +273,21 @@
     }
   },
   "baseline": {
-    "n": 36,
-    "mean_net_r": -0.0004
+    "n": 37,
+    "mean_net_r": 0.0303
   },
   "promoted_variants": [],
   "notes": [
-    "trades réels : +0,05 R ± 0,33 R par trade avant frais sur 48 trades (0 R = hasard)",
+    "trades réels : +0,07 R ± 0,33 R par trade avant frais sur 49 trades (0 R = hasard)",
     "aucun critère ne s'écarte du hasard au-delà de la marge de sécurité : poids par défaut conservés",
-    "oil, vwap : -0,16 R contre +0,05 R en global sur 118 trades éq. → poids ×0,98 sur cet actif",
-    "sp500, tendance (trend_5m, trend_15m, trend_1h, adx) : +0,29 R contre +0,02 R en global sur 74 trades éq. → poids ×1,00 sur cet actif",
+    "oil, vwap : -0,16 R contre +0,06 R en global sur 118 trades éq. → poids ×0,96 sur cet actif",
     "variante « indices le matin européen » en test : 1 trades, -1,12 R net, encore 99 trades avant décision",
     "variante « horizon ~3 h » en test : 1 trades, +0,81 R net, encore 99 trades avant décision",
     "variante « nouvel actif : Pétrole WTI (CL) » en test : 1 trades, -1,07 R net, encore 99 trades avant décision"
   ],
-  "sample": 576,
+  "sample": 577,
   "sample_by_source": {
-    "bot": 47,
+    "bot": 48,
     "shadow": 26,
     "manual": 1,
     "backtest": 502
