@@ -138,3 +138,12 @@ def test_page_buttons_point_to_the_halal_page():
     rows = page_buttons("https://x.github.io/Trading-Bot/", "bitcoin")
     assert rows[0][0][1] == "https://x.github.io/Trading-Bot/halal.html?actif=bitcoin#live"
     assert page_buttons("") == []
+
+
+def test_sparse_session_data_still_gives_a_range():
+    """ETF de Londres : bougies 5 min clairsemées, séance de 8 h 30 → le range sur 12 h doit rester mesurable."""
+    from trading_bot import indicators as ind
+    base = make_candles(n=4000, start_price=100.0, seed=5)
+    sparse = [c for i, c in enumerate(base) if 7 <= (c.ts // 3600) % 24 < 15 and i % 2 == 0]
+    assert ind.average_range(sparse, 12 * 3600, buckets=16) is None           # réglage du bot principal
+    assert ind.average_range(sparse, 12 * 3600, buckets=16, min_fill=halal_config().range_min_fill) > 0

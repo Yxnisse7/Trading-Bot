@@ -223,7 +223,8 @@ def assess(asset: AssetConfig, candles_5m: list[Candle], cfg: Config,
     atr_v = a[-1]
     recent = [x for x in a[-288:] if x is not None]
     atr_ratio = (atr_v / (sum(recent) / len(recent))) if (atr_v and recent and sum(recent) > 0) else None
-    hourly_range = ind.average_range(raw_5m, horizon_minutes * 60, buckets=24 if base_minutes == 5 else 16)
+    hourly_range = ind.average_range(raw_5m, horizon_minutes * 60, buckets=24 if base_minutes == 5 else 16,
+                                     min_fill=cfg.range_min_fill)
     sigma = ind.realized_volatility(closes, 48)
 
     # --- Niveaux clés

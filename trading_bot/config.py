@@ -171,6 +171,7 @@ class Config:
     scan_bases: list[int] | None = None     # bougies de base analysées (ex. [60] → horizon ~12 h) ; None = réglage standard
     scan_days: int = 5                      # profondeur d'historique chargée à chaque analyse
     max_candle_age_minutes: int = 30        # au-delà, dernière bougie jugée trop ancienne (marché fermé)
+    range_min_fill: float = 0.5             # part minimale de bougies d'une tranche pour mesurer son range
 
     timezone: str = "Europe/Paris"
     # adresse du site (boutons « Graphique » et « Simulation » sous les messages Telegram ; vide = pas de boutons)
