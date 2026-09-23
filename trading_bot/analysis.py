@@ -225,6 +225,10 @@ def assess(asset: AssetConfig, candles_5m: list[Candle], cfg: Config,
     atr_ratio = (atr_v / (sum(recent) / len(recent))) if (atr_v and recent and sum(recent) > 0) else None
     hourly_range = ind.average_range(raw_5m, horizon_minutes * 60, buckets=24 if base_minutes == 5 else 16,
                                      min_fill=cfg.range_min_fill)
+    if (cfg.session_range or asset.session_range) and base_minutes == 5 and hourly_range:
+        same = ind.same_hour_range(raw_5m, horizon_minutes * 60)
+        if same and same > hourly_range:
+            hourly_range = same
     sigma = ind.realized_volatility(closes, 48)
 
     # --- Niveaux clés
@@ -259,8 +263,7 @@ def assess(asset: AssetConfig, candles_5m: list[Candle], cfg: Config,
     # --- Moments précis : range d'ouverture US et extrêmes de la veille (bougies 5 min brutes)
     last_ts = raw_5m[-1].ts
     if asset.session_utc and hourly_range:
-        day0 = last_ts // 86400 * 86400
-        open_ts = day0 + cfg.us_open_utc[0] * 3600 + cfg.us_open_utc[1] * 60
+        open_ts = ind.us_open_ts(last_ts)
         orb_end = open_ts + cfg.orb_minutes * 60
         if orb_end <= last_ts + 300 <= orb_end + cfg.orb_window_minutes * 60:
             rng = ind.session_range(raw_5m, open_ts, orb_end)

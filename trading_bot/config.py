@@ -64,6 +64,9 @@ class AssetConfig:
     trial: bool = False
     # Frais fixes par ordre (courtier à 1 € l'ordre, par ex.) : comptés deux fois par trade dans la simulation
     fee_per_order: float = 0.0
+    # Range de référence adapté à l'heure (voir Config.session_range) : actifs à séance uniquement,
+    # le backtest 60 jours l'a montré utile pour Nasdaq, S&P 500, or et pétrole, nuisible pour les cryptos
+    session_range: bool = False
 
 
 @dataclass
@@ -95,7 +98,7 @@ class Config:
     # ---- Moments de marché
     activity_filter: bool = True            # ignore les heures creuses (profil d'activité automatique)
     min_activity_ratio: float = 0.6         # heure < 60 % de l'activité moyenne → pas de signal court
-    us_open_utc: tuple[int, int] = (13, 30) # ouverture cash US (13:30 UTC en heure d'été, 14:30 en hiver)
+    # ouverture cash US : 9 h 30 à New York (indicators.us_open_ts), soit 13:30 UTC l'été et 14:30 UTC l'hiver
     orb_minutes: int = 30                   # durée du range d'ouverture
     orb_window_minutes: int = 120           # fenêtre après le range d'ouverture où la cassure compte
 
@@ -124,6 +127,9 @@ class Config:
     max_tp_range_fraction: float = 0.90 # au-dessus : cible irréaliste sous 1 h
     max_atr_ratio: float = 2.5          # ATR actuel / ATR moyen 24 h au-delà duquel on s'abstient
     min_tp_to_cost_ratio: float = 6.0   # la cible doit valoir au moins N fois le coût aller-retour
+    # Range de référence adapté à l'heure : le plus grand du range moyen sur 24 h et du range de la même
+    # heure les jours précédents (à l'ouverture américaine, le marché bouge 3 à 4 fois plus que la nuit)
+    session_range: bool = False
 
     # ---- Actualité ----
     news_lookback_minutes: int = 120
@@ -158,6 +164,11 @@ class Config:
         "nasdaq": (7, 13), "sp500": (7, 13),          # indices : matinée européenne (UTC)
     })
     variant_min_trades: int = 100
+    # Avant l'ouverture américaine : un trade ouvert dans l'heure qui précède (jusqu'à 5 min après) reste
+    # exposé au pic de l'ouverture. Ces entrées sont testées en silence (variante « avant_ouverture »)
+    # sur les actifs à séance ; les cryptos (24 h/24) ne sont pas concernées.
+    pre_open_minutes: int = 60
+    pre_open_after_minutes: int = 5
     variant_baseline_min_trades: int = 30
 
     # ---- Simulation de compte (paper trading chiffré)
@@ -185,7 +196,7 @@ class Config:
 def default_assets() -> dict[str, AssetConfig]:
     return {
         "nasdaq": AssetConfig(
-            key="nasdaq", label="Nasdaq 100 (NQ)", yahoo_symbol="NQ=F",
+            key="nasdaq", session_range=True, label="Nasdaq 100 (NQ)", yahoo_symbol="NQ=F",
             price_decimals=2, tick_size=0.25,
             min_hourly_range_pct=0.08, max_hourly_range_pct=2.5,
             # Futures NQ : on évite la nuit/ouverture chaotique ; 13h-21h UTC = séance US + pré-ouverture
@@ -196,7 +207,7 @@ def default_assets() -> dict[str, AssetConfig]:
                            "payrolls", "treasury", "yields", "tech stocks", "s&p"),
         ),
         "sp500": AssetConfig(
-            key="sp500", label="S&P 500 (ES)", yahoo_symbol="ES=F",
+            key="sp500", session_range=True, label="S&P 500 (ES)", yahoo_symbol="ES=F",
             price_decimals=2, tick_size=0.25,
             min_hourly_range_pct=0.06, max_hourly_range_pct=2.0,
             session_utc=(12, 21),
@@ -228,7 +239,7 @@ def default_assets() -> dict[str, AssetConfig]:
                            "hack", "exploit", "stablecoin", "liquidation", "vitalik"),
         ),
         "gold": AssetConfig(
-            key="gold", label="Or (XAU/USD)", yahoo_symbol="GC=F",
+            key="gold", session_range=True, label="Or (XAU/USD)", yahoo_symbol="GC=F",
             price_decimals=2, tick_size=0.1,
             min_hourly_range_pct=0.05, max_hourly_range_pct=2.0,
             session_utc=(7, 20),  # Londres + New York
@@ -239,7 +250,7 @@ def default_assets() -> dict[str, AssetConfig]:
         ),
         # ---- Nouveaux actifs, à l'essai : moteurs propres, peu liés aux indices et aux cryptos
         "oil": AssetConfig(
-            key="oil", label="Pétrole WTI (CL)", yahoo_symbol="CL=F",
+            key="oil", session_range=True, label="Pétrole WTI (CL)", yahoo_symbol="CL=F",
             price_decimals=2, tick_size=0.01,
             min_hourly_range_pct=0.10, max_hourly_range_pct=2.5,
             session_utc=(7, 20),  # Londres + New York (NYMEX)

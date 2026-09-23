@@ -103,6 +103,8 @@ VARIANT_LABELS = {
     "hors_session": "indices le matin européen",
     "horizon_3h": "horizon ~3 h",
     "confiance_moyenne": "confiance moyenne",
+    "avant_ouverture": "entrées dans l'heure avant l'ouverture américaine",
+    "reprise_apres_stop": "reprise juste après un stop",
 }
 
 

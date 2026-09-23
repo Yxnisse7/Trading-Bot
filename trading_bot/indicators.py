@@ -354,6 +354,37 @@ def average_range(candles: Sequence[Candle], bucket_seconds: int, buckets: int =
     return sum(ranges) / len(ranges)
 
 
+def us_open_ts(ts: int) -> int:
+    """Ouverture de Wall Street (9 h 30, heure de New York) le jour UTC de `ts` : 13:30 UTC l'été,
+    14:30 UTC l'hiver (les changements d'heure américains et européens ne tombent pas le même jour)."""
+    from datetime import datetime, time, timezone
+    from zoneinfo import ZoneInfo
+    day = datetime.fromtimestamp(ts, tz=timezone.utc).date()
+    return int(datetime.combine(day, time(9, 30), tzinfo=ZoneInfo("America/New_York")).timestamp())
+
+
+def same_hour_range(candles: Sequence[Candle], window_seconds: int = 3600, days: int = 5,
+                    min_fill: float = 0.5) -> float | None:
+    """Range moyen de la même fenêtre horaire les jours précédents (ex. 15:05-16:05 hier, avant-hier…).
+
+    L'agitation dépend de l'heure (ouverture américaine, nuit calme) : cette mesure décrit ce qui
+    attend le trade dans l'heure qui vient, là où la moyenne sur 24 h mélange nuit et séance.
+    Les jours sans cotation à cette heure (week-end, fermeture) sont ignorés.
+    """
+    if not candles or len(candles) < 2:
+        return None
+    step = min(b.ts - a.ts for a, b in zip(candles, candles[1:]) if b.ts > a.ts)
+    expected = max(1, window_seconds // step)
+    start_now = candles[-1].ts + step                 # la fenêtre commence à la clôture de la dernière bougie
+    ranges = []
+    for k in range(1, days + 1):
+        lo, hi = start_now - k * 86400, start_now - k * 86400 + window_seconds
+        g = [c for c in candles if lo <= c.ts < hi]
+        if len(g) >= expected * min_fill:
+            ranges.append(max(c.high for c in g) - min(c.low for c in g))
+    return sum(ranges) / len(ranges) if len(ranges) >= 2 else None
+
+
 def activity_profile(candles_5m: Sequence[Candle]) -> dict[int, float]:
     """Profil d'activité par heure UTC : range moyen relatif de l'heure / moyenne de toutes les heures.
 

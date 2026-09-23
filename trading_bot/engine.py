@@ -37,6 +37,9 @@ def chat_keys(values) -> list[str]:
     return [chat_key(v) if str(v).isdigit() else str(v) for v in (values or [])]
 
 
+PRE_OPEN = "avant_ouverture"        # variante : entrées dans l'heure avant l'ouverture américaine
+RESTART = "reprise_apres_stop"      # variante : nouvelle entrée malgré le refroidissement après un stop
+POST_STOP_REASON = "stop touché récemment"
 MAJOR_EVENT_RE = re.compile(r"FOMC|Fed\b|taux directeur|CPI|inflation|Non-?farm|NFP|emploi|payrolls", re.I)
 
 # « gold » = flux FXStreet (devises, matières premières, dollar) : pertinent aussi pour le pétrole et l'euro
@@ -123,6 +126,13 @@ class Engine:
                 log.info("%s : annonce propre à l'actif (%s) → pas de signal", asset.label, own_event.name)
                 continue
             weights = self._weights_for(adj, asset.key)
+            # Avant l'ouverture américaine : un trade ouvert maintenant subirait le pic de l'ouverture.
+            # Ces entrées sont suivies en silence (variante), sauf si la variante a été promue.
+            pre_open = (asset.session_utc is not None and PRE_OPEN not in promoted
+                        and self._before_us_open(now))
+            if pre_open and not trial_key and not session_variant and not variants_on:
+                log.info("%s : juste avant l'ouverture américaine → pas de signal", asset.label)
+                continue
             # Une seule variante à la fois : un actif à l'essai n'est testé que dans ses réglages normaux,
             # et hors session seul l'horizon standard est testé, pour que les statistiques de chaque
             # variante ne mélangent pas deux changements.
@@ -130,11 +140,22 @@ class Engine:
                 plan = [(h, base, trial_key) for h, base, v in horizons if v is None and not session_variant]
             elif session_variant:
                 plan = [(h, base, session_variant) for h, base, v in horizons if base == 5 and v is None]
+            elif pre_open:
+                plan = [(h, base, PRE_OPEN) for h, base, v in horizons if v is None]
             else:
                 plan = list(horizons)
             if not plan:
                 continue
             blocked = {h: self._scan_block(asset, h, base, variant, all_sigs, now) for h, base, variant in plan}
+            # Juste après un stop, l'actif est bloqué (refroidissement) : la reprise est testée en silence
+            # (variante « reprise_apres_stop »), ou autorisée si la variante a fait ses preuves.
+            for i, (h, base, variant) in enumerate(plan):
+                if variant is None and blocked[h] and all(r.startswith(POST_STOP_REASON) for r in blocked[h]):
+                    if RESTART in promoted:
+                        blocked[h] = []
+                    elif variants_on:
+                        plan[i] = (h, base, RESTART)
+                        blocked[h] = self._variant_block(asset.key, RESTART, h, all_sigs, now)
             if all(blocked.values()):
                 # (motifs du premier horizon : « 1h » pour le bot principal, « 12h » pour le mode halal)
                 log.info("%s : pas de scan (%s)", asset.label, "; ".join(next(iter(blocked.values()))))
@@ -164,9 +185,12 @@ class Engine:
                     log.info("%s [%s] : tendance baissière, achat seulement → pas de signal", asset.label, hkey)
                     continue
                 stubborn = self._direction_block(asset.key, a.direction, all_sigs, now)
-                if stubborn:
-                    log.info("%s [%s] : %s", asset.label, hkey, stubborn)
-                    continue
+                if stubborn and variant is None and RESTART not in promoted:
+                    if variants_on and not self._variant_block(asset.key, RESTART, hkey, all_sigs, now):
+                        variant = RESTART          # même sens qu'un stop récent : testé en silence
+                    else:
+                        log.info("%s [%s] : %s", asset.label, hkey, stubborn)
+                        continue
                 if news_ctx is None:
                     items: list[newsmod.NewsItem] = []
                     for c in NEWS_CATEGORIES.get(asset.key, ["macro"]):
@@ -258,6 +282,12 @@ class Engine:
     def _weights_for(adj: dict[str, Any], asset_key: str) -> dict[str, float] | None:
         """Poids appris pour cet actif : socle global, corrigé pour l'actif s'il a assez de preuves."""
         return (adj.get("weights_by_asset") or {}).get(asset_key) or adj.get("weights") or None
+
+    def _before_us_open(self, now: datetime) -> bool:
+        """Dans l'heure qui précède l'ouverture de Wall Street (jusqu'à quelques minutes après)."""
+        open_ts = ind.us_open_ts(int(now.timestamp()))
+        t = now.timestamp()
+        return open_ts - self.cfg.pre_open_minutes * 60 <= t < open_ts + self.cfg.pre_open_after_minutes * 60
 
     def _scan_block(self, asset, horizon: str, base: int, variant: str | None, all_sigs: list[Signal],
                     now: datetime) -> list[str]:

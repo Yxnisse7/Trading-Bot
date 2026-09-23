@@ -294,11 +294,21 @@ barre de qualité qu'un signal réel, et alimentent l'apprentissage dès mainten
 | `hors_session` | Nasdaq et S&P 500 le matin européen, 7h-13h UTC (`variant_extended_sessions`) |
 | `horizon_3h` | l'horizon ~3 h sur le Nasdaq, le S&P 500 et l'or |
 | `confiance_moyenne` | les setups « moyen » quand « fort » est exigé |
+| `avant_ouverture` | les entrées dans l'heure qui précède l'ouverture de Wall Street (jusqu'à 5 min après), sur les actifs à séance : un trade ouvert à ce moment subit le pic de l'ouverture. Elles sont suivies en silence et redeviennent réelles si elles font leurs preuves |
+| `reprise_apres_stop` | une nouvelle entrée juste après un stop, que le refroidissement (60 min, et 2 h dans le même sens) bloque d'habitude |
 
 Une variante passe **automatiquement en signaux réels** quand, sur au moins 100 trades
 (`variant_min_trades`), son gain net moyen égale ou dépasse celui des signaux réels du bot ; elle
 repasse en test si ses résultats retombent. Chaque promotion ou retrait est annoncé sur Telegram.
 Une seule variante est testée à la fois sur un même trade, pour ne pas mélanger deux changements.
+
+**SL adaptés à l'heure** (`session_range`, actifs à séance : Nasdaq, S&P 500, or, pétrole) : le range
+de référence du TP et du SL est le plus grand du range moyen sur 24 h et du range de la même heure les
+jours précédents. À l'ouverture américaine, le marché bouge 3 à 4 fois plus que la nuit : un stop
+calculé sur la moyenne de la journée y était pris par le bruit. Sur 60 jours de backtest, avant → après :
+Nasdaq −2,97 % → −1,17 %, or −2,66 % → −1,41 %, pétrole −2,26 % → +3,00 %, S&P 500 inchangé ; les
+cryptos (24 h/24) y perdaient, elles gardent le calcul d'origine. L'heure d'ouverture suit New York
+(13:30 UTC l'été, 14:30 UTC l'hiver).
 
 ### Sections repliables
 Sur les trois pages, chaque section se replie ou se déplie d'un clic sur son titre (en glissant), et
