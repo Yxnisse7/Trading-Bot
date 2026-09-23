@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-23T11:50:35.641400+00:00",
+  "updated_at": "2026-09-23T12:01:02.495422+00:00",
   "method": "v2 : recalcul complet, marge de sécurité, résultats en R, sources pondérées",
   "weights": {
     "trend_5m": 1.0,
@@ -87,13 +87,13 @@
       "corr": 0.5
     },
     "oil": {
-      "trend_5m": 1.0,
-      "trend_15m": 1.0,
-      "trend_1h": 1.0,
-      "adx": 1.0,
-      "vwap": 0.688,
+      "trend_5m": 0.981,
+      "trend_15m": 0.981,
+      "trend_1h": 0.981,
+      "adx": 0.981,
+      "vwap": 0.664,
       "rsi": 1.0,
-      "macd": 0.966,
+      "macd": 0.881,
       "level": 1.0,
       "volume": 0.75,
       "orb": 1.0,
@@ -124,20 +124,20 @@
         "trend_1h",
         "adx"
       ],
-      "n": 579,
-      "n_eff": 403.4,
-      "mean_r": 0.041,
-      "margin_r": 0.11,
+      "n": 580,
+      "n_eff": 404.3,
+      "mean_r": 0.0377,
+      "margin_r": 0.1099,
       "multiplier": 1.0
     },
     "vwap": {
       "members": [
         "vwap"
       ],
-      "n": 483,
-      "n_eff": 331.7,
-      "mean_r": 0.0795,
-      "margin_r": 0.1227,
+      "n": 484,
+      "n_eff": 332.7,
+      "mean_r": 0.0756,
+      "margin_r": 0.1225,
       "multiplier": 1.0
     },
     "rsi": {
@@ -154,10 +154,10 @@
       "members": [
         "macd"
       ],
-      "n": 156,
-      "n_eff": 109.8,
-      "mean_r": 0.0312,
-      "margin_r": 0.2243,
+      "n": 157,
+      "n_eff": 110.7,
+      "mean_r": 0.0187,
+      "margin_r": 0.223,
       "multiplier": 1.0
     },
     "level": {
@@ -218,9 +218,9 @@
       "margin_r": 0.3192
     },
     "fantômes": {
-      "n": 27,
-      "mean_r": 0.2626,
-      "margin_r": 0.4259
+      "n": 28,
+      "mean_r": 0.2175,
+      "margin_r": 0.4198
     },
     "backtest": {
       "n": 502,
@@ -259,10 +259,10 @@
     },
     "essai_oil": {
       "label": "nouvel actif : Pétrole WTI (CL)",
-      "n": 1,
-      "mean_net_r": -1.0684,
+      "n": 2,
+      "mean_net_r": -1.072,
       "promoted": false,
-      "missing": 99
+      "missing": 98
     },
     "essai_euro": {
       "label": "nouvel actif : Euro / dollar (6E)",
@@ -280,16 +280,17 @@
   "notes": [
     "trades réels : +0,12 R ± 0,32 R par trade avant frais sur 51 trades (0 R = hasard)",
     "aucun critère ne s'écarte du hasard au-delà de la marge de sécurité : poids par défaut conservés",
-    "oil, vwap : -0,16 R contre +0,08 R en global sur 118 trades éq. → poids ×0,92 sur cet actif",
-    "oil, macd : -0,33 R contre +0,03 R en global sur 33 trades éq. → poids ×0,97 sur cet actif",
+    "oil, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,17 R contre +0,04 R en global sur 120 trades éq. → poids ×0,98 sur cet actif",
+    "oil, vwap : -0,17 R contre +0,08 R en global sur 117 trades éq. → poids ×0,89 sur cet actif",
+    "oil, macd : -0,37 R contre +0,02 R en global sur 33 trades éq. → poids ×0,88 sur cet actif",
     "variante « indices le matin européen » en test : 1 trades, -1,12 R net, encore 99 trades avant décision",
     "variante « horizon ~3 h » en test : 2 trades, +1,12 R net, encore 98 trades avant décision",
-    "variante « nouvel actif : Pétrole WTI (CL) » en test : 1 trades, -1,07 R net, encore 99 trades avant décision"
+    "variante « nouvel actif : Pétrole WTI (CL) » en test : 2 trades, -1,07 R net, encore 98 trades avant décision"
   ],
-  "sample": 580,
+  "sample": 581,
   "sample_by_source": {
     "bot": 50,
-    "shadow": 27,
+    "shadow": 28,
     "manual": 1,
     "backtest": 502
   }
