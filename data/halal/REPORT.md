@@ -1,6 +1,6 @@
 # Trading-Bot — rapport
 
-_Mis à jour le 23/09/2026 à 11:18 (Europe/Paris)._
+_Mis à jour le 23/09/2026 à 11:19 (Europe/Paris)._
 
 ## Vue d'ensemble
 
@@ -35,11 +35,11 @@ Notes :
 
 | Actif | Période | Signaux | TP | SL | Expirés | Taux de réussite | Hasard attendu | Avantage | P&L net | Espérance nette / trade |
 |---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| Bitcoin (BTC) | 26/07/2026 → 23/09/2026 | 16 | 5 | 7 | 4 | 42% | 41% | +0% | -2.72 % | -0.170 % |
-| Ethereum (ETH) | 26/07/2026 → 23/09/2026 | 23 | 10 | 8 | 5 | 56% | 42% | +14% | +1.94 % | +0.084 % |
-| ETF USA islamique (ISDU) | 01/07/2026 → 23/09/2026 | 0 | 0 | 0 | 0 | n/a | n/a | n/a | +0.00 % | +0.000 % |
-| ETF Monde islamique (ISDW) | 01/07/2026 → 23/09/2026 | 0 | 0 | 0 | 0 | n/a | n/a | n/a | +0.00 % | +0.000 % |
-| Or physique Royal Mint (RMAU) | 01/07/2026 → 23/09/2026 | 0 | 0 | 0 | 0 | n/a | n/a | n/a | +0.00 % | +0.000 % |
+| Bitcoin (BTC) | 26/07/2026 → 23/09/2026 | 16 | 5 | 7 | 4 | 42% | 42% | +0% | -2.18 % | -0.136 % |
+| Ethereum (ETH) | 26/07/2026 → 23/09/2026 | 22 | 10 | 8 | 4 | 56% | 42% | +13% | -0.82 % | -0.037 % |
+| ETF USA islamique (ISDU) | 01/07/2026 → 23/09/2026 | 14 | 1 | 6 | 7 | 14% | 40% | -26% | +1.14 % | +0.081 % |
+| ETF Monde islamique (ISDW) | 01/07/2026 → 23/09/2026 | 10 | 3 | 3 | 4 | 50% | 40% | +10% | +1.89 % | +0.189 % |
+| Or physique Royal Mint (RMAU) | 01/07/2026 → 23/09/2026 | 1 | 0 | 0 | 1 | n/a | 40% | n/a | +0.71 % | +0.709 % |
 
 ---
 
