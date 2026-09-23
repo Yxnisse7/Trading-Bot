@@ -326,6 +326,11 @@ dépôt, sans attendre GitHub Pages, et se rafraîchissent chaque minute : envir
 Telegram (la pastille d'état affiche « direct »). Sans jeton, ou si GitHub le refuse, GitHub Pages
 prend le relais automatiquement.
 
+Les pages chargent les fichiers communs (`yasuke.js`, `yasuke.css`, `live-chart.js`…) avec une empreinte
+de leur contenu (`yasuke.js?v=…`) : un navigateur ne peut pas garder un ancien script en cache avec une
+page neuve. Après toute modification de ces fichiers : `python scripts/version_assets.py` (un test le
+vérifie).
+
 ### Avertissement et vie privée
 L'avertissement complet (« pas un conseil financier, validez en paper trading ») n'est plus répété à
 chaque notification : il figure dans le guide `/help` que reçoit automatiquement chaque nouveau chat

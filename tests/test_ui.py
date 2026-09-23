@@ -61,3 +61,16 @@ def test_dotenv_loading(tmp_path, monkeypatch):
     import os
     assert os.environ["TELEGRAM_BOT_TOKEN"] == "abc:123" and os.environ["TELEGRAM_CHAT_ID"] == "42"
     assert os.environ["DEJA"] == "existant"
+
+
+def test_site_assets_are_versioned():
+    """Chaque page charge les fichiers communs avec l'empreinte de leur contenu : un navigateur ne peut pas
+    garder un ancien yasuke.js en cache avec une page neuve (page bloquée sur « Chargement »)."""
+    import subprocess
+    import sys
+    from pathlib import Path
+
+    root = Path(__file__).resolve().parent.parent
+    r = subprocess.run([sys.executable, str(root / "scripts" / "version_assets.py"), "--check"],
+                       capture_output=True, text=True)
+    assert r.returncode == 0, r.stdout
