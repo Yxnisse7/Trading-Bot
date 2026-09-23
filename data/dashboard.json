@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-23T16:35:37.899990+02:00",
+  "updated_at": "2026-09-23T16:40:42.232915+02:00",
   "timezone": "Europe/Paris",
   "equity_curve": [
     {
@@ -836,7 +836,7 @@
       "avg_pnl_pct": -0.0332
     },
     "open": 0,
-    "open_shadow": 0
+    "open_shadow": 1
   },
   "by_source": {
     "bot": {
@@ -4036,7 +4036,44 @@
       ]
     }
   ],
-  "open_signals": [],
+  "open_signals": [
+    {
+      "id": "278bb59f81",
+      "asset": "ethereum",
+      "asset_label": "Ethereum (ETH/USD)",
+      "direction": "short",
+      "horizon": "1h",
+      "entry": 2667.9,
+      "take_profit": 2655.0,
+      "stop_loss": 2676.5,
+      "risk_reward": 1.5,
+      "confidence": "fort",
+      "score": 7.25,
+      "criteria": [
+        "adx",
+        "corr",
+        "level",
+        "rsi",
+        "trend_15m",
+        "trend_1h",
+        "trend_5m",
+        "vwap"
+      ],
+      "source": "shadow",
+      "status": "open",
+      "pnl_pct": null,
+      "pnl_gross_pct": null,
+      "duration_minutes": null,
+      "close_price": null,
+      "created_at": "2026-09-23T14:40:33Z",
+      "closed_at": null,
+      "created_local": "23/09 16:40",
+      "expires_at": "2026-09-23T15:40:33Z",
+      "rationale": "Vente : tendance forte (ADX), marché meneur favorable, niveau clé favorable, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 21.51 (0.81 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 94%.",
+      "news_context": "actualité à surveiller (score 3) : Stablecoin cross-border flows surge 78%, defying crypto bear market | Fed's Barr says further rate hikes will likely be needed",
+      "manual_exit": null
+    }
+  ],
   "recent_trades": [
     {
       "id": "4bed451605",
@@ -5917,7 +5954,7 @@
     "updated_at": "2026-09-23T13:56:04.852207+00:00"
   },
   "state": {
-    "last_scan": "2026-09-23T14:35:29Z",
+    "last_scan": "2026-09-23T14:40:33Z",
     "last_scan_note": "0 signal(aux)",
     "last_summary": "2026-09-23T00:22:36Z",
     "last_track": "2026-09-23T13:56:04Z"
