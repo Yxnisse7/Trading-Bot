@@ -34,7 +34,6 @@ jobs:
       TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
       DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
       TRADING_BOT_DATA_DIR: data/halal
-      TRADING_BOT_OUTBOX: ${{ runner.temp }}/outbox-halal.jsonl
     steps:
       - uses: actions/checkout@v4
         with:
