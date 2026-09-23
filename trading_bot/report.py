@@ -140,7 +140,7 @@ def _sig_row(s: Signal, tz: ZoneInfo) -> dict[str, Any]:
         "confidence": s.confidence, "score": s.score, "criteria": s.criteria, "source": s.source,
         "status": s.status, "pnl_pct": s.pnl_pct, "pnl_gross_pct": s.pnl_gross_pct,
         "duration_minutes": s.duration_minutes, "close_price": s.close_price,
-        "created_at": s.created_at, "created_local": f"{c:%d/%m %H:%M}",
+        "created_at": s.created_at, "closed_at": s.closed_at, "created_local": f"{c:%d/%m %H:%M}",
         "expires_at": s.expires_at, "rationale": s.rationale, "news_context": s.news_context,
     }
 
@@ -184,6 +184,9 @@ def build_dashboard(all_signals: list[Signal], cfg: Config, adjustments: dict[st
                        "open": sum(1 for s in open_sigs if s.asset == key and s.source != "shadow"),
                        "session_utc": list(asset.session_utc) if asset.session_utc else None,
                        "cost_pct": asset.cost_pct, "trial": asset.trial,
+                       # dimensionnement, pour l'aperçu du formulaire de trade (mêmes règles que portfolio.size_position)
+                       "tick_size": asset.tick_size, "lot_multiplier": asset.lot_multiplier, "lot_min": asset.lot_min,
+                       "lot_step": asset.lot_step, "lot_label": asset.lot_label, "max_leverage": asset.max_leverage,
                        "trial_promoted": f"essai_{key}" in ((adjustments or {}).get("promoted_variants") or [])})
 
     # Séries pour les graphiques du tableau de bord (signaux visibles uniquement)

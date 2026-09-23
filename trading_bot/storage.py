@@ -35,9 +35,11 @@ class Store:
         except json.JSONDecodeError:
             return default
 
-    def _write(self, path: Path, data: Any) -> None:
+    def _write(self, path: Path, data: Any, compact: bool = False) -> None:
         tmp = path.with_suffix(".tmp")
-        tmp.write_text(json.dumps(data, indent=2, ensure_ascii=False), encoding="utf-8")
+        text = (json.dumps(data, separators=(",", ":"), ensure_ascii=False) if compact
+                else json.dumps(data, indent=2, ensure_ascii=False))
+        tmp.write_text(text, encoding="utf-8")
         tmp.replace(path)
 
     # ---- signaux ouverts
@@ -159,12 +161,13 @@ class Store:
     def save_live(self, asset_key: str, data: dict[str, Any]) -> None:
         live = self.dir / "live"
         live.mkdir(parents=True, exist_ok=True)
-        self._write(live / f"{asset_key}.json", data)
+        # compact : ~290 bougies réécrites toutes les 5 min, inutile de gonfler le dépôt
+        self._write(live / f"{asset_key}.json", data, compact=True)
         docs = self._docs_dir()
         if docs is not None:
             try:
                 (docs / "live").mkdir(parents=True, exist_ok=True)
-                self._write(docs / "live" / f"{asset_key}.json", data)
+                self._write(docs / "live" / f"{asset_key}.json", data, compact=True)
             except OSError:
                 pass
 

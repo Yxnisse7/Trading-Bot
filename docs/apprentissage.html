@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Yasuke · Apprentissage</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="yasuke.css">
+<script>try { const t = localStorage.getItem("tb-theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}</script>
+<style>
+  .learn-top { display: grid; gap: 14px; }
+  .src { display: flex; flex-wrap: wrap; gap: 6px; }
+  .notes { margin: 0; padding-left: 18px; display: grid; gap: 6px; font-size: 14px; }
+  .var-bar { height: 6px; border-radius: 999px; background: var(--soft); overflow: hidden; width: 120px; display: inline-block; vertical-align: middle; margin-right: 8px; }
+  .var-bar i { display: block; height: 100%; background: var(--brand); border-radius: 999px; }
+  .last { display: inline-flex; gap: 3px; }
+  .last i { width: 8px; height: 8px; border-radius: 2px; display: inline-block; }
+  .group-legend { margin: -4px 0 14px; }
+</style>
+</head>
+<body data-page="learning">
+<header id="yk-header"></header>
+<div class="wrap">
+  <div class="pagehead">
+    <div><h1>Apprentissage</h1><div class="sub" id="updated">Chargement…</div></div>
+    <div class="actions"><button class="btn-icon" id="btn-refresh" type="button" aria-label="Actualiser" title="Actualiser"></button></div>
+  </div>
+
+  <h2 id="apprentissage">Ce que le bot a appris</h2>
+  <div class="card learn-top" id="learning"><span class="sk t" style="width:60%"></span><span class="sk t" style="width:80%"></span><span class="sk t" style="width:40%"></span></div>
+
+  <h2 id="indicateurs">Par indicateur</h2>
+  <div class="card chart" id="ch-criteria"></div>
+  <div class="card tbl" style="margin-top:20px"><table id="criteria"><thead><tr><th>Indicateur</th><th class="num">Trades</th><th class="num">Réussite</th><th class="num">Hasard</th><th class="num">Avantage</th><th class="num">Poids appris</th><th class="num">Résultat moyen</th><th>8 derniers</th></tr></thead><tbody></tbody></table></div>
+
+  <h2 id="heures">Par heure et par sens</h2>
+  <div class="legend group-legend"><span><i style="background:var(--up)"></i>TP, cible atteinte</span><span><i style="background:var(--dn)"></i>SL, stop touché</span><span><i style="background:var(--neu)"></i>Expiré, ni l'un ni l'autre</span><span class="faint">Une seule légende pour les graphiques de cette section · signaux notifiés uniquement</span></div>
+  <section class="charts">
+    <div class="card chart" id="ch-hours"></div>
+    <div class="card chart" id="ch-direction"></div>
+    <div class="card chart" id="ch-horizon"></div>
+    <div class="card chart" id="ch-confidence"></div>
+    <div class="card chart" id="ch-source"></div>
+  </section>
+
+  <h2 id="actifs">Par actif</h2>
+  <div class="card tbl"><table id="assets"><thead><tr><th>Actif</th><th class="num">Trades</th><th class="num">Réussite</th><th class="num">Hasard</th><th class="num">Avantage</th><th class="num">Résultat net</th><th class="num">En ombre</th><th>Session (UTC)</th></tr></thead><tbody></tbody></table></div>
+
+  <h2 id="backtests">Backtests</h2>
+  <div class="card tbl"><table id="bt"><thead><tr><th>Actif</th><th>Période</th><th class="num">Signaux</th><th class="num">Réussite</th><th class="num">Hasard</th><th class="num">Avantage</th><th class="num">Résultat net</th><th class="num">Espérance</th></tr></thead><tbody></tbody></table>
+    <div class="muted" style="margin-top:10px">Rejoué chaque dimanche à 20 h UTC sur 60 jours de données. Un backtest compte peu dans l'apprentissage (0,25 contre 1 pour un trade réel).</div></div>
+
+  <div class="foot"><div>Ce n'est pas un conseil financier. Aucune stratégie ne garantit un gain.</div></div>
+</div>
+
+<div id="tip" role="tooltip"></div>
+<script src="yasuke.js"></script>
+<script src="charts.js"></script>
+<script src="sections.js"></script>
+<script>
+(function () {
+  const Y = window.YK, $ = Y.$, esc = Y.esc, C = window.YKCharts;
+  let data = null, mode = "static";
+  $("#btn-refresh").innerHTML = Y.I.refresh;
+  const say = (t) => { $("#updated").textContent = t; };
+  const edgeCell = (e) => e === null || e === undefined ? `<td class="num faint">n/a</td>` : `<td class="num ${Y.tone(e)}">${Y.signed(e * 100, 0, " pts")}</td>`;
+
+  async function load() {
+    say("Chargement…");
+    mode = await Y.loadDashboard({ onData: (d, m) => { data = d; mode = m; render(); }, say,
+      onNoData: () => say("Aucune donnée pour l'instant : elles apparaissent après le prochain passage du bot.") });
+  }
+  function charts() {
+    const d = data;
+    C.rateBars($("#ch-criteria"), d.criteria.map((c) => ({ label: Y.CRIT[c.key] || c.label, st: c.stats, weight: c.weight })),
+      { title: "Réussite par indicateur contre le hasard attendu", how: "Barre : taux de réussite des trades où l'indicateur était aligné. Trait vertical : ce qu'aurait donné le hasard avec les mêmes TP et SL. Une barre qui dépasse son trait aide ; en gris, l'échantillon est trop petit pour conclure." });
+    C.hourColumns($("#ch-hours"), d.by_hour_local, { title: "Trades par heure d'émission", how: "Heure de Paris. En bleu : heure où la réussite dépasse le hasard, avec au moins 3 trades." });
+    C.stackedOutcomes($("#ch-direction"), [["long", "Achat"], ["short", "Vente"]].map(([k, l]) => ({ label: l, st: (d.by_direction || {})[k] })), { title: "Par sens", how: "Un déséquilibre marqué signale un biais des indicateurs." });
+    C.stackedOutcomes($("#ch-horizon"), Object.entries(d.by_horizon || {}).map(([k, st]) => ({ label: k === "1h" ? "Scalp ~1 h" : `Intraday ~${k}`, st })), { title: "Par horizon", how: "Scalp ~1 h sur base 5 min, intraday ~3 h sur base 15 min." });
+    C.stackedOutcomes($("#ch-confidence"), [["fort", "Fort"], ["moyen", "Moyen"]].map(([k, l]) => ({ label: l, st: (d.by_confidence || {})[k] })), { title: "Par confiance", how: "Fort : au moins 5 critères alignés et score d'au moins 5. Moyen : 3 ou 4 critères." });
+    C.stackedOutcomes($("#ch-source"), [["bot", "Bot"], ["manual", "Manuel"], ["request", "Proposition"], ["shadow", "En ombre"]].map(([k, l]) => ({ label: l, st: (d.by_source || {})[k] })), { title: "Par source", how: "Qui a demandé le trade : le bot seul, vous, une proposition, ou les trades testés en silence." });
+  }
+  function render() {
+    const d = data;
+    say(`Mis à jour à ${Y.hhmm(d.updated_at)} · recalculé à chaque passage du bot, sur tous les trades`);
+    Y.status(d.state && d.state.last_scan, d.state && d.state.last_scan_note);
+    try { charts(); } catch (e) { console.error("graphiques :", e); }
+
+    // apprentissage
+    const adj = d.adjustments || {}, src = adj.sample_by_source || {};
+    const vr = Object.values(adj.variants || {});
+    const r2 = (v) => v == null ? "n/a" : Y.signed(v, 2, " R");
+    $("#learning").innerHTML = `
+      <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:baseline;justify-content:space-between"><div><b style="font-size:17px">${adj.sample ?? 0} trades pris en compte</b></div>
+        <div class="src">${Object.entries(src).map(([k, n]) => `<span class="pill">${esc(Y.SRC[k] || k)} <b>${n}</b></span>`).join("")}</div></div>
+      <div class="muted">Les poids sont recalculés à chaque passage à partir de tous les trades, et ne bougent que si l'écart avec le hasard dépasse la marge de sécurité. Un trade réel compte pour 1, un trade en ombre pour 0,6, un trade de backtest pour 0,25.${adj.avoid_hours_utc && adj.avoid_hours_utc.length ? ` Tranches évitées (UTC) : ${adj.avoid_hours_utc.join(", ")} h.` : ""}</div>
+      ${(adj.notes || []).length ? `<ul class="notes">${adj.notes.map((n) => `<li>${esc(n)}</li>`).join("")}</ul>` : `<div class="muted">Pas encore de conclusion : l'échantillon est trop petit.</div>`}
+      ${vr.length ? `<div class="tbl"><table><thead><tr><th>Variante testée en ombre</th><th>Progression</th><th class="num">Gain net moyen</th><th>Statut</th></tr></thead><tbody>${vr.map((v) => {
+        const need = v.n + (v.missing || 0), prog = need ? Math.min(100, v.n / need * 100) : 100;
+        return `<tr><td>${esc(v.label)}</td><td class="nowrap"><span class="var-bar"><i style="width:${prog.toFixed(0)}%"></i></span><span class="mono muted" style="font-size:12px">${v.n}${v.missing ? " / " + need : ""}</span></td><td class="num ${Y.tone(v.mean_net_r)}">${r2(v.mean_net_r)}</td><td>${v.promoted ? `<span class="pill up">promue en signaux réels</span>` : `<span class="pill">en test</span>`}</td></tr>`;
+      }).join("")}</tbody></table></div>
+      <div class="muted">Une variante passe en signaux réels quand, sur au moins 100 trades, elle fait au moins aussi bien que les signaux réels du bot${adj.baseline && adj.baseline.mean_net_r != null ? ` (actuellement ${r2(adj.baseline.mean_net_r)} net par trade sur ${adj.baseline.n})` : ""}.</div>` : ""}`;
+
+    // indicateurs
+    $("#criteria tbody").innerHTML = d.criteria.map((c) => {
+      const st = c.stats;
+      const last = (c.last_trades || []).slice(0, 8).map((t) => `<i title="${esc(t.created_local)} · ${esc(Y.shortLabel(t.asset_label))} · ${Y.RES[t.status] || t.status}" style="background:var(${t.status === "tp" ? "--up" : t.status === "sl" ? "--dn" : "--neu"})"></i>`).join("");
+      return `<tr><td class="nowrap"><b style="font-weight:500">${esc(Y.CRIT[c.key] || c.label)}</b></td><td class="num">${st.n}</td><td class="num">${Y.pct(st.win_rate)}</td><td class="num muted">${Y.pct(st.neutral_win_rate)}</td>
+        ${edgeCell(st.edge)}<td class="num">${c.weight == null ? "1,00" : Y.num(c.weight, 2)}</td><td class="num ${Y.tone(st.avg_pnl_pct)}">${Y.pctv(st.avg_pnl_pct, 3)}</td><td><span class="last">${last || '<span class="faint">aucun</span>'}</span></td></tr>`;
+    }).join("");
+
+    // actifs
+    $("#assets tbody").innerHTML = d.assets.map((a) => `<tr>
+      <td class="nowrap"><b style="font-weight:500">${esc(a.label)}</b>${a.trial && !a.trial_promoted ? ` <span class="pill brand" title="Suivi en silence : annoncé seulement après avoir fait ses preuves">à l'essai</span>` : ""}${a.open ? ` <span class="pill open">${a.open} en cours</span>` : ""}</td>
+      <td class="num">${a.stats.n}</td><td class="num">${Y.pct(a.stats.win_rate)}</td><td class="num muted">${Y.pct(a.stats.neutral_win_rate)}</td>${edgeCell(a.stats.edge)}
+      <td class="num ${Y.tone(a.stats.pnl_pct)}">${Y.pctv(a.stats.pnl_pct, 2)}</td><td class="num">${a.shadow.n} <span class="muted">(${Y.pct(a.shadow.win_rate, 0)})</span></td>
+      <td class="mono muted nowrap">${a.session_utc ? a.session_utc[0] + " h à " + a.session_utc[1] + " h" : "24 h sur 24"}</td></tr>`).join("");
+
+    // backtests
+    const bts = Object.values(d.backtests || {});
+    $("#bt tbody").innerHTML = bts.length ? bts.map((b) => `<tr><td class="nowrap"><b style="font-weight:500">${esc(b.asset_label)}</b></td><td class="mono muted nowrap" style="font-size:12px">${esc(String(b.period).replace("→", "au"))}</td>
+      <td class="num">${b.n}</td><td class="num">${Y.pct(b.win_rate)}</td><td class="num muted">${Y.pct(b.neutral_win_rate)}</td>${edgeCell(b.edge)}
+      <td class="num ${Y.tone(b.pnl_pct)}">${Y.pctv(b.pnl_pct, 2)}</td><td class="num ${Y.tone(b.expectancy_pct)}">${Y.pctv(b.expectancy_pct, 3)}</td></tr>`).join("")
+      : `<tr><td colspan="8" class="empty">Aucun backtest pour l'instant.</td></tr>`;
+  }
+  $("#btn-refresh").addEventListener("click", load);
+  let rt = null;
+  addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => { if (data) { try { charts(); } catch (e) { /* silencieux */ } } }, 200); });
+  document.addEventListener("yk:theme", () => { if (data) charts(); });
+  setInterval(() => { if (data) Y.status(data.state && data.state.last_scan); }, 60000);
+  load();
+})();
+</script>
+</body>
+</html>

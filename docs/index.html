@@ -2,672 +2,553 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Yasuke Trading-Bot</title>
+<meta name="description" content="Signaux de scalping simulés, suivis et mesurés face au hasard.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="yasuke.css">
+<script>try { const t = localStorage.getItem("tb-theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}</script>
 <style>
-  :root {
-    --bg: #f6f7f9; --card: #ffffff; --text: #1a1d23; --muted: #6b7280; --line: #e5e7eb;
-    --accent: #2563eb; --accent-text: #ffffff; --good: #16a34a; --bad: #dc2626; --warn: #d97706;
-    --shadow: 0 1px 2px rgba(0,0,0,.06), 0 1px 8px rgba(0,0,0,.04);
-  }
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      --bg: #0f1216; --card: #171b21; --text: #e8eaee; --muted: #9aa3b2; --line: #262c36;
-      --accent: #3b82f6; --good: #22c55e; --bad: #ef4444; --warn: #f59e0b; --shadow: none;
-    }
-  }
-  :root[data-theme="dark"] {
-    --bg: #0f1216; --card: #171b21; --text: #e8eaee; --muted: #9aa3b2; --line: #262c36;
-    --accent: #3b82f6; --good: #22c55e; --bad: #ef4444; --warn: #f59e0b; --shadow: none;
-  }
-  * { box-sizing: border-box; }
-  body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
-  .wrap { max-width: 1180px; margin: 0 auto; padding: 20px 16px 48px; }
-  header { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; margin-bottom: 18px; }
-  h1 { font-size: 22px; margin: 0; }
-  h2 { font-size: 17px; margin: 28px 0 10px; }
-  .muted { color: var(--muted); font-size: 13px; }
-  a { color: var(--accent); }
-  .grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); }
-  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; box-shadow: var(--shadow); overflow-x: auto; }
-  .kpi .v { font-size: 26px; font-weight: 650; margin-top: 4px; }
-  .kpi .s { font-size: 12px; color: var(--muted); }
-  .good { color: var(--good); } .bad { color: var(--bad); } .warn { color: var(--warn); }
-  table { width: 100%; border-collapse: collapse; font-size: 14px; }
-  th, td { text-align: left; padding: 8px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
-  th { font-weight: 600; color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .03em; }
-  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
-  .bar { height: 8px; border-radius: 4px; background: var(--line); overflow: hidden; margin-top: 4px; }
-  .bar > i { display: block; height: 100%; background: var(--accent); }
-  .pill { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 12px; border: 1px solid var(--line); color: var(--muted); }
-  .pill.tp { color: var(--good); border-color: var(--good); } .pill.sl { color: var(--bad); border-color: var(--bad); }
-  .pill.expired { color: var(--warn); border-color: var(--warn); } .pill.open { color: var(--accent); border-color: var(--accent); }
-  .crit { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
-  .crit .card h3 { margin: 0 0 6px; font-size: 15px; display: flex; justify-content: space-between; gap: 8px; }
-  .crit .mini { font-size: 13px; margin-top: 8px; }
-  .crit .mini div { display: flex; justify-content: space-between; gap: 8px; padding: 3px 0; border-bottom: 1px dashed var(--line); }
-  form.manual { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); align-items: end; }
-  label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 4px; }
-  select, input, textarea { width: 100%; padding: 9px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); color: var(--text); font: inherit; }
-  button { padding: 10px 16px; border: 0; border-radius: 8px; background: var(--accent); color: var(--accent-text); font: inherit; font-weight: 600; cursor: pointer; }
-  button.secondary { background: transparent; color: var(--text); border: 1px solid var(--line); }
-  button:disabled { opacity: .6; cursor: wait; }
-  .msg { margin-top: 10px; font-size: 14px; white-space: pre-wrap; }
-  details { margin-top: 10px; } summary { cursor: pointer; color: var(--muted); font-size: 13px; }
-  .disclaimer { margin-top: 32px; padding: 12px 14px; border-left: 3px solid var(--warn); background: var(--card); border-radius: 8px; font-size: 13px; color: var(--muted); }
-  @media (max-width: 640px) { th:nth-child(n+6), td:nth-child(n+6) { display: none; } }
-  /* graphiques : palette validée (bleu / orange sûrs pour le daltonisme, gris neutre) */
-  :root { --c-tp: #2a78d6; --c-sl: #eb6834; --c-exp: #898781; --c-grid: #e1e0d9; --c-axis: #c3c2b7; --c-wash: rgba(42,120,214,.10); }
-  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --c-tp: #3987e5; --c-sl: #d95926; --c-exp: #898781; --c-grid: #2c2c2a; --c-axis: #383835; --c-wash: rgba(57,135,229,.12); } }
-  :root[data-theme="dark"] { --c-tp: #3987e5; --c-sl: #d95926; --c-exp: #898781; --c-grid: #2c2c2a; --c-axis: #383835; --c-wash: rgba(57,135,229,.12); }
-  .charts { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); margin-bottom: 12px; }
-  .chart { min-width: 0; }
-  .chart h3 { margin: 0 0 2px; font-size: 15px; }
-  .chart .how { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
-  .chart svg { display: block; width: 100%; height: auto; font: 12px system-ui, -apple-system, "Segoe UI", sans-serif; }
-  .chart svg text { fill: var(--muted); }
-  .chart svg text.v { fill: var(--text); font-weight: 600; }
-  .chart .legend { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 12px; color: var(--muted); margin-top: 6px; }
-  .legend i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; vertical-align: -2px; margin-right: 5px; }
-  .legend i.line { height: 2px; width: 14px; border-radius: 1px; vertical-align: 2px; }
-  .legend i.tick { width: 2px; height: 12px; border-radius: 1px; background: var(--text); }
-  .chart .empty { font-size: 13px; color: var(--muted); padding: 18px 0; }
-  .mark { transition: opacity .1s; } .mark:hover { opacity: .75; }
-  #tip { position: fixed; z-index: 50; pointer-events: none; background: var(--card); color: var(--text); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; font-size: 12px; box-shadow: 0 4px 16px rgba(0,0,0,.12); display: none; max-width: 260px; }
-  #tip b { font-size: 14px; } #tip .r { display: flex; gap: 8px; justify-content: space-between; } #tip .k { display: inline-block; width: 12px; height: 2px; vertical-align: 3px; margin-right: 6px; }
-  .wide { grid-column: 1 / -1; }
-
+  .asset-rows { display: grid; gap: 12px; }
+  .asset-row { display: grid; grid-template-columns: 140px minmax(0, 1fr) 28px 84px; align-items: center; gap: 12px; font-size: 13px; }
+  .asset-row .nm { display: flex; align-items: center; gap: 6px; font-weight: 500; white-space: nowrap; min-width: 0; }
+  .asset-row .bar { display: flex; gap: 2px; height: 14px; border-radius: 4px; overflow: hidden; }
+  .asset-row .bar.none { background: var(--soft); }
+  .asset-row .bar i { display: block; height: 100%; }
+  .asset-row .n { text-align: right; color: var(--muted); font-size: 12px; }
+  .asset-row .r { text-align: right; font-weight: 500; white-space: nowrap; }
+  @media (max-width: 760px) { .asset-row { grid-template-columns: 96px minmax(0, 1fr) 22px 66px; gap: 8px; } }
 </style>
 </head>
-<body>
+<body data-page="dashboard">
+<header id="yk-header"></header>
 <div class="wrap">
-  <header>
+  <div class="pagehead">
+    <div><h1>Tableau de bord</h1><div class="sub" id="updated">Chargement…</div></div>
+    <div class="actions">
+      <span class="faint">Simulation uniquement, aucun ordre réel</span>
+      <button class="secondary" id="btn-scan" type="button" hidden title="Analyse immédiate (mode local)">Scanner maintenant</button>
+      <button class="btn-icon" id="btn-refresh" type="button" aria-label="Actualiser" title="Actualiser"></button>
+    </div>
+  </div>
+
+  <section class="hero-row">
+    <div class="card hero" id="hero" aria-busy="true">
+      <span class="sk t" style="width:170px"></span><span class="sk big"></span><span class="sk t" style="width:90%"></span>
+      <span class="sk bar"></span><span class="sk bar"></span><span class="sk t" style="width:70%"></span>
+    </div>
     <div>
-      <h1>Yasuke Trading-Bot</h1>
-      <div class="muted" id="updated">Chargement…</div>
-      <div class="muted"><a href="portfolio.html" id="link-portfolio">Simulation de compte →</a></div>
+      <div class="tiles" id="tiles">
+        <div class="card tile"><span class="sk t" style="width:110px"></span><span class="sk" style="height:30px;width:150px"></span><span class="sk" style="height:40px"></span></div>
+        <div class="card tile"><span class="sk t" style="width:110px"></span><span class="sk" style="height:30px;width:120px"></span><span class="sk" style="height:40px"></span></div>
+        <div class="card tile"><span class="sk t" style="width:110px"></span><span class="sk" style="height:30px;width:60px"></span><span class="sk bar"></span></div>
+        <div class="card tile"><span class="sk t" style="width:110px"></span><span class="sk" style="height:30px;width:60px"></span><span class="sk t"></span></div>
+      </div>
+      <div class="dots" id="tile-dots" aria-hidden="true"><i class="on"></i><i></i><i></i></div>
     </div>
-    <div style="display:flex; gap:8px; flex-wrap:wrap">
-      <button class="secondary" id="btn-refresh" type="button">Actualiser</button>
-      <button class="secondary" id="btn-scan" type="button" title="Analyse immédiate (mode local)">Scanner maintenant</button>
-      <button class="secondary" id="btn-theme" type="button">Thème</button>
-    </div>
-  </header>
-
-  <section class="grid" id="kpis"></section>
-
-  <h2>Graphique live</h2>
-  <div class="card" id="ch-live"></div>
-
-  <h2>Vue d'ensemble</h2>
-  <div class="muted" style="margin-bottom:8px">Comment lire : les graphiques ne portent que sur les signaux <b>notifiés</b> (bot, manuels, propositions), jamais sur les fantômes. « Hasard attendu » = taux de réussite qu'obtiendrait une pièce jetée avec les mêmes TP et SL ; c'est la barre à dépasser.</div>
-  <section class="charts">
-    <div class="card chart wide" id="ch-equity"></div>
-    <div class="card chart" id="ch-assets"></div>
-    <div class="card chart" id="ch-hours"></div>
-    <div class="card chart" id="ch-direction"></div>
-    <div class="card chart" id="ch-horizon"></div>
-    <div class="card chart" id="ch-confidence"></div>
-    <div class="card chart" id="ch-source"></div>
   </section>
 
-  <h2>Demander un trade</h2>
+  <div class="card" id="ch-live"></div>
+
+  <div class="row2" style="margin-top:20px">
+    <div class="card">
+      <div class="card-head"><div><h3>Courbe du résultat</h3><div class="sub">Somme des résultats trade après trade, frais inclus</div></div><span id="eq-total"></span></div>
+      <div class="chart" id="ch-equity"></div>
+    </div>
+    <div class="card">
+      <div class="card-head"><h3>Résultat par actif</h3><div class="legend"><span><i style="background:var(--up)"></i>TP</span><span><i style="background:var(--dn)"></i>SL</span><span><i style="background:var(--neu)"></i>Expiré</span></div></div>
+      <div class="asset-rows" id="asset-rows"></div>
+    </div>
+  </div>
+
+  <h2 id="en-cours" data-hint="aucun signal en cours">Signaux en cours</h2>
+  <div class="card" id="open-card"><div class="empty">Chargement…</div></div>
+
+  <h2 id="trades">Derniers trades</h2>
   <div class="card">
-    <form class="manual" id="manual">
-      <div><label for="m-asset">Actif</label><select id="m-asset"></select></div>
-      <div><label for="m-dir">Sens</label><select id="m-dir"><option value="long">Long (achat)</option><option value="short">Short (vente)</option></select></div>
-      <div><label for="m-tp">Objectif / TP (facultatif)</label><input id="m-tp" inputmode="decimal" placeholder="laisser vide = calibré par le bot"></div>
-      <div><label for="m-sl">Stop / SL (facultatif)</label><input id="m-sl" inputmode="decimal" placeholder="laisser vide = calibré par le bot"></div>
-      <div><label for="m-note">Commentaire (facultatif)</label><input id="m-note" maxlength="200" placeholder="ex. cassure du plus haut de la veille"></div>
-      <div style="display:flex; gap:8px; flex-wrap:wrap"><button type="submit" id="m-submit">Envoyer ce signal</button><button type="button" class="secondary" id="m-propose">Proposer un trade</button></div>
-    </form>
-    <div class="muted" style="margin-top:8px"><b>Envoyer ce signal</b> : vous choisissez le sens et, si vous voulez, vos propres objectif et stop ; laissés vides, le bot les calibre sur la volatilité du moment. Il notifie et suit le trade (source « manuel »).<br><b>Proposer un trade</b> : le bot analyse l'actif choisi maintenant, envoie sa lecture des indicateurs et, s'il voit une direction, une proposition calibrée avec son verdict honnête (passe ou non ses critères), suivie sous la source « proposition ».</div>
-    <div class="msg" id="m-msg">Les boutons fonctionnent dès maintenant ; les statistiques apparaissent quand les données sont chargées.</div>
-    <details id="gh-settings">
-      <summary>Mode GitHub Actions (quand l'interface n'est pas servie par <code>python run.py ui</code>)</summary>
-      <div class="manual" style="margin-top:10px; display:grid; gap:10px; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr))">
+    <div class="card-head">
+      <div class="sub" id="trades-sub" style="margin:0">Du plus récent au plus ancien</div>
+      <div class="filters">
+        <select id="f-asset" aria-label="Filtrer par actif"><option value="">Tous les actifs</option></select>
+        <select id="f-source" aria-label="Filtrer par source"><option value="">Toutes les sources</option><option value="bot">Bot</option><option value="manual">Manuel</option><option value="request">Proposition</option></select>
+        <div class="seg" role="group" aria-label="Filtrer par résultat" id="f-status"><button type="button" data-v="" aria-pressed="true">Tous</button><button type="button" data-v="tp">TP</button><button type="button" data-v="sl">SL</button><button type="button" data-v="expired">Expirés</button></div>
+      </div>
+    </div>
+    <div class="tbl table-trades"><table id="trades-table"><thead><tr><th>Date</th><th>Actif</th><th>Sens</th><th class="num">Entrée</th><th class="num">TP · SL</th><th>Résultat</th><th>Durée</th><th>Pourquoi ce trade</th></tr></thead><tbody></tbody></table></div>
+    <div class="cards-list" id="trades-cards"></div>
+    <div class="tbl-foot"><span id="trades-count"></span><button type="button" class="secondary" id="trades-more" hidden>Afficher 10 de plus</button></div>
+  </div>
+
+  <h2 id="analyses">Analyses détaillées</h2>
+  <div class="card links-list" id="links"></div>
+
+  <div class="foot">
+    <div>Données gratuites : décalage d'environ 5 min sur les contrats à terme, quasi temps réel sur les cryptos. Simulation uniquement, aucun ordre réel n'est passé.</div>
+    <div>Ce n'est pas un conseil financier. Graphique : <a href="https://www.tradingview.com/lightweight-charts/" rel="noopener" target="_blank">TradingView Lightweight Charts</a>, licence Apache 2.0.</div>
+  </div>
+</div>
+
+<dialog class="yk-modal" id="trade-modal" aria-labelledby="tm-title">
+  <form class="modal-in" id="manual" method="dialog" novalidate>
+    <div class="modal-head">
+      <div><h2 id="tm-title">Nouveau trade</h2><div class="sub">Suivi comme ceux du bot, en simulation.</div></div>
+      <button type="button" class="x" id="tm-close" aria-label="Fermer"></button>
+    </div>
+    <div class="sides" role="group" aria-label="Sens du trade">
+      <button type="button" class="side long" data-dir="long" aria-pressed="true"><span>↗ Acheter (long)</span><small>Gagne si le prix monte</small></button>
+      <button type="button" class="side short" data-dir="short" aria-pressed="false"><span>↘ Vendre (short)</span><small>Gagne si le prix baisse</small></button>
+    </div>
+    <div>
+      <label for="m-asset">Actif</label>
+      <select id="m-asset"></select>
+      <div class="help" id="m-price" style="color:var(--muted)"></div>
+    </div>
+    <div class="two">
+      <div>
+        <label class="lab-i" for="m-tp">Take profit (TP) <button type="button" class="info" data-bubble="tp" aria-label="Aide sur le take profit"></button></label>
+        <input id="m-tp" inputmode="decimal" autocomplete="off" placeholder="calibré par le bot">
+        <div class="help" id="h-tp"></div>
+      </div>
+      <div>
+        <label class="lab-i" for="m-sl">Stop loss (SL) <button type="button" class="info" data-bubble="sl" aria-label="Aide sur le stop loss"></button></label>
+        <input id="m-sl" inputmode="decimal" autocomplete="off" placeholder="calibré par le bot">
+        <div class="help" id="h-sl"></div>
+      </div>
+    </div>
+    <div class="presets" role="group" aria-label="Raccourcis de niveaux">Raccourcis
+      <button type="button" data-p="bot" aria-pressed="true">Niveaux du bot</button><button type="button" data-p="tight" aria-pressed="false">Serré</button><button type="button" data-p="wide" aria-pressed="false">Large</button>
+    </div>
+    <div class="preview" id="m-preview"></div>
+    <div id="m-warn"></div>
+    <div>
+      <label for="m-note">Note (facultatif)</label>
+      <input id="m-note" maxlength="200" placeholder="ex. cassure du plus haut de la veille">
+    </div>
+    <div class="modal-foot">
+      <div class="cmd">Sur Telegram : <code id="m-cmd">/long nasdaq</code></div>
+      <div class="btns">
+        <button type="button" class="secondary" id="m-propose" title="Le bot analyse l'actif maintenant et envoie sa lecture et, s'il voit une direction, une proposition calibrée">Proposer un trade</button>
+        <button type="submit" id="m-submit">Envoyer le trade</button>
+      </div>
+    </div>
+    <div class="msg" id="m-msg"></div>
+    <details class="ghbox" id="gh-settings">
+      <summary>Mode GitHub Actions (quand la page n'est pas servie par <code>python run.py ui</code>)</summary>
+      <div class="ghgrid">
         <div><label for="gh-owner">Propriétaire</label><input id="gh-owner" placeholder="Yxnisse7" value="Yxnisse7"></div>
         <div><label for="gh-repo">Dépôt</label><input id="gh-repo" placeholder="Trading-Bot" value="Trading-Bot"></div>
-        <div><label for="gh-token">Jeton (fine-grained, Actions : lecture/écriture)</label><input id="gh-token" type="password" placeholder="github_pat_…"></div>
-        <div style="display:flex; gap:8px; flex-wrap:wrap"><button class="secondary" type="button" id="gh-save">Enregistrer dans ce navigateur</button><button class="secondary" type="button" id="gh-test">Tester le jeton</button></div>
+        <div><label for="gh-token">Jeton (fine-grained, Actions : lecture et écriture)</label><input id="gh-token" type="password" placeholder="github_pat_…"></div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap"><button class="secondary" type="button" id="gh-save">Enregistrer</button><button class="secondary" type="button" id="gh-test">Tester le jeton</button></div>
       </div>
       <div class="muted" id="gh-status" style="margin-top:8px"></div>
     </details>
-  </div>
-
-  <h2>Signaux ouverts</h2>
-  <div class="card"><table id="open"><thead><tr><th>Heure</th><th>Actif</th><th>Sens</th><th class="num">Entrée</th><th class="num">TP</th><th class="num">SL</th><th>Confiance</th><th>Source</th></tr></thead><tbody></tbody></table></div>
-
-  <h2>Par indicateur — résumé des derniers trades</h2>
-  <div class="muted" style="margin-bottom:8px">Taux de réussite des trades où l'indicateur était aligné (bot, manuels et fantômes confondus), comparé au hasard attendu. Le poids est celui appris.</div>
-  <section class="charts"><div class="card chart wide" id="ch-criteria"></div></section>
-  <section class="crit" id="criteria"></section>
-
-  <h2>Par actif</h2>
-  <div class="card"><table id="assets"><thead><tr><th>Actif</th><th class="num">Trades</th><th class="num">Réussite</th><th class="num">Hasard</th><th class="num">Avantage</th><th class="num">P&amp;L net</th><th class="num">Fantômes</th><th>Session (UTC)</th></tr></thead><tbody></tbody></table></div>
-
-  <h2>Derniers trades</h2>
-  <div class="card"><table id="trades"><thead><tr><th>Heure</th><th>Actif</th><th>Sens</th><th>Résultat</th><th class="num">P&amp;L net</th><th class="num">Durée</th><th>Confiance</th><th>Source</th><th>Critères</th></tr></thead><tbody></tbody></table></div>
-
-  <h2>Backtests</h2>
-  <div class="card"><table id="backtests"><thead><tr><th>Actif</th><th>Période</th><th class="num">Signaux</th><th class="num">Réussite</th><th class="num">Hasard</th><th class="num">Avantage</th><th class="num">P&amp;L net</th><th class="num">Espérance</th></tr></thead><tbody></tbody></table></div>
-
-  <h2>Apprentissage</h2>
-  <div class="card" id="learning"></div>
-
-  <div class="disclaimer">⚠️ Signaux générés automatiquement à partir de données publiques gratuites et d'une analyse algorithmique. Ceci n'est pas un conseil financier. Aucune stratégie ne garantit un gain. Validez en paper trading avant tout passage en argent réel. Vous seul décidez et exécutez vos trades.</div>
-</div>
+  </form>
+</dialog>
 
 <div id="tip" role="tooltip"></div>
+<script src="vendor/lightweight-charts.standalone.production.js"></script>
+<script src="yasuke.js"></script>
+<script src="charts.js"></script>
 <script src="live-chart.js"></script>
 <script src="sections.js"></script>
 <script>
 (function () {
-  const $ = (s) => document.querySelector(s);
-  const pct = (v, d = 0) => (v === null || v === undefined) ? "n/a" : (v * 100).toFixed(d) + " %";
-  const signed = (v, d = 2, suffix = " %") => (v === null || v === undefined) ? "n/a" : ((v >= 0 ? "+" : "") + v.toFixed(d) + suffix);
-  const cls = (v) => (v === null || v === undefined) ? "" : (v > 0 ? "good" : v < 0 ? "bad" : "");
-  const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-  const SRC = { bot: "bot", manual: "manuel", request: "proposition", shadow: "fantôme", backtest: "backtest" };
-  const RES = { tp: "TP", sl: "SL", expired: "expiré", open: "ouvert" };
-  let mode = "static";
-  let data = null;
-  let mcp = null;            // capacité claude.ai : connecteur GitHub du lecteur (page hébergée)
-  let mcpWatching = false;
-  const GH_DEFAULT = { owner: "Yxnisse7", repo: "Trading-Bot" };
-  const ASSETS_DEFAULT = [["nasdaq", "Nasdaq 100 (NQ)"], ["sp500", "S&P 500 (ES)"], ["bitcoin", "Bitcoin (BTC/USD)"], ["ethereum", "Ethereum (ETH/USD)"], ["gold", "Or (XAU/USD)"], ["oil", "Pétrole WTI (CL)"], ["euro", "Euro / dollar (6E)"]];
-  function fillAssets(list) {
-    const sel = $("#m-asset"); const cur = sel.value;
-    sel.innerHTML = list.map(([k, l]) => `<option value="${esc(k)}">${esc(l)}</option>`).join("");
-    if (cur && list.some(([k]) => k === cur)) sel.value = cur;
-  }
-  fillAssets(ASSETS_DEFAULT);
-  // Graphique live partagé avec la page simulation (docs/live-chart.js)
+  const Y = window.YK, $ = Y.$, esc = Y.esc;
+  const ASSETS_DEFAULT = window.LiveChart ? window.LiveChart.DEFAULT_ASSETS : [];
+  let data = null, portfolio = null, mode = "static";
+  let tradeLimit = 10;
+  const filt = { asset: "", source: "", status: "" };
+
+  $("#btn-refresh").innerHTML = Y.I.refresh;
+  $("#tm-close").innerHTML = Y.I.x;
+  document.querySelectorAll(".info").forEach((b) => { b.innerHTML = Y.I.info; });
   const live = window.LiveChart ? window.LiveChart.mount($("#ch-live"), { assets: ASSETS_DEFAULT }) : null;
-  const MCP_FIX = {
-    needs_reauth: "Reconnectez GitHub dans claude.ai → Paramètres → Connecteurs, puis actualisez.",
-    server_not_connected: "Ajoutez le connecteur GitHub dans claude.ai → Paramètres → Connecteurs, puis actualisez.",
-    selection_required: "Plusieurs connecteurs GitHub : choisissez-en un dans l'invite de claude.ai, puis actualisez.",
-    not_in_manifest: "Accès GitHub refusé pour cette page : autorisez-le quand claude.ai le demande.",
-    consent_required: "Autorisez l'accès GitHub quand claude.ai le demande, puis réessayez.",
-    blocked_by_policy: "L'accès GitHub est bloqué par la politique de votre organisation.",
-    approval_required: "Cette action GitHub demande une approbation qui n'est pas disponible ici.",
-  };
-  function ghRepo() {
-    const s = ghSettings();
-    return { owner: (s && s.owner) || GH_DEFAULT.owner, repo: (s && s.repo) || GH_DEFAULT.repo };
-  }
-  function extractDashboard(result) {
-    const cands = [];
-    if (result && result.payload !== undefined) cands.push(result.payload);
-    for (const b of (result && result.content) || []) {
-      if (typeof b.text === "string") cands.push(b.text);
-      if (b.resource && typeof b.resource.text === "string") cands.push(b.resource.text);
-    }
-    for (const c of cands) {
-      if (c && typeof c === "object" && c.overview) return c;
-      if (typeof c === "string") {
-        const i = c.indexOf("{");
-        if (i >= 0) { try { const j = JSON.parse(c.slice(i)); if (j && j.overview) return j; } catch (e) { /* bloc suivant */ } }
-      }
-    }
-    return null;
-  }
-  let consentAsked = false;
-  async function ensureConsent() {
-    // Demande l'autorisation GitHub une seule fois par chargement (au clic : l'invite de claude.ai s'affiche)
-    if (consentAsked) return "asked";
-    consentAsked = true;
-    try {
-      const perms = window.claude && typeof window.claude.use === "function" ? await window.claude.use("permissions") : null;
-      if (!perms) return "unknown";
-      const before = await perms.state("mcp:github").catch(() => "unavailable");
-      if (before === "granted") return "granted";
-      const after = await perms.request(["mcp:github"]).catch(() => ({}));
-      return after["mcp:github"] || before;
-    } catch (e) { return "unknown"; }
-  }
-  const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-  function mcpErrorText(err) {
-    const code = err && err.code;
-    if (MCP_FIX[code]) return MCP_FIX[code];
-    if (code === "tool_error") return "GitHub a refusé la demande : " + (err.message || "");
-    return "GitHub n'a pas répondu (" + (code || "erreur") + (err && err.message ? " : " + err.message : "") + "). Réessayez dans un instant.";
-  }
-  let mcpChecked = false;
-  async function initMcp() {
-    if (mcp) return mcp;
-    if (mcpChecked) return null;
-    mcpChecked = true;
-    const hasClaude = window.claude && typeof window.claude.use === "function";
-    if (!hasClaude) return null;
-    try { mcp = await window.claude.use("mcp"); } catch (e) { mcp = null; }
-    if (!mcp) {
-      // La vue claude.ai ne sert pas le connecteur : on l'explique plutôt que d'afficher une page vide
-      let state = "inconnu";
-      try { const perms = await window.claude.use("permissions"); if (perms) state = await perms.state("mcp:github"); } catch (e) { /* diagnostic seulement */ }
-      $("#updated").textContent = "Connecteur GitHub indisponible dans cette vue (état : " + state + "). Ouvrez la page dans claude.ai sur navigateur, vérifiez que GitHub est bien connecté (Paramètres → Connecteurs), puis rechargez.";
-      mode = "static";
-      return null;
-    }
-    return mcp;
-  }
-  async function startMcpWatch() {
-    if (mcpWatching || !mcp) return;
-    mcpWatching = true;
-    await ensureConsent();
-    const { owner, repo } = ghRepo();
-    mcp.watchTool("github", "get_file_contents", { owner, repo, path: "data/dashboard.json", ref: "refs/heads/main" }, (ev) => {
-      if (ev.type === "data") {
-        const d = extractDashboard(ev.result);
-        if (d) { data = d; mode = "mcp"; render(); }
-        else $("#updated").textContent = "Réponse GitHub inattendue : le fichier data/dashboard.json est-il présent ?";
-        return;
-      }
-      const code = ev.error && ev.error.code;
-      const fix = MCP_FIX[code];
-      if (fix) { $("#updated").textContent = fix; if (["needs_reauth", "server_not_connected", "not_in_manifest", "blocked_by_policy", "approval_required"].includes(code)) { data = null; } }
-      else if (!data) $("#updated").textContent = "GitHub ne répond pas pour le moment (" + (code || "erreur") + (ev.error && ev.error.message ? " : " + ev.error.message : "") + "). Cliquez sur « Actualiser » pour réessayer.";
-    }, { cache: { staleTime: 60000 }, refetchInterval: 300000 });
-  }
+  const say = (t) => { $("#updated").textContent = t; };
 
-  // ---- thème
-  const themeBtn = $("#btn-theme");
-  try { const t = localStorage.getItem("tb-theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
-  themeBtn.addEventListener("click", () => {
-    const cur = document.documentElement.dataset.theme;
-    const next = cur === "dark" ? "light" : "dark";
-    document.documentElement.dataset.theme = next;
-    try { localStorage.setItem("tb-theme", next); } catch (e) {}
-    if (data) { try { renderCharts(data); } catch (e) { console.error("graphiques :", e); } }
-  });
-
-  // ---- chargement des données
+  // ------------------------------------------------------------------ chargement
   async function load() {
-    $("#updated").textContent = "Chargement…";
-    if (await initMcp()) {
-      if (mcpWatching) { try { await mcp.invalidate("github", "get_file_contents"); } catch (e) { /* rien en cache */ } }
-      else await startMcpWatch();
-      return;
-    }
-    if (window.claude) { $("#btn-scan").style.display = "none"; return; }  // vue claude.ai sans connecteur : message déjà affiché
-    try {
-      const ping = await fetch("/api/ping", { cache: "no-store" });
-      if (ping.ok) mode = "local";
-    } catch (e) { mode = "static"; }
-    const urls = mode === "local" ? ["/api/state"] : ["../data/dashboard.json", "dashboard.json"];
-    for (const u of urls) {
-      try {
-        const r = await fetch(u, { cache: "no-store" });
-        if (r.ok) { data = await r.json(); break; }
-      } catch (e) { /* essai suivant */ }
-    }
-    if (!data && mode !== "local") {
-      // Page ouverte hors serveur (fichier local, autre site) : lecture via l'API GitHub avec le jeton
-      const gh = ghSettings();
-      if (gh) {
-        try {
-          const r = await fetch(`https://api.github.com/repos/${gh.owner}/${gh.repo}/contents/data/dashboard.json?ref=main`, {
-            headers: { "Authorization": "Bearer " + gh.token, "Accept": "application/vnd.github+json" }, cache: "no-store" });
-          if (r.ok) {
-            const j = await r.json();
-            const bytes = Uint8Array.from(atob(j.content.replace(/\n/g, "")), (c) => c.charCodeAt(0));
-            data = JSON.parse(new TextDecoder("utf-8").decode(bytes));
-            mode = "github";
-          } else {
-            $("#updated").textContent = `GitHub a répondu ${r.status} : vérifiez le jeton et le dépôt dans « Mode GitHub Actions ».`;
-          }
-        } catch (e) { /* affichage ci-dessous */ }
-      }
-    }
-    if (!data) {
-      $("#updated").textContent = "Aucune donnée : lancez `python run.py ui` sur votre PC, ou renseignez le dépôt et un jeton GitHub dans « Mode GitHub Actions » puis cliquez sur Actualiser.";
-      $("#gh-settings").open = true;
-      return;
-    }
-    render();
-  }
-
-  // ---------------------------------------------------------------- graphiques (SVG, sans dépendance)
-  const SVG = "http://www.w3.org/2000/svg";
-  const el = (tag, attrs = {}, parent = null) => { const n = document.createElementNS(SVG, tag); for (const [k, v] of Object.entries(attrs)) n.setAttribute(k, v); if (parent) parent.appendChild(n); return n; };
-  const txt = (parent, x, y, str, attrs = {}) => { const t = el("text", { x, y, ...attrs }, parent); t.textContent = str; return t; };
-  const tip = $("#tip");
-  function showTip(evt, title, rows) {
-    tip.replaceChildren();
-    const b = document.createElement("b"); b.textContent = title; tip.appendChild(b);
-    for (const [key, val, color] of rows) {
-      const r = document.createElement("div"); r.className = "r";
-      const k = document.createElement("span"); if (color) { const i = document.createElement("i"); i.className = "k"; i.style.background = color; k.appendChild(i); } k.appendChild(document.createTextNode(key));
-      const v = document.createElement("strong"); v.textContent = val;
-      r.append(k, v); tip.appendChild(r);
-    }
-    tip.style.display = "block"; moveTip(evt);
-  }
-  function moveTip(evt) { const w = tip.offsetWidth, h = tip.offsetHeight; let x = evt.clientX + 14, y = evt.clientY + 14; if (x + w > innerWidth - 8) x = evt.clientX - w - 14; if (y + h > innerHeight - 8) y = evt.clientY - h - 14; tip.style.left = x + "px"; tip.style.top = y + "px"; }
-  const hideTip = () => { tip.style.display = "none"; };
-  function chartFrame(root, title, how) {
-    root.replaceChildren();
-    const h3 = document.createElement("h3"); h3.textContent = title; root.appendChild(h3);
-    const p = document.createElement("div"); p.className = "how"; p.textContent = how; root.appendChild(p);
-    return root;
-  }
-  function legend(root, items) { const l = document.createElement("div"); l.className = "legend"; for (const [label, color, kind] of items) { const s = document.createElement("span"); const i = document.createElement("i"); if (kind) i.className = kind; if (color) i.style.background = color; s.append(i, document.createTextNode(label)); l.appendChild(s); } root.appendChild(l); }
-  function empty(root, msg = "Pas encore de trade clôturé.") { const d = document.createElement("div"); d.className = "empty"; d.textContent = msg; root.appendChild(d); }
-  const COL = () => { const c = getComputedStyle(document.documentElement); return { tp: c.getPropertyValue("--c-tp").trim(), sl: c.getPropertyValue("--c-sl").trim(), exp: c.getPropertyValue("--c-exp").trim(), grid: c.getPropertyValue("--c-grid").trim(), axis: c.getPropertyValue("--c-axis").trim(), wash: c.getPropertyValue("--c-wash").trim(), card: c.getPropertyValue("--card").trim() }; };
-  const RESULT_ROWS = (st) => [["TP (cible atteinte)", String(st.tp), COL().tp], ["SL (stop touché)", String(st.sl), COL().sl], ["Expirés", String(st.expired), COL().exp], ["Réussite", pct(st.win_rate), null], ["Hasard attendu", pct(st.neutral_win_rate), null], ["P&L net cumulé", signed(st.pnl_pct, 2), null]];
-
-  // Barres horizontales empilées TP / SL / expirés (une ligne par catégorie)
-  function stackedOutcomes(root, title, how, rows) {
-    chartFrame(root, title, how);
-    rows = rows.filter((r) => r.st && r.st.n > 0);
-    if (!rows.length) return empty(root);
-    const c = COL(), W = 420, rowH = 30, left = 96, right = 86, H = rows.length * rowH + 8;
-    const max = Math.max(...rows.map((r) => r.st.n));
-    const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": title }, root);
-    const x = (v) => left + v / max * (W - left - right);
-    rows.forEach((r, i) => {
-      const y = 4 + i * rowH, bh = 18;
-      txt(svg, left - 8, y + bh / 2 + 4, r.label, { "text-anchor": "end" });
-      let cursor = 0;
-      for (const [k, color] of [["tp", c.tp], ["sl", c.sl], ["expired", c.exp]]) {
-        const v = r.st[k]; if (!v) continue;
-        const x0 = x(cursor), x1 = x(cursor + v) - (cursor + v < r.st.n ? 2 : 0);
-        const g = el("rect", { class: "mark", x: x0, y, width: Math.max(1, x1 - x0), height: bh, fill: color, rx: cursor + v >= r.st.n ? 4 : 0 }, svg);
-        g.addEventListener("pointerenter", (e) => showTip(e, r.label, RESULT_ROWS(r.st))); g.addEventListener("pointermove", moveTip); g.addEventListener("pointerleave", hideTip);
-        if (x1 - x0 > 22) txt(svg, (x0 + x1) / 2, y + bh / 2 + 4, String(v), { "text-anchor": "middle", fill: "#fff", style: "fill:#fff;font-weight:600" });
-        cursor += v;
-      }
-      txt(svg, x(r.st.n) + 6, y + bh / 2 + 4, `${pct(r.st.win_rate)} · ${r.st.n} tr.`, { class: "v", style: "font-size:11px" });
+    say("Chargement…");
+    mode = await Y.loadDashboard({
+      onData: (d, m) => { data = d; mode = m; render(); },
+      say,
+      onNoData: () => {
+        say("Aucune donnée : lancez `python run.py ui` sur votre PC, ou renseignez le dépôt et un jeton GitHub dans le mode GitHub Actions (bouton Nouveau trade).");
+        $("#gh-settings").open = true;
+      },
     });
-    legend(root, [["TP (cible atteinte)", c.tp], ["SL (stop touché)", c.sl], ["Expiré (ni l'un ni l'autre en 1 h / 3 h)", c.exp]]);
+    portfolio = null;
+    for (const u of (mode === "local" ? ["/api/portfolio"] : ["portfolio.json", "../data/portfolio.json"])) {
+      try { const r = await fetch(u + (mode === "local" ? "" : "?t=" + Date.now()), { cache: "no-store" }); if (r.ok) { portfolio = await r.json(); break; } } catch (e) { /* suivant */ }
+    }
+    if (data) renderTiles();
   }
 
-  // Réussite par critère contre le hasard attendu (barre + repère)
-  function rateBars(root, title, how, rows) {
-    chartFrame(root, title, how);
-    rows = rows.filter((r) => r.st && r.st.n > 0).sort((a, b) => (b.st.edge ?? -1) - (a.st.edge ?? -1));
-    if (!rows.length) return empty(root, "Aucun trade clôturé avec ce critère pour l'instant.");
-    const c = COL(), W = Math.max(560, Math.round(root.clientWidth || 760) - 34), rowH = 28, left = 190, right = 92, H = rows.length * rowH + 22;
-    const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": title }, root);
-    const x = (v) => left + v * (W - left - right);
-    for (const g of [0, 0.25, 0.5, 0.75, 1]) { el("line", { x1: x(g), x2: x(g), y1: 2, y2: H - 18, stroke: c.grid }, svg); txt(svg, x(g), H - 4, `${g * 100} %`, { "text-anchor": "middle", style: "font-size:11px" }); }
-    rows.forEach((r, i) => {
-      const y = 4 + i * rowH, bh = 16;
-      txt(svg, left - 8, y + bh / 2 + 4, r.label, { "text-anchor": "end" });
-      const bar = el("rect", { class: "mark", x: x(0), y, width: Math.max(2, x(r.st.win_rate || 0) - x(0)), height: bh, fill: r.st.n >= 10 ? c.tp : c.exp, rx: 4 }, svg);
-      const rowsTip = [["Trades", String(r.st.n), null], ["Réussite", pct(r.st.win_rate), null], ["Hasard attendu", pct(r.st.neutral_win_rate), null], ["Avantage", signed((r.st.edge || 0) * 100, 1, " pt"), null], ["Poids appris", r.weight == null ? "n/a" : r.weight.toFixed(2), null]];
-      bar.addEventListener("pointerenter", (e) => showTip(e, r.label, rowsTip)); bar.addEventListener("pointermove", moveTip); bar.addEventListener("pointerleave", hideTip);
-      if (r.st.neutral_win_rate != null) el("rect", { x: x(r.st.neutral_win_rate) - 1, y: y - 3, width: 2, height: bh + 6, fill: "currentColor", style: "color:var(--text)" }, svg);
-      txt(svg, x(Math.max(r.st.win_rate || 0, r.st.neutral_win_rate || 0)) + 8, y + bh / 2 + 4, `${pct(r.st.win_rate)} (${r.st.n})`, { class: "v", style: "font-size:11px" });
-    });
-    legend(root, [["Réussite (≥ 10 trades)", c.tp], ["Réussite (moins de 10 trades : pas encore significatif)", c.exp], ["Hasard attendu", null, "tick"]]);
-  }
-
-  // Colonnes : trades par heure d'émission
-  function hourColumns(root, title, how, byHour) {
-    chartFrame(root, title, how);
-    const hours = Object.keys(byHour || {}).sort();
-    const total = hours.reduce((a, h) => a + byHour[h].n, 0);
-    if (!total) return empty(root);
-    const c = COL(), W = 420, H = 176, left = 30, bottom = 22, top = 16;
-    const max = Math.max(...hours.map((h) => byHour[h].n));
-    const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": title }, root);
-    const slot = (W - left) / 24, bw = Math.min(18, slot - 3);
-    const y = (v) => top + (1 - v / max) * (H - top - bottom);
-    el("line", { x1: left, x2: W, y1: y(0), y2: y(0), stroke: c.axis }, svg);
-    txt(svg, left - 6, y(max) + 4, String(max), { "text-anchor": "end", style: "font-size:11px" });
-    hours.forEach((h, i) => {
-      const st = byHour[h]; const x0 = left + i * slot + (slot - bw) / 2;
-      if (i % 3 === 0) txt(svg, left + i * slot + slot / 2, H - 6, `${h}h`, { "text-anchor": "middle", style: "font-size:11px" });
-      if (!st.n) return;
-      const hit = el("rect", { x: left + i * slot, y: top, width: slot, height: H - top - bottom, fill: "transparent" }, svg);
-      const bar = el("rect", { class: "mark", x: x0, y: y(st.n), width: bw, height: y(0) - y(st.n), fill: st.n >= 3 && st.win_rate > st.neutral_win_rate ? c.tp : c.exp, rx: 4 }, svg);
-      for (const t of [hit, bar]) { t.addEventListener("pointerenter", (e) => showTip(e, `${h}h (heure de Paris)`, RESULT_ROWS(st))); t.addEventListener("pointermove", moveTip); t.addEventListener("pointerleave", hideTip); }
-      if (st.n === max) txt(svg, x0 + bw / 2, y(st.n) - 4, String(st.n), { class: "v", "text-anchor": "middle", style: "font-size:11px" });
-    });
-    legend(root, [["Heure au-dessus du hasard (≥ 3 trades)", c.tp], ["Autres heures", c.exp]]);
-  }
-
-  // Courbe du P&L net cumulé (en % du prix, un point par trade clôturé)
-  function equityLine(root, title, how, pts) {
-    chartFrame(root, title, how);
-    if (!pts || pts.length < 2) return empty(root, "La courbe apparaît à partir de deux trades clôturés.");
-    const c = COL(), W = Math.max(360, Math.round(root.clientWidth || 900) - 34), H = W < 500 ? 200 : 220, left = 46, right = 70, top = 12, bottom = 24;
-    const vals = [0, ...pts.map((p) => p.cum_pnl_pct)], min = Math.min(...vals), max = Math.max(...vals), span = (max - min) || 1;
-    const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": title }, root);
-    const x = (i) => left + i / (pts.length - 1) * (W - left - right), y = (v) => top + (max - v) / span * (H - top - bottom);
-    const step = niceStep(span); for (let g = Math.ceil(min / step) * step; g <= max + 1e-9; g += step) { el("line", { x1: left, x2: W - right, y1: y(g), y2: y(g), stroke: Math.abs(g) < 1e-9 ? c.axis : c.grid }, svg); txt(svg, left - 6, y(g) + 4, signed(g, step < 1 ? 1 : 0), { "text-anchor": "end", style: "font-size:11px" }); }
-    const path = pts.map((p, i) => `${i ? "L" : "M"}${x(i).toFixed(1)},${y(p.cum_pnl_pct).toFixed(1)}`).join(" ");
-    el("path", { d: `${path} L${x(pts.length - 1).toFixed(1)},${y(0).toFixed(1)} L${x(0).toFixed(1)},${y(0).toFixed(1)} Z`, fill: c.wash }, svg);
-    el("path", { d: path, fill: "none", stroke: c.tp, "stroke-width": 2, "stroke-linejoin": "round", "stroke-linecap": "round" }, svg);
-    const last = pts[pts.length - 1];
-    el("circle", { cx: x(pts.length - 1), cy: y(last.cum_pnl_pct), r: 4, fill: c.tp, stroke: c.card, "stroke-width": 2 }, svg);
-    txt(svg, x(pts.length - 1) + 8, y(last.cum_pnl_pct) + 4, signed(last.cum_pnl_pct, 2), { class: "v" });
-    txt(svg, left, H - 6, pts[0].label, { style: "font-size:11px" }); txt(svg, W - right, H - 6, last.label, { "text-anchor": "end", style: "font-size:11px" });
-    const cross = el("line", { x1: 0, x2: 0, y1: top, y2: H - bottom, stroke: c.axis, "stroke-dasharray": "0", visibility: "hidden" }, svg);
-    const dot = el("circle", { r: 5, fill: c.tp, stroke: c.card, "stroke-width": 2, visibility: "hidden" }, svg);
-    const hit = el("rect", { x: left, y: top, width: W - left - right, height: H - top - bottom, fill: "transparent" }, svg);
-    hit.addEventListener("pointermove", (e) => {
-      const r = svg.getBoundingClientRect(); const px = (e.clientX - r.left) / r.width * W; const i = Math.max(0, Math.min(pts.length - 1, Math.round((px - left) / (W - left - right) * (pts.length - 1))));
-      const p = pts[i]; cross.setAttribute("x1", x(i)); cross.setAttribute("x2", x(i)); cross.setAttribute("visibility", "visible"); dot.setAttribute("cx", x(i)); dot.setAttribute("cy", y(p.cum_pnl_pct)); dot.setAttribute("visibility", "visible");
-      showTip(e, `${p.label} · ${p.asset_label} ${p.direction}`, [["Résultat", RES[p.status] || p.status, null], ["Ce trade", signed(p.pnl_pct, 3), null], ["Cumul net", signed(p.cum_pnl_pct, 3), c.tp]]);
-    });
-    hit.addEventListener("pointerleave", () => { hideTip(); cross.setAttribute("visibility", "hidden"); dot.setAttribute("visibility", "hidden"); });
-  }
-  function niceStep(span) { const raw = span / 4, p = Math.pow(10, Math.floor(Math.log10(raw))); const m = raw / p; return (m < 1.5 ? 1 : m < 3.5 ? 2 : m < 7.5 ? 5 : 10) * p; }
-
-  let resizeTimer = null;
-  addEventListener("resize", () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(() => { if (data) { try { renderCharts(data); } catch (e) { /* silencieux */ } } }, 200); });
-  function renderCharts(d) {
-    equityLine($("#ch-equity"), "P&L net cumulé, trade après trade", "Chaque point est un trade clôturé (en % du prix, coûts déduits). Une courbe qui monte régulièrement est le seul vrai signe d'avantage ; survolez pour voir chaque trade.", d.equity_curve || []);
-    stackedOutcomes($("#ch-assets"), "Résultats par actif", "Nombre de trades par issue. À droite : taux de réussite et nombre de trades.", d.assets.map((a) => ({ label: a.label.replace(/ \(.*\)/, ""), st: a.stats })));
-    hourColumns($("#ch-hours"), "Trades par heure d'émission", "Heure de Paris. Montre quand le bot trade ; une colonne bleue = heure où la réussite dépasse le hasard, avec au moins 3 trades.", d.by_hour_local);
-    stackedOutcomes($("#ch-direction"), "Par sens", "Longs (achat) contre shorts (vente). Un déséquilibre marqué signale un biais des indicateurs.", [["long", "Long"], ["short", "Short"]].map(([k, l]) => ({ label: l, st: (d.by_direction || {})[k] })));
-    stackedOutcomes($("#ch-horizon"), "Par horizon", "Scalp ~1 h (base 5 min) contre intraday ~3 h (base 15 min).", Object.entries(d.by_horizon || {}).map(([k, st]) => ({ label: k === "1h" ? "Scalp ~1 h" : `Intraday ~${k}`, st })));
-    stackedOutcomes($("#ch-confidence"), "Par confiance", "« Fort » = au moins 5 critères alignés et score ≥ 5 ; « moyen » = 3 ou 4 critères.", [["fort", "Fort"], ["moyen", "Moyen"]].map(([k, l]) => ({ label: l, st: (d.by_confidence || {})[k] })));
-    stackedOutcomes($("#ch-source"), "Par source", "Qui a demandé le trade : le bot seul, vous (manuel), une proposition, ou les fantômes suivis en silence.", [["bot", "Bot"], ["manual", "Manuel"], ["request", "Proposition"], ["shadow", "Fantôme"]].map(([k, l]) => ({ label: l, st: (d.by_source || {})[k] })));
-    rateBars($("#ch-criteria"), "Réussite par indicateur contre le hasard attendu", "Barre = taux de réussite des trades où l'indicateur était aligné ; le trait vertical = ce qu'aurait donné le hasard avec les mêmes TP / SL. Une barre qui dépasse son trait est un indicateur qui aide ; en gris, l'échantillon est trop petit pour conclure.", d.criteria.map((c) => ({ label: c.label, st: c.stats, weight: c.weight })));
-  }
-
+  // ------------------------------------------------------------------ rendu
   function render() {
     const d = data;
     const when = new Date(d.updated_at);
-    $("#updated").textContent = `Mis à jour le ${when.toLocaleString("fr-FR")} (${d.timezone}) — mode ${mode === "local" ? "local" : mode === "mcp" ? "connecté à GitHub via claude.ai (mise à jour toutes les 5 min)" : mode === "github" ? "GitHub (lecture via l'API, mise à jour toutes les 5 min)" : "lecture seule"}` +
-      (d.state && d.state.last_scan ? ` — dernier scan ${new Date(d.state.last_scan).toLocaleTimeString("fr-FR")} (${esc(d.state.last_scan_note || "")})` : "");
-    $("#btn-scan").style.display = mode === "local" ? "" : "none";
+    const day = when.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" });
+    say(`${day.charAt(0).toUpperCase() + day.slice(1)} · mis à jour à ${Y.hhmm(when)}` + (mode !== "static" ? ` · ${Y.modeText(mode)}` : ""));
+    Y.status(d.state && d.state.last_scan, d.state && d.state.last_scan_note);
+    $("#btn-scan").hidden = mode !== "local";
     $("#gh-settings").style.display = (mode === "local" || mode === "mcp") ? "none" : "";
-
-    const v = d.overview.visible, s = d.overview.shadow;
-    try { renderCharts(d); } catch (e) { console.error("graphiques :", e); }
-    $("#kpis").innerHTML = [
-      kpi("Trades clôturés", v.n, `${v.tp} TP · ${v.sl} SL · ${v.expired} expirés`),
-      kpi("Taux de réussite", pct(v.win_rate), `hasard attendu ${pct(v.neutral_win_rate)}`),
-      kpi("Avantage", signed(v.edge === null ? null : v.edge * 100, 0, " pts"), "réussite − hasard", cls(v.edge)),
-      kpi("P&L net cumulé", signed(v.pnl_pct), "somme des % par trade", cls(v.pnl_pct)),
-      kpi("Signaux ouverts", d.overview.open, `${d.overview.open_shadow} fantômes ouverts`),
-      kpi("Fantômes clôturés", s.n, `réussite ${pct(s.win_rate)} · hasard ${pct(s.neutral_win_rate)}`),
-      d.portfolio ? kpi("Simulation de compte", `${Number(d.portfolio.balance).toLocaleString("fr-FR", {maximumFractionDigits: 2})} ${d.portfolio.currency}`,
-        `${signed(d.portfolio.pnl, 2, " " + d.portfolio.currency)} · ${d.portfolio.trades} trade(s)${d.portfolio.is_default ? " · balance par défaut" : ""}`, cls(d.portfolio.pnl)) : "",
-    ].join("");
-
-    // actifs (formulaire + tableau)
-    fillAssets(d.assets.map((a) => [a.key, a.label]));
-    if (live) live.setAssets(d.assets.map((a) => [a.key, a.label]));
-    $("#assets tbody").innerHTML = d.assets.map((a) => `<tr>
-      <td>${esc(a.label)}${a.trial && !a.trial_promoted ? ` <span class="pill" title="Suivi en silence : annoncé seulement après avoir fait ses preuves">à l'essai</span>` : ""}${a.open ? ` <span class="pill open">${a.open} ouvert(s)</span>` : ""}</td>
-      <td class="num">${a.stats.n}</td><td class="num">${pct(a.stats.win_rate)}</td><td class="num">${pct(a.stats.neutral_win_rate)}</td>
-      <td class="num ${cls(a.stats.edge)}">${a.stats.edge === null ? "n/a" : signed(a.stats.edge * 100, 0, " pts")}</td>
-      <td class="num ${cls(a.stats.pnl_pct)}">${signed(a.stats.pnl_pct)}</td>
-      <td class="num">${a.shadow.n} (${pct(a.shadow.win_rate)})</td>
-      <td>${a.session_utc ? a.session_utc[0] + "h–" + a.session_utc[1] + "h" : "24/7"}</td></tr>`).join("");
-
-    // signaux ouverts
-    $("#open tbody").innerHTML = d.open_signals.length ? d.open_signals.map((t) => `<tr>
-      <td>${esc(t.created_local)}</td><td>${esc(t.asset_label)}</td><td>${t.direction === "long" ? "🟢 long" : "🔴 short"}</td>
-      <td class="num">${t.entry}</td><td class="num">${t.take_profit}</td><td class="num">${t.stop_loss}</td>
-      <td>${esc(t.confidence)}</td><td><span class="pill">${SRC[t.source] || esc(t.source)}</span></td></tr>`).join("")
-      : `<tr><td colspan="8" class="muted">Aucun signal ouvert.</td></tr>`;
-
-    // critères
-    $("#criteria").innerHTML = d.criteria.map((c) => {
-      const st = c.stats;
-      const wr = st.win_rate === null ? 0 : st.win_rate;
-      const rows = c.last_trades.map((t) => `<div><span>${esc(t.created_local)} · ${esc(t.asset_label)} · ${t.direction}</span>
-        <span><span class="pill ${t.status}">${RES[t.status] || t.status}</span> <span class="${cls(t.pnl_pct)}">${signed(t.pnl_pct)}</span> <span class="muted">${SRC[t.source] || ""}</span></span></div>`).join("");
-      return `<div class="card"><h3><span>${esc(c.label)}</span><span class="muted">poids ${c.weight ?? "1.0"}</span></h3>
-        <div class="muted">${st.n} trades · réussite <b class="${cls(st.edge)}">${pct(st.win_rate)}</b> (hasard ${pct(st.neutral_win_rate)}) · P&L moyen <span class="${cls(st.avg_pnl_pct)}">${signed(st.avg_pnl_pct, 3)}</span></div>
-        <div class="bar"><i style="width:${(wr * 100).toFixed(0)}%"></i></div>
-        <div class="muted" style="font-size:12px;margin-top:4px">bot ${c.by_source.bot.n} · manuel ${c.by_source.manual.n} · propositions ${(c.by_source.request || {n: 0}).n} · fantôme ${c.by_source.shadow.n}</div>
-        <div class="mini">${rows || '<div class="muted">Pas encore de trade avec cet indicateur.</div>'}</div></div>`;
-    }).join("");
-
-    // trades
-    $("#trades tbody").innerHTML = d.recent_trades.length ? d.recent_trades.map((t) => `<tr>
-      <td>${esc(t.created_local)}</td><td>${esc(t.asset_label)}</td><td>${t.direction}</td>
-      <td><span class="pill ${t.status}">${RES[t.status] || t.status}</span></td>
-      <td class="num ${cls(t.pnl_pct)}">${signed(t.pnl_pct)}</td><td class="num">${t.duration_minutes ?? "-"} min</td>
-      <td>${esc(t.confidence)}</td><td>${SRC[t.source] || esc(t.source)}</td><td class="muted">${esc((t.criteria || []).join(", "))}</td></tr>`).join("")
-      : `<tr><td colspan="9" class="muted">Aucun trade clôturé pour l'instant.</td></tr>`;
-
-    // backtests
-    const bts = Object.values(d.backtests || {});
-    $("#backtests tbody").innerHTML = bts.length ? bts.map((b) => `<tr><td>${esc(b.asset_label)}</td><td>${esc(b.period)}</td>
-      <td class="num">${b.n}</td><td class="num">${pct(b.win_rate)}</td><td class="num">${pct(b.neutral_win_rate)}</td>
-      <td class="num ${cls(b.edge)}">${b.edge === null || b.edge === undefined ? "n/a" : signed(b.edge * 100, 0, " pts")}</td>
-      <td class="num ${cls(b.pnl_pct)}">${signed(b.pnl_pct)}</td><td class="num">${signed(b.expectancy_pct, 3)}</td></tr>`).join("")
-      : `<tr><td colspan="8" class="muted">Aucun backtest : lancez <code>python run.py backtest --offline</code>.</td></tr>`;
-
-    // apprentissage
-    const adj = d.adjustments || {};
-    const src = adj.sample_by_source || {};
-    const srcTxt = Object.keys(src).length ? " (" + Object.entries(src).map(([k, n]) => `${SRC[k] || k} ${n}`).join(", ") + ")" : "";
-    const vr = Object.values(adj.variants || {});
-    const r2 = (v) => v == null ? "n/a" : (v >= 0 ? "+" : "") + Number(v).toFixed(2).replace(".", ",") + " R";
-    $("#learning").innerHTML = `<div class="muted">Échantillon : ${adj.sample ?? 0} trades${esc(srcTxt)}` +
-      (adj.avoid_hours_utc && adj.avoid_hours_utc.length ? ` · tranches évitées (UTC) : ${adj.avoid_hours_utc.join(", ")}h` : "") + `</div>` +
-      `<div class="muted" style="margin-top:4px">Méthode : les poids sont recalculés à chaque passage à partir de tous les trades, et ne bougent que si l'écart avec le hasard dépasse la marge de sécurité. Un trade réel compte pour 1, un fantôme pour 0,6, un trade de backtest pour 0,25.</div>` +
-      ((adj.notes || []).length ? "<ul>" + adj.notes.map((n) => `<li>${esc(n)}</li>`).join("") + "</ul>" : `<div class="muted" style="margin-top:6px">Pas encore de données.</div>`) +
-      (vr.length ? `<table style="margin-top:8px"><thead><tr><th>Variante testée en fantôme</th><th class="num">Trades</th><th class="num">Gain net moyen</th><th>Statut</th></tr></thead><tbody>` +
-        vr.map((v) => `<tr><td>${esc(v.label)}</td><td class="num">${v.n}</td><td class="num">${r2(v.mean_net_r)}</td><td>${v.promoted ? "promue en signaux réels" : `en test${v.missing ? ` (encore ${v.missing} trades)` : ""}`}</td></tr>`).join("") +
-        `</tbody></table><div class="muted" style="margin-top:4px">Une variante passe en signaux réels quand, sur au moins 100 trades, elle fait au moins aussi bien que les signaux réels du bot${adj.baseline && adj.baseline.mean_net_r != null ? ` (actuellement ${r2(adj.baseline.mean_net_r)} net par trade sur ${adj.baseline.n})` : ""}.</div>` : "");
+    renderHero(); renderTiles();
+    const list = d.assets.map((a) => [a.key, a.label, !!(a.trial && !a.trial_promoted)]);
+    if (live) live.setAssets(list);
+    fillAssetSelects();
+    try { YKCharts.equityLine($("#ch-equity"), d.equity_curve || [], { height: 220 }); } catch (e) { console.error("courbe :", e); }
+    const tot = d.overview.visible.pnl_pct;
+    $("#eq-total").innerHTML = d.overview.visible.n ? `<span class="pill ${Y.tone(tot)}"><b>${Y.pctv(tot, 2)}</b></span>` : "";
+    renderAssets(); renderOpen(); renderTrades(); renderLinks();
+    if (location.hash === "#trade" && !$("#trade-modal").open) openTrade();
   }
 
-  function ghSettings() {
-    try {
-      const owner = (localStorage.getItem("tb-gh-owner") || "").trim(), repo = (localStorage.getItem("tb-gh-repo") || "").trim(), token = (localStorage.getItem("tb-gh-token") || "").trim();
-      return owner && repo && token ? { owner, repo, token } : null;
-    } catch (e) { return null; }
-  }
-
-  function kpi(label, value, sub, klass = "") {
-    return `<div class="card kpi"><div class="s">${esc(label)}</div><div class="v ${klass}">${esc(value)}</div><div class="s">${esc(sub)}</div></div>`;
-  }
-
-  // ---- actions
-  $("#btn-refresh").addEventListener("click", load);
-  $("#btn-scan").addEventListener("click", async () => {
-    const b = $("#btn-scan"); b.disabled = true;
-    try { await fetch("/api/scan", { method: "POST" }); await load(); } finally { b.disabled = false; }
-  });
-
-  const ghFields = ["owner", "repo", "token"];
-  try { ghFields.forEach((k) => { const v = localStorage.getItem("tb-gh-" + k); if (v) $("#gh-" + k).value = v; }); } catch (e) {}
-  function ghStatus() {
-    const el = $("#gh-status"); if (!el) return;
-    const gh = ghSettings();
-    el.textContent = gh ? `Jeton GitHub enregistré dans ce navigateur pour ${gh.owner}/${gh.repo}.` : "Aucun jeton GitHub enregistré dans ce navigateur : les boutons ne peuvent pas déclencher le bot tant qu'il n'est pas renseigné puis enregistré.";
-  }
-  ghStatus();
-  $("#gh-test").addEventListener("click", async () => {
-    const el = $("#gh-status"); const gh = ghSettings();
-    if (!gh) { el.textContent = "Enregistrez d'abord le jeton."; return; }
-    el.textContent = "Test en cours…";
-    try {
-      const r = await fetch(`https://api.github.com/repos/${gh.owner}/${gh.repo}/actions/workflows`, { headers: { "Authorization": "Bearer " + gh.token, "Accept": "application/vnd.github+json" } });
-      if (r.status === 200) { const j = await r.json(); el.textContent = `Jeton valide : ${j.total_count} workflow(s) visibles. Vous pouvez utiliser les boutons.`; }
-      else if (r.status === 401) el.textContent = "Jeton refusé (401) : il est invalide ou expiré. Générez-en un nouveau (fine-grained, dépôt Trading-Bot, Actions : Read and write).";
-      else if (r.status === 403 || r.status === 404) el.textContent = `Accès refusé (${r.status}) : le jeton n'a pas la permission Actions sur ce dépôt, ou le dépôt est mal orthographié.`;
-      else el.textContent = `Réponse inattendue de GitHub (${r.status}).`;
-    } catch (e) { el.textContent = "Impossible de joindre GitHub : " + e.message; }
-  });
-  $("#gh-save").addEventListener("click", () => {
-    try { ghFields.forEach((k) => localStorage.setItem("tb-gh-" + k, $("#gh-" + k).value.trim())); $("#m-msg").textContent = "Paramètres GitHub enregistrés dans ce navigateur."; ghStatus(); load(); }
-    catch (e) { $("#m-msg").textContent = "Impossible d'enregistrer (stockage du navigateur indisponible)."; }
-  });
-
-  async function dispatchGitHub(inputs, { retryOnce = false } = {}) {
-    if (mcp) {
-      const consent = await ensureConsent();
-      if (consent === "denied") throw new Error("Accès GitHub refusé pour cette page. Rechargez la page et acceptez l'invite d'autorisation de claude.ai.");
-      const { owner, repo } = ghRepo();
-      const call = () => mcp.callTool("github", "actions_run_trigger", { method: "run_workflow", owner, repo, workflow_id: "bot.yml", ref: "main", inputs });
-      try {
-        await call();
-      } catch (err) {
-        // Premier appel dont l'invite d'autorisation n'a pas pu être posée : l'appel n'est pas parti, réessayer est sûr
-        if (retryOnce && err && err.retryable) {
-          await sleep(Math.min(err.retryAfterMs || 3000, 10000));
-          try { await call(); return; } catch (err2) { throw new Error(mcpErrorText(err2)); }
-        }
-        throw new Error(mcpErrorText(err));
-      }
+  function renderHero() {
+    const v = data.overview.visible, h = $("#hero");
+    h.removeAttribute("aria-busy");
+    if (!v.n || v.edge === null) {
+      h.innerHTML = `<div class="lab">Avantage face au hasard</div><div class="big"><b>n/a</b></div><p>Pas encore de trade clôturé : la comparaison avec le hasard apparaîtra au premier résultat.</p>`;
       return;
     }
-    const gh = ghSettings();
-    if (!gh) { $("#gh-settings").open = true; throw new Error("Aucun jeton GitHub enregistré dans ce navigateur : dépliez « Mode GitHub Actions », collez votre jeton, cliquez « Enregistrer », puis réessayez."); }
-    const r = await fetch(`https://api.github.com/repos/${gh.owner}/${gh.repo}/actions/workflows/bot.yml/dispatches`, {
-      method: "POST",
-      headers: { "Authorization": "Bearer " + gh.token, "Accept": "application/vnd.github+json", "Content-Type": "application/json" },
-      body: JSON.stringify({ ref: "main", inputs }),
-    });
-    if (r.status !== 204) throw new Error(`GitHub a répondu ${r.status} : vérifiez le jeton (Actions : lecture/écriture) et le dépôt.`);
+    const p = v.neutral_win_rate ?? 0.4, decided = v.tp + v.sl;
+    // trades nécessaires pour qu'un avantage de 10 points soit détecté (risque 5 %, puissance 80 %)
+    const need = Math.ceil(7.84 * p * (1 - p) / 0.01);
+    const first = (data.equity_curve || [])[0];
+    const days = first ? Math.max(1, (Date.now() - new Date(first.t).getTime()) / 86400000) : 1;
+    const perDay = v.n / days, left = Math.max(0, need - v.n);
+    const se = Math.sqrt(p * (1 - p) / Math.max(1, decided));
+    let verdict = ["Pas encore significatif", "neu"];
+    if (v.n >= need) verdict = v.edge > 1.96 * se ? ["Avantage significatif", "up"] : v.edge < -1.96 * se ? ["Désavantage significatif", "dn"] : ["Pas d'avantage prouvé", "neu"];
+    const edgePts = v.edge * 100;
+    h.innerHTML = `
+      <div class="lab">Avantage face au hasard <button type="button" class="info" title="Écart entre le taux de réussite du bot et celui qu'obtiendrait une pièce jetée avec les mêmes TP et SL. C'est la barre à dépasser.">${Y.I.info}</button></div>
+      <div class="big"><b id="hero-v"></b><span>points</span></div>
+      <p>${Y.pct(v.win_rate)} de trades gagnants, contre ${Y.pct(v.neutral_win_rate)} attendus au hasard avec les mêmes TP et SL.</p>
+      <div class="cmp"><div class="h"><span>Bot</span><span class="up">${Y.pct(v.win_rate)}</span></div><div class="track"><i style="width:${(v.win_rate * 100).toFixed(1)}%"></i></div></div>
+      <div class="cmp neu"><div class="h"><span>Hasard attendu</span><span>${Y.pct(v.neutral_win_rate)}</span></div><div class="track"><i style="width:${(v.neutral_win_rate * 100).toFixed(1)}%"></i></div></div>
+      <hr>
+      <div class="rel"><span>Fiabilité de la mesure</span><span class="pill ${verdict[1]}">${verdict[0]}</span></div>
+      <div class="prog"><i style="width:${Math.min(100, v.n / need * 100).toFixed(1)}%"></i></div>
+      <div class="muted">${v.n} trades réels sur environ ${need} nécessaires pour trancher${left ? `. Encore ~${Math.ceil(left / Math.max(perDay, 0.1))} jours au rythme actuel.` : "."}</div>`;
+    Y.countTo($("#hero-v"), edgePts, (x) => Y.signed(x, 1));
   }
 
-  $("#m-propose").addEventListener("click", async () => {
-    const btn = $("#m-propose"); const msg = $("#m-msg");
-    const asset = $("#m-asset").value;
-    btn.disabled = true; msg.textContent = "Analyse en cours…";
-    try {
-      if (mode === "local") {
-        const r = await fetch("/api/propose", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ asset }) });
-        const j = await r.json();
-        if (!r.ok || !j.ok) throw new Error(j.error || "erreur");
-        msg.textContent = j.text;
-        await load();
-      } else {
-        await dispatchGitHub({ command: "propose", asset }, { retryOnce: true });
-        msg.textContent = "Analyse lancée sur GitHub Actions : la lecture des indicateurs et l'éventuelle proposition arrivent sur Telegram dans 1 à 2 minutes.";
+  function tile(label, value, sub, extra, badge) {
+    return `<div class="card tile"><div><div class="th"><span>${label}</span>${badge || ""}</div><div class="v">${value}</div></div><div class="s">${sub}</div>${extra || ""}</div>`;
+  }
+  function renderTiles() {
+    if (!data) return;
+    const v = data.overview.visible, s = data.overview.shadow, pf = data.portfolio || {};
+    const cur = pf.currency || "$";
+    const bal = portfolio ? [Number(portfolio.balance_initial), ...(portfolio.history || []).map((h) => Number(h.balance_after))] : null;
+    const eq = [0, ...(data.equity_curve || []).map((p) => p.cum_pnl_pct)];
+    const started = pf.started_at ? Y.ddmm(pf.started_at) : "";
+    const stack = v.n ? `<div class="stackbar">${[["tp", "var(--up)"], ["sl", "var(--dn)"], ["expired", "var(--neu)"]].map(([k, c]) => v[k] ? `<i style="flex:${v[k]};background:${c}"></i>` : "").join("")}</div>
+      <div class="legend"><span><i style="background:var(--up)"></i>${v.tp} TP</span><span><i style="background:var(--dn)"></i>${v.sl} SL</span><span><i style="background:var(--neu)"></i>${v.expired} expirés</span></div>` : "";
+    $("#tiles").innerHTML = [
+      pf.balance !== undefined ? tile("Balance simulée", `<span id="t-bal"></span>`,
+        `<span class="${Y.tone(pf.pnl)}">${Y.smoney(pf.pnl, cur)}</span> depuis le ${started}, soit <span class="${Y.tone(pf.pnl)}">${Y.signed(pf.pnl_pct, 1)}${Y.NB}%</span>`,
+        bal && bal.length > 1 ? Y.spark(bal, pf.pnl >= 0 ? "var(--up)" : "var(--dn)") : "", `<span class="pill">${Y.num(pf.risk_pct, 0)}${Y.NB}% de risque</span>`) : "",
+      tile("Résultat cumulé", `<span id="t-pnl"></span>`, `${v.n} trades, en moyenne <span class="${Y.tone(v.avg_pnl_pct)}">${Y.pctv(v.avg_pnl_pct, 2)}</span> par trade`, Y.spark(eq, v.pnl_pct >= 0 ? "var(--up)" : "var(--dn)")),
+      tile("Trades clôturés", `<span id="t-n"></span>`, stack || "Aucun pour l'instant", ""),
+      tile("Suivi en ombre", `<span id="t-sh"></span>`, s.n ? `Testés sans toucher au compte : <span class="up">${Y.pct(s.win_rate)}</span> gagnants contre ${Y.pct(s.neutral_win_rate)} au hasard` : "Aucun trade testé en silence pour l'instant", "", `<span class="pill brand">hors compte</span>`),
+    ].join("");
+    if (pf.balance !== undefined) Y.countTo($("#t-bal"), Number(pf.balance), (x) => Y.money(x, cur));
+    Y.countTo($("#t-pnl"), v.pnl_pct, (x) => Y.pctv(x, 2));
+    Y.countTo($("#t-n"), v.n, (x) => String(Math.round(x)));
+    Y.countTo($("#t-sh"), s.n, (x) => String(Math.round(x)));
+    const tiles = $("#tiles"), dots = $("#tile-dots");
+    dots.innerHTML = [0, 1, 2].map((i) => `<i class="${i ? "" : "on"}"></i>`).join("");
+    tiles.onscroll = () => { const i = Math.round(tiles.scrollLeft / Math.max(1, tiles.scrollWidth - tiles.clientWidth) * 2); dots.querySelectorAll("i").forEach((d, k) => d.classList.toggle("on", k === i)); };
+  }
+
+  function renderAssets() {
+    const rows = data.assets, max = Math.max(1, ...rows.map((a) => a.stats.n));
+    $("#asset-rows").innerHTML = rows.map((a) => {
+      const st = a.stats, trial = a.trial && !a.trial_promoted;
+      const bar = st.n ? `<div class="bar" style="width:${(st.n / max * 100).toFixed(1)}%" title="${st.tp} TP · ${st.sl} SL · ${st.expired} expirés · réussite ${Y.pct(st.win_rate)} contre ${Y.pct(st.neutral_win_rate)} au hasard">${[["tp", "var(--up)"], ["sl", "var(--dn)"], ["expired", "var(--neu)"]].map(([k, c]) => st[k] ? `<i style="flex:${st[k]};background:${c}"></i>` : "").join("")}</div>` : `<div class="bar none"></div>`;
+      return `<div class="asset-row"><span class="nm">${esc(Y.shortLabel(a.label))}${trial ? ` <span class="pill brand" style="padding:1px 6px;font-size:11px" title="Suivi en silence : annoncé seulement après avoir fait ses preuves">essai</span>` : ""}</span>
+        ${bar}<span class="n mono">${st.n || ""}</span><span class="r ${st.n ? Y.tone(st.pnl_pct) : "faint"}">${st.n ? Y.pctv(st.pnl_pct, 2) : "aucun"}</span></div>`;
+    }).join("");
+  }
+
+  // ------------------------------------------------------------------ signaux en cours (et notification des nouveaux)
+  function seenIds() { try { return JSON.parse(Y.store.get("tb-seen-signals") || "null"); } catch (e) { return null; } }
+  function renderOpen() {
+    const sigs = data.open_signals || [];
+    const seen = seenIds(), fresh = new Set();
+    for (const s of sigs) {
+      if (seen && !seen.includes(s.id) && Date.now() - new Date(s.created_at).getTime() < 45 * 60000) {
+        fresh.add(s.id);
+        Y.toast({ title: "Nouveau signal", text: `${s.direction === "long" ? "Achat" : "Vente"} ${Y.shortLabel(s.asset_label)} · entrée ${Y.price(s.entry)}`,
+                  meta: `TP ${Y.price(s.take_profit)} · SL ${Y.price(s.stop_loss)} · gain/risque ${Y.num(s.risk_reward, 2)}`,
+                  actions: [["Voir sur le graphique", () => { if (live) live.select(s.asset); $("#ch-live").scrollIntoView({ behavior: "smooth", block: "start" }); }], ["Ignorer", null]] });
       }
-    } catch (e) { msg.textContent = "Échec : " + e.message; }
-    finally { btn.disabled = false; }
-  });
+    }
+    Y.store.set("tb-seen-signals", JSON.stringify([...(seen || []), ...sigs.map((s) => s.id)].slice(-200)));
+    const det = document.getElementById("en-cours");
+    if (det && det.setHint) det.setHint(sigs.length ? `${sigs.length} signal${sigs.length > 1 ? "s" : ""} en cours` : "aucun signal en cours");
+    $("#open-card").innerHTML = sigs.length ? `<div class="tbl"><table><thead><tr><th>Ouvert</th><th>Actif</th><th>Sens</th><th class="num">Entrée</th><th class="num">TP</th><th class="num">SL</th><th>Gain/risque</th><th>Expire</th><th>Source</th></tr></thead><tbody>${
+      sigs.map((s) => `<tr class="${fresh.has(s.id) ? "fresh" : ""}"><td class="mono nowrap">${esc(s.created_local)}</td><td class="nowrap"><b>${esc(Y.shortLabel(s.asset_label))}</b>${fresh.has(s.id) ? ' <span class="pill solid">Nouveau</span>' : ""}</td><td>${Y.dirHtml(s.direction)}</td>
+        <td class="num">${Y.price(s.entry)}</td><td class="num up">${Y.price(s.take_profit)}</td><td class="num dn">${Y.price(s.stop_loss)}</td><td class="mono">${Y.num(s.risk_reward, 2)}</td>
+        <td class="nowrap">${s.expires_at ? Y.hhmm(s.expires_at) : ""}</td><td><span class="pill open"><span class="d"></span>${esc(Y.SRC[s.source] || s.source)}</span></td></tr>`).join("")}</tbody></table></div>`
+      : `<div class="empty" style="padding:0">Aucun signal en cours. Le bot analyse les marchés toutes les 5 minutes.</div>`;
+    if (fresh.size) setTimeout(() => document.querySelectorAll("#open-card tr.fresh").forEach((r) => r.classList.remove("fresh")), 4000);
+  }
+
+  // ------------------------------------------------------------------ derniers trades (filtres et pagination)
+  function fillAssetSelects() {
+    const opts = data.assets.map((a) => `<option value="${esc(a.key)}">${esc(Y.shortLabel(a.label))}</option>`).join("");
+    const fa = $("#f-asset"), cur = fa.value; fa.innerHTML = `<option value="">Tous les actifs</option>` + opts; fa.value = cur;
+    const ma = $("#m-asset"), cm = ma.value; ma.innerHTML = data.assets.map((a) => `<option value="${esc(a.key)}">${esc(a.label)}</option>`).join(""); if (cm) ma.value = cm;
+  }
+  function renderTrades() {
+    const all = data.recent_trades || [];
+    const list = all.filter((t) => (!filt.asset || t.asset === filt.asset) && (!filt.source || t.source === filt.source) && (!filt.status || t.status === filt.status));
+    const shown = list.slice(0, tradeLimit);
+    const lv = (t) => `${Y.price(t.take_profit)} · ${Y.price(t.stop_loss)}`;
+    const dur = (m) => m === null || m === undefined ? "" : m >= 60 ? `${Math.floor(m / 60)} h${m % 60 ? " " + String(m % 60).padStart(2, "0") : ""}` : `${m} min`;
+    $("#trades-table tbody").innerHTML = shown.length ? shown.map((t) => `<tr>
+      <td class="mono nowrap faint" style="font-size:12px">${esc(t.created_local)}</td><td class="nowrap"><b style="font-weight:500">${esc(Y.shortLabel(t.asset_label))}</b></td><td>${Y.dirHtml(t.direction)}</td>
+      <td class="num">${Y.price(t.entry)}</td><td class="num muted nowrap">${lv(t)}</td><td class="nowrap">${Y.resultPill(t.status, t.pnl_pct)}</td>
+      <td class="muted nowrap">${dur(t.duration_minutes)}</td><td>${Y.critTags(t.criteria, 2)}</td></tr>`).join("")
+      : `<tr><td colspan="8" class="empty">Aucun trade ne correspond à ces filtres.</td></tr>`;
+    $("#trades-cards").innerHTML = shown.map((t) => `<div class="tcard"><div class="l1"><span>${t.direction === "long" ? '<b class="up">↗</b>' : '<b class="dn">↘</b>'} <b>${esc(Y.shortLabel(t.asset_label))}</b> <span class="muted">${t.direction === "long" ? "Achat" : "Vente"}</span></span>${Y.resultPill(t.status, t.pnl_pct)}</div>
+      <div class="mono faint" style="font-size:11px">Entrée ${Y.price(t.entry)} · TP ${Y.price(t.take_profit)} · SL ${Y.price(t.stop_loss)}</div>
+      <div class="l3"><span>${Y.critTags(t.criteria, 2)}</span><span class="nowrap">${esc(t.created_local.slice(6))} · ${dur(t.duration_minutes)}</span></div></div>`).join("") || `<div class="empty">Aucun trade ne correspond à ces filtres.</div>`;
+    const total = data.overview.visible.n;
+    const filtered = filt.asset || filt.source || filt.status;
+    $("#trades-count").textContent = filtered ? `${shown.length} affichés sur ${list.length} (parmi les ${all.length} plus récents)` : `${shown.length} affichés sur ${total}${all.length < total ? ` · les ${all.length} plus récents sont consultables ici` : ""}`;
+    $("#trades-sub").textContent = `${total} trades clôturés, du plus récent au plus ancien`;
+    $("#trades-more").hidden = list.length <= tradeLimit;
+  }
+  $("#f-asset").addEventListener("change", (e) => { filt.asset = e.target.value; tradeLimit = 10; renderTrades(); });
+  $("#f-source").addEventListener("change", (e) => { filt.source = e.target.value; tradeLimit = 10; renderTrades(); });
+  $("#f-status").addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b) return; filt.status = b.dataset.v; tradeLimit = 10; $("#f-status").querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", String(x === b))); renderTrades(); });
+  $("#trades-more").addEventListener("click", () => { tradeLimit += 10; renderTrades(); });
+
+  // ------------------------------------------------------------------ liens vers les analyses
+  function renderLinks() {
+    const d = data, crit = (d.criteria || []).filter((c) => c.stats && c.stats.n > 0).sort((a, b) => (b.stats.edge ?? -1) - (a.stats.edge ?? -1));
+    const best = crit[0];
+    const bd = d.by_direction || {}, L = bd.long || {}, S = bd.short || {};
+    const adj = d.adjustments || {};
+    // corrections propres à un actif : poids qui s'écartent de la base commune
+    const base = adj.weights || {};
+    const corr = Object.values(adj.weights_by_asset || {}).reduce((a, m) => a + Object.entries(m || {}).filter(([k, w]) => base[k] !== undefined && Math.abs(w - base[k]) > 1e-9).length, 0);
+    const bts = Object.values(d.backtests || {});
+    const items = [
+      ["indicateurs", "Par indicateur", best ? `${crit.length} critères · le plus prometteur : ${Y.CRIT[best.key] || best.label}, ${Y.signed((best.stats.edge || 0) * 100, 0)} points${best.stats.n < 30 ? ", échantillon encore faible" : ""}` : "Pas encore de trade clôturé"],
+      ["heures", "Par heure et par sens", L.n || S.n ? `Achats ${Y.pct(L.win_rate, 0)} de réussite sur ${L.n || 0} · ventes ${Y.pct(S.win_rate, 0)} sur ${S.n || 0}` : "Pas encore de trade clôturé"],
+      ["apprentissage", "Apprentissage", `Recalculé sur ${adj.sample ?? 0} trades · ${corr ? corr + " correction" + (corr > 1 ? "s" : "") + " par actif" : "aucune correction par actif"}${(adj.variants && Object.keys(adj.variants).length) ? " · " + Object.keys(adj.variants).length + " variantes en test" : ""}`],
+      ["actifs", "Par actif", `${d.assets.length} actifs suivis, dont ${d.assets.filter((a) => a.trial && !a.trial_promoted).length} à l'essai`],
+      ["backtests", "Backtests", bts.length ? `${bts.length} actifs rejoués · ${esc(bts[0].period)}` : "Aucun backtest pour l'instant"],
+    ];
+    $("#links").innerHTML = items.map(([id, t, s]) => `<a href="apprentissage.html#${id}">${Y.I.chevR}<b>${t}</b><span>${s}</span></a>`).join("");
+  }
+
+  // ------------------------------------------------------------------ formulaire « Nouveau trade »
+  const modal = $("#trade-modal");
+  let dir = "long", preset = "bot", snap = null, snapSeq = 0;
+  const BUBBLES = {
+    tp: ["Take profit", "Le prix où le trade se ferme en gain. Pour un achat, il doit être au-dessus du prix actuel ; pour une vente, en dessous. Laissé vide, le bot le calibre sur la volatilité du moment."],
+    sl: ["Stop loss", "Le prix où le trade se ferme en perte. Pour un achat, il doit être sous le prix actuel ; pour une vente, au-dessus. C'est lui qui fixe la taille de la position simulée."],
+  };
+  function openTrade() {
+    if (!modal.open) { if (modal.showModal) modal.showModal(); else modal.setAttribute("open", ""); }
+    if (live && live.current && !modal.dataset.touched) { const k = live.current(); if (k) $("#m-asset").value = k; }
+    loadSnap();
+  }
+  function closeTrade() { if (modal.close) modal.close(); else modal.removeAttribute("open"); if (location.hash === "#trade") history.replaceState(null, "", location.pathname); }
+  document.addEventListener("click", (e) => { if (e.target.closest("#btn-trade, #bnav-trade")) openTrade(); });
+  $("#tm-close").addEventListener("click", closeTrade);
+  modal.addEventListener("click", (e) => { if (e.target === modal) closeTrade(); });
+  modal.addEventListener("close", () => { if (location.hash === "#trade") history.replaceState(null, "", location.pathname); });
+  addEventListener("hashchange", () => { if (location.hash === "#trade") openTrade(); });
+
+  document.querySelectorAll(".side").forEach((b) => b.addEventListener("click", () => {
+    dir = b.dataset.dir; document.querySelectorAll(".side").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+    if (preset !== "bot") applyPreset(preset); else update();
+  }));
+  document.querySelectorAll(".info[data-bubble]").forEach((b) => b.addEventListener("click", (e) => {
+    e.preventDefault(); e.stopPropagation();
+    const open = b.parentNode.querySelector(".bubble");
+    document.querySelectorAll(".bubble").forEach((x) => x.remove());
+    if (open) return;
+    const [t, txt] = BUBBLES[b.dataset.bubble];
+    const d = document.createElement("span"); d.className = "bubble"; d.innerHTML = `<b>${t}</b>${esc(txt)}`; b.parentNode.appendChild(d);
+  }));
+  document.addEventListener("click", (e) => { if (!e.target.closest(".info")) document.querySelectorAll(".bubble").forEach((x) => x.remove()); });
+
+  const assetInfo = () => (data && data.assets.find((a) => a.key === $("#m-asset").value)) || null;
+  const parseNum = (s) => { const raw = String(s || "").trim().replace(/\s/g, "").replace(",", "."); if (!raw) return null; const v = parseFloat(raw); return Number.isFinite(v) ? v : NaN; };
+  async function loadSnap() {
+    const key = $("#m-asset").value, mine = ++snapSeq;
+    $("#m-price").textContent = "Prix en cours de lecture…";
+    snap = window.LiveChart ? await window.LiveChart.snapshot(key) : null;
+    if (mine !== snapSeq) return;
+    if (snap && snap.candles && snap.candles.length) {
+      const lastTs = snap.candles[snap.candles.length - 1][0] + 300;
+      $("#m-price").innerHTML = `Dernier prix connu <b class="mono" style="color:var(--text)">${Y.price(snap.last, snap.digits)}</b> · clôture de ${Y.hhmm(lastTs * 1000)}, ${Y.ago(new Date(lastTs * 1000).toISOString())}. Vérifiez le prix en direct avant d'entrer.`;
+    } else $("#m-price").textContent = "Prix indisponible pour l'instant : le bot utilisera le sien à l'envoi.";
+    if (preset !== "bot") applyPreset(preset); else update();
+  }
+  $("#m-asset").addEventListener("change", () => { modal.dataset.touched = "1"; loadSnap(); });
+  function unit() {
+    const cs = (snap && snap.candles || []).slice(-12);
+    if (!cs.length) return null;
+    return cs.reduce((a, c) => a + (c[2] - c[3]), 0) / cs.length * 2;   // ≈ mouvement typique sur 20 minutes
+  }
+  function applyPreset(p) {
+    preset = p;
+    document.querySelectorAll(".presets button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.p === p)));
+    if (p === "bot") { $("#m-tp").value = ""; $("#m-sl").value = ""; update(); return; }
+    const u = unit(), a = assetInfo();
+    if (!u || !snap) { update(); return; }
+    const [kt, ks] = p === "tight" ? [1.5, 1] : [3, 2];
+    const tick = (a && a.tick_size) || Math.pow(10, -(snap.digits || 2)), rnd = (v) => Math.round(v / tick) * tick;
+    const sg = dir === "long" ? 1 : -1, dg = snap.digits ?? 2;
+    $("#m-tp").value = rnd(snap.last + sg * kt * u).toFixed(dg);
+    $("#m-sl").value = rnd(snap.last - sg * ks * u).toFixed(dg);
+    update();
+  }
+  document.querySelectorAll(".presets button").forEach((b) => b.addEventListener("click", () => applyPreset(b.dataset.p)));
+  for (const id of ["#m-tp", "#m-sl"]) $(id).addEventListener("input", () => { preset = "custom"; document.querySelectorAll(".presets button").forEach((b) => b.setAttribute("aria-pressed", "false")); update(); });
+
+  // Même règle que portfolio.size_position : risque fixe au stop, plafond de levier, lot minimal imposé si besoin
+  function sizing(entry, stop) {
+    const a = assetInfo(), pf = data && data.portfolio;
+    if (!a || !pf || !a.lot_multiplier) return null;
+    const bal = Number(pf.balance), dist = Math.abs(entry - stop);
+    if (!(bal > 0) || !(dist > 0)) return null;
+    const floorStep = (v, s) => Math.floor(v / s + 1e-9) * s;
+    const riskAmount = bal * pf.risk_pct / 100, lossPerLot = dist * a.lot_multiplier;
+    let lots = floorStep(riskAmount / lossPerLot, a.lot_step);
+    const maxLots = floorStep(bal * a.max_leverage / (entry * a.lot_multiplier), a.lot_step);
+    if (lots > maxLots) lots = maxLots;
+    let risky = false, overLev = false;
+    if (lots < a.lot_min) { lots = a.lot_min; risky = true; overLev = lots > maxLots; }
+    return { lots, label: a.lot_label, lossPerLot, riskEff: lots * lossPerLot / bal * 100, risky, overLev, riskPct: pf.risk_pct, mult: a.lot_multiplier,
+             lev: lots * entry * a.lot_multiplier / bal, maxLev: a.max_leverage, cur: pf.currency || "$" };
+  }
+  function levelsSvg(p, tp, sl, zone) {
+    const vals = [p, tp, sl, zone ? zone.lo : p, zone ? zone.hi : p], mn = Math.min(...vals), mx = Math.max(...vals), pad = (mx - mn) * 0.12 || 1;
+    const Yp = (v) => 8 + (mx + pad - v) / (mx - mn + 2 * pad) * 134;
+    const ln = (v, col, dash, lab) => `<line x1="0" x2="200" y1="${Yp(v)}" y2="${Yp(v)}" stroke="${col}" stroke-width="1.5" ${dash ? 'stroke-dasharray="5 3"' : ""}/><text x="4" y="${Yp(v) - 5}" style="font:600 11px Geist, sans-serif;fill:${col}">${lab}</text>`;
+    return `<svg viewBox="0 0 200 150" aria-hidden="true">${zone ? `<rect x="0" width="200" y="${Yp(zone.hi)}" height="${Math.max(2, Yp(zone.lo) - Yp(zone.hi))}" fill="var(--up)" fill-opacity=".16" rx="3"/><text x="196" y="${Yp(zone.lo) + 12}" text-anchor="end" style="font:500 10px Geist, sans-serif;fill:var(--up-text)">zone d'entrée</text>` : ""}
+      <rect x="150" width="10" y="${Math.min(Yp(tp), Yp(p))}" height="${Math.abs(Yp(tp) - Yp(p))}" fill="var(--up)" fill-opacity=".35" rx="2"/>
+      <rect x="150" width="10" y="${Math.min(Yp(sl), Yp(p))}" height="${Math.abs(Yp(sl) - Yp(p))}" fill="var(--dn)" fill-opacity=".35" rx="2"/>
+      ${ln(tp, "var(--up-text)", true, "TP")}${ln(p, "var(--text)", false, "Prix actuel")}${ln(sl, "var(--dn-text)", true, "SL")}</svg>`;
+  }
+  function update() {
+    const tp = parseNum($("#m-tp").value), sl = parseNum($("#m-sl").value), p = snap && snap.last, dg = snap ? snap.digits : undefined;
+    const a = assetInfo();
+    let err = "";
+    const help = (id, html, cls) => { $(id).innerHTML = html; $(id).className = "help " + (cls || ""); };
+    $("#m-tp").classList.remove("invalid"); $("#m-sl").classList.remove("invalid");
+    help("#h-tp", ""); help("#h-sl", "");
+    if (Number.isNaN(tp)) { $("#m-tp").classList.add("invalid"); help("#h-tp", "Nombre attendu, par exemple 31078,5.", "dn"); err = "tp"; }
+    if (Number.isNaN(sl)) { $("#m-sl").classList.add("invalid"); help("#h-sl", "Nombre attendu, par exemple 31031.", "dn"); err = "sl"; }
+    if (p && !err) {
+      const pts = (v) => `${Y.signed(v - p, dg ?? 2)} pts · ${Y.pctv((v / p - 1) * 100, 2)}`;
+      const long = dir === "long";
+      if (tp !== null) {
+        if (long ? tp <= p : tp >= p) { $("#m-tp").classList.add("invalid"); help("#h-tp", `Pour ${long ? "un achat" : "une vente"}, le TP doit être ${long ? "au-dessus" : "en dessous"} du prix actuel (${Y.price(p, dg)}).`, "dn"); err = "tp"; }
+        else help("#h-tp", pts(tp), "up");
+      }
+      if (sl !== null) {
+        if (long ? sl >= p : sl <= p) { $("#m-sl").classList.add("invalid"); help("#h-sl", `Pour ${long ? "un achat" : "une vente"}, le SL doit être ${long ? "sous" : "au-dessus"} du prix actuel (${Y.price(p, dg)}).`, "dn"); err = "sl"; }
+        else help("#h-sl", pts(sl), "dn");
+      }
+    }
+    $("#m-submit").disabled = !!err;
+    // commande Telegram équivalente
+    const key = $("#m-asset").value;
+    $("#m-cmd").textContent = `/${dir} ${key}${tp !== null && !Number.isNaN(tp) && sl !== null && !Number.isNaN(sl) ? ` ${tp} ${sl}` : ""}`;
+    // aperçu
+    const pv = $("#m-preview"), warn = $("#m-warn");
+    warn.innerHTML = "";
+    if (err) { pv.hidden = true; return; }
+    if (tp === null || sl === null || !p) {
+      pv.hidden = false;
+      pv.style.gridTemplateColumns = "1fr";
+      pv.innerHTML = `<div class="muted">${tp === null && sl === null ? "TP et SL laissés vides : le bot les calibre sur la volatilité du moment, puis envoie le signal avec sa zone d'entrée." : !p ? "Aperçu indisponible sans prix récent." : "Renseignez aussi le " + (tp === null ? "TP" : "SL") + " pour voir l'aperçu, ou laissez les deux vides."}</div>`;
+      return;
+    }
+    pv.hidden = false; pv.style.gridTemplateColumns = "";
+    const rr = Math.abs(tp - p) / Math.abs(p - sl);
+    const zone = window.LiveChart ? window.LiveChart.zoneOf({ entry: p, take_profit: tp, stop_loss: sl }) : null;
+    const sz = sizing(p, sl);
+    const gain = sz ? sz.lots * Math.abs(tp - p) * sz.mult : null, loss = sz ? sz.lots * sz.lossPerLot : null;
+    pv.innerHTML = `${levelsSvg(p, tp, sl, zone)}<div style="display:grid;gap:6px;align-content:start">
+      <div class="rr"><b>${Y.num(rr, 2)}</b><span>gain / risque</span></div>
+      ${sz ? `<div class="kv"><span>Si le TP est touché</span><b class="up">${Y.smoney(gain, sz.cur)}</b></div><div class="kv"><span>Si le SL est touché</span><b class="dn">${Y.smoney(-loss, sz.cur)}</b></div>
+        <div class="kv"><span>Taille</span><b>${Y.num(sz.lots, sz.lots % 1 ? 3 : 0)} ${esc(sz.label)}</b></div><div class="kv"><span>Risque sur la balance</span><b>${Y.num(sz.riskEff, 1)}${Y.NB}%</b></div>` : ""}
+      <div class="kv"><span>Zone d'entrée</span><b class="mono" style="font-weight:500">${zone ? `${Y.price(zone.lo, dg)} à ${Y.price(zone.hi, dg)}` : "aucune"}</b></div></div>`;
+    if (rr < 1) warn.innerHTML = `<div class="note-box warn">${Y.I.warn}<span>Le gain possible est plus petit que le risque (gain/risque ${Y.num(rr, 2)}). Le trade sera quand même suivi.</span></div>`;
+    else if (sz && sz.risky) {
+      const why = [];
+      if (sz.riskEff > sz.riskPct + 1e-9) why.push(`le lot minimal fait risquer ${Y.num(sz.riskEff, 1)}${Y.NB}% de la balance au lieu de ${Y.num(sz.riskPct, 0)}${Y.NB}%`);
+      if (sz.overLev) why.push(`${Y.num(sz.lots, sz.lots % 1 ? 3 : 0)} ${esc(sz.label)} représente un levier de ×${Y.num(sz.lev, 1)}, au-delà du plafond de ×${Y.num(sz.maxLev, 0)}`);
+      warn.innerHTML = `<div class="note-box warn">${Y.I.warn}<span>Trade risqué, pris quand même : ${why.join(" ; ") || "lot minimal imposé"}.</span></div>`;
+    }
+  }
 
   $("#manual").addEventListener("submit", async (ev) => {
     ev.preventDefault();
-    const btn = $("#m-submit"); const msg = $("#m-msg");
-    const num = (sel) => { const raw = $(sel).value.trim().replace(",", "."); if (!raw) return null; const v = parseFloat(raw); return Number.isFinite(v) ? v : NaN; };
-    const tp = num("#m-tp"), sl = num("#m-sl");
-    if (Number.isNaN(tp) || Number.isNaN(sl)) { msg.textContent = "Objectif et stop doivent être des nombres (ou laissés vides)."; return; }
-    const payload = { asset: $("#m-asset").value, direction: $("#m-dir").value, note: $("#m-note").value.trim(), tp, sl };
-    btn.disabled = true; msg.textContent = "Envoi…";
+    const btn = $("#m-submit"), msg = $("#m-msg");
+    const tp = parseNum($("#m-tp").value), sl = parseNum($("#m-sl").value);
+    if (Number.isNaN(tp) || Number.isNaN(sl)) { msg.textContent = "TP et SL doivent être des nombres, ou laissés vides."; return; }
+    const payload = { asset: $("#m-asset").value, direction: dir, note: $("#m-note").value.trim(), tp, sl };
+    btn.disabled = true; msg.innerHTML = "Envoi…";
     try {
       if (mode === "local") {
         const r = await fetch("/api/manual", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
         const j = await r.json();
         if (!r.ok || !j.ok) throw new Error(j.error || "erreur");
         const s = j.signal;
-        msg.textContent = `Signal ${s.direction} ${s.asset_label} envoyé : entrée ${s.entry}, TP ${s.take_profit}, SL ${s.stop_loss} (ratio ${s.risk_reward}). Notification transmise.`;
+        msg.innerHTML = `<div class="note-box ok"><span>Trade envoyé : ${s.direction === "long" ? "achat" : "vente"} ${esc(s.asset_label)}, entrée ${Y.price(s.entry)}, TP ${Y.price(s.take_profit)}, SL ${Y.price(s.stop_loss)}. Suivi toutes les 5 min, message Telegram à la clôture.</span></div>`;
         await load();
       } else {
-        await dispatchGitHub({ command: "manual", asset: payload.asset, direction: payload.direction, note: payload.note,
-                               tp: tp === null ? "" : String(tp), sl: sl === null ? "" : String(sl) });
-        msg.textContent = "Demande transmise à GitHub Actions : la notification arrive dans 1 à 2 minutes, le tableau de bord se mettra à jour au prochain passage.";
+        await Y.dispatch({ command: "manual", asset: payload.asset, direction: payload.direction, note: payload.note, tp: tp === null ? "" : String(tp), sl: sl === null ? "" : String(sl) }, { retryOnce: true });
+        msg.innerHTML = `<div class="note-box ok"><span>Trade envoyé : la notification arrive dans 1 à 2 minutes, le tableau de bord se met à jour au prochain passage. Suivi toutes les 5 min, message Telegram à la clôture.</span></div>`;
       }
-    } catch (e) { msg.textContent = "Échec : " + e.message; }
+    } catch (e) { msg.innerHTML = `<div class="note-box err">${Y.I.warn}<span>Échec : ${esc(e.message)}</span></div>`; if (/jeton/i.test(e.message)) $("#gh-settings").open = true; }
+    finally { btn.disabled = false; }
+  });
+  $("#m-propose").addEventListener("click", async () => {
+    const btn = $("#m-propose"), msg = $("#m-msg"), asset = $("#m-asset").value;
+    btn.disabled = true; msg.textContent = "Analyse en cours…";
+    try {
+      if (mode === "local") {
+        const r = await fetch("/api/propose", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ asset }) });
+        const j = await r.json();
+        if (!r.ok || !j.ok) throw new Error(j.error || "erreur");
+        msg.textContent = j.text; await load();
+      } else {
+        await Y.dispatch({ command: "propose", asset }, { retryOnce: true });
+        msg.innerHTML = `<div class="note-box ok"><span>Analyse lancée : la lecture des indicateurs et l'éventuelle proposition arrivent sur Telegram dans 1 à 2 minutes.</span></div>`;
+      }
+    } catch (e) { msg.innerHTML = `<div class="note-box err">${Y.I.warn}<span>Échec : ${esc(e.message)}</span></div>`; if (/jeton/i.test(e.message)) $("#gh-settings").open = true; }
     finally { btn.disabled = false; }
   });
 
+  // ------------------------------------------------------------------ actions
+  Y.bindGhSettings(() => { $("#m-msg").textContent = "Paramètres GitHub enregistrés dans ce navigateur."; load(); });
+  $("#btn-refresh").addEventListener("click", () => { load(); if (live) live.refresh(); });
+  $("#btn-scan").addEventListener("click", async () => {
+    const b = $("#btn-scan"); b.disabled = true;
+    try { await fetch("/api/scan", { method: "POST" }); await load(); } finally { b.disabled = false; }
+  });
+  let rt = null;
+  addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => { if (data) { try { YKCharts.equityLine($("#ch-equity"), data.equity_curve || [], { height: 220 }); } catch (e) { /* silencieux */ } } }, 200); });
+  document.addEventListener("yk:theme", () => { if (data) YKCharts.equityLine($("#ch-equity"), data.equity_curve || [], { height: 220 }); });
+  // les pages publiées changent toutes les 5 min : on relit toutes les 2 min (et l'état du bot chaque minute)
+  setInterval(() => { if (mode === "static" || mode === "github") load(); }, 120000);
+  setInterval(() => { if (data) Y.status(data.state && data.state.last_scan, data.state && data.state.last_scan_note); }, 60000);
+  update();
   load();
 })();
 </script>

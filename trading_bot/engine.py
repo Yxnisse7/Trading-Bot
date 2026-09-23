@@ -894,7 +894,7 @@ class Engine:
         return handled
 
     # ------------------------------------------------------------- live
-    LIVE_CANDLES = 80          # ~6 h 40 d'historique en 5 min
+    LIVE_CANDLES = 288         # 24 h de bougies 5 min (le site en tire aussi les vues 15 min et 1 h)
 
     def write_live_snapshot(self, now: datetime | None = None) -> list[str]:
         """Publie, pour chaque actif, les dernières bougies 5 min et les niveaux des signaux ouverts.
@@ -903,6 +903,7 @@ class Engine:
         """
         now = now or utcnow()
         open_sigs = [s for s in self.store.open_signals() if s.source != "shadow"]
+        closed = [s for s in self.store.history() if s.source != "shadow" and s.closed_at]
         written = []
         for key, asset in self.cfg.assets.items():
             try:
@@ -920,10 +921,16 @@ class Engine:
                        "stop_loss": s.stop_loss, "source": s.source, "horizon": s.horizon or "1h",
                        "created_at": s.created_at, "expires_at": s.expires_at}
                       for s in open_sigs if s.asset == key]
+            # trades clôturés pendant la fenêtre affichée : flèches d'entrée et de sortie sur le graphique
+            first = candles[0].ts
+            trades = [{"id": s.id, "direction": s.direction, "entry": s.entry, "created_at": s.created_at,
+                       "closed_at": s.closed_at, "close_price": s.close_price, "status": s.status,
+                       "pnl_pct": s.pnl_pct, "source": s.source}
+                      for s in closed if s.asset == key and parse_iso(s.created_at).timestamp() >= first]
             self.store.save_live(key, {
-                "asset": key, "label": asset.label, "updated_at": iso(now), "interval": "5m",
+                "asset": key, "label": asset.label, "updated_at": iso(now), "interval": "5m", "digits": digits,
                 "candles": [[c.ts, r(c.open), r(c.high), r(c.low), r(c.close)] for c in candles],
-                "last": r(candles[-1].close), "open_signals": levels,
+                "last": r(candles[-1].close), "open_signals": levels, "trades": trades[-40:],
             })
             written.append(key)
         return written

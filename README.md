@@ -151,7 +151,7 @@ secondes) ; déclenché par un cron externe toutes les 1 à 2 minutes, il rend l
 immédiates sans alourdir le passage complet de 5 min.
 
 ### Simulation de compte (lots et balance)
-Page `docs/portfolio.html` (lien « Simulation de compte » sur le tableau de bord), commande
+Page `docs/portfolio.html` (onglet « Simulation »), commande
 `/balance` sur Telegram et `python run.py portfolio --balance 1000 --risk 1`.
 
 - Vous définissez une **balance fictive** et un **risque par trade** (1 % par défaut). Définir une
@@ -172,18 +172,34 @@ Page `docs/portfolio.html` (lien « Simulation de compte » sur le tableau de bo
 - Prix en dollars, aucune conversion de devise ; ni marge, ni glissement, ni financement overnight.
 
 ### Interface
-`python run.py ui` sert une page simple et visuelle (`docs/index.html`) : indicateurs clés,
-**graphiques** (SVG sans dépendance, infobulles au survol, thème clair / sombre, palette bleu / orange
-lisible en cas de daltonisme) : courbe du P&L net cumulé trade après trade, résultats TP / SL / expirés
-par actif, par sens, par horizon, par confiance et par source, trades par heure d'émission, et réussite
-par indicateur contre le hasard attendu (barre contre repère) ; chaque graphique porte une phrase
-« comment lire »,
-signaux ouverts, **résumé des derniers trades par indicateur** (taux de réussite contre hasard
-attendu, poids appris, derniers trades), statistiques par actif, derniers trades, backtests et
-notes d'apprentissage. Le bouton **« Demander un trade »** crée un signal manuel : le bot calibre
-l'entrée, le TP et le SL sur la volatilité du moment, envoie la notification Telegram / Discord et
-suit le trade comme les siens ; le résultat est comptabilisé à part (source « manuel »), ce qui
-permet de comparer votre jugement à celui du bot.
+Le site (`docs/`, servi par GitHub Pages ou par `python run.py ui`) a trois onglets, avec la même
+charte : police Geist, bleu = gain / TP, orange = perte / SL, gris = neutre ou hasard, violet réservé
+à la marque et aux boutons ; thème clair ou sombre ; sur téléphone, une barre de navigation en bas.
+
+- **Tableau de bord** (`docs/index.html`) : un chiffre vedette, l'avantage du bot face au hasard, avec
+  sa jauge de fiabilité (trades nécessaires pour qu'un avantage de 10 points soit détectable) ; tuiles
+  balance, résultat cumulé, trades clôturés, suivi en ombre ; graphique live ; courbe du résultat et
+  résultat par actif ; signaux en cours (un nouveau signal déclenche une notification et reste
+  surligné quelques secondes) ; derniers trades avec filtres (actif, source, résultat), 10 par 10, et
+  critères en clair (« Tendance 5 min · 15 min · 1 h ») ; liens vers les analyses détaillées.
+- **Simulation** (`docs/portfolio.html`) : balance, courbe de la balance, positions, trades appliqués,
+  trades risqués ; la définition de la balance est repliée et signale qu'elle vaut pour tout le monde.
+- **Apprentissage** (`docs/apprentissage.html`) : notes d'apprentissage et variantes en test,
+  réussite par indicateur contre le hasard, résultats par heure, sens, horizon, confiance et source
+  (une seule légende), statistiques par actif et backtests.
+
+Le bouton **« Nouveau trade »** ouvre une fenêtre : Acheter ou Vendre, actif (avec le dernier prix
+connu et son âge), TP et SL facultatifs (vides : le bot les calibre sur la volatilité du moment),
+raccourcis « Serré » et « Large », aperçu avant envoi (gain/risque, gain ou perte en dollars sur la
+simulation, taille, risque sur la balance, zone d'entrée, avertissement si le trade est risqué),
+erreurs expliquées sur le champ (SL du mauvais côté du prix…) et la commande Telegram équivalente.
+« Proposer un trade » demande au bot sa lecture de l'actif. Les trades envoyés sont suivis comme ceux
+du bot, sous la source « manuel ».
+
+Nombres au format français (virgule, espace des milliers, vrai signe moins), blocs gris pendant le
+chargement, transitions courtes désactivées si le système demande moins d'animations. Fichiers
+communs : `docs/yasuke.css` (charte), `docs/yasuke.js` (en-tête, formats, chargement des données),
+`docs/charts.js` (petits graphiques SVG), `docs/live-chart.js`, `docs/sections.js`.
 
 **En ligne, via GitHub Pages** (dépôt public, *Settings → Pages*, branche `main`, dossier `/docs`) :
 la page est servie à `https://<propriétaire>.github.io/<dépôt>/`, lit `dashboard.json` publié à côté
@@ -285,16 +301,22 @@ repasse en test si ses résultats retombent. Chaque promotion ou retrait est ann
 Une seule variante est testée à la fois sur un même trade, pour ne pas mélanger deux changements.
 
 ### Sections repliables
-Sur les deux pages, chaque section se replie ou se déplie d'un clic sur son titre, et un bouton
-« Tout replier / Tout déplier » s'ajoute à l'en-tête. L'état est mémorisé dans le navigateur, page
-par page (`docs/sections.js`).
+Sur les trois pages, chaque section se replie ou se déplie d'un clic sur son titre (en glissant), et
+un bouton « Tout replier / Tout déplier » s'ajoute à l'en-tête. L'état est mémorisé dans le
+navigateur, page par page (`docs/sections.js`).
 
 ### Graphique live
-À chaque passage (~5 min), le bot publie pour chaque actif un instantané des 80 dernières bougies
-5 min dans `data/live/<actif>.json`, copié dans `docs/live/` pour GitHub Pages. Le tableau de bord
-affiche ces bougies avec les niveaux des signaux ouverts (entrée, objectif, stop) et se rafraîchit
-toutes les minutes. Le même graphique figure sur la page de simulation de compte (module partagé
-`docs/live-chart.js`) ; l'actif choisi est mémorisé et commun aux deux pages. Ce n'est pas un flux temps réel : la granularité est celle des passages du bot.
+À chaque passage (~5 min), le bot publie pour chaque actif un instantané compact des 24 dernières
+heures de bougies 5 min (288), les niveaux des signaux ouverts et les trades clôturés de la période,
+dans `data/live/<actif>.json`, copié dans `docs/live/` pour GitHub Pages. Le graphique est dessiné
+avec **TradingView Lightweight Charts** (copie locale dans `docs/vendor/`, licence Apache 2.0) :
+zoom à la molette ou au pincement, déplacement, réticule avec prix et heure, ligne du prix actuel,
+vues 5 min, 15 min et 1 h (reconstruites à partir des bougies 5 min), flèches d'entrée et ronds de
+sortie des trades passés, lignes TP / SL / entrée et zone d'entrée des signaux en cours. Les actifs se
+choisissent par pastilles, avec leur variation sur 24 h. Le même graphique figure sur la page de
+simulation ; l'actif et l'unité de temps choisis sont mémorisés. Si la bibliothèque ne se charge pas,
+un graphique SVG simple prend le relais. Ce n'est pas un flux temps réel : la granularité est celle
+des passages du bot.
 
 ### Avertissement et vie privée
 L'avertissement complet (« pas un conseil financier, validez en paper trading ») n'est plus répété à
@@ -425,7 +447,9 @@ trading_bot/
   notify.py                 Telegram / Discord / console
   storage.py                persistance JSON
   providers/                yahoo, binance, coingecko, news (RSS + calendrier)
-docs/index.html             interface (tableau de bord + demande de trade)
+docs/                       site : index.html (tableau de bord), portfolio.html (simulation), apprentissage.html,
+                            yasuke.css / yasuke.js (charte et outils communs), charts.js, live-chart.js, sections.js,
+                            vendor/ (TradingView Lightweight Charts), live/ et *.json publiés par le bot
 data/                       état persistant (signaux, fantômes, historique, ajustements, backtests, rapport, dashboard)
 tests/                      tests unitaires (données synthétiques, sans réseau)
 ```

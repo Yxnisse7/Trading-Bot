@@ -616,7 +616,15 @@ def test_live_snapshot_is_written_for_each_asset(tmp_path, monkeypatch):
     assert snap["open_signals"][0]["take_profit"] == sig.take_profit
     # un actif sans signal ouvert : instantané présent, liste de niveaux vide
     other = json.loads((tmp_path / "live" / "gold.json").read_text(encoding="utf-8"))
-    assert other["open_signals"] == []
+    assert other["open_signals"] == [] and other["trades"] == [] and isinstance(other["digits"], int)
+    # un trade clôturé dans la fenêtre apparaît (flèches d'entrée et de sortie du graphique)
+    from dataclasses import replace as dc_replace
+    from trading_bot.models import iso
+    done = dc_replace(sig, id="clos1", status="tp", closed_at=iso(now), close_price=sig.take_profit, pnl_pct=0.1)
+    eng.store.append_history(done)
+    eng.write_live_snapshot(now)
+    snap = json.loads((tmp_path / "live" / "bitcoin.json").read_text(encoding="utf-8"))
+    assert [t["id"] for t in snap["trades"]] == ["clos1"] and snap["trades"][0]["close_price"] == sig.take_profit
     # un fournisseur en panne ne doit pas empêcher les autres
     monkeypatch.setattr(engmod.market, "fetch_candles_5m",
                         lambda asset, days=5: (_ for _ in ()).throw(ProviderError("indisponible")) if asset.key == "gold" else candles)

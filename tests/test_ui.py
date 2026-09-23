@@ -33,7 +33,7 @@ def test_ui_serves_dashboard_and_manual(tmp_path, monkeypatch):
         c.request("GET", "/api/state"); r = c.getresponse(); assert r.status == 200
         state = json.loads(r.read()); assert "criteria" in state and len(state["assets"]) == 7
         c.request("GET", "/docs/index.html"); r = c.getresponse(); body = r.read().decode("utf-8")
-        assert r.status == 200 and "Demander un trade" in body
+        assert r.status == 200 and "Nouveau trade" in body
         c.request("GET", "/docs/../trading_bot/config.py"); r = c.getresponse(); r.read(); assert r.status == 404
         payload = json.dumps({"asset": "gold", "direction": "long", "note": "ui"})
         c.request("POST", "/api/manual", body=payload, headers={"Content-Type": "application/json"})

@@ -2,241 +2,226 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Yasuke — simulation de compte</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Yasuke · Simulation de compte</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="yasuke.css">
+<script>try { const t = localStorage.getItem("tb-theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}</script>
 <style>
-  :root {
-    --bg: #f6f7f9; --card: #ffffff; --text: #1a1d23; --muted: #6b7280; --line: #e5e7eb;
-    --accent: #2563eb; --accent-text: #ffffff; --good: #16a34a; --bad: #dc2626; --warn: #d97706;
-    --shadow: 0 1px 2px rgba(0,0,0,.06), 0 1px 8px rgba(0,0,0,.04);
-  }
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      --bg: #0f1216; --card: #171b21; --text: #e8eaee; --muted: #9aa3b2; --line: #262c36;
-      --accent: #3b82f6; --good: #22c55e; --bad: #ef4444; --warn: #f59e0b; --shadow: none;
-    }
-  }
-  :root[data-theme="dark"] {
-    --bg: #0f1216; --card: #171b21; --text: #e8eaee; --muted: #9aa3b2; --line: #262c36;
-    --accent: #3b82f6; --good: #22c55e; --bad: #ef4444; --warn: #f59e0b; --shadow: none;
-  }
-  * { box-sizing: border-box; }
-  body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
-  .wrap { max-width: 1180px; margin: 0 auto; padding: 20px 16px 48px; }
-  header { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; margin-bottom: 18px; }
-  h1 { font-size: 22px; margin: 0; } h2 { font-size: 17px; margin: 28px 0 10px; }
-  a { color: var(--accent); }
-  .muted { color: var(--muted); font-size: 13px; }
-  .grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); }
-  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; box-shadow: var(--shadow); }
-  .kpi .v { font-size: 26px; font-weight: 650; margin-top: 4px; font-variant-numeric: tabular-nums; }
-  .kpi .s { font-size: 12px; color: var(--muted); }
-  .good { color: var(--good); } .bad { color: var(--bad); } .warn { color: var(--warn); }
-  table { width: 100%; border-collapse: collapse; font-size: 14px; }
-  th, td { text-align: left; padding: 8px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
-  th { font-weight: 600; color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .03em; }
-  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
-  .tbl { overflow-x: auto; }
-  form.set { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); align-items: end; }
-  label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 4px; }
-  input { width: 100%; padding: 9px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); color: var(--text); font: inherit; }
-  button { padding: 10px 16px; border: 0; border-radius: 8px; background: var(--accent); color: var(--accent-text); font: inherit; font-weight: 600; cursor: pointer; }
-  button.secondary { background: transparent; color: var(--text); border: 1px solid var(--line); }
-  button:disabled { opacity: .6; cursor: wait; }
-  .msg { margin-top: 10px; font-size: 14px; white-space: pre-wrap; }
-  svg { width: 100%; height: 220px; display: block; }
-  .pill { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 12px; border: 1px solid var(--line); color: var(--muted); }
-  .pill.tp { color: var(--good); border-color: var(--good); } .pill.sl { color: var(--bad); border-color: var(--bad); } .pill.expired { color: var(--warn); border-color: var(--warn); }
-  details { margin-top: 10px; } summary { cursor: pointer; color: var(--muted); font-size: 13px; }
-  .disclaimer { margin-top: 32px; padding: 12px 14px; border-left: 3px solid var(--warn); background: var(--card); border-radius: 8px; font-size: 13px; color: var(--muted); }
+  form.set { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); align-items: end; }
+  .risky-list { display: grid; gap: 8px; font-size: 13px; }
+  .risky-list div { display: flex; gap: 10px; align-items: flex-start; }
+  .risky-list svg { flex: none; color: var(--dn-text); margin-top: 2px; }
+  @media (max-width: 760px) { #hist th:nth-child(4), #hist td:nth-child(4), #hist th:nth-child(6), #hist td:nth-child(6), #hist th:nth-child(7), #hist td:nth-child(7), #hist th:nth-child(9), #hist td:nth-child(9), #hist th:nth-child(10), #hist td:nth-child(10) { display: none; } }
 </style>
 </head>
-<body>
+<body data-page="simulation">
+<header id="yk-header"></header>
 <div class="wrap">
-  <header>
+  <div class="pagehead">
+    <div><h1>Simulation de compte</h1><div class="sub" id="updated">Chargement…</div></div>
+    <div class="actions"><span class="faint">Balance fictive, aucun ordre réel</span><button class="btn-icon" id="btn-refresh" type="button" aria-label="Actualiser" title="Actualiser"></button></div>
+  </div>
+
+  <section class="hero-row">
+    <div class="card hero" id="hero" aria-busy="true"><span class="sk t" style="width:140px"></span><span class="sk big"></span><span class="sk t" style="width:80%"></span><span class="sk bar"></span><span class="sk t" style="width:60%"></span></div>
     <div>
-      <h1>Simulation de compte</h1>
-      <div class="muted" id="updated">Chargement…</div>
-      <div class="muted"><a href="index.html">← Tableau de bord</a></div>
+      <div class="tiles" id="tiles">
+        <div class="card tile"><span class="sk t" style="width:110px"></span><span class="sk" style="height:30px;width:140px"></span></div>
+        <div class="card tile"><span class="sk t" style="width:110px"></span><span class="sk" style="height:30px;width:90px"></span></div>
+        <div class="card tile"><span class="sk t" style="width:110px"></span><span class="sk" style="height:30px;width:60px"></span></div>
+        <div class="card tile"><span class="sk t" style="width:110px"></span><span class="sk" style="height:30px;width:60px"></span></div>
+      </div>
+      <div class="dots" id="tile-dots" aria-hidden="true"><i class="on"></i><i></i><i></i></div>
     </div>
-    <div style="display:flex; gap:8px; flex-wrap:wrap">
-      <button class="secondary" id="btn-refresh" type="button">Actualiser</button>
-      <button class="secondary" id="btn-theme" type="button">Thème</button>
-    </div>
-  </header>
+  </section>
 
-  <section class="grid" id="kpis"></section>
+  <div class="card" id="live"></div>
 
-  <h2>Définir la balance</h2>
+  <div class="card" style="margin-top:20px">
+    <div class="card-head"><div><h3>Courbe de la balance</h3><div class="sub" id="equity-note">Balance après chaque trade clôturé</div></div><span id="eq-pill"></span></div>
+    <div class="chart" id="equity"></div>
+  </div>
+
+  <h2 id="positions" data-hint="aucune position ouverte">Positions ouvertes</h2>
+  <div class="card tbl"><table id="open"><thead><tr><th>Ouverte</th><th>Actif</th><th>Sens</th><th class="num">Entrée</th><th class="num">TP</th><th class="num">SL</th><th class="num">Lots</th><th class="num">Risque au stop</th><th class="num">Notionnel</th><th class="num">Levier</th></tr></thead><tbody></tbody></table></div>
+
+  <h2 id="historique">Trades appliqués à la balance</h2>
   <div class="card">
+    <div class="tbl"><table id="hist"><thead><tr><th>Clôturé</th><th>Actif</th><th>Sens</th><th>Horizon</th><th>Résultat</th><th class="num">Entrée</th><th class="num">Sortie</th><th class="num">Lots</th><th class="num">Brut</th><th class="num">Coûts</th><th class="num">Net</th><th class="num">Balance après</th></tr></thead><tbody></tbody></table></div>
+    <div class="tbl-foot"><span id="hist-count"></span><button type="button" class="secondary" id="hist-more" hidden>Afficher 10 de plus</button></div>
+  </div>
+
+  <h2 id="risques">Trades risqués</h2>
+  <div class="card"><div class="muted" style="margin-bottom:12px">Aucun trade n'est refusé : quand la balance ne permet pas le lot minimal au risque choisi, le lot minimal est pris quand même et le trade est marqué comme risqué, avec le risque et le levier réels.</div><div id="skipped" class="risky-list"></div></div>
+
+  <h2 id="balance" data-closed data-hint="changer la balance redémarre la simulation pour tout le monde">Définir la balance</h2>
+  <div class="card">
+    <div class="note-box warn" style="margin-bottom:16px"><span id="warn-ic"></span><span>Changer la balance démarre une nouvelle simulation, partagée par tous les utilisateurs : ne le faites pas sans accord.</span></div>
     <form class="set" id="set">
       <div><label for="s-balance">Balance fictive</label><input id="s-balance" type="number" min="1" step="1" placeholder="1000"></div>
       <div><label for="s-risk">Risque par trade (% de la balance)</label><input id="s-risk" type="number" min="0.05" max="10" step="0.05" placeholder="1"></div>
       <div><button type="submit" id="s-submit">Définir la balance</button></div>
     </form>
-    <div class="muted" style="margin-top:8px">Définir une balance démarre une nouvelle simulation : seuls les trades ouverts <b>après</b> ce moment comptent, sans rétroactivité. La simulation précédente est archivée. Tant que vous ne définissez rien, le bot simule sur la balance par défaut. Les lots sont calculés pour que la perte au stop soit égale au risque choisi, dans la limite du levier de chaque actif (×20 micro-futures, ×3 cryptos), arrondis au pas du contrat (MNQ, MES, MGC, BTC, ETH). Prix en dollars, aucune conversion de devise.</div>
-    <div class="msg" id="s-msg"></div>
-    <details id="gh-settings">
+    <div class="muted" style="margin-top:12px">Seuls les trades ouverts après ce moment comptent, sans rétroactivité ; la simulation précédente est archivée. Les lots sont calculés pour que la perte au stop soit égale au risque choisi, dans la limite du levier de chaque actif (×20 micro-futures, ×3 cryptos), arrondis au pas du contrat. Prix en dollars, aucune conversion de devise.</div>
+    <div class="msg" id="s-msg" style="margin-top:10px"></div>
+    <details class="ghbox" id="gh-settings" style="margin-top:14px">
       <summary>Mode GitHub Actions (page servie par GitHub Pages)</summary>
-      <div class="set" style="margin-top:10px; display:grid; gap:10px; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr))">
+      <div class="ghgrid">
         <div><label for="gh-owner">Propriétaire</label><input id="gh-owner" placeholder="Yxnisse7" value="Yxnisse7"></div>
         <div><label for="gh-repo">Dépôt</label><input id="gh-repo" placeholder="Trading-Bot" value="Trading-Bot"></div>
-        <div><label for="gh-token">Jeton (fine-grained, Actions : lecture/écriture)</label><input id="gh-token" type="password" placeholder="github_pat_…"></div>
-        <div style="display:flex; gap:8px; flex-wrap:wrap"><button class="secondary" type="button" id="gh-save">Enregistrer dans ce navigateur</button><button class="secondary" type="button" id="gh-test">Tester le jeton</button></div>
+        <div><label for="gh-token">Jeton (fine-grained, Actions : lecture et écriture)</label><input id="gh-token" type="password" placeholder="github_pat_…"></div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap"><button class="secondary" type="button" id="gh-save">Enregistrer</button><button class="secondary" type="button" id="gh-test">Tester le jeton</button></div>
       </div>
       <div class="muted" id="gh-status" style="margin-top:8px"></div>
     </details>
   </div>
 
-  <h2>Graphique live</h2>
-  <div class="card" id="live"></div>
-
-  <h2>Courbe de la balance</h2>
-  <div class="card"><svg id="equity" viewBox="0 0 800 220" preserveAspectRatio="none" role="img" aria-label="Courbe de la balance"></svg><div class="muted" id="equity-note"></div></div>
-
-  <h2>Positions ouvertes (simulées)</h2>
-  <div class="card tbl"><table id="open"><thead><tr><th>Ouvert</th><th>Actif</th><th>Sens</th><th class="num">Entrée</th><th class="num">SL</th><th class="num">TP</th><th class="num">Lots</th><th class="num">Risque au stop</th><th class="num">Notionnel</th><th class="num">Levier</th></tr></thead><tbody></tbody></table></div>
-
-  <h2>Trades appliqués à la balance</h2>
-  <div class="card tbl"><table id="hist"><thead><tr><th>Clôturé</th><th>Actif</th><th>Sens</th><th>Horizon</th><th>Résultat</th><th class="num">Entrée</th><th class="num">Sortie</th><th class="num">Lots</th><th class="num">Brut</th><th class="num">Coûts</th><th class="num">Net</th><th class="num">Balance après</th></tr></thead><tbody></tbody></table></div>
-
-  <h2>Trades risqués</h2>
-  <div class="card"><div class="muted" style="margin-bottom:6px">Aucun trade n'est refusé : quand la balance ne permet pas le lot minimal au risque choisi, le lot minimal est pris quand même et le trade est marqué ⚠️ (risque effectif et levier réels affichés).</div><div id="skipped" class="muted"></div></div>
-
-  <div class="disclaimer">⚠️ Simulation sur des signaux automatiques et des données publiques gratuites : les résultats ne sont pas ceux d'un compte réel (exécution, glissement, marges, conversion de devise). Ceci n'est pas un conseil financier. Aucune stratégie ne garantit un gain.</div>
+  <div class="foot">
+    <div>Simulation sur des signaux automatiques et des données publiques gratuites : les résultats ne sont pas ceux d'un compte réel (exécution, glissement, marges, conversion de devise). Ce n'est pas un conseil financier.</div>
+    <div>Graphique : <a href="https://www.tradingview.com/lightweight-charts/" rel="noopener" target="_blank">TradingView Lightweight Charts</a>, licence Apache 2.0.</div>
+  </div>
 </div>
 
+<div id="tip" role="tooltip"></div>
+<script src="vendor/lightweight-charts.standalone.production.js"></script>
+<script src="yasuke.js"></script>
+<script src="charts.js"></script>
 <script src="live-chart.js"></script>
 <script src="sections.js"></script>
 <script>
 (function () {
-  const $ = (s) => document.querySelector(s);
+  const Y = window.YK, $ = Y.$, esc = Y.esc;
+  $("#btn-refresh").innerHTML = Y.I.refresh; $("#warn-ic").innerHTML = Y.I.warn;
   // Graphique live : sans choix mémorisé, il montre l'actif de la première position simulée ouverte
-  const live = window.LiveChart ? window.LiveChart.mount($("#live"), {
-    how: "Bougies de 5 minutes. Les traits horizontaux sont les positions ouvertes sur cet actif : entrée, objectif et stop. "
-       + "Mis à jour à chaque passage du bot, soit environ toutes les 5 minutes : ce n'est pas un flux temps réel.",
-  }) : null;
-  const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-  const money = (v, cur) => (v === null || v === undefined) ? "n/a" : (Number(v).toLocaleString("fr-FR", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " " + cur);
-  const signed = (v, cur) => (v === null || v === undefined) ? "n/a" : ((v >= 0 ? "+" : "") + Number(v).toLocaleString("fr-FR", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + (cur ? " " + cur : ""));
-  const cls = (v) => (v > 0 ? "good" : v < 0 ? "bad" : "");
-  const RES = { tp: "TP", sl: "SL", expired: "expiré" };
-  let mode = "static"; let data = null;
-
-  try { const t = localStorage.getItem("tb-theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
-  $("#btn-theme").addEventListener("click", () => {
-    const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
-    document.documentElement.dataset.theme = next;
-    try { localStorage.setItem("tb-theme", next); } catch (e) {}
-  });
-  const ghFields = ["owner", "repo", "token"];
-  try { ghFields.forEach((k) => { const v = localStorage.getItem("tb-gh-" + k); if (v) $("#gh-" + k).value = v; }); } catch (e) {}
-  function ghStatus() {
-    const el = $("#gh-status"); if (!el) return;
-    const gh = ghSettings();
-    el.textContent = gh ? `Jeton GitHub enregistré dans ce navigateur pour ${gh.owner}/${gh.repo}.` : "Aucun jeton GitHub enregistré dans ce navigateur : les boutons ne peuvent pas déclencher le bot tant qu'il n'est pas renseigné puis enregistré.";
-  }
-  ghStatus();
-  $("#gh-test").addEventListener("click", async () => {
-    const el = $("#gh-status"); const gh = ghSettings();
-    if (!gh) { el.textContent = "Enregistrez d'abord le jeton."; return; }
-    el.textContent = "Test en cours…";
-    try {
-      const r = await fetch(`https://api.github.com/repos/${gh.owner}/${gh.repo}/actions/workflows`, { headers: { "Authorization": "Bearer " + gh.token, "Accept": "application/vnd.github+json" } });
-      if (r.status === 200) { const j = await r.json(); el.textContent = `Jeton valide : ${j.total_count} workflow(s) visibles. Vous pouvez utiliser les boutons.`; }
-      else if (r.status === 401) el.textContent = "Jeton refusé (401) : il est invalide ou expiré. Générez-en un nouveau (fine-grained, dépôt Trading-Bot, Actions : Read and write).";
-      else if (r.status === 403 || r.status === 404) el.textContent = `Accès refusé (${r.status}) : le jeton n'a pas la permission Actions sur ce dépôt, ou le dépôt est mal orthographié.`;
-      else el.textContent = `Réponse inattendue de GitHub (${r.status}).`;
-    } catch (e) { el.textContent = "Impossible de joindre GitHub : " + e.message; }
-  });
-  $("#gh-save").addEventListener("click", () => {
-    try { ghFields.forEach((k) => localStorage.setItem("tb-gh-" + k, $("#gh-" + k).value.trim())); $("#s-msg").textContent = "Paramètres GitHub enregistrés dans ce navigateur."; ghStatus(); }
-    catch (e) { $("#s-msg").textContent = "Impossible d'enregistrer (stockage du navigateur indisponible)."; }
-  });
-  function ghSettings() {
-    try {
-      const o = (localStorage.getItem("tb-gh-owner") || "").trim(), r = (localStorage.getItem("tb-gh-repo") || "").trim(), t = (localStorage.getItem("tb-gh-token") || "").trim();
-      return o && r && t ? { owner: o, repo: r, token: t } : null;
-    } catch (e) { return null; }
-  }
+  const live = window.LiveChart ? window.LiveChart.mount($("#live"), {}) : null;
+  const RES = { tp: "TP", sl: "SL", expired: "Expiré" };
+  let mode = "static", data = null, histLimit = 10;
 
   async function load() {
     $("#updated").textContent = "Chargement…";
-    try { const p = await fetch("/api/ping", { cache: "no-store" }); if (p.ok) mode = "local"; } catch (e) { mode = "static"; }
-    const urls = mode === "local" ? ["/api/portfolio"] : ["portfolio.json", "../data/portfolio.json"];
+    try { const p = await fetch("/api/ping", { cache: "no-store" }); mode = p.ok ? "local" : "static"; } catch (e) { mode = "static"; }
     data = null;
-    for (const u of urls) { try { const r = await fetch(u, { cache: "no-store" }); if (r.ok) { data = await r.json(); break; } } catch (e) { /* suivant */ } }
+    for (const u of (mode === "local" ? ["/api/portfolio"] : ["portfolio.json", "../data/portfolio.json"])) {
+      try { const r = await fetch(u + (mode === "local" ? "" : "?t=" + Date.now()), { cache: "no-store" }); if (r.ok) { data = await r.json(); break; } } catch (e) { /* suivant */ }
+    }
+    // état du bot pour l'en-tête
+    for (const u of (mode === "local" ? ["/api/state"] : ["dashboard.json", "../data/dashboard.json"])) {
+      try { const r = await fetch(u + (mode === "local" ? "" : "?t=" + Date.now()), { cache: "no-store" }); if (r.ok) { const d = await r.json(); Y.status(d.state && d.state.last_scan, d.state && d.state.last_scan_note); window.__st = d.state; if (live) live.setAssets(d.assets.map((a) => [a.key, a.label, !!(a.trial && !a.trial_promoted)])); break; } } catch (e) { /* suivant */ }
+    }
     if (!data || !data.balance) { $("#updated").textContent = "Aucune simulation encore enregistrée : définissez une balance, ou attendez le prochain passage du bot."; return; }
     render();
   }
 
+  function tile(label, value, sub, extra, badge) {
+    return `<div class="card tile"><div><div class="th"><span>${label}</span>${badge || ""}</div><div class="v">${value}</div></div><div class="s">${sub}</div>${extra || ""}</div>`;
+  }
   function render() {
-    const d = data; const cur = d.currency || "$";
-    const hist = d.history || []; const initial = Number(d.balance_initial); const bal = Number(d.balance);
-    const peak = Number(d.peak || initial); const pnl = bal - initial;
+    const d = data, cur = d.currency || "$";
+    const hist = d.history || [], open = Object.values(d.open || {});
+    const initial = Number(d.balance_initial), bal = Number(d.balance), peak = Number(d.peak || initial), pnl = bal - initial;
     const wins = hist.filter((h) => h.pnl > 0).length, losses = hist.filter((h) => h.pnl < 0).length;
-    $("#updated").textContent = `Mis à jour le ${new Date(d.updated_at).toLocaleString("fr-FR")} — mode ${mode === "local" ? "local" : "GitHub Pages"}` +
-      (d.is_default ? " — balance par défaut (non définie)" : ` — simulation démarrée le ${new Date(d.started_at).toLocaleString("fr-FR")}`);
+    const dd = peak ? (peak - bal) / peak * 100 : 0;
+    const riskyN = hist.filter((h) => h.risky).length + open.filter((o) => o.risky).length;
+    $("#updated").textContent = `Mise à jour à ${Y.hhmm(d.updated_at)}` + (d.is_default ? " · balance par défaut, non définie" : ` · simulation démarrée le ${new Date(d.started_at).toLocaleDateString("fr-FR", { day: "numeric", month: "long" })}`);
     $("#gh-settings").style.display = mode === "local" ? "none" : "";
-    $("#kpis").innerHTML = [
-      kpi("Balance", money(bal, cur), `départ ${money(initial, cur)}`, cls(pnl)),
-      kpi("Résultat", signed(pnl, cur), `${initial ? ((pnl / initial) * 100).toFixed(2) : "0"} %`, cls(pnl)),
-      kpi("Repli depuis le pic", (peak ? (((peak - bal) / peak) * 100).toFixed(2) : "0") + " %", `pic ${money(peak, cur)}`, peak > bal ? "warn" : ""),
-      kpi("Trades", hist.length, `${wins} gagnants · ${losses} perdants`),
-      kpi("Risque par trade", `${d.risk_pct} %`, `${Object.keys(d.open || {}).length} position(s) ouverte(s)`),
+
+    const h = $("#hero"); h.removeAttribute("aria-busy");
+    h.innerHTML = `<div class="lab">Balance simulée</div><div class="big"><b id="h-bal"></b></div>
+      <p>Départ ${Y.money(initial, cur)} · <span class="${Y.tone(pnl)}">${Y.smoney(pnl, cur)}</span>, soit <span class="${Y.tone(pnl)}">${Y.signed(initial ? pnl / initial * 100 : 0, 1)}${Y.NB}%</span></p>
+      <div class="cmp"><div class="h"><span>Trades gagnants</span><span class="up">${wins} sur ${hist.length}</span></div><div class="track"><i style="width:${hist.length ? (wins / hist.length * 100).toFixed(1) : 0}%"></i></div></div>
+      <hr><div class="rel"><span>Repli depuis le plus haut</span><span class="pill ${dd > 20 ? "dn" : "neu"}">${Y.num(dd, 1)}${Y.NB}%</span></div>
+      <div class="muted">Plus haut atteint : ${Y.money(peak, cur)}. Le repli mesure ce qu'il faudrait regagner pour y revenir.</div>`;
+    Y.countTo($("#h-bal"), bal, (x) => Y.money(x, cur));
+
+    const avgW = wins ? hist.filter((x) => x.pnl > 0).reduce((a, x) => a + x.pnl, 0) / wins : null;
+    const avgL = losses ? hist.filter((x) => x.pnl < 0).reduce((a, x) => a + x.pnl, 0) / losses : null;
+    const pts = [initial, ...hist.map((x) => Number(x.balance_after))];
+    $("#tiles").innerHTML = [
+      tile("Résultat", `<span class="${Y.tone(pnl)}">${Y.smoney(pnl, cur)}</span>`, `${Y.signed(initial ? pnl / initial * 100 : 0, 1)}${Y.NB}% depuis le départ`, Y.spark(pts, pnl >= 0 ? "var(--up)" : "var(--dn)")),
+      tile("Gain et perte moyens", `<span class="up">${avgW === null ? "n/a" : Y.smoney(avgW, cur, 0)}</span> <span class="muted" style="font-size:18px">/</span> <span class="dn">${avgL === null ? "n/a" : Y.smoney(avgL, cur, 0)}</span>`, "par trade gagnant, puis perdant"),
+      tile("Trades", String(hist.length), hist.length ? `<div class="stackbar" style="margin:4px 0 8px"><i style="flex:${wins};background:var(--up)"></i><i style="flex:${losses};background:var(--dn)"></i></div>${wins} gagnants · ${losses} perdants` : "Aucun trade clôturé"),
+      tile("Risque par trade", `${Y.num(d.risk_pct, d.risk_pct % 1 ? 2 : 0)}${Y.NB}%`, `${open.length} position${open.length > 1 ? "s" : ""} ouverte${open.length > 1 ? "s" : ""} · ${riskyN} trade${riskyN > 1 ? "s" : ""} risqué${riskyN > 1 ? "s" : ""}`, "", riskyN ? `<span class="pill dn">lot minimal</span>` : ""),
     ].join("");
+    const tiles = $("#tiles"), dots = $("#tile-dots");
+    tiles.onscroll = () => { const i = Math.round(tiles.scrollLeft / Math.max(1, tiles.scrollWidth - tiles.clientWidth) * 2); dots.querySelectorAll("i").forEach((x, k) => x.classList.toggle("on", k === i)); };
     $("#s-balance").placeholder = String(initial); $("#s-risk").placeholder = String(d.risk_pct);
+    drawEquity();
 
-    // courbe
-    const pts = [initial].concat(hist.map((h) => Number(h.balance_after)));
-    const svg = $("#equity");
-    if (pts.length < 2) { svg.innerHTML = ""; $("#equity-note").textContent = "La courbe apparaît après le premier trade clôturé."; }
-    else {
-      const W = 800, H = 220, pad = 24;
-      const min = Math.min(...pts, initial), max = Math.max(...pts, initial);
-      const span = (max - min) || 1;
-      const x = (i) => pad + (i / (pts.length - 1)) * (W - 2 * pad);
-      const y = (v) => H - pad - ((v - min) / span) * (H - 2 * pad);
-      const path = pts.map((v, i) => (i ? "L" : "M") + x(i).toFixed(1) + " " + y(v).toFixed(1)).join(" ");
-      const area = path + ` L${x(pts.length - 1).toFixed(1)} ${(H - pad).toFixed(1)} L${x(0).toFixed(1)} ${(H - pad).toFixed(1)} Z`;
-      const color = bal >= initial ? "var(--good)" : "var(--bad)";
-      svg.innerHTML = `<line x1="${pad}" y1="${y(initial).toFixed(1)}" x2="${W - pad}" y2="${y(initial).toFixed(1)}" stroke="var(--line)" stroke-dasharray="4 4"/>
-        <path d="${area}" fill="${color}" opacity="0.12"/><path d="${path}" fill="none" stroke="${color}" stroke-width="2"/>
-        <circle cx="${x(pts.length - 1).toFixed(1)}" cy="${y(bal).toFixed(1)}" r="4" fill="${color}"/>
-        <text x="${pad}" y="${pad - 8}" font-size="11" fill="var(--muted)">${money(max, cur)}</text>
-        <text x="${pad}" y="${H - 6}" font-size="11" fill="var(--muted)">${money(min, cur)}</text>`;
-      $("#equity-note").textContent = `${pts.length - 1} trade(s) ; la ligne pointillée est la balance de départ.`;
-    }
-
-    const open = Object.values(d.open || {});
     if (live && open.length && !live.hasSavedChoice()) live.select(open[0].asset);
-    $("#open tbody").innerHTML = open.length ? open.map((o) => `<tr><td>${esc(new Date(o.opened_at).toLocaleString("fr-FR"))}</td><td>${esc(o.asset)}</td><td>${o.direction === "long" ? "🟢 long" : "🔴 short"}</td>
-      <td class="num">${o.entry}</td><td class="num">${o.stop_loss}</td><td class="num">${o.take_profit}</td><td class="num">${o.lots} ${esc(o.lot_label)}${o.risky ? " ⚠️" : ""}</td>
-      <td class="num">${money(o.risk_amount, cur)}${o.risk_pct_effective != null ? ` (${Number(o.risk_pct_effective).toFixed(1)} %)` : ""}</td><td class="num">${money(o.notional, cur)}</td><td class="num">×${o.leverage}${o.capped_by_leverage ? " (plafond)" : ""}</td></tr>`).join("")
-      : `<tr><td colspan="10" class="muted">Aucune position simulée ouverte.</td></tr>`;
+    const det = document.getElementById("positions"); if (det && det.setHint) det.setHint(open.length ? `${open.length} position${open.length > 1 ? "s" : ""} ouverte${open.length > 1 ? "s" : ""}` : "aucune position ouverte");
+    $("#open tbody").innerHTML = open.length ? open.map((o) => `<tr><td class="mono nowrap" style="font-size:12px">${esc(new Date(o.opened_at).toLocaleString("fr-FR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }))}</td><td class="nowrap"><b style="font-weight:500">${esc(Y.shortLabel(o.asset_label || o.asset))}</b></td><td>${Y.dirHtml(o.direction)}</td>
+      <td class="num">${Y.price(o.entry)}</td><td class="num up">${Y.price(o.take_profit)}</td><td class="num dn">${Y.price(o.stop_loss)}</td><td class="num">${Y.num(o.lots, o.lots % 1 ? 3 : 0)} ${esc(o.lot_label)}${o.risky ? ' <span class="pill dn">risqué</span>' : ""}</td>
+      <td class="num">${Y.money(o.risk_amount, cur)}${o.risk_pct_effective != null ? ` <span class="muted">(${Y.num(o.risk_pct_effective, 1)}${Y.NB}%)</span>` : ""}</td><td class="num">${Y.money(o.notional, cur, 0)}</td><td class="num">×${Y.num(o.leverage, 1)}${o.capped_by_leverage ? " (plafond)" : ""}</td></tr>`).join("")
+      : `<tr><td colspan="10" class="empty">Aucune position simulée ouverte.</td></tr>`;
 
-    $("#hist tbody").innerHTML = hist.length ? hist.slice().reverse().map((h) => `<tr><td>${esc(new Date(h.closed_at).toLocaleString("fr-FR"))}</td><td>${esc(h.asset_label || h.asset)}</td><td>${h.direction}</td><td>${esc(h.horizon)}</td>
-      <td><span class="pill ${h.status}">${RES[h.status] || h.status}</span></td><td class="num">${h.entry}</td><td class="num">${h.exit}</td><td class="num">${h.lots} ${esc(h.lot_label)}${h.risky ? " ⚠️" : ""}</td>
-      <td class="num ${cls(h.pnl_gross)}">${signed(h.pnl_gross)}</td><td class="num">${Number(h.cost).toFixed(2)}</td><td class="num ${cls(h.pnl)}"><b>${signed(h.pnl, cur)}</b></td><td class="num">${money(h.balance_after, cur)}</td></tr>`).join("")
-      : `<tr><td colspan="12" class="muted">Aucun trade clôturé depuis le début de la simulation.</td></tr>`;
+    renderHist();
 
-    const risky = [...open.filter((o) => o.risky).map((o) => ({ at: o.opened_at, asset: o.asset, txt: `${o.lots} ${o.lot_label} · risque ${Number(o.risk_pct_effective).toFixed(1)} % de la balance · levier ×${o.leverage} (position ouverte)` })),
-      ...hist.filter((h) => h.risky).map((h) => ({ at: h.closed_at, asset: h.asset_label || h.asset, txt: `${h.lots} ${h.lot_label} · risque ${Number(h.risk_pct_effective || 0).toFixed(1)} % · ${signed(h.pnl, cur)}` }))];
+    const risky = [...open.filter((o) => o.risky).map((o) => ({ at: o.opened_at, asset: o.asset_label || o.asset, txt: `${Y.num(o.lots, o.lots % 1 ? 3 : 0)} ${o.lot_label} · risque ${Y.num(o.risk_pct_effective, 1)}${Y.NB}% de la balance · levier ×${Y.num(o.leverage, 1)} · position ouverte` })),
+      ...hist.filter((x) => x.risky).map((x) => { const before = Number(x.balance_after) - Number(x.pnl), lev = before > 0 && x.notional ? x.notional / before : null;
+        return { at: x.closed_at, asset: x.asset_label || x.asset, txt: `${Y.num(x.lots, x.lots % 1 ? 3 : 0)} ${x.lot_label} · risque ${Y.num(x.risk_pct_effective || 0, 1)}${Y.NB}%${lev ? ` · levier ×${Y.num(lev, 1)}` : ""} · ${Y.smoney(x.pnl, cur)}` }; })];
     const sk = d.skipped || [];
     $("#skipped").innerHTML = (risky.length || sk.length)
-      ? [...risky.slice(-10).reverse().map((r) => `<div>⚠️ ${esc(new Date(r.at).toLocaleString("fr-FR"))} · ${esc(r.asset)} · ${esc(r.txt)}</div>`),
-         ...sk.slice(-5).reverse().map((s) => `<div>⛔ ${esc(new Date(s.at).toLocaleString("fr-FR"))} · ${esc(s.asset)} · non dimensionnable : ${esc(s.reason)}</div>`)].join("")
-      : "Aucun.";
+      ? [...risky.slice(-10).reverse().map((r) => `<div>${Y.I.warn}<span><span class="mono muted" style="font-size:12px">${esc(new Date(r.at).toLocaleString("fr-FR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }))}</span> · <b style="font-weight:500">${esc(Y.shortLabel(r.asset))}</b> · ${esc(r.txt)}</span></div>`),
+         ...sk.slice(-5).reverse().map((s) => `<div>${Y.I.warn}<span>${esc(new Date(s.at).toLocaleString("fr-FR"))} · ${esc(s.asset)} · non dimensionnable : ${esc(s.reason)}</span></div>`)].join("")
+      : `<span class="muted">Aucun.</span>`;
   }
-  function kpi(label, value, sub, klass = "") { return `<div class="card kpi"><div class="s">${esc(label)}</div><div class="v ${klass}">${esc(value)}</div><div class="s">${esc(sub)}</div></div>`; }
+  function renderHist() {
+    const d = data, cur = d.currency || "$", hist = (d.history || []).slice().reverse(), shown = hist.slice(0, histLimit);
+    $("#hist tbody").innerHTML = shown.length ? shown.map((x) => `<tr><td class="mono nowrap" style="font-size:12px">${esc(new Date(x.closed_at).toLocaleString("fr-FR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }))}</td><td class="nowrap"><b style="font-weight:500">${esc(Y.shortLabel(x.asset_label || x.asset))}</b></td><td>${Y.dirHtml(x.direction)}</td><td class="muted">${esc(x.horizon)}</td>
+      <td>${Y.resultPill(x.status, null)}</td><td class="num">${Y.price(x.entry)}</td><td class="num">${Y.price(x.exit)}</td><td class="num nowrap">${Y.num(x.lots, x.lots % 1 ? 3 : 0)} ${esc(x.lot_label)}${x.risky ? ' <span class="pill dn">risqué</span>' : ""}</td>
+      <td class="num ${Y.tone(x.pnl_gross)}">${Y.signed(x.pnl_gross, 2)}</td><td class="num muted">${Y.num(x.cost, 2)}</td><td class="num ${Y.tone(x.pnl)}"><b>${Y.smoney(x.pnl, cur)}</b></td><td class="num">${Y.money(x.balance_after, cur)}</td></tr>`).join("")
+      : `<tr><td colspan="12" class="empty">Aucun trade clôturé depuis le début de la simulation.</td></tr>`;
+    $("#hist-count").textContent = hist.length ? `${shown.length} affichés sur ${hist.length}` : "";
+    $("#hist-more").hidden = hist.length <= histLimit;
+  }
+  $("#hist-more").addEventListener("click", () => { histLimit += 10; renderHist(); });
 
-  $("#btn-refresh").addEventListener("click", load);
+  // Courbe de la balance : trait de la balance, pointillé = départ, surface bleue au-dessus, orange en dessous
+  function drawEquity() {
+    const root = $("#equity"), d = data; if (!d) return;
+    const cur = d.currency || "$", hist = d.history || [], initial = Number(d.balance_initial);
+    const pts = [initial, ...hist.map((x) => Number(x.balance_after))];
+    root.replaceChildren();
+    if (pts.length < 2) { root.innerHTML = `<div class="empty">La courbe apparaît après le premier trade clôturé.</div>`; return; }
+    const bal = pts[pts.length - 1];
+    $("#eq-pill").innerHTML = `<span class="pill ${Y.tone(bal - initial)}"><b>${Y.smoney(bal - initial, cur)}</b></span>`;
+    const W = Math.max(320, root.clientWidth || 900), H = W < 500 ? 200 : 240, left = 4, right = 74, top = 10, bottom = 12;
+    const mn = Math.min(...pts), mx = Math.max(...pts), sp = (mx - mn) || 1;
+    const x = (i) => left + i / (pts.length - 1) * (W - left - right), y = (v) => top + (mx - v) / sp * (H - top - bottom);
+    const line = pts.map((v, i) => `${i ? "L" : "M"}${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(" ");
+    const tone = bal >= initial ? "var(--up)" : "var(--dn)";
+    root.innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Courbe de la balance">
+      ${[mx, (mx + mn) / 2, mn].map((v) => `<line x1="${left}" x2="${W - right}" y1="${y(v)}" y2="${y(v)}" stroke="var(--grid)" stroke-dasharray="2 4"/><text class="mono" x="${W - right + 8}" y="${y(v) + 4}" style="font-size:11px">${Y.money(v, cur, 0)}</text>`).join("")}
+      <line x1="${left}" x2="${W - right}" y1="${y(initial)}" y2="${y(initial)}" stroke="var(--c-axis)" stroke-dasharray="5 4"/>
+      <text x="${W - right - 4}" y="${y(initial) + 14}" text-anchor="end" style="font-size:11px">départ ${Y.money(initial, cur, 0)}</text>
+      <path d="${line} L${x(pts.length - 1)},${y(initial)} L${x(0)},${y(initial)} Z" fill="${tone}" fill-opacity=".08"/>
+      <path d="${line}" fill="none" stroke="var(--text)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+      <circle cx="${x(pts.length - 1)}" cy="${y(bal)}" r="4.5" fill="${tone}" stroke="var(--card)" stroke-width="2"/>
+      <line id="eq-x" y1="${top}" y2="${H - bottom}" stroke="var(--c-axis)" visibility="hidden"/>
+      <rect id="eq-hit" x="${left}" y="0" width="${W - left - right}" height="${H}" fill="transparent"/></svg>`;
+    $("#equity-note").textContent = `Balance après chacun des ${pts.length - 1} trades clôturés`;
+    const svg = root.querySelector("svg"), cross = root.querySelector("#eq-x");
+    root.querySelector("#eq-hit").addEventListener("pointermove", (e) => {
+      const r = svg.getBoundingClientRect(), px = (e.clientX - r.left) / r.width * W;
+      const i = Math.max(1, Math.min(pts.length - 1, Math.round((px - left) / (W - left - right) * (pts.length - 1)))), hh = hist[i - 1];
+      cross.setAttribute("x1", x(i)); cross.setAttribute("x2", x(i)); cross.setAttribute("visibility", "visible");
+      YKCharts.showTip(e, `${Y.shortLabel(hh.asset_label || hh.asset)} · ${RES[hh.status] || hh.status}`, [["Net", Y.smoney(hh.pnl, cur), null], ["Balance après", Y.money(hh.balance_after, cur), null], ["Clôturé", new Date(hh.closed_at).toLocaleString("fr-FR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }), null]]);
+    });
+    root.querySelector("#eq-hit").addEventListener("pointerleave", () => { YKCharts.hideTip(); cross.setAttribute("visibility", "hidden"); });
+  }
+
+  Y.bindGhSettings(() => { $("#s-msg").textContent = "Paramètres GitHub enregistrés dans ce navigateur."; });
+  $("#btn-refresh").addEventListener("click", () => { load(); if (live) live.refresh(); });
+  let rt = null; addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(drawEquity, 200); });
   $("#set").addEventListener("submit", async (ev) => {
     ev.preventDefault();
-    const btn = $("#s-submit"); const msg = $("#s-msg");
-    const balance = parseFloat($("#s-balance").value); const risk = $("#s-risk").value ? parseFloat($("#s-risk").value) : null;
+    const btn = $("#s-submit"), msg = $("#s-msg");
+    const balance = parseFloat($("#s-balance").value), risk = $("#s-risk").value ? parseFloat($("#s-risk").value) : null;
     if (!(balance > 0)) { msg.textContent = "Indiquez une balance positive."; return; }
-    if (!confirm(`Démarrer une nouvelle simulation avec ${balance} ${(data && data.currency) || "$"} ? Les trades déjà passés ne seront pas comptés.`)) return;
+    if (!confirm(`Démarrer une nouvelle simulation avec ${balance} ${(data && data.currency) || "$"} ? Les trades déjà passés ne seront pas comptés, et le changement vaut pour tous les utilisateurs.`)) return;
     btn.disabled = true; msg.textContent = "Enregistrement…";
     try {
       if (mode === "local") {
@@ -244,18 +229,14 @@
         const j = await r.json(); if (!r.ok || !j.ok) throw new Error(j.error || "erreur");
         msg.textContent = "Balance définie. Les prochains trades du bot seront simulés dessus."; await load();
       } else {
-        const gh = ghSettings(); if (!gh) { $("#gh-settings").open = true; throw new Error("Aucun jeton GitHub enregistré dans ce navigateur : dépliez « Mode GitHub Actions », collez votre jeton, cliquez « Enregistrer », puis réessayez."); }
-        const r = await fetch(`https://api.github.com/repos/${gh.owner}/${gh.repo}/actions/workflows/bot.yml/dispatches`, {
-          method: "POST", headers: { "Authorization": "Bearer " + gh.token, "Accept": "application/vnd.github+json", "Content-Type": "application/json" },
-          body: JSON.stringify({ ref: "main", inputs: { command: "portfolio", balance: String(balance), risk: risk === null ? "" : String(risk) } }) });
-        if (r.status === 401) throw new Error("GitHub a refusé le jeton (401) : il est invalide ou expiré.");
-        if (r.status === 403 || r.status === 404) throw new Error(`GitHub a refusé la demande (${r.status}) : le jeton n'a pas la permission « Actions : Read and write » sur ce dépôt.`);
-        if (r.status !== 204) throw new Error(`GitHub a répondu ${r.status}.`);
-        msg.textContent = "Demande transmise à GitHub : la balance sera définie dans 1 à 2 minutes. Cliquez ensuite sur « Actualiser ».";
+        await Y.dispatch({ command: "portfolio", balance: String(balance), risk: risk === null ? "" : String(risk) });
+        msg.textContent = "Demande transmise à GitHub : la balance sera définie dans 1 à 2 minutes. Cliquez ensuite sur Actualiser.";
       }
-    } catch (e) { msg.textContent = "Échec : " + e.message; }
+    } catch (e) { msg.textContent = "Échec : " + e.message; if (/jeton/i.test(e.message)) $("#gh-settings").open = true; }
     finally { btn.disabled = false; }
   });
+  setInterval(() => { if (window.__st) Y.status(window.__st.last_scan, window.__st.last_scan_note); }, 60000);
+  setInterval(() => { if (mode === "static") load(); }, 120000);
   load();
 })();
 </script>
