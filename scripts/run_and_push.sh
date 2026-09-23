@@ -18,13 +18,23 @@ save_message_ids() {
   fi
 }
 BRANCH="${GITHUB_REF_NAME:-main}"
+# Coupure réseau passagère côté GitHub (certificat, 5xx…) : on réessaie au lieu d'échouer tout le passage.
+git_retry() {
+  local n
+  for n in 1 2 3; do
+    if "$@"; then return 0; fi
+    echo "git : échec réseau ($n/3), nouvel essai dans $((n * 5)) s."
+    sleep $((n * 5))
+  done
+  return 1
+}
 export TRADING_BOT_OUTBOX="${TRADING_BOT_OUTBOX:-${RUNNER_TEMP:-/tmp}/outbox.jsonl}"
 git config user.name "trading-bot[actions]"
 git config user.email "actions@users.noreply.github.com"
 
 for attempt in 1 2 3 4; do
   rm -f "$TRADING_BOT_OUTBOX"
-  git fetch -q origin "$BRANCH"
+  git_retry git fetch -q origin "$BRANCH"
   git reset -q --hard "origin/$BRANCH"
   echo "== tentative $attempt : $*"
   "$@"
