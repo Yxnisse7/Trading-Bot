@@ -1,20 +1,68 @@
 # Trading-Bot — rapport
 
-_Mis à jour le 23/09/2026 à 15:45 (Europe/Paris)._
+_Mis à jour le 23/09/2026 à 16:40 (Europe/Paris)._
 
 ## Vue d'ensemble
 
-- Trades clôturés : **0**
-- Taux de réussite cumulé (TP / (TP+SL)) : **n/a** — hasard attendu n/a, avantage **n/a**
-- P&L théorique cumulé, net des coûts estimés (somme des % par trade, sans levier) : **+0.00 %** (brut +0.00 %)
-- Signaux ouverts : **1**
+- Trades clôturés : **1**
+- Taux de réussite cumulé (TP / (TP+SL)) : **0%** — hasard attendu 40%, avantage **-40%**
+- P&L théorique cumulé, net des coûts estimés (somme des % par trade, sans levier) : **-1.02 %** (brut -0.77 %)
+- Signaux ouverts : **0**
 - Signaux fantômes (suivis en silence pour l'apprentissage) : **0** clôturés, 0 ouverts, taux de réussite n/a (hasard attendu n/a)
 
-## Signaux ouverts
+## Statistiques
 
-| Heure | Actif | Sens | Entrée | TP | SL | Confiance | Source | Expire |
-|---|---|---|---:|---:|---:|---|---|---|
-| 23/09 15:35 | Bitcoin (BTC) | long | 85577.0 | 86560.0 | 84921.0 | moyen | signaux du bot | 03:35 |
+### Par actif
+
+| Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
+|---|---:|---:|---:|---:|---:|---:|
+| bitcoin | 1 | 0 | 1 | 0 | 0% | -1.017 % |
+
+### Par sens
+
+| Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
+|---|---:|---:|---:|---:|---:|---:|
+| long | 1 | 0 | 1 | 0 | 0% | -1.017 % |
+
+### Par confiance
+
+| Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
+|---|---:|---:|---:|---:|---:|---:|
+| moyen | 1 | 0 | 1 | 0 | 0% | -1.017 % |
+
+### Par critère technique
+
+| Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
+|---|---:|---:|---:|---:|---:|---:|
+| adx | 1 | 0 | 1 | 0 | 0% | -1.017 % |
+| level | 1 | 0 | 1 | 0 | 0% | -1.017 % |
+| trend_15m | 1 | 0 | 1 | 0 | 0% | -1.017 % |
+| trend_1h | 1 | 0 | 1 | 0 | 0% | -1.017 % |
+| volume | 1 | 0 | 1 | 0 | 0% | -1.017 % |
+
+### Par contexte d'actualité
+
+| Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
+|---|---:|---:|---:|---:|---:|---:|
+| actualité chargée | 1 | 0 | 1 | 0 | 0% | -1.017 % |
+
+### Par heure d'émission (UTC)
+
+| Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
+|---|---:|---:|---:|---:|---:|---:|
+| 13h | 1 | 0 | 1 | 0 | 0% | -1.017 % |
+
+### Par source
+
+| Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
+|---|---:|---:|---:|---:|---:|---:|
+| signaux du bot | 1 | 0 | 1 | 0 | 0% | -1.017 % |
+
+### Par horizon
+
+| Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
+|---|---:|---:|---:|---:|---:|---:|
+| 12h | 1 | 0 | 1 | 0 | 0% | -1.017 % |
 
 ## Apprentissage
 
@@ -35,6 +83,7 @@ _Mis à jour le 23/09/2026 à 15:45 (Europe/Paris)._
 
 Notes :
 
+- trades réels : -1,00 R ± 0,00 R par trade avant frais sur 1 trades (0 R = hasard)
 - aucun critère ne s'écarte du hasard au-delà de la marge de sécurité : poids par défaut conservés
 
 ## Backtests (données historiques 5 min)

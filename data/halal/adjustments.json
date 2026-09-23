@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-23T09:19:54.273144+00:00",
+  "updated_at": "2026-09-23T14:40:45.770666+00:00",
   "method": "v2 : recalcul complet, marge de sécurité, résultats en R, sources pondérées",
   "weights": {
     "trend_5m": 1.0,
@@ -96,10 +96,10 @@
         "trend_1h",
         "adx"
       ],
-      "n": 63,
-      "n_eff": 63.0,
-      "mean_r": 0.3253,
-      "margin_r": 0.3797,
+      "n": 64,
+      "n_eff": 56.8,
+      "mean_r": 0.2462,
+      "margin_r": 0.3966,
       "multiplier": 1.0
     },
     "vwap": {
@@ -136,20 +136,20 @@
       "members": [
         "level"
       ],
-      "n": 6,
-      "n_eff": 6.0,
-      "mean_r": -0.0542,
-      "margin_r": 0.9299,
+      "n": 7,
+      "n_eff": 4.5,
+      "mean_r": -0.4326,
+      "margin_r": 0.982,
       "multiplier": 1.0
     },
     "volume": {
       "members": [
         "volume"
       ],
-      "n": 1,
-      "n_eff": 1.0,
+      "n": 2,
+      "n_eff": 1.5,
       "mean_r": -1.0,
-      "margin_r": 0.0,
+      "margin_r": 0.0001,
       "multiplier": 1.0
     },
     "orb": {
@@ -174,6 +174,11 @@
     }
   },
   "overview": {
+    "réels": {
+      "n": 1,
+      "mean_r": -1.0001,
+      "margin_r": 0.0
+    },
     "backtest": {
       "n": 63,
       "mean_r": 0.3253,
@@ -184,10 +189,12 @@
   "baseline": null,
   "promoted_variants": [],
   "notes": [
+    "trades réels : -1,00 R ± 0,00 R par trade avant frais sur 1 trades (0 R = hasard)",
     "aucun critère ne s'écarte du hasard au-delà de la marge de sécurité : poids par défaut conservés"
   ],
-  "sample": 63,
+  "sample": 64,
   "sample_by_source": {
+    "bot": 1,
     "backtest": 63
   }
 }
