@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-23T15:20:38.878511+00:00",
+  "updated_at": "2026-09-23T15:30:56.548268+00:00",
   "method": "v2 : recalcul complet, marge de sécurité, résultats en R, sources pondérées",
   "weights": {
     "trend_5m": 1.0,
@@ -124,9 +124,9 @@
         "trend_1h",
         "adx"
       ],
-      "n": 591,
-      "n_eff": 409.3,
-      "mean_r": 0.0208,
+      "n": 592,
+      "n_eff": 410.2,
+      "mean_r": 0.0245,
       "margin_r": 0.1093,
       "multiplier": 1.0
     },
@@ -134,20 +134,20 @@
       "members": [
         "vwap"
       ],
-      "n": 495,
-      "n_eff": 338.8,
-      "mean_r": 0.0543,
-      "margin_r": 0.1215,
+      "n": 496,
+      "n_eff": 339.8,
+      "mean_r": 0.0584,
+      "margin_r": 0.1214,
       "multiplier": 1.0
     },
     "rsi": {
       "members": [
         "rsi"
       ],
-      "n": 479,
-      "n_eff": 327.1,
-      "mean_r": 0.0121,
-      "margin_r": 0.1203,
+      "n": 480,
+      "n_eff": 328.0,
+      "mean_r": 0.0168,
+      "margin_r": 0.1202,
       "multiplier": 1.0
     },
     "macd": {
@@ -218,9 +218,9 @@
       "margin_r": 0.3046
     },
     "fantômes": {
-      "n": 34,
-      "mean_r": 0.15,
-      "margin_r": 0.3871
+      "n": 35,
+      "mean_r": 0.1818,
+      "margin_r": 0.381
     },
     "backtest": {
       "n": 502,
@@ -259,10 +259,10 @@
     },
     "reprise_apres_stop": {
       "label": "reprise juste après un stop",
-      "n": 0,
-      "mean_net_r": null,
+      "n": 1,
+      "mean_net_r": 1.1508,
       "promoted": false,
-      "missing": 100
+      "missing": 99
     },
     "essai_ethereum": {
       "label": "nouvel actif : Ethereum (ETH/USD)",
@@ -296,13 +296,14 @@
     "aucun critère ne s'écarte du hasard au-delà de la marge de sécurité : poids par défaut conservés",
     "variante « indices le matin européen » en test : 3 trades, -1,16 R net, encore 97 trades avant décision",
     "variante « horizon ~3 h » en test : 4 trades, +0,64 R net, encore 96 trades avant décision",
+    "variante « reprise juste après un stop » en test : 1 trades, +1,15 R net, encore 99 trades avant décision",
     "variante « nouvel actif : Ethereum (ETH/USD) » en test : 1 trades, -1,25 R net, encore 99 trades avant décision",
     "variante « nouvel actif : Pétrole WTI (CL) » en test : 3 trades, -0,24 R net, encore 97 trades avant décision"
   ],
-  "sample": 592,
+  "sample": 593,
   "sample_by_source": {
     "bot": 55,
-    "shadow": 34,
+    "shadow": 35,
     "manual": 1,
     "backtest": 502
   }
