@@ -41,12 +41,12 @@ from .learning import analyze
 from .signals import format_signal
 
 
-HALAL_REFUSED = {"manual", "propose", "commands", "guide", "ui", "loop", "fetch-data"}
+HALAL_REFUSED = {"manual", "propose", "commands", "guide", "ui", "loop", "fetch-data", "topstep"}
 
 
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(description="Générateur de signaux de scalping (NQ, BTC, XAU) — données gratuites")
-    p.add_argument("command", choices=["scan", "track", "tick", "summary", "stats", "loop", "status", "test-notify", "backtest", "report", "fetch-data", "manual", "propose", "ui", "commands", "portfolio", "guide", "learn", "flush-outbox", "check-data", "stop"])
+    p.add_argument("command", choices=["scan", "track", "tick", "summary", "stats", "loop", "status", "test-notify", "backtest", "report", "fetch-data", "manual", "propose", "ui", "commands", "portfolio", "guide", "learn", "flush-outbox", "check-data", "stop", "topstep"])
     p.add_argument("--signal", help="stop : identifiant (ou début) du trade à arrêter, ou son actif ; sans valeur, le seul trade ouvert")
     p.add_argument("--halal", action="store_true", help="mode halal : second bot séparé (achat seulement, sans levier, data/halal)")
     p.add_argument("--dry-run", action="store_true", help="scan sans enregistrer les signaux")
@@ -140,6 +140,23 @@ def main(argv: list[str] | None = None) -> int:
         row = res["row"]
         print(f"Trade {res['signal']['id']} arrêté à {res['signal']['meta']['manual_exit']['price']}"
               + (f" : {row['pnl']:+.2f} {eng.portfolio.data.get('currency', '$')}" if row else ""))
+    elif args.command == "topstep":
+        # --note : « pris <id|actif> [micros] », « sortie <id|actif> [prix] », « retirer <id> », « journal … », « risque 200 » ; vide = état du compte
+        from .messages import strip_html
+        words = (args.note or "").split()
+        action = words[0].lower() if words else "topstep"
+        cmd = {"add": "pris", "remove": "retirer"}.get(action, action)
+        if cmd not in ("pris", "sortie", "retirer", "journal", "risque"):
+            cmd, words = "topstep", [""] + words
+        if cmd == "risque":
+            cmd, words = "topstep", ["", "risque"] + words[1:]
+        try:
+            text = eng.topstep_command(cmd, words[1:])
+        except (ValueError, KeyError, RuntimeError) as exc:
+            print(f"Topstep : {exc}")
+            return 1
+        notify(text, html=True)
+        print(strip_html(text))
     elif args.command == "check-data":
         out = eng.check_data()
         print(json.dumps(out, ensure_ascii=False, indent=2))

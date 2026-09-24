@@ -135,6 +135,7 @@ def page_buttons(site_url: str | None, asset_key: str | None = None) -> list[lis
 
 
 class HalalEngine(Engine):
+    TOPSTEP = False             # compte Topstep : bot principal seulement
     LIVE_CANDLES = 864          # 3 jours de bougies 5 min : vues 15 min et 1 h exploitables sur un swing
     LIVE_DAYS = 5
 

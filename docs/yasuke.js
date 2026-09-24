@@ -84,12 +84,14 @@
     wallet: `<svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><path d="M3 7.5A2.5 2.5 0 0 1 5.5 5h11A2.5 2.5 0 0 1 19 7.5v8a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 3 15.5z" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M14 11.5h2.5" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>`,
     learn: `<svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><path d="M3 17l5-6 4 3.5L19 5M14.5 5H19v4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
     crescent: `<svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><path d="M17.5 13.6A7 7 0 0 1 8.4 4.5a7 7 0 1 0 9.1 9.1z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>`,
+    flag: `<svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><path d="M5 19.5V3.5M5 4.5h11.5l-2.5 4 2.5 4H5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
     plusBig: `<svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><path d="M11 4.5v13M4.5 11h13" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>`,
   };
 
   // ------------------------------------------------------------------ en-tête, onglets, navigation du bas
   const PAGES = [["dashboard", "index.html", "Tableau de bord", "Tableau", "home"], ["simulation", "portfolio.html", "Simulation", "Simulation", "wallet"],
-                 ["learning", "apprentissage.html", "Apprentissage", "Apprendre", "learn"], ["halal", "halal.html", "Halal", "Halal", "crescent"]];
+                 ["learning", "apprentissage.html", "Apprentissage", "Apprendre", "learn"], ["halal", "halal.html", "Halal", "Halal", "crescent"],
+                 ["topstep", "topstep.html", "Topstep", "Topstep", "flag"]];
   function header(page) {
     const host = document.getElementById("yk-header");
     if (!host) return;
@@ -112,7 +114,7 @@
     const item = ([k, href, , short, ic]) => `<a href="${href}" class="${k === page ? "active" : ""}"${k === page ? ' aria-current="page"' : ""}>${I[ic]}<span>${short}</span></a>`;
     nav.innerHTML = item(PAGES[0]) + item(PAGES[1]) +
       (onDash ? `<button type="button" class="plus" id="bnav-trade"><span class="pb">${I.plusBig}</span><span>Trade</span></button>`
-              : `<a class="plus" href="index.html#trade"><span class="pb">${I.plusBig}</span><span>Trade</span></a>`) + item(PAGES[2]) + item(PAGES[3]);
+              : `<a class="plus" href="index.html#trade"><span class="pb">${I.plusBig}</span><span>Trade</span></a>`) + item(PAGES[2]) + item(PAGES[3]) + item(PAGES[4]);
     document.body.appendChild(nav);
     themeButton();
   }

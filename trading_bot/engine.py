@@ -271,7 +271,22 @@ class Engine:
                          key=lambda s: s.closed_at)
         text = msg.outcome_text(sig, row, cur, streak=msg.streak_text(visible), digits=self._digits(sig.asset),
                                 initial=float(self.portfolio.data.get("balance_initial") or 0) or None)
+        if self.TOPSTEP:
+            text += self._topstep_line(sig)
         notify(text, html=True, reply_to=sig.id)
+
+    def _topstep_line(self, sig: Signal) -> str:
+        """« Topstep : +48,00 $ (3 MNQ) · balance 50 048,00 $ » si ce trade est dans le compte Topstep."""
+        try:
+            data = self.topstep_update()
+            r = next((t for t in data["trades"] if t["id"] == sig.id), None)
+            if not r:
+                return ""
+            return (f"\n🏁 Topstep : <b>{msg.money(r['pnl'], '$', sign=True)}</b> ({r['contracts']} {r['symbol']}) · "
+                    f"balance {msg.money(r['balance_after'], '$')} · perte maximale {msg.money(data['mll'], '$')}")
+        except Exception:  # noqa: BLE001
+            log.exception("ligne Topstep")
+            return ""
 
     @staticmethod
     def _candle_close_iso(candles: list) -> str:
@@ -794,7 +809,103 @@ class Engine:
         dash = build_dashboard(all_sigs, self.cfg, adjustments, backtests, self.store.state())
         dash["portfolio"] = self.portfolio.summary()
         self.store.save_dashboard(dash)
+        if self.TOPSTEP:
+            try:
+                self.topstep_update(all_sigs)
+            except Exception:  # noqa: BLE001 — le compte Topstep ne doit jamais casser un passage
+                log.exception("compte Topstep")
         return text
+
+    # ------------------------------------------------------------ compte Topstep (simulation séparée)
+    TOPSTEP = True                    # le mode halal n'a pas de compte Topstep
+
+    def topstep(self):
+        from .topstep import TopstepAccount
+        # à côté des données du bot (data/topstep ; dossier temporaire dans les tests)
+        return TopstepAccount(self.store.dir / "topstep")
+
+    def topstep_update(self, all_sigs: list[Signal] | None = None) -> dict[str, Any]:
+        acct = self.topstep()
+        data = acct.compute(all_sigs if all_sigs is not None else self.store.all_signals(), self.cfg)
+        acct.publish(data)
+        return data
+
+    def topstep_command(self, cmd: str, args: list[str], now: datetime | None = None) -> str:
+        """/pris [actif|id] [micros] · /retirer <id> · /journal … · /topstep [risque <montant>]. Renvoie la réponse (HTML)."""
+        from . import topstep as ts
+        acct = self.topstep()
+        if cmd == "pris":
+            micros = None
+            if args and args[-1].isdigit() and len(args[-1]) <= 2:
+                micros = int(args.pop())
+            ref = args[0] if args else None
+            sig = self._find_signal(ref)
+            res = acct.take(sig, micros)
+            data = self.topstep_update()
+            return (f"✅ Ajouté au compte Topstep : {msg.esc(sig.asset_label)} "
+                    f"{'achat' if sig.direction == 'long' else 'vente'}, {res['contracts']} micros "
+                    f"{ts.PRODUCTS[sig.asset][0]}.\n\n" + ts.summary_text(data))
+        if cmd == "sortie":
+            price = None
+            if args and re.fullmatch(r"\d+([.,]\d+)?", args[-1]) and len(args[-1]) > 2:
+                price = float(args.pop().replace(",", "."))
+            sig = self._find_topstep_open(args[0] if args else None, acct)
+            if price is None:
+                price = market.fetch_price(self.cfg.assets[sig.asset])
+            acct.exit(sig, price, now)
+            data = self.topstep_update()
+            r = next((t for t in data["trades"] if t["id"] == sig.id), None)
+            res = f" : <b>{msg.money(r['pnl'], '$', sign=True)}</b>" if r else ""
+            return (f"🏁 Sortie Topstep enregistrée à {msg.esc(str(price))} pour {msg.esc(sig.asset_label)}{res}. "
+                    "Le signal du bot et sa simulation ne changent pas.\n\n" + ts.summary_text(data))
+        if cmd == "retirer":
+            if not args:
+                raise ValueError("précisez le trade : /retirer <id> (identifiant visible sur la page Topstep)")
+            key = acct.remove(args[0])
+            return f"Retiré du compte Topstep : {msg.esc(key)}.\n\n" + ts.summary_text(self.topstep_update())
+        if cmd == "journal":
+            j = ts.parse_journal(args, self.cfg.timezone)
+            row = acct.add_journal(**j)
+            return (f"📝 Trade ajouté au journal Topstep ({msg.esc(row['id'])}).\n\n" + ts.summary_text(self.topstep_update()))
+        if cmd == "topstep" and len(args) >= 2 and args[0].lower() in ("risque", "risk"):
+            acct.set_risk(float(args[1].replace(",", ".").replace("$", "")))
+            return "Risque par trade Topstep enregistré.\n\n" + ts.summary_text(self.topstep_update())
+        return ts.summary_text(self.topstep_update())
+
+    def _find_topstep_open(self, ref: str | None, acct) -> Signal:
+        """Trade encore ouvert dans le compte Topstep (par identifiant ou actif ; le seul ouvert sinon)."""
+        data = acct.compute(self.store.all_signals(), self.cfg)
+        open_ids = [o["id"] for o in data["open"]]
+        if not open_ids:
+            raise ValueError("aucun trade ouvert dans le compte Topstep")
+        by_id = {s.id: s for s in self.store.all_signals()}
+        rows = [by_id[i] for i in open_ids if i in by_id]
+        if ref:
+            ref = ref.strip().lower()
+            key = self.ASSET_ALIASES.get(ref, ref)
+            rows = [s for s in rows if s.id.lower().startswith(ref) or s.asset == key]
+        if len(rows) != 1:
+            raise ValueError("précisez le trade : /sortie <actif ou id> [prix] (" + ", ".join(
+                f"{s.asset} {s.id[:8]}" for s in rows) + ")" if rows else "aucun trade Topstep ouvert ne correspond")
+        return rows[0]
+
+    def _find_signal(self, ref: str | None) -> Signal:
+        """Signal envoyé (ouvert ou clôturé) : par identifiant, par actif (le plus récent), ou le dernier envoyé."""
+        sigs = sorted((s for s in self.store.history() + self.store.open_signals() if s.source != "shadow"),
+                      key=lambda s: s.created_at)
+        if not sigs:
+            raise ValueError("aucun signal envoyé pour l'instant")
+        if not ref:
+            return sigs[-1]
+        ref = ref.strip().lower()
+        by_id = [s for s in sigs if s.id.lower().startswith(ref)]
+        if len(by_id) == 1:
+            return by_id[0]
+        key = self.ASSET_ALIASES.get(ref, ref)
+        by_asset = [s for s in sigs if s.asset == key]
+        if by_asset:
+            return by_asset[-1]
+        raise ValueError(f"aucun signal trouvé pour « {ref} »")
 
     # ------------------------------------------------------------ données
     def fetch_data(self, days: int = 60, asset_keys: list[str] | None = None) -> dict[str, int]:
@@ -900,6 +1011,13 @@ class Engine:
         "/long <actif> [objectif] [stop] [commentaire] — signal manuel à l'achat\n"
         "/short <actif> [objectif] [stop] [commentaire] — signal manuel à la vente\n"
         "/stop [actif] — arrêter un trade ouvert au prix du moment (le bot le suit ensuite en silence pour apprendre)\n"
+        "\n"
+        "▶️ COMPTE TOPSTEP 50K (simulation de vos seuls trades)\n"
+        "/topstep — état du compte : balance, perte maximale, objectif, règles\n"
+        "/pris [actif] [micros] — j'ai pris ce signal sur Topstep (le dernier de l'actif ; micros calculés sinon)\n"
+        "/sortie [actif] [prix] — je suis sorti de ce trade sur Topstep (prix du moment sinon ; le bot n'est pas touché)\n"
+        "/retirer <id> — retirer un trade du compte Topstep\n"
+        "/journal <actif> <long|short> <entrée> <sortie> <micros> [AAAA-MM-JJTHH:MM] — trade fait hors du bot\n"
         "Sans chiffres, le bot calibre l'objectif et le stop sur la volatilité du moment. "
         "Avec, ce sont vos niveaux qui sont suivis : l'objectif d'abord, le stop ensuite.\n"
         "\n"
@@ -979,6 +1097,11 @@ class Engine:
                 return "Simulation réinitialisée.\n" + self.portfolio.format_summary()
             except ValueError as exc:
                 return f"Balance invalide : {exc}. Exemple : /balance 1000 1"
+        if self.TOPSTEP and cmd in ("/topstep", "/pris", "/sortie", "/retirer", "/journal"):
+            try:
+                return Message(self.topstep_command(cmd[1:], list(args), now), html=True)
+            except (ValueError, KeyError, ProviderError) as exc:
+                return f"Topstep : {exc}"
         if cmd in ("/stop", "/arreter", "/arrêter"):
             try:
                 self.stop_trade(args[0] if args else None, now)   # notifie lui-même

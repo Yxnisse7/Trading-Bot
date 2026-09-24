@@ -40,7 +40,7 @@ for attempt in 1 2 3 4; do
   "$@"
   git add data/
   # copies publiées sur le site (docs/halal n'existe qu'après le premier passage du mode halal)
-  for p in docs/dashboard.json docs/portfolio.json docs/live docs/halal; do
+  for p in docs/dashboard.json docs/portfolio.json docs/live docs/halal docs/topstep; do
     if [ -e "$p" ]; then git add "$p"; fi
   done
   if git diff --cached --quiet; then
