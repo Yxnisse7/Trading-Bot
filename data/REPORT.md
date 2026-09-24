@@ -1,6 +1,6 @@
 # Trading-Bot — rapport
 
-_Mis à jour le 24/09/2026 à 14:06 (Europe/Paris)._
+_Mis à jour le 24/09/2026 à 14:10 (Europe/Paris)._
 
 ## Vue d'ensemble
 
@@ -8,7 +8,7 @@ _Mis à jour le 24/09/2026 à 14:06 (Europe/Paris)._
 - Taux de réussite cumulé (TP / (TP+SL)) : **48%** — hasard attendu 41%, avantage **+7%**
 - P&L théorique cumulé, net des coûts estimés (somme des % par trade, sans levier) : **-3.07 %** (brut -0.92 %)
 - Signaux ouverts : **1**
-- Signaux fantômes (suivis en silence pour l'apprentissage) : **61** clôturés, 4 ouverts, taux de réussite 45% (hasard attendu 41%)
+- Signaux fantômes (suivis en silence pour l'apprentissage) : **62** clôturés, 3 ouverts, taux de réussite 44% (hasard attendu 41%)
 
 ## Signaux ouverts
 
@@ -116,17 +116,17 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 
 | Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
 |---|---:|---:|---:|---:|---:|---:|
-| adx | 61 | 22 | 27 | 12 | 45% | -0.033 % |
+| adx | 62 | 22 | 28 | 12 | 44% | -0.034 % |
 | corr | 9 | 0 | 6 | 3 | 0% | -0.254 % |
 | level | 10 | 3 | 3 | 4 | 50% | -0.032 % |
-| macd | 6 | 1 | 4 | 1 | 20% | -0.160 % |
+| macd | 7 | 1 | 5 | 1 | 17% | -0.150 % |
 | orb | 2 | 2 | 0 | 0 | 100% | +0.112 % |
 | pdhl | 6 | 2 | 3 | 1 | 40% | +0.025 % |
-| rsi | 29 | 13 | 14 | 2 | 48% | +0.011 % |
-| trend_15m | 61 | 22 | 27 | 12 | 45% | -0.033 % |
-| trend_1h | 59 | 20 | 27 | 12 | 43% | -0.038 % |
-| trend_5m | 38 | 18 | 18 | 2 | 50% | -0.002 % |
-| vwap | 60 | 22 | 26 | 12 | 46% | -0.026 % |
+| rsi | 30 | 13 | 15 | 2 | 46% | +0.008 % |
+| trend_15m | 62 | 22 | 28 | 12 | 44% | -0.034 % |
+| trend_1h | 60 | 20 | 28 | 12 | 42% | -0.039 % |
+| trend_5m | 39 | 18 | 19 | 2 | 49% | -0.004 % |
+| vwap | 61 | 22 | 27 | 12 | 45% | -0.027 % |
 
 ### Fantômes par actif
 
@@ -137,7 +137,7 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 | gold | 7 | 3 | 4 | 0 | 43% | +0.011 % |
 | nasdaq | 19 | 11 | 7 | 1 | 61% | +0.042 % |
 | oil | 6 | 2 | 4 | 0 | 33% | -0.145 % |
-| sp500 | 8 | 3 | 4 | 1 | 43% | -0.005 % |
+| sp500 | 9 | 3 | 5 | 1 | 38% | -0.014 % |
 
 ## Derniers trades
 
@@ -193,12 +193,12 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 
 Corrections par actif :
 
-- ethereum : {'trend_5m': 0.992, 'trend_15m': 0.992, 'trend_1h': 0.992, 'adx': 0.992}
-- oil : {'vwap': 0.706}
+- ethereum : {'trend_5m': 0.999, 'trend_15m': 0.999, 'trend_1h': 0.999, 'adx': 0.999}
+- oil : {'vwap': 0.712}
 
 | Variante testée en fantôme | Trades | Gain net moyen | Statut |
 |---|---:|---:|---|
-| indices le matin européen | 13 | -0.27 R | en test |
+| indices le matin européen | 14 | -0.33 R | en test |
 | horizon ~3 h | 5 | +0.29 R | en test |
 | confiance moyenne | 4 | -0.06 R | en test |
 | entrées dans l'heure avant l'ouverture américaine | 0 | n/a | en test |
@@ -211,9 +211,9 @@ Notes :
 
 - trades réels : +0,13 R ± 0,29 R par trade avant frais sur 63 trades (0 R = hasard)
 - aucun critère ne s'écarte du hasard au-delà de la marge de sécurité : poids par défaut conservés
-- ethereum, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,23 R contre +0,05 R en global sur 50 trades éq. → poids ×0,99 sur cet actif
-- oil, vwap : -0,14 R contre +0,08 R en global sur 116 trades éq. → poids ×0,94 sur cet actif
-- variante « indices le matin européen » en test : 13 trades, -0,27 R net, encore 87 trades avant décision
+- ethereum, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,23 R contre +0,05 R en global sur 50 trades éq. → poids ×1,00 sur cet actif
+- oil, vwap : -0,14 R contre +0,08 R en global sur 116 trades éq. → poids ×0,95 sur cet actif
+- variante « indices le matin européen » en test : 14 trades, -0,33 R net, encore 86 trades avant décision
 - variante « horizon ~3 h » en test : 5 trades, +0,29 R net, encore 95 trades avant décision
 - variante « confiance moyenne » en test : 4 trades, -0,06 R net, encore 96 trades avant décision
 - variante « reprise juste après un stop » en test : 6 trades, +0,45 R net, encore 94 trades avant décision
