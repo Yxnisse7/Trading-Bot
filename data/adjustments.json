@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-24T15:35:40.910344+00:00",
+  "updated_at": "2026-09-24T16:01:16.456499+00:00",
   "method": "v2 : recalcul complet, marge de sécurité, résultats en R, sources pondérées",
   "weights": {
     "trend_5m": 1.0,
@@ -124,50 +124,50 @@
         "trend_1h",
         "adx"
       ],
-      "n": 640,
-      "n_eff": 446.8,
-      "mean_r": 0.0407,
-      "margin_r": 0.1048,
+      "n": 643,
+      "n_eff": 448.9,
+      "mean_r": 0.0311,
+      "margin_r": 0.1044,
       "multiplier": 1.0
     },
     "vwap": {
       "members": [
         "vwap"
       ],
-      "n": 544,
-      "n_eff": 378.9,
-      "mean_r": 0.0713,
-      "margin_r": 0.1148,
+      "n": 547,
+      "n_eff": 381.2,
+      "mean_r": 0.0601,
+      "margin_r": 0.1144,
       "multiplier": 1.0
     },
     "rsi": {
       "members": [
         "rsi"
       ],
-      "n": 516,
-      "n_eff": 354.0,
-      "mean_r": 0.0313,
-      "margin_r": 0.117,
+      "n": 519,
+      "n_eff": 356.1,
+      "mean_r": 0.0191,
+      "margin_r": 0.1165,
       "multiplier": 1.0
     },
     "macd": {
       "members": [
         "macd"
       ],
-      "n": 170,
-      "n_eff": 119.0,
-      "mean_r": -0.0075,
-      "margin_r": 0.2142,
+      "n": 171,
+      "n_eff": 120.0,
+      "mean_r": -0.0176,
+      "margin_r": 0.213,
       "multiplier": 1.0
     },
     "level": {
       "members": [
         "level"
       ],
-      "n": 86,
-      "n_eff": 63.4,
-      "mean_r": -0.0889,
-      "margin_r": 0.2801,
+      "n": 87,
+      "n_eff": 63.0,
+      "mean_r": -0.1195,
+      "margin_r": 0.2791,
       "multiplier": 1.0
     },
     "volume": {
@@ -213,14 +213,14 @@
   },
   "overview": {
     "réels": {
-      "n": 67,
-      "mean_r": 0.0825,
-      "margin_r": 0.2772
+      "n": 68,
+      "mean_r": 0.0666,
+      "margin_r": 0.2749
     },
     "fantômes": {
-      "n": 72,
-      "mean_r": 0.1457,
-      "margin_r": 0.2632
+      "n": 74,
+      "mean_r": 0.1147,
+      "margin_r": 0.2596
     },
     "backtest": {
       "n": 502,
@@ -238,10 +238,10 @@
     },
     "horizon_3h": {
       "label": "horizon ~3 h",
-      "n": 8,
-      "mean_net_r": 0.394,
+      "n": 9,
+      "mean_net_r": 0.2251,
       "promoted": false,
-      "missing": 92
+      "missing": 91
     },
     "confiance_moyenne": {
       "label": "confiance moyenne",
@@ -259,10 +259,10 @@
     },
     "reprise_apres_stop": {
       "label": "reprise juste après un stop",
-      "n": 6,
-      "mean_net_r": 0.4456,
+      "n": 7,
+      "mean_net_r": 0.2199,
       "promoted": false,
-      "missing": 94
+      "missing": 93
     },
     "essai_ethereum": {
       "label": "nouvel actif : Ethereum (ETH/USD)",
@@ -287,24 +287,24 @@
     }
   },
   "baseline": {
-    "n": 55,
-    "mean_net_r": 0.0064
+    "n": 56,
+    "mean_net_r": -0.0132
   },
   "promoted_variants": [],
   "notes": [
-    "trades réels : +0,08 R ± 0,28 R par trade avant frais sur 67 trades (0 R = hasard)",
+    "trades réels : +0,07 R ± 0,27 R par trade avant frais sur 68 trades (0 R = hasard)",
     "aucun critère ne s'écarte du hasard au-delà de la marge de sécurité : poids par défaut conservés",
     "variante « indices le matin européen » en test : 17 trades, -0,48 R net, encore 83 trades avant décision",
-    "variante « horizon ~3 h » en test : 8 trades, +0,39 R net, encore 92 trades avant décision",
+    "variante « horizon ~3 h » en test : 9 trades, +0,23 R net, encore 91 trades avant décision",
     "variante « confiance moyenne » en test : 5 trades, -0,14 R net, encore 95 trades avant décision",
-    "variante « reprise juste après un stop » en test : 6 trades, +0,45 R net, encore 94 trades avant décision",
+    "variante « reprise juste après un stop » en test : 7 trades, +0,22 R net, encore 93 trades avant décision",
     "variante « nouvel actif : Ethereum (ETH/USD) » en test : 4 trades, -0,38 R net, encore 96 trades avant décision",
     "variante « nouvel actif : Pétrole WTI (CL) » en test : 9 trades, +0,23 R net, encore 91 trades avant décision"
   ],
-  "sample": 641,
+  "sample": 644,
   "sample_by_source": {
-    "bot": 66,
-    "shadow": 72,
+    "bot": 67,
+    "shadow": 74,
     "manual": 1,
     "backtest": 502
   }
