@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-24T10:20:44.545843+02:00",
+  "updated_at": "2026-09-24T10:25:39.706682+02:00",
   "timezone": "Europe/Paris",
   "equity_curve": [
     {
@@ -879,18 +879,18 @@
       "avg_pnl_pct": -0.0409
     },
     "shadow": {
-      "n": 47,
-      "tp": 18,
+      "n": 48,
+      "tp": 19,
       "sl": 19,
       "expired": 10,
-      "win_rate": 0.4864864864864865,
-      "neutral_win_rate": 0.4082,
-      "edge": 0.0783,
-      "pnl_pct": -1.3639,
-      "avg_pnl_pct": -0.029
+      "win_rate": 0.5,
+      "neutral_win_rate": 0.408,
+      "edge": 0.092,
+      "pnl_pct": -1.2177,
+      "avg_pnl_pct": -0.0254
     },
     "open": 0,
-    "open_shadow": 1
+    "open_shadow": 0
   },
   "by_source": {
     "bot": {
@@ -927,15 +927,15 @@
       "avg_pnl_pct": 0.0
     },
     "shadow": {
-      "n": 47,
-      "tp": 18,
+      "n": 48,
+      "tp": 19,
       "sl": 19,
       "expired": 10,
-      "win_rate": 0.4864864864864865,
-      "neutral_win_rate": 0.4082,
-      "edge": 0.0783,
-      "pnl_pct": -1.3639,
-      "avg_pnl_pct": -0.029
+      "win_rate": 0.5,
+      "neutral_win_rate": 0.408,
+      "edge": 0.092,
+      "pnl_pct": -1.2177,
+      "avg_pnl_pct": -0.0254
     }
   },
   "by_horizon": {
@@ -983,15 +983,15 @@
         "avg_pnl_pct": 0.0232
       },
       "shadow": {
-        "n": 15,
-        "tp": 9,
+        "n": 16,
+        "tp": 10,
         "sl": 5,
         "expired": 1,
-        "win_rate": 0.6428571428571429,
-        "neutral_win_rate": 0.4027,
-        "edge": 0.2402,
-        "pnl_pct": 0.7474,
-        "avg_pnl_pct": 0.0498
+        "win_rate": 0.6666666666666666,
+        "neutral_win_rate": 0.4025,
+        "edge": 0.2642,
+        "pnl_pct": 0.8936,
+        "avg_pnl_pct": 0.0558
       },
       "open": 0,
       "session_utc": [
@@ -1256,15 +1256,15 @@
       "label": "Tendance 5 min",
       "weight": 1.0,
       "stats": {
-        "n": 82,
-        "tp": 39,
+        "n": 83,
+        "tp": 40,
         "sl": 32,
         "expired": 11,
-        "win_rate": 0.5492957746478874,
-        "neutral_win_rate": 0.4097,
-        "edge": 0.1396,
-        "pnl_pct": -0.7963,
-        "avg_pnl_pct": -0.0097
+        "win_rate": 0.5555555555555556,
+        "neutral_win_rate": 0.4096,
+        "edge": 0.146,
+        "pnl_pct": -0.6501,
+        "avg_pnl_pct": -0.0078
       },
       "by_source": {
         "bot": {
@@ -1301,18 +1301,52 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 28,
-          "tp": 15,
+          "n": 29,
+          "tp": 16,
           "sl": 12,
           "expired": 1,
-          "win_rate": 0.5555555555555556,
-          "neutral_win_rate": 0.4048,
-          "edge": 0.1508,
-          "pnl_pct": 0.595,
-          "avg_pnl_pct": 0.0212
+          "win_rate": 0.5714285714285714,
+          "neutral_win_rate": 0.4046,
+          "edge": 0.1668,
+          "pnl_pct": 0.7412,
+          "avg_pnl_pct": 0.0256
         }
       },
       "last_trades": [
+        {
+          "id": "43e8402bd8",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 30571.25,
+          "take_profit": 30523.5,
+          "stop_loss": 30603.0,
+          "risk_reward": 1.5,
+          "confidence": "fort",
+          "score": 5.75,
+          "criteria": [
+            "adx",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "tp",
+          "pnl_pct": 0.1462,
+          "pnl_gross_pct": 0.1562,
+          "duration_minutes": 0,
+          "close_price": 30523.5,
+          "created_at": "2026-09-24T08:10:33Z",
+          "closed_at": "2026-09-24T08:11:00Z",
+          "created_local": "24/09 10:10",
+          "expires_at": "2026-09-24T09:10:33Z",
+          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 79.60 (0.26 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 81%.",
+          "news_context": "actualité à surveiller (score 2) : Treasury yields continue to rise after 10-year hit 19-year high as investors ramp-up rate hike bets",
+          "manual_exit": null
+        },
         {
           "id": "17a7ccfea8",
           "asset": "sp500",
@@ -1552,42 +1586,6 @@
           "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 15.67 (0.20 %), TP = 45 % du range, SL = 37 % du range, probabilité de résolution sous 1 h ≈ 88%.",
           "news_context": "actualité à surveiller (score 2) : 10-year Treasury yield hits highest level since 2007 as market prices in another Fed rate hike",
           "manual_exit": null
-        },
-        {
-          "id": "c65ca803f8",
-          "asset": "oil",
-          "asset_label": "Pétrole WTI (CL)",
-          "direction": "long",
-          "horizon": "1h",
-          "entry": 92.72,
-          "take_profit": 93.34,
-          "stop_loss": 92.31,
-          "risk_reward": 1.51,
-          "confidence": "fort",
-          "score": 7.72,
-          "criteria": [
-            "adx",
-            "level",
-            "macd",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.4722,
-          "pnl_gross_pct": -0.4422,
-          "duration_minutes": 49,
-          "close_price": 92.31,
-          "created_at": "2026-09-23T15:45:36Z",
-          "closed_at": "2026-09-23T16:35:00Z",
-          "created_local": "23/09 17:45",
-          "expires_at": "2026-09-23T16:45:36Z",
-          "rationale": "Achat : tendance forte (ADX), niveau clé favorable, MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 1.03 (1.11 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 84%.",
-          "news_context": "actualité à surveiller (score 3) : Euro slides as strong US PMI data lifts Fed rate hike bets | Fed's Barr: Further rate hikes needed for timely return to 2% inflation",
-          "manual_exit": null
         }
       ]
     },
@@ -1596,15 +1594,15 @@
       "label": "Tendance 15 min",
       "weight": 1.0,
       "stats": {
-        "n": 107,
-        "tp": 43,
+        "n": 108,
+        "tp": 44,
         "sl": 44,
         "expired": 20,
-        "win_rate": 0.4942528735632184,
-        "neutral_win_rate": 0.41,
-        "edge": 0.0843,
-        "pnl_pct": -3.7013,
-        "avg_pnl_pct": -0.0346
+        "win_rate": 0.5,
+        "neutral_win_rate": 0.4099,
+        "edge": 0.0901,
+        "pnl_pct": -3.5551,
+        "avg_pnl_pct": -0.0329
       },
       "by_source": {
         "bot": {
@@ -1641,18 +1639,52 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 47,
-          "tp": 18,
+          "n": 48,
+          "tp": 19,
           "sl": 19,
           "expired": 10,
-          "win_rate": 0.4864864864864865,
-          "neutral_win_rate": 0.4082,
-          "edge": 0.0783,
-          "pnl_pct": -1.3639,
-          "avg_pnl_pct": -0.029
+          "win_rate": 0.5,
+          "neutral_win_rate": 0.408,
+          "edge": 0.092,
+          "pnl_pct": -1.2177,
+          "avg_pnl_pct": -0.0254
         }
       },
       "last_trades": [
+        {
+          "id": "43e8402bd8",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 30571.25,
+          "take_profit": 30523.5,
+          "stop_loss": 30603.0,
+          "risk_reward": 1.5,
+          "confidence": "fort",
+          "score": 5.75,
+          "criteria": [
+            "adx",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "tp",
+          "pnl_pct": 0.1462,
+          "pnl_gross_pct": 0.1562,
+          "duration_minutes": 0,
+          "close_price": 30523.5,
+          "created_at": "2026-09-24T08:10:33Z",
+          "closed_at": "2026-09-24T08:11:00Z",
+          "created_local": "24/09 10:10",
+          "expires_at": "2026-09-24T09:10:33Z",
+          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 79.60 (0.26 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 81%.",
+          "news_context": "actualité à surveiller (score 2) : Treasury yields continue to rise after 10-year hit 19-year high as investors ramp-up rate hike bets",
+          "manual_exit": null
+        },
         {
           "id": "17a7ccfea8",
           "asset": "sp500",
@@ -1889,40 +1921,6 @@
           "expires_at": "2026-09-23T22:40:32Z",
           "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 17.94 (0.23 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 90%.",
           "news_context": "actualité à surveiller (score 3) : Higher interest rates squeeze younger and lower-income households. 'A rate hike is a blunt tool,' says expert | Businesses are growing at the fastest pace in over four years. Why war and inflation aren’t stopping the U.S. economy.",
-          "manual_exit": null
-        },
-        {
-          "id": "cd4118e569",
-          "asset": "ethereum",
-          "asset_label": "Ethereum (ETH/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 2671.4,
-          "take_profit": 2657.9,
-          "stop_loss": 2680.4,
-          "risk_reward": 1.5,
-          "confidence": "fort",
-          "score": 5.25,
-          "criteria": [
-            "adx",
-            "corr",
-            "level",
-            "trend_15m",
-            "trend_1h",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.4169,
-          "pnl_gross_pct": -0.3369,
-          "duration_minutes": 53,
-          "close_price": 2680.4,
-          "created_at": "2026-09-23T18:55:35Z",
-          "closed_at": "2026-09-23T19:49:00Z",
-          "created_local": "23/09 20:55",
-          "expires_at": "2026-09-23T19:55:35Z",
-          "rationale": "Vente : tendance forte (ADX), marché meneur favorable, niveau clé favorable, tendance 15 min, tendance 1 h, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 22.56 (0.84 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 60%.",
-          "news_context": "actualité à surveiller (score 3) : US stablecoin adoption could surge with bank-like protections: Visa survey | Bond yields surge to 5.12% as Wall Street fears more Fed rate hikes",
           "manual_exit": null
         }
       ]
@@ -1932,15 +1930,15 @@
       "label": "Tendance 1 h",
       "weight": 1.0,
       "stats": {
-        "n": 105,
-        "tp": 41,
+        "n": 106,
+        "tp": 42,
         "sl": 44,
         "expired": 20,
-        "win_rate": 0.4823529411764706,
-        "neutral_win_rate": 0.4102,
-        "edge": 0.0722,
-        "pnl_pct": -3.8981,
-        "avg_pnl_pct": -0.0371
+        "win_rate": 0.4883720930232558,
+        "neutral_win_rate": 0.4101,
+        "edge": 0.0783,
+        "pnl_pct": -3.7519,
+        "avg_pnl_pct": -0.0354
       },
       "by_source": {
         "bot": {
@@ -1977,18 +1975,52 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 45,
-          "tp": 16,
+          "n": 46,
+          "tp": 17,
           "sl": 19,
           "expired": 10,
-          "win_rate": 0.45714285714285713,
-          "neutral_win_rate": 0.4085,
-          "edge": 0.0486,
-          "pnl_pct": -1.5607,
-          "avg_pnl_pct": -0.0347
+          "win_rate": 0.4722222222222222,
+          "neutral_win_rate": 0.4083,
+          "edge": 0.0639,
+          "pnl_pct": -1.4145,
+          "avg_pnl_pct": -0.0307
         }
       },
       "last_trades": [
+        {
+          "id": "43e8402bd8",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 30571.25,
+          "take_profit": 30523.5,
+          "stop_loss": 30603.0,
+          "risk_reward": 1.5,
+          "confidence": "fort",
+          "score": 5.75,
+          "criteria": [
+            "adx",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "tp",
+          "pnl_pct": 0.1462,
+          "pnl_gross_pct": 0.1562,
+          "duration_minutes": 0,
+          "close_price": 30523.5,
+          "created_at": "2026-09-24T08:10:33Z",
+          "closed_at": "2026-09-24T08:11:00Z",
+          "created_local": "24/09 10:10",
+          "expires_at": "2026-09-24T09:10:33Z",
+          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 79.60 (0.26 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 81%.",
+          "news_context": "actualité à surveiller (score 2) : Treasury yields continue to rise after 10-year hit 19-year high as investors ramp-up rate hike bets",
+          "manual_exit": null
+        },
         {
           "id": "17a7ccfea8",
           "asset": "sp500",
@@ -2225,40 +2257,6 @@
           "expires_at": "2026-09-23T22:40:32Z",
           "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 17.94 (0.23 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 90%.",
           "news_context": "actualité à surveiller (score 3) : Higher interest rates squeeze younger and lower-income households. 'A rate hike is a blunt tool,' says expert | Businesses are growing at the fastest pace in over four years. Why war and inflation aren’t stopping the U.S. economy.",
-          "manual_exit": null
-        },
-        {
-          "id": "cd4118e569",
-          "asset": "ethereum",
-          "asset_label": "Ethereum (ETH/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 2671.4,
-          "take_profit": 2657.9,
-          "stop_loss": 2680.4,
-          "risk_reward": 1.5,
-          "confidence": "fort",
-          "score": 5.25,
-          "criteria": [
-            "adx",
-            "corr",
-            "level",
-            "trend_15m",
-            "trend_1h",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.4169,
-          "pnl_gross_pct": -0.3369,
-          "duration_minutes": 53,
-          "close_price": 2680.4,
-          "created_at": "2026-09-23T18:55:35Z",
-          "closed_at": "2026-09-23T19:49:00Z",
-          "created_local": "23/09 20:55",
-          "expires_at": "2026-09-23T19:55:35Z",
-          "rationale": "Vente : tendance forte (ADX), marché meneur favorable, niveau clé favorable, tendance 15 min, tendance 1 h, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 22.56 (0.84 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 60%.",
-          "news_context": "actualité à surveiller (score 3) : US stablecoin adoption could surge with bank-like protections: Visa survey | Bond yields surge to 5.12% as Wall Street fears more Fed rate hikes",
           "manual_exit": null
         }
       ]
@@ -2268,15 +2266,15 @@
       "label": "Force de tendance (ADX)",
       "weight": 1.0,
       "stats": {
-        "n": 107,
-        "tp": 43,
+        "n": 108,
+        "tp": 44,
         "sl": 44,
         "expired": 20,
-        "win_rate": 0.4942528735632184,
-        "neutral_win_rate": 0.41,
-        "edge": 0.0843,
-        "pnl_pct": -3.7013,
-        "avg_pnl_pct": -0.0346
+        "win_rate": 0.5,
+        "neutral_win_rate": 0.4099,
+        "edge": 0.0901,
+        "pnl_pct": -3.5551,
+        "avg_pnl_pct": -0.0329
       },
       "by_source": {
         "bot": {
@@ -2313,18 +2311,52 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 47,
-          "tp": 18,
+          "n": 48,
+          "tp": 19,
           "sl": 19,
           "expired": 10,
-          "win_rate": 0.4864864864864865,
-          "neutral_win_rate": 0.4082,
-          "edge": 0.0783,
-          "pnl_pct": -1.3639,
-          "avg_pnl_pct": -0.029
+          "win_rate": 0.5,
+          "neutral_win_rate": 0.408,
+          "edge": 0.092,
+          "pnl_pct": -1.2177,
+          "avg_pnl_pct": -0.0254
         }
       },
       "last_trades": [
+        {
+          "id": "43e8402bd8",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 30571.25,
+          "take_profit": 30523.5,
+          "stop_loss": 30603.0,
+          "risk_reward": 1.5,
+          "confidence": "fort",
+          "score": 5.75,
+          "criteria": [
+            "adx",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "tp",
+          "pnl_pct": 0.1462,
+          "pnl_gross_pct": 0.1562,
+          "duration_minutes": 0,
+          "close_price": 30523.5,
+          "created_at": "2026-09-24T08:10:33Z",
+          "closed_at": "2026-09-24T08:11:00Z",
+          "created_local": "24/09 10:10",
+          "expires_at": "2026-09-24T09:10:33Z",
+          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 79.60 (0.26 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 81%.",
+          "news_context": "actualité à surveiller (score 2) : Treasury yields continue to rise after 10-year hit 19-year high as investors ramp-up rate hike bets",
+          "manual_exit": null
+        },
         {
           "id": "17a7ccfea8",
           "asset": "sp500",
@@ -2562,40 +2594,6 @@
           "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 17.94 (0.23 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 90%.",
           "news_context": "actualité à surveiller (score 3) : Higher interest rates squeeze younger and lower-income households. 'A rate hike is a blunt tool,' says expert | Businesses are growing at the fastest pace in over four years. Why war and inflation aren’t stopping the U.S. economy.",
           "manual_exit": null
-        },
-        {
-          "id": "cd4118e569",
-          "asset": "ethereum",
-          "asset_label": "Ethereum (ETH/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 2671.4,
-          "take_profit": 2657.9,
-          "stop_loss": 2680.4,
-          "risk_reward": 1.5,
-          "confidence": "fort",
-          "score": 5.25,
-          "criteria": [
-            "adx",
-            "corr",
-            "level",
-            "trend_15m",
-            "trend_1h",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.4169,
-          "pnl_gross_pct": -0.3369,
-          "duration_minutes": 53,
-          "close_price": 2680.4,
-          "created_at": "2026-09-23T18:55:35Z",
-          "closed_at": "2026-09-23T19:49:00Z",
-          "created_local": "23/09 20:55",
-          "expires_at": "2026-09-23T19:55:35Z",
-          "rationale": "Vente : tendance forte (ADX), marché meneur favorable, niveau clé favorable, tendance 15 min, tendance 1 h, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 22.56 (0.84 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 60%.",
-          "news_context": "actualité à surveiller (score 3) : US stablecoin adoption could surge with bank-like protections: Visa survey | Bond yields surge to 5.12% as Wall Street fears more Fed rate hikes",
-          "manual_exit": null
         }
       ]
     },
@@ -2604,15 +2602,15 @@
       "label": "VWAP",
       "weight": 0.75,
       "stats": {
-        "n": 104,
-        "tp": 43,
+        "n": 105,
+        "tp": 44,
         "sl": 41,
         "expired": 20,
-        "win_rate": 0.5119047619047619,
-        "neutral_win_rate": 0.41,
-        "edge": 0.1019,
-        "pnl_pct": -2.5971,
-        "avg_pnl_pct": -0.025
+        "win_rate": 0.5176470588235295,
+        "neutral_win_rate": 0.4099,
+        "edge": 0.1077,
+        "pnl_pct": -2.4509,
+        "avg_pnl_pct": -0.0233
       },
       "by_source": {
         "bot": {
@@ -2649,18 +2647,52 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 46,
-          "tp": 18,
+          "n": 47,
+          "tp": 19,
           "sl": 18,
           "expired": 10,
-          "win_rate": 0.5,
-          "neutral_win_rate": 0.4077,
-          "edge": 0.0923,
-          "pnl_pct": -0.8761,
-          "avg_pnl_pct": -0.019
+          "win_rate": 0.5135135135135135,
+          "neutral_win_rate": 0.4076,
+          "edge": 0.1059,
+          "pnl_pct": -0.7299,
+          "avg_pnl_pct": -0.0155
         }
       },
       "last_trades": [
+        {
+          "id": "43e8402bd8",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 30571.25,
+          "take_profit": 30523.5,
+          "stop_loss": 30603.0,
+          "risk_reward": 1.5,
+          "confidence": "fort",
+          "score": 5.75,
+          "criteria": [
+            "adx",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "tp",
+          "pnl_pct": 0.1462,
+          "pnl_gross_pct": 0.1562,
+          "duration_minutes": 0,
+          "close_price": 30523.5,
+          "created_at": "2026-09-24T08:10:33Z",
+          "closed_at": "2026-09-24T08:11:00Z",
+          "created_local": "24/09 10:10",
+          "expires_at": "2026-09-24T09:10:33Z",
+          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 79.60 (0.26 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 81%.",
+          "news_context": "actualité à surveiller (score 2) : Treasury yields continue to rise after 10-year hit 19-year high as investors ramp-up rate hike bets",
+          "manual_exit": null
+        },
         {
           "id": "17a7ccfea8",
           "asset": "sp500",
@@ -2898,40 +2930,6 @@
           "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 17.94 (0.23 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 90%.",
           "news_context": "actualité à surveiller (score 3) : Higher interest rates squeeze younger and lower-income households. 'A rate hike is a blunt tool,' says expert | Businesses are growing at the fastest pace in over four years. Why war and inflation aren’t stopping the U.S. economy.",
           "manual_exit": null
-        },
-        {
-          "id": "cd4118e569",
-          "asset": "ethereum",
-          "asset_label": "Ethereum (ETH/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 2671.4,
-          "take_profit": 2657.9,
-          "stop_loss": 2680.4,
-          "risk_reward": 1.5,
-          "confidence": "fort",
-          "score": 5.25,
-          "criteria": [
-            "adx",
-            "corr",
-            "level",
-            "trend_15m",
-            "trend_1h",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.4169,
-          "pnl_gross_pct": -0.3369,
-          "duration_minutes": 53,
-          "close_price": 2680.4,
-          "created_at": "2026-09-23T18:55:35Z",
-          "closed_at": "2026-09-23T19:49:00Z",
-          "created_local": "23/09 20:55",
-          "expires_at": "2026-09-23T19:55:35Z",
-          "rationale": "Vente : tendance forte (ADX), marché meneur favorable, niveau clé favorable, tendance 15 min, tendance 1 h, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 22.56 (0.84 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 60%.",
-          "news_context": "actualité à surveiller (score 3) : US stablecoin adoption could surge with bank-like protections: Visa survey | Bond yields surge to 5.12% as Wall Street fears more Fed rate hikes",
-          "manual_exit": null
         }
       ]
     },
@@ -2940,15 +2938,15 @@
       "label": "RSI",
       "weight": 1.0,
       "stats": {
-        "n": 69,
-        "tp": 32,
+        "n": 70,
+        "tp": 33,
         "sl": 26,
         "expired": 11,
-        "win_rate": 0.5517241379310345,
-        "neutral_win_rate": 0.4108,
-        "edge": 0.1409,
-        "pnl_pct": -0.1532,
-        "avg_pnl_pct": -0.0022
+        "win_rate": 0.559322033898305,
+        "neutral_win_rate": 0.4107,
+        "edge": 0.1486,
+        "pnl_pct": -0.007,
+        "avg_pnl_pct": -0.0001
       },
       "by_source": {
         "bot": {
@@ -2985,18 +2983,52 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 18,
-          "tp": 10,
+          "n": 19,
+          "tp": 11,
           "sl": 7,
           "expired": 1,
-          "win_rate": 0.5882352941176471,
-          "neutral_win_rate": 0.405,
-          "edge": 0.1832,
-          "pnl_pct": 1.3368,
-          "avg_pnl_pct": 0.0743
+          "win_rate": 0.6111111111111112,
+          "neutral_win_rate": 0.4047,
+          "edge": 0.2064,
+          "pnl_pct": 1.483,
+          "avg_pnl_pct": 0.0781
         }
       },
       "last_trades": [
+        {
+          "id": "43e8402bd8",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 30571.25,
+          "take_profit": 30523.5,
+          "stop_loss": 30603.0,
+          "risk_reward": 1.5,
+          "confidence": "fort",
+          "score": 5.75,
+          "criteria": [
+            "adx",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "tp",
+          "pnl_pct": 0.1462,
+          "pnl_gross_pct": 0.1562,
+          "duration_minutes": 0,
+          "close_price": 30523.5,
+          "created_at": "2026-09-24T08:10:33Z",
+          "closed_at": "2026-09-24T08:11:00Z",
+          "created_local": "24/09 10:10",
+          "expires_at": "2026-09-24T09:10:33Z",
+          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 79.60 (0.26 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 81%.",
+          "news_context": "actualité à surveiller (score 2) : Treasury yields continue to rise after 10-year hit 19-year high as investors ramp-up rate hike bets",
+          "manual_exit": null
+        },
         {
           "id": "17a7ccfea8",
           "asset": "sp500",
@@ -3235,42 +3267,6 @@
           "expires_at": "2026-09-23T16:55:30Z",
           "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 15.67 (0.20 %), TP = 45 % du range, SL = 37 % du range, probabilité de résolution sous 1 h ≈ 88%.",
           "news_context": "actualité à surveiller (score 2) : 10-year Treasury yield hits highest level since 2007 as market prices in another Fed rate hike",
-          "manual_exit": null
-        },
-        {
-          "id": "c65ca803f8",
-          "asset": "oil",
-          "asset_label": "Pétrole WTI (CL)",
-          "direction": "long",
-          "horizon": "1h",
-          "entry": 92.72,
-          "take_profit": 93.34,
-          "stop_loss": 92.31,
-          "risk_reward": 1.51,
-          "confidence": "fort",
-          "score": 7.72,
-          "criteria": [
-            "adx",
-            "level",
-            "macd",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.4722,
-          "pnl_gross_pct": -0.4422,
-          "duration_minutes": 49,
-          "close_price": 92.31,
-          "created_at": "2026-09-23T15:45:36Z",
-          "closed_at": "2026-09-23T16:35:00Z",
-          "created_local": "23/09 17:45",
-          "expires_at": "2026-09-23T16:45:36Z",
-          "rationale": "Achat : tendance forte (ADX), niveau clé favorable, MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 1.03 (1.11 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 84%.",
-          "news_context": "actualité à surveiller (score 3) : Euro slides as strong US PMI data lifts Fed rate hike bets | Fed's Barr: Further rate hikes needed for timely return to 2% inflation",
           "manual_exit": null
         }
       ]
@@ -4093,42 +4089,7 @@
       ]
     }
   ],
-  "open_signals": [
-    {
-      "id": "43e8402bd8",
-      "asset": "nasdaq",
-      "asset_label": "Nasdaq 100 (NQ)",
-      "direction": "short",
-      "horizon": "1h",
-      "entry": 30571.25,
-      "take_profit": 30523.5,
-      "stop_loss": 30603.0,
-      "risk_reward": 1.5,
-      "confidence": "fort",
-      "score": 5.75,
-      "criteria": [
-        "adx",
-        "rsi",
-        "trend_15m",
-        "trend_1h",
-        "trend_5m",
-        "vwap"
-      ],
-      "source": "shadow",
-      "status": "open",
-      "pnl_pct": null,
-      "pnl_gross_pct": null,
-      "duration_minutes": null,
-      "close_price": null,
-      "created_at": "2026-09-24T08:10:33Z",
-      "closed_at": null,
-      "created_local": "24/09 10:10",
-      "expires_at": "2026-09-24T09:10:33Z",
-      "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 79.60 (0.26 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 81%.",
-      "news_context": "actualité à surveiller (score 2) : Treasury yields continue to rise after 10-year hit 19-year high as investors ramp-up rate hike bets",
-      "manual_exit": null
-    }
-  ],
+  "open_signals": [],
   "recent_trades": [
     {
       "id": "14d96c0bbc",
@@ -5714,10 +5675,10 @@
     "notes": [
       "trades réels : +0,17 R ± 0,29 R par trade avant frais sur 61 trades (0 R = hasard)",
       "aucun critère ne s'écarte du hasard au-delà de la marge de sécurité : poids par défaut conservés",
-      "ethereum, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,23 R contre +0,07 R en global sur 50 trades éq. → poids ×0,95 sur cet actif",
-      "oil, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,15 R contre +0,07 R en global sur 119 trades éq. → poids ×0,95 sur cet actif",
-      "oil, vwap : -0,16 R contre +0,10 R en global sur 116 trades éq. → poids ×0,86 sur cet actif",
-      "variante « indices le matin européen » en test : 6 trades, -0,35 R net, encore 94 trades avant décision",
+      "ethereum, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,23 R contre +0,07 R en global sur 50 trades éq. → poids ×0,94 sur cet actif",
+      "oil, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,15 R contre +0,07 R en global sur 119 trades éq. → poids ×0,94 sur cet actif",
+      "oil, vwap : -0,16 R contre +0,11 R en global sur 116 trades éq. → poids ×0,85 sur cet actif",
+      "variante « indices le matin européen » en test : 7 trades, -0,10 R net, encore 93 trades avant décision",
       "variante « horizon ~3 h » en test : 5 trades, +0,29 R net, encore 95 trades avant décision",
       "variante « confiance moyenne » en test : 2 trades, +0,36 R net, encore 98 trades avant décision",
       "variante « reprise juste après un stop » en test : 3 trades, +1,27 R net, encore 97 trades avant décision",
@@ -5725,10 +5686,10 @@
       "variante « nouvel actif : Pétrole WTI (CL) » en test : 4 trades, -0,44 R net, encore 96 trades avant décision"
     ],
     "avoid_hours_utc": [],
-    "sample": 610,
+    "sample": 611,
     "sample_by_source": {
       "bot": 60,
-      "shadow": 47,
+      "shadow": 48,
       "manual": 1,
       "backtest": 502
     },
@@ -5763,10 +5724,10 @@
         "corr": 0.5
       },
       "ethereum": {
-        "trend_5m": 0.953,
-        "trend_15m": 0.953,
-        "trend_1h": 0.953,
-        "adx": 0.953,
+        "trend_5m": 0.943,
+        "trend_15m": 0.943,
+        "trend_1h": 0.943,
+        "adx": 0.943,
         "vwap": 0.75,
         "rsi": 1.0,
         "macd": 1.0,
@@ -5819,11 +5780,11 @@
         "corr": 0.5
       },
       "oil": {
-        "trend_5m": 0.953,
-        "trend_15m": 0.953,
-        "trend_1h": 0.953,
-        "adx": 0.953,
-        "vwap": 0.645,
+        "trend_5m": 0.943,
+        "trend_15m": 0.943,
+        "trend_1h": 0.943,
+        "adx": 0.943,
+        "vwap": 0.636,
         "rsi": 1.0,
         "macd": 1.0,
         "level": 1.0,
@@ -5855,30 +5816,30 @@
           "trend_1h",
           "adx"
         ],
-        "n": 609,
-        "n_eff": 421.7,
-        "mean_r": 0.0668,
-        "margin_r": 0.1082,
+        "n": 610,
+        "n_eff": 422.7,
+        "mean_r": 0.0708,
+        "margin_r": 0.1081,
         "multiplier": 1.0
       },
       "vwap": {
         "members": [
           "vwap"
         ],
-        "n": 513,
-        "n_eff": 352.4,
-        "mean_r": 0.1043,
-        "margin_r": 0.1195,
+        "n": 514,
+        "n_eff": 353.4,
+        "mean_r": 0.1088,
+        "margin_r": 0.1194,
         "multiplier": 1.0
       },
       "rsi": {
         "members": [
           "rsi"
         ],
-        "n": 493,
-        "n_eff": 335.3,
-        "mean_r": 0.0711,
-        "margin_r": 0.1202,
+        "n": 494,
+        "n_eff": 336.2,
+        "mean_r": 0.0762,
+        "margin_r": 0.1201,
         "multiplier": 1.0
       },
       "macd": {
@@ -5949,9 +5910,9 @@
         "margin_r": 0.2935
       },
       "fantômes": {
-        "n": 47,
-        "mean_r": 0.2275,
-        "margin_r": 0.3241
+        "n": 48,
+        "mean_r": 0.2541,
+        "margin_r": 0.3215
       },
       "backtest": {
         "n": 502,
@@ -5962,10 +5923,10 @@
     "variants": {
       "hors_session": {
         "label": "indices le matin européen",
-        "n": 6,
-        "mean_net_r": -0.3549,
+        "n": 7,
+        "mean_net_r": -0.1031,
         "promoted": false,
-        "missing": 94
+        "missing": 93
       },
       "horizon_3h": {
         "label": "horizon ~3 h",
@@ -6022,13 +5983,13 @@
       "mean_net_r": 0.1223
     },
     "promoted_variants": [],
-    "updated_at": "2026-09-24T08:20:39.465814+00:00"
+    "updated_at": "2026-09-24T08:25:34.241217+00:00"
   },
   "state": {
-    "last_scan": "2026-09-24T08:20:38Z",
+    "last_scan": "2026-09-24T08:25:30Z",
     "last_scan_note": "0 signal(aux)",
     "last_summary": "2026-09-23T22:05:35Z",
-    "last_track": "2026-09-24T08:20:38Z",
+    "last_track": "2026-09-24T08:25:30Z",
     "last_summary_day": "2026-09-23"
   },
   "limits": {
