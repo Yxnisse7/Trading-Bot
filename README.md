@@ -432,6 +432,13 @@ MET (0,10 $). En plus des trades de la simulation :
 - `/retirer <id>` retire un trade, `/topstep` affiche l'état.
 
 Les trades déjà repris restent dans le compte même si la simulation est remise à zéro.
+**Objectif du jour** : dès que le résultat réalisé de la journée de trading atteint 1 200 $ (40 % de
+l'objectif, sous les 50 % de la règle de cohérence), le compte ne prend plus de nouveau trade jusqu'à la
+journée suivante (17:00 heure de Chicago, minuit à Paris). `/topstep objectif 1500` pour le changer,
+`/topstep objectif 0` pour le désactiver. De même, après −1 000 $ dans la journée, plus aucun trade :
+Topstep bloque le compte jusqu'au lendemain. Les trades laissés de côté sont listés sur la page (« Trades
+non pris ») et le message Telegram de l'issue l'indique. Le bot, lui, continue de trader normalement.
+
 `/topstep reset` (bouton « Nouveau compte à 50 000 $ ») repart d'un compte neuf : seuls les trades
 ouverts à partir de ce moment comptent, l'ancien compte est gardé en résumé.
 

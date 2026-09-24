@@ -88,6 +88,9 @@
     <div class="tbl-foot"><span id="hist-count"></span><button type="button" class="secondary" id="hist-more" hidden>Afficher 10 de plus</button></div>
   </div>
 
+  <h2 id="nonpris" data-closed data-hint="objectif du jour ou limite journalière atteints">Trades non pris</h2>
+  <div class="card tbl"><table id="skip"><thead><tr><th>Émis</th><th>Contrat</th><th>Raison</th><th>Issue du signal</th></tr></thead><tbody></tbody></table></div>
+
   <h2 id="jours" data-hint="résultat de chaque journée de trading">Par journée</h2>
   <div class="card"><div class="days" id="days"></div></div>
 
@@ -103,6 +106,7 @@
       <div class="wide"><button type="submit" id="j-send">Ajouter au compte</button></div>
       <div class="wide muted" style="font-size:12px;align-self:center">Sur Telegram : <span class="mono">/journal nasdaq short 30950 30910 3 2026-09-23T15:01</span></div>
       <div class="wide riskf"><label for="risk" style="margin:0">Risque par trade (% de la balance)</label><input id="risk" inputmode="decimal"><button type="button" class="secondary" id="risk-send">Enregistrer</button></div>
+      <div class="wide riskf"><label for="target" style="margin:0">Objectif du jour en $ (0 = sans)</label><input id="target" inputmode="decimal"><button type="button" class="secondary" id="target-send">Enregistrer</button></div>
       <div class="wide riskf"><button type="button" class="secondary" id="reset-send">Nouveau compte à 50 000 $</button><span class="muted" id="archives"></span></div>
     </form>
   </div>
@@ -203,9 +207,11 @@
     $("#archives").textContent = (d.archives || []).length ? "Comptes précédents : " + d.archives.map((a) => `${a.trades} trades, ${Y.smoney(a.profit, CUR, 0)} (${a.status})`).join(" · ") : "";
     $("#risk-now").textContent = `${Y.num(d.risk_pct, d.risk_pct % 1 ? 1 : 0)}${Y.NB}% (${Y.money(d.balance * d.risk_pct / 100, CUR, 0)})`;
     if (!$("#risk").value) $("#risk").value = String(d.risk_pct).replace(".", ",");
+    if (!$("#target").value) $("#target").value = String(d.daily_target ?? 0);
 
     $("#viol").innerHTML = (d.failed ? [`<b>Compte échoué</b> : balance ${Y.money(d.failed.balance, CUR)} sous la perte maximale (${Y.money(d.failed.mll, CUR)}) le ${Y.ddmm ? Y.ddmm(d.failed.at) : d.failed.at}. Sur Topstep, il faudrait repartir sur un nouveau compte.`] : [])
-      .concat(d.violations).map((v) => `<div class="note-box warn"><span>${Y.I.warn}</span><span>${v.startsWith("<b>") ? v : esc(v)}</span></div>`).join("");
+      .concat(d.violations).map((v) => `<div class="note-box warn"><span>${Y.I.warn}</span><span>${v.startsWith("<b>") ? v : esc(v)}</span></div>`).join("")
+      + (d.day_closed ? `<div class="note-box ok"><span>${Y.I.info}</span><span><b>Plus de nouveau trade aujourd'hui</b> : ${esc(d.day_closed)}. Reprise à la prochaine journée de trading (17:00 heure de Chicago, minuit à Paris). Le bot, lui, continue normalement.</span></div>` : "");
 
     const toTarget = d.target_balance - start, progress = toTarget ? Math.max(0, d.profit) / toTarget : 0;
     const st = { "en cours": "neu", "objectif atteint": "up", "échoué": "dn" }[d.status] || "neu";
@@ -223,8 +229,9 @@
     $("#tiles").innerHTML = [
       tile("Perte maximale", Y.money(d.mll, CUR, 0), `marge ${Y.money(room, CUR, 0)} · ${d.mll >= start ? "bloquée à 50 000 $" : "monte avec vos fins de journée"}`,
            bar(room / R.max_loss, room < 500 ? "var(--dn)" : "var(--up)")),
-      tile("Aujourd'hui", `<span class="${Y.tone(d.today_pnl)}">${Y.smoney(d.today_pnl, CUR, 0)}</span>`, `limite journalière restante ${Y.money(d.room_today, CUR, 0)} sur ${Y.money(R.daily_loss, CUR, 0)}`,
-           bar(todayUsed / R.daily_loss, "var(--dn)")),
+      tile("Aujourd'hui", `<span class="${Y.tone(d.today_pnl)}">${Y.smoney(d.today_pnl, CUR, 0)}</span>`,
+           (d.daily_target ? `objectif du jour ${Y.money(d.daily_target, CUR, 0)} · ` : "") + `limite ${Y.money(-R.daily_loss, CUR, 0)} (reste ${Y.money(d.room_today, CUR, 0)})`,
+           d.today_pnl > 0 && d.daily_target ? bar(d.today_pnl / d.daily_target, "var(--up)") : bar(todayUsed / R.daily_loss, "var(--dn)")),
       tile("Cohérence", d.profit > 0 ? `${Y.num(cons * 100, 0)}${Y.NB}%` : "—", d.profit > 0 ? `meilleure journée ${Y.money(d.best_day, CUR, 0)} · maximum 50 % du gain` : "calculée dès que le compte gagne",
            d.profit > 0 ? bar(cons, cons > R.consistency ? "var(--dn)" : "var(--up)") : ""),
       tile("Trades", String(d.trades.length), d.trades.length ? `<div class="stackbar" style="margin:4px 0 8px"><i style="flex:${wins};background:var(--up)"></i><i style="flex:${losses};background:var(--dn)"></i></div>${wins} gagnants · ${losses} perdants · ${d.open.length} ouvert${d.open.length > 1 ? "s" : ""}` : `${d.open.length} ouvert${d.open.length > 1 ? "s" : ""} · aucun clôturé`),
@@ -232,7 +239,7 @@
     const tiles = $("#tiles"), dots = $("#tile-dots");
     tiles.onscroll = () => { const i = Math.round(tiles.scrollLeft / Math.max(1, tiles.scrollWidth - tiles.clientWidth) * 2); dots.querySelectorAll("i").forEach((x, k) => x.classList.toggle("on", k === i)); };
     if (live && d.open.length && !live.hasSavedChoice()) live.select(d.open[0].asset);
-    renderOpen(); renderCand(); drawEquity(); renderHist(); renderDays();
+    renderOpen(); renderCand(); drawEquity(); renderHist(); renderDays(); renderSkip();
   }
 
   function dg(key) { const a = ((dash && dash.assets) || []).find((x) => x.key === key); const t = a && a.tick_size;
@@ -273,6 +280,13 @@
     $("#hist-more").hidden = hist.length <= histLimit;
   }
   $("#hist-more").addEventListener("click", () => { histLimit += 10; renderHist(); });
+  function renderSkip() {
+    const rows = (acct.skipped || []).slice().reverse();
+    const det = document.getElementById("nonpris"); if (det && det.setHint) det.setHint(rows.length ? `${rows.length} trade${rows.length > 1 ? "s" : ""} laissé${rows.length > 1 ? "s" : ""} de côté` : "aucun pour l'instant");
+    $("#skip tbody").innerHTML = rows.length ? rows.map((t) => `<tr><td class="mono nowrap" style="font-size:12px">${esc(when(t.opened_at))}</td><td class="nowrap">${contract(t)}</td>
+      <td class="muted">${esc(t.reason)}</td><td>${t.status === "open" ? `<span class="pill open"><b>En cours</b></span>` : Y.resultPill(t.status, t.pnl_pct)}</td></tr>`).join("")
+      : `<tr><td colspan="4" class="empty">Aucun trade laissé de côté : l'objectif du jour n'a pas encore été atteint.</td></tr>`;
+  }
   function renderDays() {
     const days = (acct.days || []).slice().reverse(), R = acct.rules;
     const scale = Math.max(R.daily_loss, ...days.map((x) => Math.abs(x.pnl)));
@@ -341,6 +355,11 @@
   $("#reset-send").addEventListener("click", (ev) => {
     if (!confirm("Repartir d'un compte neuf à 50 000 $ ?\n\nSeuls les trades ouverts à partir de maintenant compteront. L'ancien compte est gardé en résumé.")) return;
     send("reset", "Nouveau compte à 50 000 $ dans 1 à 2 minutes.", ev.currentTarget);
+  });
+  $("#target-send").addEventListener("click", (ev) => {
+    const v = Number($("#target").value.replace(",", ".").replace("$", ""));
+    if (!(v === 0 || (v >= 100 && v <= 3000))) { Y.toast({ title: "Objectif du jour", text: "Entre 100 et 3 000 $, ou 0 pour le désactiver.", timeout: 6000 }); return; }
+    send(`objectif ${v}`, v ? `Objectif du jour : ${v} $ (tout le compte est recalculé).` : "Objectif du jour désactivé.", ev.currentTarget);
   });
   $("#risk-send").addEventListener("click", (ev) => {
     const r = Number($("#risk").value.replace(",", "."));

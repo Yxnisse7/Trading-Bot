@@ -146,10 +146,12 @@ def main(argv: list[str] | None = None) -> int:
         words = (args.note or "").split()
         action = words[0].lower() if words else "topstep"
         cmd = {"add": "pris", "remove": "retirer"}.get(action, action)
-        if cmd not in ("pris", "sortie", "retirer", "journal", "risque", "reset", "nouveau"):
+        if cmd not in ("pris", "sortie", "retirer", "journal", "risque", "objectif", "reset", "nouveau"):
             cmd, words = "topstep", [""] + words
         if cmd in ("reset", "nouveau"):
             cmd, words = "topstep", ["", "reset"]
+        if cmd == "objectif":
+            cmd, words = "topstep", ["", "objectif"] + words[1:]
         if cmd == "risque":
             cmd, words = "topstep", ["", "risque"] + words[1:]
         try:

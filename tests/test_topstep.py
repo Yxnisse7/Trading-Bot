@@ -179,3 +179,25 @@ def test_reset_starts_a_fresh_account_from_now(tmp_path, monkeypatch):
     eng.store.append_history(_sig("new", source="manual", when=T0 + timedelta(hours=3)))
     d = eng.topstep_update()
     assert [t["id"] for t in d["trades"]] == ["new"] and d["risk_pct"] == 0.5
+
+
+def test_daily_target_and_daily_loss_stop_new_trades_for_the_day(tmp_path):
+    cfg = Config(assets=default_assets())
+    cfg.assets["nasdaq"].cost_pct = 0.0
+    acct = _acct(tmp_path)
+    win = _sig("w", source="manual", entry=20000, close=20100, sl=19900, duration=20)          # +100 points
+    after = _sig("x", source="manual", when=T0 + timedelta(minutes=30))                        # même journée, après le gain
+    nextday = _sig("y", source="manual", when=T0 + timedelta(days=1))
+    acct.take(win, 7)                                                                         # +100 pts × 2 $ × 7 = +1 400 $
+    d = acct.compute([win, after, nextday], cfg, now=T0 + timedelta(minutes=40))
+    assert [t["id"] for t in d["trades"]] == ["w", "y"]
+    assert d["skipped"][0]["id"] == "x" and "objectif du jour" in d["skipped"][0]["reason"]
+    assert d["day_closed"] and "objectif du jour" in d["day_closed"]
+    acct.set_daily_target(0)                                                                  # désactivé : tout est pris
+    assert [t["id"] for t in acct.compute([win, after, nextday], cfg)["trades"]] == ["w", "x", "y"]
+    loss = _sig("l", source="manual", entry=20000, close=19400, sl=19300)
+    acct.take(loss, 10)                                                                       # −12 000 $ dans la journée
+    d = acct.compute([loss, after], cfg)
+    assert d["skipped"][0]["id"] == "x" and "limite journalière" in d["skipped"][0]["reason"]
+    with pytest.raises(ValueError):
+        acct.set_daily_target(50)

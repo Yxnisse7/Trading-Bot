@@ -54,6 +54,7 @@ PRODUCTS = {
     "nasdaq": ("MNQ", 2.0), "sp500": ("MES", 5.0), "gold": ("MGC", 10.0), "oil": ("MCL", 100.0),
     "euro": ("M6E", 12_500.0), "bitcoin": ("MBT", 0.1), "ethereum": ("MET", 0.1),
 }
+DEFAULT_DAILY_TARGET = 1_200.0  # objectif du jour : 40 % de l'objectif du compte, sous les 50 % de la cohérence
 DEFAULT_RISK_PCT = 0.5           # % de la balance risqué au stop (250 $ sur 50 000 $) : la perte maximale
                                  # du compte (2 000 $) n'est que 4 % de la balance, 10 % la viderait au 1er stop
 
@@ -163,6 +164,15 @@ class TopstepAccount:
         self.state["risk_pct"] = float(pct)
         self.save()
 
+    def set_daily_target(self, amount: float) -> None:
+        if amount and not 100 <= amount <= RULES["profit_target"]:
+            raise ValueError("objectif du jour entre 100 et 3 000 $ (0 pour le désactiver)")
+        self.state["daily_target"] = float(amount)
+        self.save()
+
+    def daily_target(self) -> float:
+        return float(self.state.get("daily_target", DEFAULT_DAILY_TARGET))
+
     def risk_pct(self) -> float:
         return float(self.state.get("risk_pct", DEFAULT_RISK_PCT))
 
@@ -206,7 +216,7 @@ class TopstepAccount:
         items += [(j["opened_at"], ("journal", j)) for j in self.state.get("journal", [])
                   if since is None or parse_iso(j["opened_at"]) >= since]
         items.sort(key=lambda x: x[0])
-        rows, open_rows = [], []
+        rows, open_rows, skipped = [], [], []
 
         def balance_at(t: str) -> float:
             when = parse_iso(t)
@@ -224,6 +234,12 @@ class TopstepAccount:
             _, s, fixed, origin = item
             symbol, mult = PRODUCTS[s.asset]
             asset = cfg.assets.get(s.asset)
+            why = self._day_closed(rows, parse_iso(s.created_at))
+            if why:
+                skipped.append({"id": s.id, "asset": s.asset, "asset_label": s.asset_label, "symbol": symbol,
+                                "direction": s.direction, "opened_at": s.created_at, "status": s.status,
+                                "pnl_pct": s.pnl_pct, "reason": why})
+                continue
             n = fixed or self.contracts_for(s, balance_at(s.created_at))
             me = self.state.get("exits", {}).get(s.id) or (s.meta or {}).get("manual_exit")
             if me:
@@ -243,8 +259,22 @@ class TopstepAccount:
                                   s.created_at, closed_at, status, origin, asset.cost_pct if asset else 0.0))
         rows.sort(key=lambda r: r["closed_at"])
         data = self._apply_rules(rows, open_rows, now)
+        data["daily_target"] = self.daily_target()
+        data["skipped"] = skipped[-30:]
+        data["day_closed"] = self._day_closed(rows, now)
         data["candidates"] = self.candidates(signals, now, data["balance"], mirror_ids)
         return data
+
+    def _day_closed(self, rows: list[dict[str, Any]], t: datetime) -> str | None:
+        """Pourquoi aucun nouveau trade n'est pris à l'instant `t` (résultat réalisé de la journée de trading)."""
+        day = trading_day(t).isoformat()
+        realized = sum(r["pnl"] for r in rows if r["day"] == day and parse_iso(r["closed_at"]) <= t)
+        target = self.daily_target()
+        if target and realized >= target:
+            return f"objectif du jour atteint ({realized:+.0f} $)"
+        if realized <= -RULES["daily_loss"]:
+            return f"limite journalière atteinte ({realized:+.0f} $) : Topstep bloque le compte jusqu'au lendemain"
+        return None
 
     def started_at(self) -> datetime | None:
         """Début du compte (None : ancien fichier, tous les trades comptent)."""
@@ -402,6 +432,10 @@ def summary_text(d: dict[str, Any]) -> str:
              f"Perte maximale : {money(d['mll'], '$')}, marge {money(d['room_to_mll'], '$')}",
              f"Aujourd'hui {money(d['today_pnl'], '$', sign=True)} · limite journalière restante {money(d['room_today'], '$')}",
              f"Trades : {len(d['trades'])} clôturés, {len(d['open'])} ouverts · risque par trade {format(d['risk_pct'], 'g').replace('.', ',')} % de la balance"]
+    if d.get("daily_target"):
+        lines.append(f"Objectif du jour : {money(d['daily_target'], '$', 0)} ; atteint, plus de nouveau trade jusqu'au lendemain")
+    if d.get("day_closed"):
+        lines.append(f"⏸️ Plus de trade aujourd'hui : {d['day_closed']}")
     if d["violations"]:
         lines.append("⚠️ " + " · ".join(d["violations"][-3:]))
     lines.append("<i>/pris [actif] [micros] · /sortie [actif] [prix] · /retirer id · /journal · /topstep</i>")
