@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-24T21:05:35.968263+02:00",
+  "updated_at": "2026-09-24T21:10:42.491170+02:00",
   "timezone": "Europe/Paris",
   "equity_curve": [
     {
@@ -970,7 +970,7 @@
       "pnl_pct": -2.3961,
       "avg_pnl_pct": -0.0292
     },
-    "open": 0,
+    "open": 1,
     "open_shadow": 0
   },
   "by_source": {
@@ -1115,7 +1115,7 @@
         "pnl_pct": -0.6115,
         "avg_pnl_pct": -0.0408
       },
-      "open": 0,
+      "open": 1,
       "session_utc": [
         13,
         20
@@ -4183,7 +4183,43 @@
       ]
     }
   ],
-  "open_signals": [],
+  "open_signals": [
+    {
+      "id": "a763dd378f",
+      "asset": "sp500",
+      "asset_label": "S&P 500 (ES)",
+      "direction": "long",
+      "horizon": "1h",
+      "entry": 7772.5,
+      "take_profit": 7778.5,
+      "stop_loss": 7767.5,
+      "risk_reward": 1.2,
+      "confidence": "fort",
+      "score": 6.75,
+      "criteria": [
+        "adx",
+        "macd",
+        "rsi",
+        "trend_15m",
+        "trend_1h",
+        "trend_5m",
+        "vwap"
+      ],
+      "source": "bot",
+      "status": "open",
+      "pnl_pct": null,
+      "pnl_gross_pct": null,
+      "duration_minutes": null,
+      "close_price": null,
+      "created_at": "2026-09-24T19:10:36Z",
+      "closed_at": null,
+      "created_local": "24/09 21:10",
+      "expires_at": "2026-09-24T20:10:36Z",
+      "rationale": "Achat : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 17.58 (0.23 %), TP = 35 % du range, SL = 29 % du range, probabilité de résolution sous 1 h ≈ 100%.",
+      "news_context": "actualité calme sur les 2 dernières heures",
+      "manual_exit": null
+    }
+  ],
   "recent_trades": [
     {
       "id": "6849106d83",
@@ -6074,8 +6110,8 @@
     "updated_at": "2026-09-24T18:40:34.310309+00:00"
   },
   "state": {
-    "last_scan": "2026-09-24T19:05:28Z",
-    "last_scan_note": "0 signal(aux)",
+    "last_scan": "2026-09-24T19:10:36Z",
+    "last_scan_note": "1 signal(aux)",
     "last_summary": "2026-09-23T22:05:35Z",
     "last_track": "2026-09-24T18:40:33Z",
     "last_summary_day": "2026-09-23"
@@ -6101,8 +6137,8 @@
     "losses": 31,
     "avg_win": 46.66,
     "avg_loss": -33.02,
-    "open_positions": 0,
+    "open_positions": 1,
     "skipped": 0,
-    "risky": 34
+    "risky": 35
   }
 }
