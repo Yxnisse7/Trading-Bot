@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-24T16:50:47.840631+02:00",
+  "updated_at": "2026-09-24T16:55:44.192303+02:00",
   "timezone": "Europe/Paris",
   "equity_curve": [
     {
@@ -915,15 +915,15 @@
       "avg_pnl_pct": -0.0516
     },
     "shadow": {
-      "n": 69,
-      "tp": 23,
+      "n": 70,
+      "tp": 24,
       "sl": 32,
       "expired": 14,
-      "win_rate": 0.41818181818181815,
-      "neutral_win_rate": 0.4087,
-      "edge": 0.0095,
-      "pnl_pct": -2.03,
-      "avg_pnl_pct": -0.0294
+      "win_rate": 0.42857142857142855,
+      "neutral_win_rate": 0.4086,
+      "edge": 0.02,
+      "pnl_pct": -1.7154,
+      "avg_pnl_pct": -0.0245
     },
     "open": 0,
     "open_shadow": 1
@@ -963,15 +963,15 @@
       "avg_pnl_pct": 0.0
     },
     "shadow": {
-      "n": 69,
-      "tp": 23,
+      "n": 70,
+      "tp": 24,
       "sl": 32,
       "expired": 14,
-      "win_rate": 0.41818181818181815,
-      "neutral_win_rate": 0.4087,
-      "edge": 0.0095,
-      "pnl_pct": -2.03,
-      "avg_pnl_pct": -0.0294
+      "win_rate": 0.42857142857142855,
+      "neutral_win_rate": 0.4086,
+      "edge": 0.02,
+      "pnl_pct": -1.7154,
+      "avg_pnl_pct": -0.0245
     }
   },
   "by_horizon": {
@@ -1177,15 +1177,15 @@
         "avg_pnl_pct": -0.0523
       },
       "shadow": {
-        "n": 8,
-        "tp": 3,
+        "n": 9,
+        "tp": 4,
         "sl": 5,
         "expired": 0,
-        "win_rate": 0.375,
-        "neutral_win_rate": 0.4213,
-        "edge": -0.0463,
-        "pnl_pct": -0.1726,
-        "avg_pnl_pct": -0.0216
+        "win_rate": 0.4444444444444444,
+        "neutral_win_rate": 0.419,
+        "edge": 0.0254,
+        "pnl_pct": 0.142,
+        "avg_pnl_pct": 0.0158
       },
       "open": 0,
       "session_utc": [
@@ -1292,15 +1292,15 @@
       "label": "Tendance 5 min",
       "weight": 1.0,
       "stats": {
-        "n": 103,
-        "tp": 43,
+        "n": 104,
+        "tp": 44,
         "sl": 46,
         "expired": 14,
-        "win_rate": 0.48314606741573035,
+        "win_rate": 0.4888888888888889,
         "neutral_win_rate": 0.4095,
-        "edge": 0.0736,
-        "pnl_pct": -2.194,
-        "avg_pnl_pct": -0.0213
+        "edge": 0.0794,
+        "pnl_pct": -1.8794,
+        "avg_pnl_pct": -0.0181
       },
       "by_source": {
         "bot": {
@@ -1337,15 +1337,15 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 45,
-          "tp": 19,
+          "n": 46,
+          "tp": 20,
           "sl": 23,
           "expired": 3,
-          "win_rate": 0.4523809523809524,
-          "neutral_win_rate": 0.4072,
-          "edge": 0.0452,
-          "pnl_pct": 0.0581,
-          "avg_pnl_pct": 0.0013
+          "win_rate": 0.46511627906976744,
+          "neutral_win_rate": 0.4071,
+          "edge": 0.058,
+          "pnl_pct": 0.3727,
+          "avg_pnl_pct": 0.0081
         }
       },
       "last_trades": [
@@ -1381,6 +1381,40 @@
           "expires_at": "2026-09-24T15:20:41Z",
           "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 1.20 (1.27 %), TP = 35 % du range, SL = 29 % du range, probabilité de résolution sous 1 h ≈ 78%.",
           "news_context": "actualité à surveiller (score 1) : “You can’t wait too long”: BoE’s Breeden warns on rate hikes amid energy shock",
+          "manual_exit": null
+        },
+        {
+          "id": "0a561059d2",
+          "asset": "gold",
+          "asset_label": "Or (XAU/USD)",
+          "direction": "short",
+          "horizon": "3h",
+          "entry": 4303.5,
+          "take_profit": 4289.1,
+          "stop_loss": 4313.1,
+          "risk_reward": 1.5,
+          "confidence": "fort",
+          "score": 5.75,
+          "criteria": [
+            "adx",
+            "pdhl",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "tp",
+          "pnl_pct": 0.3146,
+          "pnl_gross_pct": 0.3346,
+          "duration_minutes": 40,
+          "close_price": 4289.1,
+          "created_at": "2026-09-24T14:01:02Z",
+          "closed_at": "2026-09-24T14:42:00Z",
+          "created_local": "24/09 16:01",
+          "expires_at": "2026-09-24T17:01:02Z",
+          "rationale": "Vente : tendance forte (ADX), cassure des extrêmes de la veille, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 23.98 (0.56 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 77%.",
+          "news_context": "actualité calme sur les 2 dernières heures",
           "manual_exit": null
         },
         {
@@ -1591,40 +1625,6 @@
           "expires_at": "2026-09-24T12:50:41Z",
           "rationale": "Vente : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 90.21 (0.30 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 77%.",
           "news_context": "actualité calme sur les 2 dernières heures",
-          "manual_exit": null
-        },
-        {
-          "id": "0ce4a658c3",
-          "asset": "bitcoin",
-          "asset_label": "Bitcoin (BTC/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 83461.0,
-          "take_profit": 83107.0,
-          "stop_loss": 83697.0,
-          "risk_reward": 1.5,
-          "confidence": "fort",
-          "score": 5.75,
-          "criteria": [
-            "adx",
-            "pdhl",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "bot",
-          "status": "expired",
-          "pnl_pct": 0.0562,
-          "pnl_gross_pct": 0.1162,
-          "duration_minutes": 60,
-          "close_price": 83364.01,
-          "created_at": "2026-09-24T11:35:25Z",
-          "closed_at": "2026-09-24T12:35:31Z",
-          "created_local": "24/09 13:35",
-          "expires_at": "2026-09-24T12:35:25Z",
-          "rationale": "Vente : tendance forte (ADX), cassure des extrêmes de la veille, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 590.1 (0.71 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 80%.",
-          "news_context": "actualité à surveiller (score 2) : Traders price in 4 Fed rate hikes by June 2027 as bitcoin slides below $83,000",
           "manual_exit": null
         }
       ]
@@ -1634,15 +1634,15 @@
       "label": "Tendance 15 min",
       "weight": 1.0,
       "stats": {
-        "n": 133,
-        "tp": 48,
+        "n": 134,
+        "tp": 49,
         "sl": 60,
         "expired": 25,
-        "win_rate": 0.4444444444444444,
+        "win_rate": 0.44954128440366975,
         "neutral_win_rate": 0.4096,
-        "edge": 0.0348,
-        "pnl_pct": -5.2282,
-        "avg_pnl_pct": -0.0393
+        "edge": 0.0399,
+        "pnl_pct": -4.9136,
+        "avg_pnl_pct": -0.0367
       },
       "by_source": {
         "bot": {
@@ -1679,15 +1679,15 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 69,
-          "tp": 23,
+          "n": 70,
+          "tp": 24,
           "sl": 32,
           "expired": 14,
-          "win_rate": 0.41818181818181815,
-          "neutral_win_rate": 0.4087,
-          "edge": 0.0095,
-          "pnl_pct": -2.03,
-          "avg_pnl_pct": -0.0294
+          "win_rate": 0.42857142857142855,
+          "neutral_win_rate": 0.4086,
+          "edge": 0.02,
+          "pnl_pct": -1.7154,
+          "avg_pnl_pct": -0.0245
         }
       },
       "last_trades": [
@@ -1723,6 +1723,40 @@
           "expires_at": "2026-09-24T15:20:41Z",
           "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 1.20 (1.27 %), TP = 35 % du range, SL = 29 % du range, probabilité de résolution sous 1 h ≈ 78%.",
           "news_context": "actualité à surveiller (score 1) : “You can’t wait too long”: BoE’s Breeden warns on rate hikes amid energy shock",
+          "manual_exit": null
+        },
+        {
+          "id": "0a561059d2",
+          "asset": "gold",
+          "asset_label": "Or (XAU/USD)",
+          "direction": "short",
+          "horizon": "3h",
+          "entry": 4303.5,
+          "take_profit": 4289.1,
+          "stop_loss": 4313.1,
+          "risk_reward": 1.5,
+          "confidence": "fort",
+          "score": 5.75,
+          "criteria": [
+            "adx",
+            "pdhl",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "tp",
+          "pnl_pct": 0.3146,
+          "pnl_gross_pct": 0.3346,
+          "duration_minutes": 40,
+          "close_price": 4289.1,
+          "created_at": "2026-09-24T14:01:02Z",
+          "closed_at": "2026-09-24T14:42:00Z",
+          "created_local": "24/09 16:01",
+          "expires_at": "2026-09-24T17:01:02Z",
+          "rationale": "Vente : tendance forte (ADX), cassure des extrêmes de la veille, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 23.98 (0.56 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 77%.",
+          "news_context": "actualité calme sur les 2 dernières heures",
           "manual_exit": null
         },
         {
@@ -1933,40 +1967,6 @@
           "expires_at": "2026-09-24T12:50:41Z",
           "rationale": "Vente : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 90.21 (0.30 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 77%.",
           "news_context": "actualité calme sur les 2 dernières heures",
-          "manual_exit": null
-        },
-        {
-          "id": "0ce4a658c3",
-          "asset": "bitcoin",
-          "asset_label": "Bitcoin (BTC/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 83461.0,
-          "take_profit": 83107.0,
-          "stop_loss": 83697.0,
-          "risk_reward": 1.5,
-          "confidence": "fort",
-          "score": 5.75,
-          "criteria": [
-            "adx",
-            "pdhl",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "bot",
-          "status": "expired",
-          "pnl_pct": 0.0562,
-          "pnl_gross_pct": 0.1162,
-          "duration_minutes": 60,
-          "close_price": 83364.01,
-          "created_at": "2026-09-24T11:35:25Z",
-          "closed_at": "2026-09-24T12:35:31Z",
-          "created_local": "24/09 13:35",
-          "expires_at": "2026-09-24T12:35:25Z",
-          "rationale": "Vente : tendance forte (ADX), cassure des extrêmes de la veille, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 590.1 (0.71 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 80%.",
-          "news_context": "actualité à surveiller (score 2) : Traders price in 4 Fed rate hikes by June 2027 as bitcoin slides below $83,000",
           "manual_exit": null
         }
       ]
@@ -1976,15 +1976,15 @@
       "label": "Tendance 1 h",
       "weight": 1.0,
       "stats": {
-        "n": 131,
-        "tp": 46,
+        "n": 132,
+        "tp": 47,
         "sl": 60,
         "expired": 25,
-        "win_rate": 0.4339622641509434,
-        "neutral_win_rate": 0.4098,
-        "edge": 0.0242,
-        "pnl_pct": -5.425,
-        "avg_pnl_pct": -0.0414
+        "win_rate": 0.4392523364485981,
+        "neutral_win_rate": 0.4097,
+        "edge": 0.0296,
+        "pnl_pct": -5.1104,
+        "avg_pnl_pct": -0.0387
       },
       "by_source": {
         "bot": {
@@ -2021,15 +2021,15 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 67,
-          "tp": 21,
+          "n": 68,
+          "tp": 22,
           "sl": 32,
           "expired": 14,
-          "win_rate": 0.39622641509433965,
-          "neutral_win_rate": 0.4089,
-          "edge": -0.0127,
-          "pnl_pct": -2.2268,
-          "avg_pnl_pct": -0.0332
+          "win_rate": 0.4074074074074074,
+          "neutral_win_rate": 0.4088,
+          "edge": -0.0014,
+          "pnl_pct": -1.9122,
+          "avg_pnl_pct": -0.0281
         }
       },
       "last_trades": [
@@ -2065,6 +2065,40 @@
           "expires_at": "2026-09-24T15:20:41Z",
           "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 1.20 (1.27 %), TP = 35 % du range, SL = 29 % du range, probabilité de résolution sous 1 h ≈ 78%.",
           "news_context": "actualité à surveiller (score 1) : “You can’t wait too long”: BoE’s Breeden warns on rate hikes amid energy shock",
+          "manual_exit": null
+        },
+        {
+          "id": "0a561059d2",
+          "asset": "gold",
+          "asset_label": "Or (XAU/USD)",
+          "direction": "short",
+          "horizon": "3h",
+          "entry": 4303.5,
+          "take_profit": 4289.1,
+          "stop_loss": 4313.1,
+          "risk_reward": 1.5,
+          "confidence": "fort",
+          "score": 5.75,
+          "criteria": [
+            "adx",
+            "pdhl",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "tp",
+          "pnl_pct": 0.3146,
+          "pnl_gross_pct": 0.3346,
+          "duration_minutes": 40,
+          "close_price": 4289.1,
+          "created_at": "2026-09-24T14:01:02Z",
+          "closed_at": "2026-09-24T14:42:00Z",
+          "created_local": "24/09 16:01",
+          "expires_at": "2026-09-24T17:01:02Z",
+          "rationale": "Vente : tendance forte (ADX), cassure des extrêmes de la veille, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 23.98 (0.56 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 77%.",
+          "news_context": "actualité calme sur les 2 dernières heures",
           "manual_exit": null
         },
         {
@@ -2275,40 +2309,6 @@
           "expires_at": "2026-09-24T12:50:41Z",
           "rationale": "Vente : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 90.21 (0.30 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 77%.",
           "news_context": "actualité calme sur les 2 dernières heures",
-          "manual_exit": null
-        },
-        {
-          "id": "0ce4a658c3",
-          "asset": "bitcoin",
-          "asset_label": "Bitcoin (BTC/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 83461.0,
-          "take_profit": 83107.0,
-          "stop_loss": 83697.0,
-          "risk_reward": 1.5,
-          "confidence": "fort",
-          "score": 5.75,
-          "criteria": [
-            "adx",
-            "pdhl",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "bot",
-          "status": "expired",
-          "pnl_pct": 0.0562,
-          "pnl_gross_pct": 0.1162,
-          "duration_minutes": 60,
-          "close_price": 83364.01,
-          "created_at": "2026-09-24T11:35:25Z",
-          "closed_at": "2026-09-24T12:35:31Z",
-          "created_local": "24/09 13:35",
-          "expires_at": "2026-09-24T12:35:25Z",
-          "rationale": "Vente : tendance forte (ADX), cassure des extrêmes de la veille, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 590.1 (0.71 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 80%.",
-          "news_context": "actualité à surveiller (score 2) : Traders price in 4 Fed rate hikes by June 2027 as bitcoin slides below $83,000",
           "manual_exit": null
         }
       ]
@@ -2318,15 +2318,15 @@
       "label": "Force de tendance (ADX)",
       "weight": 1.0,
       "stats": {
-        "n": 133,
-        "tp": 48,
+        "n": 134,
+        "tp": 49,
         "sl": 60,
         "expired": 25,
-        "win_rate": 0.4444444444444444,
+        "win_rate": 0.44954128440366975,
         "neutral_win_rate": 0.4096,
-        "edge": 0.0348,
-        "pnl_pct": -5.2282,
-        "avg_pnl_pct": -0.0393
+        "edge": 0.0399,
+        "pnl_pct": -4.9136,
+        "avg_pnl_pct": -0.0367
       },
       "by_source": {
         "bot": {
@@ -2363,15 +2363,15 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 69,
-          "tp": 23,
+          "n": 70,
+          "tp": 24,
           "sl": 32,
           "expired": 14,
-          "win_rate": 0.41818181818181815,
-          "neutral_win_rate": 0.4087,
-          "edge": 0.0095,
-          "pnl_pct": -2.03,
-          "avg_pnl_pct": -0.0294
+          "win_rate": 0.42857142857142855,
+          "neutral_win_rate": 0.4086,
+          "edge": 0.02,
+          "pnl_pct": -1.7154,
+          "avg_pnl_pct": -0.0245
         }
       },
       "last_trades": [
@@ -2407,6 +2407,40 @@
           "expires_at": "2026-09-24T15:20:41Z",
           "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 1.20 (1.27 %), TP = 35 % du range, SL = 29 % du range, probabilité de résolution sous 1 h ≈ 78%.",
           "news_context": "actualité à surveiller (score 1) : “You can’t wait too long”: BoE’s Breeden warns on rate hikes amid energy shock",
+          "manual_exit": null
+        },
+        {
+          "id": "0a561059d2",
+          "asset": "gold",
+          "asset_label": "Or (XAU/USD)",
+          "direction": "short",
+          "horizon": "3h",
+          "entry": 4303.5,
+          "take_profit": 4289.1,
+          "stop_loss": 4313.1,
+          "risk_reward": 1.5,
+          "confidence": "fort",
+          "score": 5.75,
+          "criteria": [
+            "adx",
+            "pdhl",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "tp",
+          "pnl_pct": 0.3146,
+          "pnl_gross_pct": 0.3346,
+          "duration_minutes": 40,
+          "close_price": 4289.1,
+          "created_at": "2026-09-24T14:01:02Z",
+          "closed_at": "2026-09-24T14:42:00Z",
+          "created_local": "24/09 16:01",
+          "expires_at": "2026-09-24T17:01:02Z",
+          "rationale": "Vente : tendance forte (ADX), cassure des extrêmes de la veille, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 23.98 (0.56 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 77%.",
+          "news_context": "actualité calme sur les 2 dernières heures",
           "manual_exit": null
         },
         {
@@ -2618,40 +2652,6 @@
           "rationale": "Vente : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 90.21 (0.30 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 77%.",
           "news_context": "actualité calme sur les 2 dernières heures",
           "manual_exit": null
-        },
-        {
-          "id": "0ce4a658c3",
-          "asset": "bitcoin",
-          "asset_label": "Bitcoin (BTC/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 83461.0,
-          "take_profit": 83107.0,
-          "stop_loss": 83697.0,
-          "risk_reward": 1.5,
-          "confidence": "fort",
-          "score": 5.75,
-          "criteria": [
-            "adx",
-            "pdhl",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "bot",
-          "status": "expired",
-          "pnl_pct": 0.0562,
-          "pnl_gross_pct": 0.1162,
-          "duration_minutes": 60,
-          "close_price": 83364.01,
-          "created_at": "2026-09-24T11:35:25Z",
-          "closed_at": "2026-09-24T12:35:31Z",
-          "created_local": "24/09 13:35",
-          "expires_at": "2026-09-24T12:35:25Z",
-          "rationale": "Vente : tendance forte (ADX), cassure des extrêmes de la veille, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 590.1 (0.71 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 80%.",
-          "news_context": "actualité à surveiller (score 2) : Traders price in 4 Fed rate hikes by June 2027 as bitcoin slides below $83,000",
-          "manual_exit": null
         }
       ]
     },
@@ -2660,15 +2660,15 @@
       "label": "VWAP",
       "weight": 0.75,
       "stats": {
-        "n": 130,
-        "tp": 48,
+        "n": 131,
+        "tp": 49,
         "sl": 57,
         "expired": 25,
-        "win_rate": 0.45714285714285713,
-        "neutral_win_rate": 0.4097,
-        "edge": 0.0474,
-        "pnl_pct": -4.124,
-        "avg_pnl_pct": -0.0317
+        "win_rate": 0.46226415094339623,
+        "neutral_win_rate": 0.4096,
+        "edge": 0.0527,
+        "pnl_pct": -3.8094,
+        "avg_pnl_pct": -0.0291
       },
       "by_source": {
         "bot": {
@@ -2705,15 +2705,15 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 68,
-          "tp": 23,
+          "n": 69,
+          "tp": 24,
           "sl": 31,
           "expired": 14,
-          "win_rate": 0.42592592592592593,
-          "neutral_win_rate": 0.4084,
-          "edge": 0.0175,
-          "pnl_pct": -1.5422,
-          "avg_pnl_pct": -0.0227
+          "win_rate": 0.43636363636363634,
+          "neutral_win_rate": 0.4083,
+          "edge": 0.0281,
+          "pnl_pct": -1.2276,
+          "avg_pnl_pct": -0.0178
         }
       },
       "last_trades": [
@@ -2749,6 +2749,40 @@
           "expires_at": "2026-09-24T15:20:41Z",
           "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 1.20 (1.27 %), TP = 35 % du range, SL = 29 % du range, probabilité de résolution sous 1 h ≈ 78%.",
           "news_context": "actualité à surveiller (score 1) : “You can’t wait too long”: BoE’s Breeden warns on rate hikes amid energy shock",
+          "manual_exit": null
+        },
+        {
+          "id": "0a561059d2",
+          "asset": "gold",
+          "asset_label": "Or (XAU/USD)",
+          "direction": "short",
+          "horizon": "3h",
+          "entry": 4303.5,
+          "take_profit": 4289.1,
+          "stop_loss": 4313.1,
+          "risk_reward": 1.5,
+          "confidence": "fort",
+          "score": 5.75,
+          "criteria": [
+            "adx",
+            "pdhl",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "tp",
+          "pnl_pct": 0.3146,
+          "pnl_gross_pct": 0.3346,
+          "duration_minutes": 40,
+          "close_price": 4289.1,
+          "created_at": "2026-09-24T14:01:02Z",
+          "closed_at": "2026-09-24T14:42:00Z",
+          "created_local": "24/09 16:01",
+          "expires_at": "2026-09-24T17:01:02Z",
+          "rationale": "Vente : tendance forte (ADX), cassure des extrêmes de la veille, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 23.98 (0.56 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 77%.",
+          "news_context": "actualité calme sur les 2 dernières heures",
           "manual_exit": null
         },
         {
@@ -2959,40 +2993,6 @@
           "expires_at": "2026-09-24T12:50:41Z",
           "rationale": "Vente : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 90.21 (0.30 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 77%.",
           "news_context": "actualité calme sur les 2 dernières heures",
-          "manual_exit": null
-        },
-        {
-          "id": "0ce4a658c3",
-          "asset": "bitcoin",
-          "asset_label": "Bitcoin (BTC/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 83461.0,
-          "take_profit": 83107.0,
-          "stop_loss": 83697.0,
-          "risk_reward": 1.5,
-          "confidence": "fort",
-          "score": 5.75,
-          "criteria": [
-            "adx",
-            "pdhl",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "bot",
-          "status": "expired",
-          "pnl_pct": 0.0562,
-          "pnl_gross_pct": 0.1162,
-          "duration_minutes": 60,
-          "close_price": 83364.01,
-          "created_at": "2026-09-24T11:35:25Z",
-          "closed_at": "2026-09-24T12:35:31Z",
-          "created_local": "24/09 13:35",
-          "expires_at": "2026-09-24T12:35:25Z",
-          "rationale": "Vente : tendance forte (ADX), cassure des extrêmes de la veille, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 590.1 (0.71 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 80%.",
-          "news_context": "actualité à surveiller (score 2) : Traders price in 4 Fed rate hikes by June 2027 as bitcoin slides below $83,000",
           "manual_exit": null
         }
       ]
@@ -4200,20 +4200,20 @@
   ],
   "open_signals": [
     {
-      "id": "0a561059d2",
-      "asset": "gold",
-      "asset_label": "Or (XAU/USD)",
-      "direction": "short",
-      "horizon": "3h",
-      "entry": 4303.5,
-      "take_profit": 4289.1,
-      "stop_loss": 4313.1,
+      "id": "f396c975e6",
+      "asset": "oil",
+      "asset_label": "Pétrole WTI (CL)",
+      "direction": "long",
+      "horizon": "1h",
+      "entry": 95.31,
+      "take_profit": 95.97,
+      "stop_loss": 94.87,
       "risk_reward": 1.5,
       "confidence": "fort",
       "score": 5.75,
       "criteria": [
         "adx",
-        "pdhl",
+        "macd",
         "trend_15m",
         "trend_1h",
         "trend_5m",
@@ -4225,12 +4225,12 @@
       "pnl_gross_pct": null,
       "duration_minutes": null,
       "close_price": null,
-      "created_at": "2026-09-24T14:01:02Z",
+      "created_at": "2026-09-24T14:55:35Z",
       "closed_at": null,
-      "created_local": "24/09 16:01",
-      "expires_at": "2026-09-24T17:01:02Z",
-      "rationale": "Vente : tendance forte (ADX), cassure des extrêmes de la veille, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 23.98 (0.56 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 77%.",
-      "news_context": "actualité calme sur les 2 dernières heures",
+      "created_local": "24/09 16:55",
+      "expires_at": "2026-09-24T15:55:35Z",
+      "rationale": "Achat : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 1.10 (1.15 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 51%.",
+      "news_context": "actualité à surveiller (score 1) : “You can’t wait too long”: BoE’s Breeden warns on rate hikes amid energy shock",
       "manual_exit": null
     }
   ],
@@ -5819,17 +5819,17 @@
       "trades réels : +0,12 R ± 0,28 R par trade avant frais sur 65 trades (0 R = hasard)",
       "aucun critère ne s'écarte du hasard au-delà de la marge de sécurité : poids par défaut conservés",
       "variante « indices le matin européen » en test : 17 trades, -0,48 R net, encore 83 trades avant décision",
-      "variante « horizon ~3 h » en test : 6 trades, +0,06 R net, encore 94 trades avant décision",
+      "variante « horizon ~3 h » en test : 7 trades, +0,26 R net, encore 93 trades avant décision",
       "variante « confiance moyenne » en test : 5 trades, -0,14 R net, encore 95 trades avant décision",
       "variante « reprise juste après un stop » en test : 6 trades, +0,45 R net, encore 94 trades avant décision",
       "variante « nouvel actif : Ethereum (ETH/USD) » en test : 4 trades, -0,38 R net, encore 96 trades avant décision",
       "variante « nouvel actif : Pétrole WTI (CL) » en test : 8 trades, +0,08 R net, encore 92 trades avant décision"
     ],
     "avoid_hours_utc": [],
-    "sample": 636,
+    "sample": 637,
     "sample_by_source": {
       "bot": 64,
-      "shadow": 69,
+      "shadow": 70,
       "manual": 1,
       "backtest": 502
     },
@@ -5956,9 +5956,9 @@
           "trend_1h",
           "adx"
         ],
-        "n": 635,
-        "n_eff": 443.5,
-        "mean_r": 0.0385,
+        "n": 636,
+        "n_eff": 444.5,
+        "mean_r": 0.0423,
         "margin_r": 0.1049,
         "multiplier": 1.0
       },
@@ -5966,9 +5966,9 @@
         "members": [
           "vwap"
         ],
-        "n": 539,
-        "n_eff": 375.3,
-        "mean_r": 0.0693,
+        "n": 540,
+        "n_eff": 376.3,
+        "mean_r": 0.0735,
         "margin_r": 0.1151,
         "multiplier": 1.0
       },
@@ -6026,10 +6026,10 @@
         "members": [
           "pdhl"
         ],
-        "n": 71,
-        "n_eff": 48.1,
-        "mean_r": -0.2247,
-        "margin_r": 0.3032,
+        "n": 72,
+        "n_eff": 49.1,
+        "mean_r": -0.189,
+        "margin_r": 0.3049,
         "multiplier": 1.0
       },
       "corr": {
@@ -6050,9 +6050,9 @@
         "margin_r": 0.2819
       },
       "fantômes": {
-        "n": 69,
-        "mean_r": 0.0875,
-        "margin_r": 0.2663
+        "n": 70,
+        "mean_r": 0.1076,
+        "margin_r": 0.2654
       },
       "backtest": {
         "n": 502,
@@ -6070,10 +6070,10 @@
       },
       "horizon_3h": {
         "label": "horizon ~3 h",
-        "n": 6,
-        "mean_net_r": 0.0628,
+        "n": 7,
+        "mean_net_r": 0.2553,
         "promoted": false,
-        "missing": 94
+        "missing": 93
       },
       "confiance_moyenne": {
         "label": "confiance moyenne",
@@ -6123,13 +6123,13 @@
       "mean_net_r": 0.0504
     },
     "promoted_variants": [],
-    "updated_at": "2026-09-24T14:30:55.441511+00:00"
+    "updated_at": "2026-09-24T14:55:35.975808+00:00"
   },
   "state": {
-    "last_scan": "2026-09-24T14:50:40Z",
+    "last_scan": "2026-09-24T14:55:35Z",
     "last_scan_note": "0 signal(aux)",
     "last_summary": "2026-09-23T22:05:35Z",
-    "last_track": "2026-09-24T14:50:40Z",
+    "last_track": "2026-09-24T14:55:35Z",
     "last_summary_day": "2026-09-23"
   },
   "limits": {
