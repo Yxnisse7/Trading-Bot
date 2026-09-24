@@ -49,7 +49,7 @@
     <div class="actions"><span class="faint">Compte séparé · simulation, aucun ordre réel</span><button class="btn-icon" id="btn-refresh" type="button" aria-label="Actualiser" title="Actualiser"></button></div>
   </div>
 
-  <div class="note-box ok" style="margin-bottom:20px"><span id="ok-ic"></span><span>Ce compte ne contient <b>que vos trades</b> : vos trades manuels, les signaux que vous marquez « pris » et les trades saisis au journal. Le bot n'y ajoute rien de lui-même, et rien ici ne change sa simulation ni son apprentissage. Les résultats sont en micro-contrats Topstep (MNQ, MES, MGC…), avec les règles du compte d'évaluation 50K.</span></div>
+  <div class="note-box ok" style="margin-bottom:20px"><span id="ok-ic"></span><span>Ce compte rejoue <b>tous les trades de l'onglet Simulation</b> (passés et à venir, ceux du bot comme vos trades manuels) sur un compte d'évaluation Topstep 50K, en micro-contrats (MNQ, MES, MGC…). Chaque trade est dimensionné comme dans la simulation : un pourcentage de la balance du moment risqué au stop. Il a ses propres fichiers : il ne change ni la simulation ni l'apprentissage du bot.</span></div>
 
   <div class="viol" id="viol"></div>
 
@@ -71,9 +71,9 @@
   <h2 id="positions" data-hint="aucune position ouverte">Positions ouvertes</h2>
   <div class="card tbl"><table id="open"><thead><tr><th>Ouvert</th><th>Contrat</th><th class="num">Estimation</th><th class="num">Entrée</th><th class="num">TP</th><th class="num">SL</th><th class="num">Micros</th><th class="num">Risque</th><th></th></tr></thead><tbody></tbody></table></div>
 
-  <h2 id="pris" data-hint="signaux du bot des 3 derniers jours">Signaux du bot : je l'ai pris</h2>
+  <h2 id="pris" data-closed data-hint="signaux que la simulation n'a pas pris">Ajouter d'autres signaux</h2>
   <div class="card">
-    <div class="muted" style="font-size:13px;margin-bottom:12px">Vous avez pris un signal sur Topstep ? Indiquez vos micros et cliquez « Pris » : il entre dans le compte avec son vrai résultat (TP, SL ou expiration). Par défaut, les micros sont calculés pour risquer <b id="risk-now">200 $</b> au stop. Sur Telegram : <span class="mono">/pris nasdaq 3</span>.</div>
+    <div class="muted" style="font-size:13px;margin-bottom:12px">Signaux des 3 derniers jours que la simulation n'a pas pris (position trop petite pour sa balance). Cliquez « Pris » pour les ajouter avec leur vrai résultat. Par défaut, les micros risquent <b id="risk-now">0,5 %</b> de la balance au stop. Sur Telegram, <span class="mono">/pris nasdaq 3</span> ajoute un signal ou impose vos micros sur un trade déjà présent.</div>
     <div class="tbl"><table id="cand"><thead><tr><th>Émis</th><th>Contrat</th><th>Statut</th><th class="num">Entrée</th><th class="num">TP</th><th class="num">SL</th><th class="num">Micros</th><th></th></tr></thead><tbody></tbody></table></div>
   </div>
 
@@ -91,7 +91,7 @@
   <h2 id="jours" data-hint="résultat de chaque journée de trading">Par journée</h2>
   <div class="card"><div class="days" id="days"></div></div>
 
-  <h2 id="journal" data-closed data-hint="un trade fait sans le bot">Ajouter un trade au journal</h2>
+  <h2 id="journal" data-closed data-hint="trade fait sans le bot · risque par trade">Journal et réglages</h2>
   <div class="card">
     <form class="jform" id="jform" autocomplete="off">
       <div><label for="j-asset">Contrat</label><select id="j-asset"></select></div>
@@ -102,7 +102,7 @@
       <div><label for="j-at">Ouverture (heure de Paris)</label><input id="j-at" type="datetime-local" required></div>
       <div class="wide"><button type="submit" id="j-send">Ajouter au compte</button></div>
       <div class="wide muted" style="font-size:12px;align-self:center">Sur Telegram : <span class="mono">/journal nasdaq short 30950 30910 3 2026-09-23T15:01</span></div>
-      <div class="wide riskf"><label for="risk" style="margin:0">Risque par trade</label><input id="risk" inputmode="decimal"><button type="button" class="secondary" id="risk-send">Enregistrer</button></div>
+      <div class="wide riskf"><label for="risk" style="margin:0">Risque par trade (% de la balance)</label><input id="risk" inputmode="decimal"><button type="button" class="secondary" id="risk-send">Enregistrer</button></div>
     </form>
   </div>
 
@@ -167,7 +167,7 @@
   $("#btn-refresh").innerHTML = Y.I.refresh; $("#warn-ic").innerHTML = Y.I.warn; $("#ok-ic").innerHTML = Y.I.info;
   const PRODUCTS = { nasdaq: ["MNQ", 2, "Nasdaq 100"], sp500: ["MES", 5, "S&P 500"], gold: ["MGC", 10, "Or"], oil: ["MCL", 100, "Pétrole WTI"],
                      euro: ["M6E", 12500, "Euro / dollar"], bitcoin: ["MBT", 0.1, "Bitcoin"], ethereum: ["MET", 0.1, "Ethereum"] };
-  const ORIGIN = { pris: "Signal pris", manuel: "Manuel", journal: "Journal" };
+  const ORIGIN = { bot: "Bot", pris: "Ajouté", manuel: "Manuel", journal: "Journal" };
   const STATUS = { tp: "TP", sl: "SL", expired: "Expiré", manual: "Sortie", journal: "Journal", open: "En cours" };
   const live = window.LiveChart ? window.LiveChart.mount($("#live"), { assets: Object.keys(PRODUCTS).map((k) => [k, `${PRODUCTS[k][2]} (${PRODUCTS[k][0]})`]),
     how: "Prix des contrats du bot (données gratuites, légèrement différées). Vos positions Topstep suivent le même prix." }) : null;
@@ -198,8 +198,8 @@
   function render() {
     const d = acct, R = d.rules, start = R.start_balance;
     $("#updated").textContent = `Mise à jour à ${Y.hhmm(d.updated_at)} · journée de trading du ${new Date(d.today + "T12:00:00").toLocaleDateString("fr-FR", { day: "numeric", month: "long" })}`;
-    $("#risk-now").textContent = Y.money(d.risk_per_trade, CUR, 0);
-    if (!$("#risk").value) $("#risk").value = d.risk_per_trade;
+    $("#risk-now").textContent = `${Y.num(d.risk_pct, d.risk_pct % 1 ? 1 : 0)}${Y.NB}% (${Y.money(d.balance * d.risk_pct / 100, CUR, 0)})`;
+    if (!$("#risk").value) $("#risk").value = String(d.risk_pct).replace(".", ",");
 
     $("#viol").innerHTML = (d.failed ? [`<b>Compte échoué</b> : balance ${Y.money(d.failed.balance, CUR)} sous la perte maximale (${Y.money(d.failed.mll, CUR)}) le ${Y.ddmm ? Y.ddmm(d.failed.at) : d.failed.at}. Sur Topstep, il faudrait repartir sur un nouveau compte.`] : [])
       .concat(d.violations).map((v) => `<div class="note-box warn"><span>${Y.I.warn}</span><span>${v.startsWith("<b>") ? v : esc(v)}</span></div>`).join("");
@@ -211,7 +211,7 @@
       <p>Départ ${Y.money(start, CUR, 0)} · <span class="${Y.tone(d.profit)}">${Y.smoney(d.profit, CUR)}</span></p>
       <div class="cmp"><div class="h"><span>Objectif ${Y.money(d.target_balance, CUR, 0)}</span><span class="${d.profit > 0 ? "up" : "muted"}">${Y.num(progress * 100, 0)}${Y.NB}%</span></div><div class="track"><i style="width:${Math.min(100, progress * 100).toFixed(1)}%"></i></div></div>
       <hr><div class="rel"><span>Encore à gagner</span><span class="pill neu">${Y.money(Math.max(0, d.target_balance - d.balance), CUR, 0)}</span></div>
-      <div class="muted">${d.needed_profit > R.profit_target ? `Objectif relevé à ${Y.money(d.needed_profit, CUR, 0)} par la règle de cohérence (meilleure journée ${Y.money(d.best_day, CUR, 0)}).` : "Aucun ordre réel : seuls vos trades comptent."}</div>`;
+      <div class="muted">${d.needed_profit > R.profit_target ? `Objectif relevé à ${Y.money(d.needed_profit, CUR, 0)} par la règle de cohérence (meilleure journée ${Y.money(d.best_day, CUR, 0)}).` : `Risque par trade : ${Y.num(d.risk_pct, d.risk_pct % 1 ? 1 : 0)}${Y.NB}% de la balance, soit ${Y.money(d.balance * d.risk_pct / 100, CUR, 0)} au stop. Aucun ordre réel.`}</div>`;
     Y.countTo($("#h-bal"), d.balance, (x) => Y.money(x, CUR));
 
     const room = d.room_to_mll, todayUsed = Math.max(0, -d.today_pnl);
@@ -256,7 +256,7 @@
       <td class="num">${Y.price(c.entry, dg(c.asset))}</td><td class="num up">${Y.price(c.take_profit, dg(c.asset))}</td><td class="num dn">${Y.price(c.stop_loss, dg(c.asset))}</td>
       <td class="num"><input class="micros" inputmode="numeric" value="${c.contracts}" aria-label="Micros" data-for="${esc(c.id)}"></td>
       <td><button type="button" data-take="${esc(c.id)}" data-sym="${esc(c.symbol)}">Pris</button></td></tr>`; }).join("")
-      : `<tr><td colspan="8" class="empty">Aucun signal du bot ces 3 derniers jours qui ne soit pas déjà dans le compte.</td></tr>`;
+      : `<tr><td colspan="8" class="empty">Tous les signaux des 3 derniers jours sont déjà dans le compte.</td></tr>`;
   }
   function renderHist() {
     const hist = (acct.trades || []).slice().reverse(), shown = hist.slice(0, histLimit);
@@ -265,7 +265,7 @@
       <td class="num">${Y.price(t.entry, dg(t.asset))}</td><td class="num">${Y.price(t.exit, dg(t.asset))}</td><td class="num">${t.contracts}</td>
       <td class="num muted">${Y.num(t.cost, 2)}</td><td class="num ${Y.tone(t.pnl)}"><b>${Y.smoney(t.pnl, CUR)}</b></td><td class="num">${Y.money(t.balance_after, CUR)}</td>
       <td><button type="button" class="secondary" style="padding:6px 10px;font-size:12px" data-note="retirer ${esc(t.id)}" data-ask="Retirer ce trade du compte Topstep ?" data-ok="Trade retiré dans 1 à 2 minutes.">Retirer</button></td></tr>`).join("")
-      : `<tr><td colspan="11" class="empty">Aucun trade pour l'instant. Marquez un signal « pris », ou ajoutez un trade au journal.</td></tr>`;
+      : `<tr><td colspan="11" class="empty">Aucun trade pour l'instant : les trades de la simulation apparaissent ici dès leur clôture.</td></tr>`;
     $("#hist-count").textContent = hist.length ? `${shown.length} affichés sur ${hist.length}` : "";
     $("#hist-more").hidden = hist.length <= histLimit;
   }
@@ -337,8 +337,9 @@
   });
   $("#risk-send").addEventListener("click", (ev) => {
     const r = Number($("#risk").value.replace(",", "."));
-    if (!(r >= 10 && r <= 2000)) { Y.toast({ title: "Risque", text: "Entre 10 et 2 000 $ par trade.", timeout: 6000 }); return; }
-    send(`risque ${r}`, `Risque par trade : ${r} $ (pour les prochains signaux pris).`, ev.currentTarget);
+    if (!(r >= 0.1 && r <= 10)) { Y.toast({ title: "Risque", text: "Entre 0,1 et 10 % de la balance par trade.", timeout: 6000 }); return; }
+    if (r > 1 && !confirm(`${r} % par trade, c'est ${Y.money(500 * r, CUR, 0)} au stop sur 50 000 $, pour une perte maximale de 2 000 $ : quelques stops suffisent à faire échouer le compte. Continuer ?`)) return;
+    send(`risque ${r}`, `Risque par trade : ${r} % de la balance (tout le compte est recalculé).`, ev.currentTarget);
   });
 
   $("#btn-refresh").addEventListener("click", () => { load(); if (live) live.refresh(); });

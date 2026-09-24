@@ -26,6 +26,27 @@ def _acct(tmp_path):
     return ts.TopstepAccount(tmp_path / "topstep", docs_dir=tmp_path / "docs")
 
 
+def test_simulation_trades_are_mirrored_and_sized_on_the_balance(tmp_path):
+    cfg = Config(assets=default_assets())
+    cfg.assets["nasdaq"].cost_pct = 0.0
+    acct = _acct(tmp_path)
+    a = _sig("a", when=T0, close=20020.0)                              # stop à 10 points : 20 $ par micro
+    b = _sig("b", when=T0 + timedelta(hours=1), close=20020.0)
+    other = _sig("other", when=T0)                                      # envoyé, mais pas pris par la simulation
+    d = acct.compute([a, b, other], cfg, now=T0 + timedelta(hours=3), mirror_ids={"a", "b"})
+    ta, tb = d["trades"]
+    # 0,5 % de 50 000 = 250 $ → 12 micros ; +20 pts × 2 $ × 12 = +480 $ ; puis 0,5 % de 50 480 → 12 micros
+    assert (ta["contracts"], ta["pnl"], ta["origin"]) == (12, 480.0, "bot") and tb["contracts"] == 12
+    assert [c["id"] for c in d["candidates"]] == ["other"]
+    acct.set_risk(1)
+    d = acct.compute([a, b, other], cfg, now=T0 + timedelta(hours=3), mirror_ids={"a", "b"})
+    assert [t["contracts"] for t in d["trades"]] == [25, 25]              # 1 % : 500 $ puis 510 $ de risque
+    # la simulation remise à zéro : les trades déjà vus restent dans le compte Topstep
+    assert {t["id"] for t in acct.compute([a, b, other], cfg, mirror_ids=set())["trades"]} == {"a", "b"}
+    with pytest.raises(ValueError):
+        acct.set_risk(25)
+
+
 def test_only_your_trades_are_in_the_account(tmp_path):
     cfg = Config(assets=default_assets())
     acct = _acct(tmp_path)
@@ -108,9 +129,12 @@ def test_telegram_commands_and_isolation(tmp_path, monkeypatch):
     eng = Engine(Config(assets=default_assets()), Store(tmp_path))
     monkeypatch.setattr(engmod, "notify", lambda text, **kw: None)
     eng.store.append_history(_sig("bot1"))
+    eng.store.append_history(_sig("sim1", when=T0 - timedelta(hours=2)))
+    eng.portfolio.data.setdefault("history", []).append({"id": "sim1", "pnl": 1.0})
+    assert "sim1" in {t["id"] for t in eng.topstep_update()["trades"]}   # trade de la simulation, repris d'office
     before = dict(eng.portfolio.data)
     reply = eng.handle_command("/pris nasdaq 4", T0)
-    assert "Ajouté au compte Topstep" in reply.text and "4 micros MNQ" in reply.text
+    assert "Dans le compte Topstep" in reply.text and "4 micros MNQ" in reply.text
     assert "TOPSTEP 50K" in eng.handle_command("/topstep", T0).text
     assert "journal" in eng.handle_command("/journal nasdaq long 20000 20010 2", T0).text.lower()
     assert eng.portfolio.data == before                              # la simulation du bot n'est pas touchée

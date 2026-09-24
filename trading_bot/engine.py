@@ -824,9 +824,15 @@ class Engine:
         # à côté des données du bot (data/topstep ; dossier temporaire dans les tests)
         return TopstepAccount(self.store.dir / "topstep")
 
+    def topstep_mirror(self) -> set[str]:
+        """Trades de la simulation du bot (onglet Simulation) : le compte Topstep les rejoue tous."""
+        d = self.portfolio.data
+        return {h["id"] for h in d.get("history", [])} | set(d.get("open", {}))
+
     def topstep_update(self, all_sigs: list[Signal] | None = None) -> dict[str, Any]:
         acct = self.topstep()
-        data = acct.compute(all_sigs if all_sigs is not None else self.store.all_signals(), self.cfg)
+        data = acct.compute(all_sigs if all_sigs is not None else self.store.all_signals(), self.cfg,
+                            mirror_ids=self.topstep_mirror())
         acct.publish(data)
         return data
 
@@ -840,10 +846,12 @@ class Engine:
                 micros = int(args.pop())
             ref = args[0] if args else None
             sig = self._find_signal(ref)
-            res = acct.take(sig, micros)
+            acct.take(sig, micros)
             data = self.topstep_update()
-            return (f"✅ Ajouté au compte Topstep : {msg.esc(sig.asset_label)} "
-                    f"{'achat' if sig.direction == 'long' else 'vente'}, {res['contracts']} micros "
+            row = next((r for r in data["open"] + data["trades"] if r["id"] == sig.id), None)
+            n = row["contracts"] if row else micros
+            return (f"✅ Dans le compte Topstep : {msg.esc(sig.asset_label)} "
+                    f"{'achat' if sig.direction == 'long' else 'vente'}, {n} micros "
                     f"{ts.PRODUCTS[sig.asset][0]}.\n\n" + ts.summary_text(data))
         if cmd == "sortie":
             price = None
@@ -868,13 +876,13 @@ class Engine:
             row = acct.add_journal(**j)
             return (f"📝 Trade ajouté au journal Topstep ({msg.esc(row['id'])}).\n\n" + ts.summary_text(self.topstep_update()))
         if cmd == "topstep" and len(args) >= 2 and args[0].lower() in ("risque", "risk"):
-            acct.set_risk(float(args[1].replace(",", ".").replace("$", "")))
-            return "Risque par trade Topstep enregistré.\n\n" + ts.summary_text(self.topstep_update())
+            acct.set_risk(float(args[1].replace(",", ".").replace("%", "")))
+            return "Risque par trade Topstep enregistré (en % de la balance).\n\n" + ts.summary_text(self.topstep_update())
         return ts.summary_text(self.topstep_update())
 
     def _find_topstep_open(self, ref: str | None, acct) -> Signal:
         """Trade encore ouvert dans le compte Topstep (par identifiant ou actif ; le seul ouvert sinon)."""
-        data = acct.compute(self.store.all_signals(), self.cfg)
+        data = acct.compute(self.store.all_signals(), self.cfg, mirror_ids=self.topstep_mirror())
         open_ids = [o["id"] for o in data["open"]]
         if not open_ids:
             raise ValueError("aucun trade ouvert dans le compte Topstep")
@@ -1012,9 +1020,9 @@ class Engine:
         "/short <actif> [objectif] [stop] [commentaire] — signal manuel à la vente\n"
         "/stop [actif] — arrêter un trade ouvert au prix du moment (le bot le suit ensuite en silence pour apprendre)\n"
         "\n"
-        "▶️ COMPTE TOPSTEP 50K (simulation de vos seuls trades)\n"
-        "/topstep — état du compte : balance, perte maximale, objectif, règles\n"
-        "/pris [actif] [micros] — j'ai pris ce signal sur Topstep (le dernier de l'actif ; micros calculés sinon)\n"
+        "▶️ COMPTE TOPSTEP 50K (les trades de la simulation, en micros Topstep)\n"
+        "/topstep — état du compte : balance, perte maximale, objectif · /topstep risque 0,5 (% de la balance)\n"
+        "/pris [actif] [micros] — ajouter un signal, ou imposer vos micros (le dernier de l'actif ; calculés sinon)\n"
         "/sortie [actif] [prix] — je suis sorti de ce trade sur Topstep (prix du moment sinon ; le bot n'est pas touché)\n"
         "/retirer <id> — retirer un trade du compte Topstep\n"
         "/journal <actif> <long|short> <entrée> <sortie> <micros> [AAAA-MM-JJTHH:MM] — trade fait hors du bot\n"

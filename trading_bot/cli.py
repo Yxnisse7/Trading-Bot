@@ -141,7 +141,7 @@ def main(argv: list[str] | None = None) -> int:
         print(f"Trade {res['signal']['id']} arrêté à {res['signal']['meta']['manual_exit']['price']}"
               + (f" : {row['pnl']:+.2f} {eng.portfolio.data.get('currency', '$')}" if row else ""))
     elif args.command == "topstep":
-        # --note : « pris <id|actif> [micros] », « sortie <id|actif> [prix] », « retirer <id> », « journal … », « risque 200 » ; vide = état du compte
+        # --note : « pris <id|actif> [micros] », « sortie <id|actif> [prix] », « retirer <id> », « journal … », « risque 0.5 » (% de la balance) ; vide = état du compte
         from .messages import strip_html
         words = (args.note or "").split()
         action = words[0].lower() if words else "topstep"

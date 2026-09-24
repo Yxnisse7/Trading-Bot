@@ -1,11 +1,14 @@
-"""Compte Topstep 50K simulé : uniquement les trades que vous avez réellement pris, avec les règles Topstep.
+"""Compte Topstep 50K simulé : les trades de la simulation du bot, rejoués en micro-contrats Topstep.
 
-Séparé de tout le reste, comme le mode halal : la simulation du bot principal n'est pas touchée et le
-bot n'ajoute aucun trade de lui-même. Le compte contient :
-  - vos trades manuels (/long, /short, « Nouveau trade » du site), automatiquement ;
-  - les signaux du bot que vous marquez « pris » (/pris, bouton du site), avec vos contrats ;
+Séparé de tout le reste, comme le mode halal : ses fichiers sont à part et il ne modifie ni la simulation
+du bot ni son apprentissage. Le compte contient :
+  - chaque trade pris par la simulation du bot (onglet Simulation), passés et à venir ;
+  - vos trades manuels (/long, /short, « Nouveau trade » du site) ;
+  - les signaux que vous marquez « pris » (/pris, bouton du site), avec vos micros si vous les donnez ;
   - les trades faits hors du bot, saisis au journal (/journal).
-Le résultat d'un signal suit sa vraie issue (TP, SL, expiration), ou votre arrêt manuel s'il y en a un.
+Chaque trade est dimensionné comme dans la simulation : un pourcentage de la balance du moment risqué au
+stop (0,5 % par défaut, réglable), converti en micros (1 à 50). Le résultat suit la vraie issue du signal
+(TP, SL, expiration), ou votre arrêt manuel / votre sortie Topstep s'il y en a une.
 
 Règles appliquées (compte d'évaluation 50K, septembre 2026 — à vérifier sur topstep.com avant de trader) :
   - objectif de gain : +3 000 $ ;
@@ -51,7 +54,8 @@ PRODUCTS = {
     "nasdaq": ("MNQ", 2.0), "sp500": ("MES", 5.0), "gold": ("MGC", 10.0), "oil": ("MCL", 100.0),
     "euro": ("M6E", 12_500.0), "bitcoin": ("MBT", 0.1), "ethereum": ("MET", 0.1),
 }
-DEFAULT_RISK = 200.0             # risque par trade par défaut : 10 % de la perte maximale autorisée
+DEFAULT_RISK_PCT = 0.5           # % de la balance risqué au stop (250 $ sur 50 000 $) : la perte maximale
+                                 # du compte (2 000 $) n'est que 4 % de la balance, 10 % la viderait au 1er stop
 
 
 def _data_dir() -> Path:
@@ -73,7 +77,7 @@ class TopstepAccount:
         try:
             return json.loads(self.file.read_text(encoding="utf-8"))
         except (OSError, ValueError):
-            return {"risk_per_trade": DEFAULT_RISK, "taken": {}, "removed": [], "journal": [], "exits": {},
+            return {"risk_pct": DEFAULT_RISK_PCT, "taken": {}, "removed": [], "journal": [], "exits": {},
                     "created_at": iso(utcnow())}
 
     def save(self) -> None:
@@ -85,8 +89,8 @@ class TopstepAccount:
             raise ValueError(f"{sig.asset_label} n'a pas de contrat équivalent chez Topstep")
         if sig.source == "shadow":
             raise ValueError("un signal suivi en silence n'a pas été envoyé : il ne peut pas avoir été pris")
-        n = int(contracts) if contracts else self.default_contracts(sig)
-        if not 1 <= n <= RULES["max_micros"]:
+        n = int(contracts) if contracts else None          # None : dimensionné sur la balance, comme les autres
+        if n is not None and not 1 <= n <= RULES["max_micros"]:
             raise ValueError(f"nombre de micros entre 1 et {RULES['max_micros']}")
         self.state.setdefault("taken", {})[sig.id] = {"contracts": n, "at": iso(utcnow())}
         self.state["removed"] = [i for i in self.state.get("removed", []) if i != sig.id]
@@ -139,41 +143,71 @@ class TopstepAccount:
         self.save()
         return row
 
-    def set_risk(self, amount: float) -> None:
-        if not 10 <= amount <= RULES["max_loss"]:
-            raise ValueError("risque par trade entre 10 et 2 000 $")
-        self.state["risk_per_trade"] = float(amount)
+    def set_risk(self, pct: float) -> None:
+        if not 0.1 <= pct <= 10:
+            raise ValueError("risque par trade entre 0,1 et 10 % de la balance")
+        self.state["risk_pct"] = float(pct)
         self.save()
 
-    def default_contracts(self, sig: Signal) -> int:
-        """Micros pour risquer `risk_per_trade` au stop, entre 1 et 50."""
+    def risk_pct(self) -> float:
+        return float(self.state.get("risk_pct", DEFAULT_RISK_PCT))
+
+    def contracts_for(self, sig: Signal, balance: float) -> int:
+        """Micros pour risquer `risk_pct` % de la balance au stop, entre 1 et 50 (comme la simulation du bot)."""
         _, mult = PRODUCTS[sig.asset]
         per_micro = abs(sig.entry - sig.stop_loss) * mult
-        risk = float(self.state.get("risk_per_trade", DEFAULT_RISK))
+        risk = balance * self.risk_pct() / 100.0
         n = math.floor(risk / per_micro) if per_micro > 0 else 1
         return max(1, min(RULES["max_micros"], n))
 
     # ------------------------------------------------------------ compte calculé
-    def included(self, signals: list[Signal]) -> list[tuple[Signal, int, str]]:
-        """(signal, micros, origine) : vos trades manuels d'office, plus les signaux marqués « pris »."""
+    def included(self, signals: list[Signal], mirror_ids: set[str] | None = None) -> list[tuple[Signal, int | None, str]]:
+        """(signal, micros imposés ou None, origine) : les trades de la simulation du bot, vos trades manuels,
+        et les signaux marqués « pris » (avec vos micros)."""
         taken = self.state.get("taken", {})
         removed = set(self.state.get("removed", []))
+        mirror = mirror_ids or set()
         out = []
         for s in signals:
             if s.id in removed or s.asset not in PRODUCTS or s.source == "shadow":
                 continue
+            fixed = taken.get(s.id, {}).get("contracts") if s.id in taken else None
             if s.id in taken:
-                out.append((s, int(taken[s.id]["contracts"]), "pris"))
+                out.append((s, int(fixed) if fixed else None, "pris"))
             elif s.source in ("manual", "request"):
-                out.append((s, self.default_contracts(s), "manuel"))
+                out.append((s, None, "manuel"))
+            elif s.id in mirror:
+                out.append((s, None, "bot"))
         return out
 
-    def compute(self, signals: list[Signal], cfg: Config, now: datetime | None = None) -> dict[str, Any]:
+    def compute(self, signals: list[Signal], cfg: Config, now: datetime | None = None,
+                mirror_ids: set[str] | None = None) -> dict[str, Any]:
+        """Rejoue le compte dans l'ordre d'ouverture : chaque trade est dimensionné sur la balance du moment."""
         now = now or utcnow()
+        start = RULES["start_balance"]
+        mirror_ids = self._remember(mirror_ids)
+        items: list[tuple[str, Any]] = [(s.created_at, ("sig", s, n, o)) for s, n, o in self.included(signals, mirror_ids)]
+        items += [(j["opened_at"], ("journal", j)) for j in self.state.get("journal", [])]
+        items.sort(key=lambda x: x[0])
         rows, open_rows = [], []
-        for s, n, origin in self.included(signals):
+
+        def balance_at(t: str) -> float:
+            when = parse_iso(t)
+            return start + sum(r["pnl"] for r in rows if parse_iso(r["closed_at"]) <= when)
+
+        for _, item in items:
+            if item[0] == "journal":
+                j = item[1]
+                symbol, mult = PRODUCTS[j["asset"]]
+                asset = cfg.assets.get(j["asset"])
+                rows.append(self._row(j["id"], j["asset"], asset.label if asset else j["asset"], symbol, mult,
+                                      j["direction"], j["entry"], j["exit"], j["contracts"], j["opened_at"],
+                                      j["closed_at"], "journal", "journal", asset.cost_pct if asset else 0.0))
+                continue
+            _, s, fixed, origin = item
             symbol, mult = PRODUCTS[s.asset]
             asset = cfg.assets.get(s.asset)
+            n = fixed or self.contracts_for(s, balance_at(s.created_at))
             me = self.state.get("exits", {}).get(s.id) or (s.meta or {}).get("manual_exit")
             if me:
                 exit_price, closed_at, status = me["price"], me["at"], "manual"
@@ -190,21 +224,24 @@ class TopstepAccount:
                 continue
             rows.append(self._row(s.id, s.asset, s.asset_label, symbol, mult, s.direction, s.entry, exit_price, n,
                                   s.created_at, closed_at, status, origin, asset.cost_pct if asset else 0.0))
-        for j in self.state.get("journal", []):
-            symbol, mult = PRODUCTS[j["asset"]]
-            asset = cfg.assets.get(j["asset"])
-            label = asset.label if asset else j["asset"]
-            rows.append(self._row(j["id"], j["asset"], label, symbol, mult, j["direction"], j["entry"], j["exit"],
-                                  j["contracts"], j["opened_at"], j["closed_at"], "journal", "journal",
-                                  asset.cost_pct if asset else 0.0))
         rows.sort(key=lambda r: r["closed_at"])
         data = self._apply_rules(rows, open_rows, now)
-        data["candidates"] = self.candidates(signals, now)
+        data["candidates"] = self.candidates(signals, now, data["balance"], mirror_ids)
         return data
 
-    def candidates(self, signals: list[Signal], now: datetime, days: int = 3, limit: int = 15) -> list[dict[str, Any]]:
-        """Signaux envoyés ces derniers jours, pas encore dans le compte : à marquer « pris » depuis le site."""
-        inside = {s.id for s, _, _ in self.included(signals)}
+    def _remember(self, mirror_ids: set[str] | None) -> set[str]:
+        """Garde les trades de la simulation déjà vus : une remise à zéro de la simulation ne les efface pas d'ici."""
+        known = set(self.state.get("mirrored", []))
+        if mirror_ids and not set(mirror_ids) <= known:
+            known |= set(mirror_ids)
+            self.state["mirrored"] = sorted(known)
+            self.save()
+        return known
+
+    def candidates(self, signals: list[Signal], now: datetime, balance: float, mirror_ids: set[str] | None = None,
+                   days: int = 3, limit: int = 15) -> list[dict[str, Any]]:
+        """Signaux envoyés ces derniers jours que la simulation n'a pas pris : à ajouter « pris » depuis le site."""
+        inside = {s.id for s, _, _ in self.included(signals, self._remember(mirror_ids))}
         since = now - timedelta(days=days)
         out = []
         for s in sorted(signals, key=lambda x: x.created_at, reverse=True):
@@ -213,7 +250,7 @@ class TopstepAccount:
             out.append({"id": s.id, "asset": s.asset, "asset_label": s.asset_label, "symbol": PRODUCTS[s.asset][0],
                         "direction": s.direction, "entry": s.entry, "take_profit": s.take_profit,
                         "stop_loss": s.stop_loss, "created_at": s.created_at, "status": s.status,
-                        "pnl_pct": s.pnl_pct, "contracts": self.default_contracts(s)})
+                        "pnl_pct": s.pnl_pct, "contracts": self.contracts_for(s, balance)})
             if len(out) >= limit:
                 break
         return out
@@ -278,7 +315,7 @@ class TopstepAccount:
             status = "en cours"
         return {
             "updated_at": iso(now), "rules": RULES, "products": {k: v[0] for k, v in PRODUCTS.items()},
-            "risk_per_trade": self.state.get("risk_per_trade", DEFAULT_RISK),
+            "risk_pct": self.risk_pct(),
             "balance": balance, "profit": profit, "mll": round(mll, 2), "room_to_mll": round(balance - mll, 2),
             "peak_eod": round(peak_eod, 2), "target_balance": round(start + need, 2), "needed_profit": round(need, 2),
             "best_day": round(best_day, 2), "consistency_ok": profit <= 0 or best_day <= RULES["consistency"] * profit,
@@ -341,7 +378,7 @@ def summary_text(d: dict[str, Any]) -> str:
              f"Objectif : {money(d['target_balance'], '$')} (encore {money(max(0.0, d['target_balance'] - d['balance']), '$')})",
              f"Perte maximale : {money(d['mll'], '$')}, marge {money(d['room_to_mll'], '$')}",
              f"Aujourd'hui {money(d['today_pnl'], '$', sign=True)} · limite journalière restante {money(d['room_today'], '$')}",
-             f"Trades : {len(d['trades'])} clôturés, {len(d['open'])} ouverts · risque par trade {money(d['risk_per_trade'], '$', 0)}"]
+             f"Trades : {len(d['trades'])} clôturés, {len(d['open'])} ouverts · risque par trade {format(d['risk_pct'], 'g').replace('.', ',')} % de la balance"]
     if d["violations"]:
         lines.append("⚠️ " + " · ".join(d["violations"][-3:]))
     lines.append("<i>/pris [actif] [micros] · /sortie [actif] [prix] · /retirer id · /journal · /topstep</i>")

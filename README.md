@@ -410,22 +410,28 @@ résultat en dollars et en euros. Le bot **continue de suivre le trade en silenc
 Un trade arrêté ne bloque plus de nouveau signal sur l'actif. Sur le site, le bouton passe par le
 workflow GitHub (jeton du « Mode GitHub Actions ») : l'arrêt a lieu 1 à 2 minutes plus tard.
 
-### Compte Topstep 50K (simulation de vos seuls trades)
-Un **compte séparé** qui reproduit un compte d'évaluation Topstep 50K avec **uniquement les trades que
-vous avez réellement pris**. Page du site : `topstep.html` (onglet « Topstep »). Le bot n'y ajoute rien
-de lui-même, et rien ici ne change sa simulation ni son apprentissage.
+### Compte Topstep 50K (la simulation rejouée chez Topstep)
+Un **compte séparé** qui rejoue **tous les trades de l'onglet Simulation** (passés et à venir, ceux du bot
+comme vos trades manuels) sur un compte d'évaluation Topstep 50K. Page du site : `topstep.html`
+(onglet « Topstep »). Il a ses propres fichiers : il ne change ni la simulation ni l'apprentissage du bot.
 
-Ce qui entre dans le compte :
-- vos trades manuels (`/long`, `/short`, « Nouveau trade »), automatiquement ;
-- les signaux du bot que vous marquez **pris** : bouton « Pris » du site, ou `/pris [actif|id] [micros]` ;
-- les trades faits hors du bot : formulaire « journal » du site, ou
-  `/journal <actif> <long|short> <entrée> <sortie> <micros> [AAAA-MM-JJTHH:MM]` (heure de Paris).
+Chaque trade est dimensionné **comme dans la simulation** : un pourcentage de la balance du moment risqué
+au stop, converti en micro-contrats (1 à 50). Par défaut **0,5 %** (250 $ sur 50 000 $), réglable sur la
+page ou avec `/topstep risque 1` ; tout le compte est alors recalculé. Les 10 % de la simulation à 500 $
+ne sont pas repris : la perte maximale Topstep (2 000 $) ne vaut que 4 % de la balance. Rejoués sur les 53
+premiers trades de la simulation, 10 % font échouer le compte le 22/09, 1 % dépasse la limite journalière,
+0,5 % finit à +1 548 $.
 
-Chaque actif du bot a son micro-contrat Topstep : MNQ (2 $ le point), MES (5 $), MGC (10 $), MCL
-(100 $), M6E (12 500 $), MBT (0,10 $), MET (0,10 $). Sans nombre de micros, le bot le calcule pour
-risquer 200 $ au stop (`/topstep risque 150` pour changer). Le résultat suit la vraie issue du signal ;
-`/sortie [actif|id] [prix]` (bouton « Sortie ») enregistre votre sortie **pour ce compte seulement**,
-le signal du bot continuant normalement. `/retirer <id>` retire un trade, `/topstep` affiche l'état.
+Micro-contrats : MNQ (2 $ le point), MES (5 $), MGC (10 $), MCL (100 $), M6E (12 500 $), MBT (0,10 $),
+MET (0,10 $). En plus des trades de la simulation :
+- `/pris [actif|id] [micros]` (bouton « Pris ») ajoute un signal que la simulation n'a pas pris, ou impose
+  vos micros sur un trade déjà présent ;
+- `/journal <actif> <long|short> <entrée> <sortie> <micros> [AAAA-MM-JJTHH:MM]` (heure de Paris) ajoute
+  un trade fait hors du bot ;
+- `/sortie [actif|id] [prix]` (bouton « Sortie ») enregistre votre sortie **pour ce compte seulement** ;
+- `/retirer <id>` retire un trade, `/topstep` affiche l'état.
+
+Les trades déjà repris restent dans le compte même si la simulation est remise à zéro.
 
 Règles appliquées (septembre 2026, à vérifier sur topstep.com) : objectif +3 000 $ ; perte maximale de
 2 000 $ sous le plus haut solde de fin de journée, bloquée à 50 000 $ ; limite journalière de 1 000 $ ;
@@ -435,7 +441,7 @@ Les manquements sont signalés sur la page et dans `/topstep`.
 
 Données : `data/topstep/account.json` (vos choix) et `data/topstep/dashboard.json` (compte calculé),
 copié dans `docs/topstep/` à chaque passage. Sur GitHub : workflow « tick », commande `topstep`, note
-`pris <id> 3`, `sortie <id>`, `retirer <id>`, `journal …` ou `risque 200`.
+`pris <id> 3`, `sortie <id>`, `retirer <id>`, `journal …` ou `risque 0.5`.
 
 Connexion automatique : l'API TopstepX (ProjectX) permet de passer des ordres par programme sur le
 Combine et l'Express Funded (pas sur le Live Funded), mais seulement **depuis votre propre appareil**
