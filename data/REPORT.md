@@ -1,6 +1,6 @@
 # Trading-Bot — rapport
 
-_Mis à jour le 24/09/2026 à 16:15 (Europe/Paris)._
+_Mis à jour le 24/09/2026 à 16:20 (Europe/Paris)._
 
 ## Vue d'ensemble
 
@@ -8,7 +8,7 @@ _Mis à jour le 24/09/2026 à 16:15 (Europe/Paris)._
 - Taux de réussite cumulé (TP / (TP+SL)) : **47%** — hasard attendu 41%, avantage **+6%**
 - P&L théorique cumulé, net des coûts estimés (somme des % par trade, sans levier) : **-3.36 %** (brut -1.09 %)
 - Signaux ouverts : **0**
-- Signaux fantômes (suivis en silence pour l'apprentissage) : **68** clôturés, 1 ouverts, taux de réussite 41% (hasard attendu 41%)
+- Signaux fantômes (suivis en silence pour l'apprentissage) : **68** clôturés, 2 ouverts, taux de réussite 41% (hasard attendu 41%)
 
 ## Statistiques
 
