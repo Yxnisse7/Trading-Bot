@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-24T10:15:44.024119+00:00",
+  "updated_at": "2026-09-24T10:20:37.764568+00:00",
   "method": "v2 : recalcul complet, marge de sécurité, résultats en R, sources pondérées",
   "weights": {
     "trend_5m": 1.0,
@@ -31,10 +31,10 @@
       "corr": 0.5
     },
     "ethereum": {
-      "trend_5m": 0.948,
-      "trend_15m": 0.948,
-      "trend_1h": 0.948,
-      "adx": 0.948,
+      "trend_5m": 0.955,
+      "trend_15m": 0.955,
+      "trend_1h": 0.955,
+      "adx": 0.955,
       "vwap": 0.75,
       "rsi": 1.0,
       "macd": 1.0,
@@ -87,11 +87,11 @@
       "corr": 0.5
     },
     "oil": {
-      "trend_5m": 0.948,
-      "trend_15m": 0.948,
-      "trend_1h": 0.948,
-      "adx": 0.948,
-      "vwap": 0.642,
+      "trend_5m": 0.916,
+      "trend_15m": 0.916,
+      "trend_1h": 0.916,
+      "adx": 0.916,
+      "vwap": 0.618,
       "rsi": 1.0,
       "macd": 1.0,
       "level": 1.0,
@@ -124,30 +124,30 @@
         "trend_1h",
         "adx"
       ],
-      "n": 616,
-      "n_eff": 427.6,
-      "mean_r": 0.0689,
-      "margin_r": 0.1075,
+      "n": 617,
+      "n_eff": 428.5,
+      "mean_r": 0.066,
+      "margin_r": 0.1074,
       "multiplier": 1.0
     },
     "vwap": {
       "members": [
         "vwap"
       ],
-      "n": 520,
-      "n_eff": 358.6,
-      "mean_r": 0.1059,
-      "margin_r": 0.1185,
+      "n": 521,
+      "n_eff": 359.6,
+      "mean_r": 0.1024,
+      "margin_r": 0.1183,
       "multiplier": 1.0
     },
     "rsi": {
       "members": [
         "rsi"
       ],
-      "n": 499,
-      "n_eff": 341.0,
-      "mean_r": 0.08,
-      "margin_r": 0.1193,
+      "n": 500,
+      "n_eff": 342.0,
+      "mean_r": 0.0762,
+      "margin_r": 0.1191,
       "multiplier": 1.0
     },
     "macd": {
@@ -218,9 +218,9 @@
       "margin_r": 0.2911
     },
     "fantômes": {
-      "n": 53,
-      "mean_r": 0.2575,
-      "margin_r": 0.3056
+      "n": 54,
+      "mean_r": 0.2342,
+      "margin_r": 0.3033
     },
     "backtest": {
       "n": 502,
@@ -273,10 +273,10 @@
     },
     "essai_oil": {
       "label": "nouvel actif : Pétrole WTI (CL)",
-      "n": 4,
-      "mean_net_r": -0.4439,
+      "n": 5,
+      "mean_net_r": -0.5657,
       "promoted": false,
-      "missing": 96
+      "missing": 95
     },
     "essai_euro": {
       "label": "nouvel actif : Euro / dollar (6E)",
@@ -295,19 +295,19 @@
     "trades réels : +0,15 R ± 0,29 R par trade avant frais sur 62 trades (0 R = hasard)",
     "aucun critère ne s'écarte du hasard au-delà de la marge de sécurité : poids par défaut conservés",
     "ethereum, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,23 R contre +0,07 R en global sur 50 trades éq. → poids ×0,95 sur cet actif",
-    "oil, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,15 R contre +0,07 R en global sur 119 trades éq. → poids ×0,95 sur cet actif",
-    "oil, vwap : -0,16 R contre +0,11 R en global sur 116 trades éq. → poids ×0,86 sur cet actif",
+    "oil, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,17 R contre +0,07 R en global sur 119 trades éq. → poids ×0,92 sur cet actif",
+    "oil, vwap : -0,17 R contre +0,10 R en global sur 116 trades éq. → poids ×0,82 sur cet actif",
     "variante « indices le matin européen » en test : 11 trades, -0,11 R net, encore 89 trades avant décision",
     "variante « horizon ~3 h » en test : 5 trades, +0,29 R net, encore 95 trades avant décision",
     "variante « confiance moyenne » en test : 2 trades, +0,36 R net, encore 98 trades avant décision",
     "variante « reprise juste après un stop » en test : 4 trades, +1,27 R net, encore 96 trades avant décision",
     "variante « nouvel actif : Ethereum (ETH/USD) » en test : 4 trades, -0,38 R net, encore 96 trades avant décision",
-    "variante « nouvel actif : Pétrole WTI (CL) » en test : 4 trades, -0,44 R net, encore 96 trades avant décision"
+    "variante « nouvel actif : Pétrole WTI (CL) » en test : 5 trades, -0,57 R net, encore 95 trades avant décision"
   ],
-  "sample": 617,
+  "sample": 618,
   "sample_by_source": {
     "bot": 61,
-    "shadow": 53,
+    "shadow": 54,
     "manual": 1,
     "backtest": 502
   }
