@@ -103,6 +103,7 @@
       <div class="wide"><button type="submit" id="j-send">Ajouter au compte</button></div>
       <div class="wide muted" style="font-size:12px;align-self:center">Sur Telegram : <span class="mono">/journal nasdaq short 30950 30910 3 2026-09-23T15:01</span></div>
       <div class="wide riskf"><label for="risk" style="margin:0">Risque par trade (% de la balance)</label><input id="risk" inputmode="decimal"><button type="button" class="secondary" id="risk-send">Enregistrer</button></div>
+      <div class="wide riskf"><button type="button" class="secondary" id="reset-send">Nouveau compte à 50 000 $</button><span class="muted" id="archives"></span></div>
     </form>
   </div>
 
@@ -197,7 +198,9 @@
   const bar = (frac, color) => `<div class="cmp" style="margin-top:8px"><div class="track"><i style="width:${Math.max(0, Math.min(100, frac * 100)).toFixed(1)}%;background:${color}"></i></div></div>`;
   function render() {
     const d = acct, R = d.rules, start = R.start_balance;
-    $("#updated").textContent = `Mise à jour à ${Y.hhmm(d.updated_at)} · journée de trading du ${new Date(d.today + "T12:00:00").toLocaleDateString("fr-FR", { day: "numeric", month: "long" })}`;
+    const since = d.started_at ? ` · compte démarré le ${new Date(d.started_at).toLocaleString("fr-FR", { day: "numeric", month: "long", hour: "2-digit", minute: "2-digit" })}` : "";
+    $("#updated").textContent = `Mise à jour à ${Y.hhmm(d.updated_at)} · journée de trading du ${new Date(d.today + "T12:00:00").toLocaleDateString("fr-FR", { day: "numeric", month: "long" })}${since}`;
+    $("#archives").textContent = (d.archives || []).length ? "Comptes précédents : " + d.archives.map((a) => `${a.trades} trades, ${Y.smoney(a.profit, CUR, 0)} (${a.status})`).join(" · ") : "";
     $("#risk-now").textContent = `${Y.num(d.risk_pct, d.risk_pct % 1 ? 1 : 0)}${Y.NB}% (${Y.money(d.balance * d.risk_pct / 100, CUR, 0)})`;
     if (!$("#risk").value) $("#risk").value = String(d.risk_pct).replace(".", ",");
 
@@ -334,6 +337,10 @@
     if (!(entry > 0 && exit > 0 && n >= 1 && n <= 50 && at)) { Y.toast({ title: "Journal", text: "Remplissez l'entrée, la sortie, les micros (1 à 50) et l'heure d'ouverture.", timeout: 8000 }); return; }
     send(`journal ${$("#j-asset").value} ${$("#j-dir").value} ${entry} ${exit} ${n} ${at.slice(0, 16)}`, "Trade ajouté au journal dans 1 à 2 minutes.", $("#j-send"))
       .then((ok) => { if (ok) { $("#j-entry").value = ""; $("#j-exit").value = ""; } });
+  });
+  $("#reset-send").addEventListener("click", (ev) => {
+    if (!confirm("Repartir d'un compte neuf à 50 000 $ ?\n\nSeuls les trades ouverts à partir de maintenant compteront. L'ancien compte est gardé en résumé.")) return;
+    send("reset", "Nouveau compte à 50 000 $ dans 1 à 2 minutes.", ev.currentTarget);
   });
   $("#risk-send").addEventListener("click", (ev) => {
     const r = Number($("#risk").value.replace(",", "."));

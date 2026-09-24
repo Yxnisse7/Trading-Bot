@@ -875,6 +875,10 @@ class Engine:
             j = ts.parse_journal(args, self.cfg.timezone)
             row = acct.add_journal(**j)
             return (f"📝 Trade ajouté au journal Topstep ({msg.esc(row['id'])}).\n\n" + ts.summary_text(self.topstep_update()))
+        if cmd == "topstep" and args and args[0].lower() in ("reset", "reinitialiser", "réinitialiser", "nouveau"):
+            acct.reset(self.topstep_update(), now)
+            return ("🆕 Nouveau compte Topstep à 50 000 $ : seuls les trades ouverts à partir de maintenant comptent. "
+                    "L'ancien est résumé sur la page.\n\n" + ts.summary_text(self.topstep_update()))
         if cmd == "topstep" and len(args) >= 2 and args[0].lower() in ("risque", "risk"):
             acct.set_risk(float(args[1].replace(",", ".").replace("%", "")))
             return "Risque par trade Topstep enregistré (en % de la balance).\n\n" + ts.summary_text(self.topstep_update())
@@ -1021,7 +1025,7 @@ class Engine:
         "/stop [actif] — arrêter un trade ouvert au prix du moment (le bot le suit ensuite en silence pour apprendre)\n"
         "\n"
         "▶️ COMPTE TOPSTEP 50K (les trades de la simulation, en micros Topstep)\n"
-        "/topstep — état du compte : balance, perte maximale, objectif · /topstep risque 0,5 (% de la balance)\n"
+        "/topstep — état du compte : balance, perte maximale, objectif · /topstep risque 0,5 (% de la balance) · /topstep reset\n"
         "/pris [actif] [micros] — ajouter un signal, ou imposer vos micros (le dernier de l'actif ; calculés sinon)\n"
         "/sortie [actif] [prix] — je suis sorti de ce trade sur Topstep (prix du moment sinon ; le bot n'est pas touché)\n"
         "/retirer <id> — retirer un trade du compte Topstep\n"

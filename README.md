@@ -432,6 +432,8 @@ MET (0,10 $). En plus des trades de la simulation :
 - `/retirer <id>` retire un trade, `/topstep` affiche l'état.
 
 Les trades déjà repris restent dans le compte même si la simulation est remise à zéro.
+`/topstep reset` (bouton « Nouveau compte à 50 000 $ ») repart d'un compte neuf : seuls les trades
+ouverts à partir de ce moment comptent, l'ancien compte est gardé en résumé.
 
 Règles appliquées (septembre 2026, à vérifier sur topstep.com) : objectif +3 000 $ ; perte maximale de
 2 000 $ sous le plus haut solde de fin de journée, bloquée à 50 000 $ ; limite journalière de 1 000 $ ;

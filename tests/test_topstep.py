@@ -165,3 +165,17 @@ def test_candidates_list_recent_bot_signals_not_yet_taken(tmp_path):
     assert [c["id"] for c in d["candidates"]] == ["a1"]
     acct.take(sigs[0], 3)
     assert acct.compute(sigs, Config(assets=default_assets()), T0 + timedelta(hours=1))["candidates"] == []
+
+
+def test_reset_starts_a_fresh_account_from_now(tmp_path, monkeypatch):
+    eng = Engine(Config(assets=default_assets()), Store(tmp_path))
+    monkeypatch.setattr(engmod, "notify", lambda text, **kw: None)
+    eng.store.append_history(_sig("old", source="manual", when=T0))
+    assert len(eng.topstep_update()["trades"]) == 1
+    reply = eng.handle_command("/topstep reset", T0 + timedelta(hours=2))
+    assert "Nouveau compte Topstep" in reply.text
+    d = eng.topstep_update()
+    assert d["trades"] == [] and d["balance"] == 50_000.0 and d["archives"][0]["trades"] == 1
+    eng.store.append_history(_sig("new", source="manual", when=T0 + timedelta(hours=3)))
+    d = eng.topstep_update()
+    assert [t["id"] for t in d["trades"]] == ["new"] and d["risk_pct"] == 0.5

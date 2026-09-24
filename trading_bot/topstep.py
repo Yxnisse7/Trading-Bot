@@ -77,8 +77,9 @@ class TopstepAccount:
         try:
             return json.loads(self.file.read_text(encoding="utf-8"))
         except (OSError, ValueError):
+            # sans date de départ, tous les trades de la simulation comptent ; /topstep reset en fixe une
             return {"risk_pct": DEFAULT_RISK_PCT, "taken": {}, "removed": [], "journal": [], "exits": {},
-                    "created_at": iso(utcnow())}
+                    "created_at": iso(utcnow()), "started_at": None, "archives": []}
 
     def save(self) -> None:
         self.dir.mkdir(parents=True, exist_ok=True)
@@ -116,6 +117,19 @@ class TopstepAccount:
         self.state.setdefault("removed", []).append(ref)
         self.save()
         return ref
+
+    def reset(self, data: dict[str, Any] | None = None, when: datetime | None = None) -> str:
+        """Nouveau compte à 50 000 $ : seuls les trades ouverts à partir de maintenant compteront.
+        L'ancien compte est résumé dans `archives` ; le risque par trade est conservé."""
+        now = iso(when or utcnow())
+        if data:
+            self.state.setdefault("archives", []).append({
+                "started_at": self.state.get("started_at") or self.state.get("created_at"), "ended_at": now,
+                "balance": data.get("balance"), "profit": data.get("profit"), "status": data.get("status"),
+                "trades": len(data.get("trades", []))})
+        self.state.update({"started_at": now, "taken": {}, "removed": [], "exits": {}, "journal": []})
+        self.save()
+        return now
 
     def exit(self, sig: Signal, price: float, when: datetime | None = None) -> dict[str, Any]:
         """Votre sortie sur Topstep, pour ce compte seulement : le signal du bot et sa simulation ne changent pas."""
@@ -186,8 +200,11 @@ class TopstepAccount:
         now = now or utcnow()
         start = RULES["start_balance"]
         mirror_ids = self._remember(mirror_ids)
-        items: list[tuple[str, Any]] = [(s.created_at, ("sig", s, n, o)) for s, n, o in self.included(signals, mirror_ids)]
-        items += [(j["opened_at"], ("journal", j)) for j in self.state.get("journal", [])]
+        since = self.started_at()
+        items: list[tuple[str, Any]] = [(s.created_at, ("sig", s, n, o)) for s, n, o in self.included(signals, mirror_ids)
+                                        if since is None or parse_iso(s.created_at) >= since]
+        items += [(j["opened_at"], ("journal", j)) for j in self.state.get("journal", [])
+                  if since is None or parse_iso(j["opened_at"]) >= since]
         items.sort(key=lambda x: x[0])
         rows, open_rows = [], []
 
@@ -229,6 +246,11 @@ class TopstepAccount:
         data["candidates"] = self.candidates(signals, now, data["balance"], mirror_ids)
         return data
 
+    def started_at(self) -> datetime | None:
+        """Début du compte (None : ancien fichier, tous les trades comptent)."""
+        v = self.state.get("started_at")
+        return parse_iso(v) if v else None
+
     def _remember(self, mirror_ids: set[str] | None) -> set[str]:
         """Garde les trades de la simulation déjà vus : une remise à zéro de la simulation ne les efface pas d'ici."""
         known = set(self.state.get("mirrored", []))
@@ -242,7 +264,7 @@ class TopstepAccount:
                    days: int = 3, limit: int = 15) -> list[dict[str, Any]]:
         """Signaux envoyés ces derniers jours que la simulation n'a pas pris : à ajouter « pris » depuis le site."""
         inside = {s.id for s, _, _ in self.included(signals, self._remember(mirror_ids))}
-        since = now - timedelta(days=days)
+        since = max(now - timedelta(days=days), self.started_at() or now - timedelta(days=days))
         out = []
         for s in sorted(signals, key=lambda x: x.created_at, reverse=True):
             if s.source == "shadow" or s.asset not in PRODUCTS or s.id in inside or parse_iso(s.created_at) < since:
@@ -315,7 +337,8 @@ class TopstepAccount:
             status = "en cours"
         return {
             "updated_at": iso(now), "rules": RULES, "products": {k: v[0] for k, v in PRODUCTS.items()},
-            "risk_pct": self.risk_pct(),
+            "risk_pct": self.risk_pct(), "started_at": self.state.get("started_at"),
+            "archives": self.state.get("archives", []),
             "balance": balance, "profit": profit, "mll": round(mll, 2), "room_to_mll": round(balance - mll, 2),
             "peak_eod": round(peak_eod, 2), "target_balance": round(start + need, 2), "needed_profit": round(need, 2),
             "best_day": round(best_day, 2), "consistency_ok": profit <= 0 or best_day <= RULES["consistency"] * profit,
