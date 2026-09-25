@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-25T12:50:49.756142+02:00",
+  "updated_at": "2026-09-25T12:55:43.377092+02:00",
   "timezone": "Europe/Paris",
   "equity_curve": [
     {
@@ -349,7 +349,7 @@
       "pnl_pct": 0,
       "avg_pnl_pct": 0.0
     },
-    "open": 0,
+    "open": 1,
     "open_shadow": 0
   },
   "by_source": {
@@ -480,7 +480,7 @@
         "pnl_pct": 0,
         "avg_pnl_pct": 0.0
       },
-      "open": 0,
+      "open": 1,
       "session_utc": null,
       "cost_pct": 0.25,
       "trial": false,
@@ -1356,7 +1356,44 @@
       ]
     }
   ],
-  "open_signals": [],
+  "open_signals": [
+    {
+      "id": "c2a03d902d",
+      "asset": "ethereum",
+      "asset_label": "Ethereum (ETH)",
+      "direction": "long",
+      "horizon": "12h",
+      "entry": 2718.0,
+      "take_profit": 2763.2,
+      "stop_loss": 2687.8,
+      "risk_reward": 1.5,
+      "confidence": "fort",
+      "score": 7.75,
+      "criteria": [
+        "adx",
+        "level",
+        "macd",
+        "pdhl",
+        "rsi",
+        "trend_15m",
+        "trend_1h",
+        "vwap"
+      ],
+      "source": "bot",
+      "status": "open",
+      "pnl_pct": null,
+      "pnl_gross_pct": null,
+      "duration_minutes": null,
+      "close_price": null,
+      "created_at": "2026-09-25T10:55:40Z",
+      "closed_at": null,
+      "created_local": "25/09 12:55",
+      "expires_at": "2026-09-25T22:55:40Z",
+      "rationale": "Achat : tendance forte (ADX), niveau clé favorable, MACD en expansion, cassure des extrêmes de la veille, RSI en momentum, tendance 3 h, tendance 12 h, prix du bon côté du VWAP. Range moyen sur 12 h ≈ 75.38 (2.77 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 12 h ≈ 63%.",
+      "news_context": "actualité à surveiller (score 2) : KelpDAO sues LayerZero for the largest exploit 2026 has seen so far",
+      "manual_exit": null
+    }
+  ],
   "recent_trades": [
     {
       "id": "8343fc95cd",
@@ -1723,9 +1760,9 @@
     "updated_at": "2026-09-24T22:05:27.643868+00:00"
   },
   "state": {
-    "last_tick": "2026-09-25T10:50:46Z",
-    "last_scan": "2026-09-25T10:40:47Z",
-    "last_scan_note": "0 signal(aux)",
+    "last_tick": "2026-09-25T10:55:40Z",
+    "last_scan": "2026-09-25T10:55:40Z",
+    "last_scan_note": "1 signal(aux)",
     "last_track": "2026-09-23T14:40:44Z",
     "last_summary": "2026-09-24T22:05:27Z",
     "last_summary_day": "2026-09-24"
@@ -1751,7 +1788,7 @@
     "losses": 1,
     "avg_win": 0.0,
     "avg_loss": -10.09,
-    "open_positions": 0,
+    "open_positions": 1,
     "skipped": 0,
     "risky": 0
   }
