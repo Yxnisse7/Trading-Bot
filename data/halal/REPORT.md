@@ -1,20 +1,14 @@
 # Trading-Bot — rapport
 
-_Mis à jour le 25/09/2026 à 14:15 (Europe/Paris)._
+_Mis à jour le 25/09/2026 à 14:20 (Europe/Paris)._
 
 ## Vue d'ensemble
 
-- Trades clôturés : **2**
+- Trades clôturés : **3**
 - Taux de réussite cumulé (TP / (TP+SL)) : **0%** — hasard attendu 40%, avantage **-40%**
-- P&L théorique cumulé, net des coûts estimés (somme des % par trade, sans levier) : **-2.14 %** (brut -1.64 %)
-- Signaux ouverts : **1**
+- P&L théorique cumulé, net des coûts estimés (somme des % par trade, sans levier) : **-3.50 %** (brut -2.75 %)
+- Signaux ouverts : **0**
 - Signaux fantômes (suivis en silence pour l'apprentissage) : **0** clôturés, 0 ouverts, taux de réussite n/a (hasard attendu n/a)
-
-## Signaux ouverts
-
-| Heure | Actif | Sens | Entrée | TP | SL | Confiance | Source | Expire |
-|---|---|---|---:|---:|---:|---|---|---|
-| 25/09 12:55 | Ethereum (ETH) | long | 2718.0 | 2763.2 | 2687.8 | fort | signaux du bot | 00:55 |
 
 ## Statistiques
 
@@ -23,45 +17,47 @@ _Mis à jour le 25/09/2026 à 14:15 (Europe/Paris)._
 | Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
 |---|---:|---:|---:|---:|---:|---:|
 | bitcoin | 2 | 0 | 2 | 0 | 0% | -1.071 % |
+| ethereum | 1 | 0 | 1 | 0 | 0% | -1.361 % |
 
 ### Par sens
 
 | Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
 |---|---:|---:|---:|---:|---:|---:|
-| long | 2 | 0 | 2 | 0 | 0% | -1.071 % |
+| long | 3 | 0 | 3 | 0 | 0% | -1.167 % |
 
 ### Par confiance
 
 | Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
 |---|---:|---:|---:|---:|---:|---:|
-| fort | 1 | 0 | 1 | 0 | 0% | -1.125 % |
+| fort | 2 | 0 | 2 | 0 | 0% | -1.243 % |
 | moyen | 1 | 0 | 1 | 0 | 0% | -1.017 % |
 
 ### Par critère technique
 
 | Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
 |---|---:|---:|---:|---:|---:|---:|
-| adx | 2 | 0 | 2 | 0 | 0% | -1.071 % |
-| level | 1 | 0 | 1 | 0 | 0% | -1.017 % |
-| macd | 1 | 0 | 1 | 0 | 0% | -1.125 % |
-| pdhl | 1 | 0 | 1 | 0 | 0% | -1.125 % |
-| rsi | 1 | 0 | 1 | 0 | 0% | -1.125 % |
-| trend_15m | 2 | 0 | 2 | 0 | 0% | -1.071 % |
-| trend_1h | 2 | 0 | 2 | 0 | 0% | -1.071 % |
+| adx | 3 | 0 | 3 | 0 | 0% | -1.167 % |
+| level | 2 | 0 | 2 | 0 | 0% | -1.189 % |
+| macd | 2 | 0 | 2 | 0 | 0% | -1.243 % |
+| pdhl | 2 | 0 | 2 | 0 | 0% | -1.243 % |
+| rsi | 2 | 0 | 2 | 0 | 0% | -1.243 % |
+| trend_15m | 3 | 0 | 3 | 0 | 0% | -1.167 % |
+| trend_1h | 3 | 0 | 3 | 0 | 0% | -1.167 % |
 | volume | 1 | 0 | 1 | 0 | 0% | -1.017 % |
-| vwap | 1 | 0 | 1 | 0 | 0% | -1.125 % |
+| vwap | 2 | 0 | 2 | 0 | 0% | -1.243 % |
 
 ### Par contexte d'actualité
 
 | Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
 |---|---:|---:|---:|---:|---:|---:|
 | actualité calme | 1 | 0 | 1 | 0 | 0% | -1.125 % |
-| actualité chargée | 1 | 0 | 1 | 0 | 0% | -1.017 % |
+| actualité chargée | 2 | 0 | 2 | 0 | 0% | -1.189 % |
 
 ### Par heure d'émission (UTC)
 
 | Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
 |---|---:|---:|---:|---:|---:|---:|
+| 10h | 1 | 0 | 1 | 0 | 0% | -1.361 % |
 | 11h | 1 | 0 | 1 | 0 | 0% | -1.125 % |
 | 13h | 1 | 0 | 1 | 0 | 0% | -1.017 % |
 
@@ -69,13 +65,13 @@ _Mis à jour le 25/09/2026 à 14:15 (Europe/Paris)._
 
 | Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
 |---|---:|---:|---:|---:|---:|---:|
-| signaux du bot | 2 | 0 | 2 | 0 | 0% | -1.071 % |
+| signaux du bot | 3 | 0 | 3 | 0 | 0% | -1.167 % |
 
 ### Par horizon
 
 | Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
 |---|---:|---:|---:|---:|---:|---:|
-| 12h | 2 | 0 | 2 | 0 | 0% | -1.071 % |
+| 12h | 3 | 0 | 3 | 0 | 0% | -1.167 % |
 
 ## Apprentissage
 
@@ -96,7 +92,7 @@ _Mis à jour le 25/09/2026 à 14:15 (Europe/Paris)._
 
 Notes :
 
-- trades réels : -1,00 R ± 0,00 R par trade avant frais sur 2 trades (0 R = hasard)
+- trades réels : -1,00 R ± 0,00 R par trade avant frais sur 3 trades (0 R = hasard)
 - aucun critère ne s'écarte du hasard au-delà de la marge de sécurité : poids par défaut conservés
 
 ## Backtests (données historiques 5 min)
