@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-25T16:05:31.290225+00:00",
+  "updated_at": "2026-09-25T16:30:56.251670+00:00",
   "method": "v2 : recalcul complet, marge de sécurité, résultats en R, sources pondérées",
   "weights": {
     "trend_5m": 1.0,
@@ -124,40 +124,40 @@
         "trend_1h",
         "adx"
       ],
-      "n": 668,
-      "n_eff": 469.8,
-      "mean_r": 0.0025,
-      "margin_r": 0.1016,
+      "n": 670,
+      "n_eff": 471.1,
+      "mean_r": -0.0038,
+      "margin_r": 0.1014,
       "multiplier": 1.0
     },
     "vwap": {
       "members": [
         "vwap"
       ],
-      "n": 572,
-      "n_eff": 403.0,
-      "mean_r": 0.0262,
-      "margin_r": 0.1106,
+      "n": 574,
+      "n_eff": 404.4,
+      "mean_r": 0.019,
+      "margin_r": 0.1104,
       "multiplier": 1.0
     },
     "rsi": {
       "members": [
         "rsi"
       ],
-      "n": 537,
-      "n_eff": 370.6,
-      "mean_r": 0.0008,
-      "margin_r": 0.1135,
+      "n": 539,
+      "n_eff": 371.8,
+      "mean_r": -0.0072,
+      "margin_r": 0.1132,
       "multiplier": 1.0
     },
     "macd": {
       "members": [
         "macd"
       ],
-      "n": 177,
-      "n_eff": 124.7,
-      "mean_r": -0.031,
-      "margin_r": 0.2052,
+      "n": 179,
+      "n_eff": 125.8,
+      "mean_r": -0.055,
+      "margin_r": 0.2036,
       "multiplier": 1.0
     },
     "level": {
@@ -213,14 +213,14 @@
   },
   "overview": {
     "réels": {
-      "n": 73,
-      "mean_r": 0.0523,
-      "margin_r": 0.2653
+      "n": 74,
+      "mean_r": 0.0381,
+      "margin_r": 0.2631
     },
     "fantômes": {
-      "n": 94,
-      "mean_r": -0.0162,
-      "margin_r": 0.2251
+      "n": 95,
+      "mean_r": -0.0266,
+      "margin_r": 0.2237
     },
     "backtest": {
       "n": 502,
@@ -238,10 +238,10 @@
     },
     "horizon_3h": {
       "label": "horizon ~3 h",
-      "n": 12,
-      "mean_net_r": -0.1006,
+      "n": 13,
+      "mean_net_r": -0.1758,
       "promoted": false,
-      "missing": 88
+      "missing": 87
     },
     "confiance_moyenne": {
       "label": "confiance moyenne",
@@ -287,24 +287,24 @@
     }
   },
   "baseline": {
-    "n": 61,
-    "mean_net_r": -0.0368
+    "n": 62,
+    "mean_net_r": -0.0536
   },
   "promoted_variants": [],
   "notes": [
-    "trades réels : +0,05 R ± 0,27 R par trade avant frais sur 73 trades (0 R = hasard)",
+    "trades réels : +0,04 R ± 0,26 R par trade avant frais sur 74 trades (0 R = hasard)",
     "aucun critère ne s'écarte du hasard au-delà de la marge de sécurité : poids par défaut conservés",
     "variante « indices le matin européen » en test : 24 trades, -0,40 R net, encore 76 trades avant décision",
-    "variante « horizon ~3 h » en test : 12 trades, -0,10 R net, encore 88 trades avant décision",
+    "variante « horizon ~3 h » en test : 13 trades, -0,18 R net, encore 87 trades avant décision",
     "variante « confiance moyenne » en test : 11 trades, -0,55 R net, encore 89 trades avant décision",
     "variante « reprise juste après un stop » en test : 7 trades, +0,22 R net, encore 93 trades avant décision",
     "variante « nouvel actif : Ethereum (ETH/USD) » en test : 5 trades, -0,55 R net, encore 95 trades avant décision",
     "variante « nouvel actif : Pétrole WTI (CL) » en test : 12 trades, +0,09 R net, encore 88 trades avant décision"
   ],
-  "sample": 669,
+  "sample": 671,
   "sample_by_source": {
-    "bot": 72,
-    "shadow": 94,
+    "bot": 73,
+    "shadow": 95,
     "manual": 1,
     "backtest": 502
   }
