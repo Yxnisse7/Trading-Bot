@@ -1,20 +1,14 @@
 # Trading-Bot — rapport
 
-_Mis à jour le 25/09/2026 à 13:15 (Europe/Paris)._
+_Mis à jour le 25/09/2026 à 13:20 (Europe/Paris)._
 
 ## Vue d'ensemble
 
-- Trades clôturés : **71**
-- Taux de réussite cumulé (TP / (TP+SL)) : **44%** — hasard attendu 42%, avantage **+3%**
-- P&L théorique cumulé, net des coûts estimés (somme des % par trade, sans levier) : **-3.83 %** (brut -1.49 %)
-- Signaux ouverts : **1**
-- Signaux fantômes (suivis en silence pour l'apprentissage) : **87** clôturés, 1 ouverts, taux de réussite 39% (hasard attendu 41%)
-
-## Signaux ouverts
-
-| Heure | Actif | Sens | Entrée | TP | SL | Confiance | Source | Expire |
-|---|---|---|---:|---:|---:|---|---|---|
-| 25/09 12:50 | Or (XAU/USD) | long | 4338.6 | 4349.4 | 4329.9 | fort | signaux du bot | 13:50 |
+- Trades clôturés : **72**
+- Taux de réussite cumulé (TP / (TP+SL)) : **45%** — hasard attendu 42%, avantage **+3%**
+- P&L théorique cumulé, net des coûts estimés (somme des % par trade, sans levier) : **-3.60 %** (brut -1.24 %)
+- Signaux ouverts : **0**
+- Signaux fantômes (suivis en silence pour l'apprentissage) : **88** clôturés, 1 ouverts, taux de réussite 40% (hasard attendu 41%)
 
 ## Statistiques
 
@@ -24,7 +18,7 @@ _Mis à jour le 25/09/2026 à 13:15 (Europe/Paris)._
 |---|---:|---:|---:|---:|---:|---:|
 | bitcoin | 14 | 3 | 6 | 5 | 33% | -0.099 % |
 | ethereum | 11 | 2 | 6 | 3 | 25% | -0.163 % |
-| gold | 16 | 5 | 9 | 2 | 36% | -0.058 % |
+| gold | 17 | 6 | 9 | 2 | 40% | -0.041 % |
 | nasdaq | 18 | 10 | 7 | 1 | 59% | +0.008 % |
 | sp500 | 12 | 6 | 5 | 1 | 55% | +0.011 % |
 
@@ -32,14 +26,14 @@ _Mis à jour le 25/09/2026 à 13:15 (Europe/Paris)._
 
 | Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
 |---|---:|---:|---:|---:|---:|---:|
-| long | 41 | 13 | 19 | 9 | 41% | -0.073 % |
+| long | 42 | 14 | 19 | 9 | 42% | -0.066 % |
 | short | 30 | 13 | 14 | 3 | 48% | -0.028 % |
 
 ### Par confiance
 
 | Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
 |---|---:|---:|---:|---:|---:|---:|
-| fort | 67 | 25 | 31 | 11 | 45% | -0.052 % |
+| fort | 68 | 26 | 31 | 11 | 46% | -0.048 % |
 | manuel | 1 | 0 | 0 | 1 | n/a | -0.159 % |
 | moyen | 3 | 1 | 2 | 0 | 33% | -0.052 % |
 
@@ -47,24 +41,24 @@ _Mis à jour le 25/09/2026 à 13:15 (Europe/Paris)._
 
 | Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
 |---|---:|---:|---:|---:|---:|---:|
-| adx | 70 | 26 | 33 | 11 | 44% | -0.052 % |
+| adx | 71 | 27 | 33 | 11 | 45% | -0.049 % |
 | corr | 10 | 2 | 5 | 3 | 29% | -0.113 % |
 | level | 6 | 1 | 5 | 0 | 17% | -0.131 % |
 | macd | 16 | 6 | 10 | 0 | 38% | -0.114 % |
 | orb | 6 | 2 | 4 | 0 | 33% | -0.052 % |
-| pdhl | 11 | 2 | 8 | 1 | 20% | -0.149 % |
-| rsi | 59 | 23 | 26 | 10 | 47% | -0.043 % |
-| trend_15m | 70 | 26 | 33 | 11 | 44% | -0.052 % |
-| trend_1h | 70 | 26 | 33 | 11 | 44% | -0.052 % |
-| trend_5m | 62 | 25 | 26 | 11 | 49% | -0.041 % |
+| pdhl | 12 | 3 | 8 | 1 | 27% | -0.118 % |
+| rsi | 60 | 24 | 26 | 10 | 48% | -0.039 % |
+| trend_15m | 71 | 27 | 33 | 11 | 45% | -0.049 % |
+| trend_1h | 71 | 27 | 33 | 11 | 45% | -0.049 % |
+| trend_5m | 63 | 26 | 26 | 11 | 50% | -0.037 % |
 | volume | 3 | 1 | 2 | 0 | 33% | -0.140 % |
-| vwap | 68 | 26 | 31 | 11 | 46% | -0.045 % |
+| vwap | 69 | 27 | 31 | 11 | 47% | -0.041 % |
 
 ### Par contexte d'actualité
 
 | Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
 |---|---:|---:|---:|---:|---:|---:|
-| actualité calme | 28 | 9 | 15 | 4 | 38% | -0.083 % |
+| actualité calme | 29 | 10 | 15 | 4 | 40% | -0.072 % |
 | actualité chargée | 43 | 17 | 18 | 8 | 49% | -0.035 % |
 
 ### Par heure d'émission (UTC)
@@ -78,7 +72,7 @@ _Mis à jour le 25/09/2026 à 13:15 (Europe/Paris)._
 | 07h | 5 | 3 | 0 | 2 | 100% | +0.124 % |
 | 08h | 4 | 0 | 4 | 0 | 0% | -0.282 % |
 | 09h | 3 | 0 | 2 | 1 | 0% | -0.237 % |
-| 10h | 1 | 0 | 0 | 1 | n/a | -0.098 % |
+| 10h | 2 | 1 | 0 | 1 | 100% | +0.065 % |
 | 11h | 6 | 2 | 2 | 2 | 50% | +0.045 % |
 | 12h | 6 | 3 | 3 | 0 | 50% | -0.021 % |
 | 13h | 3 | 0 | 3 | 0 | 0% | -0.098 % |
@@ -97,13 +91,13 @@ _Mis à jour le 25/09/2026 à 13:15 (Europe/Paris)._
 | Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
 |---|---:|---:|---:|---:|---:|---:|
 | demandes manuelles | 1 | 0 | 0 | 1 | n/a | -0.159 % |
-| signaux du bot | 70 | 26 | 33 | 11 | 44% | -0.052 % |
+| signaux du bot | 71 | 27 | 33 | 11 | 45% | -0.049 % |
 
 ### Par horizon
 
 | Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
 |---|---:|---:|---:|---:|---:|---:|
-| 1h | 69 | 26 | 31 | 12 | 46% | -0.047 % |
+| 1h | 70 | 27 | 31 | 12 | 47% | -0.043 % |
 | 3h | 2 | 0 | 2 | 0 | 0% | -0.280 % |
 
 Trades expirés : 12, 58% terminés dans le bon sens, P&L moyen -0.038 %.
@@ -116,17 +110,17 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 
 | Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
 |---|---:|---:|---:|---:|---:|---:|
-| adx | 87 | 27 | 42 | 18 | 39% | -0.027 % |
+| adx | 88 | 28 | 42 | 18 | 40% | -0.025 % |
 | corr | 9 | 0 | 6 | 3 | 0% | -0.254 % |
 | level | 11 | 3 | 3 | 5 | 50% | -0.026 % |
 | macd | 18 | 3 | 10 | 5 | 23% | -0.024 % |
 | orb | 3 | 3 | 0 | 0 | 100% | +0.178 % |
 | pdhl | 11 | 3 | 4 | 4 | 43% | +0.005 % |
-| rsi | 48 | 15 | 26 | 7 | 37% | -0.009 % |
-| trend_15m | 87 | 27 | 42 | 18 | 39% | -0.027 % |
-| trend_1h | 85 | 25 | 42 | 18 | 37% | -0.029 % |
-| trend_5m | 59 | 22 | 30 | 7 | 42% | +0.001 % |
-| vwap | 86 | 27 | 41 | 18 | 40% | -0.021 % |
+| rsi | 49 | 16 | 26 | 7 | 38% | -0.006 % |
+| trend_15m | 88 | 28 | 42 | 18 | 40% | -0.025 % |
+| trend_1h | 86 | 26 | 42 | 18 | 38% | -0.028 % |
+| trend_5m | 60 | 23 | 30 | 7 | 43% | +0.002 % |
+| vwap | 87 | 28 | 41 | 18 | 41% | -0.020 % |
 
 ### Fantômes par actif
 
@@ -135,7 +129,7 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 | bitcoin | 12 | 2 | 2 | 8 | 50% | +0.010 % |
 | ethereum | 10 | 1 | 6 | 3 | 14% | -0.225 % |
 | gold | 13 | 5 | 8 | 0 | 38% | -0.012 % |
-| nasdaq | 24 | 11 | 11 | 2 | 50% | +0.008 % |
+| nasdaq | 25 | 12 | 11 | 2 | 52% | +0.012 % |
 | oil | 11 | 4 | 5 | 2 | 44% | +0.038 % |
 | sp500 | 17 | 4 | 10 | 3 | 29% | -0.037 % |
 
@@ -143,6 +137,7 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 
 | Émis | Actif | Sens | Entrée | Clôture | Résultat | P&L | Durée |
 |---|---|---|---:|---:|---|---:|---:|
+| 25/09 12:50 | Or (XAU/USD) | long | 4338.6 | 4349.4 | ✅ TP | +0.23 % | 16 min |
 | 24/09 21:10 | S&P 500 (ES) | long | 7772.5 | 7766.5 | ❌ SL | -0.09 % | 5 min |
 | 24/09 20:25 | S&P 500 (ES) | long | 7763.5 | 7768.5 | ✅ TP | +0.05 % | 0 min |
 | 24/09 19:35 | Nasdaq 100 (NQ) | long | 30722.75 | 30694.0 | ❌ SL | -0.10 % | 7 min |
@@ -172,7 +167,6 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 | 22/09 17:01 | Or (XAU/USD) | short | 4358.8 | 4366.2 | ❌ SL | -0.19 % | 0 min |
 | 22/09 16:45 | Nasdaq 100 (NQ) | long | 30953.75 | 30901.0 | ❌ SL | -0.18 % | 7 min |
 | 22/09 13:40 | Or (XAU/USD) | short | 4354.2 | 4361.8 | ❌ SL | -0.19 % | 21 min |
-| 22/09 12:55 | Bitcoin (BTC/USD) | long | 85942.0 | 85909.14 | ⏱️ expiré | -0.10 % | 60 min |
 
 ## Apprentissage
 
@@ -193,7 +187,7 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 
 | Variante testée en fantôme | Trades | Gain net moyen | Statut |
 |---|---:|---:|---|
-| indices le matin européen | 21 | -0.45 R | en test |
+| indices le matin européen | 22 | -0.38 R | en test |
 | horizon ~3 h | 12 | -0.10 R | en test |
 | confiance moyenne | 9 | -0.51 R | en test |
 | entrées dans l'heure avant l'ouverture américaine | 0 | n/a | en test |
@@ -204,9 +198,9 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 
 Notes :
 
-- trades réels : +0,05 R ± 0,27 R par trade avant frais sur 71 trades (0 R = hasard)
+- trades réels : +0,07 R ± 0,27 R par trade avant frais sur 72 trades (0 R = hasard)
 - aucun critère ne s'écarte du hasard au-delà de la marge de sécurité : poids par défaut conservés
-- variante « indices le matin européen » en test : 21 trades, -0,45 R net, encore 79 trades avant décision
+- variante « indices le matin européen » en test : 22 trades, -0,38 R net, encore 78 trades avant décision
 - variante « horizon ~3 h » en test : 12 trades, -0,10 R net, encore 88 trades avant décision
 - variante « confiance moyenne » en test : 9 trades, -0,51 R net, encore 91 trades avant décision
 - variante « reprise juste après un stop » en test : 7 trades, +0,22 R net, encore 93 trades avant décision
