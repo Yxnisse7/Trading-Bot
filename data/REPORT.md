@@ -1,14 +1,20 @@
 # Trading-Bot — rapport
 
-_Mis à jour le 25/09/2026 à 12:45 (Europe/Paris)._
+_Mis à jour le 25/09/2026 à 12:50 (Europe/Paris)._
 
 ## Vue d'ensemble
 
 - Trades clôturés : **71**
 - Taux de réussite cumulé (TP / (TP+SL)) : **44%** — hasard attendu 42%, avantage **+3%**
 - P&L théorique cumulé, net des coûts estimés (somme des % par trade, sans levier) : **-3.83 %** (brut -1.49 %)
-- Signaux ouverts : **0**
-- Signaux fantômes (suivis en silence pour l'apprentissage) : **86** clôturés, 2 ouverts, taux de réussite 39% (hasard attendu 41%)
+- Signaux ouverts : **1**
+- Signaux fantômes (suivis en silence pour l'apprentissage) : **87** clôturés, 1 ouverts, taux de réussite 39% (hasard attendu 41%)
+
+## Signaux ouverts
+
+| Heure | Actif | Sens | Entrée | TP | SL | Confiance | Source | Expire |
+|---|---|---|---:|---:|---:|---|---|---|
+| 25/09 12:50 | Or (XAU/USD) | long | 4338.6 | 4349.4 | 4329.9 | fort | signaux du bot | 13:50 |
 
 ## Statistiques
 
@@ -110,17 +116,17 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 
 | Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
 |---|---:|---:|---:|---:|---:|---:|
-| adx | 86 | 27 | 42 | 17 | 39% | -0.026 % |
+| adx | 87 | 27 | 42 | 18 | 39% | -0.027 % |
 | corr | 9 | 0 | 6 | 3 | 0% | -0.254 % |
 | level | 11 | 3 | 3 | 5 | 50% | -0.026 % |
 | macd | 18 | 3 | 10 | 5 | 23% | -0.024 % |
 | orb | 3 | 3 | 0 | 0 | 100% | +0.178 % |
-| pdhl | 10 | 3 | 4 | 3 | 43% | +0.012 % |
-| rsi | 47 | 15 | 26 | 6 | 37% | -0.007 % |
-| trend_15m | 86 | 27 | 42 | 17 | 39% | -0.026 % |
-| trend_1h | 84 | 25 | 42 | 17 | 37% | -0.029 % |
-| trend_5m | 58 | 22 | 30 | 6 | 42% | +0.002 % |
-| vwap | 85 | 27 | 41 | 17 | 40% | -0.021 % |
+| pdhl | 11 | 3 | 4 | 4 | 43% | +0.005 % |
+| rsi | 48 | 15 | 26 | 7 | 37% | -0.009 % |
+| trend_15m | 87 | 27 | 42 | 18 | 39% | -0.027 % |
+| trend_1h | 85 | 25 | 42 | 18 | 37% | -0.029 % |
+| trend_5m | 59 | 22 | 30 | 7 | 42% | +0.001 % |
+| vwap | 86 | 27 | 41 | 18 | 40% | -0.021 % |
 
 ### Fantômes par actif
 
@@ -131,7 +137,7 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 | gold | 13 | 5 | 8 | 0 | 38% | -0.012 % |
 | nasdaq | 24 | 11 | 11 | 2 | 50% | +0.008 % |
 | oil | 11 | 4 | 5 | 2 | 44% | +0.038 % |
-| sp500 | 16 | 4 | 10 | 2 | 29% | -0.035 % |
+| sp500 | 17 | 4 | 10 | 3 | 29% | -0.037 % |
 
 ## Derniers trades
 
@@ -187,7 +193,7 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 
 | Variante testée en fantôme | Trades | Gain net moyen | Statut |
 |---|---:|---:|---|
-| indices le matin européen | 20 | -0.43 R | en test |
+| indices le matin européen | 21 | -0.45 R | en test |
 | horizon ~3 h | 12 | -0.10 R | en test |
 | confiance moyenne | 9 | -0.51 R | en test |
 | entrées dans l'heure avant l'ouverture américaine | 0 | n/a | en test |
@@ -200,7 +206,7 @@ Notes :
 
 - trades réels : +0,05 R ± 0,27 R par trade avant frais sur 71 trades (0 R = hasard)
 - aucun critère ne s'écarte du hasard au-delà de la marge de sécurité : poids par défaut conservés
-- variante « indices le matin européen » en test : 20 trades, -0,43 R net, encore 80 trades avant décision
+- variante « indices le matin européen » en test : 21 trades, -0,45 R net, encore 79 trades avant décision
 - variante « horizon ~3 h » en test : 12 trades, -0,10 R net, encore 88 trades avant décision
 - variante « confiance moyenne » en test : 9 trades, -0,51 R net, encore 91 trades avant décision
 - variante « reprise juste après un stop » en test : 7 trades, +0,22 R net, encore 93 trades avant décision
