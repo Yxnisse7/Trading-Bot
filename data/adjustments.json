@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-25T12:25:27.052468+00:00",
+  "updated_at": "2026-09-25T12:55:34.891936+00:00",
   "method": "v2 : recalcul complet, marge de sécurité, résultats en R, sources pondérées",
   "weights": {
     "trend_5m": 1.0,
@@ -124,30 +124,30 @@
         "trend_1h",
         "adx"
       ],
-      "n": 663,
-      "n_eff": 465.6,
-      "mean_r": 0.0128,
-      "margin_r": 0.1024,
+      "n": 664,
+      "n_eff": 466.6,
+      "mean_r": 0.0104,
+      "margin_r": 0.1022,
       "multiplier": 1.0
     },
     "vwap": {
       "members": [
         "vwap"
       ],
-      "n": 567,
-      "n_eff": 398.6,
-      "mean_r": 0.038,
-      "margin_r": 0.1116,
+      "n": 568,
+      "n_eff": 399.6,
+      "mean_r": 0.0353,
+      "margin_r": 0.1114,
       "multiplier": 1.0
     },
     "rsi": {
       "members": [
         "rsi"
       ],
-      "n": 535,
-      "n_eff": 368.6,
-      "mean_r": 0.0052,
-      "margin_r": 0.114,
+      "n": 536,
+      "n_eff": 369.6,
+      "mean_r": 0.0021,
+      "margin_r": 0.1138,
       "multiplier": 1.0
     },
     "macd": {
@@ -218,9 +218,9 @@
       "margin_r": 0.2674
     },
     "fantômes": {
-      "n": 90,
-      "mean_r": 0.0122,
-      "margin_r": 0.2329
+      "n": 91,
+      "mean_r": 0.0011,
+      "margin_r": 0.2314
     },
     "backtest": {
       "n": 502,
@@ -231,10 +231,10 @@
   "variants": {
     "hors_session": {
       "label": "indices le matin européen",
-      "n": 23,
-      "mean_net_r": -0.3713,
+      "n": 24,
+      "mean_net_r": -0.4026,
       "promoted": false,
-      "missing": 77
+      "missing": 76
     },
     "horizon_3h": {
       "label": "horizon ~3 h",
@@ -294,17 +294,17 @@
   "notes": [
     "trades réels : +0,07 R ± 0,27 R par trade avant frais sur 72 trades (0 R = hasard)",
     "aucun critère ne s'écarte du hasard au-delà de la marge de sécurité : poids par défaut conservés",
-    "variante « indices le matin européen » en test : 23 trades, -0,37 R net, encore 77 trades avant décision",
+    "variante « indices le matin européen » en test : 24 trades, -0,40 R net, encore 76 trades avant décision",
     "variante « horizon ~3 h » en test : 12 trades, -0,10 R net, encore 88 trades avant décision",
     "variante « confiance moyenne » en test : 9 trades, -0,51 R net, encore 91 trades avant décision",
     "variante « reprise juste après un stop » en test : 7 trades, +0,22 R net, encore 93 trades avant décision",
     "variante « nouvel actif : Ethereum (ETH/USD) » en test : 5 trades, -0,55 R net, encore 95 trades avant décision",
     "variante « nouvel actif : Pétrole WTI (CL) » en test : 11 trades, +0,14 R net, encore 89 trades avant décision"
   ],
-  "sample": 664,
+  "sample": 665,
   "sample_by_source": {
     "bot": 71,
-    "shadow": 90,
+    "shadow": 91,
     "manual": 1,
     "backtest": 502
   }
