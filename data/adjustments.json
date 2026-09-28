@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-28T07:50:35.482306+00:00",
+  "updated_at": "2026-09-28T07:55:29.544008+00:00",
   "method": "v2 : recalcul complet, marge de sécurité, résultats en R, sources pondérées",
   "weights": {
     "trend_5m": 1.0,
@@ -31,10 +31,10 @@
       "corr": 0.5
     },
     "ethereum": {
-      "trend_5m": 0.733,
-      "trend_15m": 0.733,
-      "trend_1h": 0.733,
-      "adx": 0.733,
+      "trend_5m": 0.725,
+      "trend_15m": 0.725,
+      "trend_1h": 0.725,
+      "adx": 0.725,
       "vwap": 0.75,
       "rsi": 1.0,
       "macd": 1.0,
@@ -124,9 +124,9 @@
         "trend_1h",
         "adx"
       ],
-      "n": 657,
-      "n_eff": 462.9,
-      "mean_r": 0.0509,
+      "n": 658,
+      "n_eff": 463.9,
+      "mean_r": 0.0543,
       "margin_r": 0.1016,
       "multiplier": 1.0
     },
@@ -134,9 +134,9 @@
       "members": [
         "vwap"
       ],
-      "n": 561,
-      "n_eff": 396.9,
-      "mean_r": 0.0651,
+      "n": 562,
+      "n_eff": 397.9,
+      "mean_r": 0.0689,
       "margin_r": 0.1102,
       "multiplier": 1.0
     },
@@ -144,10 +144,10 @@
       "members": [
         "rsi"
       ],
-      "n": 541,
-      "n_eff": 374.2,
-      "mean_r": 0.0539,
-      "margin_r": 0.1121,
+      "n": 542,
+      "n_eff": 375.1,
+      "mean_r": 0.0581,
+      "margin_r": 0.112,
       "multiplier": 1.0
     },
     "macd": {
@@ -164,10 +164,10 @@
       "members": [
         "level"
       ],
-      "n": 84,
-      "n_eff": 61.3,
-      "mean_r": -0.0573,
-      "margin_r": 0.2721,
+      "n": 85,
+      "n_eff": 62.2,
+      "mean_r": -0.0269,
+      "margin_r": 0.2727,
       "multiplier": 1.0
     },
     "volume": {
@@ -218,9 +218,9 @@
       "margin_r": 0.2627
     },
     "fantômes": {
-      "n": 100,
-      "mean_r": -0.0347,
-      "margin_r": 0.2171
+      "n": 101,
+      "mean_r": -0.0195,
+      "margin_r": 0.2169
     },
     "backtest": {
       "n": 483,
@@ -231,10 +231,10 @@
   "variants": {
     "hors_session": {
       "label": "indices le matin européen",
-      "n": 25,
-      "mean_net_r": -0.3448,
+      "n": 26,
+      "mean_net_r": -0.2772,
       "promoted": false,
-      "missing": 75
+      "missing": 74
     },
     "horizon_3h": {
       "label": "horizon ~3 h",
@@ -294,18 +294,18 @@
   "notes": [
     "trades réels : +0,06 R ± 0,26 R par trade avant frais sur 75 trades (0 R = hasard)",
     "aucun critère ne s'écarte du hasard au-delà de la marge de sécurité : poids par défaut conservés",
-    "ethereum, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,32 R contre +0,05 R en global sur 51 trades éq. → poids ×0,73 sur cet actif",
-    "variante « indices le matin européen » en test : 25 trades, -0,34 R net, encore 75 trades avant décision",
+    "ethereum, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,32 R contre +0,05 R en global sur 51 trades éq. → poids ×0,72 sur cet actif",
+    "variante « indices le matin européen » en test : 26 trades, -0,28 R net, encore 74 trades avant décision",
     "variante « horizon ~3 h » en test : 15 trades, -0,17 R net, encore 85 trades avant décision",
     "variante « confiance moyenne » en test : 11 trades, -0,55 R net, encore 89 trades avant décision",
     "variante « reprise juste après un stop » en test : 9 trades, -0,08 R net, encore 91 trades avant décision",
     "variante « nouvel actif : Ethereum (ETH/USD) » en test : 5 trades, -0,55 R net, encore 95 trades avant décision",
     "variante « nouvel actif : Pétrole WTI (CL) » en test : 12 trades, +0,09 R net, encore 88 trades avant décision"
   ],
-  "sample": 658,
+  "sample": 659,
   "sample_by_source": {
     "bot": 74,
-    "shadow": 100,
+    "shadow": 101,
     "manual": 1,
     "backtest": 483
   }
