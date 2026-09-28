@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-28T16:15:49Z",
+  "updated_at": "2026-09-28T16:20:49Z",
   "rules": {
     "account": "50K",
     "start_balance": 50000.0,
@@ -35,18 +35,18 @@
       "trades": 53
     }
   ],
-  "balance": 49429.64,
-  "profit": -570.36,
+  "balance": 49151.96,
+  "profit": -848.04,
   "mll": 48000.0,
-  "room_to_mll": 1429.64,
+  "room_to_mll": 1151.96,
   "peak_eod": 50000.0,
   "target_balance": 53000.0,
   "needed_profit": 3000.0,
-  "best_day": 760.74,
+  "best_day": 483.06,
   "consistency_ok": true,
   "today": "2026-09-28",
-  "today_pnl": 760.74,
-  "room_today": 1760.74,
+  "today_pnl": 483.06,
+  "room_today": 1483.06,
   "status": "en cours",
   "failed": null,
   "violations": [
@@ -63,7 +63,7 @@
     },
     {
       "day": "2026-09-28",
-      "pnl": 760.74
+      "pnl": 483.06
     }
   ],
   "trades": [
@@ -326,26 +326,6 @@
       "pnl": 383.8,
       "past_flat_time": false,
       "balance_after": 49429.64
-    }
-  ],
-  "open": [
-    {
-      "id": "ee92326ae6",
-      "asset": "sp500",
-      "asset_label": "S&P 500 (ES)",
-      "symbol": "MES",
-      "direction": "short",
-      "entry": 7744.0,
-      "take_profit": 7728.0,
-      "stop_loss": 7754.5,
-      "contracts": 4,
-      "multiplier": 5.0,
-      "origin": "bot",
-      "opened_at": "2026-09-28T15:20:34Z",
-      "expires_at": "2026-09-28T16:20:34Z",
-      "risk": 210.0,
-      "notional": 154880.0,
-      "cost_pct": 0.01
     },
     {
       "id": "2c1fb1491e",
@@ -354,17 +334,41 @@
       "symbol": "MNQ",
       "direction": "short",
       "entry": 30485.25,
-      "take_profit": 30426.75,
-      "stop_loss": 30534.0,
+      "exit": 30534.0,
       "contracts": 2,
-      "multiplier": 2.0,
+      "status": "sl",
       "origin": "bot",
       "opened_at": "2026-09-28T15:35:30Z",
-      "expires_at": "2026-09-28T16:35:30Z",
-      "risk": 195.0,
-      "notional": 121941.0,
-      "cost_pct": 0.01
+      "closed_at": "2026-09-28T16:10:00Z",
+      "day": "2026-09-28",
+      "pnl_gross": -195.0,
+      "cost": 12.19,
+      "pnl": -207.19,
+      "past_flat_time": false,
+      "balance_after": 49222.45
     },
+    {
+      "id": "ee92326ae6",
+      "asset": "sp500",
+      "asset_label": "S&P 500 (ES)",
+      "symbol": "MES",
+      "direction": "short",
+      "entry": 7744.0,
+      "exit": 7746.75,
+      "contracts": 4,
+      "status": "expired",
+      "origin": "bot",
+      "opened_at": "2026-09-28T15:20:34Z",
+      "closed_at": "2026-09-28T16:20:37Z",
+      "day": "2026-09-28",
+      "pnl_gross": -55.0,
+      "cost": 15.49,
+      "pnl": -70.49,
+      "past_flat_time": false,
+      "balance_after": 49151.96
+    }
+  ],
+  "open": [
     {
       "id": "70622e12ae",
       "asset": "gold",
