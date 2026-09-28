@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-28T16:30:58.330230+00:00",
+  "updated_at": "2026-09-28T16:35:28.447395+00:00",
   "method": "v2 : recalcul complet, marge de sécurité, résultats en R, sources pondérées",
   "weights": {
     "trend_5m": 1.0,
@@ -31,10 +31,10 @@
       "corr": 0.5
     },
     "ethereum": {
-      "trend_5m": 0.752,
-      "trend_15m": 0.752,
-      "trend_1h": 0.752,
-      "adx": 0.752,
+      "trend_5m": 0.767,
+      "trend_15m": 0.767,
+      "trend_1h": 0.767,
+      "adx": 0.767,
       "vwap": 0.75,
       "rsi": 1.0,
       "macd": 1.0,
@@ -124,30 +124,30 @@
         "trend_1h",
         "adx"
       ],
-      "n": 690,
-      "n_eff": 492.0,
-      "mean_r": 0.0436,
-      "margin_r": 0.1008,
+      "n": 692,
+      "n_eff": 493.4,
+      "mean_r": 0.0376,
+      "margin_r": 0.1006,
       "multiplier": 1.0
     },
     "vwap": {
       "members": [
         "vwap"
       ],
-      "n": 594,
-      "n_eff": 426.8,
-      "mean_r": 0.0558,
-      "margin_r": 0.1089,
+      "n": 596,
+      "n_eff": 428.3,
+      "mean_r": 0.0491,
+      "margin_r": 0.1087,
       "multiplier": 1.0
     },
     "rsi": {
       "members": [
         "rsi"
       ],
-      "n": 566,
-      "n_eff": 394.9,
-      "mean_r": 0.0305,
-      "margin_r": 0.1119,
+      "n": 568,
+      "n_eff": 396.3,
+      "mean_r": 0.0231,
+      "margin_r": 0.1116,
       "multiplier": 1.0
     },
     "macd": {
@@ -184,10 +184,10 @@
       "members": [
         "orb"
       ],
-      "n": 34,
-      "n_eff": 23.2,
-      "mean_r": 0.1087,
-      "margin_r": 0.5144,
+      "n": 36,
+      "n_eff": 24.9,
+      "mean_r": -0.0021,
+      "margin_r": 0.4892,
       "multiplier": 1.0
     },
     "pdhl": {
@@ -213,14 +213,14 @@
   },
   "overview": {
     "réels": {
-      "n": 81,
-      "mean_r": 0.0426,
-      "margin_r": 0.2596
+      "n": 82,
+      "mean_r": 0.0299,
+      "margin_r": 0.2576
     },
     "fantômes": {
-      "n": 127,
-      "mean_r": -0.0267,
-      "margin_r": 0.2022
+      "n": 128,
+      "mean_r": -0.0343,
+      "margin_r": 0.2011
     },
     "backtest": {
       "n": 483,
@@ -259,10 +259,10 @@
     },
     "reprise_apres_stop": {
       "label": "reprise juste après un stop",
-      "n": 11,
-      "mean_net_r": -0.0367,
+      "n": 12,
+      "mean_net_r": -0.1233,
       "promoted": false,
-      "missing": 89
+      "missing": 88
     },
     "essai_ethereum": {
       "label": "nouvel actif : Ethereum (ETH/USD)",
@@ -287,26 +287,26 @@
     }
   },
   "baseline": {
-    "n": 69,
-    "mean_net_r": -0.0478
+    "n": 70,
+    "mean_net_r": -0.0625
   },
   "promoted_variants": [],
   "notes": [
-    "trades réels : +0,04 R ± 0,26 R par trade avant frais sur 81 trades (0 R = hasard)",
+    "trades réels : +0,03 R ± 0,26 R par trade avant frais sur 82 trades (0 R = hasard)",
     "aucun critère ne s'écarte du hasard au-delà de la marge de sécurité : poids par défaut conservés",
-    "ethereum, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,32 R contre +0,04 R en global sur 51 trades éq. → poids ×0,75 sur cet actif",
+    "ethereum, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,32 R contre +0,04 R en global sur 51 trades éq. → poids ×0,77 sur cet actif",
     "variante « indices le matin européen » en test : 30 trades, -0,34 R net, encore 70 trades avant décision",
     "variante « horizon ~3 h » en test : 25 trades, -0,28 R net, encore 75 trades avant décision",
     "variante « confiance moyenne » en test : 17 trades, -0,10 R net, encore 83 trades avant décision",
     "variante « entrées dans l'heure avant l'ouverture américaine » en test : 1 trades, +1,09 R net, encore 99 trades avant décision",
-    "variante « reprise juste après un stop » en test : 11 trades, -0,04 R net, encore 89 trades avant décision",
+    "variante « reprise juste après un stop » en test : 12 trades, -0,12 R net, encore 88 trades avant décision",
     "variante « nouvel actif : Ethereum (ETH/USD) » en test : 5 trades, -0,55 R net, encore 95 trades avant décision",
     "variante « nouvel actif : Pétrole WTI (CL) » en test : 15 trades, -0,07 R net, encore 85 trades avant décision"
   ],
-  "sample": 691,
+  "sample": 693,
   "sample_by_source": {
-    "bot": 80,
-    "shadow": 127,
+    "bot": 81,
+    "shadow": 128,
     "manual": 1,
     "backtest": 483
   }
