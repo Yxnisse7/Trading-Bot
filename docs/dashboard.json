@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-29T21:45:44.255202+02:00",
+  "updated_at": "2026-09-29T21:50:46.257634+02:00",
   "timezone": "Europe/Paris",
   "equity_curve": [
     {
@@ -1104,18 +1104,18 @@
       "avg_pnl_pct": -0.0488
     },
     "shadow": {
-      "n": 141,
+      "n": 142,
       "tp": 44,
       "sl": 71,
-      "expired": 26,
+      "expired": 27,
       "win_rate": 0.3826086956521739,
-      "neutral_win_rate": 0.4135,
-      "edge": -0.0309,
-      "pnl_pct": -3.8389,
-      "avg_pnl_pct": -0.0272
+      "neutral_win_rate": 0.4134,
+      "edge": -0.0308,
+      "pnl_pct": -3.3443,
+      "avg_pnl_pct": -0.0236
     },
     "open": 1,
-    "open_shadow": 1
+    "open_shadow": 0
   },
   "by_source": {
     "bot": {
@@ -1152,15 +1152,15 @@
       "avg_pnl_pct": 0.0
     },
     "shadow": {
-      "n": 141,
+      "n": 142,
       "tp": 44,
       "sl": 71,
-      "expired": 26,
+      "expired": 27,
       "win_rate": 0.3826086956521739,
-      "neutral_win_rate": 0.4135,
-      "edge": -0.0309,
-      "pnl_pct": -3.8389,
-      "avg_pnl_pct": -0.0272
+      "neutral_win_rate": 0.4134,
+      "edge": -0.0308,
+      "pnl_pct": -3.3443,
+      "avg_pnl_pct": -0.0236
     }
   },
   "by_horizon": {
@@ -1407,15 +1407,15 @@
         "avg_pnl_pct": 0.0
       },
       "shadow": {
-        "n": 20,
+        "n": 21,
         "tp": 8,
         "sl": 9,
-        "expired": 3,
+        "expired": 4,
         "win_rate": 0.47058823529411764,
-        "neutral_win_rate": 0.4178,
-        "edge": 0.0528,
-        "pnl_pct": 0.1645,
-        "avg_pnl_pct": 0.0082
+        "neutral_win_rate": 0.4168,
+        "edge": 0.0538,
+        "pnl_pct": 0.6591,
+        "avg_pnl_pct": 0.0314
       },
       "open": 0,
       "session_utc": [
@@ -1481,15 +1481,15 @@
       "label": "Tendance 5 min",
       "weight": 1.0,
       "stats": {
-        "n": 181,
+        "n": 182,
         "tp": 68,
         "sl": 89,
-        "expired": 24,
+        "expired": 25,
         "win_rate": 0.43312101910828027,
-        "neutral_win_rate": 0.4122,
-        "edge": 0.0209,
-        "pnl_pct": -4.5468,
-        "avg_pnl_pct": -0.0251
+        "neutral_win_rate": 0.4121,
+        "edge": 0.021,
+        "pnl_pct": -4.0522,
+        "avg_pnl_pct": -0.0223
       },
       "by_source": {
         "bot": {
@@ -1526,18 +1526,52 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 106,
+          "n": 107,
           "tp": 39,
           "sl": 56,
-          "expired": 11,
+          "expired": 12,
           "win_rate": 0.4105263157894737,
-          "neutral_win_rate": 0.4117,
-          "edge": -0.0012,
-          "pnl_pct": -1.2434,
-          "avg_pnl_pct": -0.0117
+          "neutral_win_rate": 0.4116,
+          "edge": -0.0011,
+          "pnl_pct": -0.7488,
+          "avg_pnl_pct": -0.007
         }
       },
       "last_trades": [
+        {
+          "id": "00388398bc",
+          "asset": "oil",
+          "asset_label": "Pétrole WTI (CL)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 89.59,
+          "take_profit": 88.95,
+          "stop_loss": 90.01,
+          "risk_reward": 1.52,
+          "confidence": "fort",
+          "score": 5.75,
+          "criteria": [
+            "adx",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "expired",
+          "pnl_pct": 0.4946,
+          "pnl_gross_pct": 0.5246,
+          "duration_minutes": 60,
+          "close_price": 89.12,
+          "created_at": "2026-09-29T18:50:32Z",
+          "closed_at": "2026-09-29T19:50:35Z",
+          "created_local": "29/09 20:50",
+          "expires_at": "2026-09-29T19:50:32Z",
+          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 1.06 (1.18 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 82%.",
+          "news_context": "actualité calme sur les 2 dernières heures",
+          "manual_exit": null
+        },
         {
           "id": "787bbebe80",
           "asset": "sp500",
@@ -1778,40 +1812,6 @@
           "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 1.10 (1.22 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 56%.",
           "news_context": "actualité à surveiller (score 1) : New Zealand Dollar falls toward 0.5650 despite rising RBNZ rate hike bets",
           "manual_exit": null
-        },
-        {
-          "id": "3a0ee0abb9",
-          "asset": "sp500",
-          "asset_label": "S&P 500 (ES)",
-          "direction": "long",
-          "horizon": "1h",
-          "entry": 7760.5,
-          "take_profit": 7766.5,
-          "stop_loss": 7755.5,
-          "risk_reward": 1.2,
-          "confidence": "fort",
-          "score": 5.75,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.0744,
-          "pnl_gross_pct": -0.0644,
-          "duration_minutes": 8,
-          "close_price": 7755.5,
-          "created_at": "2026-09-29T12:31:01Z",
-          "closed_at": "2026-09-29T12:40:00Z",
-          "created_local": "29/09 14:31",
-          "expires_at": "2026-09-29T13:31:01Z",
-          "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 17.24 (0.22 %), TP = 35 % du range, SL = 29 % du range, probabilité de résolution sous 1 h ≈ 83%.",
-          "news_context": "actualité calme sur les 2 dernières heures",
-          "manual_exit": null
         }
       ]
     },
@@ -1820,15 +1820,15 @@
       "label": "Tendance 15 min",
       "weight": 1.0,
       "stats": {
-        "n": 226,
+        "n": 227,
         "tp": 76,
         "sl": 111,
-        "expired": 39,
+        "expired": 40,
         "win_rate": 0.40641711229946526,
-        "neutral_win_rate": 0.4133,
-        "edge": -0.0069,
-        "pnl_pct": -7.8752,
-        "avg_pnl_pct": -0.0348
+        "neutral_win_rate": 0.4132,
+        "edge": -0.0068,
+        "pnl_pct": -7.3806,
+        "avg_pnl_pct": -0.0325
       },
       "by_source": {
         "bot": {
@@ -1865,18 +1865,52 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 141,
+          "n": 142,
           "tp": 44,
           "sl": 71,
-          "expired": 26,
+          "expired": 27,
           "win_rate": 0.3826086956521739,
-          "neutral_win_rate": 0.4135,
-          "edge": -0.0309,
-          "pnl_pct": -3.8389,
-          "avg_pnl_pct": -0.0272
+          "neutral_win_rate": 0.4134,
+          "edge": -0.0308,
+          "pnl_pct": -3.3443,
+          "avg_pnl_pct": -0.0236
         }
       },
       "last_trades": [
+        {
+          "id": "00388398bc",
+          "asset": "oil",
+          "asset_label": "Pétrole WTI (CL)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 89.59,
+          "take_profit": 88.95,
+          "stop_loss": 90.01,
+          "risk_reward": 1.52,
+          "confidence": "fort",
+          "score": 5.75,
+          "criteria": [
+            "adx",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "expired",
+          "pnl_pct": 0.4946,
+          "pnl_gross_pct": 0.5246,
+          "duration_minutes": 60,
+          "close_price": 89.12,
+          "created_at": "2026-09-29T18:50:32Z",
+          "closed_at": "2026-09-29T19:50:35Z",
+          "created_local": "29/09 20:50",
+          "expires_at": "2026-09-29T19:50:32Z",
+          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 1.06 (1.18 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 82%.",
+          "news_context": "actualité calme sur les 2 dernières heures",
+          "manual_exit": null
+        },
         {
           "id": "aca4699e63",
           "asset": "gold",
@@ -2115,40 +2149,6 @@
           "created_local": "29/09 16:30",
           "expires_at": "2026-09-29T15:30:52Z",
           "rationale": "Achat : tendance forte (ADX), MACD en expansion, cassure du range d'ouverture, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 26.20 (0.62 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 37%.",
-          "news_context": "actualité calme sur les 2 dernières heures",
-          "manual_exit": null
-        },
-        {
-          "id": "4de5cc4a97",
-          "asset": "oil",
-          "asset_label": "Pétrole WTI (CL)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 90.67,
-          "take_profit": 90.0,
-          "stop_loss": 91.12,
-          "risk_reward": 1.49,
-          "confidence": "fort",
-          "score": 5.75,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.5263,
-          "pnl_gross_pct": -0.4963,
-          "duration_minutes": 30,
-          "close_price": 91.12,
-          "created_at": "2026-09-29T13:15:40Z",
-          "closed_at": "2026-09-29T13:46:00Z",
-          "created_local": "29/09 15:15",
-          "expires_at": "2026-09-29T14:15:40Z",
-          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 1.12 (1.24 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 56%.",
           "news_context": "actualité calme sur les 2 dernières heures",
           "manual_exit": null
         }
@@ -2159,15 +2159,15 @@
       "label": "Tendance 1 h",
       "weight": 1.0,
       "stats": {
-        "n": 224,
+        "n": 225,
         "tp": 74,
         "sl": 111,
-        "expired": 39,
+        "expired": 40,
         "win_rate": 0.4,
-        "neutral_win_rate": 0.4134,
-        "edge": -0.0134,
-        "pnl_pct": -8.072,
-        "avg_pnl_pct": -0.036
+        "neutral_win_rate": 0.4133,
+        "edge": -0.0133,
+        "pnl_pct": -7.5774,
+        "avg_pnl_pct": -0.0337
       },
       "by_source": {
         "bot": {
@@ -2204,18 +2204,52 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 139,
+          "n": 140,
           "tp": 42,
           "sl": 71,
-          "expired": 26,
+          "expired": 27,
           "win_rate": 0.37168141592920356,
-          "neutral_win_rate": 0.4137,
-          "edge": -0.042,
-          "pnl_pct": -4.0357,
-          "avg_pnl_pct": -0.029
+          "neutral_win_rate": 0.4136,
+          "edge": -0.0419,
+          "pnl_pct": -3.5411,
+          "avg_pnl_pct": -0.0253
         }
       },
       "last_trades": [
+        {
+          "id": "00388398bc",
+          "asset": "oil",
+          "asset_label": "Pétrole WTI (CL)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 89.59,
+          "take_profit": 88.95,
+          "stop_loss": 90.01,
+          "risk_reward": 1.52,
+          "confidence": "fort",
+          "score": 5.75,
+          "criteria": [
+            "adx",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "expired",
+          "pnl_pct": 0.4946,
+          "pnl_gross_pct": 0.5246,
+          "duration_minutes": 60,
+          "close_price": 89.12,
+          "created_at": "2026-09-29T18:50:32Z",
+          "closed_at": "2026-09-29T19:50:35Z",
+          "created_local": "29/09 20:50",
+          "expires_at": "2026-09-29T19:50:32Z",
+          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 1.06 (1.18 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 82%.",
+          "news_context": "actualité calme sur les 2 dernières heures",
+          "manual_exit": null
+        },
         {
           "id": "aca4699e63",
           "asset": "gold",
@@ -2454,40 +2488,6 @@
           "created_local": "29/09 16:30",
           "expires_at": "2026-09-29T15:30:52Z",
           "rationale": "Achat : tendance forte (ADX), MACD en expansion, cassure du range d'ouverture, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 26.20 (0.62 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 37%.",
-          "news_context": "actualité calme sur les 2 dernières heures",
-          "manual_exit": null
-        },
-        {
-          "id": "4de5cc4a97",
-          "asset": "oil",
-          "asset_label": "Pétrole WTI (CL)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 90.67,
-          "take_profit": 90.0,
-          "stop_loss": 91.12,
-          "risk_reward": 1.49,
-          "confidence": "fort",
-          "score": 5.75,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.5263,
-          "pnl_gross_pct": -0.4963,
-          "duration_minutes": 30,
-          "close_price": 91.12,
-          "created_at": "2026-09-29T13:15:40Z",
-          "closed_at": "2026-09-29T13:46:00Z",
-          "created_local": "29/09 15:15",
-          "expires_at": "2026-09-29T14:15:40Z",
-          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 1.12 (1.24 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 56%.",
           "news_context": "actualité calme sur les 2 dernières heures",
           "manual_exit": null
         }
@@ -2498,15 +2498,15 @@
       "label": "Force de tendance (ADX)",
       "weight": 1.0,
       "stats": {
-        "n": 226,
+        "n": 227,
         "tp": 76,
         "sl": 111,
-        "expired": 39,
+        "expired": 40,
         "win_rate": 0.40641711229946526,
-        "neutral_win_rate": 0.4133,
-        "edge": -0.0069,
-        "pnl_pct": -7.8752,
-        "avg_pnl_pct": -0.0348
+        "neutral_win_rate": 0.4132,
+        "edge": -0.0068,
+        "pnl_pct": -7.3806,
+        "avg_pnl_pct": -0.0325
       },
       "by_source": {
         "bot": {
@@ -2543,18 +2543,52 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 141,
+          "n": 142,
           "tp": 44,
           "sl": 71,
-          "expired": 26,
+          "expired": 27,
           "win_rate": 0.3826086956521739,
-          "neutral_win_rate": 0.4135,
-          "edge": -0.0309,
-          "pnl_pct": -3.8389,
-          "avg_pnl_pct": -0.0272
+          "neutral_win_rate": 0.4134,
+          "edge": -0.0308,
+          "pnl_pct": -3.3443,
+          "avg_pnl_pct": -0.0236
         }
       },
       "last_trades": [
+        {
+          "id": "00388398bc",
+          "asset": "oil",
+          "asset_label": "Pétrole WTI (CL)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 89.59,
+          "take_profit": 88.95,
+          "stop_loss": 90.01,
+          "risk_reward": 1.52,
+          "confidence": "fort",
+          "score": 5.75,
+          "criteria": [
+            "adx",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "expired",
+          "pnl_pct": 0.4946,
+          "pnl_gross_pct": 0.5246,
+          "duration_minutes": 60,
+          "close_price": 89.12,
+          "created_at": "2026-09-29T18:50:32Z",
+          "closed_at": "2026-09-29T19:50:35Z",
+          "created_local": "29/09 20:50",
+          "expires_at": "2026-09-29T19:50:32Z",
+          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 1.06 (1.18 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 82%.",
+          "news_context": "actualité calme sur les 2 dernières heures",
+          "manual_exit": null
+        },
         {
           "id": "aca4699e63",
           "asset": "gold",
@@ -2795,40 +2829,6 @@
           "rationale": "Achat : tendance forte (ADX), MACD en expansion, cassure du range d'ouverture, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 26.20 (0.62 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 37%.",
           "news_context": "actualité calme sur les 2 dernières heures",
           "manual_exit": null
-        },
-        {
-          "id": "4de5cc4a97",
-          "asset": "oil",
-          "asset_label": "Pétrole WTI (CL)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 90.67,
-          "take_profit": 90.0,
-          "stop_loss": 91.12,
-          "risk_reward": 1.49,
-          "confidence": "fort",
-          "score": 5.75,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.5263,
-          "pnl_gross_pct": -0.4963,
-          "duration_minutes": 30,
-          "close_price": 91.12,
-          "created_at": "2026-09-29T13:15:40Z",
-          "closed_at": "2026-09-29T13:46:00Z",
-          "created_local": "29/09 15:15",
-          "expires_at": "2026-09-29T14:15:40Z",
-          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 1.12 (1.24 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 56%.",
-          "news_context": "actualité calme sur les 2 dernières heures",
-          "manual_exit": null
         }
       ]
     },
@@ -2837,15 +2837,15 @@
       "label": "VWAP",
       "weight": 0.75,
       "stats": {
-        "n": 222,
+        "n": 223,
         "tp": 76,
         "sl": 107,
-        "expired": 39,
+        "expired": 40,
         "win_rate": 0.41530054644808745,
-        "neutral_win_rate": 0.4132,
-        "edge": 0.0021,
-        "pnl_pct": -6.677,
-        "avg_pnl_pct": -0.0301
+        "neutral_win_rate": 0.4131,
+        "edge": 0.0022,
+        "pnl_pct": -6.1824,
+        "avg_pnl_pct": -0.0277
       },
       "by_source": {
         "bot": {
@@ -2882,18 +2882,52 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 139,
+          "n": 140,
           "tp": 44,
           "sl": 69,
-          "expired": 26,
+          "expired": 27,
           "win_rate": 0.3893805309734513,
-          "neutral_win_rate": 0.4133,
-          "edge": -0.0239,
-          "pnl_pct": -3.2571,
-          "avg_pnl_pct": -0.0234
+          "neutral_win_rate": 0.4132,
+          "edge": -0.0238,
+          "pnl_pct": -2.7625,
+          "avg_pnl_pct": -0.0197
         }
       },
       "last_trades": [
+        {
+          "id": "00388398bc",
+          "asset": "oil",
+          "asset_label": "Pétrole WTI (CL)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 89.59,
+          "take_profit": 88.95,
+          "stop_loss": 90.01,
+          "risk_reward": 1.52,
+          "confidence": "fort",
+          "score": 5.75,
+          "criteria": [
+            "adx",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "expired",
+          "pnl_pct": 0.4946,
+          "pnl_gross_pct": 0.5246,
+          "duration_minutes": 60,
+          "close_price": 89.12,
+          "created_at": "2026-09-29T18:50:32Z",
+          "closed_at": "2026-09-29T19:50:35Z",
+          "created_local": "29/09 20:50",
+          "expires_at": "2026-09-29T19:50:32Z",
+          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 1.06 (1.18 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 82%.",
+          "news_context": "actualité calme sur les 2 dernières heures",
+          "manual_exit": null
+        },
         {
           "id": "aca4699e63",
           "asset": "gold",
@@ -3134,40 +3168,6 @@
           "rationale": "Achat : tendance forte (ADX), MACD en expansion, cassure du range d'ouverture, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 26.20 (0.62 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 37%.",
           "news_context": "actualité calme sur les 2 dernières heures",
           "manual_exit": null
-        },
-        {
-          "id": "4de5cc4a97",
-          "asset": "oil",
-          "asset_label": "Pétrole WTI (CL)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 90.67,
-          "take_profit": 90.0,
-          "stop_loss": 91.12,
-          "risk_reward": 1.49,
-          "confidence": "fort",
-          "score": 5.75,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.5263,
-          "pnl_gross_pct": -0.4963,
-          "duration_minutes": 30,
-          "close_price": 91.12,
-          "created_at": "2026-09-29T13:15:40Z",
-          "closed_at": "2026-09-29T13:46:00Z",
-          "created_local": "29/09 15:15",
-          "expires_at": "2026-09-29T14:15:40Z",
-          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 1.12 (1.24 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 56%.",
-          "news_context": "actualité calme sur les 2 dernières heures",
-          "manual_exit": null
         }
       ]
     },
@@ -3176,15 +3176,15 @@
       "label": "RSI",
       "weight": 1.0,
       "stats": {
-        "n": 162,
+        "n": 163,
         "tp": 56,
         "sl": 83,
-        "expired": 23,
+        "expired": 24,
         "win_rate": 0.4028776978417266,
-        "neutral_win_rate": 0.4138,
-        "edge": -0.0109,
-        "pnl_pct": -5.0383,
-        "avg_pnl_pct": -0.0311
+        "neutral_win_rate": 0.4137,
+        "edge": -0.0108,
+        "pnl_pct": -4.5437,
+        "avg_pnl_pct": -0.0279
       },
       "by_source": {
         "bot": {
@@ -3221,18 +3221,52 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 89,
+          "n": 90,
           "tp": 27,
           "sl": 51,
-          "expired": 11,
+          "expired": 12,
           "win_rate": 0.34615384615384615,
-          "neutral_win_rate": 0.4132,
-          "edge": -0.067,
-          "pnl_pct": -2.4356,
-          "avg_pnl_pct": -0.0274
+          "neutral_win_rate": 0.413,
+          "edge": -0.0668,
+          "pnl_pct": -1.941,
+          "avg_pnl_pct": -0.0216
         }
       },
       "last_trades": [
+        {
+          "id": "00388398bc",
+          "asset": "oil",
+          "asset_label": "Pétrole WTI (CL)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 89.59,
+          "take_profit": 88.95,
+          "stop_loss": 90.01,
+          "risk_reward": 1.52,
+          "confidence": "fort",
+          "score": 5.75,
+          "criteria": [
+            "adx",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "expired",
+          "pnl_pct": 0.4946,
+          "pnl_gross_pct": 0.5246,
+          "duration_minutes": 60,
+          "close_price": 89.12,
+          "created_at": "2026-09-29T18:50:32Z",
+          "closed_at": "2026-09-29T19:50:35Z",
+          "created_local": "29/09 20:50",
+          "expires_at": "2026-09-29T19:50:32Z",
+          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 1.06 (1.18 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 82%.",
+          "news_context": "actualité calme sur les 2 dernières heures",
+          "manual_exit": null
+        },
         {
           "id": "aca4699e63",
           "asset": "gold",
@@ -3471,40 +3505,6 @@
           "created_local": "29/09 16:30",
           "expires_at": "2026-09-29T15:30:52Z",
           "rationale": "Achat : tendance forte (ADX), MACD en expansion, cassure du range d'ouverture, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 26.20 (0.62 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 37%.",
-          "news_context": "actualité calme sur les 2 dernières heures",
-          "manual_exit": null
-        },
-        {
-          "id": "4de5cc4a97",
-          "asset": "oil",
-          "asset_label": "Pétrole WTI (CL)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 90.67,
-          "take_profit": 90.0,
-          "stop_loss": 91.12,
-          "risk_reward": 1.49,
-          "confidence": "fort",
-          "score": 5.75,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.5263,
-          "pnl_gross_pct": -0.4963,
-          "duration_minutes": 30,
-          "close_price": 91.12,
-          "created_at": "2026-09-29T13:15:40Z",
-          "closed_at": "2026-09-29T13:46:00Z",
-          "created_local": "29/09 15:15",
-          "expires_at": "2026-09-29T14:15:40Z",
-          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 1.12 (1.24 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 56%.",
           "news_context": "actualité calme sur les 2 dernières heures",
           "manual_exit": null
         }
@@ -4471,40 +4471,6 @@
       "created_local": "29/09 21:15",
       "expires_at": "2026-09-29T20:15:34Z",
       "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 93.03 (0.30 %), TP = 52 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 89%.",
-      "news_context": "actualité calme sur les 2 dernières heures",
-      "manual_exit": null
-    },
-    {
-      "id": "00388398bc",
-      "asset": "oil",
-      "asset_label": "Pétrole WTI (CL)",
-      "direction": "short",
-      "horizon": "1h",
-      "entry": 89.59,
-      "take_profit": 88.95,
-      "stop_loss": 90.01,
-      "risk_reward": 1.52,
-      "confidence": "fort",
-      "score": 5.75,
-      "criteria": [
-        "adx",
-        "rsi",
-        "trend_15m",
-        "trend_1h",
-        "trend_5m",
-        "vwap"
-      ],
-      "source": "shadow",
-      "status": "open",
-      "pnl_pct": null,
-      "pnl_gross_pct": null,
-      "duration_minutes": null,
-      "close_price": null,
-      "created_at": "2026-09-29T18:50:32Z",
-      "closed_at": null,
-      "created_local": "29/09 20:50",
-      "expires_at": "2026-09-29T19:50:32Z",
-      "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 1.06 (1.18 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 82%.",
       "news_context": "actualité calme sur les 2 dernières heures",
       "manual_exit": null
     }
@@ -6103,20 +6069,20 @@
     "notes": [
       "trades réels : +0,05 R ± 0,25 R par trade avant frais sur 86 trades (0 R = hasard)",
       "aucun critère ne s'écarte du hasard au-delà de la marge de sécurité : poids par défaut conservés",
-      "ethereum, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,32 R contre +0,04 R en global sur 51 trades éq. → poids ×0,76 sur cet actif",
+      "ethereum, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,32 R contre +0,04 R en global sur 51 trades éq. → poids ×0,75 sur cet actif",
       "variante « indices le matin européen » en test : 33 trades, -0,34 R net, encore 67 trades avant décision",
       "variante « horizon ~3 h » en test : 29 trades, -0,30 R net, encore 71 trades avant décision",
       "variante « confiance moyenne » en test : 18 trades, -0,08 R net, encore 82 trades avant décision",
       "variante « entrées dans l'heure avant l'ouverture américaine » en test : 1 trades, +1,09 R net, encore 99 trades avant décision",
       "variante « reprise juste après un stop » en test : 12 trades, -0,12 R net, encore 88 trades avant décision",
       "variante « nouvel actif : Ethereum (ETH/USD) » en test : 5 trades, -0,55 R net, encore 95 trades avant décision",
-      "variante « nouvel actif : Pétrole WTI (CL) » en test : 20 trades, +0,04 R net, encore 80 trades avant décision"
+      "variante « nouvel actif : Pétrole WTI (CL) » en test : 21 trades, +0,09 R net, encore 79 trades avant décision"
     ],
     "avoid_hours_utc": [],
-    "sample": 710,
+    "sample": 711,
     "sample_by_source": {
       "bot": 85,
-      "shadow": 141,
+      "shadow": 142,
       "manual": 1,
       "backtest": 483
     },
@@ -6151,10 +6117,10 @@
         "corr": 0.5
       },
       "ethereum": {
-        "trend_5m": 0.756,
-        "trend_15m": 0.756,
-        "trend_1h": 0.756,
-        "adx": 0.756,
+        "trend_5m": 0.75,
+        "trend_15m": 0.75,
+        "trend_1h": 0.75,
+        "adx": 0.75,
         "vwap": 0.75,
         "rsi": 1.0,
         "macd": 1.0,
@@ -6243,30 +6209,30 @@
           "trend_1h",
           "adx"
         ],
-        "n": 709,
-        "n_eff": 508.0,
-        "mean_r": 0.0419,
-        "margin_r": 0.0991,
+        "n": 710,
+        "n_eff": 509.0,
+        "mean_r": 0.0442,
+        "margin_r": 0.099,
         "multiplier": 1.0
       },
       "vwap": {
         "members": [
           "vwap"
         ],
-        "n": 612,
-        "n_eff": 442.4,
-        "mean_r": 0.0558,
-        "margin_r": 0.1068,
+        "n": 613,
+        "n_eff": 443.4,
+        "mean_r": 0.0582,
+        "margin_r": 0.1067,
         "multiplier": 1.0
       },
       "rsi": {
         "members": [
           "rsi"
         ],
-        "n": 582,
-        "n_eff": 407.8,
-        "mean_r": 0.0277,
-        "margin_r": 0.1101,
+        "n": 583,
+        "n_eff": 408.8,
+        "mean_r": 0.0306,
+        "margin_r": 0.11,
         "multiplier": 1.0
       },
       "macd": {
@@ -6337,9 +6303,9 @@
         "margin_r": 0.2507
       },
       "fantômes": {
-        "n": 141,
-        "mean_r": -0.0285,
-        "margin_r": 0.1913
+        "n": 142,
+        "mean_r": -0.0204,
+        "margin_r": 0.1906
       },
       "backtest": {
         "n": 483,
@@ -6392,10 +6358,10 @@
       },
       "essai_oil": {
         "label": "nouvel actif : Pétrole WTI (CL)",
-        "n": 20,
-        "mean_net_r": 0.0389,
+        "n": 21,
+        "mean_net_r": 0.0873,
         "promoted": false,
-        "missing": 80
+        "missing": 79
       },
       "essai_euro": {
         "label": "nouvel actif : Euro / dollar (6E)",
@@ -6410,13 +6376,13 @@
       "mean_net_r": -0.045
     },
     "promoted_variants": [],
-    "updated_at": "2026-09-29T18:50:33.508693+00:00"
+    "updated_at": "2026-09-29T19:50:39.560280+00:00"
   },
   "state": {
-    "last_scan": "2026-09-29T19:45:38Z",
+    "last_scan": "2026-09-29T19:50:35Z",
     "last_scan_note": "0 signal(aux)",
     "last_summary": "2026-09-28T22:05:26Z",
-    "last_track": "2026-09-29T19:45:38Z",
+    "last_track": "2026-09-29T19:50:35Z",
     "last_summary_day": "2026-09-28"
   },
   "limits": {
