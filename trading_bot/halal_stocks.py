@@ -78,7 +78,7 @@ def yahoo_ticker(ticker: str, exchange: str) -> str | None:
 
 def parse_holdings(text: str) -> list[dict[str, Any]]:
     """Fichier CSV d'iShares : quelques lignes d'en-tête, puis le tableau des positions."""
-    lines = text.splitlines()
+    lines = text.lstrip("\ufeff").replace("\xa0", " ").splitlines()
     start = next((i for i, ln in enumerate(lines) if ln.startswith("Ticker") or ln.startswith('"Ticker"')), None)
     if start is None:
         raise ProviderError("composition iShares : tableau introuvable")
@@ -101,15 +101,31 @@ def parse_holdings(text: str) -> list[dict[str, Any]]:
 
 
 def fetch_holdings() -> list[dict[str, Any]]:
-    url = FALLBACK_CSV
-    try:
-        page = get_text(PRODUCT_URL, timeout=20)
-        m = re.search(r'href="([^"]+\.ajax\?fileType=csv&(?:amp;)?fileName=[^"]*_holdings&(?:amp;)?dataType=fund)"', page)
-        if m:
-            url = "https://www.ishares.com" + m.group(1).replace("&amp;", "&")
-    except ProviderError as exc:
-        log.warning("page iShares indisponible (%s) : lien de téléchargement par défaut", exc)
-    return parse_holdings(get_text(url, timeout=30))
+    """Composition de l'ETF : lien trouvé sur la page du fonds, sinon liens connus (site particulier et
+    professionnel, avec passage direct de la page d'avertissement d'iShares)."""
+    pass_ = "siteEntryPassthrough=true"
+    candidates = []
+    for base in (PRODUCT_URL, PRODUCT_URL.replace("/individual/", "/professional/")):
+        try:
+            page = get_text(f"{base}?{pass_}", timeout=20)
+            m = re.search(r'href="([^"]+\.ajax\?fileType=csv&(?:amp;)?fileName=[^"]*_holdings&(?:amp;)?dataType=fund)"', page)
+            if m:
+                candidates.append("https://www.ishares.com" + m.group(1).replace("&amp;", "&") + "&" + pass_)
+        except ProviderError as exc:
+            log.warning("page iShares indisponible (%s)", exc)
+        candidates.append(base + "/1506575576011.ajax?fileType=csv&fileName=ISWD_holdings&dataType=fund&" + pass_)
+    last: Exception | None = None
+    for url in dict.fromkeys(candidates):
+        try:
+            text = get_text(url, timeout=30)
+            rows = parse_holdings(text)
+            if rows:
+                return rows
+        except ProviderError as exc:
+            last = exc
+            snippet = re.sub(r"\s+", " ", locals().get("text", "")[:200])
+            log.warning("composition iShares illisible (%s) : %s… [%s]", url.split("?")[0][-60:], exc, snippet)
+    raise ProviderError(f"composition iShares indisponible : {last}")
 
 
 # ------------------------------------------------------------------ séries
