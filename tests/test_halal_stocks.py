@@ -78,3 +78,10 @@ def test_invesco_fallback_maps_isin_to_yahoo(monkeypatch):
     monkeypatch.setattr(http, "get_json", lambda url, params=None, **kw: payload if "invesco" in url else search[params["q"]])
     rows = hs.invesco_holdings(pause=0)
     assert [(r["yahoo"], r["weight"]) for r in rows] == [("ALP", 4.2), ("BET.DE", 1.5)]      # cotation principale d'abord
+
+
+def test_sector_cap_limits_the_pocket_to_three_per_sector():
+    table = [{"key": f"T{i}", "rank": i + 1, "trend": True, "mom": 1 - i / 100} for i in range(20)]
+    sectors = {f"T{i}": ("Tech" if i < 8 else f"Autre{i}") for i in range(20)}
+    picks = hs.select(table, [], 10, sectors=sectors)
+    assert sum(1 for p in picks if sectors[p] == "Tech") == 3 and len(picks) == 10

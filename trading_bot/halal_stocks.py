@@ -6,8 +6,8 @@ les 150 plus grosses. Chaque semaine :
   - historique mensuel de chaque action (Yahoo), converti en euros ;
   - règle « momentum 12-1 » : hausse sur 12 mois sans le dernier mois (effet documenté depuis les
     années 1990), avec un filtre de tendance (prix au-dessus de sa moyenne sur 10 mois).
-    Les 10 meilleures forment la poche ; une action détenue n'est remplacée que si elle sort du
-    top 20 ou perd sa tendance (moins d'allers-retours, moins de frais) ;
+    Les 10 meilleures forment la poche, 3 au plus par secteur ; une action détenue n'est remplacée
+    que si elle sort du top 20 ou perd sa tendance (moins d'allers-retours, moins de frais) ;
   - backtest de la règle, mois par mois, contre l'ETF Monde islamique, frais de rotation compris.
     Biais connu : l'univers est la composition d'aujourd'hui (les entreprises sorties de l'indice
     ne sont pas rejouées), ce qui flatte un peu le résultat : c'est affiché.
@@ -35,6 +35,7 @@ log = logging.getLogger(__name__)
 UNIVERSE_SIZE = 150
 TOP_N = 10
 KEEP_RANK = 20
+SECTOR_CAP = 3                  # au plus 3 actions d'un même secteur : la poche ne doit pas être un pari sur un seul thème
 COST_PER_TURNOVER = 0.003       # 0,3 % par euro échangé (courtage, écart, change)
 REFRESH_DAYS = 7
 
@@ -47,6 +48,7 @@ EXCHANGES = [
     (r"copenhagen", ".CO"), (r"stockholm|nasdaq omx nordic", ".ST"), (r"helsinki", ".HE"), (r"oslo", ".OL"),
     (r"singapore", ".SI"), (r"tel aviv", ".TA"), (r"new zealand", ".NZ"), (r"wiener|vienna", ".VI"), (r"irish|dublin", ".IR"),
 ]
+RULES = {"top_n": TOP_N, "keep_rank": KEEP_RANK, "cost": COST_PER_TURNOVER, "sector_cap": SECTOR_CAP}
 FX_PAIRS = {c: f"EUR{c}=X" for c in ("USD", "GBP", "JPY", "CHF", "CAD", "AUD", "DKK", "SEK", "NOK", "HKD", "SGD", "ILS", "NZD")}
 
 
@@ -227,20 +229,35 @@ def momentum_table(series: dict[str, list[tuple[str, float]]], month: str) -> li
     return out
 
 
-def select(table: list[dict[str, Any]], held: list[str], n: int = TOP_N, keep_rank: int = KEEP_RANK) -> list[str]:
-    """Garde les actions détenues encore dans le top `keep_rank` avec leur tendance, complète par les meilleures."""
+def select(table: list[dict[str, Any]], held: list[str], n: int = TOP_N, keep_rank: int = KEEP_RANK,
+           sectors: dict[str, str] | None = None, cap: int = SECTOR_CAP) -> list[str]:
+    """Garde les actions détenues encore dans le top `keep_rank` avec leur tendance, complète par les meilleures,
+    sans dépasser `cap` actions d'un même secteur."""
+    sectors = sectors or {}
     by = {r["key"]: r for r in table}
-    kept = [k for k in held if k in by and by[k]["rank"] <= keep_rank and by[k]["trend"]]
+    kept: list[str] = []
+    count: dict[str, int] = {}
+
+    def add(k: str) -> None:
+        sec = sectors.get(k, "")
+        if sec and count.get(sec, 0) >= cap:
+            return
+        kept.append(k)
+        if sec:
+            count[sec] = count.get(sec, 0) + 1
+
+    for k in sorted((k for k in held if k in by and by[k]["rank"] <= keep_rank and by[k]["trend"]), key=lambda k: by[k]["rank"]):
+        add(k)
     for r in table:
         if len(kept) >= n:
             break
         if r["trend"] and r["key"] not in kept:
-            kept.append(r["key"])
+            add(r["key"])
     return kept[:n]
 
 
 def backtest(series: dict[str, list[tuple[str, float]]], bench: list[tuple[str, float]] | None,
-             n: int = TOP_N) -> dict[str, Any] | None:
+             n: int = TOP_N, sectors: dict[str, str] | None = None) -> dict[str, Any] | None:
     """Rejoue la règle chaque mois : poche équipondérée, rendement du mois suivant, frais de rotation."""
     months = sorted({m for s in series.values() for m, _ in s})
     maps = {k: dict(s) for k, s in series.items()}
@@ -251,7 +268,7 @@ def backtest(series: dict[str, list[tuple[str, float]]], bench: list[tuple[str, 
         table = momentum_table(series, a)
         if len(table) < 3 * n:
             continue
-        new = select(table, held, n)
+        new = select(table, held, n, sectors=sectors)
         if not new:
             continue
         turnover = len(set(new) - set(held)) / n if held else 1.0
@@ -316,7 +333,8 @@ def build(bench: list[tuple[str, float]] | None, now: datetime | None = None,
     except (OSError, ValueError):
         pass
     fresh = cache.get("updated_at") and now - parse_iso(cache["updated_at"]) < timedelta(days=REFRESH_DAYS)
-    if fresh and not force and cache.get("result"):
+    same_rules = (cache.get("result") or {}).get("rules") == RULES
+    if fresh and same_rules and not force and cache.get("result"):
         return cache["result"]
 
     holdings, source = None, "composition de l'ETF"
@@ -363,7 +381,8 @@ def build(bench: list[tuple[str, float]] | None, now: datetime | None = None,
     last = sorted({s[-1][0] for s in series.values()})
     month = st.median_low(last)
     table = momentum_table(series, month)
-    picks = select(table, [], TOP_N)
+    sectors = {k: meta[k].get("sector", "") for k in series}
+    picks = select(table, [], TOP_N, sectors=sectors)
     by = {r["key"]: r for r in table}
 
     def row(k):
@@ -375,12 +394,12 @@ def build(bench: list[tuple[str, float]] | None, now: datetime | None = None,
     result = {
         "updated_at": iso(now), "source": source, "universe_n": len(universe), "priced_n": len(series),
         "missing": missing[:40], "month": month,
-        "rules": {"top_n": TOP_N, "keep_rank": KEEP_RANK, "cost": COST_PER_TURNOVER},
+        "rules": RULES,
         "picks": [row(k) for k in picks],
         "ranked": [row(r["key"]) for r in table[:40]],
         "keep": [r["key"] for r in table if r["rank"] <= KEEP_RANK and r["trend"]],
         "prices": {k: {"name": meta[k]["name"], "price_eur": round(s[-1][1], 4)} for k, s in series.items()},
-        "backtest": backtest(series, bench),
+        "backtest": backtest(series, bench, sectors=sectors),
     }
     cdir.mkdir(parents=True, exist_ok=True)
     cache_file.write_text(json.dumps({"updated_at": iso(now), "holdings": holdings, "result": result},
