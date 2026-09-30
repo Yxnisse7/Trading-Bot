@@ -426,6 +426,10 @@ Pas du trading : de l'investissement halal à long terme. Page `investissement.h
   islamique, frais de rotation compris (0,3 % par achat ou vente) ; biais affiché : l'univers est la
   composition actuelle de l'indice. La page conseille la poche (20 % par défaut, 30 % au plus)
   seulement si la règle a battu l'ETF sur l'historique ; sinon 0 %.
+- **Modes de révision**, rejoués avec de vrais montants (200 € puis 20 €/mois dans la poche, achats en
+  plan gratuits, 1 € par vente, 31,4 % d'impôt sur chaque vente en gain) : chaque mois, tous les 3 mois,
+  ou sans jamais vendre (les versements vont aux meilleures actions du moment). Comparés à l'ETF Monde
+  islamique avec les mêmes versements, sur la valeur nette si tout était vendu à la fin.
 - **Mon portefeuille et plan du mois** : on saisit ses lignes (ETF ou actions, quantité, prix d'achat
   facultatif) ; la page donne la valeur, la plus-value, et **combien verser sur chaque ligne ce mois-ci**
   pour se rapprocher des parts visées (portefeuille type + poche actions), sans rien vendre. Les

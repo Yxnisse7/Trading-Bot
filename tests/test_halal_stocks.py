@@ -62,6 +62,11 @@ def test_backtest_and_weekly_cache(tmp_path):
     assert res["priced_n"] == 40 and len(res["picks"]) == 10 and res["picks"][0]["yahoo"] == "S39"
     bt = res["backtest"]
     assert bt and bt["months"] >= 24 and bt["bench_cagr"] is not None and 0 <= bt["beat_12m"] <= 1
+    modes = res["modes"]["modes"]
+    assert set(modes) == {"mensuelle", "trimestrielle", "sans_vente", "etf"}
+    assert modes["sans_vente"]["sales"] == 0 and modes["sans_vente"]["taxes"] == 0
+    assert modes["trimestrielle"]["sales"] <= modes["mensuelle"]["sales"]
+    assert all(abs(m["invested"] - modes["etf"]["invested"]) < 1e-6 for m in modes.values())
     n = calls["n"]
     again = hs.build(bench, NOW, fetch_monthly=fetch, holdings_fn=lambda: holdings, cache_dir=tmp_path, pause=0)
     assert again == res and calls["n"] == n                      # moins d'une semaine : cache, aucun appel

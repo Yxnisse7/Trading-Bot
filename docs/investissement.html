@@ -56,7 +56,7 @@
   .pf-actions button { padding: 8px 12px; font-size: 13px; }
   .plan td b { font-variant-numeric: tabular-nums; }
   @media (max-width: 980px) { .bt-grid { grid-template-columns: minmax(0, 1fr); } .bt-grid > div { min-width: 0; } }
-  @media (max-width: 760px) { .pf-set { grid-template-columns: 1fr; } #pf th:nth-child(3), #pf td:nth-child(3), #pf th:nth-child(5), #pf td:nth-child(5) { display: none; }
+  @media (max-width: 760px) { #modes th:nth-child(2), #modes td:nth-child(2), #modes th:nth-child(4), #modes td:nth-child(4), #modes th:nth-child(7), #modes td:nth-child(7) { display: none; } .pf-set { grid-template-columns: 1fr; } #pf th:nth-child(3), #pf td:nth-child(3), #pf th:nth-child(5), #pf td:nth-child(5) { display: none; }
     #plan th:nth-child(2), #plan td:nth-child(2), #plan th:nth-child(3), #plan td:nth-child(3) { display: none; }
     #picks th:nth-child(3), #picks td:nth-child(3), #picks th:nth-child(4), #picks td:nth-child(4), #picks th:nth-child(6), #picks td:nth-child(6) { display: none; } }
   @media (max-width: 980px) { .models, .principles { grid-template-columns: 1fr; } .sim { grid-template-columns: 1fr; } }
@@ -88,6 +88,7 @@
 
   <h2 id="poche" data-hint="actions halal choisies par une règle testée">Poche offensive : actions halal</h2>
   <div class="card" id="stocks-bt"><span class="sk t" style="width:70%"></span></div>
+  <div class="card" id="modes" style="margin-top:16px"></div>
   <div class="card tbl" style="margin-top:16px">
     <div class="card-head" style="padding:0 0 10px"><div><h3>Les 10 actions de la poche ce mois-ci</h3><div class="sub" id="picks-note">Classées par hausse sur 12 mois (sans le dernier mois), tendance longue haussière</div></div></div>
     <table id="picks"><thead><tr><th class="num">Rang</th><th>Entreprise</th><th>Secteur</th><th>Pays</th><th class="num">12 mois</th><th class="num">Dernier mois</th><th>Ticker</th></tr></thead><tbody></tbody></table>
@@ -281,9 +282,28 @@
       </div><div class="chart" id="bt-curve"></div></div>`
       : `<div class="muted">Historique trop court pour rejouer la règle (au moins 2 ans nécessaires).</div>`;
     if (b) drawBt(b);
+    renderModes(st.modes);
     $("#picks-note").textContent = `Classement de ${month(st.month)} · ${st.priced_n} entreprises cotées sur ${st.universe_n} (${st.source}) · ${st.rules.sector_cap || 3} actions au plus par secteur · une action détenue n'est à remplacer que si elle sort du top ${st.rules.keep_rank} ou perd sa tendance`;
     $("#picks tbody").innerHTML = st.picks.map((x) => `<tr><td class="num">${x.rank}</td><td class="nowrap"><b style="font-weight:500">${esc(x.name)}</b></td><td class="muted">${esc(x.sector)}</td><td class="muted">${esc(x.country)}</td>
       <td class="num ${Y.tone(x.mom)}">${pct(x.mom, 0)}</td><td class="num ${Y.tone(x.r1m)}">${pct(x.r1m, 1)}</td><td class="mono muted" style="font-size:12px">${esc(x.yahoo)}</td></tr>`).join("");
+  }
+
+  function renderModes(md) {
+    const box = $("#modes");
+    if (!md) { box.innerHTML = `<div class="muted">La comparaison des modes de révision apparaît au prochain calcul hebdomadaire.</div>`; return; }
+    const m = md.modes, keys = ["mensuelle", "trimestrielle", "sans_vente"];
+    const best = keys.reduce((a, k) => (m[k].net_if_sold > m[a].net_if_sold ? k : a), keys[0]);
+    const names = { mensuelle: "Chaque mois", trimestrielle: "Tous les 3 mois", sans_vente: "Sans vente", etf: "ETF Monde islamique" };
+    const row = (k) => { const x = m[k], g = x.net_if_sold - x.invested;
+      return `<tr${k === best ? ' style="background:var(--up-soft)"' : ""}><td><b style="font-weight:600">${names[k]}</b>${k === best ? ` <span class="pill up" style="font-size:11px">le meilleur</span>` : ""}<div class="muted" style="font-size:12px">${esc(x.label)}</div></td>
+        <td class="num ${Y.tone(x.twr)}">${pct(x.twr)}</td><td class="num dn">${pct(x.max_dd, 0)}</td><td class="num">${eur(x.value)}</td>
+        <td class="num"><b class="${Y.tone(g)}">${eur(x.net_if_sold)}</b><div class="muted" style="font-size:12px">${g >= 0 ? "+" : ""}${eur(g)}</div></td>
+        <td class="num">${x.sales}</td><td class="num muted">${eur(x.fees + x.taxes)}</td></tr>`; };
+    box.innerHTML = `<div class="card-head" style="padding:0 0 10px"><div><h3>Modes de révision, avec vos montants</h3>
+      <div class="sub">${eur(md.init)} au départ puis ${eur(md.monthly)} par mois dans la poche, de ${month(md.start)} à ${month(md.end)} : ${eur(md.init + md.monthly * (md.months - 1))} versés. Achats en plan d'investissement (gratuits), ${eur(md.fee)} par vente, impôt de ${Y.num(md.tax * 100, 1)} % sur chaque vente en gain.</div></div></div>
+      <div class="tbl"><table><thead><tr><th>Mode</th><th class="num">Rendement / an</th><th class="num">Pire baisse</th><th class="num">Valeur finale</th><th class="num">Net si tout vendu</th><th class="num">Ventes</th><th class="num">Frais et impôts payés</th></tr></thead>
+      <tbody>${keys.map(row).join("")}${row("etf")}</tbody></table></div>
+      <div class="muted" style="font-size:12px;margin-top:8px">« Net si tout vendu » : ce qui resterait après avoir tout vendu à la fin et payé l'impôt sur les gains : c'est la colonne à comparer. Mêmes limites que le backtest ci-dessus (composition actuelle de l'indice, période de forte hausse des semi-conducteurs).</div>`;
   }
   function drawBt(b) {
     const root = $("#bt-curve"), c = b.curve, W = Math.max(300, root.clientWidth || 600), H = 220, left = 4, right = 70, top = 10, bottom = 22;

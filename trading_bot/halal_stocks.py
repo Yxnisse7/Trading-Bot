@@ -48,7 +48,7 @@ EXCHANGES = [
     (r"copenhagen", ".CO"), (r"stockholm|nasdaq omx nordic", ".ST"), (r"helsinki", ".HE"), (r"oslo", ".OL"),
     (r"singapore", ".SI"), (r"tel aviv", ".TA"), (r"new zealand", ".NZ"), (r"wiener|vienna", ".VI"), (r"irish|dublin", ".IR"),
 ]
-RULES = {"top_n": TOP_N, "keep_rank": KEEP_RANK, "cost": COST_PER_TURNOVER, "sector_cap": SECTOR_CAP}
+RULES = {"top_n": TOP_N, "keep_rank": KEEP_RANK, "cost": COST_PER_TURNOVER, "sector_cap": SECTOR_CAP, "modes": 1}
 FX_PAIRS = {c: f"EUR{c}=X" for c in ("USD", "GBP", "JPY", "CHF", "CAD", "AUD", "DKK", "SEK", "NOK", "HKD", "SGD", "ILS", "NZD")}
 
 
@@ -317,6 +317,103 @@ def backtest(series: dict[str, list[tuple[str, float]]], bench: list[tuple[str, 
     }
 
 
+
+# ------------------------------------------------------------------ modes de révision (avec vos montants)
+MODES = {
+    "mensuelle": "Révision chaque mois : une action sortie du top 20 (ou sans tendance) est vendue et remplacée",
+    "trimestrielle": "Révision tous les 3 mois (janvier, avril, juillet, octobre) ; entre deux, on garde les mêmes",
+    "sans_vente": "Jamais de vente : chaque versement va aux meilleures actions du moment, les anciennes restent",
+}
+SIM_INIT, SIM_MONTHLY, SIM_FEE, SIM_TAX = 200.0, 20.0, 1.0, 0.314
+
+
+def simulate_modes(series: dict[str, list[tuple[str, float]]], bench: list[tuple[str, float]] | None,
+                   sectors: dict[str, str] | None = None, init: float = SIM_INIT, monthly: float = SIM_MONTHLY,
+                   fee: float = SIM_FEE, tax: float = SIM_TAX, n: int = TOP_N) -> dict[str, Any] | None:
+    """Rejoue les trois modes avec de vrais montants : versement initial puis mensuel, achats en plan
+    d'investissement (gratuits), 1 € par vente, impôt sur chaque vente en gain (sans compensation des
+    pertes : prudent). L'ETF Monde islamique reçoit les mêmes versements, pour comparer."""
+    months = sorted({m for s in series.values() for m, _ in s})
+    maps = {k: dict(s) for k, s in series.items()}
+    bmap = dict(bench or [])
+    steps = [(a, b) for a, b in zip(months, months[1:]) if len(momentum_table(series, a)) >= 3 * n]
+    if len(steps) < 24:
+        return None
+
+    def run(mode: str) -> dict[str, Any]:
+        pos: dict[str, dict[str, float]] = {}          # action -> {"value", "cost"}
+        invested = sales = fees = taxes = 0.0
+        idx, peak, worst, prev_unit = 1.0, 1.0, 0.0, None
+        for i, (a, b) in enumerate(steps):
+            table = momentum_table(series, a)
+            held = [k for k in pos if pos[k]["value"] > 0]
+            if mode == "sans_vente":
+                picks = select(table, [], n, sectors=sectors)
+            elif mode == "trimestrielle" and i % 3 and held:
+                picks = held
+            else:
+                picks = select(table, held, n, sectors=sectors)
+            cash = init if i == 0 else monthly
+            invested += cash
+            if mode != "sans_vente":
+                for k in [k for k in held if k not in picks]:
+                    p = pos.pop(k)
+                    gain = p["value"] - p["cost"]
+                    t = max(0.0, gain) * tax
+                    cash += p["value"] - fee - t
+                    sales += 1
+                    fees += fee
+                    taxes += t
+            # versement : d'abord aux actions retenues les plus en retard (parts égales visées)
+            if picks:
+                target = (sum(pos[k]["value"] for k in pos if k in picks) + cash) / len(picks)
+                need = {k: max(0.0, target - pos.get(k, {"value": 0.0})["value"]) for k in picks}
+                tot = sum(need.values())
+                for k in picks:
+                    add = cash * (need[k] / tot if tot else 1 / len(picks))
+                    if add > 0:
+                        q = pos.setdefault(k, {"value": 0.0, "cost": 0.0})
+                        q["value"] += add
+                        q["cost"] += add
+            before = sum(p["value"] for p in pos.values())
+            for k, p in pos.items():
+                if a in maps[k] and b in maps[k]:
+                    p["value"] *= maps[k][b] / maps[k][a]
+            after = sum(p["value"] for p in pos.values())
+            if before > 0:
+                idx *= after / before
+                peak = max(peak, idx)
+                worst = min(worst, idx / peak - 1)
+        value = sum(p["value"] for p in pos.values())
+        latent = sum(max(0.0, p["value"] - p["cost"]) for p in pos.values())
+        years = len(steps) / 12
+        return {"label": MODES[mode], "value": round(value, 2), "invested": round(invested, 2),
+                "net_if_sold": round(value - latent * tax - fee * len(pos), 2), "sales": int(sales),
+                "fees": round(fees, 2), "taxes": round(taxes, 2), "lines": len(pos),
+                "twr": idx ** (1 / years) - 1, "max_dd": worst}
+
+    out = {m: run(m) for m in MODES}
+    # l'ETF avec les mêmes versements, jamais vendu
+    v = cost = 0.0
+    idx, peak, worst = 1.0, 1.0, 0.0
+    for i, (a, b) in enumerate(steps):
+        c = init if i == 0 else monthly
+        v += c
+        cost += c
+        if a in bmap and b in bmap:
+            r = bmap[b] / bmap[a]
+            v *= r
+            idx *= r
+            peak = max(peak, idx)
+            worst = min(worst, idx / peak - 1)
+    years = len(steps) / 12
+    out["etf"] = {"label": "ETF Monde islamique, mêmes versements, jamais vendu", "value": round(v, 2),
+                  "invested": round(cost, 2), "net_if_sold": round(v - max(0.0, v - cost) * tax - fee, 2),
+                  "sales": 0, "fees": 0.0, "taxes": 0.0, "lines": 1, "twr": idx ** (1 / years) - 1, "max_dd": worst}
+    return {"start": steps[0][0], "end": steps[-1][1], "months": len(steps), "init": init, "monthly": monthly,
+            "fee": fee, "tax": tax, "modes": out}
+
+
 # ------------------------------------------------------------------ assemblage
 def build(bench: list[tuple[str, float]] | None, now: datetime | None = None,
           fetch_monthly: Callable | None = None, holdings_fn: Callable = fetch_holdings,
@@ -400,6 +497,7 @@ def build(bench: list[tuple[str, float]] | None, now: datetime | None = None,
         "keep": [r["key"] for r in table if r["rank"] <= KEEP_RANK and r["trend"]],
         "prices": {k: {"name": meta[k]["name"], "price_eur": round(s[-1][1], 4)} for k, s in series.items()},
         "backtest": backtest(series, bench, sectors=sectors),
+        "modes": simulate_modes(series, bench, sectors=sectors),
     }
     cdir.mkdir(parents=True, exist_ok=True)
     cache_file.write_text(json.dumps({"updated_at": iso(now), "holdings": holdings, "result": result},
