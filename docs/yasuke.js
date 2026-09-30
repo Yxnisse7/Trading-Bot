@@ -90,13 +90,13 @@
 
   // ------------------------------------------------------------------ en-tête, onglets, navigation du bas
   const PAGES = [["dashboard", "index.html", "Tableau de bord", "Tableau", "home"], ["simulation", "portfolio.html", "Simulation", "Simulation", "wallet"],
-                 ["learning", "apprentissage.html", "Apprentissage", "Apprendre", "learn"], ["halal", "halal.html", "Halal", "Halal", "crescent"],
+                 ["learning", "apprentissage.html", "Apprentissage", "Apprendre", "learn"], ["invest", "investissement.html", "Investir", "Investir", "crescent"],
                  ["topstep", "topstep.html", "Topstep", "Topstep", "flag"]];
   function header(page) {
     const host = document.getElementById("yk-header");
     if (!host) return;
     const onDash = page === "dashboard";
-    const trade = page === "halal" ? "" : onDash ? `<button type="button" id="btn-trade">${I.plus}<span class="btn-lbl">Nouveau trade</span></button>`
+    const trade = page === "invest" ? "" : onDash ? `<button type="button" id="btn-trade">${I.plus}<span class="btn-lbl">Nouveau trade</span></button>`
                          : `<a class="btn" id="btn-trade" href="index.html#trade">${I.plus}<span class="btn-lbl">Nouveau trade</span></a>`;
     host.className = "yk-top";
     host.innerHTML = `<div class="yk-top-in">

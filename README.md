@@ -390,34 +390,35 @@ Mêmes règles que le site (`trading_bot/messages.py`) : nombres à la français
   (« 3e gain d'affilée »).
 - Si Telegram refuse la mise en forme, le message repart aussitôt en texte brut.
 
-### Mode halal (avis malikite)
-Un **second bot, entièrement séparé** du bot principal, qui ne propose que des trades conformes à
-l'avis majoritaire, et à l'avis malikite en particulier. Page du site : `halal.html` (onglet « Halal »).
+### Investir halal (onglet « Investir »)
+Pas du trading : de l'investissement halal à long terme. Page `investissement.html` (l'ancienne page
+`halal.html` y redirige), données mises à jour chaque jour à 06:30 UTC par le workflow
+« Investissement halal — mise à jour » (`python run.py invest`, module `invest.py`), publiées dans
+`docs/invest/data.json`. Aucun ordre, aucun message Telegram.
 
-- **Achat seulement** : aucune vente à découvert (vendre ce qu'on ne possède pas est interdit). Quand
-  la tendance baisse, il s'abstient.
-- **Au comptant, sans levier** : la simulation n'engage jamais plus que les liquidités disponibles ; sans
-  liquidités pour une part, le trade n'est pas pris.
-- **Actifs au comptant** : ETF USA islamique (ISDU, MSCI USA Islamic, l'équivalent halal du Nasdaq et
-  du S&P 500), ETF Monde islamique (ISDW), or physique Royal Mint (RMAU, endossé conforme par Amanie
-  Advisors), Bitcoin et Ethereum au comptant (avis divergents : à voir avec un savant). **Aucun contrat
-  à terme** (prix et marchandise reportés tous les deux), aucun CFD, aucune option.
-- **Trades plus longs** : bougie de base 1 h, horizon ~12 h, analyse toutes les 15 min. Sans levier, un
-  scalp ne couvre pas les frais.
-- **Frais réels** : écart acheteur-vendeur, plus 1 € par ordre pour les ETF (courtier type Trade Republic).
+- **Produits** (tous au comptant, cherchables par ISIN chez Trade Republic, Degiro ou Interactive
+  Brokers, en compte-titres : non éligibles au PEA) : iShares MSCI World Islamic (IE00B27YCN58),
+  Invesco MSCI ACWI Islamic (IE000LFC57H7), iShares MSCI USA Islamic (IE00B296QM64), iShares MSCI EM
+  Islamic (IE00B27YCP72), Invesco Dow Jones Islamic Global Developed (IE000UOXRAM8), Wahed S&P 500
+  Shariah (IE000QF8TEK7), HSBC Global Sukuk (IE000E8WZD37), Royal Mint Physical Gold (XS2115336336,
+  certifié charia par Amanie Advisors).
+- **Chiffres en euros** (historique mensuel Yahoo, dividendes réinvestis quand disponibles, dollars et
+  pence convertis) : rendements sur 1, 5 et 10 ans, volatilité, pire baisse, et pour chaque durée de
+  détention la part des périodes gagnantes. **Durée conseillée** = plus courte durée gagnante au moins
+  95 % du temps. Produit trop récent : historique de référence du même marché (MSCI World Islamic,
+  USA Islamic, prix de l'or), affiché comme tel.
+- **Portefeuilles types** (prudent, équilibré, dynamique) simulés avec rééquilibrage mensuel ; un
+  produit de moins de 3 ans d'historique (sukuk) est retiré de la simulation et signalé.
+- **Simulateur** : mise de départ, versement mensuel et durée ; cas défavorable, médian et favorable
+  tirés des périodes réelles de l'historique (10 %, 50 %, 90 %).
+- **Avis par règles affichées** : tendance longue (prix contre moyenne sur 10 mois), distance au plus
+  haut et ce qu'ont donné dans le passé les achats pendant une baisse de 10 % ou plus. Pas un conseil
+  personnalisé.
+- **Actualités** : finance islamique, ETF islamiques, sukuk, or, marchés (Google Actualités, 10 jours).
+- Fiscalité 2026 rappelée (flat tax 31,4 %), purification des dividendes, compte au comptant.
 
-Séparation complète : données dans `data/halal/` (signaux, historique, apprentissage, simulation, état,
-numéros des messages), copie publiée dans `docs/halal/`, messages Telegram marqués 🌙 (signaux, issues,
-résumé quotidien à part). Il ne lit jamais les commandes Telegram (le bot principal s'en charge), n'a ni
-fantômes ni variantes, et apprend de ses seuls trades. Il tourne dans une étape à part du workflow
-« tick », après le bot principal : si elle échoue, le bot principal n'est pas touché. Les options qu'il
-utilise (`long_only`, `cash_only`, `scan_bases`, `scan_days`, `fee_per_order`) sont désactivées par
-défaut : le bot principal garde exactement son comportement.
-
-Commandes : `python run.py --halal tick | summary | status | portfolio --balance 1000 | backtest --days 60 |
-check-data`. Sur GitHub, le workflow « Trading bot — mode halal » (lancé à la main) vérifie les données
-(`check-data`), définit la balance (`portfolio`) ou relance un backtest ; il rejoue aussi la stratégie
-chaque dimanche soir. Réglages : `config.halal.json` (facultatif, même format que `config.json`).
+L'ancien **mode halal de trading** (second bot, `data/halal`) est arrêté : ses étapes ne tournent
+plus que si la variable de dépôt `HALAL_TRADING` vaut `on`. Le code et les données sont gardés.
 
 ### Positions ouvertes : estimation et arrêt manuel
 Sur le tableau de bord, la simulation et la page halal, chaque position ouverte affiche une

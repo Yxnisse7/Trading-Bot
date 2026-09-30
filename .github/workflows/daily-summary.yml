@@ -33,6 +33,7 @@ jobs:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
         run: bash scripts/run_and_push.sh python run.py summary
       - name: Résumé du mode halal (bot séparé)
+        if: ${{ vars.HALAL_TRADING == 'on' }}
         continue-on-error: true
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}

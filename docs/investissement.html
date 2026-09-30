@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Yasuke · Investir halal</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="yasuke.css?v=d5a113ef83">
+<script>try { const t = localStorage.getItem("tb-theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}</script>
+<style>
+  .principles { display: grid; gap: 14px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .principles div { display: grid; gap: 4px; font-size: 14px; }
+  .principles b { font-size: 15px; }
+  .models { display: grid; gap: 16px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .model { display: grid; gap: 12px; align-content: start; }
+  .model h3 { margin: 0; font-size: 18px; }
+  .alloc { display: flex; height: 10px; border-radius: 999px; overflow: hidden; background: var(--soft); }
+  .alloc i { display: block; height: 100%; }
+  .alloc-leg { display: flex; flex-wrap: wrap; gap: 6px 12px; font-size: 12px; color: var(--muted); }
+  .alloc-leg span { display: inline-flex; align-items: center; gap: 5px; }
+  .alloc-leg i { width: 8px; height: 8px; border-radius: 2px; display: inline-block; }
+  .kv { display: grid; grid-template-columns: 1fr auto; gap: 6px 12px; font-size: 13px; }
+  .kv span:nth-child(odd) { color: var(--muted); }
+  .kv span:nth-child(even) { text-align: right; font-variant-numeric: tabular-nums; font-weight: 500; }
+  .sim { display: grid; gap: 16px; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); align-items: start; }
+  .sim form { display: grid; gap: 12px; }
+  .sim input[type=range] { padding: 0; border: 0; background: none; accent-color: var(--brand); }
+  .outcomes { display: grid; gap: 10px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .outcome { padding: 14px; border-radius: 14px; background: var(--soft); display: grid; gap: 4px; }
+  .outcome b { font-size: 22px; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+  .outcome small { color: var(--muted); }
+  .prods { display: grid; gap: 14px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .prod { display: grid; gap: 10px; align-content: start; }
+  .prod .top { display: flex; justify-content: space-between; gap: 10px; align-items: flex-start; }
+  .prod h3 { margin: 0; font-size: 16px; }
+  .prod .isin { font-family: "Geist Mono", ui-monospace, monospace; font-size: 12px; color: var(--muted); cursor: copy; }
+  .perf { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; font-size: 12px; }
+  .perf div { background: var(--soft); border-radius: 10px; padding: 8px; display: grid; gap: 2px; }
+  .perf b { font-size: 15px; font-variant-numeric: tabular-nums; }
+  .advice { font-size: 13px; }
+  .news { display: grid; gap: 0; }
+  .news a { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 4px 12px; padding: 12px 0; border-bottom: 1px solid var(--line); text-decoration: none !important; color: var(--text); }
+  .news a:last-child { border-bottom: 0; }
+  .news .when { font-size: 12px; color: var(--muted); font-family: "Geist Mono", ui-monospace, monospace; white-space: nowrap; }
+  .news .src { grid-column: 2; font-size: 12px; color: var(--muted); }
+  .rules2 { display: grid; gap: 20px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .rules2 ul { margin: 8px 0 0; padding-left: 18px; display: grid; gap: 6px; font-size: 14px; }
+  .rules2 h3 { margin: 0; font-size: 16px; }
+  @media (max-width: 980px) { .models, .principles { grid-template-columns: 1fr; } .sim { grid-template-columns: 1fr; } }
+  @media (max-width: 760px) { .prod .top { flex-direction: column; } .prods, .rules2 { grid-template-columns: 1fr; } .outcomes { grid-template-columns: 1fr; } .perf { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+</style>
+</head>
+<body data-page="invest">
+<header id="yk-header"></header>
+<div class="wrap">
+  <div class="pagehead">
+    <div><h1>Investir halal</h1><div class="sub" id="updated">Chargement…</div></div>
+    <div class="actions"><span class="faint">Long terme · aucun ordre passé</span><button class="btn-icon" id="btn-refresh" type="button" aria-label="Actualiser" title="Actualiser"></button></div>
+  </div>
+
+  <div class="note-box ok" style="margin-bottom:20px"><span id="ok-ic"></span><span>Pas du trading : des <b>ETF islamiques</b> (entreprises filtrées charia), des <b>sukuk</b> (obligations islamiques) et de l'<b>or physique</b>, achetés au comptant, sans levier, et gardés plusieurs années. Les chiffres sont en euros, frais du fonds compris, mis à jour chaque jour.</span></div>
+
+  <div class="card principles">
+    <div><b>1. Investir chaque mois</b><span class="muted">Le même montant, quel que soit le marché : on achète plus de parts quand c'est bas, moins quand c'est haut. Personne ne sait choisir le bon jour.</span></div>
+    <div><b>2. Garder longtemps</b><span class="muted">Les actions ont baissé certaines années, mais sur 7 à 10 ans l'historique est presque toujours gagnant. La durée conseillée de chaque produit est indiquée plus bas.</span></div>
+    <div><b>3. Rééquilibrer une fois par an</b><span class="muted">Revenir aux parts du portefeuille choisi. Deux à trois ans avant d'avoir besoin de l'argent, basculer peu à peu vers les sukuk et l'or.</span></div>
+  </div>
+
+  <h2 id="portefeuilles" data-hint="rééquilibrés chaque mois, historique en euros">Portefeuilles types</h2>
+  <div class="models" id="models"><div class="card"><span class="sk t" style="width:60%"></span><span class="sk t" style="width:80%"></span></div></div>
+  <div class="card" style="margin-top:16px">
+    <div class="card-head"><div><h3>Valeur de 10 000 € investis</h3><div class="sub" id="curve-note">Historique des portefeuilles types</div></div></div>
+    <div class="chart" id="curve"></div>
+  </div>
+
+  <h2 id="simulateur">Simulateur</h2>
+  <div class="card sim">
+    <form id="simf" autocomplete="off">
+      <div><label for="s-model">Portefeuille</label><select id="s-model"></select></div>
+      <div><label for="s-init">Mise de départ (€)</label><input id="s-init" inputmode="numeric" value="1000"></div>
+      <div><label for="s-month">Chaque mois (€)</label><input id="s-month" inputmode="numeric" value="100"></div>
+      <div><label for="s-years">Durée : <b id="s-years-v">10 ans</b></label><input id="s-years" type="range" min="1" max="25" value="10"></div>
+    </form>
+    <div>
+      <div class="outcomes" id="outcomes"></div>
+      <div class="muted" style="margin-top:12px;font-size:13px" id="sim-note"></div>
+    </div>
+  </div>
+
+  <h2 id="produits" data-hint="ISIN à copier dans votre courtier">Produits</h2>
+  <div class="prods" id="prods"></div>
+
+  <h2 id="actus" data-hint="finance islamique, sukuk, or, marchés">Actualités</h2>
+  <div class="card"><div class="news" id="news"></div></div>
+
+  <h2 id="comment" data-hint="courtier, fiscalité, purification">Où et comment investir</h2>
+  <div class="card">
+    <div class="rules2">
+      <div><h3>Courtier et compte</h3><ul>
+        <li><b>Compte-titres ordinaire (CTO)</b> : ces ETF sont irlandais et ne sont pas éligibles au PEA.</li>
+        <li><b>Trade Republic</b> (1 € par ordre, plans d'investissement mensuels), <b>Degiro</b>, ou <b>Interactive Brokers</b> (accès à toutes les cotations de Londres). Cherchez le produit par son ISIN.</li>
+        <li>Refusez le <b>prêt de titres</b> et la <b>marge</b> : compte au comptant uniquement.</li>
+        <li>Fiscalité 2026 : <b>flat tax de 31,4 %</b> sur les gains et les dividendes (12,8 % d'impôt et 18,6 % de prélèvements sociaux), payée à la vente ou au versement.</li>
+      </ul></div>
+      <div><h3>Rester halal</h3><ul>
+        <li><b>Purification</b> : donnez en aumône la part non conforme des dividendes (indiquée par le fonds, ou calculée par Zoya ou Musaffa) et les intérêts éventuels versés par le courtier sur l'argent non investi.</li>
+        <li>Préférez les ETF qui <b>détiennent vraiment les actions</b> (réplication physique) : c'est le cas de ceux listés ici.</li>
+        <li>Vérifiez de temps en temps la conformité : les filtres charia évoluent.</li>
+        <li>Les avis des savants diffèrent sur certains points (sukuk, part tolérée de revenus non conformes) : en cas de doute, demandez à un savant de confiance.</li>
+      </ul></div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <div>Informations générales, pas un conseil en investissement personnalisé. Les performances passées ne préjugent pas des performances futures : un investissement en actions peut perdre de la valeur. Avis par règles automatiques et affichées.</div>
+    <div>Données : Yahoo Finance (historique mensuel), Google Actualités.</div>
+  </div>
+</div>
+
+<div id="tip" role="tooltip"></div>
+<script src="yasuke.js?v=e005aaddec"></script>
+<script src="charts.js?v=232a285ab5"></script>
+<script src="sections.js?v=0d56d6cb86"></script>
+<script>
+(function () {
+  const Y = window.YK, $ = Y.$, esc = Y.esc;
+  $("#btn-refresh").innerHTML = Y.I.refresh; $("#ok-ic").innerHTML = Y.I.info;
+  const COLORS = { monde: "#2a78d6", emergents: "#e0913a", usa: "#7b61d9", sukuk: "#2aa876", or: "#c9a227", acwi: "#2a78d6" };
+  const NAMES = { monde: "Monde islamique", emergents: "Émergents islamiques", usa: "USA islamique", sukuk: "Sukuk", or: "Or physique" };
+  const TAGS = { "finance islamique": "brand", "ETF islamiques": "brand", "sukuk": "up", "or": "neu", "marchés": "neu" };
+  let data = null;
+  const pct = (v, d = 1) => v == null ? "n/a" : `${Y.signed(v * 100, d)}${Y.NB}%`;
+  const pctU = (v, d = 0) => v == null ? "n/a" : `${Y.num(v * 100, d)}${Y.NB}%`;
+  const eur = (v) => `${Y.num(Math.round(v), 0)}${Y.NB}€`;
+  const month = (m) => { const [y, mo] = m.split("-"); return new Date(+y, +mo - 1, 1).toLocaleDateString("fr-FR", { month: "short", year: "numeric" }); };
+
+  async function load() {
+    $("#updated").textContent = "Chargement…";
+    const [d, dash] = await Promise.all([Y.getJson("invest/data.json"), Y.getJson("dashboard.json")]);
+    data = d;
+    const st = dash && dash.state; Y.status(st ? [st.last_tick, st.last_scan].filter(Boolean).sort().pop() : null, st && st.last_scan_note);
+    if (!data) { $("#updated").textContent = "Les données arrivent au prochain passage quotidien (06:30 UTC)."; return; }
+    $("#updated").textContent = `Mis à jour le ${new Date(data.updated_at).toLocaleDateString("fr-FR", { day: "numeric", month: "long" })} à ${Y.hhmm(data.updated_at)} · prix mensuels convertis en euros`;
+    renderModels(); drawCurve(); setupSim(); renderProducts(); renderNews();
+  }
+
+  function renderModels() {
+    $("#models").innerHTML = Object.entries(data.models).map(([k, m]) => { const s = m.sim;
+      const bar = Object.entries(m.weights).map(([a, w]) => `<i style="flex:${w};background:${COLORS[a] || "var(--neu)"}" title="${esc(NAMES[a] || a)} ${Math.round(w * 100)} %"></i>`).join("");
+      const leg = Object.entries(m.weights).map(([a, w]) => `<span><i style="background:${COLORS[a] || "var(--neu)"}"></i>${esc(NAMES[a] || a)} ${Math.round(w * 100)}${Y.NB}%</span>`).join("");
+      const kv = s ? `<div class="kv"><span>Rendement annuel moyen</span><span class="${Y.tone(s.r_all)}">${pct(s.r_all)}</span>
+          <span>Sur 10 ans</span><span>${pct(s.r10)}</span><span>Sur 5 ans</span><span>${pct(s.r5)}</span>
+          <span>Variations (volatilité)</span><span>${pctU(s.vol)}</span><span>Pire baisse</span><span class="dn">${pct(s.max_dd, 0)}</span>
+          <span>Durée conseillée</span><span>${s.advised_years ? `${s.advised_years} ans et plus` : "n/a"}</span></div>
+          <div class="muted" style="font-size:12px">Depuis ${month(s.start)}${s.dropped && s.dropped.length ? ` · ${s.dropped.map((d) => NAMES[d] || d).join(", ")} trop récent${s.dropped.length > 1 ? "s" : ""} : retiré${s.dropped.length > 1 ? "s" : ""} de l'historique, les autres parts sont augmentées d'autant` : ""}${m.weights.or ? " · or : historique du prix de l'or" : ""}.</div>`
+        : `<div class="muted">Historique indisponible pour l'instant.</div>`;
+      return `<div class="card model"><div><h3>${esc(m.label)}</h3><div class="muted" style="font-size:13px">${esc(m.for)}</div></div>
+        <div class="alloc">${bar}</div><div class="alloc-leg">${leg}</div>${kv}</div>`; }).join("");
+  }
+
+  function drawCurve() {
+    const root = $("#curve"); root.replaceChildren();
+    const series = Object.entries(data.models).filter(([, m]) => m.sim && m.sim.curve && m.sim.curve.length > 2);
+    if (!series.length) { root.innerHTML = `<div class="empty">Pas encore d'historique.</div>`; return; }
+    const start = series.map(([, m]) => m.sim.curve[0][0]).sort().pop();       // période commune
+    const lines = series.map(([k, m]) => { const c = m.sim.curve.filter((p) => p[0] >= start); const b = c[0][1]; return [k, m.label, c.map((p) => [p[0], p[1] / b * 10000])]; });
+    const all = lines.flatMap((l) => l[2].map((p) => p[1])), months = [...new Set(lines.flatMap((l) => l[2].map((p) => p[0])))].sort();
+    const W = Math.max(320, root.clientWidth || 900), H = W < 500 ? 220 : 260, left = 4, right = 78, top = 10, bottom = 24;
+    const mn = Math.min(...all), mx = Math.max(...all), sp = mx - mn || 1;
+    const xi = (m) => left + months.indexOf(m) / Math.max(1, months.length - 1) * (W - left - right), y = (v) => top + (mx - v) / sp * (H - top - bottom);
+    const cols = { prudent: "#2aa876", equilibre: "#2a78d6", dynamique: "#7b61d9" };
+    const years = months.filter((m, i) => m.endsWith("-01") && (i === 0 || +m.slice(0, 4) % (months.length > 120 ? 3 : 1) === 0));
+    root.innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Valeur de 10 000 euros dans chaque portefeuille type">
+      ${[mx, (mx + mn) / 2, mn].map((v) => `<line x1="${left}" x2="${W - right}" y1="${y(v)}" y2="${y(v)}" stroke="var(--grid)" stroke-dasharray="2 4"/><text class="mono" x="${W - right + 8}" y="${y(v) + 4}" style="font-size:11px">${eur(v)}</text>`).join("")}
+      ${years.map((m) => `<text class="mono" x="${xi(m)}" y="${H - 6}" text-anchor="${xi(m) < 24 ? "start" : "middle"}" style="font-size:11px">${m.slice(0, 4)}</text>`).join("")}
+      ${lines.map(([k, , pts]) => `<path d="${pts.map((p, i) => `${i ? "L" : "M"}${xi(p[0]).toFixed(1)},${y(p[1]).toFixed(1)}`).join(" ")}" fill="none" stroke="${cols[k]}" stroke-width="2" stroke-linejoin="round"/>`).join("")}
+    </svg><div class="legend" style="margin-top:6px">${lines.map(([k, l, pts]) => `<span><i style="background:${cols[k]}"></i>${esc(l)} : ${eur(pts[pts.length - 1][1])}</span>`).join("")}</div>`;
+    $("#curve-note").textContent = `Depuis ${month(start)}, rééquilibrage mensuel, sans frais de courtage ni impôts`;
+  }
+
+  // Simulateur : versements mensuels, rendement annuel pris dans l'historique (10 % des cas les pires, médiane, 10 % les meilleurs)
+  function setupSim() {
+    const sel = $("#s-model");
+    if (!sel.options.length) {
+      sel.innerHTML = Object.entries(data.models).filter(([, m]) => m.sim).map(([k, m]) => `<option value="${k}"${k === "equilibre" ? " selected" : ""}>${esc(m.label)}</option>`).join("");
+      ["#s-model", "#s-init", "#s-month", "#s-years"].forEach((id) => $(id).addEventListener("input", sim));
+    }
+    sim();
+  }
+  function project(init, monthly, years, rate) {
+    const r = Math.pow(1 + rate, 1 / 12) - 1; let v = init;
+    for (let i = 0; i < years * 12; i++) v = v * (1 + r) + monthly;
+    return v;
+  }
+  function sim() {
+    const m = data.models[$("#s-model").value]; if (!m || !m.sim) return;
+    const init = Math.max(0, Number($("#s-init").value.replace(/\s/g, "")) || 0), monthly = Math.max(0, Number($("#s-month").value.replace(/\s/g, "")) || 0);
+    const years = Number($("#s-years").value); $("#s-years-v").textContent = `${years} an${years > 1 ? "s" : ""}`;
+    const hs = Object.keys(m.sim.periods).map(Number).sort((a, b) => a - b);
+    const h = hs.filter((x) => x <= years).pop() || hs[0], p = m.sim.periods[String(h)];
+    const invested = init + monthly * 12 * years;
+    const cases = [["Cas défavorable", p.p10, "1 fois sur 10, ça a été pire"], ["Cas médian", p.median, "la moitié des périodes a fait mieux"], ["Cas favorable", p.p90, "1 fois sur 10, ça a été mieux"]];
+    $("#outcomes").innerHTML = cases.map(([l, r, why]) => { const v = project(init, monthly, years, r), g = v - invested;
+      return `<div class="outcome"><small>${l} · ${pct(r)} par an</small><b>${eur(v)}</b><span class="${Y.tone(g)}" style="font-size:13px">${g >= 0 ? "+" : ""}${eur(g)} sur ${eur(invested)} versés</span><small>${why}</small></div>`; }).join("");
+    $("#sim-note").textContent = `Rendements annuels tirés de toutes les périodes de ${h} an${h > 1 ? "s" : ""} de l'historique du portefeuille « ${m.label} » (depuis ${month(m.sim.start)}). ` +
+      `Sur ${h} an${h > 1 ? "s" : ""}, ${pctU(p.positive)} des périodes ont été gagnantes. Avant impôts (31,4 % sur les gains à la vente) et frais de courtage. Le passé ne garantit pas l'avenir.`;
+  }
+
+  function renderProducts() {
+    $("#prods").innerHTML = data.products.map((p) => { const s = p.stats, ref = p.reference, a = p.advice;
+      const cell = (l, v) => `<div><span class="muted">${l}</span><b class="${Y.tone(v)}">${pct(v)}</b></div>`;
+      const hist = s ? `<div class="perf">${cell("1 an", s.r1)}${cell("5 ans / an", s.r5)}${cell("10 ans / an", s.r10)}<div><span class="muted">Pire baisse</span><b class="dn">${pct(s.max_dd, 0)}</b></div></div>`
+        : `<div class="muted" style="font-size:13px">Historique indisponible pour l'instant${p.error ? ` (${esc(p.error)})` : ""}.</div>`;
+      const base = ref || s, per = base && base.advised_years ? base.periods[String(base.advised_years)] : null;
+      const dur = base && base.advised_years ? `<b>Durée conseillée : ${base.advised_years} ans et plus</b> <span class="muted">(${ref ? `historique de référence : ${esc(ref.name)}, depuis ${month(ref.start)}` : `depuis ${month(s.start)}`} : gagnant ${pctU(per.positive)} du temps sur ${base.advised_years} ans, ${pct(per.median)} par an en médiane)</span>`
+        : `<b>Durée conseillée :</b> <span class="muted">${p.kind === "sukuk" ? "à partir de 2 à 3 ans (placement stable) ; historique trop court pour la mesurer" : "historique trop court pour la mesurer"}</span>`;
+      return `<div class="card prod"><div class="top"><div><h3>${esc(p.name)}</h3><div class="muted" style="font-size:13px">${esc(p.category)}</div></div><span class="pill ${esc(a.tag)}"><b>${esc(a.label)}</b></span></div>
+        <div class="muted" style="font-size:13px">${esc(p.role)}</div>
+        <div style="font-size:12px"><span class="isin" data-copy="${esc(p.isin)}" title="Copier l'ISIN">ISIN ${esc(p.isin)}</span> · frais ${Y.num(p.ter, 2)}${Y.NB}%/an · ${esc(p.income)}${s && s.last_month ? ` · depuis ${month(s.start)}` : ""}</div>
+        ${hist}<div style="font-size:13px">${dur}</div><div class="advice muted">${esc(a.text)}</div></div>`; }).join("");
+  }
+  document.addEventListener("click", (e) => { const el = e.target.closest("[data-copy]"); if (!el) return;
+    try { navigator.clipboard.writeText(el.dataset.copy); Y.toast({ title: "ISIN copié", text: el.dataset.copy, timeout: 3000 }); } catch (err) { /* rien */ } });
+
+  function renderNews() {
+    const n = data.news || [];
+    const det = document.getElementById("actus"); if (det && det.setHint) det.setHint(n.length ? `${n.length} articles des 10 derniers jours` : "aucun article récent");
+    $("#news").innerHTML = n.length ? n.map((x) => `<a href="${esc(x.link)}" target="_blank" rel="noopener"><span class="when">${new Date(x.published).toLocaleDateString("fr-FR", { day: "2-digit", month: "2-digit" })}</span>
+      <span>${esc(x.title)}</span><span class="src"><span class="pill ${TAGS[x.tag] || "neu"}" style="font-size:11px">${esc(x.tag)}</span> ${esc(x.source || "")}</span></a>`).join("")
+      : `<div class="empty">Pas d'article récent.</div>`;
+  }
+
+  $("#btn-refresh").addEventListener("click", load);
+  let rt = null; addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => { if (data) drawCurve(); }, 200); });
+  load();
+})();
+</script>
+</body>
+</html>

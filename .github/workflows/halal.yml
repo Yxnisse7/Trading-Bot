@@ -4,8 +4,6 @@ name: Trading bot — mode halal
 # Le passage courant (suivi + analyse) tourne dans le workflow « tick », juste après le bot principal.
 # Ici : vérification des données, backtest (chaque dimanche et à la demande), balance, résumé, rapport.
 on:
-  schedule:
-    - cron: "30 20 * * 0"     # dimanche 20:30 UTC, après le backtest du bot principal
   workflow_dispatch:
     inputs:
       command:

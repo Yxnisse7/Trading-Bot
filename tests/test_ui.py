@@ -34,8 +34,10 @@ def test_ui_serves_dashboard_and_manual(tmp_path, monkeypatch):
         state = json.loads(r.read()); assert "criteria" in state and len(state["assets"]) == 7
         c.request("GET", "/docs/index.html"); r = c.getresponse(); body = r.read().decode("utf-8")
         assert r.status == 200 and "Nouveau trade" in body
+        c.request("GET", "/docs/investissement.html"); r = c.getresponse(); body = r.read().decode("utf-8")
+        assert r.status == 200 and "Investir halal" in body and "invest/data.json" in body
         c.request("GET", "/docs/halal.html"); r = c.getresponse(); body = r.read().decode("utf-8")
-        assert r.status == 200 and "Mode halal" in body and 'base: "halal/"' in body
+        assert r.status == 200 and "investissement.html" in body
         c.request("GET", "/docs/topstep.html"); r = c.getresponse(); body = r.read().decode("utf-8")
         assert r.status == 200 and "Topstep 50K" in body and "topstep/account.json" in body
         c.request("GET", "/docs/../trading_bot/config.py"); r = c.getresponse(); r.read(); assert r.status == 404
