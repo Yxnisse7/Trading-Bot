@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-30T21:10:41.389463+02:00",
+  "updated_at": "2026-09-30T21:15:49.694427+02:00",
   "timezone": "Europe/Paris",
   "equity_curve": [
     {
@@ -1177,7 +1177,7 @@
       "pnl_pct": -4.8376,
       "avg_pnl_pct": -0.0323
     },
-    "open": 0,
+    "open": 1,
     "open_shadow": 4
   },
   "by_source": {
@@ -1281,7 +1281,7 @@
         "pnl_pct": -0.368,
         "avg_pnl_pct": -0.0097
       },
-      "open": 0,
+      "open": 1,
       "session_utc": [
         13,
         20
@@ -4545,6 +4545,42 @@
   ],
   "open_signals": [
     {
+      "id": "72d4e410ae",
+      "asset": "nasdaq",
+      "asset_label": "Nasdaq 100 (NQ)",
+      "direction": "long",
+      "horizon": "1h",
+      "entry": 30841.75,
+      "take_profit": 30889.5,
+      "stop_loss": 30807.0,
+      "risk_reward": 1.37,
+      "confidence": "fort",
+      "score": 7.75,
+      "criteria": [
+        "adx",
+        "level",
+        "macd",
+        "rsi",
+        "trend_15m",
+        "trend_1h",
+        "trend_5m",
+        "vwap"
+      ],
+      "source": "bot",
+      "status": "open",
+      "pnl_pct": null,
+      "pnl_gross_pct": null,
+      "duration_minutes": null,
+      "close_price": null,
+      "created_at": "2026-09-30T19:15:39Z",
+      "closed_at": null,
+      "created_local": "30/09 21:15",
+      "expires_at": "2026-09-30T20:15:39Z",
+      "rationale": "Achat : tendance forte (ADX), niveau clé favorable, MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 86.74 (0.28 %), TP = 55 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 88%.",
+      "news_context": "actualité à surveiller (score 3) : 10-year Treasury yield are higher as traders look past inflation data, await jobs report | Trump's latest global tariffs face trade court challenge",
+      "manual_exit": null
+    },
+    {
       "id": "e5622bf7e9",
       "asset": "nasdaq",
       "asset_label": "Nasdaq 100 (NQ)",
@@ -7085,10 +7121,10 @@
     }
   },
   "state": {
-    "last_scan": "2026-09-30T19:10:34Z",
-    "last_scan_note": "0 signal(aux)",
+    "last_scan": "2026-09-30T19:15:39Z",
+    "last_scan_note": "1 signal(aux)",
     "last_summary": "2026-09-29T22:05:32Z",
-    "last_track": "2026-09-30T19:10:34Z",
+    "last_track": "2026-09-30T19:15:39Z",
     "last_summary_day": "2026-09-29"
   },
   "limits": {
@@ -7112,8 +7148,8 @@
     "losses": 43,
     "avg_win": 63.07,
     "avg_loss": -42.88,
-    "open_positions": 0,
+    "open_positions": 1,
     "skipped": 0,
-    "risky": 56
+    "risky": 57
   }
 }
