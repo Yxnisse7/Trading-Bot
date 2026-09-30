@@ -72,6 +72,8 @@ class Assessment:
     horizon_minutes: int = 60        # 12 bougies de base
     base_minutes: int = 5
     activity_ratio: float | None = None
+    # mesures brutes pour l'apprentissage par contexte (orientées dans le sens du trade par build_signal)
+    features: dict[str, float] = field(default_factory=dict)
 
     @property
     def n_criteria(self) -> int:
@@ -376,9 +378,24 @@ def assess(asset: AssetConfig, candles_5m: list[Candle], cfg: Config,
 
     score = round(total(direction), 2) if direction else 0.0
     criteria = sorted(votes[direction]) if direction else []
+    features: dict[str, float] = {}
+    if adx_last is not None:
+        features["adx"] = round(adx_last, 2)
+    if r[-1] is not None:
+        features["rsi"] = round(r[-1], 2)
+    if hourly_range and hourly_range > 0:
+        if vw:
+            features["vwap_dev"] = round((price - vw) / hourly_range, 4)
+        if e20[-1] is not None:
+            features["ema_dev"] = round((price - e20[-1]) / hourly_range, 4)
+    if atr_ratio is not None:
+        features["atr_ratio"] = round(atr_ratio, 3)
+    if activity is not None:
+        features["activity"] = round(activity, 3)
     return Assessment(asset.key, price, direction, score, criteria, details,
                       hourly_range, atr_v, support, resistance, sigma, adx_last, atr_ratio, reasons,
-                      horizon_minutes=horizon_minutes, base_minutes=base_minutes, activity_ratio=activity)
+                      horizon_minutes=horizon_minutes, base_minutes=base_minutes, activity_ratio=activity,
+                      features=features)
 
 
 def confidence_label(score: float, n_criteria: int, cfg: Config) -> str | None:

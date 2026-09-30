@@ -278,9 +278,34 @@ précédents : les mêmes trades donnent toujours les mêmes poids, et aucun tra
 - **Socle global + correction par actif** : chaque actif part des poids globaux et ne s'en écarte
   que si sa propre différence dépasse, elle aussi, la marge de sécurité (`weights_by_asset`).
 - **Tranches horaires** évitées seulement si elles sont nettement pires que le hasard.
-- Le backtest est **relancé chaque dimanche** sur 60 jours de données fraîches
-  (`weekly-backtest.yml`) et remplace le précédent : l'apprentissage ne s'appuie jamais sur un
-  backtest figé.
+- Le backtest est **relancé chaque dimanche** (`weekly-backtest.yml`) et remplace le précédent :
+  l'apprentissage ne s'appuie jamais sur un backtest figé. Yahoo ne donne que 60 jours de bougies
+  5 min : elles sont donc **accumulées** de semaine en semaine hors du dépôt (release GitHub
+  « candles », fichier `candles.tar.gz`, 400 jours gardés au plus), et la stratégie est rejouée sur
+  **180 jours** (`BACKTEST_DAYS`). Ne supprimez pas cette release : c'est la mémoire longue du backtest.
+
+### Contexte, sorties et filtres (apprentissage v3)
+Les critères cochés sont présents sur presque tous les trades : ils ne disent pas **quand** un
+trade marche. Le bot apprend donc aussi sur des mesures chiffrées, sans rien changer de lui-même :
+
+- **Contexte** (`meta.ctx`, module `context.py`) : à chaque signal (réel, en ombre, backtest) sont
+  notés la force de tendance (ADX), le RSI et les écarts au VWAP et à l'EMA20 dans le sens du trade,
+  la volatilité du moment, l'activité de l'heure, la taille du range, les frais rapportés au risque,
+  les minutes depuis l'ouverture américaine et le jour. Chaque mesure est coupée en tranches ; une
+  tranche est « à éviter » si même sa borne haute reste sous zéro (marge des tranches horaires).
+- **Sorties** (`meta.exc`) : pendant le suivi (et en backtest), gain et perte maximaux en R, et
+  retour éventuel au prix d'entrée après +0,5 / +0,8 / +1 R. On mesure ce qu'aurait donné un stop
+  remonté à l'entrée ; une règle meilleure est signalée « à décider » mais **jamais activée seule** :
+  elle toucherait les sorties des vrais trades.
+- **Filtres testés hors échantillon** : « pas d'entrée sur les indices et l'or de 15:00 à 17:00 »
+  (30 min avant à 1 h 30 après l'ouverture US) et « contextes appris comme perdants ». Un signal réel
+  concerné est **quand même envoyé**, mais marqué (`meta.filters`). Le filtre ne s'applique que si,
+  sur les trades marqués depuis sa mise en place (au moins 100 gardés, 20 écartés), les trades
+  écartés font nettement pire que les autres (écart prouvé à 95 %, gain net). Il écarte alors ces
+  signaux, suivis en silence.
+
+Tout est affiché sur la page Apprentissage (sections « Filtres testés », « Contexte des trades »,
+« Sorties »).
 
 Les poids, statistiques et notes sont dans `data/adjustments.json`, affichés dans le résumé
 quotidien, le rapport et le tableau de bord.

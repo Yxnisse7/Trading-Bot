@@ -5,6 +5,7 @@ import logging
 from datetime import datetime, timezone
 from zoneinfo import ZoneInfo
 
+from .context import excursion_step, walk_excursion
 from .models import Candle, Signal, iso, parse_iso, utcnow
 
 log = logging.getLogger(__name__)
@@ -71,6 +72,13 @@ def update_signal(sig: Signal, candles: list[Candle] | None, price: float | None
         outcome = resolve_with_candles(sig, candles)
     if outcome is None and price is not None:
         outcome = resolve_with_price(sig, price, now)
+    # gain et perte maximaux atteints (apprentissage des règles de sortie), jusqu'à la résolution
+    try:
+        walk_excursion(sig, candles or [], outcome[2] if outcome else now)
+        if outcome is None and price is not None:
+            excursion_step(sig, sig.meta["exc"], price, price)
+    except Exception:  # noqa: BLE001 — une mesure ne doit jamais bloquer le suivi
+        log.exception("excursions de %s", sig.id)
     if outcome is not None:
         status, px, when = outcome
         return close_signal(sig, status, px, when, cost_pct)

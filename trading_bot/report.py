@@ -221,7 +221,8 @@ def build_dashboard(all_signals: list[Signal], cfg: Config, adjustments: dict[st
         "backtests": backtests or {},
         "adjustments": {k: (adjustments or {}).get(k) for k in
                         ("notes", "avoid_hours_utc", "sample", "sample_by_source", "method", "weights", "weights_by_asset",
-                         "stats", "overview", "variants", "baseline", "promoted_variants", "updated_at")},
+                         "stats", "overview", "variants", "baseline", "promoted_variants", "updated_at",
+                         "context", "exits", "filters", "us_open")},
         # l'état est publié sur le site : on en retire tout ce qui touche aux chats Telegram
         "state": {k: v for k, v in (state or {}).items() if not k.startswith("telegram_")},
         "limits": {"max_signals_per_asset_per_day": cfg.max_signals_per_asset_per_day,

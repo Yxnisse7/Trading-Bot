@@ -265,6 +265,11 @@ def learn(history: list[Signal], cfg: Config, current: dict[str, Any] | None = N
         if st:
             overview[label] = {"n": st["n"], "mean_r": round(st["mean"], 4), "margin_r": round(cfg.learning_z * st["se"], 4)}
     variants = variant_report(closed, cfg) if cfg.variants_enabled else {"variants": {}, "promoted": []}
+    from . import context as ctxmod
+    context = ctxmod.context_report(rows, cfg)
+    exits = ctxmod.exit_report(closed, cfg)
+    filters = ctxmod.filter_report(closed, cfg) if cfg.variants_enabled else {}
+    us_open = ctxmod.us_open_history(closed)
 
     notes: list[str] = []
     real = overview.get("réels")
@@ -281,6 +286,19 @@ def learn(history: list[Signal], cfg: Config, current: dict[str, Any] | None = N
             notes.append(f"variante « {v['label']} » en test : {v['n']} trades, {_fmt_r(v['mean_net_r'])} net"
                          + (f", encore {v['missing']} trades avant décision" if v["missing"] else ", pas meilleure que les signaux réels"))
 
+    for a in context["avoid"]:
+        notes.append(f"contexte perdant repéré : {a['label']} ({_fmt_r(a['mean_r'])} sur {a['n']} trades), "
+                     "testé en silence avant d'être filtré")
+    for key, f in filters.items():
+        if f["promoted"]:
+            notes.append(f"filtre « {f['label']} » appliqué : trades écartés {_fmt_r(f['mean_out_r'])} net, "
+                         f"gardés {_fmt_r(f['mean_kept_r'])}")
+    for gname, e in exits.items():
+        for x, rule in e["rules"].items():
+            if rule["better"]:
+                notes.append(f"sortie : stop remonté à l'entrée après +{x.replace('.', ',')} R ferait mieux "
+                             f"({_fmt_r(rule['net_r'])} net contre {_fmt_r(e['current_net_r'])}, {gname}) : à décider")
+
     by_source: dict[str, int] = {}
     for s in closed:
         by_source[s.source] = by_source.get(s.source, 0) + 1
@@ -294,7 +312,11 @@ def learn(history: list[Signal], cfg: Config, current: dict[str, Any] | None = N
         "overview": overview,
         "variants": variants.get("variants", {}),
         "baseline": variants.get("baseline"),
-        "promoted_variants": variants.get("promoted", []),
+        "promoted_variants": variants.get("promoted", []) + [k for k, f in filters.items() if f["promoted"]],
+        "context": context,
+        "exits": exits,
+        "filters": filters,
+        "us_open": us_open,
         "notes": notes[:20],
         "sample": len(closed),
         "sample_by_source": by_source,

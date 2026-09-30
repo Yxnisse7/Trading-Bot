@@ -22,6 +22,7 @@ from .portfolio import Portfolio
 from .providers import calendar as calmod
 from .providers import market
 from .providers import news as newsmod
+from . import context as ctxmod
 from .providers.http import ProviderError
 from .report import build_dashboard, build_report
 from .signals import build_signal, round_to_tick
@@ -218,6 +219,24 @@ class Engine:
                     self._record_shadow(sig, variant, all_sigs)
                     log.info("%s [%s] : variante « %s » testée en fantôme (id %s)", asset.label, hkey, variant, sig.id)
                     continue
+                if self.cfg.variants_enabled:
+                    # Filtres testés hors échantillon : le signal est marqué, et écarté seulement si le
+                    # filtre a fait ses preuves sur les trades marqués depuis sa mise en place
+                    flags = []
+                    if ctxmod.in_us_open_window(asset.key, now):
+                        flags.append("sans_ouverture_us")
+                    hits = ctxmod.context_hits(sig.meta.get("ctx"), adj.get("context"))
+                    if hits:
+                        flags.append("filtre_contexte")
+                        sig.meta["ctx_avoid"] = hits
+                    sig.meta["filters"] = flags
+                    sig.meta["filters_checked"] = True
+                    applied = [f for f in flags if f in promoted]
+                    if applied:
+                        if not dry_run:
+                            self._record_shadow(sig, applied[0], all_sigs)
+                        log.info("%s [%s] : écarté par le filtre « %s » (suivi en silence)", asset.label, hkey, applied[0])
+                        continue
                 produced.append(sig)
                 all_sigs.append(sig)
                 sizing = None

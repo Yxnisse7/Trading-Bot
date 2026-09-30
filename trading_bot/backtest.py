@@ -16,6 +16,7 @@ from zoneinfo import ZoneInfo
 
 from .analysis import assess
 from .config import AssetConfig, Config
+from .context import walk_excursion
 from .models import Candle, Signal, parse_iso
 from .signals import build_signal
 from .tracker import resolve_with_candles, close_signal
@@ -70,6 +71,7 @@ def run_backtest(asset: AssetConfig, candles: list[Candle], cfg: Config, *, step
                 # entrée = clôture de la bougie i ; issue sur les bougies i+1 .. i+horizon
                 future = candles[i + 1: i + 1 + horizon]
                 outcome = resolve_with_candles(sig, future)
+                walk_excursion(sig, future, outcome[2] if outcome else None)
                 if outcome is None:
                     last = future[-1]
                     close_signal(sig, "expired", last.close, datetime.fromtimestamp(last.ts + 300, tz=timezone.utc), asset.cost_pct)

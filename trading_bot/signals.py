@@ -17,6 +17,7 @@ from zoneinfo import ZoneInfo
 from . import indicators as ind
 from .analysis import Assessment, confidence_label
 from .config import AssetConfig, Config
+from .context import signal_context
 from .models import Signal, iso, parse_iso, utcnow
 
 _LABELS = {
@@ -182,6 +183,7 @@ def build_signal(asset: AssetConfig, a: Assessment, cfg: Config, news_context: s
               "sigma_5m": a.sigma_5m, "p_resolution": p_res, "p_tp_neutral": p_tp,
               "activity_ratio": a.activity_ratio, "base_minutes": a.base_minutes},
     )
+    sig.meta["ctx"] = signal_context(a.features, a.direction, entry, sl, asset.cost_pct, hr_pct, now)
     return sig, reasons
 
 

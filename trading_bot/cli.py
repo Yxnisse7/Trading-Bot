@@ -46,7 +46,7 @@ HALAL_REFUSED = {"manual", "propose", "commands", "guide", "ui", "loop", "fetch-
 
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(description="Générateur de signaux de scalping (NQ, BTC, XAU) — données gratuites")
-    p.add_argument("command", choices=["scan", "track", "tick", "summary", "stats", "loop", "status", "test-notify", "backtest", "report", "fetch-data", "manual", "propose", "ui", "commands", "portfolio", "guide", "learn", "flush-outbox", "check-data", "stop", "topstep"])
+    p.add_argument("command", choices=["scan", "track", "tick", "summary", "stats", "loop", "status", "test-notify", "backtest", "report", "fetch-data", "manual", "propose", "ui", "commands", "portfolio", "guide", "learn", "flush-outbox", "check-data", "stop", "topstep", "trim-candles"])
     p.add_argument("--signal", help="stop : identifiant (ou début) du trade à arrêter, ou son actif ; sans valeur, le seul trade ouvert")
     p.add_argument("--halal", action="store_true", help="mode halal : second bot séparé (achat seulement, sans levier, data/halal)")
     p.add_argument("--dry-run", action="store_true", help="scan sans enregistrer les signaux")
@@ -115,7 +115,9 @@ def main(argv: list[str] | None = None) -> int:
             print(format_signal(s, cfg.timezone))
             print()
     elif args.command == "backtest":
-        res = eng.backtest(days=min(60, max(2, args.days)), asset_keys=args.asset, send=args.send, offline=args.offline)
+        # hors ligne, l'historique gardé peut dépasser les 60 jours de Yahoo
+        res = eng.backtest(days=min(400 if args.offline else 60, max(2, args.days)), asset_keys=args.asset,
+                           send=args.send, offline=args.offline)
         if not res:
             print("Backtest impossible : aucune donnée récupérée.")
             return 1
@@ -161,6 +163,14 @@ def main(argv: list[str] | None = None) -> int:
             return 1
         notify(text, html=True)
         print(strip_html(text))
+    elif args.command == "trim-candles":
+        # garde les `--days` derniers jours de bougies enregistrées (historique du backtest)
+        for key in eng.cfg.assets:
+            candles = eng.store.load_candles(key)
+            if candles:
+                cutoff = candles[-1].ts - args.days * 86400
+                eng.store.save_candles(key, [c for c in candles if c.ts >= cutoff])
+                print(f"{key} : {sum(1 for c in candles if c.ts >= cutoff)} bougies gardées")
     elif args.command == "check-data":
         out = eng.check_data()
         print(json.dumps(out, ensure_ascii=False, indent=2))

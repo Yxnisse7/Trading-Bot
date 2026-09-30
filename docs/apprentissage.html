@@ -18,6 +18,10 @@
   .last { display: inline-flex; gap: 3px; }
   .last i { width: 8px; height: 8px; border-radius: 2px; display: inline-block; }
   .group-legend { margin: -4px 0 14px; }
+  .ctx-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2.2fr); gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 13px; align-items: center; }
+  .ctx-row:last-child { border-bottom: 0; }
+  .ctx-b { display: flex; flex-wrap: wrap; gap: 6px; }
+  @media (max-width: 760px) { .ctx-row { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body data-page="learning">
@@ -30,6 +34,15 @@
 
   <h2 id="apprentissage">Ce que le bot a appris</h2>
   <div class="card learn-top" id="learning"><span class="sk t" style="width:60%"></span><span class="sk t" style="width:80%"></span><span class="sk t" style="width:40%"></span></div>
+
+  <h2 id="filtres" data-hint="testés sur les nouveaux trades avant d'être appliqués">Filtres testés</h2>
+  <div class="card" id="filters"></div>
+
+  <h2 id="contexte" data-closed data-hint="résultat moyen par tranche de chaque mesure">Contexte des trades</h2>
+  <div class="card" id="context"></div>
+
+  <h2 id="sorties" data-closed data-hint="et si le stop remontait au prix d'entrée ?">Sorties</h2>
+  <div class="card" id="exits"></div>
 
   <h2 id="indicateurs">Par indicateur</h2>
   <div class="card chart" id="ch-criteria"></div>
@@ -50,7 +63,7 @@
 
   <h2 id="backtests">Backtests</h2>
   <div class="card tbl"><table id="bt"><thead><tr><th>Actif</th><th>Période</th><th class="num">Signaux</th><th class="num">Réussite</th><th class="num">Hasard</th><th class="num">Avantage</th><th class="num">Résultat net</th><th class="num">Espérance</th></tr></thead><tbody></tbody></table>
-    <div class="muted" style="margin-top:10px">Rejoué chaque dimanche à 20 h UTC sur 60 jours de données. Un backtest compte peu dans l'apprentissage (0,25 contre 1 pour un trade réel).</div></div>
+    <div class="muted" style="margin-top:10px">Rejoué chaque dimanche à 20 h UTC, sur jusqu'à 180 jours de bougies (l'historique s'allonge de semaine en semaine). Un backtest compte peu dans l'apprentissage (0,25 contre 1 pour un trade réel).</div></div>
 
   <div class="foot"><div>Ce n'est pas un conseil financier. Aucune stratégie ne garantit un gain.</div></div>
 </div>
@@ -103,6 +116,7 @@
       }).join("")}</tbody></table></div>
       <div class="muted">Une variante passe en signaux réels quand, sur au moins 100 trades, elle fait au moins aussi bien que les signaux réels du bot${adj.baseline && adj.baseline.mean_net_r != null ? ` (actuellement ${r2(adj.baseline.mean_net_r)} net par trade sur ${adj.baseline.n})` : ""}.</div>` : ""}`;
 
+    renderLearning2(adj, r2);
     // indicateurs
     $("#criteria tbody").innerHTML = d.criteria.map((c) => {
       const st = c.stats;
@@ -125,6 +139,35 @@
       <td class="num ${Y.tone(b.pnl_pct)}">${Y.pctv(b.pnl_pct, 2)}</td><td class="num ${Y.tone(b.expectancy_pct)}">${Y.pctv(b.expectancy_pct, 3)}</td></tr>`).join("")
       : `<tr><td colspan="8" class="empty">Aucun backtest pour l'instant.</td></tr>`;
   }
+  // Filtres, contexte et sorties (apprentissage v3)
+  function renderLearning2(adj, r2) {
+    const f = Object.values(adj.filters || {}), uo = adj.us_open || {};
+    const hist = (k, l) => uo[k] && uo[k].n_in ? `${l} : ${r2(uo[k].mean_in_r)} dans la fenêtre (${uo[k].n_in} trades) contre ${r2(uo[k].mean_out_r)} en dehors (${uo[k].n_out})` : "";
+    $("#filters").innerHTML = f.length ? `<div class="tbl"><table><thead><tr><th>Filtre</th><th>Progression</th><th class="num">Trades écartés</th><th class="num">Trades gardés</th><th>Statut</th></tr></thead><tbody>${f.map((v) => {
+        const need = 100, prog = Math.min(100, v.n_kept / need * 100);
+        return `<tr><td>${esc(v.label)}</td><td class="nowrap"><span class="var-bar"><i style="width:${prog.toFixed(0)}%"></i></span><span class="mono muted" style="font-size:12px">${v.n_kept} / ${need}</span></td>
+          <td class="num ${Y.tone(v.mean_out_r)}">${v.n_out ? `${r2(v.mean_out_r)} <span class="muted">(${v.n_out})</span>` : '<span class="faint">aucun</span>'}</td><td class="num ${Y.tone(v.mean_kept_r)}">${v.n_kept ? r2(v.mean_kept_r) : '<span class="faint">n/a</span>'}</td>
+          <td>${v.promoted ? `<span class="pill up">appliqué</span>` : `<span class="pill">en test</span>`}</td></tr>`; }).join("")}</tbody></table></div>
+      <div class="muted" style="margin-top:10px">Chaque signal réel qui tomberait sous un filtre est quand même envoyé, mais marqué. Le filtre ne s'applique que si, sur les trades marqués depuis sa mise en place (au moins 100 gardés et 20 écartés), les trades écartés font nettement pire (gain net après frais).</div>
+      ${[hist("réels", "Trades réels passés"), hist("backtest", "Backtest")].filter(Boolean).map((t) => `<div class="muted" style="margin-top:6px">Ouverture US, pour information · ${t}.</div>`).join("")}`
+      : `<div class="muted">Les filtres apparaissent au prochain passage du bot.</div>`;
+
+    const ctx = adj.context || {}, feats = Object.values(ctx.features || {});
+    $("#context").innerHTML = feats.length ? `<div class="muted" style="margin-bottom:8px">${ctx.n} trades avec leur contexte (réels, en ombre et backtest). Résultat moyen avant frais par tranche : une tranche n'est « à éviter » que si l'écart dépasse la marge de sécurité, puis elle est testée en silence (filtre « contextes appris »).</div>
+      ${feats.map((ft) => `<div class="ctx-row"><div><b style="font-weight:500">${esc(ft.label)}</b></div><div class="ctx-b">${ft.buckets.map((b) =>
+        `<span class="pill ${b.avoid ? "dn" : "neu"}" title="${b.n} trades · marge ± ${Y.num(b.margin_r, 2)} R">${esc(b.label)} · <b class="${Y.tone(b.mean_r)}">${r2(b.mean_r)}</b> <span class="faint">(${b.n})</span>${b.avoid ? " · à éviter" : ""}</span>`).join("")}</div></div>`).join("")}`
+      : `<div class="muted">Pas encore de trade avec son contexte : les mesures sont notées sur chaque nouveau signal et sur le backtest du dimanche.</div>`;
+
+    const ex = Object.entries(adj.exits || {});
+    $("#exits").innerHTML = ex.length ? ex.map(([g, e]) => `<div style="margin-bottom:14px"><b style="font-weight:600">${esc(g[0].toUpperCase() + g.slice(1))}</b> <span class="muted">· ${e.n} trades · gain maximal médian ${Y.num(e.mfe_median, 2)} R · ${e.n_sl} stops, dont ${e.sl_reached["0.5"]} passés d'abord par +0,5 R et ${e.sl_reached["1.0"]} par +1 R</span>
+      <div class="tbl" style="margin-top:8px"><table><thead><tr><th>Règle</th><th class="num">Gain net moyen</th><th class="num">Écart</th><th>Verdict</th></tr></thead><tbody>
+      <tr><td>Actuelle (TP, SL ou expiration)</td><td class="num ${Y.tone(e.current_net_r)}">${r2(e.current_net_r)}</td><td class="num muted">—</td><td></td></tr>
+      ${Object.entries(e.rules).map(([x, r]) => `<tr><td>Stop remonté à l'entrée après +${x.replace(".", ",")} R</td><td class="num ${Y.tone(r.net_r)}">${r2(r.net_r)}</td><td class="num ${Y.tone(r.diff_r)}">${r2(r.diff_r)} <span class="faint">± ${Y.num(r.margin_r, 2)}</span></td>
+        <td>${r.better ? `<span class="pill up">meilleure : à décider</span>` : `<span class="pill">pas prouvé</span>`}</td></tr>`).join("")}</tbody></table></div></div>`).join("")
+      + `<div class="muted">Mesure seulement : une règle de sortie touche les vrais trades, elle n'est jamais activée sans votre accord.</div>`
+      : `<div class="muted">Le gain et la perte maximaux sont mesurés sur chaque trade à partir de maintenant, et sur le backtest du dimanche.</div>`;
+  }
+
   $("#btn-refresh").addEventListener("click", load);
   let rt = null;
   addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => { if (data) { try { charts(); } catch (e) { /* silencieux */ } } }, 200); });

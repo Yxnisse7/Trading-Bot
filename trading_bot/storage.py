@@ -113,7 +113,9 @@ class Store:
                                                   "confidence", "criteria", "created_at", "status", "pnl_pct",
                                                   "pnl_gross_pct", "duration_minutes", "news_context")}
                          | {"source": "backtest", "asset_label": v.get("asset_label", k), "expires_at": t.get("expires_at"),
-                            "risk_reward": t.get("risk_reward"), "score": t.get("score"), "rationale": ""}
+                            "risk_reward": t.get("risk_reward"), "score": t.get("score"), "rationale": "",
+                            # contexte et excursions : de quoi apprendre sans le détail des critères
+                            "meta": {m: (t.get("meta") or {}).get(m) for m in ("ctx", "exc") if (t.get("meta") or {}).get(m)}}
                          for t in v.get("trades", [])]
         self._write(self.backtest_trades_file, trades)
 

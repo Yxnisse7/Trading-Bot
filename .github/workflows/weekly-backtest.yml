@@ -1,7 +1,8 @@
 name: Trading bot — backtest hebdomadaire
 
-# Chaque dimanche à 20:00 UTC (marchés fermés) : backtest sur 60 jours de données fraîches, pour que
-# l'apprentissage ne s'appuie pas sur un backtest figé. Lançable aussi à la main.
+# Chaque dimanche à 20:00 UTC (marchés fermés) : 60 jours de bougies fraîches ajoutés à l'historique
+# gardé (release « candles »), puis backtest sur 180 jours, pour que l'apprentissage ne s'appuie pas
+# sur un backtest figé. Lançable aussi à la main.
 on:
   schedule:
     - cron: "0 20 * * 0"
@@ -17,7 +18,7 @@ permissions:
 jobs:
   backtest:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 50
     steps:
       - uses: actions/checkout@v4
         with:
@@ -27,5 +28,7 @@ jobs:
           python-version: "3.11"
           cache: pip
       - run: pip install -r requirements.txt
-      - name: Backtest sur 60 jours
+      - name: Historique des bougies et backtest sur 180 jours
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: bash scripts/run_and_push.sh bash scripts/weekly_backtest.sh
