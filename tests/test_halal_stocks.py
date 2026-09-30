@@ -55,7 +55,7 @@ def test_backtest_and_weekly_cache(tmp_path):
         k = int(sym[1:].split(".")[0])
         return _stock(72, 0.001 * k - 0.01), "USD"
 
-    holdings = [{"ticker": f"S{k}", "yahoo": f"S{k}", "name": f"Société {k}", "sector": "Tech", "country": "US",
+    holdings = [{"ticker": f"S{k}", "yahoo": f"S{k}", "name": f"Société {k}", "sector": f"Secteur {k % 5}", "country": "US",
                  "currency": "USD", "weight": 1.0} for k in range(40)]
     bench = [(m, v) for m, v in hs.to_eur_series(_stock(72, 0.008), "EUR", {})]
     res = hs.build(bench, NOW, fetch_monthly=fetch, holdings_fn=lambda: holdings, cache_dir=tmp_path, pause=0)
