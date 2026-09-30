@@ -417,6 +417,21 @@ Pas du trading : de l'investissement halal à long terme. Page `investissement.h
 - **Actualités** : finance islamique, ETF islamiques, sukuk, or, marchés (Google Actualités, 10 jours).
 - Fiscalité 2026 rappelée (flat tax 31,4 %), purification des dividendes, compte au comptant.
 
+- **Poche offensive : actions halal** (module `halal_stocks.py`, recalculée chaque semaine) : univers =
+  les 150 plus grosses entreprises de l'ETF iShares MSCI World Islamic (filtre charia MSCI ; fichier
+  de composition public d'iShares, dernière composition gardée si indisponible), historique mensuel en
+  euros. Règle « momentum 12-1 » : les 10 actions qui ont le plus monté sur 12 mois (sans le dernier
+  mois) et dont le prix est au-dessus de sa moyenne sur 10 mois ; une action détenue n'est remplacée
+  que si elle sort du top 20 ou perd sa tendance. **Backtest** mois par mois contre l'ETF Monde
+  islamique, frais de rotation compris (0,3 % par achat ou vente) ; biais affiché : l'univers est la
+  composition actuelle de l'indice. La page conseille la poche (20 % par défaut, 30 % au plus)
+  seulement si la règle a battu l'ETF sur l'historique ; sinon 0 %.
+- **Mon portefeuille et plan du mois** : on saisit ses lignes (ETF ou actions, quantité, prix d'achat
+  facultatif) ; la page donne la valeur, la plus-value, et **combien verser sur chaque ligne ce mois-ci**
+  pour se rapprocher des parts visées (portefeuille type + poche actions), sans rien vendre. Les
+  actions sorties de la règle sont signalées « à remplacer ». Enregistré dans le navigateur ; un lien
+  permet de retrouver son portefeuille sur un autre appareil.
+
 L'ancien **mode halal de trading** (second bot, `data/halal`) est arrêté : ses étapes ne tournent
 plus que si la variable de dépôt `HALAL_TRADING` vaut `on`. Le code et les données sont gardés.
 

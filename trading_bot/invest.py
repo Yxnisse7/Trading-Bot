@@ -312,7 +312,12 @@ def fetch_invest_news(now: datetime | None = None, days: int = 10, limit: int = 
 
 
 # ------------------------------------------------------------------ assemblage
-def build(now: datetime | None = None, fetch=fetch_monthly, news=fetch_invest_news) -> dict[str, Any]:
+def _stocks(bench, now, fetch):
+    from . import halal_stocks
+    return halal_stocks.build(bench, now, fetch_monthly=fetch)
+
+
+def build(now: datetime | None = None, fetch=fetch_monthly, news=fetch_invest_news, stocks=_stocks) -> dict[str, Any]:
     now = now or utcnow()
     fx: dict[str, dict[str, float]] = {}
     for ccy, sym in FX.items():
@@ -358,7 +363,14 @@ def build(now: datetime | None = None, fetch=fetch_monthly, news=fetch_invest_ne
         sim = simulate_model(m["weights"], model_series)
         models[key] = {**m, "sim": sim, "advised": advised(sim["advised_years"] if sim else None, FLOOR_YEARS[key])}
 
-    return {"updated_at": iso(now), "products": products, "models": models,
+    stock_part = None
+    if stocks:
+        try:
+            stock_part = stocks(series.get("monde"), now, fetch)
+        except Exception:  # noqa: BLE001 — la poche actions ne doit jamais bloquer le reste de la page
+            log.exception("poche actions halal")
+    prices = {p["key"]: round(series[p["key"]][-1][1], 4) for p in UNIVERSE if p["key"] in series}
+    return {"updated_at": iso(now), "products": products, "models": models, "stocks": stock_part, "prices": prices,
             "news": news(now) if news else [], "errors": errors,
             "fx_last": {c: (sorted(v.items())[-1][1] if v else None) for c, v in fx.items()}}
 

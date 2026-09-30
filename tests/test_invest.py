@@ -66,7 +66,7 @@ def test_holding_periods_and_advised_horizon():
 
 
 def test_build_products_models_and_advice():
-    data = invest.build(NOW, fetch=fake_fetch, news=None)
+    data = invest.build(NOW, fetch=fake_fetch, news=None, stocks=None)
     by = {p["key"]: p for p in data["products"]}
     monde = by["monde"]["stats"]
     assert monde["months"] > 200 and monde["r10"] is not None
