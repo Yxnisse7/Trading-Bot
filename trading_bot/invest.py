@@ -78,6 +78,12 @@ MODELS = {
                   "for": "Objectif à plus de 10 ans, en acceptant des baisses de 30 % ou plus en route."},
 }
 HORIZONS = [1, 2, 3, 5, 7, 10, 15]
+# durée minimale de bon sens, quel que soit l'historique (l'or a stagné près de 20 ans, de 1980 à 2000)
+FLOOR_YEARS = {"actions": 5, "or": 5, "sukuk": 2, "prudent": 3, "equilibre": 5, "dynamique": 8}
+
+
+def advised(data_years: int | None, floor: int) -> dict[str, Any]:
+    return {"years": max(floor, data_years or 0), "data_years": data_years, "floor": floor}
 
 NEWS_QUERIES = [
     ("finance islamique", "finance islamique"),
@@ -164,7 +170,7 @@ def holding_periods(series: list[tuple[str, float]]) -> dict[str, Any]:
     return out
 
 
-def advised_horizon(periods: dict[str, Any], threshold: float = 0.95) -> int | None:
+def advised_horizon(periods: dict[str, Any], threshold: float = 1.0) -> int | None:
     for h in HORIZONS:
         p = periods.get(str(h))
         if p and p["n"] >= 12 and p["positive"] >= threshold:
@@ -329,7 +335,9 @@ def build(now: datetime | None = None, fetch=fetch_monthly, news=fetch_invest_ne
             ref = stats(series[ref_key])
             ref["name"] = PROXIES.get(ref_key, {}).get("name") or next(x["name"] for x in UNIVERSE if x["key"] == ref_key)
         long = bool((s and s["months"] >= 60) or ref)
+        base = ref or s
         products.append({**{k: v for k, v in p.items() if k != "proxy"}, "stats": s, "reference": ref,
+                         "advised": advised(base["advised_years"] if base else None, FLOOR_YEARS[p["kind"]]),
                          "advice": advice(p, s, long), "error": errors.get(p["key"])})
 
     # portefeuilles : l'or s'appuie sur sa série longue de référence
@@ -339,7 +347,7 @@ def build(now: datetime | None = None, fetch=fetch_monthly, news=fetch_invest_ne
     models = {}
     for key, m in MODELS.items():
         sim = simulate_model(m["weights"], model_series)
-        models[key] = {**m, "sim": sim}
+        models[key] = {**m, "sim": sim, "advised": advised(sim["advised_years"] if sim else None, FLOOR_YEARS[key])}
 
     return {"updated_at": iso(now), "products": products, "models": models,
             "news": news(now) if news else [], "errors": errors,

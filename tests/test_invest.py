@@ -69,7 +69,9 @@ def test_build_products_models_and_advice():
     data = invest.build(NOW, fetch=fake_fetch, news=None)
     by = {p["key"]: p for p in data["products"]}
     monde = by["monde"]["stats"]
-    assert monde["months"] > 200 and monde["r10"] is not None and monde["advised_years"]
+    assert monde["months"] > 200 and monde["r10"] is not None
+    assert by["monde"]["advised"]["years"] >= 5 and by["sukuk"]["advised"]["years"] >= 2   # planchers de bon sens
+    assert data["models"]["dynamique"]["advised"]["years"] >= 8
     # produit récent coté en pence : converti, jugé « trop récent », avec l'historique de référence du monde
     acwi = by["acwi"]
     assert acwi["stats"]["months"] == 8 and acwi["advice"]["label"] == "Trop récent"

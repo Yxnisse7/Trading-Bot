@@ -153,7 +153,7 @@
       const kv = s ? `<div class="kv"><span>Rendement annuel moyen</span><span class="${Y.tone(s.r_all)}">${pct(s.r_all)}</span>
           <span>Sur 10 ans</span><span>${pct(s.r10)}</span><span>Sur 5 ans</span><span>${pct(s.r5)}</span>
           <span>Variations (volatilité)</span><span>${pctU(s.vol)}</span><span>Pire baisse</span><span class="dn">${pct(s.max_dd, 0)}</span>
-          <span>Durée conseillée</span><span>${s.advised_years ? `${s.advised_years} ans et plus` : "n/a"}</span></div>
+          <span>Durée conseillée</span><span>${m.advised ? `${m.advised.years} ans et plus` : "n/a"}</span></div>
           <div class="muted" style="font-size:12px">Depuis ${month(s.start)}${s.dropped && s.dropped.length ? ` · ${s.dropped.map((d) => NAMES[d] || d).join(", ")} trop récent${s.dropped.length > 1 ? "s" : ""} : retiré${s.dropped.length > 1 ? "s" : ""} de l'historique, les autres parts sont augmentées d'autant` : ""}${m.weights.or ? " · or : historique du prix de l'or" : ""}.</div>`
         : `<div class="muted">Historique indisponible pour l'instant.</div>`;
       return `<div class="card model"><div><h3>${esc(m.label)}</h3><div class="muted" style="font-size:13px">${esc(m.for)}</div></div>
@@ -213,9 +213,14 @@
       const cell = (l, v) => `<div><span class="muted">${l}</span><b class="${Y.tone(v)}">${pct(v)}</b></div>`;
       const hist = s ? `<div class="perf">${cell("1 an", s.r1)}${cell("5 ans / an", s.r5)}${cell("10 ans / an", s.r10)}<div><span class="muted">Pire baisse</span><b class="dn">${pct(s.max_dd, 0)}</b></div></div>`
         : `<div class="muted" style="font-size:13px">Historique indisponible pour l'instant${p.error ? ` (${esc(p.error)})` : ""}.</div>`;
-      const base = ref || s, per = base && base.advised_years ? base.periods[String(base.advised_years)] : null;
-      const dur = base && base.advised_years ? `<b>Durée conseillée : ${base.advised_years} ans et plus</b> <span class="muted">(${ref ? `historique de référence : ${esc(ref.name)}, depuis ${month(ref.start)}` : `depuis ${month(s.start)}`} : gagnant ${pctU(per.positive)} du temps sur ${base.advised_years} ans, ${pct(per.median)} par an en médiane)</span>`
-        : `<b>Durée conseillée :</b> <span class="muted">${p.kind === "sukuk" ? "à partir de 2 à 3 ans (placement stable) ; historique trop court pour la mesurer" : "historique trop court pour la mesurer"}</span>`;
+      const base = ref || s, adv = p.advised || {}, yrs = adv.years;
+      const per = base && yrs && base.periods[String(yrs)] ? base.periods[String(yrs)] : null;
+      const src = base ? (ref ? `historique de référence : ${esc(ref.name)}, depuis ${month(ref.start)}` : `historique depuis ${month(s.start)}`) : "";
+      const why = !base ? "historique indisponible : durée de bon sens"
+        : !per ? `${src} trop court pour mesurer ${yrs} ans : durée de bon sens`
+        : `${src} : ${per.positive >= 1 ? "jamais perdant" : `gagnant ${pctU(per.positive)} du temps`} sur ${yrs} ans, ${pct(per.median)} par an en médiane, ${pct(per.worst)} par an au pire`
+          + (adv.data_years && adv.data_years < yrs ? ` (déjà jamais perdant sur ${adv.data_years} an${adv.data_years > 1 ? "s" : ""}, mais un historique favorable ne suffit pas)` : "");
+      const dur = yrs ? `<b>Durée conseillée : ${yrs} ans et plus</b> <span class="muted">(${why})</span>` : "";
       return `<div class="card prod"><div class="top"><div><h3>${esc(p.name)}</h3><div class="muted" style="font-size:13px">${esc(p.category)}</div></div><span class="pill ${esc(a.tag)}"><b>${esc(a.label)}</b></span></div>
         <div class="muted" style="font-size:13px">${esc(p.role)}</div>
         <div style="font-size:12px"><span class="isin" data-copy="${esc(p.isin)}" title="Copier l'ISIN">ISIN ${esc(p.isin)}</span> · frais ${Y.num(p.ter, 2)}${Y.NB}%/an · ${esc(p.income)}${s && s.last_month ? ` · depuis ${month(s.start)}` : ""}</div>
