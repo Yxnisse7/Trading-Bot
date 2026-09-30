@@ -168,6 +168,9 @@ def main(argv: list[str] | None = None) -> int:
         from . import invest
         data = invest.build()
         invest.publish(data)
+        reminder = invest.revision_reminder(data, utcnow())
+        if reminder:
+            notify(reminder, html=True, buttons=[[("📅 Mon plan du mois", eng.cfg.site_url.rstrip("/") + "/investissement.html#plan-mois")]])
         ok = [p["key"] for p in data["products"] if p["stats"]]
         print(f"Investissement : {len(ok)} produits sur {len(data['products'])}, {len(data['news'])} actualités"
               + (f" ; indisponibles : {', '.join(data['errors'])}" if data["errors"] else ""))

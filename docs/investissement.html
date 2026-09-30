@@ -49,7 +49,8 @@
   .rules2 ul { margin: 8px 0 0; padding-left: 18px; display: grid; gap: 6px; font-size: 14px; }
   .rules2 h3 { margin: 0; font-size: 16px; }
   .bt-grid { display: grid; gap: 20px; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); align-items: start; }
-  .pf-set { display: grid; gap: 12px; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-bottom: 14px; }
+  .pf-set { display: grid; gap: 12px; grid-template-columns: repeat(5, minmax(0, 1fr)); margin-bottom: 14px; }
+  @media (max-width: 1100px) { .pf-set { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
   .pf-row input, .pf-row select { padding: 7px 9px; font-size: 13px; border-radius: 9px; }
   .pf-row td { vertical-align: middle; }
   .pf-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
@@ -90,9 +91,12 @@
   <div class="card" id="stocks-bt"><span class="sk t" style="width:70%"></span></div>
   <div class="card" id="modes" style="margin-top:16px"></div>
   <div class="card tbl" style="margin-top:16px">
-    <div class="card-head" style="padding:0 0 10px"><div><h3>Les 10 actions de la poche ce mois-ci</h3><div class="sub" id="picks-note">Classées par hausse sur 12 mois (sans le dernier mois), tendance longue haussière</div></div></div>
+    <div class="card-head" style="padding:0 0 10px"><div><h3>Les 10 actions de la poche</h3><div class="sub" id="picks-note">Classées par hausse sur 12 mois (sans le dernier mois), tendance longue haussière</div></div></div>
     <table id="picks"><thead><tr><th class="num">Rang</th><th>Entreprise</th><th>Secteur</th><th>Pays</th><th class="num">12 mois</th><th class="num">Dernier mois</th><th>Ticker</th></tr></thead><tbody></tbody></table>
   </div>
+
+  <h2 id="pepites" data-hint="petite part, plus risquée">Pépites : petites entreprises halal en forte hausse</h2>
+  <div class="card" id="pep-box"><span class="sk t" style="width:60%"></span></div>
 
   <h2 id="plan-mois" data-hint="combien mettre où, ce mois-ci">Mon portefeuille et plan du mois</h2>
   <div class="card">
@@ -100,7 +104,10 @@
       <div><label for="pf-model">Portefeuille type</label><select id="pf-model"></select></div>
       <div><label for="pf-sat">Part de la poche actions</label><select id="pf-sat"><option value="0">0 % (ETF seulement)</option><option value="0.1">10 %</option><option value="0.2">20 %</option><option value="0.3">30 % (maximum)</option></select></div>
       <div><label for="pf-amount">Versement ce mois (€)</label><input id="pf-amount" inputmode="numeric" value="100"></div>
+      <div><label for="pf-pep">Part des pépites (risquée)</label><select id="pf-pep"><option value="0">0 %</option><option value="0.05">5 %</option><option value="0.1">10 % (maximum)</option></select></div>
+      <div><label for="pf-rev">Révision des actions</label><select id="pf-rev"><option value="trimestrielle">Tous les 3 mois (conseillé)</option><option value="mensuelle">Chaque mois</option></select></div>
     </div>
+    <div id="rev-banner"></div>
     <div class="tbl"><table id="pf"><thead><tr><th>Ce que je détiens</th><th class="num">Quantité</th><th class="num">Prix d'achat moyen (€)</th><th class="num">Valeur</th><th class="num">Plus-value</th><th></th></tr></thead><tbody></tbody>
       <tfoot><tr><td><b>Total</b></td><td></td><td></td><td class="num"><b id="pf-total">0 €</b></td><td class="num" id="pf-pl"></td><td></td></tr></tfoot></table></div>
     <datalist id="pf-options"></datalist>
@@ -274,7 +281,7 @@
     const row = (l, a, c, cls) => `<tr><td>${l}</td><td class="num ${cls ? Y.tone(a) : ""}">${a == null ? "n/a" : cls === "u" ? pctU(a) : pct(a)}</td><td class="num ${cls ? Y.tone(c) : ""}">${c == null ? "n/a" : cls === "u" ? pctU(c) : pct(c)}</td></tr>`;
     box.innerHTML = b ? `<div class="bt-grid"><div>
         <div style="margin-bottom:10px"><span class="pill ${good ? "up" : "dn"}"><b>${good ? "La règle a battu l'ETF sur l'historique" : "Pas mieux que l'ETF sur l'historique"}</b></span></div>
-        <div class="tbl"><table><thead><tr><th>${month(b.start)} → ${month(b.end)}</th><th class="num">Poche</th><th class="num">ETF Monde</th></tr></thead><tbody>
+        <div class="tbl"><table><thead><tr><th>${month(b.start)} → ${month(b.end)} · révision tous les 3 mois</th><th class="num">Poche</th><th class="num">ETF Monde</th></tr></thead><tbody>
           ${row("Rendement annuel", b.cagr, b.bench_cagr, "t")}${row("Pire baisse", b.max_dd, b.bench_max_dd, "t")}${row("Pire période de 12 mois", b.worst_12m, b.bench_worst_12m, "t")}${row("Variations (volatilité)", b.vol, b.bench_vol, "u")}
           <tr><td>Périodes de 12 mois où la poche a fait mieux</td><td class="num">${pctU(b.beat_12m)}</td><td></td></tr>
           <tr><td>Actions changées par mois (en moyenne)</td><td class="num">${Y.num(b.turnover * st.rules.top_n, 1)}</td><td></td></tr></tbody></table></div>
@@ -282,12 +289,29 @@
       </div><div class="chart" id="bt-curve"></div></div>`
       : `<div class="muted">Historique trop court pour rejouer la règle (au moins 2 ans nécessaires).</div>`;
     if (b) drawBt(b);
+    renderPepites(st.pepites);
     renderModes(st.modes);
     $("#picks-note").textContent = `Classement de ${month(st.month)} · ${st.priced_n} entreprises cotées sur ${st.universe_n} (${st.source}) · ${st.rules.sector_cap || 3} actions au plus par secteur · une action détenue n'est à remplacer que si elle sort du top ${st.rules.keep_rank} ou perd sa tendance`;
     $("#picks tbody").innerHTML = st.picks.map((x) => `<tr><td class="num">${x.rank}</td><td class="nowrap"><b style="font-weight:500">${esc(x.name)}</b></td><td class="muted">${esc(x.sector)}</td><td class="muted">${esc(x.country)}</td>
       <td class="num ${Y.tone(x.mom)}">${pct(x.mom, 0)}</td><td class="num ${Y.tone(x.r1m)}">${pct(x.r1m, 1)}</td><td class="mono muted" style="font-size:12px">${esc(x.yahoo)}</td></tr>`).join("");
   }
 
+
+  function renderPepites(pp) {
+    const box = $("#pep-box");
+    if (!pp) { box.innerHTML = `<div class="muted">Les pépites apparaissent au prochain calcul hebdomadaire.</div>`; return; }
+    const b = pp.backtest, good = b && b.bench_cagr != null && b.cagr > b.bench_cagr && b.beat_12m >= 0.5;
+    const cmp = b ? `<div class="tbl" style="margin:10px 0"><table><thead><tr><th>${month(b.start)} → ${month(b.end)} · révision tous les 3 mois</th><th class="num">Pépites</th><th class="num">ETF Monde</th></tr></thead><tbody>
+        <tr><td>Rendement annuel</td><td class="num ${Y.tone(b.cagr)}">${pct(b.cagr)}</td><td class="num ${Y.tone(b.bench_cagr)}">${pct(b.bench_cagr)}</td></tr>
+        <tr><td>Pire baisse</td><td class="num dn">${pct(b.max_dd, 0)}</td><td class="num dn">${pct(b.bench_max_dd, 0)}</td></tr>
+        <tr><td>Pire période de 12 mois</td><td class="num ${Y.tone(b.worst_12m)}">${pct(b.worst_12m)}</td><td class="num ${Y.tone(b.bench_worst_12m)}">${pct(b.bench_worst_12m)}</td></tr>
+        <tr><td>Meilleure période de 12 mois</td><td class="num ${Y.tone(b.best_12m)}">${pct(b.best_12m)}</td><td></td></tr>
+        <tr><td>Périodes de 12 mois où les pépites ont fait mieux</td><td class="num">${pctU(b.beat_12m)}</td><td></td></tr></tbody></table></div>` : `<div class="muted">Historique trop court pour rejouer la règle.</div>`;
+    box.innerHTML = `<div class="muted" style="font-size:13px">Les entreprises <b>plus petites</b> de l'indice islamique (rangs ${pp.rules.from} à ${pp.rules.to} par taille, ${pp.priced_n} cotées), classées par hausse sur ${pp.rules.lookback} mois (sans le dernier) : on les repère plus tôt, quand leur histoire commence à décoller. ${pp.rules.top_n} actions, ${pp.rules.sector_cap} au plus par secteur, révision tous les 3 mois. C'est la part « pari » : elle peut doubler comme perdre la moitié, garde-la petite (5 à 10 % du portefeuille).</div>
+      <div style="margin-top:10px"><span class="pill ${good ? "up" : "dn"}"><b>${good ? "A battu l'ETF sur l'historique" : "N'a pas battu l'ETF sur l'historique"}</b></span></div>${cmp}
+      <div class="tbl"><table id="pep-picks"><thead><tr><th class="num">Rang</th><th>Entreprise</th><th>Secteur</th><th class="num">${pp.rules.lookback} mois</th><th>Ticker</th></tr></thead><tbody>
+      ${pp.picks.map((x) => `<tr><td class="num">${x.rank}</td><td><b style="font-weight:500">${esc(x.name)}</b> <span class="muted" style="font-size:12px">${esc(x.country)}</span></td><td class="muted">${esc(x.sector)}</td><td class="num ${Y.tone(x.mom)}">${pct(x.mom, 0)}</td><td class="mono muted" style="font-size:12px">${esc(x.yahoo)}</td></tr>`).join("")}</tbody></table></div>`;
+  }
   function renderModes(md) {
     const box = $("#modes");
     if (!md) { box.innerHTML = `<div class="muted">La comparaison des modes de révision apparaît au prochain calcul hebdomadaire.</div>`; return; }
@@ -326,17 +350,21 @@
   function lines() {
     const out = data.products.map((p) => ({ id: p.key, label: `${p.name} (ETF)`, price: (data.prices || {})[p.key] }));
     const sp = (data.stocks && data.stocks.prices) || {};
-    for (const [k, v] of Object.entries(sp)) out.push({ id: k, label: `${v.name} (action, ${k})`, price: v.price_eur, stock: true });
+    for (const [k, v] of Object.entries(sp)) out.push({ id: k, label: `${v.name} (${v.pocket === "pepites" ? "pépite" : "action"}, ${k})`, price: v.price_eur, stock: true });
     return out;
   }
   function setupPortfolio() {
     const good = data.stocks && data.stocks.backtest && data.stocks.backtest.bench_cagr != null && data.stocks.backtest.cagr > data.stocks.backtest.bench_cagr && data.stocks.backtest.beat_12m >= 0.5;
-    if (!pf) pf = loadPf() || { model: "equilibre", sat: good ? 0.2 : 0, amount: 100, rows: [] };
+    if (!pf) pf = loadPf() || { model: "equilibre", sat: good ? 0.2 : 0, pep: 0.05, rev: "trimestrielle", amount: 100, rows: [] };
+    if (pf.rev == null) pf.rev = "trimestrielle";
+    if (pf.pep == null) pf.pep = 0.05;
     const ms = $("#pf-model");
     if (!ms.options.length) {
       ms.innerHTML = Object.entries(data.models).map(([k, m]) => `<option value="${k}">${esc(m.label)}</option>`).join("");
       ms.addEventListener("change", () => { pf.model = ms.value; savePf(); plan(); });
       $("#pf-sat").addEventListener("change", (e) => { pf.sat = Number(e.target.value); savePf(); plan(); });
+      $("#pf-pep").addEventListener("change", (e) => { pf.pep = Number(e.target.value); savePf(); plan(); });
+      $("#pf-rev").addEventListener("change", (e) => { pf.rev = e.target.value; savePf(); plan(); });
       $("#pf-amount").addEventListener("input", (e) => { pf.amount = Math.max(0, Number(e.target.value.replace(/\s/g, "")) || 0); savePf(); plan(); });
       $("#pf-add").addEventListener("click", () => { pf.rows.push({ id: "", qty: "", pru: "" }); savePf(); renderPf(); });
       $("#pf-link").addEventListener("click", () => { const code = btoa(unescape(encodeURIComponent(JSON.stringify(pf))));
@@ -349,6 +377,7 @@
       $("#pf").addEventListener("click", (e) => { const b = e.target.closest("[data-del]"); if (!b) return; pf.rows.splice(+b.dataset.del, 1); savePf(); renderPf(); });
     }
     ms.value = pf.model; $("#pf-sat").value = String(pf.sat); $("#pf-amount").value = pf.amount;
+    $("#pf-pep").value = String(pf.pep); $("#pf-rev").value = pf.rev;
     $("#pf-options").innerHTML = lines().map((l) => `<option value="${esc(l.label)}"></option>`).join("");
     renderPf();
   }
@@ -375,29 +404,49 @@
     $("#pf-total").textContent = eur(tot);
     $("#pf-pl").innerHTML = plKnown ? `<b class="${Y.tone(pl)}">${pl >= 0 ? "+" : ""}${eur(pl)}</b>` : "";
   }
+  const MONTHS = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
   function plan() {
-    const m = data.models[pf.model], st = data.stocks, sat = st ? pf.sat : 0;
+    const m = data.models[pf.model], st = data.stocks;
+    const sat = st ? pf.sat : 0, pep = st && st.pepites ? (pf.pep || 0) : 0;
+    const quarterly = (pf.rev || "trimestrielle") === "trimestrielle", rev = data.revision || {};
+    const revNow = !quarterly || !!rev.now;
     const hs = holdings(), cur = {}; hs.forEach((h) => { cur[h.id] = (cur[h.id] || 0) + h.value; });
+    const pocketOf = (id) => ((st && st.prices && st.prices[id]) || {}).pocket || "main";
     const target = {};
-    Object.entries(m.weights).forEach(([k, w]) => { target[k] = w * (1 - sat); });
-    const alerts = [];
-    if (sat > 0) {
-      // actions détenues encore dans le top 20 avec tendance : gardées ; puis les meilleures du classement
-      const keep = new Set(st.keep || []), held = hs.filter((h) => h.stock && keep.has(h.id)).map((h) => h.id);
-      const chosen = [...new Set([...held, ...st.picks.map((p) => p.yahoo)])].slice(0, st.rules.top_n);
-      chosen.forEach((k) => { target[k] = (target[k] || 0) + sat / chosen.length; });
-      hs.filter((h) => h.stock && !keep.has(h.id)).forEach((h) => alerts.push(`<b>${esc(h.label)}</b> : sortie du top ${st.rules.keep_rank} ou tendance perdue. À vendre pour réinvestir dans la poche (une vente en gain est imposée à 31,4 %).`));
-    } else if (hs.some((h) => h.stock)) alerts.push("Vous détenez des actions alors que la poche est à 0 % : elles ne reçoivent plus de versements.");
+    Object.entries(m.weights).forEach(([k, w]) => { target[k] = w * (1 - sat - pep); });
+    const alerts = [], infos = [];
+    const pockets = [["main", sat, st, "la poche actions"], ["pepites", pep, st && st.pepites, "les pépites"]];
+    for (const [name, share, P, label] of pockets) {
+      const held = hs.filter((h) => h.stock && pocketOf(h.id) === name).map((h) => h.id);
+      if (!share) { if (held.length) infos.push(`Vous détenez des actions de ${label} alors que sa part est à 0 % : elles ne reçoivent plus de versements.`); continue; }
+      const keep = new Set(P.keep || []), top = P.rules.top_n;
+      let chosen;
+      if (revNow) {
+        const out = held.filter((k) => !keep.has(k));
+        out.forEach((k) => alerts.push(`<b>${esc((lineOf(k) || { label: k }).label)}</b> (${label}) : sortie du top ${P.rules.keep_rank} ou sans tendance. À vendre ce mois-ci, puis réinvestir dans ${label} (une vente en gain est imposée à 31,4 %).`));
+        chosen = [...new Set([...held.filter((k) => keep.has(k)), ...P.picks.map((p) => p.yahoo)])].slice(0, top);
+      } else {
+        // entre deux révisions : on garde les mêmes actions ; un nouveau venu part des actions du classement
+        chosen = [...new Set([...held, ...P.picks.map((p) => p.yahoo)])].slice(0, Math.max(top, held.length));
+      }
+      chosen.forEach((k) => { target[k] = (target[k] || 0) + share / chosen.length; });
+    }
+    const nxt = rev.next ? `${MONTHS[+rev.next.slice(5) - 1]} ${rev.next.slice(0, 4)}` : "";
+    $("#rev-banner").innerHTML = !st || (!sat && !pep) ? ""
+      : quarterly && rev.now ? `<div class="note-box ok" style="margin-bottom:12px"><span>${Y.I.info}</span><span><b>Mois de révision</b> (janvier, avril, juillet, octobre) : vendez les actions signalées ci-dessous et achetez les nouvelles. Un rappel est aussi envoyé sur Telegram.</span></div>`
+      : quarterly ? `<div class="note-box" style="margin-bottom:12px;background:var(--soft)"><span>${Y.I.info}</span><span>Prochaine révision des actions : <b>${nxt}</b> (rappel sur Telegram ce mois-là). D'ici là, gardez les mêmes actions : les versements vont aux actions déjà détenues.</span></div>` : "";
     const total = Object.values(cur).reduce((a, b) => a + b, 0), amount = pf.amount || 0, after = total + amount;
     const ids = [...new Set([...Object.keys(target), ...Object.keys(cur)])];
     const deficit = Object.fromEntries(ids.map((k) => [k, Math.max(0, (target[k] || 0) * after - (cur[k] || 0))]));
     const dsum = Object.values(deficit).reduce((a, b) => a + b, 0);
     const alloc = Object.fromEntries(ids.map((k) => [k, dsum >= amount ? (dsum ? amount * deficit[k] / dsum : 0) : deficit[k] + (amount - dsum) * (target[k] || 0)]));
-    ids.filter((k) => !target[k] && cur[k] && !(lineOf(k) || {}).stock).forEach((k) => alerts.push(`<b>${esc((lineOf(k) || { label: k }).label)}</b> ne fait pas partie du portefeuille « ${esc(m.label)} » : il ne reçoit pas de versement.`));
-    $("#plan-alerts").innerHTML = alerts.map((a) => `<div class="note-box warn" style="margin-bottom:8px"><span>${Y.I.warn}</span><span>${a}</span></div>`).join("");
+    ids.filter((k) => !target[k] && cur[k] && !(lineOf(k) || {}).stock).forEach((k) => infos.push(`<b>${esc((lineOf(k) || { label: k }).label)}</b> ne fait pas partie du portefeuille « ${esc(m.label)} » : il ne reçoit pas de versement.`));
+    $("#plan-alerts").innerHTML = alerts.map((a) => `<div class="note-box warn" style="margin-bottom:8px"><span>${Y.I.warn}</span><span>${a}</span></div>`).join("")
+      + infos.map((a) => `<div class="note-box" style="margin-bottom:8px;background:var(--soft)"><span>${Y.I.info}</span><span>${a}</span></div>`).join("");
+    const tag = (k) => { const l = lineOf(k); return l && l.stock ? ` <span class="pill ${pocketOf(k) === "pepites" ? "brand" : "neu"}" style="font-size:11px">${pocketOf(k) === "pepites" ? "pépite" : "poche"}</span>` : ""; };
     const rows = ids.filter((k) => target[k] || cur[k]).sort((a, b) => (alloc[b] || 0) - (alloc[a] || 0));
     $("#plan tbody").innerHTML = rows.map((k) => { const l = lineOf(k);
-      return `<tr><td>${esc(l ? l.label : k)}</td><td class="num muted">${total ? pctU((cur[k] || 0) / total) : "—"}</td><td class="num">${pctU(target[k] || 0, 1)}</td><td class="num"><b>${alloc[k] >= 1 ? eur(alloc[k]) : "—"}</b></td></tr>`; }).join("")
+      return `<tr><td>${esc(l ? l.label : k)}${tag(k)}</td><td class="num muted">${total ? pctU((cur[k] || 0) / total) : "—"}</td><td class="num">${pctU(target[k] || 0, 1)}</td><td class="num"><b>${alloc[k] >= 1 ? eur(alloc[k]) : "—"}</b></td></tr>`; }).join("")
       + `<tr><td><b>Total</b></td><td></td><td class="num">100 %</td><td class="num"><b>${eur(amount)}</b></td></tr>`;
   }
   function renderNews() {

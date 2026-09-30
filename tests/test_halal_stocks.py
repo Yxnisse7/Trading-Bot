@@ -90,3 +90,35 @@ def test_sector_cap_limits_the_pocket_to_three_per_sector():
     sectors = {f"T{i}": ("Tech" if i < 8 else f"Autre{i}") for i in range(20)}
     picks = hs.select(table, [], 10, sectors=sectors)
     assert sum(1 for p in picks if sectors[p] == "Tech") == 3 and len(picks) == 10
+
+
+def test_pepites_pocket_and_quarterly_reminder(tmp_path, monkeypatch):
+    from datetime import datetime, timezone
+    from trading_bot import invest
+    monkeypatch.setattr(hs, "UNIVERSE_SIZE", 40)
+    monkeypatch.setattr(hs, "PEPITES_FROM", 40)
+    monkeypatch.setattr(hs, "PEPITES_TO", 70)
+
+    def fetch(sym):
+        if sym.startswith("EUR"):
+            return [(t, 1.0) for t in _months(72)], "USD"
+        k = int(sym[1:])
+        return _stock(72, 0.0008 * (k % 40) - 0.01), "USD"
+
+    holdings = [{"ticker": f"S{k}", "yahoo": f"S{k}", "name": f"Société {k}", "sector": f"Secteur {k % 6}",
+                 "country": "US", "currency": "USD", "weight": 100 - k} for k in range(70)]
+    bench = hs.to_eur_series(_stock(72, 0.008), "EUR", {})
+    res = hs.build(bench, NOW, fetch_monthly=fetch, holdings_fn=lambda: holdings, cache_dir=tmp_path, pause=0)
+    pep = res["pepites"]
+    assert pep and len(pep["picks"]) == 5 and all(int(p["yahoo"][1:]) >= 40 for p in pep["picks"])
+    assert res["backtest"] and res["backtest_monthly"]
+    sectors = [p["sector"] for p in pep["picks"]]
+    assert max(sectors.count(x) for x in sectors) <= 2
+    # rappel : seulement en janvier, avril, juillet, octobre, une fois par trimestre
+    data = {"stocks": res}
+    sf = tmp_path / "state.json"
+    assert invest.revision_reminder(data, datetime(2026, 9, 30, tzinfo=timezone.utc), sf) is None
+    text = invest.revision_reminder(data, datetime(2026, 10, 1, tzinfo=timezone.utc), sf)
+    assert text and "Révision trimestrielle" in text and "Pépites" in text
+    assert invest.revision_reminder(data, datetime(2026, 10, 2, tzinfo=timezone.utc), sf) is None
+    assert invest.next_revision(datetime(2026, 11, 5, tzinfo=timezone.utc)) == "2027-01"

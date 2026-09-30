@@ -33,6 +33,10 @@ from .providers.http import ProviderError, get_text
 log = logging.getLogger(__name__)
 
 UNIVERSE_SIZE = 150
+# Poche « pépites » : entreprises plus petites de l'indice (rangs 151 à 400), momentum récent (6 mois),
+# 5 actions, 2 au plus par secteur, révision tous les 3 mois
+PEPITES_FROM, PEPITES_TO, PEPITES_N, PEPITES_KEEP, PEPITES_CAP, PEPITES_LOOKBACK = 150, 400, 5, 10, 2, 6
+REVISION_EVERY = 3
 TOP_N = 10
 KEEP_RANK = 20
 SECTOR_CAP = 3                  # au plus 3 actions d'un même secteur : la poche ne doit pas être un pari sur un seul thème
@@ -48,7 +52,8 @@ EXCHANGES = [
     (r"copenhagen", ".CO"), (r"stockholm|nasdaq omx nordic", ".ST"), (r"helsinki", ".HE"), (r"oslo", ".OL"),
     (r"singapore", ".SI"), (r"tel aviv", ".TA"), (r"new zealand", ".NZ"), (r"wiener|vienna", ".VI"), (r"irish|dublin", ".IR"),
 ]
-RULES = {"top_n": TOP_N, "keep_rank": KEEP_RANK, "cost": COST_PER_TURNOVER, "sector_cap": SECTOR_CAP, "modes": 1}
+RULES = {"top_n": TOP_N, "keep_rank": KEEP_RANK, "cost": COST_PER_TURNOVER, "sector_cap": SECTOR_CAP, "modes": 1,
+         "revision_every": REVISION_EVERY, "pepites": [PEPITES_FROM, PEPITES_TO, PEPITES_N, PEPITES_KEEP, PEPITES_CAP, PEPITES_LOOKBACK]}
 FX_PAIRS = {c: f"EUR{c}=X" for c in ("USD", "GBP", "JPY", "CHF", "CAD", "AUD", "DKK", "SEK", "NOK", "HKD", "SGD", "ILS", "NZD")}
 
 
@@ -211,16 +216,17 @@ def to_eur_series(rows: list[tuple[int, float]], ccy: str, fx: dict[str, dict[st
     return sorted(out.items())
 
 
-def momentum_table(series: dict[str, list[tuple[str, float]]], month: str) -> list[dict[str, Any]]:
-    """Classement au mois `month` (fin de mois) : momentum 12-1 et filtre de tendance 10 mois."""
+def momentum_table(series: dict[str, list[tuple[str, float]]], month: str, lookback: int = 12) -> list[dict[str, Any]]:
+    """Classement au mois `month` (fin de mois) : momentum `lookback`-1 (hausse sur `lookback` mois sans
+    le dernier) et filtre de tendance 10 mois."""
     out = []
     for key, s in series.items():
         idx = {m: i for i, (m, _) in enumerate(s)}
         i = idx.get(month)
-        if i is None or i < 12:
+        if i is None or i < max(12, lookback):
             continue
         vals = [v for _, v in s]
-        mom = vals[i - 1] / vals[i - 12] - 1
+        mom = vals[i - 1] / vals[i - lookback] - 1
         sma = sum(vals[i - 9: i + 1]) / 10
         out.append({"key": key, "mom": mom, "trend": vals[i] > sma, "r1m": vals[i] / vals[i - 1] - 1})
     out.sort(key=lambda x: -x["mom"])
@@ -257,18 +263,21 @@ def select(table: list[dict[str, Any]], held: list[str], n: int = TOP_N, keep_ra
 
 
 def backtest(series: dict[str, list[tuple[str, float]]], bench: list[tuple[str, float]] | None,
-             n: int = TOP_N, sectors: dict[str, str] | None = None) -> dict[str, Any] | None:
-    """Rejoue la règle chaque mois : poche équipondérée, rendement du mois suivant, frais de rotation."""
+             n: int = TOP_N, sectors: dict[str, str] | None = None, every: int = 1, lookback: int = 12,
+             keep_rank: int = KEEP_RANK, cap: int = SECTOR_CAP) -> dict[str, Any] | None:
+    """Rejoue la règle : révision tous les `every` mois (entre deux, on garde les mêmes), poche
+    équipondérée à chaque révision, rendement du mois suivant, frais de rotation."""
     months = sorted({m for s in series.values() for m, _ in s})
     maps = {k: dict(s) for k, s in series.items()}
     bmap = dict(bench or [])
     held: list[str] = []
     value, bvalue, curve, rows = 1.0, 1.0, [], []
     for a, b in zip(months, months[1:]):
-        table = momentum_table(series, a)
+        table = momentum_table(series, a, lookback)
         if len(table) < 3 * n:
             continue
-        new = select(table, held, n, sectors=sectors)
+        step = len(rows)
+        new = select(table, held, n, keep_rank, sectors=sectors, cap=cap) if (not held or step % every == 0) else held
         if not new:
             continue
         turnover = len(set(new) - set(held)) / n if held else 1.0
@@ -444,7 +453,7 @@ def build(bench: list[tuple[str, float]] | None, now: datetime | None = None,
         holdings, source = cache.get("holdings"), "dernière composition connue"
     if not holdings:
         return cache.get("result")
-    universe = holdings[:UNIVERSE_SIZE]
+    universe = holdings[:PEPITES_TO]
 
     fx: dict[str, dict[str, float]] = {}
     for ccy, sym in FX_PAIRS.items():
@@ -470,6 +479,11 @@ def build(bench: list[tuple[str, float]] | None, now: datetime | None = None,
             missing.append(h["yahoo"])
         if pause:
             time.sleep(pause)
+    big_keys = [h["yahoo"] for h in universe[:UNIVERSE_SIZE]]
+    small_keys = [h["yahoo"] for h in universe[PEPITES_FROM:PEPITES_TO]]
+    all_series = series
+    series = {k: all_series[k] for k in big_keys if k in all_series}
+    small = {k: all_series[k] for k in small_keys if k in all_series}
     if len(series) < 3 * TOP_N:
         log.warning("poche actions : trop peu d'historiques (%d)", len(series))
         return cache.get("result")
@@ -488,15 +502,37 @@ def build(bench: list[tuple[str, float]] | None, now: datetime | None = None,
                 "price_eur": round(series[k][-1][1], 4), "mom": round(r.get("mom", 0), 4), "r1m": round(r.get("r1m", 0), 4),
                 "trend": bool(r.get("trend")), "rank": r.get("rank")}
 
+    pepites = None
+    if len(small) >= 3 * PEPITES_N:
+        ptable = momentum_table(small, month, PEPITES_LOOKBACK)
+        psec = {k: meta[k].get("sector", "") for k in small}
+        ppicks = select(ptable, [], PEPITES_N, PEPITES_KEEP, sectors=psec, cap=PEPITES_CAP)
+        pby = {r["key"]: r for r in ptable}
+
+        def prow(k):
+            h, r = meta[k], pby.get(k, {})
+            return {"yahoo": k, "name": h["name"], "sector": h["sector"], "country": h["country"],
+                    "price_eur": round(small[k][-1][1], 4), "mom": round(r.get("mom", 0), 4),
+                    "r1m": round(r.get("r1m", 0), 4), "trend": bool(r.get("trend")), "rank": r.get("rank")}
+        pepites = {"universe_n": len(small_keys), "priced_n": len(small), "picks": [prow(k) for k in ppicks],
+                   "keep": [r["key"] for r in ptable if r["rank"] <= PEPITES_KEEP and r["trend"]],
+                   "rules": {"top_n": PEPITES_N, "keep_rank": PEPITES_KEEP, "sector_cap": PEPITES_CAP,
+                             "lookback": PEPITES_LOOKBACK, "from": PEPITES_FROM + 1, "to": PEPITES_TO},
+                   "backtest": backtest(small, bench, PEPITES_N, psec, every=REVISION_EVERY, lookback=PEPITES_LOOKBACK,
+                                        keep_rank=PEPITES_KEEP, cap=PEPITES_CAP)}
+
     result = {
-        "updated_at": iso(now), "source": source, "universe_n": len(universe), "priced_n": len(series),
+        "updated_at": iso(now), "source": source, "universe_n": min(len(universe), UNIVERSE_SIZE), "priced_n": len(series),
         "missing": missing[:40], "month": month,
         "rules": RULES,
         "picks": [row(k) for k in picks],
         "ranked": [row(r["key"]) for r in table[:40]],
         "keep": [r["key"] for r in table if r["rank"] <= KEEP_RANK and r["trend"]],
-        "prices": {k: {"name": meta[k]["name"], "price_eur": round(s[-1][1], 4)} for k, s in series.items()},
-        "backtest": backtest(series, bench, sectors=sectors),
+        "prices": {k: {"name": meta[k]["name"], "price_eur": round(s[-1][1], 4), "pocket": "pepites" if k in small else "main"}
+                   for k, s in all_series.items()},
+        "backtest": backtest(series, bench, sectors=sectors, every=REVISION_EVERY),
+        "backtest_monthly": backtest(series, bench, sectors=sectors),
+        "pepites": pepites,
         "modes": simulate_modes(series, bench, sectors=sectors),
     }
     cdir.mkdir(parents=True, exist_ok=True)

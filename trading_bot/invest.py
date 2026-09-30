@@ -371,6 +371,7 @@ def build(now: datetime | None = None, fetch=fetch_monthly, news=fetch_invest_ne
             log.exception("poche actions halal")
     prices = {p["key"]: round(series[p["key"]][-1][1], 4) for p in UNIVERSE if p["key"] in series}
     return {"updated_at": iso(now), "products": products, "models": models, "stocks": stock_part, "prices": prices,
+            "revision": {"months": list(REVISION_MONTHS), "next": next_revision(now), "now": now.month in REVISION_MONTHS},
             "news": news(now) if news else [], "errors": errors,
             "fx_last": {c: (sorted(v.items())[-1][1] if v else None) for c, v in fx.items()}}
 
@@ -381,3 +382,47 @@ def publish(data: dict[str, Any], data_dir: Path | None = None, docs_dir: Path |
     for d in (data_dir or invest_dir(), docs_dir or ROOT_DIR / "docs" / "invest"):
         d.mkdir(parents=True, exist_ok=True)
         (d / "data.json").write_text(text, encoding="utf-8")
+
+
+# ------------------------------------------------------------------ rappel de révision (janvier, avril, juillet, octobre)
+REVISION_MONTHS = (1, 4, 7, 10)
+
+
+def next_revision(now: datetime) -> str:
+    """Mois de la prochaine révision (« 2027-01 »), le mois en cours s'il en est un."""
+    y, m = now.year, now.month
+    while m not in REVISION_MONTHS:
+        m += 1
+        if m > 12:
+            y, m = y + 1, 1
+    return f"{y}-{m:02d}"
+
+
+def revision_reminder(data: dict[str, Any], now: datetime, state_file: Path | None = None) -> str | None:
+    """Texte du rappel Telegram, une seule fois par trimestre, pendant un mois de révision."""
+    import json
+    if now.month not in REVISION_MONTHS or not data.get("stocks"):
+        return None
+    key = f"{now.year}-{now.month:02d}"
+    state_file = state_file or invest_dir() / "state.json"
+    try:
+        state = json.loads(state_file.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        state = {}
+    if state.get("last_reminder") == key:
+        return None
+    st_ = data["stocks"]
+    lines = ["<b>📅 Révision trimestrielle de ta poche actions halal</b>", "",
+             "<b>Les 10 actions du trimestre</b> (hausse sur 12 mois, 3 au plus par secteur) :"]
+    lines += [f"{i}. {x['name']} ({x['yahoo']})" for i, x in enumerate(st_["picks"], 1)]
+    pep = (st_.get("pepites") or {}).get("picks") or []
+    if pep:
+        lines += ["", "<b>Pépites</b> (petites entreprises, hausse sur 6 mois) :"]
+        lines += [f"• {x['name']} ({x['yahoo']})" for x in pep]
+    lines += ["", "À faire : vendre les actions que tu détiens et qui ne sont plus dans le top 20 (ou sans tendance), "
+              "acheter les nouvelles avec l'argent de la vente. Jusqu'à la prochaine révision, tes versements vont "
+              "aux mêmes actions.", "Le détail et les montants : onglet « Investir » → « Mon portefeuille et plan du mois »."]
+    state["last_reminder"] = key
+    state_file.parent.mkdir(parents=True, exist_ok=True)
+    state_file.write_text(json.dumps(state), encoding="utf-8")
+    return "\n".join(lines)

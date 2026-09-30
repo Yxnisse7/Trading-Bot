@@ -2,7 +2,7 @@ name: Investissement halal — mise à jour
 
 # Chaque jour à 06:30 UTC (et à la main) : historique mensuel des ETF islamiques, sukuk et or,
 # statistiques de long terme, avis par règles et actualités, publiés pour l'onglet « Investir ».
-# Aucun ordre, aucun message Telegram.
+# Aucun ordre ; un seul message Telegram par trimestre (rappel de révision en janvier, avril, juillet, octobre).
 on:
   schedule:
     - cron: "30 6 * * *"
@@ -18,7 +18,7 @@ permissions:
 jobs:
   invest:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
         with:
@@ -29,4 +29,8 @@ jobs:
           cache: pip
       - run: pip install -r requirements.txt
       - name: Données d'investissement
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
         run: bash scripts/run_and_push.sh python run.py invest

@@ -426,6 +426,13 @@ Pas du trading : de l'investissement halal à long terme. Page `investissement.h
   islamique, frais de rotation compris (0,3 % par achat ou vente) ; biais affiché : l'univers est la
   composition actuelle de l'indice. La page conseille la poche (20 % par défaut, 30 % au plus)
   seulement si la règle a battu l'ETF sur l'historique ; sinon 0 %.
+- **Révision tous les 3 mois par défaut** (janvier, avril, juillet, octobre) : c'est le mode qui a donné le
+  meilleur résultat net avec de petits montants. Entre deux révisions, les versements vont aux actions
+  déjà détenues ; le mois de révision, la page signale celles à vendre et un **rappel Telegram** (une
+  fois par trimestre) liste les actions du trimestre. Le mode « chaque mois » reste disponible.
+- **Pépites** (part « pari », 5 % par défaut, 10 % au plus) : les entreprises plus petites de l'indice
+  islamique (rangs 151 à 400 par taille), classées par hausse sur 6 mois sans le dernier ; 5 actions,
+  2 au plus par secteur, révision tous les 3 mois, backtest affiché contre l'ETF.
 - **Modes de révision**, rejoués avec de vrais montants (200 € puis 20 €/mois dans la poche, achats en
   plan gratuits, 1 € par vente, 31,4 % d'impôt sur chaque vente en gain) : chaque mois, tous les 3 mois,
   ou sans jamais vendre (les versements vont aux meilleures actions du moment). Comparés à l'ETF Monde
