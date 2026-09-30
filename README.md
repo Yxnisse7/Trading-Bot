@@ -408,7 +408,8 @@ Pas du trading : de l'investissement halal à long terme. Page `investissement.h
   95 % du temps. Produit trop récent : historique de référence du même marché (MSCI World Islamic,
   USA Islamic, prix de l'or), affiché comme tel.
 - **Portefeuilles types** (prudent, équilibré, dynamique) simulés avec rééquilibrage mensuel ; un
-  produit de moins de 3 ans d'historique (sukuk) est retiré de la simulation et signalé.
+  les sukuk (ETF lancé en 2023) sont estimés avec des obligations d'État américaines 3-7 ans (même
+  devise, durée proche ; référence de calcul, non halal, affichée comme telle), l'or avec le prix de l'or.
 - **Simulateur** : mise de départ, versement mensuel et durée ; cas défavorable, médian et favorable
   tirés des périodes réelles de l'historique (10 %, 50 %, 90 %).
 - **Avis par règles affichées** : tendance longue (prix contre moyenne sur 10 mois), distance au plus

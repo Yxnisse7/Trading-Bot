@@ -197,7 +197,7 @@
           <span>Sur 10 ans</span><span>${pct(s.r10)}</span><span>Sur 5 ans</span><span>${pct(s.r5)}</span>
           <span>Variations (volatilité)</span><span>${pctU(s.vol)}</span><span>Pire baisse</span><span class="dn">${pct(s.max_dd, 0)}</span>
           <span>Durée conseillée</span><span>${m.advised ? `${m.advised.years} ans et plus` : "n/a"}</span></div>
-          <div class="muted" style="font-size:12px">Depuis ${month(s.start)}${s.dropped && s.dropped.length ? ` · ${s.dropped.map((d) => NAMES[d] || d).join(", ")} trop récent${s.dropped.length > 1 ? "s" : ""} : retiré${s.dropped.length > 1 ? "s" : ""} de l'historique, les autres parts sont augmentées d'autant` : ""}${m.weights.or ? " · or : historique du prix de l'or" : ""}.</div>`
+          <div class="muted" style="font-size:12px">Depuis ${month(s.start)}${s.dropped && s.dropped.length ? ` · ${s.dropped.map((d) => NAMES[d] || d).join(", ")} trop récent${s.dropped.length > 1 ? "s" : ""} : retiré${s.dropped.length > 1 ? "s" : ""} de l'historique, les autres parts sont augmentées d'autant` : ""}${m.weights.or ? " · or : historique du prix de l'or" : ""}${m.weights.sukuk && !(s.dropped || []).includes("sukuk") ? " · sukuk : estimés avec des obligations d'État américaines 3-7 ans (ETF de sukuk trop récent)" : ""}.</div>`
         : `<div class="muted">Historique indisponible pour l'instant.</div>`;
       return `<div class="card model"><div><h3>${esc(m.label)}</h3><div class="muted" style="font-size:13px">${esc(m.for)}</div></div>
         <div class="alloc">${bar}</div><div class="alloc-leg">${leg}</div>${kv}</div>`; }).join("");

@@ -56,7 +56,7 @@ UNIVERSE: list[dict[str, Any]] = [
      "category": "Actions américaines", "kind": "actions", "income": "capitalise",
      "role": "Grandes entreprises américaines du S&P 500 conformes à la charia, filtre humanitaire en plus.",
      "since": 2026, "proxy": "usa"},
-    {"key": "sukuk", "name": "HSBC Global Sukuk", "isin": "IE000E8WZD37", "yahoo": "HBKU.L", "ter": 0.37,
+    {"key": "sukuk", "name": "HSBC Global Sukuk", "isin": "IE000E8WZD37", "yahoo": "HBKU.L", "ter": 0.37, "proxy": "sukuk_long",
      "category": "Sukuk (obligations islamiques)", "kind": "sukuk", "income": "distribue",
      "role": "La partie stable : sukuk en dollars de bonne qualité (États, banques). Rendement régulier, faibles variations.",
      "since": 2025},
@@ -66,7 +66,11 @@ UNIVERSE: list[dict[str, Any]] = [
      "since": 2020, "proxy": "or_long"},
 ]
 # séries longues servant de référence (pas des produits à acheter)
-PROXIES = {"or_long": {"name": "prix de l'or (contrat à terme, référence)", "yahoo": "GC=F"}}
+PROXIES = {"or_long": {"name": "prix de l'or (contrat à terme, référence)", "yahoo": "GC=F"},
+           # Les ETF de sukuk n'existent que depuis 2023 : pour estimer leur comportement sur longue période, on
+           # prend des obligations d'État américaines de 3 à 7 ans (même devise, durée et qualité proches).
+           # Non halal : sert uniquement de référence de calcul, jamais de produit à acheter.
+           "sukuk_long": {"name": "obligations d'État américaines 3-7 ans (référence de calcul, non halal)", "yahoo": "IEI"}}
 FX = {"USD": "EURUSD=X", "GBP": "EURGBP=X"}
 
 MODELS = {
@@ -358,6 +362,8 @@ def build(now: datetime | None = None, fetch=fetch_monthly, news=fetch_invest_ne
     model_series = dict(series)
     if "or_long" in series:
         model_series["or"] = series["or_long"]
+    if "sukuk_long" in series and len(series.get("sukuk") or []) < 60:
+        model_series["sukuk"] = series["sukuk_long"]
     models = {}
     for key, m in MODELS.items():
         sim = simulate_model(m["weights"], model_series)

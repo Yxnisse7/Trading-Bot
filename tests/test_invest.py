@@ -79,9 +79,9 @@ def test_build_products_models_and_advice():
     assert by["sp500_wahed"]["stats"] is None and by["sp500_wahed"]["error"]
     # baisse récente de 20 % sur les émergents : renforcer progressivement
     assert by["emergents"]["advice"]["label"] == "Renforcer progressivement"
-    # portefeuille prudent : sukuk trop récents, retirés de la simulation et signalés
+    # portefeuille prudent : sukuk trop récents, estimés avec la série de référence (obligations 3-7 ans)
     prudent = data["models"]["prudent"]["sim"]
-    assert prudent["dropped"] == ["sukuk"] and abs(sum(prudent["weights_used"].values()) - 1) < 1e-9
+    assert prudent["dropped"] == [] and prudent["weights_used"]["sukuk"] == 0.5
     assert data["models"]["dynamique"]["sim"]["periods"]
 
 
