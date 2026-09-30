@@ -93,9 +93,10 @@ def test_publish_writes_site_copy(tmp_path):
 def test_news_titles_are_cleaned(monkeypatch):
     rss = """<rss><channel>
       <item><title>Les sukuk en hausse - Les Echos</title><link>https://a</link><pubDate>Mon, 28 Sep 2026 08:00:00 GMT</pubDate></item>
+      <item><title>Cours de l'or : le SJC atteint 140 millions de VND - Vietnam.vn</title><link>https://c</link><pubDate>Mon, 28 Sep 2026 09:00:00 GMT</pubDate></item>
       <item><title>Vieux titre - Source</title><link>https://b</link><pubDate>Mon, 01 Jun 2026 08:00:00 GMT</pubDate></item>
     </channel></rss>"""
     monkeypatch.setattr(invest, "get_text", lambda url, timeout=12: rss)
     items = invest.fetch_invest_news(NOW)
     assert items[0]["title"] == "Les sukuk en hausse" and items[0]["source"] == "Les Echos"
-    assert len(items) == 1                                  # doublons et titres anciens écartés
+    assert len(items) == 1                        # doublons, titres anciens et sites bloqués écartés

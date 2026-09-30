@@ -86,12 +86,15 @@ def advised(data_years: int | None, floor: int) -> dict[str, Any]:
     return {"years": max(floor, data_years or 0), "data_years": data_years, "floor": floor}
 
 NEWS_QUERIES = [
-    ("finance islamique", "finance islamique"),
-    ("ETF islamique OR \"islamic ETF\"", "ETF islamiques"),
+    ('"finance islamique"', "finance islamique"),
+    ('"ETF islamique" OR "ETF islamiques" OR "islamic ETF" OR "Shariah ETF"', "ETF islamiques"),
     ("sukuk", "sukuk"),
-    ("prix de l'or", "or"),
-    ("Bourse marchés actions", "marchés"),
+    ('"cours de l\'or" OR "prix de l\'or" once', "or"),
+    ('"Bourse de Paris" OR "Wall Street" OR "marchés actions"', "marchés"),
 ]
+NEWS_PER_TAG = 6
+# sites qui inondent les résultats (prix de l'or en dongs traduits automatiquement, etc.)
+NEWS_BLOCKED = re.compile(r"(\.vn\b|vietnam|laodong|\bVND\b|\bSJC\b|\btaels?\b)", re.I)
 
 
 def invest_dir() -> Path:
@@ -294,12 +297,18 @@ def fetch_invest_news(now: datetime | None = None, days: int = 10, limit: int = 
             if m:
                 title, source = m.group(1).strip(), m.group(2).strip()
             key = re.sub(r"\W+", " ", title.lower())[:80]
-            if it.published < cutoff or key in seen:
+            if it.published < cutoff or key in seen or NEWS_BLOCKED.search(f"{title} {source}"):
                 continue
             seen.add(key)
             out.append({"title": title, "source": source, "link": it.link, "published": iso(it.published), "tag": tag})
+    # quelques articles par thème (le plus récent d'abord), pour qu'un seul sujet n'envahisse pas la liste
     out.sort(key=lambda x: x["published"], reverse=True)
-    return out[:limit]
+    kept, per = [], {}
+    for x in out:
+        if per.get(x["tag"], 0) < NEWS_PER_TAG:
+            per[x["tag"]] = per.get(x["tag"], 0) + 1
+            kept.append(x)
+    return kept[:limit]
 
 
 # ------------------------------------------------------------------ assemblage
