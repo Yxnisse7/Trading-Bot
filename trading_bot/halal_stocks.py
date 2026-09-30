@@ -32,8 +32,6 @@ from .providers.http import ProviderError, get_text
 
 log = logging.getLogger(__name__)
 
-PRODUCT_URL = "https://www.ishares.com/uk/individual/en/products/251394/ishares-msci-world-islamic-ucits-etf"
-FALLBACK_CSV = PRODUCT_URL + "/1506575576011.ajax?fileType=csv&fileName=ISWD_holdings&dataType=fund"
 UNIVERSE_SIZE = 150
 TOP_N = 10
 KEEP_RANK = 20
@@ -100,22 +98,22 @@ def parse_holdings(text: str) -> list[dict[str, Any]]:
     return rows
 
 
+ISHARES_CSV = [
+    "https://www.ishares.com/uk/individual/en/products/251394/fund/1506575576011.ajax?fileType=csv&fileName=ISWD_holdings&dataType=fund",
+    "https://www.ishares.com/uk/professional/en/products/251394/fund/1506575576011.ajax?fileType=csv&fileName=ISWD_holdings&dataType=fund",
+    "https://www.ishares.com/ch/individual/en/products/251394/fund/1495092304805.ajax?fileType=csv&fileName=ISWD_holdings&dataType=fund",
+]
+# secours : composition de l'ETF Invesco MSCI ACWI Islamic (même famille d'indices), en JSON
+INVESCO_JSON = "https://dng-api.invesco.com/cache/v1/accounts/en_GB/shareclasses/IE000LFC57H7/holdings/fund?idType=isin"
+YAHOO_SEARCH = "https://query2.finance.yahoo.com/v1/finance/search"
+SECONDARY = {"FRA", "BER", "MUN", "STU", "DUS", "HAM", "GER", "EBS", "VIE", "IOB", "MEX", "BUE", "SAO", "PNK"}
+
+
 def fetch_holdings() -> list[dict[str, Any]]:
-    """Composition de l'ETF : lien trouvé sur la page du fonds, sinon liens connus (site particulier et
-    professionnel, avec passage direct de la page d'avertissement d'iShares)."""
-    pass_ = "siteEntryPassthrough=true"
-    candidates = []
-    for base in (PRODUCT_URL, PRODUCT_URL.replace("/individual/", "/professional/")):
-        try:
-            page = get_text(f"{base}?{pass_}", timeout=20)
-            m = re.search(r'href="([^"]+\.ajax\?fileType=csv&(?:amp;)?fileName=[^"]*_holdings&(?:amp;)?dataType=fund)"', page)
-            if m:
-                candidates.append("https://www.ishares.com" + m.group(1).replace("&amp;", "&") + "&" + pass_)
-        except ProviderError as exc:
-            log.warning("page iShares indisponible (%s)", exc)
-        candidates.append(base + "/1506575576011.ajax?fileType=csv&fileName=ISWD_holdings&dataType=fund&" + pass_)
+    """Composition de l'ETF iShares MSCI World Islamic (CSV), sinon celle de l'Invesco MSCI ACWI Islamic."""
     last: Exception | None = None
-    for url in dict.fromkeys(candidates):
+    for url in ISHARES_CSV:
+        text = ""
         try:
             text = get_text(url, timeout=30)
             rows = parse_holdings(text)
@@ -123,9 +121,74 @@ def fetch_holdings() -> list[dict[str, Any]]:
                 return rows
         except ProviderError as exc:
             last = exc
-            snippet = re.sub(r"\s+", " ", locals().get("text", "")[:200])
-            log.warning("composition iShares illisible (%s) : %s… [%s]", url.split("?")[0][-60:], exc, snippet)
-    raise ProviderError(f"composition iShares indisponible : {last}")
+            log.warning("composition iShares illisible (%s) : %s [%s]", url[:70], exc, re.sub(r"\s+", " ", text[:120]))
+    try:
+        rows = invesco_holdings()
+        if rows:
+            return rows
+    except ProviderError as exc:
+        last = exc
+        log.warning("composition Invesco indisponible : %s", exc)
+    raise ProviderError(f"composition de l'ETF indisponible : {last}")
+
+
+def _find_rows(obj: Any) -> list[dict[str, Any]]:
+    """Première liste de positions (dictionnaires avec un ISIN) dans une réponse JSON de forme inconnue."""
+    if isinstance(obj, list):
+        if obj and isinstance(obj[0], dict) and any(k.lower() == "isin" for k in obj[0]):
+            return obj
+        for x in obj:
+            found = _find_rows(x)
+            if found:
+                return found
+    elif isinstance(obj, dict):
+        for v in obj.values():
+            found = _find_rows(v)
+            if found:
+                return found
+    return []
+
+
+def isin_to_yahoo(isin: str) -> str | None:
+    from .providers.http import get_json
+    try:
+        data = get_json(YAHOO_SEARCH, params={"q": isin, "quotesCount": 6, "newsCount": 0}, timeout=10, retries=2)
+    except ProviderError:
+        return None
+    quotes = [q for q in data.get("quotes", []) if q.get("quoteType") == "EQUITY" and q.get("symbol")]
+    main = [q for q in quotes if (q.get("exchange") or "").upper() not in SECONDARY]
+    return (main or quotes or [{}])[0].get("symbol")
+
+
+def invesco_holdings(pause: float = 0.1) -> list[dict[str, Any]]:
+    from .providers.http import get_json
+    data = get_json(INVESCO_JSON, timeout=30)
+    rows = _find_rows(data)
+    if not rows:
+        raise ProviderError("réponse Invesco sans positions")
+    out = []
+    for r in rows:
+        low = {k.lower(): v for k, v in r.items()}
+        isin = str(low.get("isin") or "").strip()
+        weight = low.get("weight") or low.get("percentageofnetassets") or low.get("percentage") or 0
+        try:
+            weight = float(str(weight).replace("%", "").replace(",", "."))
+        except ValueError:
+            weight = 0.0
+        if len(isin) != 12:
+            continue
+        out.append({"ticker": isin, "isin": isin, "name": str(low.get("name") or low.get("issuername") or isin).title(),
+                    "sector": str(low.get("sector") or low.get("gicssector") or ""), "country": str(low.get("country") or ""),
+                    "currency": str(low.get("currency") or ""), "weight": weight})
+    out.sort(key=lambda x: -x["weight"])
+    mapped = []
+    for h in out[:UNIVERSE_SIZE + 30]:
+        y = isin_to_yahoo(h["isin"])
+        if y:
+            mapped.append({**h, "yahoo": y})
+        if pause:
+            time.sleep(pause)
+    return mapped
 
 
 # ------------------------------------------------------------------ séries
@@ -256,9 +319,10 @@ def build(bench: list[tuple[str, float]] | None, now: datetime | None = None,
     if fresh and not force and cache.get("result"):
         return cache["result"]
 
-    holdings, source = None, "iShares"
+    holdings, source = None, "composition de l'ETF"
     try:
         holdings = holdings_fn()
+        source = "iShares MSCI World Islamic" if holdings and holdings[0].get("isin") is None else "Invesco MSCI ACWI Islamic"
     except ProviderError as exc:
         log.warning("composition de l'ETF indisponible : %s", exc)
     if not holdings:

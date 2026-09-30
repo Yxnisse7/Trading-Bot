@@ -65,3 +65,16 @@ def test_backtest_and_weekly_cache(tmp_path):
     n = calls["n"]
     again = hs.build(bench, NOW, fetch_monthly=fetch, holdings_fn=lambda: holdings, cache_dir=tmp_path, pause=0)
     assert again == res and calls["n"] == n                      # moins d'une semaine : cache, aucun appel
+
+
+def test_invesco_fallback_maps_isin_to_yahoo(monkeypatch):
+    from trading_bot.providers import http
+    payload = {"effectiveDate": "2026-09-29", "holdings": [
+        {"name": "ALPHA CORP", "isin": "US0000000001", "weight": 4.2, "currency": "USD"},
+        {"name": "BETA AG", "isin": "DE0000000002", "weight": "1,5", "currency": "EUR"}]}
+    search = {"US0000000001": {"quotes": [{"symbol": "ALP.F", "exchange": "FRA", "quoteType": "EQUITY"},
+                                          {"symbol": "ALP", "exchange": "NMS", "quoteType": "EQUITY"}]},
+              "DE0000000002": {"quotes": [{"symbol": "BET.DE", "exchange": "GER", "quoteType": "EQUITY"}]}}
+    monkeypatch.setattr(http, "get_json", lambda url, params=None, **kw: payload if "invesco" in url else search[params["q"]])
+    rows = hs.invesco_holdings(pause=0)
+    assert [(r["yahoo"], r["weight"]) for r in rows] == [("ALP", 4.2), ("BET.DE", 1.5)]      # cotation principale d'abord
