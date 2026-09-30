@@ -296,12 +296,12 @@
     const names = { mensuelle: "Chaque mois", trimestrielle: "Tous les 3 mois", sans_vente: "Sans vente", etf: "ETF Monde islamique" };
     const row = (k) => { const x = m[k], g = x.net_if_sold - x.invested;
       return `<tr${k === best ? ' style="background:var(--up-soft)"' : ""}><td><b style="font-weight:600">${names[k]}</b>${k === best ? ` <span class="pill up" style="font-size:11px">le meilleur</span>` : ""}<div class="muted" style="font-size:12px">${esc(x.label)}</div></td>
-        <td class="num ${Y.tone(x.twr)}">${pct(x.twr)}</td><td class="num dn">${pct(x.max_dd, 0)}</td><td class="num">${eur(x.value)}</td>
+        <td class="num ${Y.tone(x.twr)}">${pct(x.twr)}</td><td class="num dn">${pct(x.max_dd, 0)}</td><td class="num">${eur(x.value)}<div class="muted" style="font-size:12px">${x.lines} ligne${x.lines > 1 ? "s" : ""} à la fin</div></td>
         <td class="num"><b class="${Y.tone(g)}">${eur(x.net_if_sold)}</b><div class="muted" style="font-size:12px">${g >= 0 ? "+" : ""}${eur(g)}</div></td>
         <td class="num">${x.sales}</td><td class="num muted">${eur(x.fees + x.taxes)}</td></tr>`; };
     box.innerHTML = `<div class="card-head" style="padding:0 0 10px"><div><h3>Modes de révision, avec vos montants</h3>
       <div class="sub">${eur(md.init)} au départ puis ${eur(md.monthly)} par mois dans la poche, de ${month(md.start)} à ${month(md.end)} : ${eur(md.init + md.monthly * (md.months - 1))} versés. Achats en plan d'investissement (gratuits), ${eur(md.fee)} par vente, impôt de ${Y.num(md.tax * 100, 1)} % sur chaque vente en gain.</div></div></div>
-      <div class="tbl"><table><thead><tr><th>Mode</th><th class="num">Rendement / an</th><th class="num">Pire baisse</th><th class="num">Valeur finale</th><th class="num">Net si tout vendu</th><th class="num">Ventes</th><th class="num">Frais et impôts payés</th></tr></thead>
+      <div class="tbl"><table><thead><tr><th>Mode</th><th class="num">Rendement / an<div class="faint" style="font-size:11px;font-weight:400">avant frais et impôts</div></th><th class="num">Pire baisse</th><th class="num">Valeur finale</th><th class="num">Net si tout vendu</th><th class="num">Ventes</th><th class="num">Frais et impôts payés</th></tr></thead>
       <tbody>${keys.map(row).join("")}${row("etf")}</tbody></table></div>
       <div class="muted" style="font-size:12px;margin-top:8px">« Net si tout vendu » : ce qui resterait après avoir tout vendu à la fin et payé l'impôt sur les gains : c'est la colonne à comparer. Mêmes limites que le backtest ci-dessus (composition actuelle de l'indice, période de forte hausse des semi-conducteurs).</div>`;
   }
