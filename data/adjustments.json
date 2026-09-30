@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-30T09:15:18.448356+00:00",
+  "updated_at": "2026-09-30T10:05:33.586364+00:00",
   "method": "v2 : recalcul complet, marge de sécurité, résultats en R, sources pondérées",
   "weights": {
     "trend_5m": 1.0,
@@ -124,40 +124,40 @@
         "trend_1h",
         "adx"
       ],
-      "n": 848,
-      "n_eff": 604.9,
-      "mean_r": 0.0281,
-      "margin_r": 0.09,
+      "n": 849,
+      "n_eff": 605.9,
+      "mean_r": 0.0279,
+      "margin_r": 0.0898,
       "multiplier": 1.0
     },
     "vwap": {
       "members": [
         "vwap"
       ],
-      "n": 740,
-      "n_eff": 529.3,
-      "mean_r": 0.0432,
-      "margin_r": 0.0969,
+      "n": 741,
+      "n_eff": 530.3,
+      "mean_r": 0.043,
+      "margin_r": 0.0967,
       "multiplier": 1.0
     },
     "rsi": {
       "members": [
         "rsi"
       ],
-      "n": 700,
-      "n_eff": 490.5,
-      "mean_r": 0.0204,
-      "margin_r": 0.0994,
+      "n": 701,
+      "n_eff": 491.4,
+      "mean_r": 0.0201,
+      "margin_r": 0.0992,
       "multiplier": 1.0
     },
     "macd": {
       "members": [
         "macd"
       ],
-      "n": 221,
-      "n_eff": 156.8,
-      "mean_r": 0.0047,
-      "margin_r": 0.1798,
+      "n": 222,
+      "n_eff": 157.8,
+      "mean_r": 0.0039,
+      "margin_r": 0.1786,
       "multiplier": 1.0
     },
     "level": {
@@ -194,10 +194,10 @@
       "members": [
         "pdhl"
       ],
-      "n": 117,
-      "n_eff": 81.4,
-      "mean_r": 0.0614,
-      "margin_r": 0.2388,
+      "n": 118,
+      "n_eff": 82.4,
+      "mean_r": 0.0593,
+      "margin_r": 0.2358,
       "multiplier": 1.0
     },
     "corr": {
@@ -218,9 +218,9 @@
       "margin_r": 0.2475
     },
     "fantômes": {
-      "n": 143,
-      "mean_r": -0.0094,
-      "margin_r": 0.1905
+      "n": 144,
+      "mean_r": -0.01,
+      "margin_r": 0.1892
     },
     "backtest": {
       "n": 618,
@@ -238,10 +238,10 @@
     },
     "horizon_3h": {
       "label": "horizon ~3 h",
-      "n": 29,
-      "mean_net_r": -0.3025,
+      "n": 30,
+      "mean_net_r": -0.2984,
       "promoted": false,
-      "missing": 71
+      "missing": 70
     },
     "confiance_moyenne": {
       "label": "confiance moyenne",
@@ -688,6 +688,37 @@
     "avoid": []
   },
   "exits": {
+    "réels et en ombre": {
+      "n": 1,
+      "current_net_r": -0.1773,
+      "mfe_median": 1.337,
+      "sl_reached": {
+        "0.5": 0,
+        "0.8": 0,
+        "1.0": 0
+      },
+      "n_sl": 0,
+      "rules": {
+        "0.5": {
+          "net_r": -0.0812,
+          "diff_r": 0.0962,
+          "margin_r": Infinity,
+          "better": false
+        },
+        "0.8": {
+          "net_r": -0.0812,
+          "diff_r": 0.0962,
+          "margin_r": Infinity,
+          "better": false
+        },
+        "1.0": {
+          "net_r": -0.0812,
+          "diff_r": 0.0962,
+          "margin_r": Infinity,
+          "better": false
+        }
+      }
+    },
     "backtest": {
       "n": 618,
       "current_net_r": -0.0831,
@@ -760,7 +791,7 @@
     "trades réels : +0,05 R ± 0,25 R par trade avant frais sur 88 trades (0 R = hasard)",
     "aucun critère ne s'écarte du hasard au-delà de la marge de sécurité : poids par défaut conservés",
     "variante « indices le matin européen » en test : 33 trades, -0,34 R net, encore 67 trades avant décision",
-    "variante « horizon ~3 h » en test : 29 trades, -0,30 R net, encore 71 trades avant décision",
+    "variante « horizon ~3 h » en test : 30 trades, -0,30 R net, encore 70 trades avant décision",
     "variante « confiance moyenne » en test : 18 trades, -0,08 R net, encore 82 trades avant décision",
     "variante « entrées dans l'heure avant l'ouverture américaine » en test : 1 trades, +1,09 R net, encore 99 trades avant décision",
     "variante « reprise juste après un stop » en test : 12 trades, -0,12 R net, encore 88 trades avant décision",
@@ -769,10 +800,10 @@
     "variante « nouvel actif : Euro / dollar (6E) » en test : 1 trades, +1,30 R net, encore 99 trades avant décision",
     "sortie : stop remonté à l'entrée après +1,0 R ferait mieux (-0,06 R net contre -0,08 R, backtest) : à décider"
   ],
-  "sample": 849,
+  "sample": 850,
   "sample_by_source": {
     "bot": 87,
-    "shadow": 143,
+    "shadow": 144,
     "manual": 1,
     "backtest": 618
   }
