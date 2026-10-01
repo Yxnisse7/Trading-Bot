@@ -122,3 +122,21 @@ def test_pepites_pocket_and_quarterly_reminder(tmp_path, monkeypatch):
     assert text and "Révision trimestrielle" in text and "Pépites" in text
     assert invest.revision_reminder(data, datetime(2026, 10, 2, tzinfo=timezone.utc), sf) is None
     assert invest.next_revision(datetime(2026, 11, 5, tzinfo=timezone.utc)) == "2027-01"
+
+
+def test_israeli_companies_are_excluded(tmp_path):
+    assert hs.is_israeli({"name": "Check Point Software Technologies", "country": "United States"})
+    assert hs.is_israeli({"name": "Bank Leumi", "country": "Israel"})
+    assert not hs.is_israeli({"name": "Toyota Motor", "country": "Japan"})
+
+    def fetch(sym):
+        if sym.startswith("EUR"):
+            return [(t, 1.0) for t in _months(72)], "USD"
+        k = int(sym[1:])
+        return _stock(72, 0.001 * k - 0.01), "USD"
+
+    holdings = [{"ticker": f"S{k}", "yahoo": f"S{k}", "name": f"Société {k}", "sector": f"Secteur {k % 5}",
+                 "country": "Israel" if k == 39 else "US", "currency": "USD", "weight": 1.0} for k in range(40)]
+    res = hs.build([], NOW, fetch_monthly=fetch, holdings_fn=lambda: holdings, cache_dir=tmp_path, pause=0)
+    assert "S39" not in res["prices"] and all(p["yahoo"] != "S39" for p in res["picks"])
+    assert res["excluded"][0]["name"] == "Société 39" and res["israel_weight"] == 1.0

@@ -438,6 +438,13 @@ Pas du trading : de l'investissement halal à long terme. Page `investissement.h
   plan gratuits, 1 € par vente, 31,4 % d'impôt sur chaque vente en gain) : chaque mois, tous les 3 mois,
   ou sans jamais vendre (les versements vont aux meilleures actions du moment). Comparés à l'ETF Monde
   islamique avec les mêmes versements, sur la valeur nette si tout était vendu à la fin.
+- **Entreprises israéliennes exclues** de la poche actions et des pépites (pays indiqué par iShares, plus
+  une liste de sociétés israéliennes cotées ailleurs) ; leur part dans l'ETF Monde islamique est affichée
+  (un ETF ne permet pas de les retirer).
+- **Bitcoin** (au comptant, avis divergents) : fiche avec historique en euros et part réglable dans le plan
+  (0, 3 ou 5 %). **SCPI NCap Éducation Santé** (Norma Capital, certifiée charia, 0 % de dette) : fiche tenue à
+  jour à la main (prix de part, loyers versés, 12 % de frais d'entrée, minimum 1 010 €, 8 ans et plus),
+  détenable dans le portefeuille mais hors du plan mensuel.
 - **Mon portefeuille et plan du mois** : on saisit ses lignes (ETF ou actions, quantité, prix d'achat
   facultatif) ; la page donne la valeur, la plus-value, et **combien verser sur chaque ligne ce mois-ci**
   pour se rapprocher des parts visées (portefeuille type + poche actions), sans rien vendre. Les

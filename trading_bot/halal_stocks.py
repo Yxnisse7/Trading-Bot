@@ -37,6 +37,15 @@ UNIVERSE_SIZE = 150
 # 5 actions, 2 au plus par secteur, révision tous les 3 mois
 PEPITES_FROM, PEPITES_TO, PEPITES_N, PEPITES_KEEP, PEPITES_CAP, PEPITES_LOOKBACK = 150, 400, 5, 10, 2, 6
 REVISION_EVERY = 3
+# Entreprises israéliennes exclues de la poche et des pépites (choix éthique de l'utilisateur) : pays du siège
+# indiqué par iShares, plus les sociétés israéliennes connues cotées ou domiciliées ailleurs.
+ISRAEL_NAMES = re.compile(r"\b(mobileye|check ?point|teva|nice ltd|wix|monday\.?com|elbit|amdocs|global-e|zim integrated|"
+                          r"tower semiconductor|camtek|nova ltd|inmode|oddity|cyberark|solaredge|ormat|playtika|"
+                          r"taboola|fiverr|lemonade|sapiens|radware|cellebrite|jfrog|riskified|similarweb)\b", re.I)
+
+
+def is_israeli(h: dict[str, Any]) -> bool:
+    return "israel" in (h.get("country") or "").lower() or bool(ISRAEL_NAMES.search(h.get("name") or ""))
 TOP_N = 10
 KEEP_RANK = 20
 SECTOR_CAP = 3                  # au plus 3 actions d'un même secteur : la poche ne doit pas être un pari sur un seul thème
@@ -53,7 +62,7 @@ EXCHANGES = [
     (r"singapore", ".SI"), (r"tel aviv", ".TA"), (r"new zealand", ".NZ"), (r"wiener|vienna", ".VI"), (r"irish|dublin", ".IR"),
 ]
 RULES = {"top_n": TOP_N, "keep_rank": KEEP_RANK, "cost": COST_PER_TURNOVER, "sector_cap": SECTOR_CAP, "modes": 1,
-         "revision_every": REVISION_EVERY, "pepites": [PEPITES_FROM, PEPITES_TO, PEPITES_N, PEPITES_KEEP, PEPITES_CAP, PEPITES_LOOKBACK]}
+         "revision_every": REVISION_EVERY, "exclude_israel": True, "pepites": [PEPITES_FROM, PEPITES_TO, PEPITES_N, PEPITES_KEEP, PEPITES_CAP, PEPITES_LOOKBACK]}
 FX_PAIRS = {c: f"EUR{c}=X" for c in ("USD", "GBP", "JPY", "CHF", "CAD", "AUD", "DKK", "SEK", "NOK", "HKD", "SGD", "ILS", "NZD")}
 
 
@@ -453,7 +462,9 @@ def build(bench: list[tuple[str, float]] | None, now: datetime | None = None,
         holdings, source = cache.get("holdings"), "dernière composition connue"
     if not holdings:
         return cache.get("result")
-    universe = holdings[:PEPITES_TO]
+    excluded = [h for h in holdings if is_israeli(h)]
+    israel_weight = round(sum(h.get("weight") or 0 for h in excluded), 2)
+    universe = [h for h in holdings if not is_israeli(h)][:PEPITES_TO]
 
     fx: dict[str, dict[str, float]] = {}
     for ccy, sym in FX_PAIRS.items():
@@ -524,6 +535,8 @@ def build(bench: list[tuple[str, float]] | None, now: datetime | None = None,
     result = {
         "updated_at": iso(now), "source": source, "universe_n": min(len(universe), UNIVERSE_SIZE), "priced_n": len(series),
         "missing": missing[:40], "month": month,
+        "excluded": [{"name": h["name"], "country": h.get("country"), "weight": h.get("weight")} for h in excluded],
+        "israel_weight": israel_weight,
         "rules": RULES,
         "picks": [row(k) for k in picks],
         "ranked": [row(r["key"]) for r in table[:40]],

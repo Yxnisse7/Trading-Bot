@@ -64,6 +64,24 @@ UNIVERSE: list[dict[str, Any]] = [
      "category": "Or physique", "kind": "or", "income": "aucun revenu",
      "role": "Protection en cas de crise et contre l'inflation ; or physique alloué, certifié charia (Amanie Advisors).",
      "since": 2020, "proxy": "or_long"},
+    {"key": "bitcoin", "name": "Bitcoin (BTC)", "isin": "", "yahoo": "BTC-USD", "ter": 0.0,
+     "category": "Crypto-actif", "kind": "crypto", "income": "aucun revenu",
+     "role": "Le seul crypto-actif retenu par la plupart des avis qui en acceptent : au comptant, sans levier ni « earn ». "
+             "Avis des savants divergents ; baisses de 70 à 80 % déjà vues.",
+     "since": 2014, "buy": "Trade Republic : onglet Crypto (au comptant)"},
+]
+
+# Produits sans cotation quotidienne : informations tenues à jour à la main (date indiquée)
+STATIC_PRODUCTS: list[dict[str, Any]] = [
+    {"key": "scpi_ncap", "name": "SCPI NCap Éducation Santé (Norma Capital)", "kind": "immobilier",
+     "category": "Immobilier (SCPI) certifié charia", "price_eur": 202.0, "price_date": "2026-03-31",
+     "min_eur": 1010.0, "entry_fee": 12.0, "distribution": {"2023": 4.72, "2024": 4.78, "2025": 4.52},
+     "advised_years": 8,
+     "role": "Écoles et établissements de santé en Europe de l'Ouest, achetés sans aucun emprunt (0 % de dette), "
+             "conformité vérifiée par un comité charia indépendant. Loyers versés chaque mois.",
+     "cons": "Minimum 1 010 € (5 parts), 12 % de frais d'entrée : il faut environ 3 ans de loyers pour les rattraper. "
+             "Placement de 8 ans et plus, revente pas immédiate. Ne s'achète pas chez Trade Republic (souscription "
+             "auprès de Norma Capital ou d'une plateforme de SCPI)."},
 ]
 # séries longues servant de référence (pas des produits à acheter)
 PROXIES = {"or_long": {"name": "prix de l'or (contrat à terme, référence)", "yahoo": "GC=F"},
@@ -83,7 +101,7 @@ MODELS = {
 }
 HORIZONS = [1, 2, 3, 5, 7, 10, 15]
 # durée minimale de bon sens, quel que soit l'historique (l'or a stagné près de 20 ans, de 1980 à 2000)
-FLOOR_YEARS = {"actions": 5, "or": 5, "sukuk": 2, "prudent": 3, "equilibre": 5, "dynamique": 8}
+FLOOR_YEARS = {"actions": 5, "or": 5, "sukuk": 2, "crypto": 5, "prudent": 3, "equilibre": 5, "dynamique": 8}
 
 
 def advised(data_years: int | None, floor: int) -> dict[str, Any]:
@@ -376,7 +394,9 @@ def build(now: datetime | None = None, fetch=fetch_monthly, news=fetch_invest_ne
         except Exception:  # noqa: BLE001 — la poche actions ne doit jamais bloquer le reste de la page
             log.exception("poche actions halal")
     prices = {p["key"]: round(series[p["key"]][-1][1], 4) for p in UNIVERSE if p["key"] in series}
-    return {"updated_at": iso(now), "products": products, "models": models, "stocks": stock_part, "prices": prices,
+    prices.update({p["key"]: p["price_eur"] for p in STATIC_PRODUCTS})
+    return {"updated_at": iso(now), "products": products, "static_products": STATIC_PRODUCTS, "models": models,
+            "stocks": stock_part, "prices": prices,
             "revision": {"months": list(REVISION_MONTHS), "next": next_revision(now), "now": now.month in REVISION_MONTHS},
             "news": news(now) if news else [], "errors": errors,
             "fx_last": {c: (sorted(v.items())[-1][1] if v else None) for c, v in fx.items()}}

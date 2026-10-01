@@ -49,7 +49,7 @@
   .rules2 ul { margin: 8px 0 0; padding-left: 18px; display: grid; gap: 6px; font-size: 14px; }
   .rules2 h3 { margin: 0; font-size: 16px; }
   .bt-grid { display: grid; gap: 20px; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); align-items: start; }
-  .pf-set { display: grid; gap: 12px; grid-template-columns: repeat(5, minmax(0, 1fr)); margin-bottom: 14px; }
+  .pf-set { display: grid; gap: 12px; grid-template-columns: repeat(6, minmax(0, 1fr)); margin-bottom: 14px; }
   @media (max-width: 1100px) { .pf-set { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
   .pf-row input, .pf-row select { padding: 7px 9px; font-size: 13px; border-radius: 9px; }
   .pf-row td { vertical-align: middle; }
@@ -105,6 +105,7 @@
       <div><label for="pf-sat">Part de la poche actions</label><select id="pf-sat"><option value="0">0 % (ETF seulement)</option><option value="0.1">10 %</option><option value="0.2">20 %</option><option value="0.3">30 % (maximum)</option></select></div>
       <div><label for="pf-amount">Versement ce mois (€)</label><input id="pf-amount" inputmode="numeric" value="100"></div>
       <div><label for="pf-pep">Part des pépites (risquée)</label><select id="pf-pep"><option value="0">0 %</option><option value="0.05">5 %</option><option value="0.1">10 % (maximum)</option></select></div>
+      <div><label for="pf-btc">Part du Bitcoin</label><select id="pf-btc"><option value="0">0 %</option><option value="0.03">3 %</option><option value="0.05">5 % (maximum conseillé)</option></select></div>
       <div><label for="pf-rev">Révision des actions</label><select id="pf-rev"><option value="trimestrielle">Tous les 3 mois (conseillé)</option><option value="mensuelle">Chaque mois</option></select></div>
     </div>
     <div id="rev-banner"></div>
@@ -266,8 +267,15 @@
       const dur = yrs ? `<b>Durée conseillée : ${yrs} ans et plus</b> <span class="muted">(${why})</span>` : "";
       return `<div class="card prod"><div class="top"><div><h3>${esc(p.name)}</h3><div class="muted" style="font-size:13px">${esc(p.category)}</div></div><span class="pill ${esc(a.tag)}"><b>${esc(a.label)}</b></span></div>
         <div class="muted" style="font-size:13px">${esc(p.role)}</div>
-        <div style="font-size:12px"><span class="isin" data-copy="${esc(p.isin)}" title="Copier l'ISIN">ISIN ${esc(p.isin)}</span> · frais ${Y.num(p.ter, 2)}${Y.NB}%/an · ${esc(p.income)}${s && s.last_month ? ` · depuis ${month(s.start)}` : ""}</div>
-        ${hist}<div style="font-size:13px">${dur}</div><div class="advice muted">${esc(a.text)}</div></div>`; }).join("");
+        <div style="font-size:12px">${p.isin ? `<span class="isin" data-copy="${esc(p.isin)}" title="Copier l'ISIN">ISIN ${esc(p.isin)}</span> · frais ${Y.num(p.ter, 2)}${Y.NB}%/an` : `<b>${esc(p.buy || "")}</b>`} · ${esc(p.income)}${s && s.last_month ? ` · depuis ${month(s.start)}` : ""}</div>
+        ${hist}<div style="font-size:13px">${dur}</div><div class="advice muted">${esc(a.text)}</div></div>`; }).join("")
+      + (data.static_products || []).map((p) => { const d = Object.entries(p.distribution || {});
+        return `<div class="card prod"><div class="top"><div><h3>${esc(p.name)}</h3><div class="muted" style="font-size:13px">${esc(p.category)}</div></div><span class="pill neu"><b>Long terme</b></span></div>
+          <div class="muted" style="font-size:13px">${esc(p.role)}</div>
+          <div style="font-size:12px">Part à ${eur(p.price_eur)} (au ${new Date(p.price_date).toLocaleDateString("fr-FR")}) · minimum ${eur(p.min_eur)} · frais d'entrée ${Y.num(p.entry_fee, 0)}${Y.NB}%</div>
+          <div class="perf">${d.map(([y, v]) => `<div><span class="muted">Loyers ${y}</span><b class="up">${Y.num(v, 2)}${Y.NB}%</b></div>`).join("")}<div><span class="muted">Dette</span><b>0${Y.NB}%</b></div></div>
+          <div style="font-size:13px"><b>Durée conseillée : ${p.advised_years} ans et plus</b> <span class="muted">(frais d'entrée à amortir, revente lente)</span></div>
+          <div class="advice muted">${esc(p.cons)}</div></div>`; }).join("");
   }
   document.addEventListener("click", (e) => { const el = e.target.closest("[data-copy]"); if (!el) return;
     try { navigator.clipboard.writeText(el.dataset.copy); Y.toast({ title: "ISIN copié", text: el.dataset.copy, timeout: 3000 }); } catch (err) { /* rien */ } });
@@ -291,7 +299,8 @@
     if (b) drawBt(b);
     renderPepites(st.pepites);
     renderModes(st.modes);
-    $("#picks-note").textContent = `Classement de ${month(st.month)} · ${st.priced_n} entreprises cotées sur ${st.universe_n} (${st.source}) · ${st.rules.sector_cap || 3} actions au plus par secteur · une action détenue n'est à remplacer que si elle sort du top ${st.rules.keep_rank} ou perd sa tendance`;
+    const exclNote = st.rules && st.rules.exclude_israel ? ` · entreprises israéliennes exclues (${(st.excluded || []).length}, ${Y.num(st.israel_weight || 0, 1)} % de l'ETF Monde islamique)` : "";
+    $("#picks-note").textContent = `Classement de ${month(st.month)} · ${st.priced_n} entreprises cotées sur ${st.universe_n} (${st.source}) · ${st.rules.sector_cap || 3} actions au plus par secteur · une action détenue n'est à remplacer que si elle sort du top ${st.rules.keep_rank} ou perd sa tendance${exclNote}`;
     $("#picks tbody").innerHTML = st.picks.map((x) => `<tr><td class="num">${x.rank}</td><td class="nowrap"><b style="font-weight:500">${esc(x.name)}</b></td><td class="muted">${esc(x.sector)}</td><td class="muted">${esc(x.country)}</td>
       <td class="num ${Y.tone(x.mom)}">${pct(x.mom, 0)}</td><td class="num ${Y.tone(x.r1m)}">${pct(x.r1m, 1)}</td><td class="mono muted" style="font-size:12px">${esc(x.yahoo)}</td></tr>`).join("");
   }
@@ -348,7 +357,8 @@
   let pf = null;
   const savePf = () => { try { localStorage.setItem(PF_KEY, JSON.stringify(pf)); } catch (e) { /* navigateur privé */ } };
   function lines() {
-    const out = data.products.map((p) => ({ id: p.key, label: `${p.name} (ETF)`, price: (data.prices || {})[p.key] }));
+    const out = data.products.map((p) => ({ id: p.key, label: p.kind === "crypto" ? p.name : `${p.name} (ETF)`, price: (data.prices || {})[p.key] }));
+    (data.static_products || []).forEach((p) => out.push({ id: p.key, label: `${p.name} (parts)`, price: p.price_eur }));
     const sp = (data.stocks && data.stocks.prices) || {};
     for (const [k, v] of Object.entries(sp)) out.push({ id: k, label: `${v.name} (${v.pocket === "pepites" ? "pépite" : "action"}, ${k})`, price: v.price_eur, stock: true });
     return out;
@@ -364,6 +374,7 @@
       ms.addEventListener("change", () => { pf.model = ms.value; savePf(); plan(); });
       $("#pf-sat").addEventListener("change", (e) => { pf.sat = Number(e.target.value); savePf(); plan(); });
       $("#pf-pep").addEventListener("change", (e) => { pf.pep = Number(e.target.value); savePf(); plan(); });
+      $("#pf-btc").addEventListener("change", (e) => { pf.btc = Number(e.target.value); savePf(); plan(); });
       $("#pf-rev").addEventListener("change", (e) => { pf.rev = e.target.value; savePf(); plan(); });
       $("#pf-amount").addEventListener("input", (e) => { pf.amount = Math.max(0, Number(e.target.value.replace(/\s/g, "")) || 0); savePf(); plan(); });
       $("#pf-add").addEventListener("click", () => { pf.rows.push({ id: "", qty: "", pru: "" }); savePf(); renderPf(); });
@@ -377,7 +388,7 @@
       $("#pf").addEventListener("click", (e) => { const b = e.target.closest("[data-del]"); if (!b) return; pf.rows.splice(+b.dataset.del, 1); savePf(); renderPf(); });
     }
     ms.value = pf.model; $("#pf-sat").value = String(pf.sat); $("#pf-amount").value = pf.amount;
-    $("#pf-pep").value = String(pf.pep); $("#pf-rev").value = pf.rev;
+    $("#pf-pep").value = String(pf.pep); $("#pf-rev").value = pf.rev; $("#pf-btc").value = String(pf.btc || 0);
     $("#pf-options").innerHTML = lines().map((l) => `<option value="${esc(l.label)}"></option>`).join("");
     renderPf();
   }
@@ -413,7 +424,9 @@
     const hs = holdings(), cur = {}; hs.forEach((h) => { cur[h.id] = (cur[h.id] || 0) + h.value; });
     const pocketOf = (id) => ((st && st.prices && st.prices[id]) || {}).pocket || "main";
     const target = {};
-    Object.entries(m.weights).forEach(([k, w]) => { target[k] = w * (1 - sat - pep); });
+    const btc = (data.prices || {}).bitcoin ? (pf.btc || 0) : 0;
+    Object.entries(m.weights).forEach(([k, w]) => { target[k] = w * (1 - sat - pep - btc); });
+    if (btc) target.bitcoin = btc;
     const alerts = [], infos = [];
     const pockets = [["main", sat, st, "la poche actions"], ["pepites", pep, st && st.pepites, "les pépites"]];
     for (const [name, share, P, label] of pockets) {
@@ -440,7 +453,9 @@
     const deficit = Object.fromEntries(ids.map((k) => [k, Math.max(0, (target[k] || 0) * after - (cur[k] || 0))]));
     const dsum = Object.values(deficit).reduce((a, b) => a + b, 0);
     const alloc = Object.fromEntries(ids.map((k) => [k, dsum >= amount ? (dsum ? amount * deficit[k] / dsum : 0) : deficit[k] + (amount - dsum) * (target[k] || 0)]));
-    ids.filter((k) => !target[k] && cur[k] && !(lineOf(k) || {}).stock).forEach((k) => infos.push(`<b>${esc((lineOf(k) || { label: k }).label)}</b> ne fait pas partie du portefeuille « ${esc(m.label)} » : il ne reçoit pas de versement.`));
+    const statics = new Set((data.static_products || []).map((p) => p.key));
+    ids.filter((k) => statics.has(k) && cur[k]).forEach((k) => infos.push(`<b>${esc((lineOf(k) || { label: k }).label)}</b> : immobilier compté dans le total, à part du plan mensuel (on achète des parts entières, 1 010 € au minimum la première fois).`));
+    ids.filter((k) => !target[k] && cur[k] && !statics.has(k) && !(lineOf(k) || {}).stock).forEach((k) => infos.push(`<b>${esc((lineOf(k) || { label: k }).label)}</b> ne fait pas partie du portefeuille « ${esc(m.label)} » : il ne reçoit pas de versement.`));
     $("#plan-alerts").innerHTML = alerts.map((a) => `<div class="note-box warn" style="margin-bottom:8px"><span>${Y.I.warn}</span><span>${a}</span></div>`).join("")
       + infos.map((a) => `<div class="note-box" style="margin-bottom:8px;background:var(--soft)"><span>${Y.I.info}</span><span>${a}</span></div>`).join("");
     const tag = (k) => { const l = lineOf(k); return l && l.stock ? ` <span class="pill ${pocketOf(k) === "pepites" ? "brand" : "neu"}" style="font-size:11px">${pocketOf(k) === "pepites" ? "pépite" : "poche"}</span>` : ""; };
