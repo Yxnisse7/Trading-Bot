@@ -1,6 +1,6 @@
 # Trading-Bot — rapport
 
-_Mis à jour le 01/10/2026 à 08:20 (Europe/Paris)._
+_Mis à jour le 01/10/2026 à 08:26 (Europe/Paris)._
 
 ## Vue d'ensemble
 
