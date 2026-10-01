@@ -1,20 +1,14 @@
 # Trading-Bot — rapport
 
-_Mis à jour le 01/10/2026 à 20:30 (Europe/Paris)._
+_Mis à jour le 01/10/2026 à 20:35 (Europe/Paris)._
 
 ## Vue d'ensemble
 
-- Trades clôturés : **98**
-- Taux de réussite cumulé (TP / (TP+SL)) : **46%** — hasard attendu 42%, avantage **+4%**
-- P&L théorique cumulé, net des coûts estimés (somme des % par trade, sans levier) : **-3.33 %** (brut -0.56 %)
-- Signaux ouverts : **1**
+- Trades clôturés : **99**
+- Taux de réussite cumulé (TP / (TP+SL)) : **45%** — hasard attendu 42%, avantage **+3%**
+- P&L théorique cumulé, net des coûts estimés (somme des % par trade, sans levier) : **-3.51 %** (brut -0.73 %)
+- Signaux ouverts : **0**
 - Signaux fantômes (suivis en silence pour l'apprentissage) : **181** clôturés, 1 ouverts, taux de réussite 35% (hasard attendu 41%)
-
-## Signaux ouverts
-
-| Heure | Actif | Sens | Entrée | TP | SL | Confiance | Source | Expire |
-|---|---|---|---:|---:|---:|---|---|---|
-| 01/10 20:20 | Nasdaq 100 (NQ) | short | 30714.5 | 30646.0 | 30764.75 | fort | signaux du bot | 21:20 |
 
 ## Statistiques
 
@@ -25,7 +19,7 @@ _Mis à jour le 01/10/2026 à 20:30 (Europe/Paris)._
 | bitcoin | 15 | 3 | 7 | 5 | 30% | -0.113 % |
 | ethereum | 11 | 2 | 6 | 3 | 25% | -0.163 % |
 | gold | 27 | 12 | 12 | 3 | 50% | -0.010 % |
-| nasdaq | 27 | 14 | 11 | 2 | 56% | +0.029 % |
+| nasdaq | 28 | 14 | 12 | 2 | 54% | +0.022 % |
 | sp500 | 18 | 6 | 8 | 4 | 43% | -0.021 % |
 
 ### Par sens
@@ -33,13 +27,13 @@ _Mis à jour le 01/10/2026 à 20:30 (Europe/Paris)._
 | Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
 |---|---:|---:|---:|---:|---:|---:|
 | long | 52 | 18 | 24 | 10 | 43% | -0.049 % |
-| short | 46 | 19 | 20 | 7 | 49% | -0.017 % |
+| short | 47 | 19 | 21 | 7 | 48% | -0.020 % |
 
 ### Par confiance
 
 | Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
 |---|---:|---:|---:|---:|---:|---:|
-| fort | 94 | 36 | 42 | 16 | 46% | -0.032 % |
+| fort | 95 | 36 | 43 | 16 | 46% | -0.034 % |
 | manuel | 1 | 0 | 0 | 1 | n/a | -0.159 % |
 | moyen | 3 | 1 | 2 | 0 | 33% | -0.052 % |
 
@@ -47,24 +41,24 @@ _Mis à jour le 01/10/2026 à 20:30 (Europe/Paris)._
 
 | Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
 |---|---:|---:|---:|---:|---:|---:|
-| adx | 97 | 37 | 44 | 16 | 46% | -0.033 % |
-| corr | 11 | 2 | 5 | 4 | 29% | -0.094 % |
-| level | 11 | 2 | 7 | 2 | 22% | -0.086 % |
-| macd | 25 | 8 | 15 | 2 | 35% | -0.091 % |
+| adx | 98 | 37 | 45 | 16 | 45% | -0.034 % |
+| corr | 12 | 2 | 6 | 4 | 25% | -0.101 % |
+| level | 12 | 2 | 8 | 2 | 20% | -0.093 % |
+| macd | 26 | 8 | 16 | 2 | 33% | -0.094 % |
 | orb | 9 | 2 | 6 | 1 | 25% | -0.085 % |
 | pdhl | 15 | 5 | 8 | 2 | 38% | -0.054 % |
 | rsi | 84 | 34 | 36 | 14 | 49% | -0.022 % |
-| trend_15m | 97 | 37 | 44 | 16 | 46% | -0.033 % |
-| trend_1h | 97 | 37 | 44 | 16 | 46% | -0.033 % |
+| trend_15m | 98 | 37 | 45 | 16 | 45% | -0.034 % |
+| trend_1h | 98 | 37 | 45 | 16 | 45% | -0.034 % |
 | trend_5m | 87 | 34 | 37 | 16 | 48% | -0.028 % |
 | volume | 4 | 1 | 3 | 0 | 25% | -0.182 % |
-| vwap | 95 | 37 | 42 | 16 | 47% | -0.027 % |
+| vwap | 96 | 37 | 43 | 16 | 46% | -0.029 % |
 
 ### Par contexte d'actualité
 
 | Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
 |---|---:|---:|---:|---:|---:|---:|
-| actualité calme | 42 | 15 | 21 | 6 | 42% | -0.050 % |
+| actualité calme | 43 | 15 | 22 | 6 | 41% | -0.053 % |
 | actualité chargée | 56 | 22 | 23 | 11 | 49% | -0.022 % |
 
 ### Par heure d'émission (UTC)
@@ -86,7 +80,7 @@ _Mis à jour le 01/10/2026 à 20:30 (Europe/Paris)._
 | 15h | 16 | 5 | 10 | 1 | 33% | -0.098 % |
 | 16h | 6 | 1 | 3 | 2 | 25% | -0.044 % |
 | 17h | 3 | 1 | 1 | 1 | 50% | -0.025 % |
-| 18h | 6 | 5 | 0 | 1 | 100% | +0.078 % |
+| 18h | 7 | 5 | 1 | 1 | 83% | +0.042 % |
 | 19h | 10 | 5 | 4 | 1 | 56% | +0.029 % |
 | 20h | 1 | 0 | 1 | 0 | 0% | -0.138 % |
 | 22h | 2 | 0 | 0 | 2 | n/a | -0.195 % |
@@ -97,13 +91,13 @@ _Mis à jour le 01/10/2026 à 20:30 (Europe/Paris)._
 | Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
 |---|---:|---:|---:|---:|---:|---:|
 | demandes manuelles | 1 | 0 | 0 | 1 | n/a | -0.159 % |
-| signaux du bot | 97 | 37 | 44 | 16 | 46% | -0.033 % |
+| signaux du bot | 98 | 37 | 45 | 16 | 45% | -0.034 % |
 
 ### Par horizon
 
 | Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
 |---|---:|---:|---:|---:|---:|---:|
-| 1h | 96 | 37 | 42 | 17 | 47% | -0.029 % |
+| 1h | 97 | 37 | 43 | 17 | 46% | -0.030 % |
 | 3h | 2 | 0 | 2 | 0 | 0% | -0.280 % |
 
 Trades expirés : 17, 59% terminés dans le bon sens, P&L moyen -0.015 %.
@@ -145,6 +139,7 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 
 | Émis | Actif | Sens | Entrée | Clôture | Résultat | P&L | Durée |
 |---|---|---|---:|---:|---|---:|---:|
+| 01/10 20:20 | Nasdaq 100 (NQ) | short | 30714.5 | 30764.75 | ❌ SL | -0.17 % | 2 min |
 | 01/10 17:15 | S&P 500 (ES) | short | 7680.0 | 7687.75 | ❌ SL | -0.11 % | 0 min |
 | 01/10 16:55 | Nasdaq 100 (NQ) | short | 30706.75 | 30645.25 | ✅ TP | +0.19 % | 0 min |
 | 01/10 16:10 | S&P 500 (ES) | short | 7698.0 | 7689.5 | ⏱️ expiré | +0.10 % | 60 min |
@@ -174,7 +169,6 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 | 25/09 12:50 | Or (XAU/USD) | long | 4338.6 | 4349.4 | ✅ TP | +0.23 % | 16 min |
 | 24/09 21:10 | S&P 500 (ES) | long | 7772.5 | 7766.5 | ❌ SL | -0.09 % | 5 min |
 | 24/09 20:25 | S&P 500 (ES) | long | 7763.5 | 7768.5 | ✅ TP | +0.05 % | 0 min |
-| 24/09 19:35 | Nasdaq 100 (NQ) | long | 30722.75 | 30694.0 | ❌ SL | -0.10 % | 7 min |
 
 ## Apprentissage
 
@@ -195,7 +189,7 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 
 Corrections par actif :
 
-- sp500 : {'trend_5m': 0.858, 'trend_15m': 0.858, 'trend_1h': 0.858, 'adx': 0.858, 'vwap': 0.615, 'rsi': 0.972}
+- sp500 : {'trend_5m': 0.865, 'trend_15m': 0.865, 'trend_1h': 0.865, 'adx': 0.865, 'vwap': 0.621, 'rsi': 0.972}
 
 | Variante testée en fantôme | Trades | Gain net moyen | Statut |
 |---|---:|---:|---|
@@ -210,10 +204,10 @@ Corrections par actif :
 
 Notes :
 
-- trades réels : +0,08 R ± 0,23 R par trade avant frais sur 98 trades (0 R = hasard)
+- trades réels : +0,07 R ± 0,23 R par trade avant frais sur 99 trades (0 R = hasard)
 - aucun critère ne s'écarte du hasard au-delà de la marge de sécurité : poids par défaut conservés
-- sp500, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,25 R contre +0,01 R en global sur 120 trades éq. → poids ×0,86 sur cet actif
-- sp500, vwap : -0,25 R contre +0,02 R en global sur 117 trades éq. → poids ×0,82 sur cet actif
+- sp500, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,25 R contre +0,01 R en global sur 120 trades éq. → poids ×0,87 sur cet actif
+- sp500, vwap : -0,25 R contre +0,02 R en global sur 117 trades éq. → poids ×0,83 sur cet actif
 - sp500, rsi : -0,22 R contre +0,01 R en global sur 105 trades éq. → poids ×0,97 sur cet actif
 - variante « indices le matin européen » en test : 34 trades, -0,36 R net, encore 66 trades avant décision
 - variante « horizon ~3 h » en test : 39 trades, -0,40 R net, encore 61 trades avant décision
