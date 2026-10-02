@@ -227,8 +227,8 @@
     }
     return null;
   }
-  // Rafraîchissement : toutes les minutes en lecture directe, toutes les 2 min sur GitHub Pages
-  function poll(fn) { let n = 0; setInterval(() => { n++; if (S.direct || n % 2 === 0) fn(); }, 60000); }
+  // Rafraîchissement : toutes les minutes en lecture directe et en local (python run.py ui), toutes les 2 min sur GitHub Pages
+  function poll(fn) { let n = 0; setInterval(() => { n++; if (S.direct || S.mode === "local" || n % 2 === 0) fn(); }, 60000); }
   function ghRepo() { const s = ghSettings(); return { owner: (s && s.owner) || GH_DEFAULT.owner, repo: (s && s.repo) || GH_DEFAULT.repo }; }
   // Branche le bloc « Mode GitHub Actions » (champs gh-owner, gh-repo, gh-token, boutons gh-save, gh-test, texte gh-status)
   function bindGhSettings(onSaved) {

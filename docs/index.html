@@ -151,7 +151,7 @@
 
 <div id="tip" role="tooltip"></div>
 <script src="vendor/lightweight-charts.standalone.production.js"></script>
-<script src="yasuke.js?v=e005aaddec"></script>
+<script src="yasuke.js?v=cc23fa8d13"></script>
 <script src="charts.js?v=232a285ab5"></script>
 <script src="live-chart.js?v=974fc956eb"></script>
 <script src="sections.js?v=0d56d6cb86"></script>
@@ -557,7 +557,7 @@
   addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => { if (data) { try { YKCharts.equityLine($("#ch-equity"), data.equity_curve || [], { height: 220 }); } catch (e) { /* silencieux */ } } }, 200); });
   document.addEventListener("yk:theme", () => { if (data) YKCharts.equityLine($("#ch-equity"), data.equity_curve || [], { height: 220 }); });
   // les pages publiées changent toutes les 5 min : on relit toutes les 2 min (et l'état du bot chaque minute)
-  Y.poll(() => { if (mode === "static" || mode === "github") load(); });
+  Y.poll(() => { if (mode === "static" || mode === "github" || mode === "local") load(); });
   setInterval(() => { if (data) Y.status(data.state && data.state.last_scan, data.state && data.state.last_scan_note); }, 60000);
   update();
   load();
