@@ -540,6 +540,11 @@ python run.py loop                     # laisse tourner en tâche de fond
 
 Tests : `pip install -r requirements-dev.txt && python -m pytest -q`
 
+Sous Windows : `tzdata` (fuseaux horaires) s'installe tout seul avec `requirements.txt`, et
+`.gitattributes` garde les fins de ligne LF (sinon les empreintes des fichiers du site diffèrent).
+Une copie locale de secours ne doit **pas** recevoir le jeton Telegram tant que le bot tourne sur
+GitHub Actions : elle lirait les commandes à sa place et doublerait les messages.
+
 ## Notifications gratuites (optionnel)
 
 | Variable d'environnement | Service |
