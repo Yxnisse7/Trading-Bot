@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-02T14:40:41.643338+00:00",
+  "updated_at": "2026-10-02T15:01:13.866964+00:00",
   "method": "v2 : recalcul complet, marge de sécurité, résultats en R, sources pondérées",
   "weights": {
     "trend_5m": 1.0,
@@ -101,12 +101,12 @@
       "corr": 0.5
     },
     "sp500": {
-      "trend_5m": 0.843,
-      "trend_15m": 0.843,
-      "trend_1h": 0.843,
-      "adx": 0.843,
-      "vwap": 0.607,
-      "rsi": 0.944,
+      "trend_5m": 0.84,
+      "trend_15m": 0.84,
+      "trend_1h": 0.84,
+      "adx": 0.84,
+      "vwap": 0.604,
+      "rsi": 0.941,
       "macd": 1.0,
       "level": 1.0,
       "volume": 0.75,
@@ -124,30 +124,30 @@
         "trend_1h",
         "adx"
       ],
-      "n": 910,
-      "n_eff": 658.5,
-      "mean_r": -0.0081,
-      "margin_r": 0.086,
+      "n": 911,
+      "n_eff": 658.9,
+      "mean_r": -0.007,
+      "margin_r": 0.0859,
       "multiplier": 1.0
     },
     "vwap": {
       "members": [
         "vwap"
       ],
-      "n": 801,
-      "n_eff": 583.5,
-      "mean_r": 0.0039,
-      "margin_r": 0.092,
+      "n": 802,
+      "n_eff": 584.0,
+      "mean_r": 0.005,
+      "margin_r": 0.0918,
       "multiplier": 1.0
     },
     "rsi": {
       "members": [
         "rsi"
       ],
-      "n": 748,
-      "n_eff": 531.2,
-      "mean_r": -0.0113,
-      "margin_r": 0.0954,
+      "n": 749,
+      "n_eff": 531.6,
+      "mean_r": -0.0099,
+      "margin_r": 0.0952,
       "multiplier": 1.0
     },
     "macd": {
@@ -194,10 +194,10 @@
       "members": [
         "pdhl"
       ],
-      "n": 131,
-      "n_eff": 94.0,
-      "mean_r": 0.0123,
-      "margin_r": 0.2232,
+      "n": 132,
+      "n_eff": 94.5,
+      "mean_r": 0.0195,
+      "margin_r": 0.2209,
       "multiplier": 1.0
     },
     "corr": {
@@ -213,9 +213,9 @@
   },
   "overview": {
     "réels": {
-      "n": 100,
-      "mean_r": 0.0592,
-      "margin_r": 0.2284
+      "n": 101,
+      "mean_r": 0.0627,
+      "margin_r": 0.2263
     },
     "fantômes": {
       "n": 193,
@@ -287,12 +287,12 @@
     }
   },
   "baseline": {
-    "n": 88,
-    "mean_net_r": -0.029
+    "n": 89,
+    "mean_net_r": -0.0245
   },
   "promoted_variants": [],
   "context": {
-    "n": 679,
+    "n": 680,
     "features": {
       "adx": {
         "label": "force de tendance (ADX 15 min)",
@@ -311,10 +311,10 @@
             "label": "milieu (26 à 35)",
             "lo": 25.81,
             "hi": 35.32,
-            "n": 226,
-            "n_eff": 178.7,
-            "mean_r": -0.0715,
-            "margin_r": 0.1994,
+            "n": 227,
+            "n_eff": 177.0,
+            "mean_r": -0.0644,
+            "margin_r": 0.1992,
             "avoid": false
           },
           {
@@ -345,21 +345,21 @@
           {
             "label": "milieu (59 à 66)",
             "lo": 58.78,
-            "hi": 65.56,
-            "n": 226,
-            "n_eff": 191.4,
-            "mean_r": 0.0077,
-            "margin_r": 0.1936,
+            "hi": 65.59,
+            "n": 227,
+            "n_eff": 192.3,
+            "mean_r": 0.0038,
+            "margin_r": 0.193,
             "avoid": false
           },
           {
             "label": "haut (≥ 66)",
-            "lo": 65.56,
+            "lo": 65.59,
             "hi": 1000000000.0,
             "n": 227,
-            "n_eff": 196.5,
-            "mean_r": -0.02,
-            "margin_r": 0.1984,
+            "n_eff": 192.3,
+            "mean_r": -0.0095,
+            "margin_r": 0.1993,
             "avoid": false
           }
         ]
@@ -368,23 +368,23 @@
         "label": "écart au VWAP dans le sens du trade (en range)",
         "buckets": [
           {
-            "label": "bas (< 0,87)",
+            "label": "bas (< 0,85)",
             "lo": -1000000000.0,
-            "hi": 0.8658,
+            "hi": 0.8531,
             "n": 196,
-            "n_eff": 149.5,
-            "mean_r": -0.0476,
-            "margin_r": 0.2204,
+            "n_eff": 148.0,
+            "mean_r": -0.037,
+            "margin_r": 0.2202,
             "avoid": false
           },
           {
-            "label": "milieu (0,87 à 1,38)",
-            "lo": 0.8658,
+            "label": "milieu (0,85 à 1,38)",
+            "lo": 0.8531,
             "hi": 1.3824,
-            "n": 196,
-            "n_eff": 163.0,
-            "mean_r": -0.053,
-            "margin_r": 0.2054,
+            "n": 197,
+            "n_eff": 164.0,
+            "mean_r": -0.0571,
+            "margin_r": 0.2047,
             "avoid": false
           },
           {
@@ -416,10 +416,10 @@
             "label": "milieu (0,22 à 0,49)",
             "lo": 0.2228,
             "hi": 0.4901,
-            "n": 226,
-            "n_eff": 194.8,
-            "mean_r": 0.0633,
-            "margin_r": 0.1895,
+            "n": 227,
+            "n_eff": 191.8,
+            "mean_r": 0.0686,
+            "margin_r": 0.1897,
             "avoid": false
           },
           {
@@ -451,10 +451,10 @@
             "label": "milieu (1,13 à 1,45)",
             "lo": 1.129,
             "hi": 1.452,
-            "n": 227,
-            "n_eff": 189.6,
-            "mean_r": -0.0515,
-            "margin_r": 0.1963,
+            "n": 228,
+            "n_eff": 187.0,
+            "mean_r": -0.0445,
+            "margin_r": 0.1965,
             "avoid": false
           },
           {
@@ -485,21 +485,21 @@
           {
             "label": "milieu (1,04 à 1,34)",
             "lo": 1.039,
-            "hi": 1.337,
-            "n": 223,
-            "n_eff": 194.1,
-            "mean_r": -0.0659,
-            "margin_r": 0.196,
+            "hi": 1.341,
+            "n": 224,
+            "n_eff": 195.0,
+            "mean_r": -0.0696,
+            "margin_r": 0.1954,
             "avoid": false
           },
           {
             "label": "haut (≥ 1,34)",
-            "lo": 1.337,
+            "lo": 1.341,
             "hi": 1000000000.0,
             "n": 224,
-            "n_eff": 173.7,
-            "mean_r": -0.0223,
-            "margin_r": 0.2147,
+            "n_eff": 171.6,
+            "mean_r": -0.0126,
+            "margin_r": 0.2148,
             "avoid": false
           }
         ]
@@ -521,10 +521,10 @@
             "label": "milieu (0,41 à 0,82)",
             "lo": 0.4078,
             "hi": 0.8187,
-            "n": 226,
-            "n_eff": 179.9,
-            "mean_r": 0.0652,
-            "margin_r": 0.1981,
+            "n": 227,
+            "n_eff": 178.0,
+            "mean_r": 0.0704,
+            "margin_r": 0.1979,
             "avoid": false
           },
           {
@@ -546,10 +546,10 @@
             "label": "bas (< 0,08)",
             "lo": -1000000000.0,
             "hi": 0.0823,
-            "n": 225,
-            "n_eff": 176.1,
-            "mean_r": -0.0252,
-            "margin_r": 0.2007,
+            "n": 226,
+            "n_eff": 174.8,
+            "mean_r": -0.0191,
+            "margin_r": 0.2002,
             "avoid": false
           },
           {
@@ -591,10 +591,10 @@
             "label": "de 30 min avant à 1 h 30 après",
             "lo": -30.0,
             "hi": 90.0,
-            "n": 97,
-            "n_eff": 72.3,
-            "mean_r": -0.1412,
-            "margin_r": 0.323,
+            "n": 98,
+            "n_eff": 71.7,
+            "mean_r": -0.1243,
+            "margin_r": 0.3205,
             "avoid": false
           },
           {
@@ -656,10 +656,10 @@
             "label": "vendredi",
             "lo": 4,
             "hi": 5,
-            "n": 136,
-            "n_eff": 117.9,
-            "mean_r": -0.1004,
-            "margin_r": 0.2415,
+            "n": 137,
+            "n_eff": 114.9,
+            "mean_r": -0.0875,
+            "margin_r": 0.2422,
             "avoid": false
           },
           {
@@ -689,8 +689,8 @@
   },
   "exits": {
     "réels et en ombre": {
-      "n": 62,
-      "current_net_r": -0.4582,
+      "n": 63,
+      "current_net_r": -0.4451,
       "mfe_median": 0.524,
       "sl_reached": {
         "0.5": 11,
@@ -700,21 +700,21 @@
       "n_sl": 38,
       "rules": {
         "0.5": {
-          "net_r": -0.2972,
-          "diff_r": 0.1611,
-          "margin_r": 0.1101,
+          "net_r": -0.2866,
+          "diff_r": 0.1585,
+          "margin_r": 0.1085,
           "better": false
         },
         "0.8": {
-          "net_r": -0.3733,
-          "diff_r": 0.0849,
-          "margin_r": 0.0883,
+          "net_r": -0.3616,
+          "diff_r": 0.0836,
+          "margin_r": 0.0869,
           "better": false
         },
         "1.0": {
-          "net_r": -0.4198,
-          "diff_r": 0.0385,
-          "margin_r": 0.0714,
+          "net_r": -0.4073,
+          "diff_r": 0.0378,
+          "margin_r": 0.0702,
           "better": false
         }
       }
@@ -754,29 +754,29 @@
   "filters": {
     "sans_ouverture_us": {
       "label": "pas d'entrée sur les indices et l'or de 15:00 à 17:00 (ouverture US)",
-      "n": 12,
-      "n_out": 5,
+      "n": 13,
+      "n_out": 6,
       "n_kept": 7,
-      "mean_out_r": 0.5238,
+      "mean_out_r": 0.4979,
       "mean_kept_r": -0.2599,
       "missing": 93,
       "promoted": false
     },
     "filtre_contexte": {
       "label": "contextes appris comme perdants évités",
-      "n": 12,
+      "n": 13,
       "n_out": 0,
-      "n_kept": 12,
+      "n_kept": 13,
       "mean_out_r": null,
-      "mean_kept_r": 0.0666,
-      "missing": 88,
+      "mean_kept_r": 0.0899,
+      "missing": 87,
       "promoted": false
     }
   },
   "us_open": {
     "réels": {
-      "n_in": 16,
-      "mean_in_r": -0.1803,
+      "n_in": 17,
+      "mean_in_r": -0.148,
       "n_out": 58,
       "mean_out_r": 0.0952
     },
@@ -788,10 +788,10 @@
     }
   },
   "notes": [
-    "trades réels : +0,06 R ± 0,23 R par trade avant frais sur 100 trades (0 R = hasard)",
+    "trades réels : +0,06 R ± 0,23 R par trade avant frais sur 101 trades (0 R = hasard)",
     "aucun critère ne s'écarte du hasard au-delà de la marge de sécurité : poids par défaut conservés",
     "sp500, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,27 R contre -0,01 R en global sur 123 trades éq. → poids ×0,84 sur cet actif",
-    "sp500, vwap : -0,27 R contre +0,00 R en global sur 120 trades éq. → poids ×0,81 sur cet actif",
+    "sp500, vwap : -0,27 R contre +0,01 R en global sur 120 trades éq. → poids ×0,81 sur cet actif",
     "sp500, rsi : -0,24 R contre -0,01 R en global sur 108 trades éq. → poids ×0,94 sur cet actif",
     "variante « indices le matin européen » en test : 40 trades, -0,42 R net, encore 60 trades avant décision",
     "variante « horizon ~3 h » en test : 39 trades, -0,40 R net, encore 61 trades avant décision",
@@ -803,9 +803,9 @@
     "variante « nouvel actif : Euro / dollar (6E) » en test : 14 trades, +0,02 R net, encore 86 trades avant décision",
     "sortie : stop remonté à l'entrée après +1,0 R ferait mieux (-0,06 R net contre -0,08 R, backtest) : à décider"
   ],
-  "sample": 911,
+  "sample": 912,
   "sample_by_source": {
-    "bot": 99,
+    "bot": 100,
     "shadow": 193,
     "manual": 1,
     "backtest": 618
