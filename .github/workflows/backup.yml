@@ -30,7 +30,8 @@ jobs:
       - name: Historique des bougies (release « candles »)
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release download candles --pattern candles.tar.gz --dir "$RUNNER_TEMP" || echo "Pas d'historique des bougies : sauvegarde sans."
+        run: |
+          gh release download candles --pattern candles.tar.gz --dir "$RUNNER_TEMP" || echo "Pas d'historique des bougies, sauvegarde sans."
       - name: Archive envoyée sur Telegram
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
