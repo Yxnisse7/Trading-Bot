@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-02T12:40:40.714250+02:00",
+  "updated_at": "2026-10-02T12:45:42.310451+02:00",
   "timezone": "Europe/Paris",
   "equity_curve": [
     {
@@ -1232,7 +1232,7 @@
       "avg_pnl_pct": -0.0459
     },
     "open": 0,
-    "open_shadow": 0
+    "open_shadow": 1
   },
   "by_source": {
     "bot": {
@@ -4568,7 +4568,42 @@
       ]
     }
   ],
-  "open_signals": [],
+  "open_signals": [
+    {
+      "id": "1870baa8c4",
+      "asset": "nasdaq",
+      "asset_label": "Nasdaq 100 (NQ)",
+      "direction": "long",
+      "horizon": "1h",
+      "entry": 30996.0,
+      "take_profit": 31058.0,
+      "stop_loss": 30954.75,
+      "risk_reward": 1.5,
+      "confidence": "fort",
+      "score": 5.75,
+      "criteria": [
+        "adx",
+        "rsi",
+        "trend_15m",
+        "trend_1h",
+        "trend_5m",
+        "vwap"
+      ],
+      "source": "shadow",
+      "status": "open",
+      "pnl_pct": null,
+      "pnl_gross_pct": null,
+      "duration_minutes": null,
+      "close_price": null,
+      "created_at": "2026-10-02T10:45:35Z",
+      "closed_at": null,
+      "created_local": "02/10 12:45",
+      "expires_at": "2026-10-02T11:45:35Z",
+      "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 103.28 (0.33 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 56%.",
+      "news_context": "actualité à surveiller (score 2) : Eurozone inflation hits its highest level in three years at 3.8% as energy costs soar",
+      "manual_exit": null
+    }
+  ],
   "recent_trades": [
     {
       "id": "57a560d1ba",
@@ -6983,7 +7018,7 @@
     }
   },
   "state": {
-    "last_scan": "2026-10-02T10:40:34Z",
+    "last_scan": "2026-10-02T10:45:35Z",
     "last_scan_note": "0 signal(aux)",
     "last_summary": "2026-10-01T22:05:28Z",
     "last_track": "2026-10-02T10:20:37Z",
