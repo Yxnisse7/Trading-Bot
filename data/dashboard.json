@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-02T20:01:07.593364+02:00",
+  "updated_at": "2026-10-02T20:05:32.540016+02:00",
   "timezone": "Europe/Paris",
   "equity_curve": [
     {
@@ -1285,8 +1285,8 @@
       "pnl_pct": -9.4481,
       "avg_pnl_pct": -0.0485
     },
-    "open": 0,
-    "open_shadow": 0
+    "open": 1,
+    "open_shadow": 1
   },
   "by_source": {
     "bot": {
@@ -1471,7 +1471,7 @@
         "pnl_pct": 0.1201,
         "avg_pnl_pct": 0.01
       },
-      "open": 0,
+      "open": 1,
       "session_utc": null,
       "cost_pct": 0.06,
       "trial": false,
@@ -4702,7 +4702,77 @@
       ]
     }
   ],
-  "open_signals": [],
+  "open_signals": [
+    {
+      "id": "4f531630eb",
+      "asset": "bitcoin",
+      "asset_label": "Bitcoin (BTC/USD)",
+      "direction": "short",
+      "horizon": "1h",
+      "entry": 84854.0,
+      "take_profit": 84531.0,
+      "stop_loss": 85070.0,
+      "risk_reward": 1.5,
+      "confidence": "fort",
+      "score": 6.75,
+      "criteria": [
+        "adx",
+        "level",
+        "rsi",
+        "trend_15m",
+        "trend_1h",
+        "trend_5m",
+        "vwap"
+      ],
+      "source": "bot",
+      "status": "open",
+      "pnl_pct": null,
+      "pnl_gross_pct": null,
+      "duration_minutes": null,
+      "close_price": null,
+      "created_at": "2026-10-02T18:05:27Z",
+      "closed_at": null,
+      "created_local": "02/10 20:05",
+      "expires_at": "2026-10-02T19:05:27Z",
+      "rationale": "Vente : tendance forte (ADX), niveau clé favorable, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 538.9 (0.64 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 92%.",
+      "news_context": "prudence post-Rapport emploi US (NFP) : critères renforcés · actualité à surveiller (score 1) : 10-year Treasury yield ticks higher despite weaker-than-expected jobs report",
+      "manual_exit": null
+    },
+    {
+      "id": "ce72fce7d6",
+      "asset": "oil",
+      "asset_label": "Pétrole WTI (CL)",
+      "direction": "long",
+      "horizon": "1h",
+      "entry": 91.3,
+      "take_profit": 91.71,
+      "stop_loss": 90.96,
+      "risk_reward": 1.21,
+      "confidence": "fort",
+      "score": 5.75,
+      "criteria": [
+        "adx",
+        "rsi",
+        "trend_15m",
+        "trend_1h",
+        "trend_5m",
+        "vwap"
+      ],
+      "source": "shadow",
+      "status": "open",
+      "pnl_pct": null,
+      "pnl_gross_pct": null,
+      "duration_minutes": null,
+      "close_price": null,
+      "created_at": "2026-10-02T18:05:27Z",
+      "closed_at": null,
+      "created_local": "02/10 20:05",
+      "expires_at": "2026-10-02T19:05:27Z",
+      "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 0.98 (1.07 %), TP = 42 % du range, SL = 35 % du range, probabilité de résolution sous 1 h ≈ 96%.",
+      "news_context": "prudence post-Rapport emploi US (NFP) : critères renforcés · actualité à surveiller (score 2) : US payrolls miss at 29K and the Dollar Index drops below 102.00 | 10-year Treasury yield ticks higher despite weaker-than-expected jobs report",
+      "manual_exit": null
+    }
+  ],
   "recent_trades": [
     {
       "id": "a810fb111e",
@@ -7119,8 +7189,8 @@
     }
   },
   "state": {
-    "last_scan": "2026-10-02T18:00:58Z",
-    "last_scan_note": "0 signal(aux)",
+    "last_scan": "2026-10-02T18:05:27Z",
+    "last_scan_note": "1 signal(aux)",
     "last_summary": "2026-10-01T22:05:28Z",
     "last_track": "2026-10-02T17:25:28Z",
     "last_summary_day": "2026-10-01"
@@ -7146,7 +7216,7 @@
     "losses": 48,
     "avg_win": 61.17,
     "avg_loss": -47.13,
-    "open_positions": 0,
+    "open_positions": 1,
     "skipped": 0,
     "risky": 66
   }
