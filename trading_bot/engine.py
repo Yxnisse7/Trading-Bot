@@ -74,10 +74,14 @@ class Engine:
         if blackout:
             log.info("Blackout macro : %s à %s UTC — aucun signal", blackout.name, blackout.at.strftime("%H:%M"))
             self._touch_state(now, note=f"blackout {blackout.name}")
+            if not dry_run:
+                self.write_report()        # le site doit voir le passage, sinon il affiche « Bot en retard »
             return []
         if now.hour in avoid_hours:
             log.info("Tranche horaire %02dh UTC évitée (apprentissage)", now.hour)
             self._touch_state(now, note="tranche évitée")
+            if not dry_run:
+                self.write_report()
             return []
 
         news_cache: dict[str, list[newsmod.NewsItem]] = {}

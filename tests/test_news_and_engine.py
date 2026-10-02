@@ -138,6 +138,15 @@ def test_stale_candles_skipped(tmp_path, monkeypatch):
     assert eng.scan(now) == []
 
 
+def test_blackout_pass_still_refreshes_dashboard(tmp_path, monkeypatch):
+    now = datetime(2026, 10, 2, 12, 0, tzinfo=timezone.utc)  # pause du NFP
+    candles = make_candles(n=500, drift=0.0003, noise=0.0012, seed=7, start_ts=int(now.timestamp()) - 500 * 300)
+    eng = _engine(tmp_path, monkeypatch, candles, candles[-1].close)
+    assert eng.scan(now) == []
+    dash = json.loads((tmp_path / "dashboard.json").read_text())
+    assert dash["state"]["last_scan"] == "2026-10-02T12:00:00Z" and "blackout" in dash["state"]["last_scan_note"]
+
+
 def test_tick_scans_only_on_interval(tmp_path, monkeypatch):
     now = datetime(2026, 9, 17, 14, 0, tzinfo=timezone.utc)
     candles = make_candles(n=500, drift=0.0003, noise=0.0012, seed=7, start_ts=int(now.timestamp()) - 500 * 300)
