@@ -82,7 +82,9 @@ def make_handler(engine: Engine):
                 self._json(200, engine.portfolio.data)
                 return
             if path == "/api/ping":
-                self._json(200, {"ok": True, "mode": "local"})
+                # mirror : l'interface lit les données du dépôt (copie de secours mise à jour par git pull),
+                # pas celles d'un bot qui tourne sur ce PC (TRADING_BOT_DATA_DIR vers un autre dossier)
+                self._json(200, {"ok": True, "mode": "local", "mirror": is_mirror(engine)})
                 return
             if path.startswith("/docs/"):
                 target = (docs_dir / path[len("/docs/"):]).resolve()
@@ -99,6 +101,11 @@ def make_handler(engine: Engine):
         def do_POST(self) -> None:  # noqa: N802
             path = self.path.split("?", 1)[0]
             body = self._body()
+            if is_mirror(engine):
+                # copie miroir du dépôt : aucune action, le vrai bot tourne sur GitHub Actions
+                self._json(403, {"ok": False, "error": "Copie locale du dépôt : actions désactivées (le bot tourne sur "
+                                 "GitHub). Pour tester sur ce PC, lancez-le avec TRADING_BOT_DATA_DIR vers un autre dossier."})
+                return
             try:
                 if path == "/api/manual":
                     with lock:
@@ -143,8 +150,16 @@ def make_handler(engine: Engine):
     return Handler
 
 
+def is_mirror(engine: Engine) -> bool:
+    """L'interface lit les données du dépôt lui-même (copie de secours tenue à jour par git pull)."""
+    return engine.store.dir.resolve() == (ROOT_DIR / "data").resolve()
+
+
 def serve(engine: Engine, host: str = "127.0.0.1", port: int = 8787) -> None:
-    engine.write_report()
+    # Copie miroir : rien n'est réécrit au démarrage, sinon le prochain « git pull » bute sur
+    # des fichiers modifiés localement. Bot qui tourne sur ce PC : rapport recalculé.
+    if not is_mirror(engine) or not engine.store.dashboard_file.exists():
+        engine.write_report()
     server = ThreadingHTTPServer((host, port), make_handler(engine))
     print(f"Interface : http://{host}:{port}  (Ctrl+C pour arrêter)", flush=True)
     try:

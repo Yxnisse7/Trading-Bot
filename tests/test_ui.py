@@ -78,3 +78,38 @@ def test_site_assets_are_versioned():
     r = subprocess.run([sys.executable, str(root / "scripts" / "version_assets.py"), "--check"],
                        capture_output=True, text=True)
     assert r.returncode == 0, r.stdout
+
+
+def test_mirror_copy_is_read_only(tmp_path, monkeypatch):
+    """Interface locale sur la copie du dépôt : rien n'est réécrit au démarrage, aucune action acceptée."""
+    from trading_bot import ui
+
+    eng = Engine(Config(assets=default_assets()), Store(tmp_path))
+    eng.write_report()
+    monkeypatch.setattr(ui, "is_mirror", lambda engine: True)
+    writes = []
+    monkeypatch.setattr(eng, "write_report", lambda: writes.append(1))
+
+    class StopServer(Exception):
+        pass
+
+    monkeypatch.setattr(ui, "ThreadingHTTPServer", lambda *a, **k: (_ for _ in ()).throw(StopServer()))
+    try:
+        ui.serve(eng, port=0)
+    except StopServer:
+        pass
+    assert writes == []                                         # démarrage sans écriture
+
+    server = ThreadingHTTPServer(("127.0.0.1", 0), make_handler(eng))
+    threading.Thread(target=server.serve_forever, daemon=True).start()
+    try:
+        c = HTTPConnection("127.0.0.1", server.server_address[1], timeout=5)
+        c.request("GET", "/api/ping"); r = c.getresponse(); assert json.loads(r.read())["mirror"] is True
+        c.request("POST", "/api/manual", body=json.dumps({"asset": "gold", "direction": "long"}),
+                  headers={"Content-Type": "application/json"})
+        r = c.getresponse(); j = json.loads(r.read())
+        assert r.status == 403 and not j["ok"] and "Copie locale" in j["error"]
+        assert eng.store.open_signals() == []
+    finally:
+        server.shutdown()
+        server.server_close()

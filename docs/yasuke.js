@@ -141,12 +141,21 @@
   }
 
   // ------------------------------------------------------------------ état du bot
+  let lastStatus = null;
   function status(lastIso, note) {
+    lastStatus = [lastIso, note];
     const el = document.getElementById("yk-status"); if (!el) return;
     const b = el.querySelector("b"), sub = el.querySelector(".yk-st-sub");
     if (!lastIso) { el.className = "yk-status"; b.textContent = "Bot inconnu"; sub.textContent = "aucun passage enregistré"; return; }
     const min = Math.max(0, Math.round((Date.now() - new Date(lastIso).getTime()) / 60000));
     const late = min > 15;
+    if (late && S.mirror) {
+      // copie locale du dépôt : les données datent du dernier « git pull », le bot tourne ailleurs (GitHub)
+      el.className = "yk-status"; b.textContent = "Copie locale";
+      sub.textContent = `données d'il y a ${min < 120 ? min + " min" : Math.round(min / 60) + " h"}`;
+      el.title = "Interface locale sur la copie du dépôt : le bot tourne sur GitHub Actions. Faites un « git pull » pour récupérer ses derniers passages.";
+      return;
+    }
     el.className = "yk-status " + (late ? "late" : "ok");
     b.textContent = late ? "Bot en retard" : "Bot actif";
     sub.textContent = (late ? `aucun passage depuis ${min < 120 ? min + " min" : Math.round(min / 60) + " h"}` : `dernier passage ${ago(lastIso)}`)
@@ -271,7 +280,12 @@
     blocked_by_policy: "L'accès GitHub est bloqué par la politique de votre organisation.",
     approval_required: "Cette action GitHub demande une approbation qui n'est pas disponible ici.",
   };
-  const S = { mode: "static", mcp: null, mcpChecked: false, watching: false, consentAsked: false };
+  const S = { mode: "static", mcp: null, mcpChecked: false, watching: false, consentAsked: false, mirror: false };
+  // Interface locale (python run.py ui) : copie miroir du dépôt ou bot qui tourne sur ce PC ?
+  if (/^(127\.0\.0\.1|localhost)$/.test(location.hostname)) {
+    fetch("/api/ping", { cache: "no-store" }).then((r) => r.json())
+      .then((j) => { S.mirror = !!j.mirror; if (S.mirror && lastStatus) status(...lastStatus); }).catch(() => { /* pas le serveur local */ });
+  }
   function extractDashboard(result) {
     const cands = [];
     if (result && result.payload !== undefined) cands.push(result.payload);
