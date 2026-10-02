@@ -562,6 +562,13 @@ chaque dimanche à 20:00 UTC :
 - `bot.yml` accepte aussi `tp` et `sl` en entrée pour `manual` (objectif et stop imposés).
 - `daily-summary.yml` : résumé quotidien à 22:05 UTC (00:05 Paris en été) ; lancé avant midi heure locale, il porte sur la veille, sinon sur le jour même (`--day hier|aujourd'hui|AAAA-MM-JJ` pour forcer).
 - `tests.yml` : tests à chaque push.
+- `backup.yml` : **sauvegarde hebdomadaire** le dimanche à 21:30 UTC, après le backtest. Une
+  archive zip de tous les fichiers suivis du dépôt (code, données, site), plus l'historique des
+  bougies (release `candles`), est envoyée en silence au **seul propriétaire** (premier chat de
+  `TELEGRAM_CHAT_ID`) : environ 5 Mo, sous la limite de 50 Mo des bots Telegram. Rien n'est écrit
+  dans le dépôt, et les secrets n'y sont jamais. Si GitHub bloquait un jour le dépôt, le mode
+  d'emploi pour tout reconstruire est dans `sauvegarde/LISEZMOI.txt` de l'archive (nouveau dépôt,
+  secrets à remettre, Pages, workflows, cron-job.org). Commande : `python run.py backup --candles <archive>`.
 
 Ajoutez les secrets Telegram / Discord dans *Settings → Secrets and variables → Actions*, et vérifiez
 que `main` est la branche par défaut (les crons ne s'exécutent que sur celle-ci).

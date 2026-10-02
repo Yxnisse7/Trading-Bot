@@ -1,0 +1,38 @@
+name: Sauvegarde hebdomadaire (Telegram)
+
+# Chaque dimanche à 21:30 UTC, après le backtest hebdomadaire : une archive zip du dépôt (code,
+# données, site) et de l'historique des bougies est envoyée en silence au propriétaire du bot sur
+# Telegram (premier chat de TELEGRAM_CHAT_ID). De quoi tout reconstruire si GitHub bloquait le dépôt.
+# Rien n'est écrit dans le dépôt. Lançable aussi à la main.
+on:
+  schedule:
+    - cron: "30 21 * * 0"
+  workflow_dispatch:
+
+concurrency:
+  group: trading-bot-backup
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Historique des bougies (release « candles »)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release download candles --pattern candles.tar.gz --dir "$RUNNER_TEMP" || echo "Pas d'historique des bougies : sauvegarde sans."
+      - name: Archive envoyée sur Telegram
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python run.py backup --candles "$RUNNER_TEMP/candles.tar.gz"

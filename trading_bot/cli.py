@@ -41,12 +41,12 @@ from .learning import analyze
 from .signals import format_signal
 
 
-HALAL_REFUSED = {"manual", "propose", "commands", "guide", "ui", "loop", "fetch-data", "topstep", "invest"}
+HALAL_REFUSED = {"manual", "propose", "commands", "guide", "ui", "loop", "fetch-data", "topstep", "invest", "backup"}
 
 
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(description="Générateur de signaux de scalping (NQ, BTC, XAU) — données gratuites")
-    p.add_argument("command", choices=["scan", "track", "tick", "summary", "stats", "loop", "status", "test-notify", "backtest", "report", "fetch-data", "manual", "propose", "ui", "commands", "portfolio", "guide", "learn", "flush-outbox", "check-data", "stop", "topstep", "trim-candles", "invest"])
+    p.add_argument("command", choices=["scan", "track", "tick", "summary", "stats", "loop", "status", "test-notify", "backtest", "report", "fetch-data", "manual", "propose", "ui", "commands", "portfolio", "guide", "learn", "flush-outbox", "check-data", "stop", "topstep", "trim-candles", "invest", "backup"])
     p.add_argument("--signal", help="stop : identifiant (ou début) du trade à arrêter, ou son actif ; sans valeur, le seul trade ouvert")
     p.add_argument("--halal", action="store_true", help="mode halal : second bot séparé (achat seulement, sans levier, data/halal)")
     p.add_argument("--dry-run", action="store_true", help="scan sans enregistrer les signaux")
@@ -64,6 +64,7 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--port", type=int, default=8787, help="port de l'interface locale")
     p.add_argument("--balance", type=float, help="nouvelle balance de simulation")
     p.add_argument("--risk", type=float, help="risque par trade en % de la balance")
+    p.add_argument("--candles", help="backup : archive des bougies (release « candles ») à inclure")
     p.add_argument("-v", "--verbose", action="store_true")
     args = p.parse_args(argv)
 
@@ -84,6 +85,20 @@ def main(argv: list[str] | None = None) -> int:
 
         print(f"{flush_outbox()} notification(s) envoyée(s).")
         return 0
+    if args.command == "backup":
+        # sauvegarde hebdomadaire : archive du dépôt (+ bougies) envoyée au propriétaire sur Telegram
+        import tempfile
+        from pathlib import Path
+
+        from . import backup
+
+        day = utcnow()
+        path, summary = backup.build_archive(Path.cwd(), Path(tempfile.mkdtemp()), day,
+                                             Path(args.candles) if args.candles else None)
+        sent = backup.send_document(path, backup.caption(summary, day))
+        print(f"Sauvegarde {path.name} : {summary['size'] / 1e6:.1f} Mo, {summary['files']} fichiers, "
+              f"bougies {'incluses' if summary['candles'] else 'absentes'} — {'envoyée' if sent else 'NON envoyée'}.")
+        return 0 if sent else 1
     eng = HalalEngine(cfg) if args.halal else Engine(cfg)
 
     if args.command == "scan":
