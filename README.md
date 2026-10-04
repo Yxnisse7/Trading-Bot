@@ -362,6 +362,30 @@ Nasdaq −2,97 % → −1,17 %, or −2,66 % → −1,41 %, pétrole −2,26 % �
 cryptos (24 h/24) y perdaient, elles gardent le calcul d'origine. L'heure d'ouverture suit New York
 (13:30 UTC l'été, 14:30 UTC l'hiver).
 
+### Nouveaux setups et historique long
+Deux idées d'entrée, écrites dans `HYPOTHESES.md` **avant** tout test, avec leurs critères d'abandon :
+A « repli dans une tendance forte » (ADX 15 min ≥ 30, entrée à la reprise après un retour sur l'EMA 20,
+stop sous le creux, objectif 1,5 R) et B « retour à la VWAP sans tendance » (ADX < 20, prix à plus de
+2 ATR de la VWAP du jour). Un setup n'est gardé que s'il fait au moins 100 trades, un gain net moyen
+positif, un facteur de profit ≥ 1,1, le même résultat dans les deux moitiés de la période et s'il
+résiste aux tests de résistance. Il serait alors suivi en ombre, jamais notifié directement.
+
+- `python run.py backtest-setups` : sur les bougies récentes (Yahoo / Binance) ;
+  `--history` : sur l'historique long. Résultats dans `data/setups.json` et sur la page Apprentissage.
+- **Historique long gratuit** (workflow manuel « Historique long », `python run.py fetch-history --months 12`) :
+  archives mensuelles Binance pour les cryptos (vraies bougies), bougies 1 min Dukascopy regroupées en
+  5 min pour le reste. Dukascopy donne des **CFD au comptant**, pas les contrats CME : niveaux un peu
+  décalés, volume en ticks, mais même forme de mouvement, ce qui suffit pour juger une idée en R.
+  Dukascopy limite le nombre de requêtes : le téléchargement patiente et réessaie (compter plusieurs
+  dizaines de minutes pour 12 mois). Les bougies vont dans la release « history », jamais dans le dépôt.
+- Autres sources si besoin : Yahoo en bougies 1 h sur 730 jours (gratuit, vrais contrats, mais trop
+  grossier pour des trades de 2 h) ; Databento (vraies données CME en 1 min, 125 $ de crédit offert à
+  l'inscription, payant ensuite).
+
+Premier essai (bougies récentes, juillet → septembre 2026) : A −0,26 R par trade, B −0,46 R ; les
+deux sont abandonnés. Avant frais l'avantage est proche de zéro, et les frais coûtent 0,36 à 0,57 R par
+trade sur les cryptos. Seul A sur le Nasdaq et le S&P 500 est positif, sur trop peu de trades.
+
 ### Sections repliables
 Sur les trois pages, chaque section se replie ou se déplie d'un clic sur son titre (en glissant), et
 un bouton « Tout replier / Tout déplier » s'ajoute à l'en-tête. L'état est mémorisé dans le
