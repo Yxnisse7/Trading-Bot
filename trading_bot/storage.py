@@ -120,6 +120,15 @@ class Store:
                          for t in v.get("trades", [])]
         self._write(self.backtest_trades_file, trades)
 
+    def setups(self) -> dict[str, Any]:
+        """Évaluation des setups : {"recent": ..., "history": ...} (bougies récentes / historique long)."""
+        return self._read(self.dir / "setups.json", {})
+
+    def save_setups(self, data: dict[str, Any], history: bool = False) -> None:
+        all_ = self.setups()
+        all_["history" if history else "recent"] = data
+        self._write(self.dir / "setups.json", all_)
+
     def stress(self) -> dict[str, Any]:
         return self._read(self.stress_file, {})
 

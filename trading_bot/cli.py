@@ -34,19 +34,19 @@ import time
 from datetime import date, datetime
 
 from .config import DISCLAIMER, load_config
-from .models import utcnow
+from .models import iso, utcnow
 from .notify import notify
 from .engine import Engine
 from .learning import analyze
 from .signals import format_signal
 
 
-HALAL_REFUSED = {"manual", "propose", "commands", "guide", "ui", "loop", "fetch-data", "topstep", "invest", "backup", "fetch-history"}
+HALAL_REFUSED = {"manual", "propose", "commands", "guide", "ui", "loop", "fetch-data", "topstep", "invest", "backup", "fetch-history", "backtest-setups"}
 
 
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(description="Générateur de signaux de scalping (NQ, BTC, XAU) — données gratuites")
-    p.add_argument("command", choices=["scan", "track", "tick", "summary", "stats", "loop", "status", "test-notify", "backtest", "report", "fetch-data", "manual", "propose", "ui", "commands", "portfolio", "guide", "learn", "flush-outbox", "check-data", "stop", "topstep", "trim-candles", "invest", "backup", "fetch-history"])
+    p.add_argument("command", choices=["scan", "track", "tick", "summary", "stats", "loop", "status", "test-notify", "backtest", "report", "fetch-data", "manual", "propose", "ui", "commands", "portfolio", "guide", "learn", "flush-outbox", "check-data", "stop", "topstep", "trim-candles", "invest", "backup", "fetch-history", "backtest-setups"])
     p.add_argument("--signal", help="stop : identifiant (ou début) du trade à arrêter, ou son actif ; sans valeur, le seul trade ouvert")
     p.add_argument("--halal", action="store_true", help="mode halal : second bot séparé (achat seulement, sans levier, data/halal)")
     p.add_argument("--dry-run", action="store_true", help="scan sans enregistrer les signaux")
@@ -66,6 +66,7 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--risk", type=float, help="risque par trade en % de la balance")
     p.add_argument("--candles", help="backup : archive des bougies (release « candles ») à inclure")
     p.add_argument("--months", type=int, default=12, help="fetch-history : profondeur de l'historique long en mois")
+    p.add_argument("--history", action="store_true", help="backtest-setups : sur l'historique long (data/history) plutôt que les bougies Yahoo")
     p.add_argument("-v", "--verbose", action="store_true")
     args = p.parse_args(argv)
 
@@ -208,6 +209,27 @@ def main(argv: list[str] | None = None) -> int:
             if candles:
                 eng.store.save_history(key, candles)
             print(key, hist.SOURCE_LABEL.get(key, ""), json.dumps(hist.check_candles(candles), ensure_ascii=False), flush=True)
+    elif args.command == "backtest-setups":
+        # setups pré-enregistrés (HYPOTHESES.md) jugés sur leurs critères d'abandon
+        from . import setups
+
+        load = eng.store.load_history if args.history else eng.store.load_candles
+        candles = {k: load(k) for k in eng.cfg.assets}
+        candles = {k: v for k, v in candles.items() if v}
+        if not candles:
+            print("Aucune bougie : lancez d'abord fetch-history (ou fetch-data).")
+            return 1
+        source = "historique long (Binance, Dukascopy CFD)" if args.history else "bougies Yahoo / Binance récentes"
+        out = setups.evaluate(eng.cfg.assets, candles, source)
+        out["updated_at"] = iso(utcnow())
+        eng.store.save_setups(out, history=args.history)
+        for key, v in out["setups"].items():
+            t = v["total"]
+            print(f"{v['label']} [{source}] : {t['n']} trades, {t['mean_r']} R net, facteur de profit "
+                  f"{t['profit_factor']} → {v['verdict']}")
+            for check, ok in v["checks"].items():
+                print(f"   {'✓' if ok else '✗'} {check}")
+        eng.write_report()
     elif args.command == "trim-candles":
         # garde les `--days` derniers jours de bougies enregistrées (historique du backtest)
         for key in eng.cfg.assets:
