@@ -16,7 +16,7 @@ permissions:
 jobs:
   history:
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    timeout-minutes: 300
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -36,3 +36,9 @@ jobs:
             --title "Historique long 5 min" \
             --notes "Bougies 5 min sur plusieurs mois (Binance, Dukascopy CFD) pour tester les setups. Données publiques."
           gh release upload history "$RUNNER_TEMP/history.tar.gz" --clobber
+      - name: Backtest des setups sur l'historique long
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python run.py backtest-setups --history
+          gh release upload history data/setups.json --clobber

@@ -198,7 +198,10 @@ def main(argv: list[str] | None = None) -> int:
         from .providers import history as hist
 
         today = date.today()
-        for key in (args.asset or list(eng.cfg.assets)):
+        keys = args.asset or list(eng.cfg.assets)
+        keys = sorted(keys, key=lambda k: k not in hist.BINANCE)        # Binance d'abord : rapide, sans limite
+        for key in keys:
+            hist.STATS.update(ok=0, absent=0, failed=0, throttled=0)
             ref = eng.store.load_candles(key)
             if key in hist.BINANCE:
                 candles = hist.fetch_binance(key, args.months, today)
@@ -208,7 +211,8 @@ def main(argv: list[str] | None = None) -> int:
                 continue
             if candles:
                 eng.store.save_history(key, candles)
-            print(key, hist.SOURCE_LABEL.get(key, ""), json.dumps(hist.check_candles(candles), ensure_ascii=False), flush=True)
+            print(key, hist.SOURCE_LABEL.get(key, ""), json.dumps(hist.check_candles(candles) | {"fichiers": dict(hist.STATS)},
+                                                                ensure_ascii=False), flush=True)
     elif args.command == "backtest-setups":
         # setups pré-enregistrés (HYPOTHESES.md) jugés sur leurs critères d'abandon
         from . import setups

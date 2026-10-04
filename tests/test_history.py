@@ -44,3 +44,31 @@ def test_dukascopy_candles_decode_scale_and_resample():
 def test_check_candles_flags_incoherent_bars():
     bad = [Candle(0, 10, 9, 11, 10)]                    # plus haut sous le plus bas
     assert hist.check_candles(bad)["incoherent"] == 1
+
+
+def test_long_history_saved_apart_from_signal_history(tmp_path):
+    from trading_bot.storage import Store
+
+    store = Store(tmp_path / "data", tmp_path / "docs")
+    store.save_history("nasdaq", [Candle(1_700_000_100, 1, 2, 0.5, 1.5, 10)])
+    assert store.load_history("nasdaq")[0].close == 1.5
+    assert store.history() == []                      # l'historique des signaux reste intact
+
+
+def test_throttled_request_waits_then_succeeds(monkeypatch):
+    calls = []
+
+    class R:
+        def __init__(self, code, content=b""):
+            self.status_code, self.content, self.headers = code, content, {"Retry-After": "0"}
+
+        def raise_for_status(self):
+            pass
+
+    replies = [R(429), R(429), R(200, b"ok")]
+    monkeypatch.setattr(hist.requests, "get", lambda url, **kw: calls.append(kw) or replies.pop(0))
+    monkeypatch.setattr(hist.time, "sleep", lambda s: None)
+    hist.STATS.update(ok=0, absent=0, failed=0, throttled=0)
+    assert hist._get("https://x") == b"ok"
+    assert hist.STATS["throttled"] == 2 and hist.STATS["ok"] == 1
+    assert "User-Agent" in calls[0]["headers"]

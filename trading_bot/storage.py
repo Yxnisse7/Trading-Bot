@@ -202,11 +202,11 @@ class Store:
         return self.dir / "candles" / f"{asset_key}_5m.json"
 
     # ---- historique long (data/history, release « history », jamais commité)
-    def history_file(self, asset_key: str) -> Path:
+    def long_history_file(self, asset_key: str) -> Path:
         return self.dir / "history" / f"{asset_key}_5m.json"
 
     def save_history(self, asset_key: str, candles: list) -> None:
-        path = self.history_file(asset_key)
+        path = self.long_history_file(asset_key)
         path.parent.mkdir(parents=True, exist_ok=True)
         rows = [[c.ts, c.open, c.high, c.low, c.close, c.volume] for c in candles]
         path.write_text(json.dumps(rows, separators=(",", ":")), encoding="utf-8")
@@ -214,7 +214,7 @@ class Store:
     def load_history(self, asset_key: str) -> list:
         from .models import Candle
 
-        rows = self._read(self.history_file(asset_key), [])
+        rows = self._read(self.long_history_file(asset_key), [])
         return [Candle(int(r[0]), float(r[1]), float(r[2]), float(r[3]), float(r[4]), float(r[5])) for r in rows]
 
     def save_candles(self, asset_key: str, candles: list) -> None:

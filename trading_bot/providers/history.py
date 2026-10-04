@@ -34,20 +34,34 @@ SOURCE_LABEL = {**{k: "Binance (vraies bougies)" for k in BINANCE},
 SCALES = (1, 10, 100, 1000, 10000, 100000)
 
 
-def _get(url: str, timeout: int = 30, retries: int = 3) -> bytes | None:
-    """Contenu brut, None si absent (404 ou fichier vide : week-end, jour férié, mois pas encore publié)."""
+HEADERS = {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0 Safari/537.36"}
+STATS: dict[str, int] = {"ok": 0, "absent": 0, "failed": 0, "throttled": 0}
+
+
+def _get(url: str, timeout: int = 30, retries: int = 6) -> bytes | None:
+    """Contenu brut, None si absent (404 ou fichier vide : week-end, jour férié, mois pas encore publié).
+    Trop de requêtes (429) : on attend de plus en plus longtemps (Retry-After si fourni) puis on réessaie."""
     for attempt in range(retries):
         try:
-            r = requests.get(url, timeout=timeout)
+            r = requests.get(url, timeout=timeout, headers=HEADERS)
             if r.status_code == 404:
+                STATS["absent"] += 1
                 return None
+            if r.status_code == 429:
+                STATS["throttled"] += 1
+                wait = r.headers.get("Retry-After", "")
+                time.sleep(min(int(wait), 120) if wait.isdigit() else 10 * (attempt + 1))
+                continue
             r.raise_for_status()
+            STATS["ok" if r.content else "absent"] += 1
             return r.content or None
         except requests.RequestException as exc:
             if attempt == retries - 1:
-                log.warning("historique : %s indisponible (%s)", url, exc)
-                return None
-            time.sleep(2 * (attempt + 1))
+                break
+            log.debug("historique : %s (%s), nouvel essai", url, exc)
+            time.sleep(3 * (attempt + 1))
+    STATS["failed"] += 1
+    log.warning("historique : %s indisponible après %d essais", url, retries)
     return None
 
 
@@ -124,7 +138,7 @@ def detect_scale(raw: bytes, reference: float | None) -> float:
     return float(min(SCALES, key=lambda s: abs((med / s) / reference - 1)))
 
 
-def fetch_dukascopy(asset: str, days: int, today: date, reference: float | None, pause: float = 0.05) -> list[Candle]:
+def fetch_dukascopy(asset: str, days: int, today: date, reference: float | None, pause: float = 0.5) -> list[Candle]:
     sym = DUKASCOPY[asset]
     out: list[Candle] = []
     scale = None

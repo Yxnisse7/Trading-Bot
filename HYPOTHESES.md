@@ -67,3 +67,4 @@ signal réel que par la promotion automatique, avec la marge corrigée du nombre
 | Date | Essai | Résultat |
 |---|---|---|
 | 2026-10-04 | Pré-enregistrement de A et B | — |
+| 2026-10-04 | A et B sur les bougies Yahoo conservées (≈ 3 mois, 7 actifs), frais inclus | A : 858 trades, −0,27 R, PF 0,62 → **abandon** (Nasdaq +0,13 R sur 47 trades, S&P +0,06 R sur 60 : trop peu pour conclure). B : 665 trades, −0,46 R → **abandon**. Avant frais, l'avantage est proche de zéro ; les frais coûtent 0,36 à 0,57 R par trade sur les cryptos et 0,25 R sur l'euro. |
