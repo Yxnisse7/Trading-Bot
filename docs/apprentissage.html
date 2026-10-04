@@ -76,6 +76,9 @@
   <h2 id="resistance" data-hint="les trades du backtest rejoués en conditions dégradées">Tests de résistance</h2>
   <div class="card" id="stress"></div>
 
+  <h2 id="setups" data-hint="idées d'entrée écrites avant d'être testées (HYPOTHESES.md)">Nouveaux setups</h2>
+  <div class="card" id="setups-box"></div>
+
   <div class="foot"><div>Ce n'est pas un conseil financier. Aucune stratégie ne garantit un gain.</div></div>
 </div>
 
@@ -150,6 +153,27 @@
       <td class="num ${Y.tone(b.pnl_pct)}">${Y.pctv(b.pnl_pct, 2)}</td><td class="num ${Y.tone(b.expectancy_pct)}">${Y.pctv(b.expectancy_pct, 3)}</td></tr>`).join("")
       : `<tr><td colspan="8" class="empty">Aucun backtest pour l'instant.</td></tr>`;
     renderStress(d.stress || {});
+    renderSetups(d.setups || {}, d.assets || []);
+  }
+  // Setups pré-enregistrés : jugés sur des critères d'abandon écrits avant le premier test
+  function renderSetups(all, assets) {
+    const el = $("#setups-box");
+    const runs = [["history", "Historique long"], ["recent", "Bougies récentes"]].filter(([k]) => all[k] && all[k].setups);
+    if (!runs.length) { el.innerHTML = `<div class="muted">Pas encore testés.</div>`; return; }
+    const r2 = (v) => v == null ? "n/a" : Y.signed(v, 2, " R");
+    const label = (k) => (assets.find((a) => a.key === k) || {}).label || k;
+    el.innerHTML = runs.map(([k, title]) => {
+      const run = all[k];
+      return `<div style="margin-bottom:18px"><b style="font-weight:600">${title}</b> <span class="muted">· ${esc(run.source || "")}${run.updated_at ? " · " + esc(Y.ago ? Y.ago(run.updated_at) : run.updated_at) : ""}</span>
+        ${Object.values(run.setups).map((v) => {
+          const t = v.total || {}, h1 = v.first_half || {}, h2 = v.second_half || {};
+          const rows = Object.entries(v.by_asset || {}).map(([a, s]) => `<tr><td class="nowrap">${esc(label(a))}</td><td class="mono muted nowrap" style="font-size:12px">${esc(String(s.period || "").replace("→", "au"))}</td><td class="num">${s.n}</td><td class="num">${Y.pct(s.win_rate)}</td><td class="num">${s.profit_factor ?? "n/a"}</td><td class="num ${Y.tone(s.mean_r)}">${r2(s.mean_r)}</td></tr>`).join("");
+          return `<div class="verdict" style="margin-top:10px"><div><span class="pill ${v.passed ? "up" : "dn"}">${esc(v.verdict)}</span> <b style="font-weight:500">${esc(v.label)}</b></div>
+            <div class="muted">${t.n} trades · gain net moyen <b class="${Y.tone(t.mean_r)}">${r2(t.mean_r)}</b> · facteur de profit ${t.profit_factor ?? "n/a"} · 1re moitié ${r2(h1.mean_r)}, 2de ${r2(h2.mean_r)}</div>
+            <div class="ctx-b" style="margin-top:6px">${Object.entries(v.checks || {}).map(([c, ok]) => `<span class="pill ${ok ? "up" : "dn"}">${ok ? "✓" : "✗"} ${esc(c)}</span>`).join("")}</div></div>
+            <div class="tbl"><table><thead><tr><th>Actif</th><th>Période</th><th class="num">Trades</th><th class="num">Réussite</th><th class="num">Facteur de profit</th><th class="num">Gain net moyen</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+        }).join("")}</div>`;
+    }).join("") + `<div class="muted">Un setup qui remplit tous les critères est d'abord suivi en ombre sur le marché réel, sans notification. Les critères et chaque essai sont notés dans HYPOTHESES.md : modifier un setup après avoir vu ses résultats compte comme un nouvel essai.</div>`;
   }
   // Tests de résistance : mêmes trades du backtest, conditions dégradées (méthode « backtest-expert »)
   function renderStress(st) {
