@@ -323,9 +323,23 @@ barre de qualité qu'un signal réel, et alimentent l'apprentissage dès mainten
 | `reprise_apres_stop` | une nouvelle entrée juste après un stop, que le refroidissement (60 min, et 2 h dans le même sens) bloque d'habitude |
 
 Une variante passe **automatiquement en signaux réels** quand, sur au moins 100 trades
-(`variant_min_trades`), son gain net moyen égale ou dépasse celui des signaux réels du bot ; elle
-repasse en test si ses résultats retombent. Chaque promotion ou retrait est annoncé sur Telegram.
+(`variant_min_trades`), son gain net moyen égale ou dépasse celui des signaux réels du bot **et**
+reste positif « au pire », c'est-à-dire après une marge de sécurité corrigée du nombre d'essais
+(Bonferroni sur toutes les variantes et filtres en compétition, `promotion_alpha` = 5 % : ≈ 2,58
+écarts-types pour 10 essais, 1,96 au minimum ; les filtres utilisent la même marge). Sans cette
+correction, l'une des variantes finirait par battre le bot par pur hasard. Elle repasse en test si
+ses résultats retombent. Chaque promotion ou retrait est annoncé sur Telegram.
 Une seule variante est testée à la fois sur un même trade, pour ne pas mélanger deux changements.
+
+### Tests de résistance du backtest
+À chaque backtest hebdomadaire, les mêmes trades sont rejoués sur les mêmes bougies dans des
+conditions dégradées (`trading_bot/stress.py`, méthode de la skill `backtest-expert`) : frais × 1,5 et
+× 2, stop et objectif déplacés de ±25 à 50 %, entrée retardée de 5 et 10 min (niveaux notifiés
+inchangés, comme sur Topstep où l'entrée arrive après le signal ; « manqué » si le prix les a déjà
+dépassés), et le pire cas cumulé. Une grille stop × objectif montre si le gain tient sur une zone de
+réglages (« plateau ») ou sur une seule case. Le scénario de référence retrouve exactement le
+résultat du backtest. Verdict sur la page Apprentissage (`data/stress.json`) : robuste, fragile,
+très fragile, ou pas d'avantage (la stratégie perd déjà en référence).
 
 **SL adaptés à l'heure** (`session_range`, actifs à séance : Nasdaq, S&P 500, or, pétrole) : le range
 de référence du TP et du SL est le plus grand du range moyen sur 24 h et du range de la même heure les

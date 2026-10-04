@@ -22,6 +22,14 @@
   .ctx-row:last-child { border-bottom: 0; }
   .ctx-b { display: flex; flex-wrap: wrap; gap: 6px; }
   @media (max-width: 760px) { .ctx-row { grid-template-columns: 1fr; } }
+  .verdict { display: grid; gap: 6px; margin-bottom: 14px; }
+  .heat { border-collapse: separate; border-spacing: 4px; margin-top: 4px; }
+  .heat th { font-weight: 500; font-size: 12px; color: var(--muted); padding: 2px 6px; text-align: center; }
+  .heat td { font-family: var(--mono, monospace); font-size: 12px; padding: 8px 10px; border-radius: 6px; text-align: center; min-width: 64px; white-space: nowrap; }
+  @media (max-width: 520px) { .heat td { min-width: 0; padding: 7px 6px; font-size: 11px; } .heat th { padding: 2px 3px; } }
+  .heat td.pos { background: var(--up-soft); color: var(--up-text); }
+  .heat td.neg { background: var(--dn-soft); color: var(--dn-text); }
+  .heat td.ref { outline: 2px solid var(--brand); outline-offset: -2px; }
 </style>
 </head>
 <body data-page="learning">
@@ -64,6 +72,9 @@
   <h2 id="backtests">Backtests</h2>
   <div class="card tbl"><table id="bt"><thead><tr><th>Actif</th><th>Période</th><th class="num">Signaux</th><th class="num">Réussite</th><th class="num">Hasard</th><th class="num">Avantage</th><th class="num">Résultat net</th><th class="num">Espérance</th></tr></thead><tbody></tbody></table>
     <div class="muted" style="margin-top:10px">Rejoué chaque dimanche à 20 h UTC, sur jusqu'à 180 jours de bougies (l'historique s'allonge de semaine en semaine). Un backtest compte peu dans l'apprentissage (0,25 contre 1 pour un trade réel).</div></div>
+
+  <h2 id="resistance" data-hint="les trades du backtest rejoués en conditions dégradées">Tests de résistance</h2>
+  <div class="card" id="stress"></div>
 
   <div class="foot"><div>Ce n'est pas un conseil financier. Aucune stratégie ne garantit un gain.</div></div>
 </div>
@@ -138,6 +149,33 @@
       <td class="num">${b.n}</td><td class="num">${Y.pct(b.win_rate)}</td><td class="num muted">${Y.pct(b.neutral_win_rate)}</td>${edgeCell(b.edge)}
       <td class="num ${Y.tone(b.pnl_pct)}">${Y.pctv(b.pnl_pct, 2)}</td><td class="num ${Y.tone(b.expectancy_pct)}">${Y.pctv(b.expectancy_pct, 3)}</td></tr>`).join("")
       : `<tr><td colspan="8" class="empty">Aucun backtest pour l'instant.</td></tr>`;
+    renderStress(d.stress || {});
+  }
+  // Tests de résistance : mêmes trades du backtest, conditions dégradées (méthode « backtest-expert »)
+  function renderStress(st) {
+    const el = $("#stress");
+    if (!st.scenarios || !st.scenarios.length) {
+      el.innerHTML = `<div class="muted">Calculés au prochain backtest hebdomadaire (dimanche 20 h UTC).</div>`;
+      return;
+    }
+    const r2 = (v) => v == null ? "n/a" : Y.signed(v, 2, " R");
+    const pill = { robuste: "up", fragile: "", tres_fragile: "dn", aucun_avantage: "dn" }[st.verdict] || "";
+    const name = { robuste: "Robuste", fragile: "Fragile", tres_fragile: "Très fragile", aucun_avantage: "Pas d'avantage" }[st.verdict] || st.verdict;
+    const pct = (v) => v == null ? "n/a" : Math.round(v * 100) + " %";
+    const cell = (g) => g ? `<td class="${g.mean_r > 0 ? "pos" : "neg"}${g.sl === 1 && g.tp === 1 ? " ref" : ""}" title="${g.n} trades">${r2(g.mean_r)}</td>` : "<td></td>";
+    const find = (sl, tp) => (st.grid || []).find((g) => g.sl === sl && g.tp === tp);
+    const mult = (m) => m === 1 ? "prévu" : (m > 1 ? "+" : "−") + Math.round(Math.abs(m - 1) * 100) + " %";
+    el.innerHTML = `
+      <div class="verdict"><div><span class="pill ${pill}">${esc(name)}</span> <span class="muted">${st.scenarios[0].n} trades du backtest rejoués · scénarios dégradés encore gagnants : <b>${pct(st.robustness)}</b> · réglages stop/objectif gagnants : <b>${pct(st.plateau)}</b></span></div>
+        <div>${esc(st.verdict_text || "")}</div></div>
+      <div class="tbl"><table><thead><tr><th>Scénario</th><th class="num">Trades</th><th class="num">Manqués</th><th class="num">Réussite</th><th class="num">Facteur de profit</th><th class="num">Gain net moyen</th></tr></thead><tbody>
+        ${st.scenarios.map((s) => `<tr${s.key === "base" ? ' style="font-weight:500"' : ""}><td>${esc(s.label)}</td><td class="num">${s.n}</td><td class="num muted">${s.missed || "–"}</td><td class="num">${Y.pct(s.win_rate)}</td><td class="num">${s.profit_factor ?? "n/a"}</td><td class="num ${Y.tone(s.mean_r)}">${r2(s.mean_r)}</td></tr>`).join("")}
+      </tbody></table></div>
+      <div style="margin-top:16px"><b style="font-weight:500">Stop × objectif</b> <span class="muted">— gain net moyen pour chaque réglage (encadré : celui du bot). Une stratégie solide montre une large zone bleue, pas une seule case.</span></div>
+      <div class="tbl"><table class="heat"><thead><tr><th>Stop ↓ · objectif →</th>${(st.grid_tp || []).map((tp) => `<th>${mult(tp)}</th>`).join("")}</tr></thead><tbody>
+        ${(st.grid_sl || []).map((sl) => `<tr><th>${mult(sl)}</th>${(st.grid_tp || []).map((tp) => cell(find(sl, tp))).join("")}</tr>`).join("")}
+      </tbody></table></div>
+      <div class="muted" style="margin-top:10px">Entrée retardée : les niveaux notifiés restent les mêmes, comme sur Topstep où l'entrée arrive après le signal (données des contrats CME différées de 10 min) ; « manqué » = le prix avait déjà dépassé l'objectif ou le stop. Recalculé à chaque backtest hebdomadaire.</div>`;
   }
   // Filtres, contexte et sorties (apprentissage v3)
   function renderLearning2(adj, r2) {

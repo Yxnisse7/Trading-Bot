@@ -832,6 +832,7 @@ class Engine:
         self.store.save_report(text)
         dash = build_dashboard(all_sigs, self.cfg, adjustments, backtests, self.store.state())
         dash["portfolio"] = self.portfolio.summary()
+        dash["stress"] = self.store.stress()
         self.store.save_dashboard(dash)
         if self.TOPSTEP:
             try:
@@ -983,6 +984,7 @@ class Engine:
     def backtest(self, days: int = 30, asset_keys: list[str] | None = None, send: bool = False,
                  offline: bool = False) -> dict[str, Any]:
         results: dict[str, Any] = {}
+        used_candles: dict[str, list] = {}
         for key, asset in self.cfg.assets.items():
             if asset_keys and key not in asset_keys:
                 continue
@@ -1000,6 +1002,7 @@ class Engine:
                 except ProviderError as exc:
                     log.warning("%s : données indisponibles pour le backtest (%s)", asset.label, exc)
                     continue
+            used_candles[key] = candles
             bases = [5] + ([self.cfg.long_horizon_base_minutes] if (self.cfg.long_horizon_enabled and asset.long_horizon) else [])
             extra: dict[str, Any] = {}
             if self.cfg.scan_bases:
@@ -1020,6 +1023,16 @@ class Engine:
         if results:
             # backtest complet (tous les actifs) : il remplace l'ancien, rien de figé ne subsiste
             self.store.save_backtests(results, replace=not asset_keys)
+            if not asset_keys:
+                # tests de résistance : les mêmes trades rejoués dans des conditions dégradées
+                from .stress import stress_test
+                try:
+                    stress = stress_test(results, used_candles, {k: a.cost_pct for k, a in self.cfg.assets.items()})
+                    if stress:
+                        stress["updated_at"] = iso(utcnow())
+                        self.store.save_stress(stress)
+                except Exception:  # noqa: BLE001 — le backtest reste valable même si l'analyse échoue
+                    log.exception("tests de résistance")
             self.write_report()
         return results
 

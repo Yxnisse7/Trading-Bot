@@ -26,6 +26,7 @@ class Store:
         self.calendar_cache_file = self.dir / "calendar_cache.json"  # calendrier économique (ForexFactory)
         self.portfolio_file = self.dir / "portfolio.json"     # simulation de compte
         self.dashboard_file = self.dir / "dashboard.json"     # données de l'interface
+        self.stress_file = self.dir / "stress.json"           # tests de résistance du dernier backtest
 
     # ---- helpers
     def _read(self, path: Path, default: Any) -> Any:
@@ -118,6 +119,12 @@ class Store:
                             "meta": {m: (t.get("meta") or {}).get(m) for m in ("ctx", "exc") if (t.get("meta") or {}).get(m)}}
                          for t in v.get("trades", [])]
         self._write(self.backtest_trades_file, trades)
+
+    def stress(self) -> dict[str, Any]:
+        return self._read(self.stress_file, {})
+
+    def save_stress(self, data: dict[str, Any]) -> None:
+        self._write(self.stress_file, data)
 
     def backtest_trades(self) -> list[Signal]:
         out = []
