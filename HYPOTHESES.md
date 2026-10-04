@@ -62,6 +62,17 @@ récentes, frais réels inclus :
 Un setup qui passe tout reste **en ombre sur le marché réel** (variante silencieuse) et ne devient un
 signal réel que par la promotion automatique, avec la marge corrigée du nombre d'essais.
 
+## Essai 2 — setup A limité au Nasdaq et au S&P 500 (`setup_repli` indices)
+
+Écrit le 4 octobre 2026, **après** avoir vu le premier essai (A positif seulement sur ces deux
+actifs, 39 et 51 trades) : c'est une idée tirée des résultats, donc suspecte tant qu'elle n'est pas
+confirmée ailleurs. Règles de A inchangées, actifs limités à `nasdaq` et `sp500`.
+
+**Données de confirmation :** historique long Dukascopy, **uniquement les bougies antérieures au
+9 juillet 2026** (début des bougies déjà vues), soit environ octobre 2025 → juin 2026. Mêmes critères
+d'abandon que plus haut (100 trades minimum, gain net moyen > 0, facteur de profit ≥ 1,1, deux
+moitiés de même signe, tests de résistance). Frais : ceux du bot (0,01 % aller-retour).
+
 ## Journal des essais
 
 | Date | Essai | Résultat |
