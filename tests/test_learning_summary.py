@@ -105,11 +105,16 @@ def test_learn_avoids_hours_only_when_clearly_losing(cfg):
 
 def test_variant_promotion_rule(cfg):
     bot = [_trade(i, "tp" if i % 8 < 3 else "sl", ["rsi"]) for i in range(40)]             # ≈ 0 R brut, négatif net
-    good = [_trade(100 + i, "tp" if i % 2 else "sl", ["rsi"], source="shadow", variant="horizon_3h") for i in range(100)]
+    good = [_trade(100 + i, "tp" if i % 5 else "sl", ["rsi"], source="shadow", variant="horizon_3h") for i in range(100)]
     short = [_trade(300 + i, "tp", ["rsi"], source="shadow", variant="hors_session") for i in range(99)]
     worse = [_trade(500 + i, "sl", ["rsi"], source="shadow", variant="confiance_moyenne") for i in range(120)]
-    adj = learn(bot + good + short + worse, cfg)
+    # meilleure que le bot (+0,33 R), mais pas PROUVÉE positive une fois corrigée du nombre de variantes en test
+    lucky = [_trade(700 + i, "tp" if i % 2 else "sl", ["rsi"], source="shadow", variant="avant_ouverture") for i in range(100)]
+    adj = learn(bot + good + short + worse + lucky, cfg)
     assert adj["promoted_variants"] == ["horizon_3h"]
+    v = adj["variants"]["avant_ouverture"]
+    assert v["mean_net_r"] > adj["baseline"]["mean_net_r"] and v["lower_r"] < 0 and not v["promoted"]
+    assert adj["variants_z"] > 2.5                      # 10 essais en compétition : marge relevée (1,96 pour un seul)
     assert adj["variants"]["hors_session"]["missing"] == 1 and not adj["variants"]["hors_session"]["promoted"]
     assert not adj["variants"]["confiance_moyenne"]["promoted"]
     assert any("promue" in n for n in adj["notes"])

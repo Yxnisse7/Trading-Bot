@@ -240,7 +240,7 @@ FILTERS = {
 }
 
 
-def filter_report(closed: list[Signal], cfg: Config) -> dict[str, Any]:
+def filter_report(closed: list[Signal], cfg: Config, z: float | None = None) -> dict[str, Any]:
     """Compare, sur les trades réels marqués depuis la mise en place du test, les trades qu'un filtre
     aurait écartés à ceux qu'il garde (gain net en R)."""
     from .learning import trade_r
@@ -258,7 +258,7 @@ def filter_report(closed: list[Signal], cfg: Config) -> dict[str, Any]:
         if len(kept) >= cfg.variant_min_trades and len(out_r) >= 20 and mo is not None and mk is not None:
             var = lambda xs, m: sum((x - m) ** 2 for x in xs) / max(1, len(xs) - 1)  # noqa: E731
             se = math.sqrt(var(out_r, mo) / len(out_r) + var(kept, mk) / len(kept))
-            promoted = mk - mo > cfg.learning_z * se
+            promoted = mk - mo > (z if z is not None else cfg.learning_z) * se
         out[key] = {"label": label, "n": len(kept) + len(out_r), "n_out": len(out_r), "n_kept": len(kept),
                     "mean_out_r": round(mo, 4) if mo is not None else None,
                     "mean_kept_r": round(mk, 4) if mk is not None else None,

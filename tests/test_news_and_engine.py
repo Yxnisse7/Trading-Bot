@@ -691,7 +691,7 @@ def test_relearn_announces_promotions(tmp_path, monkeypatch):
     for i in range(40):
         eng.store.append_history(_trade(i, "tp" if i % 8 < 3 else "sl", ["rsi"]))
     for i in range(100):
-        eng.store.append_history(_trade(100 + i, "tp" if i % 2 else "sl", ["rsi"], source="shadow", variant="horizon_3h"))
+        eng.store.append_history(_trade(100 + i, "tp" if i % 5 else "sl", ["rsi"], source="shadow", variant="horizon_3h"))
     adj = eng._relearn()
     assert adj["promoted_variants"] == ["horizon_3h"]
     assert any("VARIANTE PROMUE" in t and "horizon" in t for t in sent)

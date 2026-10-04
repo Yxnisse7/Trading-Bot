@@ -158,12 +158,15 @@ class Config:
 
     # ---- Variantes testées en fantôme (jamais notifiées tant qu'elles ne sont pas promues)
     # Promotion automatique si, sur au moins `variant_min_trades` trades, la variante fait au moins
-    # aussi bien (gain net moyen) que les signaux réels du bot.
+    # aussi bien (gain net moyen) que les signaux réels du bot ET que son gain net est prouvé positif,
+    # avec une marge qui grandit avec le nombre de variantes et filtres en test (promotion_alpha).
     variants_enabled: bool = True
     variant_extended_sessions: dict[str, tuple[int, int]] = field(default_factory=lambda: {
         "nasdaq": (7, 13), "sp500": (7, 13),          # indices : matinée européenne (UTC)
     })
     variant_min_trades: int = 100
+    # Risque d'erreur toléré sur l'ensemble des variantes et filtres en test (corrigé de leur nombre)
+    promotion_alpha: float = 0.05
     # Avant l'ouverture américaine : un trade ouvert dans l'heure qui précède (jusqu'à 5 min après) reste
     # exposé au pic de l'ouverture. Ces entrées sont testées en silence (variante « avant_ouverture »)
     # sur les actifs à séance ; les cryptos (24 h/24) ne sont pas concernées.

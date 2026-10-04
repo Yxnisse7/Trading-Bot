@@ -172,8 +172,38 @@ def _fmt_m(v: float) -> str:
     return f"± {v:.2f} R".replace(".", ",")
 
 
-def variant_report(closed: list[Signal], cfg: Config) -> dict[str, Any]:
-    """Compare chaque variante testée en fantôme aux signaux réels du bot, sur le gain net."""
+def variant_labels(cfg: Config) -> dict[str, str]:
+    labels = dict(VARIANT_LABELS)
+    for key, asset in cfg.assets.items():
+        if asset.trial:
+            labels[f"essai_{key}"] = f"nouvel actif : {asset.label}"
+    return labels
+
+
+def promotion_z(cfg: Config, n_trials: int) -> float:
+    """Marge exigée pour promouvoir une variante ou un filtre, corrigée du nombre d'essais (Bonferroni).
+
+    Avec 10 variantes testées, l'une d'elles finit toujours par battre le bot par hasard : chaque essai
+    supplémentaire relève la barre (1,96 pour un seul essai, ≈ 2,58 pour 10)."""
+    from statistics import NormalDist
+    n = max(1, n_trials)
+    return max(cfg.learning_z, NormalDist().inv_cdf(1 - cfg.promotion_alpha / n))   # unilatéral : « meilleur que »
+
+
+def _mean_se(rs: list[float]) -> tuple[float | None, float | None]:
+    if not rs:
+        return None, None
+    m = sum(rs) / len(rs)
+    if len(rs) < 2:
+        return m, None
+    return m, math.sqrt(sum((r - m) ** 2 for r in rs) / (len(rs) - 1) / len(rs))
+
+
+def variant_report(closed: list[Signal], cfg: Config, z: float | None = None) -> dict[str, Any]:
+    """Compare chaque variante testée en fantôme aux signaux réels du bot, sur le gain net.
+
+    Promotion : au moins `variant_min_trades` trades, au moins aussi bien que le bot, ET un gain net
+    prouvé positif avec la marge `z` (corrigée du nombre de variantes et de filtres en test)."""
     # Référence : les signaux réels des actifs annoncés aujourd'hui (les actifs à l'essai en sont exclus,
     # sinon un actif mis de côté pour ses mauvais résultats abaisserait la barre des variantes)
     trial_assets = {k for k, a in cfg.assets.items() if a.trial}
@@ -182,17 +212,19 @@ def variant_report(closed: list[Signal], cfg: Config) -> dict[str, Any]:
     base_mean = sum(base) / len(base) if base else None
     out: dict[str, Any] = {"baseline": {"n": len(base), "mean_net_r": round(base_mean, 4) if base_mean is not None else None},
                            "variants": {}, "promoted": []}
-    labels = dict(VARIANT_LABELS)
-    for key, asset in cfg.assets.items():
-        if asset.trial:
-            labels[f"essai_{key}"] = f"nouvel actif : {asset.label}"
+    labels = variant_labels(cfg)
+    z = z if z is not None else promotion_z(cfg, len(labels))
+    out["z"] = round(z, 2)
     for key, label in labels.items():
         rs = [trade_r(s, net=True) for s in closed if s.source == "shadow" and (s.meta or {}).get("variant") == key]
         rs = [r for r in rs if r is not None]
-        mean = sum(rs) / len(rs) if rs else None
+        mean, se = _mean_se(rs)
+        lower = mean - z * se if mean is not None and se is not None else None
         ready = (len(rs) >= cfg.variant_min_trades and len(base) >= cfg.variant_baseline_min_trades
-                 and mean is not None and base_mean is not None and mean >= base_mean)
+                 and mean is not None and base_mean is not None and mean >= base_mean
+                 and lower is not None and lower > 0)
         out["variants"][key] = {"label": label, "n": len(rs), "mean_net_r": round(mean, 4) if mean is not None else None,
+                                "lower_r": round(lower, 4) if lower is not None else None,
                                 "promoted": ready, "missing": max(0, cfg.variant_min_trades - len(rs))}
         if ready:
             out["promoted"].append(key)
@@ -264,11 +296,13 @@ def learn(history: list[Signal], cfg: Config, current: dict[str, Any] | None = N
         st = weighted_stats([(r, 1.0) for s, r, _ in rows if pred(s)])
         if st:
             overview[label] = {"n": st["n"], "mean_r": round(st["mean"], 4), "margin_r": round(cfg.learning_z * st["se"], 4)}
-    variants = variant_report(closed, cfg) if cfg.variants_enabled else {"variants": {}, "promoted": []}
     from . import context as ctxmod
+    # une seule marge pour tout ce qui est en compétition pour la promotion (variantes + filtres)
+    trials_z = promotion_z(cfg, len(variant_labels(cfg)) + len(ctxmod.FILTERS))
+    variants = variant_report(closed, cfg, trials_z) if cfg.variants_enabled else {"variants": {}, "promoted": []}
     context = ctxmod.context_report(rows, cfg)
     exits = ctxmod.exit_report(closed, cfg)
-    filters = ctxmod.filter_report(closed, cfg) if cfg.variants_enabled else {}
+    filters = ctxmod.filter_report(closed, cfg, trials_z) if cfg.variants_enabled else {}
     us_open = ctxmod.us_open_history(closed)
 
     notes: list[str] = []
@@ -312,6 +346,7 @@ def learn(history: list[Signal], cfg: Config, current: dict[str, Any] | None = N
         "overview": overview,
         "variants": variants.get("variants", {}),
         "baseline": variants.get("baseline"),
+        "variants_z": round(trials_z, 2),
         "promoted_variants": variants.get("promoted", []) + [k for k, f in filters.items() if f["promoted"]],
         "context": context,
         "exits": exits,
