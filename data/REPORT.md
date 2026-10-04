@@ -1,6 +1,6 @@
 # Trading-Bot — rapport
 
-_Mis à jour le 04/10/2026 à 02:55 (Europe/Paris)._
+_Mis à jour le 04/10/2026 à 02:59 (Europe/Paris)._
 
 ## Vue d'ensemble
 
@@ -189,7 +189,7 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 
 Corrections par actif :
 
-- sp500 : {'trend_5m': 0.791, 'trend_15m': 0.791, 'trend_1h': 0.791, 'adx': 0.791, 'vwap': 0.566, 'rsi': 0.893}
+- sp500 : {'trend_5m': 0.769, 'trend_15m': 0.769, 'trend_1h': 0.769, 'adx': 0.769, 'vwap': 0.555, 'rsi': 0.867}
 
 | Variante testée en fantôme | Trades | Gain net moyen | Statut |
 |---|---:|---:|---|
@@ -206,9 +206,9 @@ Notes :
 
 - trades réels : +0,10 R ± 0,22 R par trade avant frais sur 106 trades (0 R = hasard)
 - aucun critère ne s'écarte du hasard au-delà de la marge de sécurité : poids par défaut conservés
-- sp500, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,27 R contre +0,01 R en global sur 124 trades éq. → poids ×0,79 sur cet actif
-- sp500, vwap : -0,28 R contre +0,02 R en global sur 121 trades éq. → poids ×0,75 sur cet actif
-- sp500, rsi : -0,25 R contre +0,00 R en global sur 109 trades éq. → poids ×0,89 sur cet actif
+- sp500, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,28 R contre +0,00 R en global sur 126 trades éq. → poids ×0,77 sur cet actif
+- sp500, vwap : -0,28 R contre +0,01 R en global sur 123 trades éq. → poids ×0,74 sur cet actif
+- sp500, rsi : -0,26 R contre -0,00 R en global sur 111 trades éq. → poids ×0,87 sur cet actif
 - variante « indices le matin européen » en test : 40 trades, -0,42 R net, encore 60 trades avant décision
 - variante « horizon ~3 h » en test : 39 trades, -0,40 R net, encore 61 trades avant décision
 - variante « confiance moyenne » en test : 23 trades, -0,23 R net, encore 77 trades avant décision
@@ -217,19 +217,19 @@ Notes :
 - variante « nouvel actif : Ethereum (ETH/USD) » en test : 5 trades, -0,55 R net, encore 95 trades avant décision
 - variante « nouvel actif : Pétrole WTI (CL) » en test : 32 trades, -0,10 R net, encore 68 trades avant décision
 - variante « nouvel actif : Euro / dollar (6E) » en test : 15 trades, -0,05 R net, encore 85 trades avant décision
-- sortie : stop remonté à l'entrée après +1,0 R ferait mieux (-0,06 R net contre -0,08 R, backtest) : à décider
+- sortie : stop remonté à l'entrée après +1,0 R ferait mieux (-0,06 R net contre -0,09 R, backtest) : à décider
 
 ## Backtests (données historiques 5 min)
 
 | Actif | Période | Signaux | TP | SL | Expirés | Taux de réussite | Hasard attendu | Avantage | P&L net | Espérance nette / trade |
 |---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| Nasdaq 100 (NQ) | 09/07/2026 → 30/09/2026 | 82 | 21 | 39 | 22 | 35% | 41% | -6% | -1.06 % | -0.013 % |
-| S&P 500 (ES) | 09/07/2026 → 30/09/2026 | 101 | 35 | 50 | 16 | 41% | 42% | -1% | -0.23 % | -0.002 % |
-| Bitcoin (BTC/USD) | 20/07/2026 → 30/09/2026 | 52 | 17 | 23 | 12 | 42% | 41% | +2% | -1.93 % | -0.037 % |
-| Ethereum (ETH/USD) | 20/07/2026 → 30/09/2026 | 56 | 11 | 27 | 18 | 29% | 40% | -11% | -6.67 % | -0.119 % |
-| Or (XAU/USD) | 09/07/2026 → 30/09/2026 | 124 | 41 | 50 | 33 | 45% | 42% | +3% | -1.40 % | -0.011 % |
-| Pétrole WTI (CL) | 14/07/2026 → 30/09/2026 | 181 | 60 | 81 | 40 | 43% | 41% | +1% | +3.92 % | +0.022 % |
-| Euro / dollar (6E) | 14/07/2026 → 30/09/2026 | 22 | 5 | 14 | 3 | 26% | 40% | -14% | -0.54 % | -0.025 % |
+| Nasdaq 100 (NQ) | 09/07/2026 → 02/10/2026 | 87 | 22 | 42 | 23 | 34% | 42% | -7% | -1.15 % | -0.013 % |
+| S&P 500 (ES) | 09/07/2026 → 02/10/2026 | 104 | 35 | 53 | 16 | 40% | 42% | -2% | -0.64 % | -0.006 % |
+| Bitcoin (BTC/USD) | 20/07/2026 → 04/10/2026 | 55 | 20 | 23 | 12 | 47% | 41% | +6% | -0.99 % | -0.018 % |
+| Ethereum (ETH/USD) | 20/07/2026 → 04/10/2026 | 56 | 11 | 27 | 18 | 29% | 40% | -11% | -6.67 % | -0.119 % |
+| Or (XAU/USD) | 09/07/2026 → 02/10/2026 | 130 | 43 | 52 | 35 | 45% | 42% | +3% | -1.47 % | -0.011 % |
+| Pétrole WTI (CL) | 14/07/2026 → 02/10/2026 | 186 | 60 | 85 | 41 | 41% | 41% | +0% | +2.42 % | +0.013 % |
+| Euro / dollar (6E) | 14/07/2026 → 02/10/2026 | 31 | 9 | 19 | 3 | 32% | 40% | -8% | -0.65 % | -0.021 % |
 
 ---
 
