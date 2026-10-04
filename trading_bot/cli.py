@@ -41,12 +41,12 @@ from .learning import analyze
 from .signals import format_signal
 
 
-HALAL_REFUSED = {"manual", "propose", "commands", "guide", "ui", "loop", "fetch-data", "topstep", "invest", "backup"}
+HALAL_REFUSED = {"manual", "propose", "commands", "guide", "ui", "loop", "fetch-data", "topstep", "invest", "backup", "fetch-history"}
 
 
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(description="Générateur de signaux de scalping (NQ, BTC, XAU) — données gratuites")
-    p.add_argument("command", choices=["scan", "track", "tick", "summary", "stats", "loop", "status", "test-notify", "backtest", "report", "fetch-data", "manual", "propose", "ui", "commands", "portfolio", "guide", "learn", "flush-outbox", "check-data", "stop", "topstep", "trim-candles", "invest", "backup"])
+    p.add_argument("command", choices=["scan", "track", "tick", "summary", "stats", "loop", "status", "test-notify", "backtest", "report", "fetch-data", "manual", "propose", "ui", "commands", "portfolio", "guide", "learn", "flush-outbox", "check-data", "stop", "topstep", "trim-candles", "invest", "backup", "fetch-history"])
     p.add_argument("--signal", help="stop : identifiant (ou début) du trade à arrêter, ou son actif ; sans valeur, le seul trade ouvert")
     p.add_argument("--halal", action="store_true", help="mode halal : second bot séparé (achat seulement, sans levier, data/halal)")
     p.add_argument("--dry-run", action="store_true", help="scan sans enregistrer les signaux")
@@ -65,6 +65,7 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--balance", type=float, help="nouvelle balance de simulation")
     p.add_argument("--risk", type=float, help="risque par trade en % de la balance")
     p.add_argument("--candles", help="backup : archive des bougies (release « candles ») à inclure")
+    p.add_argument("--months", type=int, default=12, help="fetch-history : profondeur de l'historique long en mois")
     p.add_argument("-v", "--verbose", action="store_true")
     args = p.parse_args(argv)
 
@@ -189,6 +190,24 @@ def main(argv: list[str] | None = None) -> int:
         ok = [p["key"] for p in data["products"] if p["stats"]]
         print(f"Investissement : {len(ok)} produits sur {len(data['products'])}, {len(data['news'])} actualités"
               + (f" ; indisponibles : {', '.join(data['errors'])}" if data["errors"] else ""))
+    elif args.command == "fetch-history":
+        # historique long (Binance pour les cryptos, Dukascopy pour le reste) dans data/history/
+        from datetime import date
+
+        from .providers import history as hist
+
+        today = date.today()
+        for key in (args.asset or list(eng.cfg.assets)):
+            ref = eng.store.load_candles(key)
+            if key in hist.BINANCE:
+                candles = hist.fetch_binance(key, args.months, today)
+            elif key in hist.DUKASCOPY:
+                candles = hist.fetch_dukascopy(key, args.months * 31, today, ref[-1].close if ref else None)
+            else:
+                continue
+            if candles:
+                eng.store.save_history(key, candles)
+            print(key, hist.SOURCE_LABEL.get(key, ""), json.dumps(hist.check_candles(candles), ensure_ascii=False), flush=True)
     elif args.command == "trim-candles":
         # garde les `--days` derniers jours de bougies enregistrées (historique du backtest)
         for key in eng.cfg.assets:
