@@ -63,9 +63,10 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--sl", type=float, help="stop imposé pour le signal manuel (sinon calibré par le bot)")
     p.add_argument("--port", type=int, default=8787, help="port de l'interface locale")
     p.add_argument("--balance", type=float, help="nouvelle balance de simulation")
-    p.add_argument("--risk", type=float, help="risque par trade en % de la balance")
+    p.add_argument("--risk", type=float, help="risque par trade en %% de la balance")
     p.add_argument("--candles", help="backup : archive des bougies (release « candles ») à inclure")
     p.add_argument("--months", type=int, default=12, help="fetch-history : profondeur de l'historique long en mois")
+    p.add_argument("--max-minutes", type=int, default=0, help="fetch-history : temps maximal par actif (0 = sans limite)")
     p.add_argument("--history", action="store_true", help="backtest-setups : sur l'historique long (data/history) plutôt que les bougies Yahoo")
     p.add_argument("-v", "--verbose", action="store_true")
     args = p.parse_args(argv)
@@ -206,7 +207,8 @@ def main(argv: list[str] | None = None) -> int:
             if key in hist.BINANCE:
                 candles = hist.fetch_binance(key, args.months, today)
             elif key in hist.DUKASCOPY:
-                candles = hist.fetch_dukascopy(key, args.months * 31, today, ref[-1].close if ref else None)
+                candles = hist.fetch_dukascopy(key, args.months * 31, today, ref[-1].close if ref else None,
+                                               deadline=time.time() + args.max_minutes * 60 if args.max_minutes else None)
             else:
                 continue
             if candles:

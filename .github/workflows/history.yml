@@ -3,20 +3,29 @@ name: Historique long (backtest des setups)
 # À la main : télécharge des mois de bougies 5 min (Binance pour les cryptos, Dukascopy pour les
 # indices, l'or, le pétrole et l'euro), vérifie leur cohérence, et les garde dans la release
 # « history » (jamais dans le dépôt). Sert à tester les nouveaux setups sur bien plus que 60 jours.
+# Un job par actif, en parallèle : Dukascopy limite les requêtes par machine, et un actif lent ou
+# coupé par le temps imparti garde ce qu'il a déjà téléchargé sans bloquer les autres.
 on:
   workflow_dispatch:
     inputs:
       months:
         description: "Profondeur en mois"
         default: "12"
+      minutes:
+        description: "Temps maximal de téléchargement par actif (minutes)"
+        default: "300"
 
 permissions:
   contents: write
 
 jobs:
-  history:
+  fetch:
     runs-on: ubuntu-latest
-    timeout-minutes: 300
+    timeout-minutes: 340
+    strategy:
+      fail-fast: false
+      matrix:
+        asset: [bitcoin, ethereum, nasdaq, sp500, gold, oil, euro]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -25,20 +34,39 @@ jobs:
           cache: pip
       - run: pip install -r requirements.txt
       - name: Téléchargement et contrôle
-        run: python run.py fetch-history --months "${{ inputs.months }}"
-      - name: Release « history »
+        run: python run.py fetch-history --asset "${{ matrix.asset }}" --months "${{ inputs.months }}" --max-minutes "${{ inputs.minutes }}"
+      - name: Envoi dans la release « history »
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          tar czf "$RUNNER_TEMP/history.tar.gz" -C data/history .
-          ls -la "$RUNNER_TEMP/history.tar.gz"
+          f="data/history/${{ matrix.asset }}_5m.json"
+          [ -f "$f" ] || { echo "aucune bougie pour ${{ matrix.asset }}"; exit 1; }
+          gzip -k "$f"
           gh release view history >/dev/null 2>&1 || gh release create history --prerelease \
             --title "Historique long 5 min" \
-            --notes "Bougies 5 min sur plusieurs mois (Binance, Dukascopy CFD) pour tester les setups. Données publiques."
-          gh release upload history "$RUNNER_TEMP/history.tar.gz" --clobber
+            --notes "Bougies 5 min sur plusieurs mois (Binance, Dukascopy CFD) pour tester les setups. Données publiques." || true
+          gh release upload history "$f.gz" --clobber
+
+  setups:
+    needs: fetch
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: pip install -r requirements.txt
       - name: Backtest des setups sur l'historique long
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          mkdir -p data/history
+          gh release download history --pattern '*_5m.json.gz' --dir data/history --clobber
+          gunzip -f data/history/*.gz
+          ls -la data/history
           python run.py backtest-setups --history
-          gh release upload history data/setups.json --clobber
+          tar czf "$RUNNER_TEMP/history.tar.gz" -C data/history .
+          gh release upload history data/setups.json "$RUNNER_TEMP/history.tar.gz" --clobber

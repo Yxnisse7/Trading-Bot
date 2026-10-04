@@ -138,12 +138,17 @@ def detect_scale(raw: bytes, reference: float | None) -> float:
     return float(min(SCALES, key=lambda s: abs((med / s) / reference - 1)))
 
 
-def fetch_dukascopy(asset: str, days: int, today: date, reference: float | None, pause: float = 0.5) -> list[Candle]:
+def fetch_dukascopy(asset: str, days: int, today: date, reference: float | None, pause: float = 0.5,
+                    deadline: float | None = None) -> list[Candle]:
+    """`deadline` (horodatage) : on s'arrête là et on garde ce qui est déjà téléchargé (du plus ancien au plus récent)."""
     sym = DUKASCOPY[asset]
     out: list[Candle] = []
     scale = None
     d = today - timedelta(days=days)
     while d < today:
+        if deadline is not None and time.time() > deadline:
+            log.warning("Dukascopy %s : temps écoulé, arrêt au %s", sym, d)
+            break
         if d.weekday() != 5:                           # samedi : marché fermé
             # mois numérotés à partir de 0 dans les adresses Dukascopy
             url = f"https://datafeed.dukascopy.com/datafeed/{sym}/{d.year}/{d.month - 1:02d}/{d.day:02d}/BID_candles_min_1.bi5"

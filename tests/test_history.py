@@ -72,3 +72,12 @@ def test_throttled_request_waits_then_succeeds(monkeypatch):
     assert hist._get("https://x") == b"ok"
     assert hist.STATS["throttled"] == 2 and hist.STATS["ok"] == 1
     assert "User-Agent" in calls[0]["headers"]
+
+
+def test_dukascopy_stops_at_deadline_and_keeps_nothing_new(monkeypatch):
+    from datetime import date
+
+    calls = []
+    monkeypatch.setattr(hist, "_get", lambda url: calls.append(url))
+    assert hist.fetch_dukascopy("nasdaq", 30, date(2026, 10, 1), 100.0, pause=0, deadline=0.0) == []
+    assert calls == []                                   # délai déjà dépassé : aucune requête
