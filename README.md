@@ -341,6 +341,19 @@ réglages (« plateau ») ou sur une seule case. Le scénario de référence ret
 résultat du backtest. Verdict sur la page Apprentissage (`data/stress.json`) : robuste, fragile,
 très fragile, ou pas d'avantage (la stratégie perd déjà en référence).
 
+### Changements de contrat (analyse d'octobre 2026)
+Yahoo colle les contrats successifs (`NQ=F`, `CL=F`…) sans corriger l'écart de prix au changement
+d'échéance (skill `ml4t-continuous-futures`). Sur l'historique gardé (juillet → septembre 2026) :
+- **Nasdaq, S&P 500, or, euro : aucun saut artificiel visible.** Les plus grands écarts tombent à la
+  réouverture du dimanche, en même temps sur des marchés sans lien et dans le sens du marché, pas dans
+  celui qu'aurait le report d'échéance ; l'euro n'a aucun écart pendant sa semaine d'échéance.
+- **Pétrole : deux sauts probables**, au lendemain de l'expiration du contrat du mois (+1,43 % le
+  22 juillet, −1,99 % le 23 septembre, plus de 20 fois la variation habituelle d'une bougie). Effet
+  mesuré : 1 trade de backtest sur 181 et 1 trade en ombre sur 32, tous deux stoppés par ce saut.
+
+Conclusion : effet trop rare pour justifier une correction automatique, qui risquerait d'effacer de
+vrais mouvements (annonces OPEP, stocks). À revérifier quand l'historique couvrira plus de mois.
+
 **SL adaptés à l'heure** (`session_range`, actifs à séance : Nasdaq, S&P 500, or, pétrole) : le range
 de référence du TP et du SL est le plus grand du range moyen sur 24 h et du range de la même heure les
 jours précédents. À l'ouverture américaine, le marché bouge 3 à 4 fois plus que la nuit : un stop
