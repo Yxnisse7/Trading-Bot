@@ -92,6 +92,17 @@ def parse_binance_csv(raw: bytes) -> list[Candle]:
     return out
 
 
+def _binance_days(sym: str, start: date, end: date) -> list[Candle]:
+    out: list[Candle] = []
+    d = start
+    while d < end:
+        raw = _get(f"https://data.binance.vision/data/spot/daily/klines/{sym}/5m/{sym}-5m-{d:%Y-%m-%d}.zip")
+        if raw:
+            out += parse_binance_csv(raw)
+        d += timedelta(days=1)
+    return out
+
+
 def fetch_binance(asset: str, months: int, today: date) -> list[Candle]:
     sym = BINANCE[asset]
     out: list[Candle] = []
@@ -104,13 +115,10 @@ def fetch_binance(asset: str, months: int, today: date) -> list[Candle]:
         raw = _get(url)
         if raw:
             out += parse_binance_csv(raw)
-    # mois en cours : archives quotidiennes
-    d = date(today.year, today.month, 1)
-    while d < today:
-        raw = _get(f"https://data.binance.vision/data/spot/daily/klines/{sym}/5m/{sym}-5m-{d:%Y-%m-%d}.zip")
-        if raw:
-            out += parse_binance_csv(raw)
-        d += timedelta(days=1)
+        else:
+            # archive du mois pas encore publiée (premiers jours du mois suivant) : archives quotidiennes
+            out += _binance_days(sym, date(y, m, 1), date(y + m // 12, m % 12 + 1, 1))
+    out += _binance_days(sym, date(today.year, today.month, 1), today)     # mois en cours
     return sorted({c.ts: c for c in out}.values(), key=lambda c: c.ts)
 
 

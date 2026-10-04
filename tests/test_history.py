@@ -81,3 +81,20 @@ def test_dukascopy_stops_at_deadline_and_keeps_nothing_new(monkeypatch):
     monkeypatch.setattr(hist, "_get", lambda url: calls.append(url))
     assert hist.fetch_dukascopy("nasdaq", 30, date(2026, 10, 1), 100.0, pause=0, deadline=0.0) == []
     assert calls == []                                   # délai déjà dépassé : aucune requête
+
+
+def test_binance_missing_month_falls_back_to_daily_archives(monkeypatch):
+    from datetime import date
+
+    urls = []
+
+    def fake_get(url):
+        urls.append(url)
+        if "/monthly/" in url:
+            return None if "2026-09" in url else _zip("1767225600000,1,1,1,1,1,x\n")
+        return _zip("1788220800000,2,2,2,2,1,x\n") if url.endswith("2026-09-01.zip") else None
+
+    monkeypatch.setattr(hist, "_get", fake_get)
+    out = hist.fetch_binance("bitcoin", 2, date(2026, 10, 3))
+    assert sum("/daily/" in u and "-2026-09-" in u for u in urls) == 30          # tout septembre en quotidien
+    assert any(c.close == 2 for c in out)
