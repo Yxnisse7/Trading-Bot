@@ -27,7 +27,7 @@ from ..models import Candle
 log = logging.getLogger(__name__)
 
 BINANCE = {"bitcoin": "BTCUSDT", "ethereum": "ETHUSDT"}
-DUKASCOPY = {"nasdaq": "USA100IDXUSD", "sp500": "USA500IDXUSD", "gold": "XAUUSD",
+DUKASCOPY = {"nasdaq": "USATECHIDXUSD", "sp500": "USA500IDXUSD", "gold": "XAUUSD",
              "oil": "LIGHTCMDUSD", "euro": "EURUSD"}
 SOURCE_LABEL = {**{k: "Binance (vraies bougies)" for k in BINANCE},
                 **{k: "Dukascopy (CFD au comptant)" for k in DUKASCOPY}}

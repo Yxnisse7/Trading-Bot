@@ -14,6 +14,9 @@ on:
       minutes:
         description: "Temps maximal de téléchargement par actif (minutes)"
         default: "300"
+      assets:
+        description: "Actifs à (re)télécharger, liste JSON"
+        default: '["bitcoin", "ethereum", "nasdaq", "sp500", "gold", "oil", "euro"]'
 
 permissions:
   contents: write
@@ -25,7 +28,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        asset: [bitcoin, ethereum, nasdaq, sp500, gold, oil, euro]
+        asset: ${{ fromJSON(inputs.assets) }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
