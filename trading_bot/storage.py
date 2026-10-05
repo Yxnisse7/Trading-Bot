@@ -129,6 +129,13 @@ class Store:
         all_["history" if history else "recent"] = data
         self._write(self.dir / "setups.json", all_)
 
+    def lab_shadow(self) -> dict[str, Any]:
+        """Stratégies du laboratoire suivies en ombre sur le marché réel : {"strat:actif": {...}}."""
+        return self._read(self.dir / "lab_shadow.json", {})
+
+    def save_lab_shadow(self, data: dict[str, Any]) -> None:
+        self._write(self.dir / "lab_shadow.json", data)
+
     def strategies(self) -> dict[str, Any]:
         """Laboratoire de stratégies (essai 3) : une case par stratégie × actif."""
         return self._read(self.dir / "strategies.json", {})

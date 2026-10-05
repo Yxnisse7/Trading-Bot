@@ -157,10 +157,10 @@
       : `<tr><td colspan="8" class="empty">Aucun backtest pour l'instant.</td></tr>`;
     renderStress(d.stress || {});
     renderSetups(d.setups || {}, d.assets || []);
-    renderLab(d.strategies || {}, d.assets || []);
+    renderLab(d.strategies || {}, d.assets || [], d.lab_shadow || {});
   }
   // Laboratoire : stratégie × actif, découverte (12 derniers mois) puis confirmation (année d'avant, jamais vue)
-  function renderLab(lab, assets) {
+  function renderLab(lab, assets, shadow) {
     const el = $("#lab-box");
     const cells = Object.values(lab.cells || {});
     if (!cells.length) { el.innerHTML = `<div class="muted">Pas encore lancé.</div>`; return; }
@@ -181,7 +181,11 @@
       <div class="tbl"><table class="heat"><thead><tr><th>Stratégie</th>${keys.map((k) => `<th>${esc(label(k))}</th>`).join("")}</tr></thead><tbody>
       ${strats.map((st) => `<tr><th title="${esc(lab.strategies[st])}">${esc(st)}</th>${keys.map((k) => cell(find(st, k))).join("")}</tr>`).join("")}
       </tbody></table></div>
-      <div class="muted" style="margin-top:10px">… en attente de la confirmation · ✓ validé (refait ses preuves sur l'année jamais vue) · ★ prouvé (marge corrigée pour ${lab.n_trials || 56} essais). ${kept.length ? `Retenus : ${kept.map((c) => esc(c.strategy + " · " + label(c.asset)) + " (" + esc(c.status) + ")").join(", ")}.` : "Aucun couple retenu."} Un couple validé est d'abord suivi en ombre, sans notification.</div>`;
+      <div class="muted" style="margin-top:10px">… en attente de la confirmation · ✓ validé (refait ses preuves sur l'année jamais vue) · ★ prouvé (marge corrigée pour ${lab.n_trials || 56} essais). ${kept.length ? `Retenus : ${kept.map((c) => esc(c.strategy + " · " + label(c.asset)) + " (" + esc(c.status) + ")").join(", ")}.` : "Aucun couple retenu."} Un couple validé est d'abord suivi en ombre, sans notification.</div>`
+      + Object.values(shadow || {}).map((r) => { const open = (r.trades || []).find((t) => t.status === "open");
+        const since = new Date(r.since).toLocaleDateString("fr-FR", { day: "numeric", month: "long" });
+        return `<div class="verdict" style="margin-top:14px"><div><span class="pill brand">en ombre</span> <b style="font-weight:500">${esc(r.strategy)} · ${esc(label(r.asset))}</b> <span class="muted">sur le marché réel depuis le ${esc(since)}, sans notification</span></div>
+          <div class="muted">${r.n ? `${r.n} trade${r.n > 1 ? "s" : ""} clôturé${r.n > 1 ? "s" : ""} · gain net moyen <b class="${Y.tone(r.mean_r)}">${r2(r.mean_r)}</b> (frais Topstep)` : "Aucun trade clôturé pour l'instant."}${open ? ` · position en cours : ${open.direction === "long" ? "achat" : "vente"} à ${Y.num(open.entry, 0)}, stop ${Y.num(open.stop, 0)}` : ""} · vérifié chaque heure, avec la même règle que le test.</div></div>`; }).join("");
   }
   // Setups pré-enregistrés : jugés sur des critères d'abandon écrits avant le premier test
   function renderSetups(all, assets) {

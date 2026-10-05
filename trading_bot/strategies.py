@@ -39,7 +39,9 @@ STRATEGIES = {
     "news_breakout": "Cassure du range des 15 min qui suivent une annonce (emploi, inflation, Fed)",
     "pre_fomc": "Achat des indices la veille d'une décision de la Fed (Lucca & Moench, 2015)",
 }
-INFO_ONLY = {"pre_fomc"}          # trop peu d'occurrences : affiché sans verdict (essai 4)
+INFO_ONLY = {"pre_fomc"}
+# Suivis en ombre sur le marché réel (aucune notification) : (stratégie, actif) → date de début
+SHADOW = {("donchian_1h", "bitcoin"): "2026-10-05T19:00:00Z"}          # trop peu d'occurrences : affiché sans verdict (essai 4)
 MIN_TRADES = {"news_breakout": 20}
 
 

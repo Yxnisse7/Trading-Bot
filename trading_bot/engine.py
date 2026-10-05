@@ -860,6 +860,7 @@ class Engine:
         dash["stress"] = self.store.stress()
         dash["setups"] = self.store.setups()       # évaluation des setups (sans le détail des trades)
         dash["strategies"] = self.store.strategies()
+        dash["lab_shadow"] = self.store.lab_shadow()
         try:
             dash["agenda"] = self.agenda()
             dash["agenda_rules"] = {"before": self.cfg.news_blackout_before_minutes,
@@ -1274,6 +1275,63 @@ class Engine:
         self.store.save_state(st)
         return handled
 
+    # ------------------------------------------------------------- laboratoire en ombre
+    LAB_DAYS = 8               # historique rechargé : canal de 20 h + position de 120 h au plus
+
+    def lab_shadow(self, now: datetime | None = None) -> dict[str, Any]:
+        """Rejoue, une fois par heure, les stratégies du laboratoire suivies en ombre (strategies.SHADOW) sur
+        les dernières bougies réelles, avec exactement la même règle que le test, et garde leurs trades.
+        Aucune notification : c'est une preuve qui s'accumule, jugée plus tard sur ses résultats réels."""
+        from . import strategies as sl
+        from .topstep import FEES, PRODUCTS
+
+        now = now or utcnow()
+        data = self.store.lab_shadow()
+        hour = now.replace(minute=0, second=0, microsecond=0)
+        changed = False
+        for (strat, key), since in sl.SHADOW.items():
+            name = f"{strat}:{key}"
+            rec = data.setdefault(name, {"strategy": strat, "asset": key, "since": since, "trades": []})
+            if rec.get("checked_hour") == iso(hour) or key not in self.cfg.assets:
+                continue
+            asset = self.cfg.assets[key]
+            try:
+                raw = market.fetch_candles_5m(asset, days=self.LAB_DAYS)
+            except ProviderError as exc:
+                log.info("laboratoire en ombre %s : données indisponibles (%s)", name, exc)
+                continue
+            candles = ind.closed_candles(raw, int(now.timestamp()), 300)
+            runner = sl.RUNNERS_1H.get(strat) or sl.RUNNERS_5M.get(strat)
+            trades = runner(candles, key) if strat in sl.RUNNERS_1H else runner(sl._Series(candles), key)
+            fee = FEES.get(key)
+            tcost = (sum(fee), PRODUCTS[key][1]) if fee and key in PRODUCTS else None
+            start = parse_iso(since).timestamp()
+            done = [t for t in rec["trades"] if t["status"] == "closed"]
+            last_exit = max((t["exit_ts"] for t in done), default=0)
+            kept = {t["entry_ts"]: t for t in done}
+            for t in trades:
+                if t.entry_ts < start or t.entry_ts < last_exit or t.entry_ts in kept:
+                    continue                                    # une position à la fois, comme dans le test
+                rs = sl.trade_rs(t, asset.cost_pct, tcost)
+                still_open = t.reason == "fin des données"
+                kept[t.entry_ts] = {"entry_ts": t.entry_ts, "entry_at": iso(datetime.fromtimestamp(t.entry_ts, timezone.utc)),
+                                    "direction": t.direction, "entry": t.entry, "risk": round(t.risk, 6),
+                                    "stop": round(t.entry - t.risk if t.direction == "long" else t.entry + t.risk, 6),
+                                    "status": "open" if still_open else "closed", "reason": None if still_open else t.reason,
+                                    "exit_ts": None if still_open else t.exit_ts, "exit": None if still_open else t.exit,
+                                    "last": t.exit if still_open else None,
+                                    "r_topstep": None if still_open else round(rs.get("net_topstep", rs["net_bot"]), 4),
+                                    "r_bot": None if still_open else round(rs["net_bot"], 4)}
+            rec["trades"] = sorted(kept.values(), key=lambda t: t["entry_ts"])
+            rec["checked_hour"] = iso(hour)
+            closed_rs = [t["r_topstep"] for t in rec["trades"] if t["status"] == "closed"]
+            rec["n"] = len(closed_rs)
+            rec["mean_r"] = round(sum(closed_rs) / len(closed_rs), 4) if closed_rs else None
+            changed = True
+        if changed:
+            self.store.save_lab_shadow(data)
+        return data
+
     # ------------------------------------------------------------- live
     LIVE_CANDLES = 288         # 24 h de bougies 5 min (le site en tire aussi les vues 15 min et 1 h)
     LIVE_DAYS = 2              # historique chargé pour l'instantané
@@ -1335,6 +1393,10 @@ class Engine:
             self.write_live_snapshot(now)
         except Exception:  # noqa: BLE001 — le graphique ne doit jamais casser un passage
             log.exception("instantané live")
+        try:
+            self.lab_shadow(now)
+        except Exception:  # noqa: BLE001 — le suivi en ombre ne doit jamais casser un passage
+            log.exception("laboratoire en ombre")
         st = self.store.state()
         last_scan = parse_iso(st["last_scan"]) if st.get("last_scan") else None
         new: list[Signal] = []
