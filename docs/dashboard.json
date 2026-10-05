@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-05T09:45:42.126332+02:00",
+  "updated_at": "2026-10-05T09:50:44.264788+02:00",
   "timezone": "Europe/Paris",
   "equity_curve": [
     {
@@ -7142,10 +7142,10 @@
     }
   },
   "state": {
-    "last_scan": "2026-10-05T07:45:35Z",
+    "last_scan": "2026-10-05T07:50:35Z",
     "last_scan_note": "0 signal(aux)",
     "last_summary": "2026-10-04T22:06:06Z",
-    "last_track": "2026-10-05T07:45:35Z",
+    "last_track": "2026-10-05T07:50:35Z",
     "last_summary_day": "2026-10-04"
   },
   "limits": {
@@ -8059,6 +8059,658 @@
         }
       },
       "updated_at": "2026-10-04T19:52:05Z"
+    },
+    "history": {
+      "source": "historique long, 12 mois (Binance ; Dukascopy CFD)",
+      "setups": {
+        "setup_repli": {
+          "label": "setup A : repli dans une tendance forte",
+          "total": {
+            "n": 4074,
+            "mean_r": -0.2229,
+            "profit_factor": 0.67,
+            "win_rate": 0.3989,
+            "total_r": -907.96
+          },
+          "first_half": {
+            "n": 2037,
+            "mean_r": -0.1683,
+            "profit_factor": 0.74,
+            "win_rate": 0.406,
+            "total_r": -342.76
+          },
+          "second_half": {
+            "n": 2037,
+            "mean_r": -0.2775,
+            "profit_factor": 0.61,
+            "win_rate": 0.3918,
+            "total_r": -565.19
+          },
+          "by_asset": {
+            "nasdaq": {
+              "n": 267,
+              "mean_r": -0.0163,
+              "profit_factor": 0.97,
+              "win_rate": 0.4457,
+              "total_r": -4.35,
+              "period": "28/09/2025 → 04/10/2026"
+            },
+            "sp500": {
+              "n": 223,
+              "mean_r": 0.0671,
+              "profit_factor": 1.13,
+              "win_rate": 0.4843,
+              "total_r": 14.97,
+              "period": "28/09/2025 → 02/10/2026"
+            },
+            "bitcoin": {
+              "n": 1141,
+              "mean_r": -0.323,
+              "profit_factor": 0.56,
+              "win_rate": 0.3839,
+              "total_r": -368.49,
+              "period": "01/10/2025 → 03/10/2026"
+            },
+            "ethereum": {
+              "n": 1231,
+              "mean_r": -0.273,
+              "profit_factor": 0.61,
+              "win_rate": 0.3989,
+              "total_r": -336.09,
+              "period": "01/10/2025 → 03/10/2026"
+            },
+            "gold": {
+              "n": 469,
+              "mean_r": -0.1111,
+              "profit_factor": 0.82,
+              "win_rate": 0.4072,
+              "total_r": -52.1,
+              "period": "28/09/2025 → 02/10/2026"
+            },
+            "oil": {
+              "n": 398,
+              "mean_r": -0.1635,
+              "profit_factor": 0.74,
+              "win_rate": 0.3744,
+              "total_r": -65.06,
+              "period": "28/09/2025 → 02/10/2026"
+            },
+            "euro": {
+              "n": 345,
+              "mean_r": -0.2807,
+              "profit_factor": 0.6,
+              "win_rate": 0.3739,
+              "total_r": -96.83,
+              "period": "28/09/2025 → 02/10/2026"
+            }
+          },
+          "stress": {
+            "scenarios": [
+              {
+                "key": "base",
+                "label": "Référence (backtest)",
+                "n": 4072,
+                "missed": 0,
+                "mean_r": -0.2205,
+                "total_r": -897.8,
+                "win_rate": 0.4,
+                "profit_factor": 0.67
+              },
+              {
+                "key": "frais_1_5",
+                "label": "Frais × 1,5",
+                "n": 4072,
+                "missed": 0,
+                "mean_r": -0.3255,
+                "total_r": -1325.28,
+                "win_rate": 0.3937,
+                "profit_factor": 0.56
+              },
+              {
+                "key": "frais_2",
+                "label": "Frais × 2",
+                "n": 4072,
+                "missed": 0,
+                "mean_r": -0.4304,
+                "total_r": -1752.76,
+                "win_rate": 0.3846,
+                "profit_factor": 0.47
+              },
+              {
+                "key": "stop_50",
+                "label": "Stop 50 % plus serré",
+                "n": 4072,
+                "missed": 0,
+                "mean_r": -0.4335,
+                "total_r": -1765.23,
+                "win_rate": 0.2601,
+                "profit_factor": 0.58
+              },
+              {
+                "key": "stop_75",
+                "label": "Stop 25 % plus serré",
+                "n": 4072,
+                "missed": 0,
+                "mean_r": -0.2935,
+                "total_r": -1195.21,
+                "win_rate": 0.3423,
+                "profit_factor": 0.64
+              },
+              {
+                "key": "stop_125",
+                "label": "Stop 25 % plus large",
+                "n": 4072,
+                "missed": 0,
+                "mean_r": -0.1831,
+                "total_r": -745.55,
+                "win_rate": 0.4384,
+                "profit_factor": 0.68
+              },
+              {
+                "key": "stop_150",
+                "label": "Stop 50 % plus large",
+                "n": 4072,
+                "missed": 0,
+                "mean_r": -0.1584,
+                "total_r": -644.8,
+                "win_rate": 0.4639,
+                "profit_factor": 0.68
+              },
+              {
+                "key": "tp_75",
+                "label": "Objectif 25 % plus proche",
+                "n": 4072,
+                "missed": 0,
+                "mean_r": -0.2279,
+                "total_r": -928.14,
+                "win_rate": 0.4536,
+                "profit_factor": 0.63
+              },
+              {
+                "key": "tp_125",
+                "label": "Objectif 25 % plus loin",
+                "n": 4072,
+                "missed": 0,
+                "mean_r": -0.209,
+                "total_r": -851.0,
+                "win_rate": 0.3713,
+                "profit_factor": 0.7
+              },
+              {
+                "key": "retard_1",
+                "label": "Entrée 5 min plus tard",
+                "n": 3985,
+                "missed": 87,
+                "mean_r": -0.2051,
+                "total_r": -817.37,
+                "win_rate": 0.399,
+                "profit_factor": 0.66
+              },
+              {
+                "key": "retard_2",
+                "label": "Entrée 10 min plus tard",
+                "n": 3804,
+                "missed": 267,
+                "mean_r": -0.1877,
+                "total_r": -714.13,
+                "win_rate": 0.4038,
+                "profit_factor": 0.67
+              },
+              {
+                "key": "pire",
+                "label": "Entrée 10 min plus tard + frais × 2",
+                "n": 3804,
+                "missed": 267,
+                "mean_r": -0.3913,
+                "total_r": -1488.63,
+                "win_rate": 0.368,
+                "profit_factor": 0.44
+              }
+            ],
+            "grid": [
+              {
+                "sl": 0.5,
+                "tp": 0.75,
+                "n": 4072,
+                "mean_r": -0.4366
+              },
+              {
+                "sl": 0.5,
+                "tp": 1.0,
+                "n": 4072,
+                "mean_r": -0.4335
+              },
+              {
+                "sl": 0.5,
+                "tp": 1.25,
+                "n": 4072,
+                "mean_r": -0.4091
+              },
+              {
+                "sl": 0.75,
+                "tp": 0.75,
+                "n": 4072,
+                "mean_r": -0.2998
+              },
+              {
+                "sl": 0.75,
+                "tp": 1.0,
+                "n": 4072,
+                "mean_r": -0.2935
+              },
+              {
+                "sl": 0.75,
+                "tp": 1.25,
+                "n": 4072,
+                "mean_r": -0.277
+              },
+              {
+                "sl": 1.0,
+                "tp": 0.75,
+                "n": 4072,
+                "mean_r": -0.2279
+              },
+              {
+                "sl": 1.0,
+                "tp": 1.0,
+                "n": 4072,
+                "mean_r": -0.2205
+              },
+              {
+                "sl": 1.0,
+                "tp": 1.25,
+                "n": 4072,
+                "mean_r": -0.209
+              },
+              {
+                "sl": 1.25,
+                "tp": 0.75,
+                "n": 4072,
+                "mean_r": -0.1858
+              },
+              {
+                "sl": 1.25,
+                "tp": 1.0,
+                "n": 4072,
+                "mean_r": -0.1831
+              },
+              {
+                "sl": 1.25,
+                "tp": 1.25,
+                "n": 4072,
+                "mean_r": -0.1734
+              },
+              {
+                "sl": 1.5,
+                "tp": 0.75,
+                "n": 4072,
+                "mean_r": -0.1619
+              },
+              {
+                "sl": 1.5,
+                "tp": 1.0,
+                "n": 4072,
+                "mean_r": -0.1584
+              },
+              {
+                "sl": 1.5,
+                "tp": 1.25,
+                "n": 4072,
+                "mean_r": -0.1517
+              }
+            ],
+            "grid_sl": [
+              0.5,
+              0.75,
+              1.0,
+              1.25,
+              1.5
+            ],
+            "grid_tp": [
+              0.75,
+              1.0,
+              1.25
+            ],
+            "robustness": 0.0,
+            "plateau": 0.0
+          },
+          "checks": {
+            "échantillon ≥ 100 trades": true,
+            "gain net moyen > 0": false,
+            "facteur de profit ≥ 1,1": false,
+            "même signe dans les deux moitiés": true,
+            "2de moitié ≥ 50 % de la 1re": false,
+            "≥ 60 % des scénarios dégradés gagnants": false,
+            "≥ 50 % des réglages stop × objectif gagnants": false
+          },
+          "passed": false,
+          "verdict": "abandon (critères non remplis)"
+        },
+        "setup_vwap": {
+          "label": "setup B : retour à la VWAP sans tendance",
+          "total": {
+            "n": 3051,
+            "mean_r": -0.3145,
+            "profit_factor": 0.63,
+            "win_rate": 0.3556,
+            "total_r": -959.58
+          },
+          "first_half": {
+            "n": 1525,
+            "mean_r": -0.2632,
+            "profit_factor": 0.68,
+            "win_rate": 0.3698,
+            "total_r": -401.37
+          },
+          "second_half": {
+            "n": 1526,
+            "mean_r": -0.3658,
+            "profit_factor": 0.58,
+            "win_rate": 0.3414,
+            "total_r": -558.22
+          },
+          "by_asset": {
+            "nasdaq": {
+              "n": 128,
+              "mean_r": -0.0316,
+              "profit_factor": 0.95,
+              "win_rate": 0.3516,
+              "total_r": -4.04,
+              "period": "28/09/2025 → 04/10/2026"
+            },
+            "sp500": {
+              "n": 133,
+              "mean_r": -0.2982,
+              "profit_factor": 0.62,
+              "win_rate": 0.3008,
+              "total_r": -39.66,
+              "period": "28/09/2025 → 02/10/2026"
+            },
+            "bitcoin": {
+              "n": 1083,
+              "mean_r": -0.4003,
+              "profit_factor": 0.57,
+              "win_rate": 0.3647,
+              "total_r": -433.47,
+              "period": "01/10/2025 → 03/10/2026"
+            },
+            "ethereum": {
+              "n": 840,
+              "mean_r": -0.3569,
+              "profit_factor": 0.58,
+              "win_rate": 0.3738,
+              "total_r": -299.83,
+              "period": "01/10/2025 → 03/10/2026"
+            },
+            "gold": {
+              "n": 340,
+              "mean_r": -0.1616,
+              "profit_factor": 0.79,
+              "win_rate": 0.3382,
+              "total_r": -54.94,
+              "period": "28/09/2025 → 02/10/2026"
+            },
+            "oil": {
+              "n": 278,
+              "mean_r": -0.1762,
+              "profit_factor": 0.76,
+              "win_rate": 0.3345,
+              "total_r": -48.99,
+              "period": "28/09/2025 → 02/10/2026"
+            },
+            "euro": {
+              "n": 249,
+              "mean_r": -0.3159,
+              "profit_factor": 0.62,
+              "win_rate": 0.3333,
+              "total_r": -78.65,
+              "period": "28/09/2025 → 02/10/2026"
+            }
+          },
+          "stress": {
+            "scenarios": [
+              {
+                "key": "base",
+                "label": "Référence (backtest)",
+                "n": 3051,
+                "missed": 0,
+                "mean_r": -0.3049,
+                "total_r": -930.31,
+                "win_rate": 0.3592,
+                "profit_factor": 0.63
+              },
+              {
+                "key": "frais_1_5",
+                "label": "Frais × 1,5",
+                "n": 3051,
+                "missed": 0,
+                "mean_r": -0.4799,
+                "total_r": -1464.21,
+                "win_rate": 0.3451,
+                "profit_factor": 0.5
+              },
+              {
+                "key": "frais_2",
+                "label": "Frais × 2",
+                "n": 3051,
+                "missed": 0,
+                "mean_r": -0.6549,
+                "total_r": -1998.11,
+                "win_rate": 0.3327,
+                "profit_factor": 0.39
+              },
+              {
+                "key": "stop_50",
+                "label": "Stop 50 % plus serré",
+                "n": 3051,
+                "missed": 0,
+                "mean_r": -0.6199,
+                "total_r": -1891.32,
+                "win_rate": 0.2271,
+                "profit_factor": 0.53
+              },
+              {
+                "key": "stop_75",
+                "label": "Stop 25 % plus serré",
+                "n": 3051,
+                "missed": 0,
+                "mean_r": -0.4123,
+                "total_r": -1258.05,
+                "win_rate": 0.3015,
+                "profit_factor": 0.59
+              },
+              {
+                "key": "stop_125",
+                "label": "Stop 25 % plus large",
+                "n": 3051,
+                "missed": 0,
+                "mean_r": -0.2448,
+                "total_r": -746.93,
+                "win_rate": 0.4028,
+                "profit_factor": 0.66
+              },
+              {
+                "key": "stop_150",
+                "label": "Stop 50 % plus large",
+                "n": 3051,
+                "missed": 0,
+                "mean_r": -0.2018,
+                "total_r": -615.65,
+                "win_rate": 0.4349,
+                "profit_factor": 0.68
+              },
+              {
+                "key": "tp_75",
+                "label": "Objectif 25 % plus proche",
+                "n": 3051,
+                "missed": 0,
+                "mean_r": -0.3153,
+                "total_r": -962.05,
+                "win_rate": 0.3943,
+                "profit_factor": 0.6
+              },
+              {
+                "key": "tp_125",
+                "label": "Objectif 25 % plus loin",
+                "n": 3051,
+                "missed": 0,
+                "mean_r": -0.2889,
+                "total_r": -881.54,
+                "win_rate": 0.3392,
+                "profit_factor": 0.66
+              },
+              {
+                "key": "retard_1",
+                "label": "Entrée 5 min plus tard",
+                "n": 2933,
+                "missed": 118,
+                "mean_r": -0.3026,
+                "total_r": -887.65,
+                "win_rate": 0.3563,
+                "profit_factor": 0.61
+              },
+              {
+                "key": "retard_2",
+                "label": "Entrée 10 min plus tard",
+                "n": 2816,
+                "missed": 234,
+                "mean_r": -0.3096,
+                "total_r": -871.72,
+                "win_rate": 0.3608,
+                "profit_factor": 0.59
+              },
+              {
+                "key": "pire",
+                "label": "Entrée 10 min plus tard + frais × 2",
+                "n": 2816,
+                "missed": 234,
+                "mean_r": -0.6463,
+                "total_r": -1820.11,
+                "win_rate": 0.3217,
+                "profit_factor": 0.35
+              }
+            ],
+            "grid": [
+              {
+                "sl": 0.5,
+                "tp": 0.75,
+                "n": 3051,
+                "mean_r": -0.626
+              },
+              {
+                "sl": 0.5,
+                "tp": 1.0,
+                "n": 3051,
+                "mean_r": -0.6199
+              },
+              {
+                "sl": 0.5,
+                "tp": 1.25,
+                "n": 3051,
+                "mean_r": -0.6091
+              },
+              {
+                "sl": 0.75,
+                "tp": 0.75,
+                "n": 3051,
+                "mean_r": -0.4159
+              },
+              {
+                "sl": 0.75,
+                "tp": 1.0,
+                "n": 3051,
+                "mean_r": -0.4123
+              },
+              {
+                "sl": 0.75,
+                "tp": 1.25,
+                "n": 3051,
+                "mean_r": -0.4036
+              },
+              {
+                "sl": 1.0,
+                "tp": 0.75,
+                "n": 3051,
+                "mean_r": -0.3153
+              },
+              {
+                "sl": 1.0,
+                "tp": 1.0,
+                "n": 3051,
+                "mean_r": -0.3049
+              },
+              {
+                "sl": 1.0,
+                "tp": 1.25,
+                "n": 3051,
+                "mean_r": -0.2889
+              },
+              {
+                "sl": 1.25,
+                "tp": 0.75,
+                "n": 3051,
+                "mean_r": -0.25
+              },
+              {
+                "sl": 1.25,
+                "tp": 1.0,
+                "n": 3051,
+                "mean_r": -0.2448
+              },
+              {
+                "sl": 1.25,
+                "tp": 1.25,
+                "n": 3051,
+                "mean_r": -0.2318
+              },
+              {
+                "sl": 1.5,
+                "tp": 0.75,
+                "n": 3051,
+                "mean_r": -0.2096
+              },
+              {
+                "sl": 1.5,
+                "tp": 1.0,
+                "n": 3051,
+                "mean_r": -0.2018
+              },
+              {
+                "sl": 1.5,
+                "tp": 1.25,
+                "n": 3051,
+                "mean_r": -0.1888
+              }
+            ],
+            "grid_sl": [
+              0.5,
+              0.75,
+              1.0,
+              1.25,
+              1.5
+            ],
+            "grid_tp": [
+              0.75,
+              1.0,
+              1.25
+            ],
+            "robustness": 0.0,
+            "plateau": 0.0
+          },
+          "checks": {
+            "échantillon ≥ 100 trades": true,
+            "gain net moyen > 0": false,
+            "facteur de profit ≥ 1,1": false,
+            "même signe dans les deux moitiés": true,
+            "2de moitié ≥ 50 % de la 1re": false,
+            "≥ 60 % des scénarios dégradés gagnants": false,
+            "≥ 50 % des réglages stop × objectif gagnants": false
+          },
+          "passed": false,
+          "verdict": "abandon (critères non remplis)"
+        }
+      },
+      "updated_at": "2026-10-05T07:48:09Z"
     }
   }
 }
