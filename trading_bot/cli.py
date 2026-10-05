@@ -248,8 +248,13 @@ def main(argv: list[str] | None = None) -> int:
                 both = sl.evaluate(tr, asset.cost_pct, tcost)
                 need = sl.MIN_TRADES.get(strat, 30)
                 cand = sl.discovery_pass(disc, need)
+                robust = None
+                if strat in sl.ROBUST_ONLY:
+                    robust = sl.robust_check(tr, asset.cost_pct, tcost, split)
                 if strat in sl.INFO_ONLY:
                     status = "pour information"
+                elif robust is not None:
+                    status = "validé (à suivre en ombre)" if robust["passed"] else "écarté (essai 5)"
                 elif not cand:
                     status = "écarté (découverte)"
                 elif conf["n"] == 0:
@@ -259,7 +264,8 @@ def main(argv: list[str] | None = None) -> int:
                 else:
                     status = "prouvé" if sl.proven(both, n_trials) else "validé"
                 out["cells"][f"{strat}:{key}"] = {"strategy": strat, "asset": key, "asset_label": asset.label,
-                                                  "discovery": disc, "confirmation": conf, "all": both, "status": status}
+                                                  "discovery": disc, "confirmation": conf, "all": both, "status": status,
+                                                  **({"robust": robust} if robust is not None else {})}
                 d, c = disc["net"], conf["net"]
                 print(f"{strat:16s} {key:9s} découverte n={disc['n']:4d} {d['mean_r']} PF {d['profit_factor']} | "
                       f"confirmation n={conf['n']:4d} {c['mean_r']} PF {c['profit_factor']} → {status}", flush=True)

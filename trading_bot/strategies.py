@@ -38,8 +38,10 @@ STRATEGIES = {
     "rsi2_1h": "Retour à la moyenne RSI(2) dans le sens de la MM200, en bougies 1 h (Connors)",
     "news_breakout": "Cassure du range des 15 min qui suivent une annonce (emploi, inflation, Fed)",
     "pre_fomc": "Achat des indices la veille d'une décision de la Fed (Lucca & Moench, 2015)",
+    "noise_area_v2": "Zone de bruit avec un stop réaliste, au moins 1 ATR 15 min (essai 5)",
 }
 INFO_ONLY = {"pre_fomc"}
+ROBUST_ONLY = {"noise_area_v2"}   # plus de données vierges : critères de l'essai 5 sur les 24 mois
 # Suivis en ombre sur le marché réel (aucune notification) : (stratégie, actif) → date de début
 SHADOW = {("donchian_1h", "bitcoin"): "2026-10-05T19:00:00Z"}          # trop peu d'occurrences : affiché sans verdict (essai 4)
 MIN_TRADES = {"news_breakout": 20}
@@ -209,9 +211,28 @@ def intraday_mom(s: _Series, asset: str) -> list[Trade]:
     return out
 
 
-def noise_area(s: _Series, asset: str, lookback: int = 14) -> list[Trade]:
+def _atr15(s: _Series) -> list[float | None]:
+    """ATR(14) de la dernière bougie de 15 min close, aligné sur chaque bougie de 5 min (sans biais de futur)."""
+    c15 = ind.resample(s.c, 15)
+    a15 = ind.atr(c15, 14)
+    out, k = [], -1
+    for c in s.c:
+        while k + 1 < len(c15) and c15[k + 1].ts + 900 <= c.ts + 300:
+            k += 1
+        out.append(a15[k] if k >= 0 else None)
+    return out
+
+
+def noise_area_v2(s: _Series, asset: str) -> list[Trade]:
+    """Essai 5 : `noise_area` avec un stop dur réaliste (au moins 1 ATR 15 min), qui sert aussi de R."""
+    return noise_area(s, asset, realistic_stop=True)
+
+
+def noise_area(s: _Series, asset: str, lookback: int = 14, realistic_stop: bool = False) -> list[Trade]:
     """Bornes = ouverture (corrigée de l'écart avec la clôture de la veille) ± moyenne sur 14 jours du
     mouvement absolu depuis l'ouverture à la même heure. Décisions aux demi-heures de 10:00 à 15:30."""
+    name = "noise_area_v2" if realistic_stop else "noise_area"
+    atr15 = _atr15(s) if realistic_stop else None
     out = []
     days = _days(s.c)
     moves: dict[date, dict[int, float]] = {}       # jour → {minutes depuis 9:30 → |clôture/ouverture − 1|}
@@ -253,6 +274,12 @@ def noise_area(s: _Series, asset: str, lookback: int = 14) -> list[Trade]:
         end = _ny_ts(d, 16, 0)
         while k < len(s.c) and s.c[k].ts < end:
             b = s.c[k]
+            if realistic_stop and pos is not None and k > pos[4]:
+                hard = pos[1] - pos[3] if pos[0] == "long" else pos[1] + pos[3]
+                if (b.low <= hard) if pos[0] == "long" else (b.high >= hard):
+                    px = min(hard, b.open) if pos[0] == "long" else max(hard, b.open)
+                    out.append(Trade(name, asset, pos[0], s.c[pos[4]].ts + 300, b.ts + 300, pos[1], px, pos[3], "stop"))
+                    pos = None
             tp = (b.high + b.low + b.close) / 3
             vwap_pv += tp * max(b.volume, 1.0)
             vwap_v += max(b.volume, 1.0)
@@ -266,19 +293,25 @@ def noise_area(s: _Series, asset: str, lookback: int = 14) -> list[Trade]:
                         if b.close > ub or b.close < lb:
                             long = b.close > ub
                             stop = max(ub, vw) if long else min(lb, vw)
-                            risk = max(abs(b.close - stop), 0.5 * (s.atr[k] or 0))
+                            if realistic_stop:
+                                if not atr15[k]:
+                                    k += 1
+                                    continue
+                                risk = max(abs(b.close - stop), atr15[k])
+                            else:
+                                risk = max(abs(b.close - stop), 0.5 * (s.atr[k] or 0))
                             pos = ("long" if long else "short", b.close, stop, risk, k)
                     elif pos is not None:
                         long = pos[0] == "long"
                         stop = max(ub, vw) if long else min(lb, vw)
                         if (b.close < stop) if long else (b.close > stop):
-                            out.append(Trade("noise_area", asset, pos[0], s.c[pos[4]].ts + 300, close_t,
+                            out.append(Trade(name, asset, pos[0], s.c[pos[4]].ts + 300, close_t,
                                              pos[1], b.close, pos[3], "bornes"))
                             pos = None
             k += 1
         if pos is not None:
             last = s.c[k - 1]
-            out.append(Trade("noise_area", asset, pos[0], s.c[pos[4]].ts + 300, last.ts + 300,
+            out.append(Trade(name, asset, pos[0], s.c[pos[4]].ts + 300, last.ts + 300,
                              pos[1], last.close, pos[3], "heure"))
         hist.append(d)
     return out
@@ -455,7 +488,8 @@ def pre_fomc(candles: list[Candle], asset: str) -> list[Trade]:
 
 
 RUNNERS_5M = {"orb5": orb5, "orb30": orb30, "intraday_mom": intraday_mom, "noise_area": noise_area,
-              "gap_fade": gap_fade, "london_breakout": london_breakout, "news_breakout": news_breakout}
+              "gap_fade": gap_fade, "london_breakout": london_breakout, "news_breakout": news_breakout,
+              "noise_area_v2": noise_area_v2}
 RUNNERS_1H = {"donchian_1h": donchian_1h, "rsi2_1h": rsi2_1h, "pre_fomc": pre_fomc}
 
 
@@ -519,6 +553,34 @@ def discovery_pass(ev: dict[str, Any], min_trades: int = 30) -> bool:
 def confirmation_pass(ev: dict[str, Any], min_trades: int = 30) -> bool:
     net = ev["net"]
     return ev["n"] >= min_trades and (net["mean_r"] or 0) > 0 and (net["profit_factor"] or 0) >= 1.1
+
+
+def robust_check(trades: list[Trade], cost_bot_pct: float, topstep_cost: tuple[float, float] | None,
+                 split_ts: int) -> dict[str, Any]:
+    """Critères de l'essai 5 sur toute la période : deux années positives, facteur de profit, résultat
+    sans les 5 % meilleurs trades, et gain en % du prix (insensible à la taille du stop)."""
+    key = "net_topstep" if topstep_cost else "net_bot"
+    rows = [(t.entry_ts, trade_rs(t, cost_bot_pct, topstep_cost)[key],
+             (t.gross_points() - ((topstep_cost[0] / topstep_cost[1]) if topstep_cost else cost_bot_pct / 100 * t.entry))
+             / t.entry * 100) for t in trades]
+    rs = sorted(r for _, r, _ in rows)
+    y1 = [r for ts, r, _ in rows if ts < split_ts]
+    y2 = [r for ts, r, _ in rows if ts >= split_ts]
+    cut = max(1, len(rs) // 20)
+    trimmed = rs[:-cut] if len(rs) > cut else []
+    st_all = _stats(rs)
+    checks = {
+        "au moins 100 trades": len(rs) >= 100,
+        "gain > 0 en 2024-25": bool(y1) and sum(y1) / len(y1) > 0,
+        "gain > 0 en 2025-26": bool(y2) and sum(y2) / len(y2) > 0,
+        "facteur de profit ≥ 1,1": (st_all["profit_factor"] or 0) >= 1.1,
+        "≥ 0 sans les 5 % meilleurs trades": bool(trimmed) and sum(trimmed) / len(trimmed) >= 0,
+        "gain en % du prix > 0": bool(rows) and sum(p for *_, p in rows) / len(rows) > 0,
+    }
+    return {"checks": checks, "passed": all(checks.values()),
+            "mean_y1": round(sum(y1) / len(y1), 4) if y1 else None, "mean_y2": round(sum(y2) / len(y2), 4) if y2 else None,
+            "trimmed_mean": round(sum(trimmed) / len(trimmed), 4) if trimmed else None,
+            "mean_pct": round(sum(p for *_, p in rows) / len(rows), 4) if rows else None}
 
 
 def proven(ev_all: dict[str, Any], n_trials: int, alpha: float = 0.05) -> bool:

@@ -85,3 +85,18 @@ def test_news_breakout_waits_fifteen_minutes_then_follows_the_break():
     assert t.direction == "long" and t.entry_ts == first_break.ts + 300 and t.entry == first_break.close
     assert round(t.risk, 6) == round(t.entry - 99.5, 6)                 # stop sous le range
     assert t.reason == "heure" and t.exit_ts == st._ny_ts(d, 12, 0)
+
+
+def test_noise_area_v2_stop_is_at_least_one_15min_atr_and_caps_losses():
+    start = int(datetime(2026, 3, 2, 0, 0, tzinfo=timezone.utc).timestamp())
+    candles = make_candles(n=288 * 30, drift=0.00002, noise=0.0015, seed=21, start_ts=start)
+    s = st._Series(candles)
+    a15 = st._atr15(s)
+    trades = st.noise_area_v2(s, "nasdaq")
+    assert trades and all(t.strategy == "noise_area_v2" for t in trades)
+    for t in trades:
+        k = s.pos[t.entry_ts - 300]
+        assert t.risk >= a15[k] - 1e-9
+        assert t.gross_points() / t.risk >= -1.5                      # perte bornée par le stop dur
+    v1 = st.noise_area(s, "nasdaq")
+    assert min(t.risk for t in trades) >= min(t.risk for t in v1)

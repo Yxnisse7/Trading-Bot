@@ -1,6 +1,6 @@
 {
   "split": "2025-09-28",
-  "n_trials": 63,
+  "n_trials": 70,
   "strategies": {
     "orb5": "Cassure de la 1re bougie de 5 min de New York (Zarattini & Aziz, 2023)",
     "orb30": "Cassure du range des 30 premières minutes de New York",
@@ -11,7 +11,8 @@
     "donchian_1h": "Cassure de canal de Donchian 20 heures, sortie sur 10 heures (méthode Turtle)",
     "rsi2_1h": "Retour à la moyenne RSI(2) dans le sens de la MM200, en bougies 1 h (Connors)",
     "news_breakout": "Cassure du range des 15 min qui suivent une annonce (emploi, inflation, Fed)",
-    "pre_fomc": "Achat des indices la veille d'une décision de la Fed (Lucca & Moench, 2015)"
+    "pre_fomc": "Achat des indices la veille d'une décision de la Fed (Lucca & Moench, 2015)",
+    "noise_area_v2": "Zone de bruit avec un stop réaliste, au moins 1 ATR 15 min (essai 5)"
   },
   "cells": {
     "orb5:nasdaq": {
@@ -9043,7 +9044,583 @@
         "last": null
       },
       "status": "pour information"
+    },
+    "noise_area_v2:sp500": {
+      "strategy": "noise_area_v2",
+      "asset": "sp500",
+      "asset_label": "S&P 500 (ES)",
+      "discovery": {
+        "n": 250,
+        "gross": {
+          "n": 250,
+          "mean_r": -0.0434,
+          "se": 0.1145,
+          "profit_factor": 0.92,
+          "win_rate": 0.32
+        },
+        "net_bot": {
+          "n": 250,
+          "mean_r": -0.109,
+          "se": 0.1145,
+          "profit_factor": 0.82,
+          "win_rate": 0.312
+        },
+        "net": {
+          "n": 250,
+          "mean_r": -0.0889,
+          "se": 0.1145,
+          "profit_factor": 0.85,
+          "win_rate": 0.312
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 125,
+          "mean_r": -0.0504,
+          "se": 0.1676,
+          "profit_factor": 0.91,
+          "win_rate": 0.36
+        },
+        "second_half": {
+          "n": 125,
+          "mean_r": -0.1274,
+          "se": 0.1565,
+          "profit_factor": 0.79,
+          "win_rate": 0.264
+        },
+        "first": "2025-10-01",
+        "last": "2026-10-01"
+      },
+      "confirmation": {
+        "n": 204,
+        "gross": {
+          "n": 204,
+          "mean_r": 0.0101,
+          "se": 0.121,
+          "profit_factor": 1.02,
+          "win_rate": 0.3186
+        },
+        "net_bot": {
+          "n": 204,
+          "mean_r": -0.0555,
+          "se": 0.1209,
+          "profit_factor": 0.9,
+          "win_rate": 0.299
+        },
+        "net": {
+          "n": 204,
+          "mean_r": -0.0435,
+          "se": 0.1209,
+          "profit_factor": 0.92,
+          "win_rate": 0.3039
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 102,
+          "mean_r": 0.0448,
+          "se": 0.2079,
+          "profit_factor": 1.08,
+          "win_rate": 0.3333
+        },
+        "second_half": {
+          "n": 102,
+          "mean_r": -0.1317,
+          "se": 0.1241,
+          "profit_factor": 0.77,
+          "win_rate": 0.2745
+        },
+        "first": "2024-10-14",
+        "last": "2025-09-25"
+      },
+      "all": {
+        "n": 454,
+        "gross": {
+          "n": 454,
+          "mean_r": -0.0194,
+          "se": 0.0832,
+          "profit_factor": 0.96,
+          "win_rate": 0.3194
+        },
+        "net_bot": {
+          "n": 454,
+          "mean_r": -0.0849,
+          "se": 0.0831,
+          "profit_factor": 0.86,
+          "win_rate": 0.3062
+        },
+        "net": {
+          "n": 454,
+          "mean_r": -0.0685,
+          "se": 0.0831,
+          "profit_factor": 0.88,
+          "win_rate": 0.3084
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 227,
+          "mean_r": -0.0018,
+          "se": 0.131,
+          "profit_factor": 1.0,
+          "win_rate": 0.3084
+        },
+        "second_half": {
+          "n": 227,
+          "mean_r": -0.1351,
+          "se": 0.1025,
+          "profit_factor": 0.77,
+          "win_rate": 0.3084
+        },
+        "first": "2024-10-14",
+        "last": "2026-10-01"
+      },
+      "status": "écarté (essai 5)",
+      "robust": {
+        "checks": {
+          "au moins 100 trades": true,
+          "gain > 0 en 2024-25": false,
+          "gain > 0 en 2025-26": false,
+          "facteur de profit ≥ 1,1": false,
+          "≥ 0 sans les 5 % meilleurs trades": false,
+          "gain en % du prix > 0": false
+        },
+        "passed": false,
+        "mean_y1": -0.0435,
+        "mean_y2": -0.0889,
+        "trimmed_mean": -0.3621,
+        "mean_pct": -0.0076
+      }
+    },
+    "noise_area_v2:bitcoin": {
+      "strategy": "noise_area_v2",
+      "asset": "bitcoin",
+      "asset_label": "Bitcoin (BTC/USD)",
+      "discovery": {
+        "n": 254,
+        "gross": {
+          "n": 254,
+          "mean_r": 0.2113,
+          "se": 0.1311,
+          "profit_factor": 1.46,
+          "win_rate": 0.3543
+        },
+        "net_bot": {
+          "n": 254,
+          "mean_r": 0.0664,
+          "se": 0.1308,
+          "profit_factor": 1.12,
+          "win_rate": 0.3189
+        },
+        "net": {
+          "n": 254,
+          "mean_r": 0.1105,
+          "se": 0.1309,
+          "profit_factor": 1.21,
+          "win_rate": 0.3307
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 127,
+          "mean_r": 0.2783,
+          "se": 0.1646,
+          "profit_factor": 1.57,
+          "win_rate": 0.4016
+        },
+        "second_half": {
+          "n": 127,
+          "mean_r": -0.0573,
+          "se": 0.2032,
+          "profit_factor": 0.9,
+          "win_rate": 0.2598
+        },
+        "first": "2025-09-29",
+        "last": "2026-09-15"
+      },
+      "confirmation": {
+        "n": 241,
+        "gross": {
+          "n": 241,
+          "mean_r": 0.0427,
+          "se": 0.1146,
+          "profit_factor": 1.08,
+          "win_rate": 0.3195
+        },
+        "net_bot": {
+          "n": 241,
+          "mean_r": -0.1113,
+          "se": 0.1144,
+          "profit_factor": 0.83,
+          "win_rate": 0.278
+        },
+        "net": {
+          "n": 241,
+          "mean_r": -0.0428,
+          "se": 0.1144,
+          "profit_factor": 0.93,
+          "win_rate": 0.2946
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 120,
+          "mean_r": 0.1224,
+          "se": 0.1793,
+          "profit_factor": 1.22,
+          "win_rate": 0.3333
+        },
+        "second_half": {
+          "n": 121,
+          "mean_r": -0.2067,
+          "se": 0.1418,
+          "profit_factor": 0.69,
+          "win_rate": 0.2562
+        },
+        "first": "2024-10-21",
+        "last": "2025-09-26"
+      },
+      "all": {
+        "n": 495,
+        "gross": {
+          "n": 495,
+          "mean_r": 0.1292,
+          "se": 0.0874,
+          "profit_factor": 1.26,
+          "win_rate": 0.3374
+        },
+        "net_bot": {
+          "n": 495,
+          "mean_r": -0.0201,
+          "se": 0.0872,
+          "profit_factor": 0.97,
+          "win_rate": 0.299
+        },
+        "net": {
+          "n": 495,
+          "mean_r": 0.0358,
+          "se": 0.0873,
+          "profit_factor": 1.06,
+          "win_rate": 0.3131
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 247,
+          "mean_r": -0.0386,
+          "se": 0.113,
+          "profit_factor": 0.94,
+          "win_rate": 0.2955
+        },
+        "second_half": {
+          "n": 248,
+          "mean_r": 0.11,
+          "se": 0.133,
+          "profit_factor": 1.21,
+          "win_rate": 0.3306
+        },
+        "first": "2024-10-21",
+        "last": "2026-09-15"
+      },
+      "status": "écarté (essai 5)",
+      "robust": {
+        "checks": {
+          "au moins 100 trades": true,
+          "gain > 0 en 2024-25": false,
+          "gain > 0 en 2025-26": true,
+          "facteur de profit ≥ 1,1": false,
+          "≥ 0 sans les 5 % meilleurs trades": false,
+          "gain en % du prix > 0": false
+        },
+        "passed": false,
+        "mean_y1": -0.0428,
+        "mean_y2": 0.1105,
+        "trimmed_mean": -0.2925,
+        "mean_pct": -0.0031
+      }
+    },
+    "noise_area_v2:ethereum": {
+      "strategy": "noise_area_v2",
+      "asset": "ethereum",
+      "asset_label": "Ethereum (ETH/USD)",
+      "discovery": {
+        "n": 246,
+        "gross": {
+          "n": 246,
+          "mean_r": 0.1857,
+          "se": 0.1158,
+          "profit_factor": 1.41,
+          "win_rate": 0.378
+        },
+        "net_bot": {
+          "n": 246,
+          "mean_r": 0.0479,
+          "se": 0.1159,
+          "profit_factor": 1.09,
+          "win_rate": 0.3374
+        },
+        "net": {
+          "n": 246,
+          "mean_r": -0.3594,
+          "se": 0.1183,
+          "profit_factor": 0.58,
+          "win_rate": 0.2358
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 123,
+          "mean_r": 0.0333,
+          "se": 0.1864,
+          "profit_factor": 1.05,
+          "win_rate": 0.3252
+        },
+        "second_half": {
+          "n": 123,
+          "mean_r": -0.752,
+          "se": 0.1377,
+          "profit_factor": 0.26,
+          "win_rate": 0.1463
+        },
+        "first": "2025-09-29",
+        "last": "2026-10-02"
+      },
+      "confirmation": {
+        "n": 222,
+        "gross": {
+          "n": 222,
+          "mean_r": 0.357,
+          "se": 0.1494,
+          "profit_factor": 1.72,
+          "win_rate": 0.3739
+        },
+        "net_bot": {
+          "n": 222,
+          "mean_r": 0.233,
+          "se": 0.1493,
+          "profit_factor": 1.41,
+          "win_rate": 0.3423
+        },
+        "net": {
+          "n": 222,
+          "mean_r": -0.0515,
+          "se": 0.1487,
+          "profit_factor": 0.93,
+          "win_rate": 0.2793
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 111,
+          "mean_r": -0.0061,
+          "se": 0.2018,
+          "profit_factor": 0.99,
+          "win_rate": 0.2793
+        },
+        "second_half": {
+          "n": 111,
+          "mean_r": -0.097,
+          "se": 0.2193,
+          "profit_factor": 0.88,
+          "win_rate": 0.2793
+        },
+        "first": "2024-10-22",
+        "last": "2025-09-26"
+      },
+      "all": {
+        "n": 468,
+        "gross": {
+          "n": 468,
+          "mean_r": 0.267,
+          "se": 0.0934,
+          "profit_factor": 1.57,
+          "win_rate": 0.3761
+        },
+        "net_bot": {
+          "n": 468,
+          "mean_r": 0.1357,
+          "se": 0.0934,
+          "profit_factor": 1.24,
+          "win_rate": 0.3397
+        },
+        "net": {
+          "n": 468,
+          "mean_r": -0.2133,
+          "se": 0.0942,
+          "profit_factor": 0.74,
+          "win_rate": 0.2564
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 234,
+          "mean_r": -0.0362,
+          "se": 0.1431,
+          "profit_factor": 0.95,
+          "win_rate": 0.2821
+        },
+        "second_half": {
+          "n": 234,
+          "mean_r": -0.3904,
+          "se": 0.1218,
+          "profit_factor": 0.55,
+          "win_rate": 0.2308
+        },
+        "first": "2024-10-22",
+        "last": "2026-10-02"
+      },
+      "status": "écarté (essai 5)",
+      "robust": {
+        "checks": {
+          "au moins 100 trades": true,
+          "gain > 0 en 2024-25": false,
+          "gain > 0 en 2025-26": false,
+          "facteur de profit ≥ 1,1": false,
+          "≥ 0 sans les 5 % meilleurs trades": false,
+          "gain en % du prix > 0": false
+        },
+        "passed": false,
+        "mean_y1": -0.0515,
+        "mean_y2": -0.3594,
+        "trimmed_mean": -0.5633,
+        "mean_pct": -0.1067
+      }
+    },
+    "noise_area_v2:oil": {
+      "strategy": "noise_area_v2",
+      "asset": "oil",
+      "asset_label": "Pétrole WTI (CL)",
+      "discovery": {
+        "n": 252,
+        "gross": {
+          "n": 252,
+          "mean_r": -0.1445,
+          "se": 0.0774,
+          "profit_factor": 0.73,
+          "win_rate": 0.3056
+        },
+        "net_bot": {
+          "n": 252,
+          "mean_r": -0.2083,
+          "se": 0.0773,
+          "profit_factor": 0.63,
+          "win_rate": 0.2937
+        },
+        "net": {
+          "n": 252,
+          "mean_r": -0.2291,
+          "se": 0.0772,
+          "profit_factor": 0.61,
+          "win_rate": 0.2897
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 126,
+          "mean_r": -0.2693,
+          "se": 0.1084,
+          "profit_factor": 0.56,
+          "win_rate": 0.2937
+        },
+        "second_half": {
+          "n": 126,
+          "mean_r": -0.1889,
+          "se": 0.1103,
+          "profit_factor": 0.66,
+          "win_rate": 0.2857
+        },
+        "first": "2025-09-29",
+        "last": "2026-10-01"
+      },
+      "confirmation": {
+        "n": 213,
+        "gross": {
+          "n": 213,
+          "mean_r": -0.0455,
+          "se": 0.0852,
+          "profit_factor": 0.91,
+          "win_rate": 0.3521
+        },
+        "net_bot": {
+          "n": 213,
+          "mean_r": -0.1277,
+          "se": 0.0853,
+          "profit_factor": 0.76,
+          "win_rate": 0.3333
+        },
+        "net": {
+          "n": 213,
+          "mean_r": -0.1571,
+          "se": 0.0853,
+          "profit_factor": 0.72,
+          "win_rate": 0.3286
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 106,
+          "mean_r": -0.1441,
+          "se": 0.1155,
+          "profit_factor": 0.74,
+          "win_rate": 0.3491
+        },
+        "second_half": {
+          "n": 107,
+          "mean_r": -0.17,
+          "se": 0.126,
+          "profit_factor": 0.7,
+          "win_rate": 0.3084
+        },
+        "first": "2024-10-18",
+        "last": "2025-09-26"
+      },
+      "all": {
+        "n": 465,
+        "gross": {
+          "n": 465,
+          "mean_r": -0.0992,
+          "se": 0.0573,
+          "profit_factor": 0.8,
+          "win_rate": 0.3269
+        },
+        "net_bot": {
+          "n": 465,
+          "mean_r": -0.1714,
+          "se": 0.0572,
+          "profit_factor": 0.69,
+          "win_rate": 0.3118
+        },
+        "net": {
+          "n": 465,
+          "mean_r": -0.1961,
+          "se": 0.0572,
+          "profit_factor": 0.66,
+          "win_rate": 0.3075
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 232,
+          "mean_r": -0.1681,
+          "se": 0.0801,
+          "profit_factor": 0.7,
+          "win_rate": 0.3276
+        },
+        "second_half": {
+          "n": 233,
+          "mean_r": -0.2241,
+          "se": 0.0818,
+          "profit_factor": 0.62,
+          "win_rate": 0.2876
+        },
+        "first": "2024-10-18",
+        "last": "2026-10-01"
+      },
+      "status": "écarté (essai 5)",
+      "robust": {
+        "checks": {
+          "au moins 100 trades": true,
+          "gain > 0 en 2024-25": false,
+          "gain > 0 en 2025-26": false,
+          "facteur de profit ≥ 1,1": false,
+          "≥ 0 sans les 5 % meilleurs trades": false,
+          "gain en % du prix > 0": false
+        },
+        "passed": false,
+        "mean_y1": -0.1571,
+        "mean_y2": -0.2291,
+        "trimmed_mean": -0.4043,
+        "mean_pct": -0.1031
+      }
     }
   },
-  "updated_at": "2026-10-05T17:36:22Z"
+  "updated_at": "2026-10-05T18:46:34Z"
 }
