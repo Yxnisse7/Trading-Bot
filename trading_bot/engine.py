@@ -144,14 +144,25 @@ class Engine:
             # Une seule variante à la fois : un actif à l'essai n'est testé que dans ses réglages normaux,
             # et hors session seul l'horizon standard est testé, pour que les statistiques de chaque
             # variante ne mélangent pas deux changements.
+            asset_horizons = horizons
+            if asset.key in self.cfg.long_horizon_own_variant and not self.cfg.scan_bases and not caution:
+                # horizon 3 h jugé pour cet actif seul : réel s'il a fait ses preuves ici, sinon testé en ombre
+                own = f"horizon_3h_{asset.key}"
+                rest = [x for x in horizons if x[1] != self.cfg.long_horizon_base_minutes]
+                if self.cfg.long_horizon_enabled or own in promoted:
+                    asset_horizons = rest + [(long_key, self.cfg.long_horizon_base_minutes, None)]
+                elif variants_on:
+                    asset_horizons = rest + [(long_key, self.cfg.long_horizon_base_minutes, own)]
+                else:
+                    asset_horizons = rest
             if trial_key:
-                plan = [(h, base, trial_key) for h, base, v in horizons if v is None and not session_variant]
+                plan = [(h, base, trial_key) for h, base, v in asset_horizons if v is None and not session_variant]
             elif session_variant:
-                plan = [(h, base, session_variant) for h, base, v in horizons if base == 5 and v is None]
+                plan = [(h, base, session_variant) for h, base, v in asset_horizons if base == 5 and v is None]
             elif pre_open:
-                plan = [(h, base, PRE_OPEN) for h, base, v in horizons if v is None]
+                plan = [(h, base, PRE_OPEN) for h, base, v in asset_horizons if v is None]
             else:
-                plan = list(horizons)
+                plan = list(asset_horizons)
             if not plan:
                 continue
             blocked = {h: self._scan_block(asset, h, base, variant, all_sigs, now) for h, base, variant in plan}
@@ -756,7 +767,7 @@ class Engine:
             log.info("résumé du %s déjà envoyé (%s) : rien à renvoyer", day, st.get("last_summary"))
             return ""
         adj = self._relearn()
-        text = daily_summary(self.store.all_signals(), self.cfg, day, adj)
+        text = daily_summary(self.store.all_signals(), self.cfg, day, adj, self.store.lab_shadow())
         text += "\n\n" + self.portfolio.format_summary(html=True)
         try:
             now = utcnow()

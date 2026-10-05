@@ -111,6 +111,9 @@ class Config:
     # ---- Second horizon (intraday plus long, base 15 min → ~3 h)
     long_horizon_enabled: bool = True
     long_horizon_base_minutes: int = 15
+    # Actifs dont l'horizon 3 h est testé en ombre à part (variante « horizon_3h_<actif> ») : promu ou non
+    # pour cet actif seul, sans être noyé dans les résultats des autres (or : +0,10 R sur 24 mois, frais Topstep)
+    long_horizon_own_variant: tuple[str, ...] = ("gold",)
     max_long_signals_per_asset_per_day: int = 2
 
     # ---- Expérimental (désactivé par défaut ; aucun avantage démontré en backtest)

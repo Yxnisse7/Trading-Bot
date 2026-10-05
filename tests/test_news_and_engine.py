@@ -95,9 +95,12 @@ def test_full_cycle_scan_track_summary(tmp_path, monkeypatch):
     assert eng.store.open_signals() == [] and len(real) == 4
     # horizon 3 h désactivé : testé en silence comme variante, uniquement sur les actifs où il est permis
     variants = [s for s in eng.store.history() if s.source == "shadow"]
-    assert all((s.meta.get("variant") == "horizon_3h" and s.asset in ("nasdaq", "sp500", "gold"))
+    # l'or a sa propre variante 3 h (jugée et promue pour lui seul)
+    assert all((s.meta.get("variant") == "horizon_3h" and s.asset in ("nasdaq", "sp500"))
+               or (s.meta.get("variant") == "horizon_3h_gold" and s.asset == "gold")
                or (s.meta.get("variant") == f"essai_{s.asset}" and eng.cfg.assets[s.asset].trial) for s in variants)
     assert any(s.meta.get("variant") == "horizon_3h" for s in variants)
+    assert any(s.meta.get("variant") == "horizon_3h_gold" for s in variants)
     # les actifs à l'essai ne produisent jamais de signal réel tant qu'ils ne sont pas promus
     assert not any(eng.cfg.assets[s.asset].trial for s in real)
     assert eng.store.adjustments()["sample"] == 4 + len(variants)
@@ -769,3 +772,12 @@ def test_agenda_lists_relevant_announcements_with_official_nfp(tmp_path, monkeyp
     eng.store = store
     names = [e["name"] for e in eng.agenda(datetime(2026, 10, 1, 12, 0, tzinfo=timezone.utc), days=14)]
     assert names == ["Rapport emploi US (NFP)", "USD Unemployment Claims", "CPI US (données sept. 2026)"]
+
+
+def test_gold_3h_variant_is_its_own_trial_and_promotion_makes_it_real():
+    from trading_bot.config import Config, default_assets
+    from trading_bot.learning import variant_labels
+
+    cfg = Config(assets=default_assets())
+    labels = variant_labels(cfg)
+    assert "horizon_3h_gold" in labels and "horizon_3h" in labels

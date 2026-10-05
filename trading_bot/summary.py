@@ -55,8 +55,28 @@ def _verdicts(closed: list[Signal], labels: dict[str, str]) -> tuple[list[str], 
     return sig_list, leads
 
 
+def lab_week_lines(lab_shadow: dict[str, Any], cfg: Config) -> list[str]:
+    """Point de la semaine sur les stratégies du laboratoire suivies en ombre (frais Topstep)."""
+    if not lab_shadow:
+        return []
+    out = ["", "<b>🧪 Laboratoire en ombre · point de la semaine</b>"]
+    for rec in lab_shadow.values():
+        asset = cfg.assets.get(rec.get("asset"))
+        name = re.sub(r" \(.*\)$", "", asset.label) if asset else rec.get("asset", "")
+        opened = next((t for t in rec.get("trades", []) if t.get("status") == "open"), None)
+        n, m = rec.get("n") or 0, rec.get("mean_r")
+        line = f"• {esc(rec.get('strategy', ''))} · {esc(name)} : "
+        line += (f"{n} trade{'s' if n > 1 else ''} clôturé{'s' if n > 1 else ''}, {m:+.2f} R en moyenne".replace(".", ",")
+                 if n else "aucun trade clôturé")
+        if opened:
+            line += f" · en cours : {'achat' if opened['direction'] == 'long' else 'vente'}"
+        out.append(line)
+    out.append("Suivi silencieux : aucune notification de trade, uniquement ce point du dimanche.")
+    return out
+
+
 def daily_summary(all_signals: list[Signal], cfg: Config, day: date | None = None,
-                  adjustments: dict[str, Any] | None = None) -> str:
+                  adjustments: dict[str, Any] | None = None, lab_shadow: dict[str, Any] | None = None) -> str:
     tz = ZoneInfo(cfg.timezone)
     day = day or datetime.now(tz).date()
     shadow_today = [s for s in all_signals if s.source == "shadow" and parse_iso(s.created_at).astimezone(tz).date() == day]
@@ -134,5 +154,7 @@ def daily_summary(all_signals: list[Signal], cfg: Config, day: date | None = Non
             lines.append(f"• tranches horaires évitées (UTC) : {esc(adjustments['avoid_hours_utc'])}")
     else:
         lines.append("<b>Apprentissage</b> : aucun ajustement, critères actuels conservés.")
+    if day.weekday() == 6:
+        lines += lab_week_lines(lab_shadow or {}, cfg)
     return "\n".join(lines)
 

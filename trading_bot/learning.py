@@ -177,6 +177,8 @@ def variant_labels(cfg: Config) -> dict[str, str]:
     for key, asset in cfg.assets.items():
         if asset.trial:
             labels[f"essai_{key}"] = f"nouvel actif : {asset.label}"
+        if key in cfg.long_horizon_own_variant:
+            labels[f"horizon_3h_{key}"] = f"horizon ~3 h sur {asset.label}"
     return labels
 
 

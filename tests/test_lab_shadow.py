@@ -41,3 +41,16 @@ def test_lab_shadow_ignores_trades_before_its_start(tmp_path, monkeypatch):
     eng = _engine(tmp_path, monkeypatch, candles)
     monkeypatch.setattr(sl, "SHADOW", {("donchian_1h", "bitcoin"): "2030-01-01T00:00:00Z"})
     assert eng.lab_shadow(now)["donchian_1h:bitcoin"]["trades"] == []
+
+
+def test_sunday_summary_reports_the_lab_in_shadow():
+    from datetime import date
+
+    from trading_bot.summary import daily_summary
+
+    cfg = Config(assets=default_assets())
+    lab = {"donchian_1h:gold": {"strategy": "donchian_1h", "asset": "gold", "n": 3, "mean_r": 0.42,
+                                "trades": [{"status": "open", "direction": "long"}]}}
+    sunday = daily_summary([], cfg, date(2026, 10, 11), None, lab)
+    assert "Laboratoire en ombre" in sunday and "donchian_1h · Or" in sunday and "+0,42 R" in sunday
+    assert "Laboratoire en ombre" not in daily_summary([], cfg, date(2026, 10, 12), None, lab)
