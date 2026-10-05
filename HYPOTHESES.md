@@ -109,6 +109,24 @@ pour ces stratégies ; seul l'avantage du critère ORB du bot sur les indices y 
 Un couple stratégie × actif validé part **en ombre** sur le marché réel (aucune notification) ; il ne
 devient un signal réel que par la promotion automatique habituelle.
 
+## Essai 4 — les annonces macro (`trading_bot/macro_history.py`)
+
+Écrit le 5 octobre 2026, **avant** tout test. Annonces : emploi (NFP) et inflation (CPI) à 8:30 heure de
+New York, décision de la Fed (FOMC) à 14:00, dates officielles d'octobre 2024 à octobre 2026 (fermeture
+de l'État fédéral de l'automne 2025 comprise). Frais Topstep, mêmes données que l'essai 3.
+
+1. **La protection actuelle sert-elle ?** Trades du backtest du bot ouverts de 45 min avant à 30 min après
+   une annonce, comparés aux autres. Jugée utile si ces trades font pire d'au moins 0,1 R en moyenne ;
+   sinon on proposera de la desserrer. Mesure indicative (peu de trades dans les fenêtres).
+2. **`news_breakout`** (tous les actifs) : range des 15 min qui suivent l'annonce (8:30–8:45, ou
+   14:00–14:15 pour la Fed) ; première clôture de 5 min au-delà avant 10:00 (Fed : 15:00), dans le sens
+   de la cassure, stop de l'autre côté du range, sortie à 12:00 (Fed : 16:00). Le quart d'heure d'attente
+   tient compte des 10 min de retard des données CME gratuites.
+   Critères de l'essai 3, mais **20 trades minimum** au lieu de 30 (environ 30 annonces par an).
+3. **`pre_fomc`** (Nasdaq, S&P 500) : achat la veille de la décision à 14:00, sortie à 13:55 le jour J,
+   stop 2 ATR horaire (Lucca & Moench 2015, effet affaibli depuis 2016). Seulement 8 décisions par an :
+   **résultat affiché pour information, sans verdict.**
+
 ## Journal des essais
 
 | Date | Essai | Résultat |
