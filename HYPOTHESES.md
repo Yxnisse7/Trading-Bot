@@ -73,6 +73,42 @@ confirmée ailleurs. Règles de A inchangées, actifs limités à `nasdaq` et `s
 d'abandon que plus haut (100 trades minimum, gain net moyen > 0, facteur de profit ≥ 1,1, deux
 moitiés de même signe, tests de résistance). Frais : ceux du bot (0,01 % aller-retour).
 
+## Essai 3 — laboratoire de stratégies (`trading_bot/strategies.py`)
+
+Écrit le 5 octobre 2026, **avant** de lancer ces stratégies sur les données. Constat de départ : les
+critères du bot sont presque tous présents sur chaque trade (6,6 en moyenne, ADX, tendances, VWAP et
+RSI sur quasiment tous) ; ils ne trient rien, les repondérer par actif n'apporterait rien. On teste à la
+place 8 idées différentes, tirées d'études ou de méthodes connues, réglages fixés d'avance :
+
+| Stratégie | Règle (heures de New York sauf mention) |
+|---|---|
+| `orb5` | 1re bougie 9:30–9:35 : sens de sa couleur, stop à l'autre extrémité, objectif 10 R, sortie 16:00 (Zarattini & Aziz 2023) |
+| `orb30` | Range 9:30–10:00 ; 1re clôture au-delà avant 12:00, stop à l'autre côté du range, sortie 16:00 |
+| `intraday_mom` | Signe du rendement clôture de la veille (16:00) → 10:00 ; entrée 15:30 dans ce sens, sortie 16:00, stop 2 ATR (Gao, Han, Li & Zhou 2018) |
+| `noise_area` | Bornes = ouverture (corrigée de l'écart) ± mouvement moyen depuis l'ouverture sur 14 jours à la même heure ; entrée aux demi-heures 10:00–15:30 hors bornes, sortie sous max(borne, VWAP) ou 16:00 (Zarattini, Aziz & Barbon 2024) |
+| `gap_fade` | Écart d'ouverture de 0,25 % à 1 % : entrée contre l'écart à 9:35, objectif clôture de la veille, stop à même distance, sortie 12:00 |
+| `london_breakout` | Range 00:00–07:00 UTC ; 1re clôture au-delà avant 11:00 UTC, stop autre côté, objectif 1 R, sortie 16:00 UTC |
+| `donchian_1h` | Bougies 1 h : clôture au-delà du plus haut/bas des 20 heures, stop 2 ATR, sortie sur cassure des 10 heures ou 120 h |
+| `rsi2_1h` | Bougies 1 h : RSI(2) < 10 au-dessus de la MM200 (achat) ou > 90 en dessous (vente), sortie RSI > 70 / < 30 ou 10 h, stop 2,5 ATR (Connors) |
+
+Les 8 stratégies sont testées sur les 7 actifs (56 essais). Frais de référence : **frais réels Topstep**
+(commission par micro + 1 tick) ; les frais du bot sont affichés à côté.
+
+**Périodes.** Découverte : historique long du 28/09/2025 au 04/10/2026 (déjà utilisé pour le bot, pas
+pour ces stratégies ; seul l'avantage du critère ORB du bot sur les indices y a été vu). Confirmation :
+01/10/2024 → 27/09/2025, **jamais regardé** (téléchargement en cours au moment d'écrire).
+
+**Critères.**
+1. Découverte — candidat si : au moins 30 trades, gain net moyen > 0, facteur de profit ≥ 1,1, les deux
+   moitiés positives.
+2. Confirmation — un candidat est **validé** s'il refait au moins 30 trades, gain net moyen > 0 et
+   facteur de profit ≥ 1,1 sur la période jamais vue.
+3. **Prouvé** si, sur les deux périodes réunies, la borne basse du gain net moyen reste > 0 avec la marge
+   corrigée pour 56 essais (z ≈ 3,1).
+
+Un couple stratégie × actif validé part **en ombre** sur le marché réel (aucune notification) ; il ne
+devient un signal réel que par la promotion automatique habituelle.
+
 ## Journal des essais
 
 | Date | Essai | Résultat |
