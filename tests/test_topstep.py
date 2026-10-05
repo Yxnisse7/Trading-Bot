@@ -13,6 +13,13 @@ from trading_bot.storage import Store
 T0 = datetime(2026, 9, 22, 14, 0, tzinfo=timezone.utc)   # mardi 09:00 à Chicago
 
 
+@pytest.fixture(autouse=True)
+def _no_fees(monkeypatch, request):
+    """Montants ronds dans les tests de règles : frais Topstep à zéro, sauf dans les tests de frais."""
+    if "fees" not in request.node.name:
+        monkeypatch.setattr(ts, "FEES", {})
+
+
 def _sig(id_, source="bot", status="tp", entry=20000.0, close=20020.0, when=T0, asset="nasdaq", direction="long",
          sl=19990.0, duration=20, **kw):
     return Signal(id=id_, asset=asset, asset_label="Nasdaq 100 (NQ)", direction=direction, entry=entry,
@@ -47,7 +54,7 @@ def test_simulation_trades_are_mirrored_and_sized_on_the_balance(tmp_path):
         acct.set_risk(25)
 
 
-def test_only_your_trades_are_in_the_account(tmp_path):
+def test_only_your_trades_are_in_the_account_fees_included(tmp_path):
     cfg = Config(assets=default_assets())
     acct = _acct(tmp_path)
     sigs = [_sig("bot1"), _sig("man1", source="manual"), _sig("sh1", source="shadow")]
@@ -201,3 +208,14 @@ def test_daily_target_and_daily_loss_stop_new_trades_for_the_day(tmp_path):
     assert d["skipped"][0]["id"] == "x" and "limite journalière" in d["skipped"][0]["reason"]
     with pytest.raises(ValueError):
         acct.set_daily_target(50)
+
+
+def test_real_topstep_fees_and_one_tick_are_deducted_per_micro(tmp_path):
+    cfg = Config(assets=default_assets())
+    acct = _acct(tmp_path)
+    d = acct.compute([_sig("a", when=T0, close=20020.0)], cfg, now=T0 + timedelta(hours=3), mirror_ids={"a"})
+    t = d["trades"][0]
+    # 12 micros MNQ : 1,22 $ de frais + 0,50 $ de glissement chacun ; +480 $ bruts
+    assert (t["contracts"], t["fees"], t["slippage"], t["cost"]) == (12, 14.64, 6.0, 20.64)
+    assert t["pnl"] == round(480.0 - 20.64, 2)
+    assert set(ts.FEES) == set(ts.PRODUCTS)               # un tarif pour chaque contrat proposé

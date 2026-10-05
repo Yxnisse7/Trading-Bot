@@ -134,7 +134,7 @@
       <div class="tbl"><table id="products"><thead><tr><th>Actif du bot</th><th>Micro Topstep</th><th class="num">Valeur d'un point</th></tr></thead><tbody></tbody></table></div>
       </div>
     </div>
-    <div class="note-box warn" style="margin-top:16px"><span id="warn-ic"></span><span>Règles relevées en septembre 2026 : Topstep les change régulièrement. Vérifiez-les sur topstep.com avant d'acheter un compte. Cette simulation n'applique ni les glissements de prix ni les commissions exactes de Topstep : les frais sont estimés.</span></div>
+    <div class="note-box warn" style="margin-top:16px"><span id="warn-ic"></span><span>Règles relevées en septembre 2026 : Topstep les change régulièrement. Vérifiez-les sur topstep.com avant d'acheter un compte. Frais déduits : les commissions réelles de TopstepX par micro-contrat (relevées en octobre 2026, de 0,72 $ à 2,82 $ l'aller-retour selon le contrat) plus un tick de glissement par trade.</span></div>
   </div>
 
   <h2 id="auto" data-closed data-hint="faire passer les ordres par le bot">Connexion automatique à Topstep</h2>
@@ -256,7 +256,7 @@
       <td class="nowrap"><span class="rowbtns"><button type="button" class="secondary" data-note="sortie ${esc(o.id)}" data-ask="Enregistrer votre sortie de ${esc(o.symbol)} au prix du moment ?\n\nSeul le compte Topstep change : le signal du bot continue normalement." data-ok="Sortie enregistrée dans 1 à 2 minutes.">Sortie</button><button type="button" class="secondary" data-note="retirer ${esc(o.id)}" data-ask="Retirer ce trade du compte Topstep ?" data-ok="Trade retiré dans 1 à 2 minutes.">Retirer</button></span></td></tr>`).join("")
       : `<tr><td colspan="9" class="empty">Aucune position ouverte dans le compte Topstep.</td></tr>`;
     const positions = Object.fromEntries(rows.map((o) => [o.id, { lots: o.contracts, notional: o.notional, direction: o.direction, entry: o.entry }]));
-    const assets = rows.map((o) => ({ key: o.asset, lot_multiplier: o.multiplier, cost_pct: o.cost_pct || 0 }));
+    const assets = rows.map((o) => ({ key: o.asset, lot_multiplier: o.multiplier, cost_pct: o.cost_pct || 0, fee_per_order: o.fee_per_order || 0 }));
     Y.fillEstimates($("#open"), { positions, assets });
   }
   function renderCand() {
@@ -273,7 +273,7 @@
     $("#hist tbody").innerHTML = shown.length ? shown.map((t) => `<tr><td class="mono nowrap" style="font-size:12px">${esc(when(t.closed_at))}</td><td class="nowrap">${contract(t)}</td>
       <td class="muted nowrap">${ORIGIN[t.origin] || esc(t.origin)}</td><td><span class="pill ${["tp", "sl", "expired"].includes(t.status) ? t.status : Y.tone(t.pnl) || "neu"}"><b>${STATUS[t.status] || esc(t.status)}</b></span>${t.past_flat_time ? ` <span class="pill dn" title="Encore ouvert à 15:10 heure de Chicago">15:10</span>` : ""}</td>
       <td class="num">${Y.price(t.entry, dg(t.asset))}</td><td class="num">${Y.price(t.exit, dg(t.asset))}</td><td class="num">${t.contracts}</td>
-      <td class="num muted">${Y.num(t.cost, 2)}</td><td class="num ${Y.tone(t.pnl)}"><b>${Y.smoney(t.pnl, CUR)}</b></td><td class="num">${Y.money(t.balance_after, CUR)}</td>
+      <td class="num muted"${t.fees != null ? ` title="Commission Topstep ${Y.num(t.fees, 2)} $ + glissement ${Y.num(t.slippage, 2)} $"` : ""}>${Y.num(t.cost, 2)}</td><td class="num ${Y.tone(t.pnl)}"><b>${Y.smoney(t.pnl, CUR)}</b></td><td class="num">${Y.money(t.balance_after, CUR)}</td>
       <td><button type="button" class="secondary" style="padding:6px 10px;font-size:12px" data-note="retirer ${esc(t.id)}" data-ask="Retirer ce trade du compte Topstep ?" data-ok="Trade retiré dans 1 à 2 minutes.">Retirer</button></td></tr>`).join("")
       : `<tr><td colspan="11" class="empty">Aucun trade pour l'instant : les trades de la simulation apparaissent ici dès leur clôture.</td></tr>`;
     $("#hist-count").textContent = hist.length ? `${shown.length} affichés sur ${hist.length}` : "";

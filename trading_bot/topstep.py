@@ -54,6 +54,13 @@ PRODUCTS = {
     "nasdaq": ("MNQ", 2.0), "sp500": ("MES", 5.0), "gold": ("MGC", 10.0), "oil": ("MCL", 100.0),
     "euro": ("M6E", 12_500.0), "bitcoin": ("MBT", 0.1), "ethereum": ("MET", 0.1),
 }
+# Frais réels TopstepX, aller-retour par micro-contrat (commission 0,50 $ + NFA 0,02 $ + bourse CME), relevés en
+# octobre 2026 (help.topstep.com, « TopstepX Commissions and Fees ») ; plus un tick de glissement par aller-retour
+# (le stop est souvent exécuté un cran plus loin). Remplace l'estimation en % du bot, faite pour tout courtier.
+FEES = {  # actif: (frais $ aller-retour, valeur d'un tick $)
+    "nasdaq": (1.22, 0.50), "sp500": (1.22, 1.25), "gold": (1.92, 1.00), "oil": (1.72, 1.00),
+    "euro": (1.00, 1.25), "bitcoin": (2.82, 0.50), "ethereum": (0.72, 0.05),
+}
 DEFAULT_DAILY_TARGET = 1_200.0  # objectif du jour : 40 % de l'objectif du compte, sous les 50 % de la cohérence
 DEFAULT_RISK_PCT = 0.5           # % de la balance risqué au stop (250 $ sur 50 000 $) : la perte maximale
                                  # du compte (2 000 $) n'est que 4 % de la balance, 10 % la viderait au 1er stop
@@ -229,11 +236,10 @@ class TopstepAccount:
                 asset = cfg.assets.get(j["asset"])
                 rows.append(self._row(j["id"], j["asset"], asset.label if asset else j["asset"], symbol, mult,
                                       j["direction"], j["entry"], j["exit"], j["contracts"], j["opened_at"],
-                                      j["closed_at"], "journal", "journal", asset.cost_pct if asset else 0.0))
+                                      j["closed_at"], "journal", "journal"))
                 continue
             _, s, fixed, origin = item
             symbol, mult = PRODUCTS[s.asset]
-            asset = cfg.assets.get(s.asset)
             why = self._day_closed(rows, parse_iso(s.created_at))
             if why:
                 skipped.append({"id": s.id, "asset": s.asset, "asset_label": s.asset_label, "symbol": symbol,
@@ -253,10 +259,11 @@ class TopstepAccount:
                                   "opened_at": s.created_at, "expires_at": s.expires_at,
                                   "risk": round(abs(s.entry - s.stop_loss) * mult * n, 2),
                                   "notional": round(s.entry * mult * n, 2),
-                                  "cost_pct": asset.cost_pct if asset else 0.0})
+                                  # coût d'un aller-retour réparti sur les deux ordres (estimation du site en direct)
+                                  "cost_pct": 0.0, "fee_per_order": round(sum(FEES.get(s.asset, (0.0, 0.0))) * n / 2, 2)})
                 continue
             rows.append(self._row(s.id, s.asset, s.asset_label, symbol, mult, s.direction, s.entry, exit_price, n,
-                                  s.created_at, closed_at, status, origin, asset.cost_pct if asset else 0.0))
+                                  s.created_at, closed_at, status, origin))
         rows.sort(key=lambda r: r["closed_at"])
         data = self._apply_rules(rows, open_rows, now)
         data["daily_target"] = self.daily_target()
@@ -308,18 +315,20 @@ class TopstepAccount:
         return out
 
     @staticmethod
-    def _row(id_, asset, label, symbol, mult, direction, entry, exit_price, n, opened_at, closed_at, status, origin,
-             cost_pct) -> dict[str, Any]:
+    def _row(id_, asset, label, symbol, mult, direction, entry, exit_price, n, opened_at, closed_at, status,
+             origin) -> dict[str, Any]:
         sign = 1.0 if direction == "long" else -1.0
         gross = sign * (exit_price - entry) * mult * n
-        cost = cost_pct / 100.0 * entry * mult * n
+        fee, tick = FEES.get(asset, (0.0, 0.0))
+        cost = (fee + tick) * n
         opened, closed = parse_iso(opened_at), parse_iso(closed_at)
         flat = _flat_limit(closed)
         late = opened < flat <= closed        # encore ouvert à 15:10 heure de Chicago
         return {"id": id_, "asset": asset, "asset_label": label, "symbol": symbol, "direction": direction,
                 "entry": entry, "exit": exit_price, "contracts": n, "status": status, "origin": origin,
                 "opened_at": opened_at, "closed_at": closed_at, "day": trading_day(closed).isoformat(),
-                "pnl_gross": round(gross, 2), "cost": round(cost, 2), "pnl": round(gross - cost, 2),
+                "pnl_gross": round(gross, 2), "fees": round(fee * n, 2), "slippage": round(tick * n, 2),
+                "cost": round(cost, 2), "pnl": round(gross - cost, 2),
                 "past_flat_time": late}
 
     def _apply_rules(self, rows: list[dict[str, Any]], open_rows: list[dict[str, Any]], now: datetime) -> dict[str, Any]:
