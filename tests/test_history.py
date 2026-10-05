@@ -98,3 +98,27 @@ def test_binance_missing_month_falls_back_to_daily_archives(monkeypatch):
     out = hist.fetch_binance("bitcoin", 2, date(2026, 10, 3))
     assert sum("/daily/" in u and "-2026-09-" in u for u in urls) == 30          # tout septembre en quotidien
     assert any(c.close == 2 for c in out)
+
+
+def test_fetch_history_older_extends_backwards_and_merges(tmp_path, monkeypatch):
+    from datetime import date
+
+    from trading_bot import cli
+    from trading_bot.storage import Store
+
+    seen = {}
+
+    def fake_binance(asset, months, end):
+        seen["end"] = end
+        return [Candle(1_727_740_800, 1, 1, 1, 1, 1)]          # 1er octobre 2024
+
+    monkeypatch.setattr(hist, "fetch_binance", fake_binance)
+    monkeypatch.setenv("TRADING_BOT_DATA", str(tmp_path / "data"))
+    store = Store(tmp_path / "data", tmp_path / "docs")
+    store.save_history("bitcoin", [Candle(1_759_276_800, 2, 2, 2, 2, 1)])   # 1er octobre 2025
+    monkeypatch.setattr(cli, "Store", lambda *a, **k: store, raising=False)
+    import trading_bot.engine as engine_mod
+    monkeypatch.setattr(engine_mod, "Store", lambda *a, **k: store, raising=False)
+    assert cli.main(["fetch-history", "--asset", "bitcoin", "--months", "12", "--older"]) in (0, None)
+    assert seen["end"] == date(2025, 10, 1)
+    assert [c.close for c in store.load_history("bitcoin")] == [1, 2]

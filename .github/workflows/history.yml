@@ -14,6 +14,9 @@ on:
       minutes:
         description: "Temps maximal de téléchargement par actif (minutes)"
         default: "300"
+      older:
+        description: "Remonter avant l'historique déjà gardé (true) au lieu de repartir d'aujourd'hui"
+        default: "false"
       assets:
         description: "Actifs à (re)télécharger, liste JSON"
         default: '["bitcoin", "ethereum", "nasdaq", "sp500", "gold", "oil", "euro"]'
@@ -36,8 +39,16 @@ jobs:
           python-version: "3.11"
           cache: pip
       - run: pip install -r requirements.txt
+      - name: Historique déjà gardé (mode « older »)
+        if: inputs.older == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p data/history
+          gh release download history --pattern "${{ matrix.asset }}_5m.json.gz" --dir data/history --clobber
+          gunzip -f data/history/*.gz
       - name: Téléchargement et contrôle
-        run: python run.py fetch-history --asset "${{ matrix.asset }}" --months "${{ inputs.months }}" --max-minutes "${{ inputs.minutes }}"
+        run: python run.py fetch-history --asset "${{ matrix.asset }}" --months "${{ inputs.months }}" --max-minutes "${{ inputs.minutes }}" ${{ inputs.older == 'true' && '--older' || '' }}
       - name: Envoi dans la release « history »
         env:
           GH_TOKEN: ${{ github.token }}

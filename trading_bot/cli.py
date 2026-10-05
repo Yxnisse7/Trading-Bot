@@ -31,7 +31,7 @@ import json
 import logging
 import sys
 import time
-from datetime import date, datetime
+from datetime import date, datetime, timezone
 
 from .config import DISCLAIMER, load_config
 from .models import iso, utcnow
@@ -66,6 +66,7 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--risk", type=float, help="risque par trade en %% de la balance")
     p.add_argument("--candles", help="backup : archive des bougies (release « candles ») à inclure")
     p.add_argument("--months", type=int, default=12, help="fetch-history : profondeur de l'historique long en mois")
+    p.add_argument("--older", action="store_true", help="fetch-history : remonter avant l'historique déjà gardé et fusionner")
     p.add_argument("--max-minutes", type=int, default=0, help="fetch-history : temps maximal par actif (0 = sans limite)")
     p.add_argument("--history", action="store_true", help="backtest-setups : sur l'historique long (data/history) plutôt que les bougies Yahoo")
     p.add_argument("-v", "--verbose", action="store_true")
@@ -204,13 +205,18 @@ def main(argv: list[str] | None = None) -> int:
         for key in keys:
             hist.STATS.update(ok=0, absent=0, failed=0, throttled=0)
             ref = eng.store.load_candles(key)
+            existing = eng.store.load_history(key) if args.older else []
+            # --older : on remonte `--months` mois avant la plus ancienne bougie déjà gardée, puis on fusionne
+            end = datetime.fromtimestamp(existing[0].ts, tz=timezone.utc).date() if existing else today
             if key in hist.BINANCE:
-                candles = hist.fetch_binance(key, args.months, today)
+                candles = hist.fetch_binance(key, args.months, end)
             elif key in hist.DUKASCOPY:
-                candles = hist.fetch_dukascopy(key, args.months * 31, today, ref[-1].close if ref else None,
+                candles = hist.fetch_dukascopy(key, args.months * 31, end, ref[-1].close if ref else None,
                                                deadline=time.time() + args.max_minutes * 60 if args.max_minutes else None)
             else:
                 continue
+            if existing:
+                candles = sorted({c.ts: c for c in candles + existing}.values(), key=lambda c: c.ts)
             if candles:
                 eng.store.save_history(key, candles)
             print(key, hist.SOURCE_LABEL.get(key, ""), json.dumps(hist.check_candles(candles) | {"fichiers": dict(hist.STATS)},
