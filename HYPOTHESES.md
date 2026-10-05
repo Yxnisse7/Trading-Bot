@@ -127,6 +127,23 @@ de l'État fédéral de l'automne 2025 comprise). Frais Topstep, mêmes données
    stop 2 ATR horaire (Lucca & Moench 2015, effet affaibli depuis 2016). Seulement 8 décisions par an :
    **résultat affiché pour information, sans verdict.**
 
+## Essai 5 — `noise_area` avec un stop réaliste (`noise_area_v2`)
+
+Écrit le 5 octobre 2026, **avant** de lancer cette version. Constat : `noise_area` sur le Bitcoin ne
+gagnait que grâce à 5 % de trades à +17 à +37 R, issus de stops placés à quelques dollars du prix
+(irréalisables : plus de 50 micros chez Topstep, un tick de glissement mange le gain) ; en % du prix,
+pas d'avantage régulier.
+
+**Règle :** entrées et sorties de `noise_area` inchangées, mais stop dur dès l'entrée à la plus grande des
+deux distances : borne (max(borne, VWAP) à l'achat, min(borne, VWAP) à la vente) ou **1 ATR(14) des bougies
+de 15 min closes**. Ce stop est aussi le dénominateur du R (plus de plancher à 0,5 ATR 5 min).
+
+**Données :** les deux années ont déjà été regardées pour la version d'origine ; il n'existe donc plus de
+données vierges pour cette idée. Jugement sur les 24 mois, actif par actif (7 essais), frais Topstep :
+au moins 100 trades, gain net moyen > 0 **chacune des deux années**, facteur de profit ≥ 1,1, gain moyen
+encore ≥ 0 **sans les 5 % meilleurs trades**, et gain moyen en % du prix > 0. Un actif qui passe tout part
+en ombre sur le marché réel : c'est là que se fera la vraie confirmation.
+
 ## Journal des essais
 
 | Date | Essai | Résultat |
