@@ -129,6 +129,16 @@ class Store:
         all_["history" if history else "recent"] = data
         self._write(self.dir / "setups.json", all_)
 
+    def strategies(self) -> dict[str, Any]:
+        """Laboratoire de stratégies (essai 3) : une case par stratégie × actif."""
+        return self._read(self.dir / "strategies.json", {})
+
+    def save_strategies(self, data: dict[str, Any], merge: bool = False) -> None:
+        if merge:
+            old = self.strategies()
+            data["cells"] = {**old.get("cells", {}), **data["cells"]}
+        self._write(self.dir / "strategies.json", data)
+
     def stress(self) -> dict[str, Any]:
         return self._read(self.stress_file, {})
 

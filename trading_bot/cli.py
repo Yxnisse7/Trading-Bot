@@ -41,12 +41,12 @@ from .learning import analyze
 from .signals import format_signal
 
 
-HALAL_REFUSED = {"manual", "propose", "commands", "guide", "ui", "loop", "fetch-data", "topstep", "invest", "backup", "fetch-history", "backtest-setups"}
+HALAL_REFUSED = {"manual", "propose", "commands", "guide", "ui", "loop", "fetch-data", "topstep", "invest", "backup", "fetch-history", "backtest-setups", "strategy-lab"}
 
 
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(description="Générateur de signaux de scalping (NQ, BTC, XAU) — données gratuites")
-    p.add_argument("command", choices=["scan", "track", "tick", "summary", "stats", "loop", "status", "test-notify", "backtest", "report", "fetch-data", "manual", "propose", "ui", "commands", "portfolio", "guide", "learn", "flush-outbox", "check-data", "stop", "topstep", "trim-candles", "invest", "backup", "fetch-history", "backtest-setups"])
+    p.add_argument("command", choices=["scan", "track", "tick", "summary", "stats", "loop", "status", "test-notify", "backtest", "report", "fetch-data", "manual", "propose", "ui", "commands", "portfolio", "guide", "learn", "flush-outbox", "check-data", "stop", "topstep", "trim-candles", "invest", "backup", "fetch-history", "backtest-setups", "strategy-lab"])
     p.add_argument("--signal", help="stop : identifiant (ou début) du trade à arrêter, ou son actif ; sans valeur, le seul trade ouvert")
     p.add_argument("--halal", action="store_true", help="mode halal : second bot séparé (achat seulement, sans levier, data/halal)")
     p.add_argument("--dry-run", action="store_true", help="scan sans enregistrer les signaux")
@@ -221,6 +221,48 @@ def main(argv: list[str] | None = None) -> int:
                 eng.store.save_history(key, candles)
             print(key, hist.SOURCE_LABEL.get(key, ""), json.dumps(hist.check_candles(candles) | {"fichiers": dict(hist.STATS)},
                                                                 ensure_ascii=False), flush=True)
+    elif args.command == "strategy-lab":
+        # essai 3 (HYPOTHESES.md) : 8 stratégies publiées × chaque actif, découverte puis confirmation
+        from . import strategies as sl
+        from .providers import history as hist
+        from .topstep import FEES, PRODUCTS
+
+        split = int(datetime(2025, 9, 28, tzinfo=timezone.utc).timestamp())
+        n_trials = len(sl.STRATEGIES) * len(eng.cfg.assets)
+        out = {"split": "2025-09-28", "n_trials": n_trials, "strategies": sl.STRATEGIES, "cells": {}}
+        for key, asset in eng.cfg.assets.items():
+            if args.asset and key not in args.asset:
+                continue
+            candles = eng.store.load_history(key)
+            if key in hist.BINANCE:                                    # même source : comble le dernier mois
+                candles = sorted({c.ts: c for c in candles + eng.store.load_candles(key)}.values(), key=lambda c: c.ts)
+            if not candles:
+                continue
+            trades = sl.run_all(key, candles)
+            fee = FEES.get(key)
+            tcost = (sum(fee), PRODUCTS[key][1]) if fee and key in PRODUCTS else None
+            for strat in sl.STRATEGIES:
+                tr = [t for t in trades if t.strategy == strat]
+                disc = sl.evaluate(tr, asset.cost_pct, tcost, start_ts=split)
+                conf = sl.evaluate(tr, asset.cost_pct, tcost, end_ts=split)
+                both = sl.evaluate(tr, asset.cost_pct, tcost)
+                cand = sl.discovery_pass(disc)
+                if not cand:
+                    status = "écarté (découverte)"
+                elif conf["n"] == 0:
+                    status = "candidat : confirmation à venir"
+                elif not sl.confirmation_pass(conf):
+                    status = "écarté (confirmation)"
+                else:
+                    status = "prouvé" if sl.proven(both, n_trials) else "validé"
+                out["cells"][f"{strat}:{key}"] = {"strategy": strat, "asset": key, "asset_label": asset.label,
+                                                  "discovery": disc, "confirmation": conf, "all": both, "status": status}
+                d, c = disc["net"], conf["net"]
+                print(f"{strat:16s} {key:9s} découverte n={disc['n']:4d} {d['mean_r']} PF {d['profit_factor']} | "
+                      f"confirmation n={conf['n']:4d} {c['mean_r']} PF {c['profit_factor']} → {status}", flush=True)
+        out["updated_at"] = iso(utcnow())
+        eng.store.save_strategies(out, merge=bool(args.asset))
+        eng.write_report()
     elif args.command == "backtest-setups":
         # setups pré-enregistrés (HYPOTHESES.md) jugés sur leurs critères d'abandon
         from . import setups

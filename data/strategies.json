@@ -1,0 +1,7241 @@
+{
+  "split": "2025-09-28",
+  "n_trials": 56,
+  "strategies": {
+    "orb5": "Cassure de la 1re bougie de 5 min de New York (Zarattini & Aziz, 2023)",
+    "orb30": "Cassure du range des 30 premières minutes de New York",
+    "intraday_mom": "Momentum intraday : la 1re demi-heure prédit la dernière (Gao, Han, Li & Zhou, 2018)",
+    "noise_area": "Sortie de la « zone de bruit » du jour (Zarattini, Aziz & Barbon, 2024)",
+    "gap_fade": "Comblement de l'écart d'ouverture de New York",
+    "london_breakout": "Cassure du range asiatique à l'ouverture de Londres",
+    "donchian_1h": "Cassure de canal de Donchian 20 heures, sortie sur 10 heures (méthode Turtle)",
+    "rsi2_1h": "Retour à la moyenne RSI(2) dans le sens de la MM200, en bougies 1 h (Connors)"
+  },
+  "cells": {
+    "orb5:nasdaq": {
+      "strategy": "orb5",
+      "asset": "nasdaq",
+      "asset_label": "Nasdaq 100 (NQ)",
+      "discovery": {
+        "n": 252,
+        "gross": {
+          "n": 252,
+          "mean_r": 0.0878,
+          "se": 0.1433,
+          "profit_factor": 1.12,
+          "win_rate": 0.2778
+        },
+        "net_bot": {
+          "n": 252,
+          "mean_r": 0.0282,
+          "se": 0.1436,
+          "profit_factor": 1.04,
+          "win_rate": 0.2778
+        },
+        "net": {
+          "n": 252,
+          "mean_r": 0.0686,
+          "se": 0.1434,
+          "profit_factor": 1.09,
+          "win_rate": 0.2778
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 126,
+          "mean_r": 0.1767,
+          "se": 0.2235,
+          "profit_factor": 1.24,
+          "win_rate": 0.2857
+        },
+        "second_half": {
+          "n": 126,
+          "mean_r": -0.0396,
+          "se": 0.1802,
+          "profit_factor": 0.95,
+          "win_rate": 0.2698
+        },
+        "first": "2025-09-29",
+        "last": "2026-10-02"
+      },
+      "confirmation": {
+        "n": 0,
+        "gross": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_bot": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "second_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "first": null,
+        "last": null
+      },
+      "all": {
+        "n": 252,
+        "gross": {
+          "n": 252,
+          "mean_r": 0.0878,
+          "se": 0.1433,
+          "profit_factor": 1.12,
+          "win_rate": 0.2778
+        },
+        "net_bot": {
+          "n": 252,
+          "mean_r": 0.0282,
+          "se": 0.1436,
+          "profit_factor": 1.04,
+          "win_rate": 0.2778
+        },
+        "net": {
+          "n": 252,
+          "mean_r": 0.0686,
+          "se": 0.1434,
+          "profit_factor": 1.09,
+          "win_rate": 0.2778
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 126,
+          "mean_r": 0.1767,
+          "se": 0.2235,
+          "profit_factor": 1.24,
+          "win_rate": 0.2857
+        },
+        "second_half": {
+          "n": 126,
+          "mean_r": -0.0396,
+          "se": 0.1802,
+          "profit_factor": 0.95,
+          "win_rate": 0.2698
+        },
+        "first": "2025-09-29",
+        "last": "2026-10-02"
+      },
+      "status": "écarté (découverte)"
+    },
+    "orb30:nasdaq": {
+      "strategy": "orb30",
+      "asset": "nasdaq",
+      "asset_label": "Nasdaq 100 (NQ)",
+      "discovery": {
+        "n": 228,
+        "gross": {
+          "n": 228,
+          "mean_r": 0.0039,
+          "se": 0.0614,
+          "profit_factor": 1.01,
+          "win_rate": 0.4825
+        },
+        "net_bot": {
+          "n": 228,
+          "mean_r": -0.0127,
+          "se": 0.0614,
+          "profit_factor": 0.97,
+          "win_rate": 0.4781
+        },
+        "net": {
+          "n": 228,
+          "mean_r": -0.0014,
+          "se": 0.0614,
+          "profit_factor": 1.0,
+          "win_rate": 0.4825
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 114,
+          "mean_r": 0.0753,
+          "se": 0.0865,
+          "profit_factor": 1.24,
+          "win_rate": 0.5351
+        },
+        "second_half": {
+          "n": 114,
+          "mean_r": -0.0782,
+          "se": 0.087,
+          "profit_factor": 0.81,
+          "win_rate": 0.4298
+        },
+        "first": "2025-09-29",
+        "last": "2026-10-02"
+      },
+      "confirmation": {
+        "n": 0,
+        "gross": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_bot": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "second_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "first": null,
+        "last": null
+      },
+      "all": {
+        "n": 228,
+        "gross": {
+          "n": 228,
+          "mean_r": 0.0039,
+          "se": 0.0614,
+          "profit_factor": 1.01,
+          "win_rate": 0.4825
+        },
+        "net_bot": {
+          "n": 228,
+          "mean_r": -0.0127,
+          "se": 0.0614,
+          "profit_factor": 0.97,
+          "win_rate": 0.4781
+        },
+        "net": {
+          "n": 228,
+          "mean_r": -0.0014,
+          "se": 0.0614,
+          "profit_factor": 1.0,
+          "win_rate": 0.4825
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 114,
+          "mean_r": 0.0753,
+          "se": 0.0865,
+          "profit_factor": 1.24,
+          "win_rate": 0.5351
+        },
+        "second_half": {
+          "n": 114,
+          "mean_r": -0.0782,
+          "se": 0.087,
+          "profit_factor": 0.81,
+          "win_rate": 0.4298
+        },
+        "first": "2025-09-29",
+        "last": "2026-10-02"
+      },
+      "status": "écarté (découverte)"
+    },
+    "intraday_mom:nasdaq": {
+      "strategy": "intraday_mom",
+      "asset": "nasdaq",
+      "asset_label": "Nasdaq 100 (NQ)",
+      "discovery": {
+        "n": 230,
+        "gross": {
+          "n": 230,
+          "mean_r": 0.0724,
+          "se": 0.0603,
+          "profit_factor": 1.21,
+          "win_rate": 0.5217
+        },
+        "net_bot": {
+          "n": 230,
+          "mean_r": 0.0149,
+          "se": 0.0603,
+          "profit_factor": 1.04,
+          "win_rate": 0.487
+        },
+        "net": {
+          "n": 230,
+          "mean_r": 0.054,
+          "se": 0.0603,
+          "profit_factor": 1.15,
+          "win_rate": 0.513
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 115,
+          "mean_r": -0.0779,
+          "se": 0.0808,
+          "profit_factor": 0.81,
+          "win_rate": 0.4609
+        },
+        "second_half": {
+          "n": 115,
+          "mean_r": 0.186,
+          "se": 0.0883,
+          "profit_factor": 1.64,
+          "win_rate": 0.5652
+        },
+        "first": "2025-09-30",
+        "last": "2026-10-02"
+      },
+      "confirmation": {
+        "n": 0,
+        "gross": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_bot": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "second_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "first": null,
+        "last": null
+      },
+      "all": {
+        "n": 230,
+        "gross": {
+          "n": 230,
+          "mean_r": 0.0724,
+          "se": 0.0603,
+          "profit_factor": 1.21,
+          "win_rate": 0.5217
+        },
+        "net_bot": {
+          "n": 230,
+          "mean_r": 0.0149,
+          "se": 0.0603,
+          "profit_factor": 1.04,
+          "win_rate": 0.487
+        },
+        "net": {
+          "n": 230,
+          "mean_r": 0.054,
+          "se": 0.0603,
+          "profit_factor": 1.15,
+          "win_rate": 0.513
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 115,
+          "mean_r": -0.0779,
+          "se": 0.0808,
+          "profit_factor": 0.81,
+          "win_rate": 0.4609
+        },
+        "second_half": {
+          "n": 115,
+          "mean_r": 0.186,
+          "se": 0.0883,
+          "profit_factor": 1.64,
+          "win_rate": 0.5652
+        },
+        "first": "2025-09-30",
+        "last": "2026-10-02"
+      },
+      "status": "écarté (découverte)"
+    },
+    "noise_area:nasdaq": {
+      "strategy": "noise_area",
+      "asset": "nasdaq",
+      "asset_label": "Nasdaq 100 (NQ)",
+      "discovery": {
+        "n": 187,
+        "gross": {
+          "n": 187,
+          "mean_r": 0.1931,
+          "se": 0.234,
+          "profit_factor": 1.19,
+          "win_rate": 0.4064
+        },
+        "net_bot": {
+          "n": 187,
+          "mean_r": 0.1075,
+          "se": 0.2341,
+          "profit_factor": 1.1,
+          "win_rate": 0.4011
+        },
+        "net": {
+          "n": 187,
+          "mean_r": 0.1658,
+          "se": 0.234,
+          "profit_factor": 1.16,
+          "win_rate": 0.4064
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 93,
+          "mean_r": -0.1051,
+          "se": 0.3025,
+          "profit_factor": 0.9,
+          "win_rate": 0.3978
+        },
+        "second_half": {
+          "n": 94,
+          "mean_r": 0.4338,
+          "se": 0.3561,
+          "profit_factor": 1.44,
+          "win_rate": 0.4149
+        },
+        "first": "2025-10-17",
+        "last": "2026-09-30"
+      },
+      "confirmation": {
+        "n": 0,
+        "gross": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_bot": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "second_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "first": null,
+        "last": null
+      },
+      "all": {
+        "n": 187,
+        "gross": {
+          "n": 187,
+          "mean_r": 0.1931,
+          "se": 0.234,
+          "profit_factor": 1.19,
+          "win_rate": 0.4064
+        },
+        "net_bot": {
+          "n": 187,
+          "mean_r": 0.1075,
+          "se": 0.2341,
+          "profit_factor": 1.1,
+          "win_rate": 0.4011
+        },
+        "net": {
+          "n": 187,
+          "mean_r": 0.1658,
+          "se": 0.234,
+          "profit_factor": 1.16,
+          "win_rate": 0.4064
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 93,
+          "mean_r": -0.1051,
+          "se": 0.3025,
+          "profit_factor": 0.9,
+          "win_rate": 0.3978
+        },
+        "second_half": {
+          "n": 94,
+          "mean_r": 0.4338,
+          "se": 0.3561,
+          "profit_factor": 1.44,
+          "win_rate": 0.4149
+        },
+        "first": "2025-10-17",
+        "last": "2026-09-30"
+      },
+      "status": "écarté (découverte)"
+    },
+    "gap_fade:nasdaq": {
+      "strategy": "gap_fade",
+      "asset": "nasdaq",
+      "asset_label": "Nasdaq 100 (NQ)",
+      "discovery": {
+        "n": 117,
+        "gross": {
+          "n": 117,
+          "mean_r": -0.0324,
+          "se": 0.0775,
+          "profit_factor": 0.92,
+          "win_rate": 0.4444
+        },
+        "net_bot": {
+          "n": 117,
+          "mean_r": -0.063,
+          "se": 0.0778,
+          "profit_factor": 0.85,
+          "win_rate": 0.4444
+        },
+        "net": {
+          "n": 117,
+          "mean_r": -0.0423,
+          "se": 0.0776,
+          "profit_factor": 0.9,
+          "win_rate": 0.4444
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 58,
+          "mean_r": -0.0714,
+          "se": 0.1117,
+          "profit_factor": 0.83,
+          "win_rate": 0.431
+        },
+        "second_half": {
+          "n": 59,
+          "mean_r": -0.0137,
+          "se": 0.1085,
+          "profit_factor": 0.96,
+          "win_rate": 0.4576
+        },
+        "first": "2025-10-01",
+        "last": "2026-10-01"
+      },
+      "confirmation": {
+        "n": 0,
+        "gross": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_bot": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "second_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "first": null,
+        "last": null
+      },
+      "all": {
+        "n": 117,
+        "gross": {
+          "n": 117,
+          "mean_r": -0.0324,
+          "se": 0.0775,
+          "profit_factor": 0.92,
+          "win_rate": 0.4444
+        },
+        "net_bot": {
+          "n": 117,
+          "mean_r": -0.063,
+          "se": 0.0778,
+          "profit_factor": 0.85,
+          "win_rate": 0.4444
+        },
+        "net": {
+          "n": 117,
+          "mean_r": -0.0423,
+          "se": 0.0776,
+          "profit_factor": 0.9,
+          "win_rate": 0.4444
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 58,
+          "mean_r": -0.0714,
+          "se": 0.1117,
+          "profit_factor": 0.83,
+          "win_rate": 0.431
+        },
+        "second_half": {
+          "n": 59,
+          "mean_r": -0.0137,
+          "se": 0.1085,
+          "profit_factor": 0.96,
+          "win_rate": 0.4576
+        },
+        "first": "2025-10-01",
+        "last": "2026-10-01"
+      },
+      "status": "écarté (découverte)"
+    },
+    "london_breakout:nasdaq": {
+      "strategy": "london_breakout",
+      "asset": "nasdaq",
+      "asset_label": "Nasdaq 100 (NQ)",
+      "discovery": {
+        "n": 197,
+        "gross": {
+          "n": 197,
+          "mean_r": -0.0251,
+          "se": 0.0666,
+          "profit_factor": 0.94,
+          "win_rate": 0.4721
+        },
+        "net_bot": {
+          "n": 197,
+          "mean_r": -0.0446,
+          "se": 0.0665,
+          "profit_factor": 0.9,
+          "win_rate": 0.4721
+        },
+        "net": {
+          "n": 197,
+          "mean_r": -0.0314,
+          "se": 0.0666,
+          "profit_factor": 0.93,
+          "win_rate": 0.4721
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 98,
+          "mean_r": -0.1558,
+          "se": 0.0991,
+          "profit_factor": 0.72,
+          "win_rate": 0.4184
+        },
+        "second_half": {
+          "n": 99,
+          "mean_r": 0.0917,
+          "se": 0.0877,
+          "profit_factor": 1.26,
+          "win_rate": 0.5253
+        },
+        "first": "2025-09-29",
+        "last": "2026-10-02"
+      },
+      "confirmation": {
+        "n": 0,
+        "gross": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_bot": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "second_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "first": null,
+        "last": null
+      },
+      "all": {
+        "n": 197,
+        "gross": {
+          "n": 197,
+          "mean_r": -0.0251,
+          "se": 0.0666,
+          "profit_factor": 0.94,
+          "win_rate": 0.4721
+        },
+        "net_bot": {
+          "n": 197,
+          "mean_r": -0.0446,
+          "se": 0.0665,
+          "profit_factor": 0.9,
+          "win_rate": 0.4721
+        },
+        "net": {
+          "n": 197,
+          "mean_r": -0.0314,
+          "se": 0.0666,
+          "profit_factor": 0.93,
+          "win_rate": 0.4721
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 98,
+          "mean_r": -0.1558,
+          "se": 0.0991,
+          "profit_factor": 0.72,
+          "win_rate": 0.4184
+        },
+        "second_half": {
+          "n": 99,
+          "mean_r": 0.0917,
+          "se": 0.0877,
+          "profit_factor": 1.26,
+          "win_rate": 0.5253
+        },
+        "first": "2025-09-29",
+        "last": "2026-10-02"
+      },
+      "status": "écarté (découverte)"
+    },
+    "donchian_1h:nasdaq": {
+      "strategy": "donchian_1h",
+      "asset": "nasdaq",
+      "asset_label": "Nasdaq 100 (NQ)",
+      "discovery": {
+        "n": 192,
+        "gross": {
+          "n": 192,
+          "mean_r": -0.1311,
+          "se": 0.1079,
+          "profit_factor": 0.78,
+          "win_rate": 0.3125
+        },
+        "net_bot": {
+          "n": 192,
+          "mean_r": -0.1471,
+          "se": 0.1079,
+          "profit_factor": 0.76,
+          "win_rate": 0.3125
+        },
+        "net": {
+          "n": 192,
+          "mean_r": -0.1362,
+          "se": 0.1079,
+          "profit_factor": 0.78,
+          "win_rate": 0.3125
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 96,
+          "mean_r": -0.2933,
+          "se": 0.1181,
+          "profit_factor": 0.53,
+          "win_rate": 0.2812
+        },
+        "second_half": {
+          "n": 96,
+          "mean_r": 0.0208,
+          "se": 0.1799,
+          "profit_factor": 1.04,
+          "win_rate": 0.3438
+        },
+        "first": "2025-10-01",
+        "last": "2026-10-02"
+      },
+      "confirmation": {
+        "n": 0,
+        "gross": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_bot": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "second_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "first": null,
+        "last": null
+      },
+      "all": {
+        "n": 192,
+        "gross": {
+          "n": 192,
+          "mean_r": -0.1311,
+          "se": 0.1079,
+          "profit_factor": 0.78,
+          "win_rate": 0.3125
+        },
+        "net_bot": {
+          "n": 192,
+          "mean_r": -0.1471,
+          "se": 0.1079,
+          "profit_factor": 0.76,
+          "win_rate": 0.3125
+        },
+        "net": {
+          "n": 192,
+          "mean_r": -0.1362,
+          "se": 0.1079,
+          "profit_factor": 0.78,
+          "win_rate": 0.3125
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 96,
+          "mean_r": -0.2933,
+          "se": 0.1181,
+          "profit_factor": 0.53,
+          "win_rate": 0.2812
+        },
+        "second_half": {
+          "n": 96,
+          "mean_r": 0.0208,
+          "se": 0.1799,
+          "profit_factor": 1.04,
+          "win_rate": 0.3438
+        },
+        "first": "2025-10-01",
+        "last": "2026-10-02"
+      },
+      "status": "écarté (découverte)"
+    },
+    "rsi2_1h:nasdaq": {
+      "strategy": "rsi2_1h",
+      "asset": "nasdaq",
+      "asset_label": "Nasdaq 100 (NQ)",
+      "discovery": {
+        "n": 223,
+        "gross": {
+          "n": 223,
+          "mean_r": -0.018,
+          "se": 0.0429,
+          "profit_factor": 0.93,
+          "win_rate": 0.5874
+        },
+        "net_bot": {
+          "n": 223,
+          "mean_r": -0.0314,
+          "se": 0.0429,
+          "profit_factor": 0.88,
+          "win_rate": 0.5785
+        },
+        "net": {
+          "n": 223,
+          "mean_r": -0.0223,
+          "se": 0.0429,
+          "profit_factor": 0.92,
+          "win_rate": 0.5874
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 111,
+          "mean_r": -0.0689,
+          "se": 0.0609,
+          "profit_factor": 0.76,
+          "win_rate": 0.5495
+        },
+        "second_half": {
+          "n": 112,
+          "mean_r": 0.0238,
+          "se": 0.0603,
+          "profit_factor": 1.1,
+          "win_rate": 0.625
+        },
+        "first": "2025-10-13",
+        "last": "2026-10-01"
+      },
+      "confirmation": {
+        "n": 0,
+        "gross": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_bot": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "second_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "first": null,
+        "last": null
+      },
+      "all": {
+        "n": 223,
+        "gross": {
+          "n": 223,
+          "mean_r": -0.018,
+          "se": 0.0429,
+          "profit_factor": 0.93,
+          "win_rate": 0.5874
+        },
+        "net_bot": {
+          "n": 223,
+          "mean_r": -0.0314,
+          "se": 0.0429,
+          "profit_factor": 0.88,
+          "win_rate": 0.5785
+        },
+        "net": {
+          "n": 223,
+          "mean_r": -0.0223,
+          "se": 0.0429,
+          "profit_factor": 0.92,
+          "win_rate": 0.5874
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 111,
+          "mean_r": -0.0689,
+          "se": 0.0609,
+          "profit_factor": 0.76,
+          "win_rate": 0.5495
+        },
+        "second_half": {
+          "n": 112,
+          "mean_r": 0.0238,
+          "se": 0.0603,
+          "profit_factor": 1.1,
+          "win_rate": 0.625
+        },
+        "first": "2025-10-13",
+        "last": "2026-10-01"
+      },
+      "status": "écarté (découverte)"
+    },
+    "orb5:sp500": {
+      "strategy": "orb5",
+      "asset": "sp500",
+      "asset_label": "S&P 500 (ES)",
+      "discovery": {
+        "n": 244,
+        "gross": {
+          "n": 244,
+          "mean_r": -0.0678,
+          "se": 0.1368,
+          "profit_factor": 0.91,
+          "win_rate": 0.209
+        },
+        "net_bot": {
+          "n": 244,
+          "mean_r": -0.1698,
+          "se": 0.1373,
+          "profit_factor": 0.8,
+          "win_rate": 0.209
+        },
+        "net": {
+          "n": 244,
+          "mean_r": -0.1386,
+          "se": 0.1372,
+          "profit_factor": 0.83,
+          "win_rate": 0.209
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 122,
+          "mean_r": -0.1108,
+          "se": 0.1924,
+          "profit_factor": 0.87,
+          "win_rate": 0.2295
+        },
+        "second_half": {
+          "n": 122,
+          "mean_r": -0.1664,
+          "se": 0.1963,
+          "profit_factor": 0.8,
+          "win_rate": 0.1885
+        },
+        "first": "2025-09-30",
+        "last": "2026-10-02"
+      },
+      "confirmation": {
+        "n": 0,
+        "gross": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_bot": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "second_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "first": null,
+        "last": null
+      },
+      "all": {
+        "n": 244,
+        "gross": {
+          "n": 244,
+          "mean_r": -0.0678,
+          "se": 0.1368,
+          "profit_factor": 0.91,
+          "win_rate": 0.209
+        },
+        "net_bot": {
+          "n": 244,
+          "mean_r": -0.1698,
+          "se": 0.1373,
+          "profit_factor": 0.8,
+          "win_rate": 0.209
+        },
+        "net": {
+          "n": 244,
+          "mean_r": -0.1386,
+          "se": 0.1372,
+          "profit_factor": 0.83,
+          "win_rate": 0.209
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 122,
+          "mean_r": -0.1108,
+          "se": 0.1924,
+          "profit_factor": 0.87,
+          "win_rate": 0.2295
+        },
+        "second_half": {
+          "n": 122,
+          "mean_r": -0.1664,
+          "se": 0.1963,
+          "profit_factor": 0.8,
+          "win_rate": 0.1885
+        },
+        "first": "2025-09-30",
+        "last": "2026-10-02"
+      },
+      "status": "écarté (découverte)"
+    },
+    "orb30:sp500": {
+      "strategy": "orb30",
+      "asset": "sp500",
+      "asset_label": "S&P 500 (ES)",
+      "discovery": {
+        "n": 233,
+        "gross": {
+          "n": 233,
+          "mean_r": -0.0193,
+          "se": 0.0667,
+          "profit_factor": 0.95,
+          "win_rate": 0.4378
+        },
+        "net_bot": {
+          "n": 233,
+          "mean_r": -0.048,
+          "se": 0.0668,
+          "profit_factor": 0.89,
+          "win_rate": 0.4292
+        },
+        "net": {
+          "n": 233,
+          "mean_r": -0.0391,
+          "se": 0.0667,
+          "profit_factor": 0.91,
+          "win_rate": 0.4335
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 116,
+          "mean_r": 0.0286,
+          "se": 0.0921,
+          "profit_factor": 1.08,
+          "win_rate": 0.4655
+        },
+        "second_half": {
+          "n": 117,
+          "mean_r": -0.1062,
+          "se": 0.0966,
+          "profit_factor": 0.78,
+          "win_rate": 0.4017
+        },
+        "first": "2025-09-30",
+        "last": "2026-10-02"
+      },
+      "confirmation": {
+        "n": 0,
+        "gross": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_bot": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "second_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "first": null,
+        "last": null
+      },
+      "all": {
+        "n": 233,
+        "gross": {
+          "n": 233,
+          "mean_r": -0.0193,
+          "se": 0.0667,
+          "profit_factor": 0.95,
+          "win_rate": 0.4378
+        },
+        "net_bot": {
+          "n": 233,
+          "mean_r": -0.048,
+          "se": 0.0668,
+          "profit_factor": 0.89,
+          "win_rate": 0.4292
+        },
+        "net": {
+          "n": 233,
+          "mean_r": -0.0391,
+          "se": 0.0667,
+          "profit_factor": 0.91,
+          "win_rate": 0.4335
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 116,
+          "mean_r": 0.0286,
+          "se": 0.0921,
+          "profit_factor": 1.08,
+          "win_rate": 0.4655
+        },
+        "second_half": {
+          "n": 117,
+          "mean_r": -0.1062,
+          "se": 0.0966,
+          "profit_factor": 0.78,
+          "win_rate": 0.4017
+        },
+        "first": "2025-09-30",
+        "last": "2026-10-02"
+      },
+      "status": "écarté (découverte)"
+    },
+    "intraday_mom:sp500": {
+      "strategy": "intraday_mom",
+      "asset": "sp500",
+      "asset_label": "S&P 500 (ES)",
+      "discovery": {
+        "n": 213,
+        "gross": {
+          "n": 213,
+          "mean_r": -0.0257,
+          "se": 0.0606,
+          "profit_factor": 0.93,
+          "win_rate": 0.446
+        },
+        "net_bot": {
+          "n": 213,
+          "mean_r": -0.1025,
+          "se": 0.0607,
+          "profit_factor": 0.75,
+          "win_rate": 0.4272
+        },
+        "net": {
+          "n": 213,
+          "mean_r": -0.0788,
+          "se": 0.0606,
+          "profit_factor": 0.8,
+          "win_rate": 0.4319
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 106,
+          "mean_r": -0.2021,
+          "se": 0.0836,
+          "profit_factor": 0.57,
+          "win_rate": 0.3868
+        },
+        "second_half": {
+          "n": 107,
+          "mean_r": 0.0434,
+          "se": 0.0865,
+          "profit_factor": 1.13,
+          "win_rate": 0.4766
+        },
+        "first": "2025-10-01",
+        "last": "2026-10-02"
+      },
+      "confirmation": {
+        "n": 0,
+        "gross": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_bot": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "second_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "first": null,
+        "last": null
+      },
+      "all": {
+        "n": 213,
+        "gross": {
+          "n": 213,
+          "mean_r": -0.0257,
+          "se": 0.0606,
+          "profit_factor": 0.93,
+          "win_rate": 0.446
+        },
+        "net_bot": {
+          "n": 213,
+          "mean_r": -0.1025,
+          "se": 0.0607,
+          "profit_factor": 0.75,
+          "win_rate": 0.4272
+        },
+        "net": {
+          "n": 213,
+          "mean_r": -0.0788,
+          "se": 0.0606,
+          "profit_factor": 0.8,
+          "win_rate": 0.4319
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 106,
+          "mean_r": -0.2021,
+          "se": 0.0836,
+          "profit_factor": 0.57,
+          "win_rate": 0.3868
+        },
+        "second_half": {
+          "n": 107,
+          "mean_r": 0.0434,
+          "se": 0.0865,
+          "profit_factor": 1.13,
+          "win_rate": 0.4766
+        },
+        "first": "2025-10-01",
+        "last": "2026-10-02"
+      },
+      "status": "écarté (découverte)"
+    },
+    "noise_area:sp500": {
+      "strategy": "noise_area",
+      "asset": "sp500",
+      "asset_label": "S&P 500 (ES)",
+      "discovery": {
+        "n": 201,
+        "gross": {
+          "n": 201,
+          "mean_r": -0.1698,
+          "se": 0.2323,
+          "profit_factor": 0.85,
+          "win_rate": 0.3582
+        },
+        "net_bot": {
+          "n": 201,
+          "mean_r": -0.2994,
+          "se": 0.2321,
+          "profit_factor": 0.75,
+          "win_rate": 0.3433
+        },
+        "net": {
+          "n": 201,
+          "mean_r": -0.2589,
+          "se": 0.232,
+          "profit_factor": 0.78,
+          "win_rate": 0.3433
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 100,
+          "mean_r": 0.0702,
+          "se": 0.3797,
+          "profit_factor": 1.07,
+          "win_rate": 0.4
+        },
+        "second_half": {
+          "n": 101,
+          "mean_r": -0.5848,
+          "se": 0.2663,
+          "profit_factor": 0.56,
+          "win_rate": 0.2871
+        },
+        "first": "2025-10-22",
+        "last": "2026-10-01"
+      },
+      "confirmation": {
+        "n": 0,
+        "gross": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_bot": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "second_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "first": null,
+        "last": null
+      },
+      "all": {
+        "n": 201,
+        "gross": {
+          "n": 201,
+          "mean_r": -0.1698,
+          "se": 0.2323,
+          "profit_factor": 0.85,
+          "win_rate": 0.3582
+        },
+        "net_bot": {
+          "n": 201,
+          "mean_r": -0.2994,
+          "se": 0.2321,
+          "profit_factor": 0.75,
+          "win_rate": 0.3433
+        },
+        "net": {
+          "n": 201,
+          "mean_r": -0.2589,
+          "se": 0.232,
+          "profit_factor": 0.78,
+          "win_rate": 0.3433
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 100,
+          "mean_r": 0.0702,
+          "se": 0.3797,
+          "profit_factor": 1.07,
+          "win_rate": 0.4
+        },
+        "second_half": {
+          "n": 101,
+          "mean_r": -0.5848,
+          "se": 0.2663,
+          "profit_factor": 0.56,
+          "win_rate": 0.2871
+        },
+        "first": "2025-10-22",
+        "last": "2026-10-01"
+      },
+      "status": "écarté (découverte)"
+    },
+    "gap_fade:sp500": {
+      "strategy": "gap_fade",
+      "asset": "sp500",
+      "asset_label": "S&P 500 (ES)",
+      "discovery": {
+        "n": 111,
+        "gross": {
+          "n": 111,
+          "mean_r": -0.0448,
+          "se": 0.07,
+          "profit_factor": 0.87,
+          "win_rate": 0.4775
+        },
+        "net_bot": {
+          "n": 111,
+          "mean_r": -0.0701,
+          "se": 0.07,
+          "profit_factor": 0.8,
+          "win_rate": 0.4595
+        },
+        "net": {
+          "n": 111,
+          "mean_r": -0.0624,
+          "se": 0.07,
+          "profit_factor": 0.82,
+          "win_rate": 0.4595
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 55,
+          "mean_r": 0.0997,
+          "se": 0.0989,
+          "profit_factor": 1.38,
+          "win_rate": 0.5636
+        },
+        "second_half": {
+          "n": 56,
+          "mean_r": -0.2216,
+          "se": 0.0951,
+          "profit_factor": 0.49,
+          "win_rate": 0.3571
+        },
+        "first": "2025-10-01",
+        "last": "2026-10-02"
+      },
+      "confirmation": {
+        "n": 0,
+        "gross": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_bot": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "second_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "first": null,
+        "last": null
+      },
+      "all": {
+        "n": 111,
+        "gross": {
+          "n": 111,
+          "mean_r": -0.0448,
+          "se": 0.07,
+          "profit_factor": 0.87,
+          "win_rate": 0.4775
+        },
+        "net_bot": {
+          "n": 111,
+          "mean_r": -0.0701,
+          "se": 0.07,
+          "profit_factor": 0.8,
+          "win_rate": 0.4595
+        },
+        "net": {
+          "n": 111,
+          "mean_r": -0.0624,
+          "se": 0.07,
+          "profit_factor": 0.82,
+          "win_rate": 0.4595
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 55,
+          "mean_r": 0.0997,
+          "se": 0.0989,
+          "profit_factor": 1.38,
+          "win_rate": 0.5636
+        },
+        "second_half": {
+          "n": 56,
+          "mean_r": -0.2216,
+          "se": 0.0951,
+          "profit_factor": 0.49,
+          "win_rate": 0.3571
+        },
+        "first": "2025-10-01",
+        "last": "2026-10-02"
+      },
+      "status": "écarté (découverte)"
+    },
+    "london_breakout:sp500": {
+      "strategy": "london_breakout",
+      "asset": "sp500",
+      "asset_label": "S&P 500 (ES)",
+      "discovery": {
+        "n": 186,
+        "gross": {
+          "n": 186,
+          "mean_r": -0.0634,
+          "se": 0.0681,
+          "profit_factor": 0.87,
+          "win_rate": 0.4624
+        },
+        "net_bot": {
+          "n": 186,
+          "mean_r": -0.0941,
+          "se": 0.068,
+          "profit_factor": 0.81,
+          "win_rate": 0.4624
+        },
+        "net": {
+          "n": 186,
+          "mean_r": -0.0847,
+          "se": 0.068,
+          "profit_factor": 0.83,
+          "win_rate": 0.4624
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 93,
+          "mean_r": -0.2265,
+          "se": 0.0974,
+          "profit_factor": 0.61,
+          "win_rate": 0.3871
+        },
+        "second_half": {
+          "n": 93,
+          "mean_r": 0.0571,
+          "se": 0.0933,
+          "profit_factor": 1.15,
+          "win_rate": 0.5376
+        },
+        "first": "2025-09-30",
+        "last": "2026-10-02"
+      },
+      "confirmation": {
+        "n": 0,
+        "gross": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_bot": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "second_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "first": null,
+        "last": null
+      },
+      "all": {
+        "n": 186,
+        "gross": {
+          "n": 186,
+          "mean_r": -0.0634,
+          "se": 0.0681,
+          "profit_factor": 0.87,
+          "win_rate": 0.4624
+        },
+        "net_bot": {
+          "n": 186,
+          "mean_r": -0.0941,
+          "se": 0.068,
+          "profit_factor": 0.81,
+          "win_rate": 0.4624
+        },
+        "net": {
+          "n": 186,
+          "mean_r": -0.0847,
+          "se": 0.068,
+          "profit_factor": 0.83,
+          "win_rate": 0.4624
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 93,
+          "mean_r": -0.2265,
+          "se": 0.0974,
+          "profit_factor": 0.61,
+          "win_rate": 0.3871
+        },
+        "second_half": {
+          "n": 93,
+          "mean_r": 0.0571,
+          "se": 0.0933,
+          "profit_factor": 1.15,
+          "win_rate": 0.5376
+        },
+        "first": "2025-09-30",
+        "last": "2026-10-02"
+      },
+      "status": "écarté (découverte)"
+    },
+    "donchian_1h:sp500": {
+      "strategy": "donchian_1h",
+      "asset": "sp500",
+      "asset_label": "S&P 500 (ES)",
+      "discovery": {
+        "n": 192,
+        "gross": {
+          "n": 192,
+          "mean_r": -0.1287,
+          "se": 0.0999,
+          "profit_factor": 0.78,
+          "win_rate": 0.3073
+        },
+        "net_bot": {
+          "n": 192,
+          "mean_r": -0.1525,
+          "se": 0.0999,
+          "profit_factor": 0.75,
+          "win_rate": 0.3021
+        },
+        "net": {
+          "n": 192,
+          "mean_r": -0.1452,
+          "se": 0.0999,
+          "profit_factor": 0.76,
+          "win_rate": 0.3073
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 96,
+          "mean_r": -0.1771,
+          "se": 0.1199,
+          "profit_factor": 0.69,
+          "win_rate": 0.2917
+        },
+        "second_half": {
+          "n": 96,
+          "mean_r": -0.1132,
+          "se": 0.1604,
+          "profit_factor": 0.82,
+          "win_rate": 0.3229
+        },
+        "first": "2025-09-30",
+        "last": "2026-10-02"
+      },
+      "confirmation": {
+        "n": 0,
+        "gross": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_bot": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "second_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "first": null,
+        "last": null
+      },
+      "all": {
+        "n": 192,
+        "gross": {
+          "n": 192,
+          "mean_r": -0.1287,
+          "se": 0.0999,
+          "profit_factor": 0.78,
+          "win_rate": 0.3073
+        },
+        "net_bot": {
+          "n": 192,
+          "mean_r": -0.1525,
+          "se": 0.0999,
+          "profit_factor": 0.75,
+          "win_rate": 0.3021
+        },
+        "net": {
+          "n": 192,
+          "mean_r": -0.1452,
+          "se": 0.0999,
+          "profit_factor": 0.76,
+          "win_rate": 0.3073
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 96,
+          "mean_r": -0.1771,
+          "se": 0.1199,
+          "profit_factor": 0.69,
+          "win_rate": 0.2917
+        },
+        "second_half": {
+          "n": 96,
+          "mean_r": -0.1132,
+          "se": 0.1604,
+          "profit_factor": 0.82,
+          "win_rate": 0.3229
+        },
+        "first": "2025-09-30",
+        "last": "2026-10-02"
+      },
+      "status": "écarté (découverte)"
+    },
+    "rsi2_1h:sp500": {
+      "strategy": "rsi2_1h",
+      "asset": "sp500",
+      "asset_label": "S&P 500 (ES)",
+      "discovery": {
+        "n": 218,
+        "gross": {
+          "n": 218,
+          "mean_r": -0.0418,
+          "se": 0.0434,
+          "profit_factor": 0.84,
+          "win_rate": 0.5826
+        },
+        "net_bot": {
+          "n": 218,
+          "mean_r": -0.0616,
+          "se": 0.0434,
+          "profit_factor": 0.78,
+          "win_rate": 0.5734
+        },
+        "net": {
+          "n": 218,
+          "mean_r": -0.0554,
+          "se": 0.0434,
+          "profit_factor": 0.8,
+          "win_rate": 0.5734
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 109,
+          "mean_r": -0.1077,
+          "se": 0.0646,
+          "profit_factor": 0.66,
+          "win_rate": 0.5505
+        },
+        "second_half": {
+          "n": 109,
+          "mean_r": -0.0032,
+          "se": 0.0579,
+          "profit_factor": 0.99,
+          "win_rate": 0.5963
+        },
+        "first": "2025-10-14",
+        "last": "2026-10-02"
+      },
+      "confirmation": {
+        "n": 0,
+        "gross": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_bot": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "second_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "first": null,
+        "last": null
+      },
+      "all": {
+        "n": 218,
+        "gross": {
+          "n": 218,
+          "mean_r": -0.0418,
+          "se": 0.0434,
+          "profit_factor": 0.84,
+          "win_rate": 0.5826
+        },
+        "net_bot": {
+          "n": 218,
+          "mean_r": -0.0616,
+          "se": 0.0434,
+          "profit_factor": 0.78,
+          "win_rate": 0.5734
+        },
+        "net": {
+          "n": 218,
+          "mean_r": -0.0554,
+          "se": 0.0434,
+          "profit_factor": 0.8,
+          "win_rate": 0.5734
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 109,
+          "mean_r": -0.1077,
+          "se": 0.0646,
+          "profit_factor": 0.66,
+          "win_rate": 0.5505
+        },
+        "second_half": {
+          "n": 109,
+          "mean_r": -0.0032,
+          "se": 0.0579,
+          "profit_factor": 0.99,
+          "win_rate": 0.5963
+        },
+        "first": "2025-10-14",
+        "last": "2026-10-02"
+      },
+      "status": "écarté (découverte)"
+    },
+    "orb5:bitcoin": {
+      "strategy": "orb5",
+      "asset": "bitcoin",
+      "asset_label": "Bitcoin (BTC/USD)",
+      "discovery": {
+        "n": 253,
+        "gross": {
+          "n": 253,
+          "mean_r": 0.0334,
+          "se": 0.1781,
+          "profit_factor": 1.04,
+          "win_rate": 0.1581
+        },
+        "net_bot": {
+          "n": 253,
+          "mean_r": -0.2523,
+          "se": 0.1788,
+          "profit_factor": 0.77,
+          "win_rate": 0.1542
+        },
+        "net": {
+          "n": 253,
+          "mean_r": -0.1717,
+          "se": 0.179,
+          "profit_factor": 0.83,
+          "win_rate": 0.1542
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 126,
+          "mean_r": -0.0231,
+          "se": 0.278,
+          "profit_factor": 0.98,
+          "win_rate": 0.1429
+        },
+        "second_half": {
+          "n": 127,
+          "mean_r": -0.3191,
+          "se": 0.2263,
+          "profit_factor": 0.7,
+          "win_rate": 0.1654
+        },
+        "first": "2025-10-01",
+        "last": "2026-10-02"
+      },
+      "confirmation": {
+        "n": 0,
+        "gross": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_bot": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "second_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "first": null,
+        "last": null
+      },
+      "all": {
+        "n": 253,
+        "gross": {
+          "n": 253,
+          "mean_r": 0.0334,
+          "se": 0.1781,
+          "profit_factor": 1.04,
+          "win_rate": 0.1581
+        },
+        "net_bot": {
+          "n": 253,
+          "mean_r": -0.2523,
+          "se": 0.1788,
+          "profit_factor": 0.77,
+          "win_rate": 0.1542
+        },
+        "net": {
+          "n": 253,
+          "mean_r": -0.1717,
+          "se": 0.179,
+          "profit_factor": 0.83,
+          "win_rate": 0.1542
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 126,
+          "mean_r": -0.0231,
+          "se": 0.278,
+          "profit_factor": 0.98,
+          "win_rate": 0.1429
+        },
+        "second_half": {
+          "n": 127,
+          "mean_r": -0.3191,
+          "se": 0.2263,
+          "profit_factor": 0.7,
+          "win_rate": 0.1654
+        },
+        "first": "2025-10-01",
+        "last": "2026-10-02"
+      },
+      "status": "écarté (découverte)"
+    },
+    "orb30:bitcoin": {
+      "strategy": "orb30",
+      "asset": "bitcoin",
+      "asset_label": "Bitcoin (BTC/USD)",
+      "discovery": {
+        "n": 237,
+        "gross": {
+          "n": 237,
+          "mean_r": 0.0873,
+          "se": 0.0766,
+          "profit_factor": 1.21,
+          "win_rate": 0.4726
+        },
+        "net_bot": {
+          "n": 237,
+          "mean_r": 0.0215,
+          "se": 0.0764,
+          "profit_factor": 1.05,
+          "win_rate": 0.4641
+        },
+        "net": {
+          "n": 237,
+          "mean_r": 0.04,
+          "se": 0.0765,
+          "profit_factor": 1.09,
+          "win_rate": 0.4684
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 118,
+          "mean_r": 0.1044,
+          "se": 0.1015,
+          "profit_factor": 1.26,
+          "win_rate": 0.5254
+        },
+        "second_half": {
+          "n": 119,
+          "mean_r": -0.0238,
+          "se": 0.1145,
+          "profit_factor": 0.95,
+          "win_rate": 0.4118
+        },
+        "first": "2025-10-01",
+        "last": "2026-10-02"
+      },
+      "confirmation": {
+        "n": 0,
+        "gross": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_bot": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "second_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "first": null,
+        "last": null
+      },
+      "all": {
+        "n": 237,
+        "gross": {
+          "n": 237,
+          "mean_r": 0.0873,
+          "se": 0.0766,
+          "profit_factor": 1.21,
+          "win_rate": 0.4726
+        },
+        "net_bot": {
+          "n": 237,
+          "mean_r": 0.0215,
+          "se": 0.0764,
+          "profit_factor": 1.05,
+          "win_rate": 0.4641
+        },
+        "net": {
+          "n": 237,
+          "mean_r": 0.04,
+          "se": 0.0765,
+          "profit_factor": 1.09,
+          "win_rate": 0.4684
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 118,
+          "mean_r": 0.1044,
+          "se": 0.1015,
+          "profit_factor": 1.26,
+          "win_rate": 0.5254
+        },
+        "second_half": {
+          "n": 119,
+          "mean_r": -0.0238,
+          "se": 0.1145,
+          "profit_factor": 0.95,
+          "win_rate": 0.4118
+        },
+        "first": "2025-10-01",
+        "last": "2026-10-02"
+      },
+      "status": "écarté (découverte)"
+    },
+    "intraday_mom:bitcoin": {
+      "strategy": "intraday_mom",
+      "asset": "bitcoin",
+      "asset_label": "Bitcoin (BTC/USD)",
+      "discovery": {
+        "n": 251,
+        "gross": {
+          "n": 251,
+          "mean_r": -0.0986,
+          "se": 0.0415,
+          "profit_factor": 0.69,
+          "win_rate": 0.4661
+        },
+        "net_bot": {
+          "n": 251,
+          "mean_r": -0.2739,
+          "se": 0.042,
+          "profit_factor": 0.36,
+          "win_rate": 0.3705
+        },
+        "net": {
+          "n": 251,
+          "mean_r": -0.2258,
+          "se": 0.0419,
+          "profit_factor": 0.43,
+          "win_rate": 0.4024
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 125,
+          "mean_r": -0.1685,
+          "se": 0.057,
+          "profit_factor": 0.52,
+          "win_rate": 0.456
+        },
+        "second_half": {
+          "n": 126,
+          "mean_r": -0.2827,
+          "se": 0.0612,
+          "profit_factor": 0.36,
+          "win_rate": 0.3492
+        },
+        "first": "2025-10-02",
+        "last": "2026-10-02"
+      },
+      "confirmation": {
+        "n": 0,
+        "gross": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_bot": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "second_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "first": null,
+        "last": null
+      },
+      "all": {
+        "n": 251,
+        "gross": {
+          "n": 251,
+          "mean_r": -0.0986,
+          "se": 0.0415,
+          "profit_factor": 0.69,
+          "win_rate": 0.4661
+        },
+        "net_bot": {
+          "n": 251,
+          "mean_r": -0.2739,
+          "se": 0.042,
+          "profit_factor": 0.36,
+          "win_rate": 0.3705
+        },
+        "net": {
+          "n": 251,
+          "mean_r": -0.2258,
+          "se": 0.0419,
+          "profit_factor": 0.43,
+          "win_rate": 0.4024
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 125,
+          "mean_r": -0.1685,
+          "se": 0.057,
+          "profit_factor": 0.52,
+          "win_rate": 0.456
+        },
+        "second_half": {
+          "n": 126,
+          "mean_r": -0.2827,
+          "se": 0.0612,
+          "profit_factor": 0.36,
+          "win_rate": 0.3492
+        },
+        "first": "2025-10-02",
+        "last": "2026-10-02"
+      },
+      "status": "écarté (découverte)"
+    },
+    "noise_area:bitcoin": {
+      "strategy": "noise_area",
+      "asset": "bitcoin",
+      "asset_label": "Bitcoin (BTC/USD)",
+      "discovery": {
+        "n": 216,
+        "gross": {
+          "n": 216,
+          "mean_r": 0.4621,
+          "se": 0.327,
+          "profit_factor": 1.47,
+          "win_rate": 0.3796
+        },
+        "net_bot": {
+          "n": 216,
+          "mean_r": 0.1559,
+          "se": 0.3264,
+          "profit_factor": 1.13,
+          "win_rate": 0.3287
+        },
+        "net": {
+          "n": 216,
+          "mean_r": 0.2443,
+          "se": 0.3265,
+          "profit_factor": 1.22,
+          "win_rate": 0.3472
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 108,
+          "mean_r": 0.4355,
+          "se": 0.3758,
+          "profit_factor": 1.44,
+          "win_rate": 0.4167
+        },
+        "second_half": {
+          "n": 108,
+          "mean_r": 0.0532,
+          "se": 0.5353,
+          "profit_factor": 1.04,
+          "win_rate": 0.2778
+        },
+        "first": "2025-10-21",
+        "last": "2026-09-15"
+      },
+      "confirmation": {
+        "n": 0,
+        "gross": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_bot": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "second_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "first": null,
+        "last": null
+      },
+      "all": {
+        "n": 216,
+        "gross": {
+          "n": 216,
+          "mean_r": 0.4621,
+          "se": 0.327,
+          "profit_factor": 1.47,
+          "win_rate": 0.3796
+        },
+        "net_bot": {
+          "n": 216,
+          "mean_r": 0.1559,
+          "se": 0.3264,
+          "profit_factor": 1.13,
+          "win_rate": 0.3287
+        },
+        "net": {
+          "n": 216,
+          "mean_r": 0.2443,
+          "se": 0.3265,
+          "profit_factor": 1.22,
+          "win_rate": 0.3472
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 108,
+          "mean_r": 0.4355,
+          "se": 0.3758,
+          "profit_factor": 1.44,
+          "win_rate": 0.4167
+        },
+        "second_half": {
+          "n": 108,
+          "mean_r": 0.0532,
+          "se": 0.5353,
+          "profit_factor": 1.04,
+          "win_rate": 0.2778
+        },
+        "first": "2025-10-21",
+        "last": "2026-09-15"
+      },
+      "status": "candidat : confirmation à venir"
+    },
+    "gap_fade:bitcoin": {
+      "strategy": "gap_fade",
+      "asset": "bitcoin",
+      "asset_label": "Bitcoin (BTC/USD)",
+      "discovery": {
+        "n": 80,
+        "gross": {
+          "n": 80,
+          "mean_r": 0.0126,
+          "se": 0.1076,
+          "profit_factor": 1.03,
+          "win_rate": 0.5
+        },
+        "net_bot": {
+          "n": 80,
+          "mean_r": -0.2038,
+          "se": 0.145,
+          "profit_factor": 0.67,
+          "win_rate": 0.4875
+        },
+        "net": {
+          "n": 80,
+          "mean_r": -0.1503,
+          "se": 0.1322,
+          "profit_factor": 0.74,
+          "win_rate": 0.5
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 40,
+          "mean_r": -0.2821,
+          "se": 0.2185,
+          "profit_factor": 0.59,
+          "win_rate": 0.475
+        },
+        "second_half": {
+          "n": 40,
+          "mean_r": -0.0186,
+          "se": 0.1489,
+          "profit_factor": 0.96,
+          "win_rate": 0.525
+        },
+        "first": "2025-10-03",
+        "last": "2026-09-16"
+      },
+      "confirmation": {
+        "n": 0,
+        "gross": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_bot": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "second_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "first": null,
+        "last": null
+      },
+      "all": {
+        "n": 80,
+        "gross": {
+          "n": 80,
+          "mean_r": 0.0126,
+          "se": 0.1076,
+          "profit_factor": 1.03,
+          "win_rate": 0.5
+        },
+        "net_bot": {
+          "n": 80,
+          "mean_r": -0.2038,
+          "se": 0.145,
+          "profit_factor": 0.67,
+          "win_rate": 0.4875
+        },
+        "net": {
+          "n": 80,
+          "mean_r": -0.1503,
+          "se": 0.1322,
+          "profit_factor": 0.74,
+          "win_rate": 0.5
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 40,
+          "mean_r": -0.2821,
+          "se": 0.2185,
+          "profit_factor": 0.59,
+          "win_rate": 0.475
+        },
+        "second_half": {
+          "n": 40,
+          "mean_r": -0.0186,
+          "se": 0.1489,
+          "profit_factor": 0.96,
+          "win_rate": 0.525
+        },
+        "first": "2025-10-03",
+        "last": "2026-09-16"
+      },
+      "status": "écarté (découverte)"
+    },
+    "london_breakout:bitcoin": {
+      "strategy": "london_breakout",
+      "asset": "bitcoin",
+      "asset_label": "Bitcoin (BTC/USD)",
+      "discovery": {
+        "n": 154,
+        "gross": {
+          "n": 154,
+          "mean_r": 0.0053,
+          "se": 0.0628,
+          "profit_factor": 1.02,
+          "win_rate": 0.474
+        },
+        "net_bot": {
+          "n": 154,
+          "mean_r": -0.0372,
+          "se": 0.0627,
+          "profit_factor": 0.9,
+          "win_rate": 0.474
+        },
+        "net": {
+          "n": 154,
+          "mean_r": -0.025,
+          "se": 0.0627,
+          "profit_factor": 0.93,
+          "win_rate": 0.474
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 77,
+          "mean_r": -0.0686,
+          "se": 0.0868,
+          "profit_factor": 0.81,
+          "win_rate": 0.4416
+        },
+        "second_half": {
+          "n": 77,
+          "mean_r": 0.0186,
+          "se": 0.0909,
+          "profit_factor": 1.05,
+          "win_rate": 0.5065
+        },
+        "first": "2025-10-01",
+        "last": "2026-10-01"
+      },
+      "confirmation": {
+        "n": 0,
+        "gross": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_bot": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "second_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "first": null,
+        "last": null
+      },
+      "all": {
+        "n": 154,
+        "gross": {
+          "n": 154,
+          "mean_r": 0.0053,
+          "se": 0.0628,
+          "profit_factor": 1.02,
+          "win_rate": 0.474
+        },
+        "net_bot": {
+          "n": 154,
+          "mean_r": -0.0372,
+          "se": 0.0627,
+          "profit_factor": 0.9,
+          "win_rate": 0.474
+        },
+        "net": {
+          "n": 154,
+          "mean_r": -0.025,
+          "se": 0.0627,
+          "profit_factor": 0.93,
+          "win_rate": 0.474
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 77,
+          "mean_r": -0.0686,
+          "se": 0.0868,
+          "profit_factor": 0.81,
+          "win_rate": 0.4416
+        },
+        "second_half": {
+          "n": 77,
+          "mean_r": 0.0186,
+          "se": 0.0909,
+          "profit_factor": 1.05,
+          "win_rate": 0.5065
+        },
+        "first": "2025-10-01",
+        "last": "2026-10-01"
+      },
+      "status": "écarté (découverte)"
+    },
+    "donchian_1h:bitcoin": {
+      "strategy": "donchian_1h",
+      "asset": "bitcoin",
+      "asset_label": "Bitcoin (BTC/USD)",
+      "discovery": {
+        "n": 254,
+        "gross": {
+          "n": 254,
+          "mean_r": 0.0922,
+          "se": 0.1575,
+          "profit_factor": 1.17,
+          "win_rate": 0.3071
+        },
+        "net_bot": {
+          "n": 254,
+          "mean_r": 0.0329,
+          "se": 0.1575,
+          "profit_factor": 1.06,
+          "win_rate": 0.2953
+        },
+        "net": {
+          "n": 254,
+          "mean_r": 0.0494,
+          "se": 0.1575,
+          "profit_factor": 1.09,
+          "win_rate": 0.2953
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 127,
+          "mean_r": 0.066,
+          "se": 0.1489,
+          "profit_factor": 1.12,
+          "win_rate": 0.315
+        },
+        "second_half": {
+          "n": 127,
+          "mean_r": 0.0328,
+          "se": 0.2783,
+          "profit_factor": 1.06,
+          "win_rate": 0.2756
+        },
+        "first": "2025-10-02",
+        "last": "2026-10-03"
+      },
+      "confirmation": {
+        "n": 0,
+        "gross": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_bot": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "second_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "first": null,
+        "last": null
+      },
+      "all": {
+        "n": 254,
+        "gross": {
+          "n": 254,
+          "mean_r": 0.0922,
+          "se": 0.1575,
+          "profit_factor": 1.17,
+          "win_rate": 0.3071
+        },
+        "net_bot": {
+          "n": 254,
+          "mean_r": 0.0329,
+          "se": 0.1575,
+          "profit_factor": 1.06,
+          "win_rate": 0.2953
+        },
+        "net": {
+          "n": 254,
+          "mean_r": 0.0494,
+          "se": 0.1575,
+          "profit_factor": 1.09,
+          "win_rate": 0.2953
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 127,
+          "mean_r": 0.066,
+          "se": 0.1489,
+          "profit_factor": 1.12,
+          "win_rate": 0.315
+        },
+        "second_half": {
+          "n": 127,
+          "mean_r": 0.0328,
+          "se": 0.2783,
+          "profit_factor": 1.06,
+          "win_rate": 0.2756
+        },
+        "first": "2025-10-02",
+        "last": "2026-10-03"
+      },
+      "status": "écarté (découverte)"
+    },
+    "rsi2_1h:bitcoin": {
+      "strategy": "rsi2_1h",
+      "asset": "bitcoin",
+      "asset_label": "Bitcoin (BTC/USD)",
+      "discovery": {
+        "n": 352,
+        "gross": {
+          "n": 352,
+          "mean_r": -0.0403,
+          "se": 0.0297,
+          "profit_factor": 0.83,
+          "win_rate": 0.6534
+        },
+        "net_bot": {
+          "n": 352,
+          "mean_r": -0.0866,
+          "se": 0.0298,
+          "profit_factor": 0.66,
+          "win_rate": 0.5881
+        },
+        "net": {
+          "n": 352,
+          "mean_r": -0.0742,
+          "se": 0.0298,
+          "profit_factor": 0.7,
+          "win_rate": 0.6108
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 176,
+          "mean_r": -0.1167,
+          "se": 0.0422,
+          "profit_factor": 0.57,
+          "win_rate": 0.5455
+        },
+        "second_half": {
+          "n": 176,
+          "mean_r": -0.0317,
+          "se": 0.0419,
+          "profit_factor": 0.86,
+          "win_rate": 0.6761
+        },
+        "first": "2025-10-09",
+        "last": "2026-10-03"
+      },
+      "confirmation": {
+        "n": 0,
+        "gross": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_bot": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "second_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "first": null,
+        "last": null
+      },
+      "all": {
+        "n": 352,
+        "gross": {
+          "n": 352,
+          "mean_r": -0.0403,
+          "se": 0.0297,
+          "profit_factor": 0.83,
+          "win_rate": 0.6534
+        },
+        "net_bot": {
+          "n": 352,
+          "mean_r": -0.0866,
+          "se": 0.0298,
+          "profit_factor": 0.66,
+          "win_rate": 0.5881
+        },
+        "net": {
+          "n": 352,
+          "mean_r": -0.0742,
+          "se": 0.0298,
+          "profit_factor": 0.7,
+          "win_rate": 0.6108
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 176,
+          "mean_r": -0.1167,
+          "se": 0.0422,
+          "profit_factor": 0.57,
+          "win_rate": 0.5455
+        },
+        "second_half": {
+          "n": 176,
+          "mean_r": -0.0317,
+          "se": 0.0419,
+          "profit_factor": 0.86,
+          "win_rate": 0.6761
+        },
+        "first": "2025-10-09",
+        "last": "2026-10-03"
+      },
+      "status": "écarté (découverte)"
+    },
+    "orb5:ethereum": {
+      "strategy": "orb5",
+      "asset": "ethereum",
+      "asset_label": "Ethereum (ETH/USD)",
+      "discovery": {
+        "n": 253,
+        "gross": {
+          "n": 253,
+          "mean_r": 0.1842,
+          "se": 0.181,
+          "profit_factor": 1.23,
+          "win_rate": 0.1897
+        },
+        "net_bot": {
+          "n": 253,
+          "mean_r": -0.1035,
+          "se": 0.1789,
+          "profit_factor": 0.9,
+          "win_rate": 0.1897
+        },
+        "net": {
+          "n": 253,
+          "mean_r": -1.0086,
+          "se": 0.1842,
+          "profit_factor": 0.43,
+          "win_rate": 0.1779
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 126,
+          "mean_r": -0.427,
+          "se": 0.2584,
+          "profit_factor": 0.68,
+          "win_rate": 0.2143
+        },
+        "second_half": {
+          "n": 127,
+          "mean_r": -1.5857,
+          "se": 0.2533,
+          "profit_factor": 0.27,
+          "win_rate": 0.1417
+        },
+        "first": "2025-10-01",
+        "last": "2026-10-02"
+      },
+      "confirmation": {
+        "n": 0,
+        "gross": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_bot": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "second_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "first": null,
+        "last": null
+      },
+      "all": {
+        "n": 253,
+        "gross": {
+          "n": 253,
+          "mean_r": 0.1842,
+          "se": 0.181,
+          "profit_factor": 1.23,
+          "win_rate": 0.1897
+        },
+        "net_bot": {
+          "n": 253,
+          "mean_r": -0.1035,
+          "se": 0.1789,
+          "profit_factor": 0.9,
+          "win_rate": 0.1897
+        },
+        "net": {
+          "n": 253,
+          "mean_r": -1.0086,
+          "se": 0.1842,
+          "profit_factor": 0.43,
+          "win_rate": 0.1779
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 126,
+          "mean_r": -0.427,
+          "se": 0.2584,
+          "profit_factor": 0.68,
+          "win_rate": 0.2143
+        },
+        "second_half": {
+          "n": 127,
+          "mean_r": -1.5857,
+          "se": 0.2533,
+          "profit_factor": 0.27,
+          "win_rate": 0.1417
+        },
+        "first": "2025-10-01",
+        "last": "2026-10-02"
+      },
+      "status": "écarté (découverte)"
+    },
+    "orb30:ethereum": {
+      "strategy": "orb30",
+      "asset": "ethereum",
+      "asset_label": "Ethereum (ETH/USD)",
+      "discovery": {
+        "n": 232,
+        "gross": {
+          "n": 232,
+          "mean_r": 0.232,
+          "se": 0.0998,
+          "profit_factor": 1.6,
+          "win_rate": 0.4957
+        },
+        "net_bot": {
+          "n": 232,
+          "mean_r": 0.1624,
+          "se": 0.0996,
+          "profit_factor": 1.38,
+          "win_rate": 0.4655
+        },
+        "net": {
+          "n": 232,
+          "mean_r": -0.0563,
+          "se": 0.0995,
+          "profit_factor": 0.9,
+          "win_rate": 0.4181
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 116,
+          "mean_r": 0.0551,
+          "se": 0.1194,
+          "profit_factor": 1.12,
+          "win_rate": 0.4741
+        },
+        "second_half": {
+          "n": 116,
+          "mean_r": -0.1677,
+          "se": 0.1592,
+          "profit_factor": 0.74,
+          "win_rate": 0.3621
+        },
+        "first": "2025-10-01",
+        "last": "2026-10-02"
+      },
+      "confirmation": {
+        "n": 0,
+        "gross": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_bot": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "second_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "first": null,
+        "last": null
+      },
+      "all": {
+        "n": 232,
+        "gross": {
+          "n": 232,
+          "mean_r": 0.232,
+          "se": 0.0998,
+          "profit_factor": 1.6,
+          "win_rate": 0.4957
+        },
+        "net_bot": {
+          "n": 232,
+          "mean_r": 0.1624,
+          "se": 0.0996,
+          "profit_factor": 1.38,
+          "win_rate": 0.4655
+        },
+        "net": {
+          "n": 232,
+          "mean_r": -0.0563,
+          "se": 0.0995,
+          "profit_factor": 0.9,
+          "win_rate": 0.4181
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 116,
+          "mean_r": 0.0551,
+          "se": 0.1194,
+          "profit_factor": 1.12,
+          "win_rate": 0.4741
+        },
+        "second_half": {
+          "n": 116,
+          "mean_r": -0.1677,
+          "se": 0.1592,
+          "profit_factor": 0.74,
+          "win_rate": 0.3621
+        },
+        "first": "2025-10-01",
+        "last": "2026-10-02"
+      },
+      "status": "écarté (découverte)"
+    },
+    "intraday_mom:ethereum": {
+      "strategy": "intraday_mom",
+      "asset": "ethereum",
+      "asset_label": "Ethereum (ETH/USD)",
+      "discovery": {
+        "n": 251,
+        "gross": {
+          "n": 251,
+          "mean_r": -0.0707,
+          "se": 0.0416,
+          "profit_factor": 0.76,
+          "win_rate": 0.4343
+        },
+        "net_bot": {
+          "n": 251,
+          "mean_r": -0.2438,
+          "se": 0.0422,
+          "profit_factor": 0.4,
+          "win_rate": 0.3347
+        },
+        "net": {
+          "n": 251,
+          "mean_r": -0.7991,
+          "se": 0.05,
+          "profit_factor": 0.08,
+          "win_rate": 0.1554
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 125,
+          "mean_r": -0.5386,
+          "se": 0.0631,
+          "profit_factor": 0.14,
+          "win_rate": 0.216
+        },
+        "second_half": {
+          "n": 126,
+          "mean_r": -1.0576,
+          "se": 0.0704,
+          "profit_factor": 0.04,
+          "win_rate": 0.0952
+        },
+        "first": "2025-10-02",
+        "last": "2026-10-02"
+      },
+      "confirmation": {
+        "n": 0,
+        "gross": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_bot": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "second_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "first": null,
+        "last": null
+      },
+      "all": {
+        "n": 251,
+        "gross": {
+          "n": 251,
+          "mean_r": -0.0707,
+          "se": 0.0416,
+          "profit_factor": 0.76,
+          "win_rate": 0.4343
+        },
+        "net_bot": {
+          "n": 251,
+          "mean_r": -0.2438,
+          "se": 0.0422,
+          "profit_factor": 0.4,
+          "win_rate": 0.3347
+        },
+        "net": {
+          "n": 251,
+          "mean_r": -0.7991,
+          "se": 0.05,
+          "profit_factor": 0.08,
+          "win_rate": 0.1554
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 125,
+          "mean_r": -0.5386,
+          "se": 0.0631,
+          "profit_factor": 0.14,
+          "win_rate": 0.216
+        },
+        "second_half": {
+          "n": 126,
+          "mean_r": -1.0576,
+          "se": 0.0704,
+          "profit_factor": 0.04,
+          "win_rate": 0.0952
+        },
+        "first": "2025-10-02",
+        "last": "2026-10-02"
+      },
+      "status": "écarté (découverte)"
+    },
+    "noise_area:ethereum": {
+      "strategy": "noise_area",
+      "asset": "ethereum",
+      "asset_label": "Ethereum (ETH/USD)",
+      "discovery": {
+        "n": 213,
+        "gross": {
+          "n": 213,
+          "mean_r": 0.1816,
+          "se": 0.2665,
+          "profit_factor": 1.18,
+          "win_rate": 0.3991
+        },
+        "net_bot": {
+          "n": 213,
+          "mean_r": -0.1107,
+          "se": 0.2663,
+          "profit_factor": 0.91,
+          "win_rate": 0.3568
+        },
+        "net": {
+          "n": 213,
+          "mean_r": -1.0266,
+          "se": 0.2737,
+          "profit_factor": 0.45,
+          "win_rate": 0.2488
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 106,
+          "mean_r": -0.2388,
+          "se": 0.3293,
+          "profit_factor": 0.82,
+          "win_rate": 0.3208
+        },
+        "second_half": {
+          "n": 107,
+          "mean_r": -1.807,
+          "se": 0.4245,
+          "profit_factor": 0.26,
+          "win_rate": 0.1776
+        },
+        "first": "2025-10-21",
+        "last": "2026-10-02"
+      },
+      "confirmation": {
+        "n": 0,
+        "gross": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_bot": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "second_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "first": null,
+        "last": null
+      },
+      "all": {
+        "n": 213,
+        "gross": {
+          "n": 213,
+          "mean_r": 0.1816,
+          "se": 0.2665,
+          "profit_factor": 1.18,
+          "win_rate": 0.3991
+        },
+        "net_bot": {
+          "n": 213,
+          "mean_r": -0.1107,
+          "se": 0.2663,
+          "profit_factor": 0.91,
+          "win_rate": 0.3568
+        },
+        "net": {
+          "n": 213,
+          "mean_r": -1.0266,
+          "se": 0.2737,
+          "profit_factor": 0.45,
+          "win_rate": 0.2488
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 106,
+          "mean_r": -0.2388,
+          "se": 0.3293,
+          "profit_factor": 0.82,
+          "win_rate": 0.3208
+        },
+        "second_half": {
+          "n": 107,
+          "mean_r": -1.807,
+          "se": 0.4245,
+          "profit_factor": 0.26,
+          "win_rate": 0.1776
+        },
+        "first": "2025-10-21",
+        "last": "2026-10-02"
+      },
+      "status": "écarté (découverte)"
+    },
+    "gap_fade:ethereum": {
+      "strategy": "gap_fade",
+      "asset": "ethereum",
+      "asset_label": "Ethereum (ETH/USD)",
+      "discovery": {
+        "n": 55,
+        "gross": {
+          "n": 55,
+          "mean_r": 0.1537,
+          "se": 0.1261,
+          "profit_factor": 1.4,
+          "win_rate": 0.5818
+        },
+        "net_bot": {
+          "n": 55,
+          "mean_r": -0.0691,
+          "se": 0.153,
+          "profit_factor": 0.87,
+          "win_rate": 0.5818
+        },
+        "net": {
+          "n": 55,
+          "mean_r": -0.8638,
+          "se": 0.364,
+          "profit_factor": 0.21,
+          "win_rate": 0.4909
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 27,
+          "mean_r": -0.9392,
+          "se": 0.6799,
+          "profit_factor": 0.25,
+          "win_rate": 0.5556
+        },
+        "second_half": {
+          "n": 28,
+          "mean_r": -0.7912,
+          "se": 0.3014,
+          "profit_factor": 0.17,
+          "win_rate": 0.4286
+        },
+        "first": "2025-10-07",
+        "last": "2026-09-16"
+      },
+      "confirmation": {
+        "n": 0,
+        "gross": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_bot": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "second_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "first": null,
+        "last": null
+      },
+      "all": {
+        "n": 55,
+        "gross": {
+          "n": 55,
+          "mean_r": 0.1537,
+          "se": 0.1261,
+          "profit_factor": 1.4,
+          "win_rate": 0.5818
+        },
+        "net_bot": {
+          "n": 55,
+          "mean_r": -0.0691,
+          "se": 0.153,
+          "profit_factor": 0.87,
+          "win_rate": 0.5818
+        },
+        "net": {
+          "n": 55,
+          "mean_r": -0.8638,
+          "se": 0.364,
+          "profit_factor": 0.21,
+          "win_rate": 0.4909
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 27,
+          "mean_r": -0.9392,
+          "se": 0.6799,
+          "profit_factor": 0.25,
+          "win_rate": 0.5556
+        },
+        "second_half": {
+          "n": 28,
+          "mean_r": -0.7912,
+          "se": 0.3014,
+          "profit_factor": 0.17,
+          "win_rate": 0.4286
+        },
+        "first": "2025-10-07",
+        "last": "2026-09-16"
+      },
+      "status": "écarté (découverte)"
+    },
+    "london_breakout:ethereum": {
+      "strategy": "london_breakout",
+      "asset": "ethereum",
+      "asset_label": "Ethereum (ETH/USD)",
+      "discovery": {
+        "n": 144,
+        "gross": {
+          "n": 144,
+          "mean_r": -0.0382,
+          "se": 0.0622,
+          "profit_factor": 0.89,
+          "win_rate": 0.4583
+        },
+        "net_bot": {
+          "n": 144,
+          "mean_r": -0.0818,
+          "se": 0.0621,
+          "profit_factor": 0.78,
+          "win_rate": 0.4514
+        },
+        "net": {
+          "n": 144,
+          "mean_r": -0.2199,
+          "se": 0.062,
+          "profit_factor": 0.5,
+          "win_rate": 0.4028
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 72,
+          "mean_r": -0.1873,
+          "se": 0.0833,
+          "profit_factor": 0.53,
+          "win_rate": 0.4167
+        },
+        "second_half": {
+          "n": 72,
+          "mean_r": -0.2526,
+          "se": 0.0924,
+          "profit_factor": 0.48,
+          "win_rate": 0.3889
+        },
+        "first": "2025-10-01",
+        "last": "2026-10-02"
+      },
+      "confirmation": {
+        "n": 0,
+        "gross": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_bot": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "second_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "first": null,
+        "last": null
+      },
+      "all": {
+        "n": 144,
+        "gross": {
+          "n": 144,
+          "mean_r": -0.0382,
+          "se": 0.0622,
+          "profit_factor": 0.89,
+          "win_rate": 0.4583
+        },
+        "net_bot": {
+          "n": 144,
+          "mean_r": -0.0818,
+          "se": 0.0621,
+          "profit_factor": 0.78,
+          "win_rate": 0.4514
+        },
+        "net": {
+          "n": 144,
+          "mean_r": -0.2199,
+          "se": 0.062,
+          "profit_factor": 0.5,
+          "win_rate": 0.4028
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 72,
+          "mean_r": -0.1873,
+          "se": 0.0833,
+          "profit_factor": 0.53,
+          "win_rate": 0.4167
+        },
+        "second_half": {
+          "n": 72,
+          "mean_r": -0.2526,
+          "se": 0.0924,
+          "profit_factor": 0.48,
+          "win_rate": 0.3889
+        },
+        "first": "2025-10-01",
+        "last": "2026-10-02"
+      },
+      "status": "écarté (découverte)"
+    },
+    "donchian_1h:ethereum": {
+      "strategy": "donchian_1h",
+      "asset": "ethereum",
+      "asset_label": "Ethereum (ETH/USD)",
+      "discovery": {
+        "n": 245,
+        "gross": {
+          "n": 245,
+          "mean_r": 0.0615,
+          "se": 0.1576,
+          "profit_factor": 1.11,
+          "win_rate": 0.3143
+        },
+        "net_bot": {
+          "n": 245,
+          "mean_r": 0.0073,
+          "se": 0.1576,
+          "profit_factor": 1.01,
+          "win_rate": 0.3061
+        },
+        "net": {
+          "n": 245,
+          "mean_r": -0.1642,
+          "se": 0.1575,
+          "profit_factor": 0.78,
+          "win_rate": 0.2735
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 122,
+          "mean_r": -0.0178,
+          "se": 0.1809,
+          "profit_factor": 0.97,
+          "win_rate": 0.3115
+        },
+        "second_half": {
+          "n": 123,
+          "mean_r": -0.3094,
+          "se": 0.2575,
+          "profit_factor": 0.63,
+          "win_rate": 0.2358
+        },
+        "first": "2025-10-02",
+        "last": "2026-10-02"
+      },
+      "confirmation": {
+        "n": 0,
+        "gross": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_bot": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "second_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "first": null,
+        "last": null
+      },
+      "all": {
+        "n": 245,
+        "gross": {
+          "n": 245,
+          "mean_r": 0.0615,
+          "se": 0.1576,
+          "profit_factor": 1.11,
+          "win_rate": 0.3143
+        },
+        "net_bot": {
+          "n": 245,
+          "mean_r": 0.0073,
+          "se": 0.1576,
+          "profit_factor": 1.01,
+          "win_rate": 0.3061
+        },
+        "net": {
+          "n": 245,
+          "mean_r": -0.1642,
+          "se": 0.1575,
+          "profit_factor": 0.78,
+          "win_rate": 0.2735
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 122,
+          "mean_r": -0.0178,
+          "se": 0.1809,
+          "profit_factor": 0.97,
+          "win_rate": 0.3115
+        },
+        "second_half": {
+          "n": 123,
+          "mean_r": -0.3094,
+          "se": 0.2575,
+          "profit_factor": 0.63,
+          "win_rate": 0.2358
+        },
+        "first": "2025-10-02",
+        "last": "2026-10-02"
+      },
+      "status": "écarté (découverte)"
+    },
+    "rsi2_1h:ethereum": {
+      "strategy": "rsi2_1h",
+      "asset": "ethereum",
+      "asset_label": "Ethereum (ETH/USD)",
+      "discovery": {
+        "n": 342,
+        "gross": {
+          "n": 342,
+          "mean_r": 0.0248,
+          "se": 0.0305,
+          "profit_factor": 1.12,
+          "win_rate": 0.6374
+        },
+        "net_bot": {
+          "n": 342,
+          "mean_r": -0.0196,
+          "se": 0.0305,
+          "profit_factor": 0.91,
+          "win_rate": 0.6111
+        },
+        "net": {
+          "n": 342,
+          "mean_r": -0.1631,
+          "se": 0.0312,
+          "profit_factor": 0.45,
+          "win_rate": 0.4825
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 171,
+          "mean_r": -0.1085,
+          "se": 0.0445,
+          "profit_factor": 0.6,
+          "win_rate": 0.538
+        },
+        "second_half": {
+          "n": 171,
+          "mean_r": -0.2177,
+          "se": 0.0435,
+          "profit_factor": 0.33,
+          "win_rate": 0.4269
+        },
+        "first": "2025-10-09",
+        "last": "2026-10-02"
+      },
+      "confirmation": {
+        "n": 0,
+        "gross": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_bot": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "second_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "first": null,
+        "last": null
+      },
+      "all": {
+        "n": 342,
+        "gross": {
+          "n": 342,
+          "mean_r": 0.0248,
+          "se": 0.0305,
+          "profit_factor": 1.12,
+          "win_rate": 0.6374
+        },
+        "net_bot": {
+          "n": 342,
+          "mean_r": -0.0196,
+          "se": 0.0305,
+          "profit_factor": 0.91,
+          "win_rate": 0.6111
+        },
+        "net": {
+          "n": 342,
+          "mean_r": -0.1631,
+          "se": 0.0312,
+          "profit_factor": 0.45,
+          "win_rate": 0.4825
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 171,
+          "mean_r": -0.1085,
+          "se": 0.0445,
+          "profit_factor": 0.6,
+          "win_rate": 0.538
+        },
+        "second_half": {
+          "n": 171,
+          "mean_r": -0.2177,
+          "se": 0.0435,
+          "profit_factor": 0.33,
+          "win_rate": 0.4269
+        },
+        "first": "2025-10-09",
+        "last": "2026-10-02"
+      },
+      "status": "écarté (découverte)"
+    },
+    "orb5:gold": {
+      "strategy": "orb5",
+      "asset": "gold",
+      "asset_label": "Or (XAU/USD)",
+      "discovery": {
+        "n": 245,
+        "gross": {
+          "n": 245,
+          "mean_r": -0.0625,
+          "se": 0.1642,
+          "profit_factor": 0.93,
+          "win_rate": 0.1592
+        },
+        "net_bot": {
+          "n": 245,
+          "mean_r": -0.2071,
+          "se": 0.1647,
+          "profit_factor": 0.78,
+          "win_rate": 0.1592
+        },
+        "net": {
+          "n": 245,
+          "mean_r": -0.1104,
+          "se": 0.1643,
+          "profit_factor": 0.87,
+          "win_rate": 0.1592
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 122,
+          "mean_r": 0.2206,
+          "se": 0.2671,
+          "profit_factor": 1.27,
+          "win_rate": 0.1967
+        },
+        "second_half": {
+          "n": 123,
+          "mean_r": -0.4388,
+          "se": 0.1888,
+          "profit_factor": 0.52,
+          "win_rate": 0.122
+        },
+        "first": "2025-09-29",
+        "last": "2026-10-02"
+      },
+      "confirmation": {
+        "n": 0,
+        "gross": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_bot": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "second_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "first": null,
+        "last": null
+      },
+      "all": {
+        "n": 245,
+        "gross": {
+          "n": 245,
+          "mean_r": -0.0625,
+          "se": 0.1642,
+          "profit_factor": 0.93,
+          "win_rate": 0.1592
+        },
+        "net_bot": {
+          "n": 245,
+          "mean_r": -0.2071,
+          "se": 0.1647,
+          "profit_factor": 0.78,
+          "win_rate": 0.1592
+        },
+        "net": {
+          "n": 245,
+          "mean_r": -0.1104,
+          "se": 0.1643,
+          "profit_factor": 0.87,
+          "win_rate": 0.1592
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 122,
+          "mean_r": 0.2206,
+          "se": 0.2671,
+          "profit_factor": 1.27,
+          "win_rate": 0.1967
+        },
+        "second_half": {
+          "n": 123,
+          "mean_r": -0.4388,
+          "se": 0.1888,
+          "profit_factor": 0.52,
+          "win_rate": 0.122
+        },
+        "first": "2025-09-29",
+        "last": "2026-10-02"
+      },
+      "status": "écarté (découverte)"
+    },
+    "orb30:gold": {
+      "strategy": "orb30",
+      "asset": "gold",
+      "asset_label": "Or (XAU/USD)",
+      "discovery": {
+        "n": 227,
+        "gross": {
+          "n": 227,
+          "mean_r": -0.0078,
+          "se": 0.0668,
+          "profit_factor": 0.98,
+          "win_rate": 0.4361
+        },
+        "net_bot": {
+          "n": 227,
+          "mean_r": -0.0449,
+          "se": 0.0669,
+          "profit_factor": 0.9,
+          "win_rate": 0.4229
+        },
+        "net": {
+          "n": 227,
+          "mean_r": -0.0202,
+          "se": 0.0669,
+          "profit_factor": 0.95,
+          "win_rate": 0.4361
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 113,
+          "mean_r": 0.0097,
+          "se": 0.0949,
+          "profit_factor": 1.02,
+          "win_rate": 0.4513
+        },
+        "second_half": {
+          "n": 114,
+          "mean_r": -0.0497,
+          "se": 0.0946,
+          "profit_factor": 0.89,
+          "win_rate": 0.4211
+        },
+        "first": "2025-09-29",
+        "last": "2026-10-02"
+      },
+      "confirmation": {
+        "n": 0,
+        "gross": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_bot": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "second_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "first": null,
+        "last": null
+      },
+      "all": {
+        "n": 227,
+        "gross": {
+          "n": 227,
+          "mean_r": -0.0078,
+          "se": 0.0668,
+          "profit_factor": 0.98,
+          "win_rate": 0.4361
+        },
+        "net_bot": {
+          "n": 227,
+          "mean_r": -0.0449,
+          "se": 0.0669,
+          "profit_factor": 0.9,
+          "win_rate": 0.4229
+        },
+        "net": {
+          "n": 227,
+          "mean_r": -0.0202,
+          "se": 0.0669,
+          "profit_factor": 0.95,
+          "win_rate": 0.4361
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 113,
+          "mean_r": 0.0097,
+          "se": 0.0949,
+          "profit_factor": 1.02,
+          "win_rate": 0.4513
+        },
+        "second_half": {
+          "n": 114,
+          "mean_r": -0.0497,
+          "se": 0.0946,
+          "profit_factor": 0.89,
+          "win_rate": 0.4211
+        },
+        "first": "2025-09-29",
+        "last": "2026-10-02"
+      },
+      "status": "écarté (découverte)"
+    },
+    "intraday_mom:gold": {
+      "strategy": "intraday_mom",
+      "asset": "gold",
+      "asset_label": "Or (XAU/USD)",
+      "discovery": {
+        "n": 215,
+        "gross": {
+          "n": 215,
+          "mean_r": 0.0608,
+          "se": 0.0465,
+          "profit_factor": 1.26,
+          "win_rate": 0.5256
+        },
+        "net_bot": {
+          "n": 215,
+          "mean_r": -0.0385,
+          "se": 0.047,
+          "profit_factor": 0.87,
+          "win_rate": 0.4605
+        },
+        "net": {
+          "n": 215,
+          "mean_r": 0.0278,
+          "se": 0.0467,
+          "profit_factor": 1.11,
+          "win_rate": 0.4977
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 107,
+          "mean_r": -0.0041,
+          "se": 0.0663,
+          "profit_factor": 0.99,
+          "win_rate": 0.4766
+        },
+        "second_half": {
+          "n": 108,
+          "mean_r": 0.0594,
+          "se": 0.066,
+          "profit_factor": 1.26,
+          "win_rate": 0.5185
+        },
+        "first": "2025-09-30",
+        "last": "2026-10-02"
+      },
+      "confirmation": {
+        "n": 0,
+        "gross": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_bot": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "second_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "first": null,
+        "last": null
+      },
+      "all": {
+        "n": 215,
+        "gross": {
+          "n": 215,
+          "mean_r": 0.0608,
+          "se": 0.0465,
+          "profit_factor": 1.26,
+          "win_rate": 0.5256
+        },
+        "net_bot": {
+          "n": 215,
+          "mean_r": -0.0385,
+          "se": 0.047,
+          "profit_factor": 0.87,
+          "win_rate": 0.4605
+        },
+        "net": {
+          "n": 215,
+          "mean_r": 0.0278,
+          "se": 0.0467,
+          "profit_factor": 1.11,
+          "win_rate": 0.4977
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 107,
+          "mean_r": -0.0041,
+          "se": 0.0663,
+          "profit_factor": 0.99,
+          "win_rate": 0.4766
+        },
+        "second_half": {
+          "n": 108,
+          "mean_r": 0.0594,
+          "se": 0.066,
+          "profit_factor": 1.26,
+          "win_rate": 0.5185
+        },
+        "first": "2025-09-30",
+        "last": "2026-10-02"
+      },
+      "status": "écarté (découverte)"
+    },
+    "noise_area:gold": {
+      "strategy": "noise_area",
+      "asset": "gold",
+      "asset_label": "Or (XAU/USD)",
+      "discovery": {
+        "n": 185,
+        "gross": {
+          "n": 185,
+          "mean_r": -0.0214,
+          "se": 0.2432,
+          "profit_factor": 0.98,
+          "win_rate": 0.3459
+        },
+        "net_bot": {
+          "n": 185,
+          "mean_r": -0.1934,
+          "se": 0.2431,
+          "profit_factor": 0.85,
+          "win_rate": 0.3297
+        },
+        "net": {
+          "n": 185,
+          "mean_r": -0.0784,
+          "se": 0.2432,
+          "profit_factor": 0.93,
+          "win_rate": 0.3405
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 92,
+          "mean_r": 0.3985,
+          "se": 0.3177,
+          "profit_factor": 1.49,
+          "win_rate": 0.3913
+        },
+        "second_half": {
+          "n": 93,
+          "mean_r": -0.5502,
+          "se": 0.3628,
+          "profit_factor": 0.64,
+          "win_rate": 0.2903
+        },
+        "first": "2025-10-17",
+        "last": "2026-10-02"
+      },
+      "confirmation": {
+        "n": 0,
+        "gross": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_bot": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "second_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "first": null,
+        "last": null
+      },
+      "all": {
+        "n": 185,
+        "gross": {
+          "n": 185,
+          "mean_r": -0.0214,
+          "se": 0.2432,
+          "profit_factor": 0.98,
+          "win_rate": 0.3459
+        },
+        "net_bot": {
+          "n": 185,
+          "mean_r": -0.1934,
+          "se": 0.2431,
+          "profit_factor": 0.85,
+          "win_rate": 0.3297
+        },
+        "net": {
+          "n": 185,
+          "mean_r": -0.0784,
+          "se": 0.2432,
+          "profit_factor": 0.93,
+          "win_rate": 0.3405
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 92,
+          "mean_r": 0.3985,
+          "se": 0.3177,
+          "profit_factor": 1.49,
+          "win_rate": 0.3913
+        },
+        "second_half": {
+          "n": 93,
+          "mean_r": -0.5502,
+          "se": 0.3628,
+          "profit_factor": 0.64,
+          "win_rate": 0.2903
+        },
+        "first": "2025-10-17",
+        "last": "2026-10-02"
+      },
+      "status": "écarté (découverte)"
+    },
+    "gap_fade:gold": {
+      "strategy": "gap_fade",
+      "asset": "gold",
+      "asset_label": "Or (XAU/USD)",
+      "discovery": {
+        "n": 85,
+        "gross": {
+          "n": 85,
+          "mean_r": 0.0676,
+          "se": 0.0948,
+          "profit_factor": 1.18,
+          "win_rate": 0.5176
+        },
+        "net_bot": {
+          "n": 85,
+          "mean_r": 0.0251,
+          "se": 0.0945,
+          "profit_factor": 1.06,
+          "win_rate": 0.5176
+        },
+        "net": {
+          "n": 85,
+          "mean_r": 0.0534,
+          "se": 0.0947,
+          "profit_factor": 1.14,
+          "win_rate": 0.5176
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 42,
+          "mean_r": 0.1074,
+          "se": 0.1409,
+          "profit_factor": 1.29,
+          "win_rate": 0.5238
+        },
+        "second_half": {
+          "n": 43,
+          "mean_r": 0.0008,
+          "se": 0.1281,
+          "profit_factor": 1.0,
+          "win_rate": 0.5116
+        },
+        "first": "2025-09-30",
+        "last": "2026-10-02"
+      },
+      "confirmation": {
+        "n": 0,
+        "gross": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_bot": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "second_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "first": null,
+        "last": null
+      },
+      "all": {
+        "n": 85,
+        "gross": {
+          "n": 85,
+          "mean_r": 0.0676,
+          "se": 0.0948,
+          "profit_factor": 1.18,
+          "win_rate": 0.5176
+        },
+        "net_bot": {
+          "n": 85,
+          "mean_r": 0.0251,
+          "se": 0.0945,
+          "profit_factor": 1.06,
+          "win_rate": 0.5176
+        },
+        "net": {
+          "n": 85,
+          "mean_r": 0.0534,
+          "se": 0.0947,
+          "profit_factor": 1.14,
+          "win_rate": 0.5176
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 42,
+          "mean_r": 0.1074,
+          "se": 0.1409,
+          "profit_factor": 1.29,
+          "win_rate": 0.5238
+        },
+        "second_half": {
+          "n": 43,
+          "mean_r": 0.0008,
+          "se": 0.1281,
+          "profit_factor": 1.0,
+          "win_rate": 0.5116
+        },
+        "first": "2025-09-30",
+        "last": "2026-10-02"
+      },
+      "status": "candidat : confirmation à venir"
+    },
+    "london_breakout:gold": {
+      "strategy": "london_breakout",
+      "asset": "gold",
+      "asset_label": "Or (XAU/USD)",
+      "discovery": {
+        "n": 140,
+        "gross": {
+          "n": 140,
+          "mean_r": 0.0719,
+          "se": 0.0593,
+          "profit_factor": 1.27,
+          "win_rate": 0.5571
+        },
+        "net_bot": {
+          "n": 140,
+          "mean_r": 0.0527,
+          "se": 0.0593,
+          "profit_factor": 1.19,
+          "win_rate": 0.55
+        },
+        "net": {
+          "n": 140,
+          "mean_r": 0.0654,
+          "se": 0.0593,
+          "profit_factor": 1.25,
+          "win_rate": 0.55
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 70,
+          "mean_r": -0.0635,
+          "se": 0.0875,
+          "profit_factor": 0.82,
+          "win_rate": 0.4714
+        },
+        "second_half": {
+          "n": 70,
+          "mean_r": 0.1944,
+          "se": 0.0776,
+          "profit_factor": 2.04,
+          "win_rate": 0.6286
+        },
+        "first": "2025-09-30",
+        "last": "2026-09-30"
+      },
+      "confirmation": {
+        "n": 0,
+        "gross": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_bot": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "second_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "first": null,
+        "last": null
+      },
+      "all": {
+        "n": 140,
+        "gross": {
+          "n": 140,
+          "mean_r": 0.0719,
+          "se": 0.0593,
+          "profit_factor": 1.27,
+          "win_rate": 0.5571
+        },
+        "net_bot": {
+          "n": 140,
+          "mean_r": 0.0527,
+          "se": 0.0593,
+          "profit_factor": 1.19,
+          "win_rate": 0.55
+        },
+        "net": {
+          "n": 140,
+          "mean_r": 0.0654,
+          "se": 0.0593,
+          "profit_factor": 1.25,
+          "win_rate": 0.55
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 70,
+          "mean_r": -0.0635,
+          "se": 0.0875,
+          "profit_factor": 0.82,
+          "win_rate": 0.4714
+        },
+        "second_half": {
+          "n": 70,
+          "mean_r": 0.1944,
+          "se": 0.0776,
+          "profit_factor": 2.04,
+          "win_rate": 0.6286
+        },
+        "first": "2025-09-30",
+        "last": "2026-09-30"
+      },
+      "status": "écarté (découverte)"
+    },
+    "donchian_1h:gold": {
+      "strategy": "donchian_1h",
+      "asset": "gold",
+      "asset_label": "Or (XAU/USD)",
+      "discovery": {
+        "n": 153,
+        "gross": {
+          "n": 153,
+          "mean_r": 0.1881,
+          "se": 0.1563,
+          "profit_factor": 1.35,
+          "win_rate": 0.3595
+        },
+        "net_bot": {
+          "n": 153,
+          "mean_r": 0.1649,
+          "se": 0.1562,
+          "profit_factor": 1.3,
+          "win_rate": 0.3595
+        },
+        "net": {
+          "n": 153,
+          "mean_r": 0.1803,
+          "se": 0.1562,
+          "profit_factor": 1.33,
+          "win_rate": 0.3595
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 76,
+          "mean_r": 0.3068,
+          "se": 0.2523,
+          "profit_factor": 1.56,
+          "win_rate": 0.3816
+        },
+        "second_half": {
+          "n": 77,
+          "mean_r": 0.0555,
+          "se": 0.186,
+          "profit_factor": 1.1,
+          "win_rate": 0.3377
+        },
+        "first": "2025-09-30",
+        "last": "2026-10-02"
+      },
+      "confirmation": {
+        "n": 0,
+        "gross": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_bot": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "second_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "first": null,
+        "last": null
+      },
+      "all": {
+        "n": 153,
+        "gross": {
+          "n": 153,
+          "mean_r": 0.1881,
+          "se": 0.1563,
+          "profit_factor": 1.35,
+          "win_rate": 0.3595
+        },
+        "net_bot": {
+          "n": 153,
+          "mean_r": 0.1649,
+          "se": 0.1562,
+          "profit_factor": 1.3,
+          "win_rate": 0.3595
+        },
+        "net": {
+          "n": 153,
+          "mean_r": 0.1803,
+          "se": 0.1562,
+          "profit_factor": 1.33,
+          "win_rate": 0.3595
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 76,
+          "mean_r": 0.3068,
+          "se": 0.2523,
+          "profit_factor": 1.56,
+          "win_rate": 0.3816
+        },
+        "second_half": {
+          "n": 77,
+          "mean_r": 0.0555,
+          "se": 0.186,
+          "profit_factor": 1.1,
+          "win_rate": 0.3377
+        },
+        "first": "2025-09-30",
+        "last": "2026-10-02"
+      },
+      "status": "candidat : confirmation à venir"
+    },
+    "rsi2_1h:gold": {
+      "strategy": "rsi2_1h",
+      "asset": "gold",
+      "asset_label": "Or (XAU/USD)",
+      "discovery": {
+        "n": 244,
+        "gross": {
+          "n": 244,
+          "mean_r": 0.0547,
+          "se": 0.0354,
+          "profit_factor": 1.29,
+          "win_rate": 0.668
+        },
+        "net_bot": {
+          "n": 244,
+          "mean_r": 0.0369,
+          "se": 0.0354,
+          "profit_factor": 1.19,
+          "win_rate": 0.6557
+        },
+        "net": {
+          "n": 244,
+          "mean_r": 0.0488,
+          "se": 0.0354,
+          "profit_factor": 1.25,
+          "win_rate": 0.6639
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 122,
+          "mean_r": 0.0917,
+          "se": 0.0502,
+          "profit_factor": 1.52,
+          "win_rate": 0.7213
+        },
+        "second_half": {
+          "n": 122,
+          "mean_r": 0.006,
+          "se": 0.0497,
+          "profit_factor": 1.03,
+          "win_rate": 0.6066
+        },
+        "first": "2025-10-09",
+        "last": "2026-10-02"
+      },
+      "confirmation": {
+        "n": 0,
+        "gross": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_bot": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "second_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "first": null,
+        "last": null
+      },
+      "all": {
+        "n": 244,
+        "gross": {
+          "n": 244,
+          "mean_r": 0.0547,
+          "se": 0.0354,
+          "profit_factor": 1.29,
+          "win_rate": 0.668
+        },
+        "net_bot": {
+          "n": 244,
+          "mean_r": 0.0369,
+          "se": 0.0354,
+          "profit_factor": 1.19,
+          "win_rate": 0.6557
+        },
+        "net": {
+          "n": 244,
+          "mean_r": 0.0488,
+          "se": 0.0354,
+          "profit_factor": 1.25,
+          "win_rate": 0.6639
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 122,
+          "mean_r": 0.0917,
+          "se": 0.0502,
+          "profit_factor": 1.52,
+          "win_rate": 0.7213
+        },
+        "second_half": {
+          "n": 122,
+          "mean_r": 0.006,
+          "se": 0.0497,
+          "profit_factor": 1.03,
+          "win_rate": 0.6066
+        },
+        "first": "2025-10-09",
+        "last": "2026-10-02"
+      },
+      "status": "candidat : confirmation à venir"
+    },
+    "orb5:oil": {
+      "strategy": "orb5",
+      "asset": "oil",
+      "asset_label": "Pétrole WTI (CL)",
+      "discovery": {
+        "n": 249,
+        "gross": {
+          "n": 249,
+          "mean_r": 0.0689,
+          "se": 0.1738,
+          "profit_factor": 1.08,
+          "win_rate": 0.1727
+        },
+        "net_bot": {
+          "n": 249,
+          "mean_r": -0.0651,
+          "se": 0.1744,
+          "profit_factor": 0.93,
+          "win_rate": 0.1687
+        },
+        "net": {
+          "n": 249,
+          "mean_r": -0.1077,
+          "se": 0.175,
+          "profit_factor": 0.89,
+          "win_rate": 0.1687
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 124,
+          "mean_r": -0.2152,
+          "se": 0.2372,
+          "profit_factor": 0.79,
+          "win_rate": 0.1774
+        },
+        "second_half": {
+          "n": 125,
+          "mean_r": -0.0009,
+          "se": 0.2578,
+          "profit_factor": 1.0,
+          "win_rate": 0.16
+        },
+        "first": "2025-09-29",
+        "last": "2026-10-02"
+      },
+      "confirmation": {
+        "n": 0,
+        "gross": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_bot": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "second_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "first": null,
+        "last": null
+      },
+      "all": {
+        "n": 249,
+        "gross": {
+          "n": 249,
+          "mean_r": 0.0689,
+          "se": 0.1738,
+          "profit_factor": 1.08,
+          "win_rate": 0.1727
+        },
+        "net_bot": {
+          "n": 249,
+          "mean_r": -0.0651,
+          "se": 0.1744,
+          "profit_factor": 0.93,
+          "win_rate": 0.1687
+        },
+        "net": {
+          "n": 249,
+          "mean_r": -0.1077,
+          "se": 0.175,
+          "profit_factor": 0.89,
+          "win_rate": 0.1687
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 124,
+          "mean_r": -0.2152,
+          "se": 0.2372,
+          "profit_factor": 0.79,
+          "win_rate": 0.1774
+        },
+        "second_half": {
+          "n": 125,
+          "mean_r": -0.0009,
+          "se": 0.2578,
+          "profit_factor": 1.0,
+          "win_rate": 0.16
+        },
+        "first": "2025-09-29",
+        "last": "2026-10-02"
+      },
+      "status": "écarté (découverte)"
+    },
+    "orb30:oil": {
+      "strategy": "orb30",
+      "asset": "oil",
+      "asset_label": "Pétrole WTI (CL)",
+      "discovery": {
+        "n": 234,
+        "gross": {
+          "n": 234,
+          "mean_r": -0.1279,
+          "se": 0.0738,
+          "profit_factor": 0.77,
+          "win_rate": 0.3675
+        },
+        "net_bot": {
+          "n": 234,
+          "mean_r": -0.1647,
+          "se": 0.0737,
+          "profit_factor": 0.71,
+          "win_rate": 0.359
+        },
+        "net": {
+          "n": 234,
+          "mean_r": -0.1754,
+          "se": 0.0736,
+          "profit_factor": 0.7,
+          "win_rate": 0.3632
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 117,
+          "mean_r": -0.1384,
+          "se": 0.101,
+          "profit_factor": 0.75,
+          "win_rate": 0.3846
+        },
+        "second_half": {
+          "n": 117,
+          "mean_r": -0.2123,
+          "se": 0.1073,
+          "profit_factor": 0.65,
+          "win_rate": 0.3419
+        },
+        "first": "2025-09-29",
+        "last": "2026-10-02"
+      },
+      "confirmation": {
+        "n": 0,
+        "gross": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_bot": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "second_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "first": null,
+        "last": null
+      },
+      "all": {
+        "n": 234,
+        "gross": {
+          "n": 234,
+          "mean_r": -0.1279,
+          "se": 0.0738,
+          "profit_factor": 0.77,
+          "win_rate": 0.3675
+        },
+        "net_bot": {
+          "n": 234,
+          "mean_r": -0.1647,
+          "se": 0.0737,
+          "profit_factor": 0.71,
+          "win_rate": 0.359
+        },
+        "net": {
+          "n": 234,
+          "mean_r": -0.1754,
+          "se": 0.0736,
+          "profit_factor": 0.7,
+          "win_rate": 0.3632
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 117,
+          "mean_r": -0.1384,
+          "se": 0.101,
+          "profit_factor": 0.75,
+          "win_rate": 0.3846
+        },
+        "second_half": {
+          "n": 117,
+          "mean_r": -0.2123,
+          "se": 0.1073,
+          "profit_factor": 0.65,
+          "win_rate": 0.3419
+        },
+        "first": "2025-09-29",
+        "last": "2026-10-02"
+      },
+      "status": "écarté (découverte)"
+    },
+    "intraday_mom:oil": {
+      "strategy": "intraday_mom",
+      "asset": "oil",
+      "asset_label": "Pétrole WTI (CL)",
+      "discovery": {
+        "n": 218,
+        "gross": {
+          "n": 218,
+          "mean_r": 0.0022,
+          "se": 0.0363,
+          "profit_factor": 1.01,
+          "win_rate": 0.4908
+        },
+        "net_bot": {
+          "n": 218,
+          "mean_r": -0.0791,
+          "se": 0.0364,
+          "profit_factor": 0.69,
+          "win_rate": 0.4495
+        },
+        "net": {
+          "n": 218,
+          "mean_r": -0.105,
+          "se": 0.0367,
+          "profit_factor": 0.62,
+          "win_rate": 0.4312
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 109,
+          "mean_r": -0.1749,
+          "se": 0.055,
+          "profit_factor": 0.47,
+          "win_rate": 0.367
+        },
+        "second_half": {
+          "n": 109,
+          "mean_r": -0.0352,
+          "se": 0.0479,
+          "profit_factor": 0.84,
+          "win_rate": 0.4954
+        },
+        "first": "2025-09-30",
+        "last": "2026-10-02"
+      },
+      "confirmation": {
+        "n": 0,
+        "gross": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_bot": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "second_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "first": null,
+        "last": null
+      },
+      "all": {
+        "n": 218,
+        "gross": {
+          "n": 218,
+          "mean_r": 0.0022,
+          "se": 0.0363,
+          "profit_factor": 1.01,
+          "win_rate": 0.4908
+        },
+        "net_bot": {
+          "n": 218,
+          "mean_r": -0.0791,
+          "se": 0.0364,
+          "profit_factor": 0.69,
+          "win_rate": 0.4495
+        },
+        "net": {
+          "n": 218,
+          "mean_r": -0.105,
+          "se": 0.0367,
+          "profit_factor": 0.62,
+          "win_rate": 0.4312
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 109,
+          "mean_r": -0.1749,
+          "se": 0.055,
+          "profit_factor": 0.47,
+          "win_rate": 0.367
+        },
+        "second_half": {
+          "n": 109,
+          "mean_r": -0.0352,
+          "se": 0.0479,
+          "profit_factor": 0.84,
+          "win_rate": 0.4954
+        },
+        "first": "2025-09-30",
+        "last": "2026-10-02"
+      },
+      "status": "écarté (découverte)"
+    },
+    "noise_area:oil": {
+      "strategy": "noise_area",
+      "asset": "oil",
+      "asset_label": "Pétrole WTI (CL)",
+      "discovery": {
+        "n": 214,
+        "gross": {
+          "n": 214,
+          "mean_r": -0.3706,
+          "se": 0.2143,
+          "profit_factor": 0.7,
+          "win_rate": 0.3318
+        },
+        "net_bot": {
+          "n": 214,
+          "mean_r": -0.5232,
+          "se": 0.2141,
+          "profit_factor": 0.61,
+          "win_rate": 0.3178
+        },
+        "net": {
+          "n": 214,
+          "mean_r": -0.572,
+          "se": 0.214,
+          "profit_factor": 0.59,
+          "win_rate": 0.3084
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 107,
+          "mean_r": -0.6052,
+          "se": 0.302,
+          "profit_factor": 0.57,
+          "win_rate": 0.2991
+        },
+        "second_half": {
+          "n": 107,
+          "mean_r": -0.5388,
+          "se": 0.3046,
+          "profit_factor": 0.61,
+          "win_rate": 0.3178
+        },
+        "first": "2025-10-21",
+        "last": "2026-10-01"
+      },
+      "confirmation": {
+        "n": 0,
+        "gross": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_bot": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "second_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "first": null,
+        "last": null
+      },
+      "all": {
+        "n": 214,
+        "gross": {
+          "n": 214,
+          "mean_r": -0.3706,
+          "se": 0.2143,
+          "profit_factor": 0.7,
+          "win_rate": 0.3318
+        },
+        "net_bot": {
+          "n": 214,
+          "mean_r": -0.5232,
+          "se": 0.2141,
+          "profit_factor": 0.61,
+          "win_rate": 0.3178
+        },
+        "net": {
+          "n": 214,
+          "mean_r": -0.572,
+          "se": 0.214,
+          "profit_factor": 0.59,
+          "win_rate": 0.3084
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 107,
+          "mean_r": -0.6052,
+          "se": 0.302,
+          "profit_factor": 0.57,
+          "win_rate": 0.2991
+        },
+        "second_half": {
+          "n": 107,
+          "mean_r": -0.5388,
+          "se": 0.3046,
+          "profit_factor": 0.61,
+          "win_rate": 0.3178
+        },
+        "first": "2025-10-21",
+        "last": "2026-10-01"
+      },
+      "status": "écarté (découverte)"
+    },
+    "gap_fade:oil": {
+      "strategy": "gap_fade",
+      "asset": "oil",
+      "asset_label": "Pétrole WTI (CL)",
+      "discovery": {
+        "n": 54,
+        "gross": {
+          "n": 54,
+          "mean_r": 0.0503,
+          "se": 0.1198,
+          "profit_factor": 1.13,
+          "win_rate": 0.5556
+        },
+        "net_bot": {
+          "n": 54,
+          "mean_r": -0.0304,
+          "se": 0.1202,
+          "profit_factor": 0.93,
+          "win_rate": 0.5556
+        },
+        "net": {
+          "n": 54,
+          "mean_r": -0.0581,
+          "se": 0.1197,
+          "profit_factor": 0.86,
+          "win_rate": 0.537
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 27,
+          "mean_r": -0.1636,
+          "se": 0.1598,
+          "profit_factor": 0.64,
+          "win_rate": 0.4815
+        },
+        "second_half": {
+          "n": 27,
+          "mean_r": 0.0474,
+          "se": 0.179,
+          "profit_factor": 1.12,
+          "win_rate": 0.5926
+        },
+        "first": "2025-09-30",
+        "last": "2026-09-03"
+      },
+      "confirmation": {
+        "n": 0,
+        "gross": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_bot": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "second_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "first": null,
+        "last": null
+      },
+      "all": {
+        "n": 54,
+        "gross": {
+          "n": 54,
+          "mean_r": 0.0503,
+          "se": 0.1198,
+          "profit_factor": 1.13,
+          "win_rate": 0.5556
+        },
+        "net_bot": {
+          "n": 54,
+          "mean_r": -0.0304,
+          "se": 0.1202,
+          "profit_factor": 0.93,
+          "win_rate": 0.5556
+        },
+        "net": {
+          "n": 54,
+          "mean_r": -0.0581,
+          "se": 0.1197,
+          "profit_factor": 0.86,
+          "win_rate": 0.537
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 27,
+          "mean_r": -0.1636,
+          "se": 0.1598,
+          "profit_factor": 0.64,
+          "win_rate": 0.4815
+        },
+        "second_half": {
+          "n": 27,
+          "mean_r": 0.0474,
+          "se": 0.179,
+          "profit_factor": 1.12,
+          "win_rate": 0.5926
+        },
+        "first": "2025-09-30",
+        "last": "2026-09-03"
+      },
+      "status": "écarté (découverte)"
+    },
+    "london_breakout:oil": {
+      "strategy": "london_breakout",
+      "asset": "oil",
+      "asset_label": "Pétrole WTI (CL)",
+      "discovery": {
+        "n": 220,
+        "gross": {
+          "n": 220,
+          "mean_r": 0.0224,
+          "se": 0.0606,
+          "profit_factor": 1.05,
+          "win_rate": 0.4955
+        },
+        "net_bot": {
+          "n": 220,
+          "mean_r": -0.0029,
+          "se": 0.0606,
+          "profit_factor": 0.99,
+          "win_rate": 0.4909
+        },
+        "net": {
+          "n": 220,
+          "mean_r": -0.0117,
+          "se": 0.0606,
+          "profit_factor": 0.97,
+          "win_rate": 0.4909
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 110,
+          "mean_r": -0.0481,
+          "se": 0.0883,
+          "profit_factor": 0.9,
+          "win_rate": 0.5
+        },
+        "second_half": {
+          "n": 110,
+          "mean_r": 0.0248,
+          "se": 0.0833,
+          "profit_factor": 1.06,
+          "win_rate": 0.4818
+        },
+        "first": "2025-09-29",
+        "last": "2026-10-02"
+      },
+      "confirmation": {
+        "n": 0,
+        "gross": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_bot": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "second_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "first": null,
+        "last": null
+      },
+      "all": {
+        "n": 220,
+        "gross": {
+          "n": 220,
+          "mean_r": 0.0224,
+          "se": 0.0606,
+          "profit_factor": 1.05,
+          "win_rate": 0.4955
+        },
+        "net_bot": {
+          "n": 220,
+          "mean_r": -0.0029,
+          "se": 0.0606,
+          "profit_factor": 0.99,
+          "win_rate": 0.4909
+        },
+        "net": {
+          "n": 220,
+          "mean_r": -0.0117,
+          "se": 0.0606,
+          "profit_factor": 0.97,
+          "win_rate": 0.4909
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 110,
+          "mean_r": -0.0481,
+          "se": 0.0883,
+          "profit_factor": 0.9,
+          "win_rate": 0.5
+        },
+        "second_half": {
+          "n": 110,
+          "mean_r": 0.0248,
+          "se": 0.0833,
+          "profit_factor": 1.06,
+          "win_rate": 0.4818
+        },
+        "first": "2025-09-29",
+        "last": "2026-10-02"
+      },
+      "status": "écarté (découverte)"
+    },
+    "donchian_1h:oil": {
+      "strategy": "donchian_1h",
+      "asset": "oil",
+      "asset_label": "Pétrole WTI (CL)",
+      "discovery": {
+        "n": 173,
+        "gross": {
+          "n": 173,
+          "mean_r": -0.0746,
+          "se": 0.116,
+          "profit_factor": 0.88,
+          "win_rate": 0.3179
+        },
+        "net_bot": {
+          "n": 173,
+          "mean_r": -0.0965,
+          "se": 0.1159,
+          "profit_factor": 0.84,
+          "win_rate": 0.3121
+        },
+        "net": {
+          "n": 173,
+          "mean_r": -0.1041,
+          "se": 0.116,
+          "profit_factor": 0.83,
+          "win_rate": 0.3121
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 86,
+          "mean_r": -0.1897,
+          "se": 0.1566,
+          "profit_factor": 0.7,
+          "win_rate": 0.2791
+        },
+        "second_half": {
+          "n": 87,
+          "mean_r": -0.0194,
+          "se": 0.1714,
+          "profit_factor": 0.97,
+          "win_rate": 0.3448
+        },
+        "first": "2025-09-30",
+        "last": "2026-10-02"
+      },
+      "confirmation": {
+        "n": 0,
+        "gross": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_bot": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "second_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "first": null,
+        "last": null
+      },
+      "all": {
+        "n": 173,
+        "gross": {
+          "n": 173,
+          "mean_r": -0.0746,
+          "se": 0.116,
+          "profit_factor": 0.88,
+          "win_rate": 0.3179
+        },
+        "net_bot": {
+          "n": 173,
+          "mean_r": -0.0965,
+          "se": 0.1159,
+          "profit_factor": 0.84,
+          "win_rate": 0.3121
+        },
+        "net": {
+          "n": 173,
+          "mean_r": -0.1041,
+          "se": 0.116,
+          "profit_factor": 0.83,
+          "win_rate": 0.3121
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 86,
+          "mean_r": -0.1897,
+          "se": 0.1566,
+          "profit_factor": 0.7,
+          "win_rate": 0.2791
+        },
+        "second_half": {
+          "n": 87,
+          "mean_r": -0.0194,
+          "se": 0.1714,
+          "profit_factor": 0.97,
+          "win_rate": 0.3448
+        },
+        "first": "2025-09-30",
+        "last": "2026-10-02"
+      },
+      "status": "écarté (découverte)"
+    },
+    "rsi2_1h:oil": {
+      "strategy": "rsi2_1h",
+      "asset": "oil",
+      "asset_label": "Pétrole WTI (CL)",
+      "discovery": {
+        "n": 250,
+        "gross": {
+          "n": 250,
+          "mean_r": 0.0158,
+          "se": 0.0357,
+          "profit_factor": 1.07,
+          "win_rate": 0.64
+        },
+        "net_bot": {
+          "n": 250,
+          "mean_r": -0.001,
+          "se": 0.0357,
+          "profit_factor": 1.0,
+          "win_rate": 0.624
+        },
+        "net": {
+          "n": 250,
+          "mean_r": -0.0062,
+          "se": 0.0357,
+          "profit_factor": 0.97,
+          "win_rate": 0.62
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 125,
+          "mean_r": 0.0243,
+          "se": 0.048,
+          "profit_factor": 1.13,
+          "win_rate": 0.624
+        },
+        "second_half": {
+          "n": 125,
+          "mean_r": -0.0368,
+          "se": 0.0528,
+          "profit_factor": 0.86,
+          "win_rate": 0.616
+        },
+        "first": "2025-10-13",
+        "last": "2026-10-02"
+      },
+      "confirmation": {
+        "n": 0,
+        "gross": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_bot": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "second_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "first": null,
+        "last": null
+      },
+      "all": {
+        "n": 250,
+        "gross": {
+          "n": 250,
+          "mean_r": 0.0158,
+          "se": 0.0357,
+          "profit_factor": 1.07,
+          "win_rate": 0.64
+        },
+        "net_bot": {
+          "n": 250,
+          "mean_r": -0.001,
+          "se": 0.0357,
+          "profit_factor": 1.0,
+          "win_rate": 0.624
+        },
+        "net": {
+          "n": 250,
+          "mean_r": -0.0062,
+          "se": 0.0357,
+          "profit_factor": 0.97,
+          "win_rate": 0.62
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 125,
+          "mean_r": 0.0243,
+          "se": 0.048,
+          "profit_factor": 1.13,
+          "win_rate": 0.624
+        },
+        "second_half": {
+          "n": 125,
+          "mean_r": -0.0368,
+          "se": 0.0528,
+          "profit_factor": 0.86,
+          "win_rate": 0.616
+        },
+        "first": "2025-10-13",
+        "last": "2026-10-02"
+      },
+      "status": "écarté (découverte)"
+    },
+    "orb5:euro": {
+      "strategy": "orb5",
+      "asset": "euro",
+      "asset_label": "Euro / dollar (6E)",
+      "discovery": {
+        "n": 250,
+        "gross": {
+          "n": 250,
+          "mean_r": -0.0839,
+          "se": 0.1686,
+          "profit_factor": 0.9,
+          "win_rate": 0.14
+        },
+        "net_bot": {
+          "n": 250,
+          "mean_r": -0.5249,
+          "se": 0.1671,
+          "profit_factor": 0.57,
+          "win_rate": 0.136
+        },
+        "net": {
+          "n": 250,
+          "mean_r": -0.7679,
+          "se": 0.1685,
+          "profit_factor": 0.47,
+          "win_rate": 0.136
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 125,
+          "mean_r": -0.6435,
+          "se": 0.2542,
+          "profit_factor": 0.54,
+          "win_rate": 0.16
+        },
+        "second_half": {
+          "n": 125,
+          "mean_r": -0.8923,
+          "se": 0.2217,
+          "profit_factor": 0.39,
+          "win_rate": 0.112
+        },
+        "first": "2025-09-29",
+        "last": "2026-10-02"
+      },
+      "confirmation": {
+        "n": 0,
+        "gross": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_bot": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "second_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "first": null,
+        "last": null
+      },
+      "all": {
+        "n": 250,
+        "gross": {
+          "n": 250,
+          "mean_r": -0.0839,
+          "se": 0.1686,
+          "profit_factor": 0.9,
+          "win_rate": 0.14
+        },
+        "net_bot": {
+          "n": 250,
+          "mean_r": -0.5249,
+          "se": 0.1671,
+          "profit_factor": 0.57,
+          "win_rate": 0.136
+        },
+        "net": {
+          "n": 250,
+          "mean_r": -0.7679,
+          "se": 0.1685,
+          "profit_factor": 0.47,
+          "win_rate": 0.136
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 125,
+          "mean_r": -0.6435,
+          "se": 0.2542,
+          "profit_factor": 0.54,
+          "win_rate": 0.16
+        },
+        "second_half": {
+          "n": 125,
+          "mean_r": -0.8923,
+          "se": 0.2217,
+          "profit_factor": 0.39,
+          "win_rate": 0.112
+        },
+        "first": "2025-09-29",
+        "last": "2026-10-02"
+      },
+      "status": "écarté (découverte)"
+    },
+    "orb30:euro": {
+      "strategy": "orb30",
+      "asset": "euro",
+      "asset_label": "Euro / dollar (6E)",
+      "discovery": {
+        "n": 245,
+        "gross": {
+          "n": 245,
+          "mean_r": 0.0184,
+          "se": 0.0962,
+          "profit_factor": 1.04,
+          "win_rate": 0.3918
+        },
+        "net_bot": {
+          "n": 245,
+          "mean_r": -0.0722,
+          "se": 0.096,
+          "profit_factor": 0.87,
+          "win_rate": 0.3592
+        },
+        "net": {
+          "n": 245,
+          "mean_r": -0.122,
+          "se": 0.096,
+          "profit_factor": 0.79,
+          "win_rate": 0.3469
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 122,
+          "mean_r": -0.1952,
+          "se": 0.1147,
+          "profit_factor": 0.67,
+          "win_rate": 0.3443
+        },
+        "second_half": {
+          "n": 123,
+          "mean_r": -0.0494,
+          "se": 0.1539,
+          "profit_factor": 0.91,
+          "win_rate": 0.3496
+        },
+        "first": "2025-09-29",
+        "last": "2026-10-02"
+      },
+      "confirmation": {
+        "n": 0,
+        "gross": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_bot": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "second_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "first": null,
+        "last": null
+      },
+      "all": {
+        "n": 245,
+        "gross": {
+          "n": 245,
+          "mean_r": 0.0184,
+          "se": 0.0962,
+          "profit_factor": 1.04,
+          "win_rate": 0.3918
+        },
+        "net_bot": {
+          "n": 245,
+          "mean_r": -0.0722,
+          "se": 0.096,
+          "profit_factor": 0.87,
+          "win_rate": 0.3592
+        },
+        "net": {
+          "n": 245,
+          "mean_r": -0.122,
+          "se": 0.096,
+          "profit_factor": 0.79,
+          "win_rate": 0.3469
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 122,
+          "mean_r": -0.1952,
+          "se": 0.1147,
+          "profit_factor": 0.67,
+          "win_rate": 0.3443
+        },
+        "second_half": {
+          "n": 123,
+          "mean_r": -0.0494,
+          "se": 0.1539,
+          "profit_factor": 0.91,
+          "win_rate": 0.3496
+        },
+        "first": "2025-09-29",
+        "last": "2026-10-02"
+      },
+      "status": "écarté (découverte)"
+    },
+    "intraday_mom:euro": {
+      "strategy": "intraday_mom",
+      "asset": "euro",
+      "asset_label": "Euro / dollar (6E)",
+      "discovery": {
+        "n": 238,
+        "gross": {
+          "n": 238,
+          "mean_r": -0.0833,
+          "se": 0.0431,
+          "profit_factor": 0.73,
+          "win_rate": 0.4454
+        },
+        "net_bot": {
+          "n": 238,
+          "mean_r": -0.3242,
+          "se": 0.0437,
+          "profit_factor": 0.29,
+          "win_rate": 0.3109
+        },
+        "net": {
+          "n": 238,
+          "mean_r": -0.4569,
+          "se": 0.0445,
+          "profit_factor": 0.18,
+          "win_rate": 0.2311
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 119,
+          "mean_r": -0.386,
+          "se": 0.0626,
+          "profit_factor": 0.24,
+          "win_rate": 0.2857
+        },
+        "second_half": {
+          "n": 119,
+          "mean_r": -0.5279,
+          "se": 0.0629,
+          "profit_factor": 0.13,
+          "win_rate": 0.1765
+        },
+        "first": "2025-09-30",
+        "last": "2026-10-02"
+      },
+      "confirmation": {
+        "n": 0,
+        "gross": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_bot": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "second_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "first": null,
+        "last": null
+      },
+      "all": {
+        "n": 238,
+        "gross": {
+          "n": 238,
+          "mean_r": -0.0833,
+          "se": 0.0431,
+          "profit_factor": 0.73,
+          "win_rate": 0.4454
+        },
+        "net_bot": {
+          "n": 238,
+          "mean_r": -0.3242,
+          "se": 0.0437,
+          "profit_factor": 0.29,
+          "win_rate": 0.3109
+        },
+        "net": {
+          "n": 238,
+          "mean_r": -0.4569,
+          "se": 0.0445,
+          "profit_factor": 0.18,
+          "win_rate": 0.2311
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 119,
+          "mean_r": -0.386,
+          "se": 0.0626,
+          "profit_factor": 0.24,
+          "win_rate": 0.2857
+        },
+        "second_half": {
+          "n": 119,
+          "mean_r": -0.5279,
+          "se": 0.0629,
+          "profit_factor": 0.13,
+          "win_rate": 0.1765
+        },
+        "first": "2025-09-30",
+        "last": "2026-10-02"
+      },
+      "status": "écarté (découverte)"
+    },
+    "noise_area:euro": {
+      "strategy": "noise_area",
+      "asset": "euro",
+      "asset_label": "Euro / dollar (6E)",
+      "discovery": {
+        "n": 193,
+        "gross": {
+          "n": 193,
+          "mean_r": -0.1889,
+          "se": 0.2915,
+          "profit_factor": 0.85,
+          "win_rate": 0.3161
+        },
+        "net_bot": {
+          "n": 193,
+          "mean_r": -0.572,
+          "se": 0.2917,
+          "profit_factor": 0.63,
+          "win_rate": 0.2694
+        },
+        "net": {
+          "n": 193,
+          "mean_r": -0.7827,
+          "se": 0.2922,
+          "profit_factor": 0.55,
+          "win_rate": 0.2539
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 96,
+          "mean_r": -0.9219,
+          "se": 0.471,
+          "profit_factor": 0.52,
+          "win_rate": 0.25
+        },
+        "second_half": {
+          "n": 97,
+          "mean_r": -0.6449,
+          "se": 0.3493,
+          "profit_factor": 0.58,
+          "win_rate": 0.2577
+        },
+        "first": "2025-10-17",
+        "last": "2026-10-02"
+      },
+      "confirmation": {
+        "n": 0,
+        "gross": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_bot": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "second_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "first": null,
+        "last": null
+      },
+      "all": {
+        "n": 193,
+        "gross": {
+          "n": 193,
+          "mean_r": -0.1889,
+          "se": 0.2915,
+          "profit_factor": 0.85,
+          "win_rate": 0.3161
+        },
+        "net_bot": {
+          "n": 193,
+          "mean_r": -0.572,
+          "se": 0.2917,
+          "profit_factor": 0.63,
+          "win_rate": 0.2694
+        },
+        "net": {
+          "n": 193,
+          "mean_r": -0.7827,
+          "se": 0.2922,
+          "profit_factor": 0.55,
+          "win_rate": 0.2539
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 96,
+          "mean_r": -0.9219,
+          "se": 0.471,
+          "profit_factor": 0.52,
+          "win_rate": 0.25
+        },
+        "second_half": {
+          "n": 97,
+          "mean_r": -0.6449,
+          "se": 0.3493,
+          "profit_factor": 0.58,
+          "win_rate": 0.2577
+        },
+        "first": "2025-10-17",
+        "last": "2026-10-02"
+      },
+      "status": "écarté (découverte)"
+    },
+    "gap_fade:euro": {
+      "strategy": "gap_fade",
+      "asset": "euro",
+      "asset_label": "Euro / dollar (6E)",
+      "discovery": {
+        "n": 74,
+        "gross": {
+          "n": 74,
+          "mean_r": 0.0145,
+          "se": 0.0495,
+          "profit_factor": 1.09,
+          "win_rate": 0.5946
+        },
+        "net_bot": {
+          "n": 74,
+          "mean_r": -0.0138,
+          "se": 0.0497,
+          "profit_factor": 0.92,
+          "win_rate": 0.5811
+        },
+        "net": {
+          "n": 74,
+          "mean_r": -0.0294,
+          "se": 0.0498,
+          "profit_factor": 0.83,
+          "win_rate": 0.5541
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 37,
+          "mean_r": -0.0497,
+          "se": 0.0767,
+          "profit_factor": 0.76,
+          "win_rate": 0.5405
+        },
+        "second_half": {
+          "n": 37,
+          "mean_r": -0.0091,
+          "se": 0.0644,
+          "profit_factor": 0.94,
+          "win_rate": 0.5676
+        },
+        "first": "2025-10-06",
+        "last": "2026-10-01"
+      },
+      "confirmation": {
+        "n": 0,
+        "gross": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_bot": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "second_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "first": null,
+        "last": null
+      },
+      "all": {
+        "n": 74,
+        "gross": {
+          "n": 74,
+          "mean_r": 0.0145,
+          "se": 0.0495,
+          "profit_factor": 1.09,
+          "win_rate": 0.5946
+        },
+        "net_bot": {
+          "n": 74,
+          "mean_r": -0.0138,
+          "se": 0.0497,
+          "profit_factor": 0.92,
+          "win_rate": 0.5811
+        },
+        "net": {
+          "n": 74,
+          "mean_r": -0.0294,
+          "se": 0.0498,
+          "profit_factor": 0.83,
+          "win_rate": 0.5541
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 37,
+          "mean_r": -0.0497,
+          "se": 0.0767,
+          "profit_factor": 0.76,
+          "win_rate": 0.5405
+        },
+        "second_half": {
+          "n": 37,
+          "mean_r": -0.0091,
+          "se": 0.0644,
+          "profit_factor": 0.94,
+          "win_rate": 0.5676
+        },
+        "first": "2025-10-06",
+        "last": "2026-10-01"
+      },
+      "status": "écarté (découverte)"
+    },
+    "london_breakout:euro": {
+      "strategy": "london_breakout",
+      "asset": "euro",
+      "asset_label": "Euro / dollar (6E)",
+      "discovery": {
+        "n": 211,
+        "gross": {
+          "n": 211,
+          "mean_r": -0.0131,
+          "se": 0.0584,
+          "profit_factor": 0.97,
+          "win_rate": 0.5024
+        },
+        "net_bot": {
+          "n": 211,
+          "mean_r": -0.0672,
+          "se": 0.0583,
+          "profit_factor": 0.84,
+          "win_rate": 0.4834
+        },
+        "net": {
+          "n": 211,
+          "mean_r": -0.097,
+          "se": 0.0583,
+          "profit_factor": 0.78,
+          "win_rate": 0.4739
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 105,
+          "mean_r": -0.2066,
+          "se": 0.0831,
+          "profit_factor": 0.59,
+          "win_rate": 0.4095
+        },
+        "second_half": {
+          "n": 106,
+          "mean_r": 0.0115,
+          "se": 0.0809,
+          "profit_factor": 1.03,
+          "win_rate": 0.5377
+        },
+        "first": "2025-09-30",
+        "last": "2026-10-02"
+      },
+      "confirmation": {
+        "n": 0,
+        "gross": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_bot": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "second_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "first": null,
+        "last": null
+      },
+      "all": {
+        "n": 211,
+        "gross": {
+          "n": 211,
+          "mean_r": -0.0131,
+          "se": 0.0584,
+          "profit_factor": 0.97,
+          "win_rate": 0.5024
+        },
+        "net_bot": {
+          "n": 211,
+          "mean_r": -0.0672,
+          "se": 0.0583,
+          "profit_factor": 0.84,
+          "win_rate": 0.4834
+        },
+        "net": {
+          "n": 211,
+          "mean_r": -0.097,
+          "se": 0.0583,
+          "profit_factor": 0.78,
+          "win_rate": 0.4739
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 105,
+          "mean_r": -0.2066,
+          "se": 0.0831,
+          "profit_factor": 0.59,
+          "win_rate": 0.4095
+        },
+        "second_half": {
+          "n": 106,
+          "mean_r": 0.0115,
+          "se": 0.0809,
+          "profit_factor": 1.03,
+          "win_rate": 0.5377
+        },
+        "first": "2025-09-30",
+        "last": "2026-10-02"
+      },
+      "status": "écarté (découverte)"
+    },
+    "donchian_1h:euro": {
+      "strategy": "donchian_1h",
+      "asset": "euro",
+      "asset_label": "Euro / dollar (6E)",
+      "discovery": {
+        "n": 195,
+        "gross": {
+          "n": 195,
+          "mean_r": -0.1876,
+          "se": 0.1088,
+          "profit_factor": 0.7,
+          "win_rate": 0.2308
+        },
+        "net_bot": {
+          "n": 195,
+          "mean_r": -0.2406,
+          "se": 0.1087,
+          "profit_factor": 0.64,
+          "win_rate": 0.2308
+        },
+        "net": {
+          "n": 195,
+          "mean_r": -0.2699,
+          "se": 0.1087,
+          "profit_factor": 0.61,
+          "win_rate": 0.2308
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 97,
+          "mean_r": -0.2449,
+          "se": 0.1327,
+          "profit_factor": 0.63,
+          "win_rate": 0.299
+        },
+        "second_half": {
+          "n": 98,
+          "mean_r": -0.2947,
+          "se": 0.1726,
+          "profit_factor": 0.58,
+          "win_rate": 0.1633
+        },
+        "first": "2025-09-30",
+        "last": "2026-10-02"
+      },
+      "confirmation": {
+        "n": 0,
+        "gross": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_bot": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "second_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "first": null,
+        "last": null
+      },
+      "all": {
+        "n": 195,
+        "gross": {
+          "n": 195,
+          "mean_r": -0.1876,
+          "se": 0.1088,
+          "profit_factor": 0.7,
+          "win_rate": 0.2308
+        },
+        "net_bot": {
+          "n": 195,
+          "mean_r": -0.2406,
+          "se": 0.1087,
+          "profit_factor": 0.64,
+          "win_rate": 0.2308
+        },
+        "net": {
+          "n": 195,
+          "mean_r": -0.2699,
+          "se": 0.1087,
+          "profit_factor": 0.61,
+          "win_rate": 0.2308
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 97,
+          "mean_r": -0.2449,
+          "se": 0.1327,
+          "profit_factor": 0.63,
+          "win_rate": 0.299
+        },
+        "second_half": {
+          "n": 98,
+          "mean_r": -0.2947,
+          "se": 0.1726,
+          "profit_factor": 0.58,
+          "win_rate": 0.1633
+        },
+        "first": "2025-09-30",
+        "last": "2026-10-02"
+      },
+      "status": "écarté (découverte)"
+    },
+    "rsi2_1h:euro": {
+      "strategy": "rsi2_1h",
+      "asset": "euro",
+      "asset_label": "Euro / dollar (6E)",
+      "discovery": {
+        "n": 254,
+        "gross": {
+          "n": 254,
+          "mean_r": 0.0864,
+          "se": 0.0326,
+          "profit_factor": 1.55,
+          "win_rate": 0.6811
+        },
+        "net_bot": {
+          "n": 254,
+          "mean_r": 0.043,
+          "se": 0.0327,
+          "profit_factor": 1.25,
+          "win_rate": 0.6654
+        },
+        "net": {
+          "n": 254,
+          "mean_r": 0.0191,
+          "se": 0.0327,
+          "profit_factor": 1.11,
+          "win_rate": 0.6417
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 127,
+          "mean_r": 0.0502,
+          "se": 0.0478,
+          "profit_factor": 1.27,
+          "win_rate": 0.6772
+        },
+        "second_half": {
+          "n": 127,
+          "mean_r": -0.0121,
+          "se": 0.0447,
+          "profit_factor": 0.93,
+          "win_rate": 0.6063
+        },
+        "first": "2025-10-10",
+        "last": "2026-10-02"
+      },
+      "confirmation": {
+        "n": 0,
+        "gross": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_bot": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "second_half": {
+          "n": 0,
+          "mean_r": null,
+          "se": null,
+          "profit_factor": null,
+          "win_rate": null
+        },
+        "first": null,
+        "last": null
+      },
+      "all": {
+        "n": 254,
+        "gross": {
+          "n": 254,
+          "mean_r": 0.0864,
+          "se": 0.0326,
+          "profit_factor": 1.55,
+          "win_rate": 0.6811
+        },
+        "net_bot": {
+          "n": 254,
+          "mean_r": 0.043,
+          "se": 0.0327,
+          "profit_factor": 1.25,
+          "win_rate": 0.6654
+        },
+        "net": {
+          "n": 254,
+          "mean_r": 0.0191,
+          "se": 0.0327,
+          "profit_factor": 1.11,
+          "win_rate": 0.6417
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 127,
+          "mean_r": 0.0502,
+          "se": 0.0478,
+          "profit_factor": 1.27,
+          "win_rate": 0.6772
+        },
+        "second_half": {
+          "n": 127,
+          "mean_r": -0.0121,
+          "se": 0.0447,
+          "profit_factor": 0.93,
+          "win_rate": 0.6063
+        },
+        "first": "2025-10-10",
+        "last": "2026-10-02"
+      },
+      "status": "écarté (découverte)"
+    }
+  },
+  "updated_at": "2026-10-05T14:12:25Z"
+}

@@ -834,6 +834,7 @@ class Engine:
         dash["portfolio"] = self.portfolio.summary()
         dash["stress"] = self.store.stress()
         dash["setups"] = self.store.setups()       # évaluation des setups (sans le détail des trades)
+        dash["strategies"] = self.store.strategies()
         self.store.save_dashboard(dash)
         if self.TOPSTEP:
             try:
