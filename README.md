@@ -382,9 +382,27 @@ résiste aux tests de résistance. Il serait alors suivi en ombre, jamais notifi
   grossier pour des trades de 2 h) ; Databento (vraies données CME en 1 min, 125 $ de crédit offert à
   l'inscription, payant ensuite).
 
-Premier essai (bougies récentes, juillet → septembre 2026) : A −0,26 R par trade, B −0,46 R ; les
-deux sont abandonnés. Avant frais l'avantage est proche de zéro, et les frais coûtent 0,36 à 0,57 R par
-trade sur les cryptos. Seul A sur le Nasdaq et le S&P 500 est positif, sur trop peu de trades.
+**Bilan sur 12 mois (octobre 2025 → octobre 2026, analyse du 5 octobre 2026).** Le bot actuel, rejoué
+sur l'historique long avec ses propres frais (gain moyen par trade, avant frais → après frais) :
+
+| Actif | Trades | Avant frais | Après frais |
+|---|---|---|---|
+| Nasdaq 100 | 478 | +0,09 R | +0,02 R |
+| Pétrole | 640 | +0,04 R | −0,06 R |
+| Or | 588 | +0,04 R | −0,07 R |
+| S&P 500 | 415 | +0,02 R | −0,08 R |
+| Bitcoin | 597 | +0,05 R | −0,14 R |
+| Ethereum | 643 | 0,00 R | −0,18 R |
+| Euro / dollar | 233 | +0,01 R | −0,20 R |
+
+Avant frais, l'avantage est faible partout ; après frais, seul le Nasdaq reste au-dessus de zéro, sans
+que ce soit prouvé (il faudrait de l'ordre de 1 500 trades pour un écart pareil). Les frais comptés par
+le bot sont prudents : chez Topstep (frais réels + 1 tick de glissement), ils sont environ 3 fois plus
+bas sur le Nasdaq et l'or, ce qui ne suffit pas à rendre les autres actifs gagnants.
+
+Setups : A −0,22 R sur 4 074 trades, B −0,31 R sur 3 051 trades, tous deux abandonnés. L'essai 2
+(A sur Nasdaq et S&P 500, mois jamais regardés) donne +0,03 R sur 388 trades avec un facteur de profit
+de 1,06 et une seconde moitié négative : abandonné aussi. Détail dans `HYPOTHESES.md`.
 
 ### Sections repliables
 Sur les trois pages, chaque section se replie ou se déplie d'un clic sur son titre (en glissant), et
