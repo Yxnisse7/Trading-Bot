@@ -76,6 +76,9 @@
   <h2 id="resistance" data-hint="les trades du backtest rejoués en conditions dégradées">Tests de résistance</h2>
   <div class="card" id="stress"></div>
 
+  <h2 id="labo" data-hint="8 méthodes publiées testées sur chaque actif, frais Topstep réels">Laboratoire de stratégies</h2>
+  <div class="card" id="lab-box"></div>
+
   <h2 id="setups" data-hint="idées d'entrée écrites avant d'être testées (HYPOTHESES.md)">Nouveaux setups</h2>
   <div class="card" id="setups-box"></div>
 
@@ -154,6 +157,31 @@
       : `<tr><td colspan="8" class="empty">Aucun backtest pour l'instant.</td></tr>`;
     renderStress(d.stress || {});
     renderSetups(d.setups || {}, d.assets || []);
+    renderLab(d.strategies || {}, d.assets || []);
+  }
+  // Laboratoire : stratégie × actif, découverte (12 derniers mois) puis confirmation (année d'avant, jamais vue)
+  function renderLab(lab, assets) {
+    const el = $("#lab-box");
+    const cells = Object.values(lab.cells || {});
+    if (!cells.length) { el.innerHTML = `<div class="muted">Pas encore lancé.</div>`; return; }
+    const strats = Object.keys(lab.strategies || {});
+    const keys = [...new Set(cells.map((c) => c.asset))];
+    const label = (k) => ((assets.find((a) => a.key === k) || {}).label || k).replace(/ \(.*\)/, "");
+    const r2 = (v) => v == null ? "–" : Y.signed(v, 2, " R");
+    const icon = { "prouvé": "★", "validé": "✓", "candidat : confirmation à venir": "…", "écarté (confirmation)": "✗", "écarté (découverte)": "" };
+    const find = (st, a) => cells.find((c) => c.strategy === st && c.asset === a);
+    const tip = (c) => { const d = c.discovery, f = c.confirmation;
+      return `${c.status} · découverte : ${d.n} trades, ${r2(d.net.mean_r)}, facteur de profit ${d.net.profit_factor ?? "n/a"}, moitiés ${r2(d.first_half.mean_r)} / ${r2(d.second_half.mean_r)}`
+        + (f.n ? ` · confirmation : ${f.n} trades, ${r2(f.net.mean_r)}, facteur de profit ${f.net.profit_factor ?? "n/a"}` : ""); };
+    const cell = (c) => { if (!c || !c.discovery.n) return `<td class="muted">–</td>`;
+      const m = c.discovery.net.mean_r, ok = c.status !== "écarté (découverte)" && c.status !== "écarté (confirmation)";
+      return `<td class="${m > 0 ? "pos" : "neg"}${ok ? " ref" : ""}" title="${esc(tip(c))}">${r2(m)} ${icon[c.status] || ""}</td>`; };
+    const kept = cells.filter((c) => ["prouvé", "validé", "candidat : confirmation à venir"].includes(c.status));
+    el.innerHTML = `<div class="muted" style="margin-bottom:10px">Gain net moyen par trade sur les 12 derniers mois (frais Topstep réels), pour ${strats.length} méthodes tirées d'études publiées, réglages fixés d'avance (HYPOTHESES.md, essai 3). Encadré : retenu pour la confirmation sur l'année d'avant, jamais regardée. Survolez une case pour le détail.</div>
+      <div class="tbl"><table class="heat"><thead><tr><th>Stratégie</th>${keys.map((k) => `<th>${esc(label(k))}</th>`).join("")}</tr></thead><tbody>
+      ${strats.map((st) => `<tr><th title="${esc(lab.strategies[st])}">${esc(st)}</th>${keys.map((k) => cell(find(st, k))).join("")}</tr>`).join("")}
+      </tbody></table></div>
+      <div class="muted" style="margin-top:10px">… en attente de la confirmation · ✓ validé (refait ses preuves sur l'année jamais vue) · ★ prouvé (marge corrigée pour ${lab.n_trials || 56} essais). ${kept.length ? `Retenus : ${kept.map((c) => esc(c.strategy + " · " + label(c.asset)) + " (" + esc(c.status) + ")").join(", ")}.` : "Aucun couple retenu."} Un couple validé est d'abord suivi en ombre, sans notification.</div>`;
   }
   // Setups pré-enregistrés : jugés sur des critères d'abandon écrits avant le premier test
   function renderSetups(all, assets) {
