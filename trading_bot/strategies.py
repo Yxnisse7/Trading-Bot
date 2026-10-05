@@ -43,7 +43,8 @@ STRATEGIES = {
 INFO_ONLY = {"pre_fomc"}
 ROBUST_ONLY = {"noise_area_v2"}   # plus de données vierges : critères de l'essai 5 sur les 24 mois
 # Suivis en ombre sur le marché réel (aucune notification) : (stratégie, actif) → date de début
-SHADOW = {("donchian_1h", "bitcoin"): "2026-10-05T19:00:00Z"}          # trop peu d'occurrences : affiché sans verdict (essai 4)
+SHADOW = {("donchian_1h", "bitcoin"): "2026-10-05T19:00:00Z",
+          ("donchian_1h", "gold"): "2026-10-05T20:00:00Z"}     # validé à l'essai 3 (confirmation 2024-25)          # trop peu d'occurrences : affiché sans verdict (essai 4)
 MIN_TRADES = {"news_breakout": 20}
 
 
