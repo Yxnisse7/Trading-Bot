@@ -68,6 +68,9 @@
   <h2 id="en-cours" data-hint="aucun signal en cours">Signaux en cours</h2>
   <div class="card" id="open-card"><div class="empty">Chargement…</div></div>
 
+  <h2 id="agenda" data-hint="annonces économiques des 7 prochains jours">Agenda macro</h2>
+  <div class="card" id="agenda-card"><div class="empty">Chargement…</div></div>
+
   <h2 id="trades">Derniers trades</h2>
   <div class="card">
     <div class="card-head">
@@ -203,7 +206,7 @@
     try { YKCharts.equityLine($("#ch-equity"), d.equity_curve || [], { height: 220 }); } catch (e) { console.error("courbe :", e); }
     const tot = d.overview.visible.pnl_pct;
     $("#eq-total").innerHTML = d.overview.visible.n ? `<span class="pill ${Y.tone(tot)}"><b>${Y.pctv(tot, 2)}</b></span>` : "";
-    renderAssets(); renderOpen(); renderTrades(); renderLinks();
+    renderAssets(); renderOpen(); renderAgenda(); renderTrades(); renderLinks();
     if (location.hash === "#trade" && !$("#trade-modal").open) openTrade();
   }
 
@@ -264,6 +267,31 @@
     const tiles = $("#tiles"), dots = $("#tile-dots");
     dots.innerHTML = [0, 1, 2].map((i) => `<i class="${i ? "" : "on"}"></i>`).join("");
     tiles.onscroll = () => { const i = Math.round(tiles.scrollLeft / Math.max(1, tiles.scrollWidth - tiles.clientWidth) * 2); dots.querySelectorAll("i").forEach((d, k) => d.classList.toggle("on", k === i)); };
+  }
+
+  // Agenda macro : annonces à venir, pause des signaux, réaction habituelle (indicative, jamais une règle)
+  const HINTS = [
+    [/non-?farm|nfp|emploi us|employment change|unemployment rate|unemployment claims|chômage/i,
+     "Emploi plus fort que prévu (ou chômage en baisse) : souvent dollar en hausse, or en baisse, indices partagés (taux plus hauts plus longtemps). Plus faible : l'inverse."],
+    [/\bcpi\b|inflation|pce/i, "Inflation plus forte que prévu : souvent dollar en hausse, or et indices en baisse (la Fed baisserait moins vite ses taux). Plus faible : l'inverse."],
+    [/minutes/i, "Compte rendu de la dernière réunion de la Fed : ton plus strict que prévu → dollar en hausse, indices et or en baisse ; plus souple : l'inverse. Réaction souvent modérée."],
+    [/fomc|fed |federal funds|powell/i, "Fed plus stricte que prévu : dollar en hausse, indices et or en baisse ; plus souple : l'inverse. Gros mouvements jusqu'à la fin de la conférence de presse."],
+    [/crude oil inventories|eia/i, "Stocks de pétrole en hausse plus forte que prévu : pétrole en baisse ; en baisse : pétrole en hausse."],
+    [/ecb|bce|lagarde/i, "BCE plus stricte que prévu : euro en hausse ; plus souple : euro en baisse."],
+  ];
+  function renderAgenda() {
+    const el = $("#agenda-card"), ev = data.agenda || [], rules = data.agenda_rules || {};
+    if (!ev.length) { el.innerHTML = `<div class="empty">Aucune annonce importante connue sur les 7 prochains jours.</div>`; return; }
+    const lab = (k) => ((data.assets || []).find((a) => a.key === k) || {}).label || k;
+    const fmt = (iso) => { const t = new Date(iso); return t.toLocaleDateString("fr-FR", { weekday: "short", day: "numeric", month: "short" }) + " · " + Y.hhmm(t); };
+    const now = Date.now();
+    el.innerHTML = ev.map((e) => { const hint = (HINTS.find(([re]) => re.test(e.name)) || [])[1]; const past = new Date(e.at).getTime() < now;
+        return `<div style="display:flex;flex-wrap:wrap;gap:4px 14px;padding:10px 0;border-bottom:1px solid var(--line)${past ? ";opacity:.55" : ""}">
+          <div class="mono nowrap" style="font-size:12px;min-width:150px;padding-top:2px">${esc(fmt(e.at))}</div>
+          <div style="flex:1;min-width:220px"><div><b style="font-weight:500">${esc(e.name)}</b> <span class="pill ${e.impact === "high" ? "dn" : ""}">${e.impact === "high" ? "impact fort" : "impact moyen"}</span></div>
+          ${hint ? `<div class="muted" style="font-size:12px;margin-top:3px">${esc(hint)}</div>` : ""}
+          ${e.blackout ? `<div style="font-size:12px;margin-top:3px">⏸ Pause des signaux ${rules.before || 45} min avant → ${rules.after || 30} min après${e.assets && e.assets.length ? " (" + e.assets.map((k) => esc(lab(k))).join(", ") + ")" : " (tous les actifs)"}</div>` : ""}</div></div>`; }).join("") + `
+      <div class="muted" style="margin-top:10px">Annonces américaines à fort et moyen impact, plus la BCE pour l'euro (prévision et chiffre précédent quand ils sont publiés). Le bot n'envoie aucun signal pendant les pauses et, avant chaque signal, lit les titres de la presse financière des 2 dernières heures : au-delà d'un score de risque de ${rules.max_news_risk ?? 3}, il s'abstient. Les réactions indiquées sont habituelles, pas garanties : le marché réagit à l'écart avec la prévision, et pas toujours dans le même sens. Sur 12 mois, les trades du bot pris près d'une annonce ont fait pire que les autres (−0,34 R contre −0,09 R, sur 23 trades seulement) ; trader la cassure qui suit une annonce n'a rien donné (essai 4, page Apprentissage).</div>`;
   }
 
   function renderAssets() {

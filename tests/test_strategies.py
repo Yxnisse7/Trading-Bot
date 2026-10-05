@@ -66,3 +66,22 @@ def test_gap_uses_previous_new_york_close_not_the_overnight_bar():
         bars.append(Candle(t + 300 * k, 99.5, 99.7 + 0.02 * k, 99.45, 99.6 + 0.02 * k, 1))
     trades = st.gap_fade(st._Series(bars), "nasdaq")
     assert len(trades) == 1 and trades[0].direction == "long" and trades[0].reason == "objectif"
+
+
+def test_news_breakout_waits_fifteen_minutes_then_follows_the_break():
+    d = date(2026, 6, 5)
+    at = st._ny_ts(d, 8, 30)
+    bars = [Candle(at - 300, 100, 100.2, 99.8, 100, 1)]
+    for k, (hi, lo, cl) in enumerate([(101, 99.5, 100.5), (100.8, 99.6, 100.2), (100.9, 99.7, 100.4)]):
+        bars.append(Candle(at + 300 * k, 100, hi, lo, cl, 1))        # range 8:30–8:45 : 99,5 → 101
+    price = 100.4
+    for k in range(3, 50):                                            # cassure par le haut à 8:50
+        price += 0.3
+        bars.append(Candle(at + 300 * k, price - 0.3, price + 0.1, price - 0.35, price, 1))
+    tr = st.news_breakout(st._Series(bars), "nasdaq", events=[(at, "nfp")])
+    assert len(tr) == 1
+    t = tr[0]
+    first_break = next(b for b in bars if b.ts >= at + 900 and b.close > 101)
+    assert t.direction == "long" and t.entry_ts == first_break.ts + 300 and t.entry == first_break.close
+    assert round(t.risk, 6) == round(t.entry - 99.5, 6)                 # stop sous le range
+    assert t.reason == "heure" and t.exit_ts == st._ny_ts(d, 12, 0)

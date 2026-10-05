@@ -36,7 +36,11 @@ STRATEGIES = {
     "london_breakout": "Cassure du range asiatique à l'ouverture de Londres",
     "donchian_1h": "Cassure de canal de Donchian 20 heures, sortie sur 10 heures (méthode Turtle)",
     "rsi2_1h": "Retour à la moyenne RSI(2) dans le sens de la MM200, en bougies 1 h (Connors)",
+    "news_breakout": "Cassure du range des 15 min qui suivent une annonce (emploi, inflation, Fed)",
+    "pre_fomc": "Achat des indices la veille d'une décision de la Fed (Lucca & Moench, 2015)",
 }
+INFO_ONLY = {"pre_fomc"}          # trop peu d'occurrences : affiché sans verdict (essai 4)
+MIN_TRADES = {"news_breakout": 20}
 
 
 @dataclass
@@ -396,9 +400,61 @@ def rsi2_1h(candles: list[Candle], asset: str) -> list[Trade]:
     return out
 
 
+# ---------------------------------------------------------------- annonces macro (essai 4)
+def news_breakout(s: _Series, asset: str, events: list[tuple[int, str]] | None = None) -> list[Trade]:
+    from .macro_history import events as macro_events
+
+    out = []
+    for at, kind in (events if events is not None else macro_events()):
+        day = datetime.fromtimestamp(at, NY).date()
+        fed = kind == "fomc"
+        i0 = s.at(at)
+        i1 = s.at(at + 600)
+        if i0 is None or i1 is None or i1 - i0 != 2:
+            continue
+        hi = max(x.high for x in s.c[i0:i1 + 1])
+        lo = min(x.low for x in s.c[i0:i1 + 1])
+        last_entry = _ny_ts(day, 15, 0) if fed else _ny_ts(day, 10, 0)
+        exit_ts = _ny_ts(day, 16, 0) if fed else _ny_ts(day, 12, 0)
+        k = i1 + 1
+        while k < len(s.c) and s.c[k].ts + 300 <= last_entry:
+            b = s.c[k]
+            if b.close > hi or b.close < lo:
+                long = b.close > hi
+                stop = lo if long else hi
+                px, j, why = simulate(s.c, k, "long" if long else "short", b.close, stop, exit_ts=exit_ts)
+                out.append(Trade("news_breakout", asset, "long" if long else "short", b.ts + 300, s.c[j].ts + 300,
+                                 b.close, px, abs(b.close - stop), why))
+                break
+            k += 1
+    return out
+
+
+def pre_fomc(candles: list[Candle], asset: str) -> list[Trade]:
+    if asset not in ("nasdaq", "sp500"):
+        return []
+    from .macro_history import FOMC
+
+    h = ind.resample(candles, 60)
+    atr = ind.atr(h, 14)
+    hts = [x.ts for x in h]
+    out = []
+    for d in FOMC:
+        day = date.fromisoformat(d)
+        start, end = _ny_ts(_prev_session(day), 14, 0), _ny_ts(day, 14, 0)
+        i = bisect_left(hts, start) - 1                  # bougie horaire close juste avant 14:00 la veille
+        if i < 15 or not atr[i] or hts[i] + 3600 > start or start - hts[i] > 7200:
+            continue
+        entry = h[i].close
+        risk = 2 * atr[i]
+        px, j, why = simulate(h, i, "long", entry, entry - risk, exit_ts=end - 300, bar_seconds=3600)
+        out.append(Trade("pre_fomc", asset, "long", h[i].ts + 3600, h[j].ts + 3600, entry, px, risk, why))
+    return out
+
+
 RUNNERS_5M = {"orb5": orb5, "orb30": orb30, "intraday_mom": intraday_mom, "noise_area": noise_area,
-              "gap_fade": gap_fade, "london_breakout": london_breakout}
-RUNNERS_1H = {"donchian_1h": donchian_1h, "rsi2_1h": rsi2_1h}
+              "gap_fade": gap_fade, "london_breakout": london_breakout, "news_breakout": news_breakout}
+RUNNERS_1H = {"donchian_1h": donchian_1h, "rsi2_1h": rsi2_1h, "pre_fomc": pre_fomc}
 
 
 def run_all(asset: str, candles: list[Candle], only: list[str] | None = None) -> list[Trade]:
@@ -451,16 +507,16 @@ def evaluate(trades: list[Trade], cost_bot_pct: float, topstep_cost: tuple[float
             "last": datetime.fromtimestamp(sel[-1].entry_ts, tz=timezone.utc).date().isoformat() if sel else None}
 
 
-def discovery_pass(ev: dict[str, Any]) -> bool:
+def discovery_pass(ev: dict[str, Any], min_trades: int = 30) -> bool:
     """Critères de l'essai 3 sur la période de découverte (HYPOTHESES.md)."""
     net, h1, h2 = ev["net"], ev["first_half"], ev["second_half"]
-    return (ev["n"] >= 30 and (net["mean_r"] or 0) > 0 and (net["profit_factor"] or 0) >= 1.1
+    return (ev["n"] >= min_trades and (net["mean_r"] or 0) > 0 and (net["profit_factor"] or 0) >= 1.1
             and (h1["mean_r"] or 0) > 0 and (h2["mean_r"] or 0) > 0)
 
 
-def confirmation_pass(ev: dict[str, Any]) -> bool:
+def confirmation_pass(ev: dict[str, Any], min_trades: int = 30) -> bool:
     net = ev["net"]
-    return ev["n"] >= 30 and (net["mean_r"] or 0) > 0 and (net["profit_factor"] or 0) >= 1.1
+    return ev["n"] >= min_trades and (net["mean_r"] or 0) > 0 and (net["profit_factor"] or 0) >= 1.1
 
 
 def proven(ev_all: dict[str, Any], n_trials: int, alpha: float = 0.05) -> bool:

@@ -228,7 +228,7 @@ def main(argv: list[str] | None = None) -> int:
         from .topstep import FEES, PRODUCTS
 
         split = int(datetime(2025, 9, 28, tzinfo=timezone.utc).timestamp())
-        n_trials = len(sl.STRATEGIES) * len(eng.cfg.assets)
+        n_trials = (len(sl.STRATEGIES) - len(sl.INFO_ONLY)) * len(eng.cfg.assets)
         out = {"split": "2025-09-28", "n_trials": n_trials, "strategies": sl.STRATEGIES, "cells": {}}
         for key, asset in eng.cfg.assets.items():
             if args.asset and key not in args.asset:
@@ -246,12 +246,15 @@ def main(argv: list[str] | None = None) -> int:
                 disc = sl.evaluate(tr, asset.cost_pct, tcost, start_ts=split)
                 conf = sl.evaluate(tr, asset.cost_pct, tcost, end_ts=split)
                 both = sl.evaluate(tr, asset.cost_pct, tcost)
-                cand = sl.discovery_pass(disc)
-                if not cand:
+                need = sl.MIN_TRADES.get(strat, 30)
+                cand = sl.discovery_pass(disc, need)
+                if strat in sl.INFO_ONLY:
+                    status = "pour information"
+                elif not cand:
                     status = "écarté (découverte)"
                 elif conf["n"] == 0:
                     status = "candidat : confirmation à venir"
-                elif not sl.confirmation_pass(conf):
+                elif not sl.confirmation_pass(conf, need):
                     status = "écarté (confirmation)"
                 else:
                     status = "prouvé" if sl.proven(both, n_trials) else "validé"

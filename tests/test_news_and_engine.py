@@ -42,6 +42,11 @@ def test_blackout_windows():
     assert evs and "NFP" in evs[0].name
     assert news.in_blackout(now, evs, 45, 30) is not None
     assert news.in_blackout(now - timedelta(hours=2), evs, 45, 30) is None
+    # dates officielles : NFP de février 2026 un mercredi, rien le 1er vendredi de mai (report au 8), 13h30 UTC l'hiver
+    feb = news.recurring_macro_events(datetime(2026, 2, 11, 15, 0, tzinfo=timezone.utc))
+    assert feb and feb[0].at == datetime(2026, 2, 11, 13, 30, tzinfo=timezone.utc)
+    assert news.recurring_macro_events(datetime(2026, 5, 1, 12, 0, tzinfo=timezone.utc)) == []
+    assert news.recurring_macro_events(datetime(2026, 5, 8, 12, 0, tzinfo=timezone.utc))[0].at.hour == 12
     custom = news.load_calendar([{"name": "FOMC", "at": "2026-09-16T18:00:00Z", "impact": "high"},
                                  {"name": "x", "at": "bad"}])
     assert len(custom) == 1
@@ -746,3 +751,21 @@ def test_daily_summary_is_sent_once_per_day(tmp_path, monkeypatch):
     assert eng.summary(day, send=False) and len(sent) == 1         # /resume répond toujours, sans diffuser
     assert eng.summary(day, force=True) and len(sent) == 2
     assert eng.summary(day + timedelta(days=1)) and len(sent) == 3  # jour suivant : envoyé
+
+
+def test_agenda_lists_relevant_announcements_with_official_nfp(tmp_path, monkeypatch):
+    from trading_bot.engine import Engine
+    from trading_bot.config import Config, default_assets
+    from trading_bot.storage import Store
+
+    store = Store(tmp_path / "data", tmp_path / "docs")
+    store.calendar_file.parent.mkdir(parents=True, exist_ok=True)
+    store.calendar_file.write_text(json.dumps({"events": [
+        {"name": "CPI US (données sept. 2026)", "at": "2026-10-14T12:30:00Z", "impact": "high"}]}))
+    store.calendar_cache_file.write_text(json.dumps({"events": [
+        {"name": "CAD Employment Change", "at": "2026-10-09T12:30:00Z", "impact": "medium"},
+        {"name": "USD Unemployment Claims", "at": "2026-10-08T12:30:00Z", "impact": "medium"}]}))
+    eng = Engine(Config(assets=default_assets()))
+    eng.store = store
+    names = [e["name"] for e in eng.agenda(datetime(2026, 10, 1, 12, 0, tzinfo=timezone.utc), days=14)]
+    assert names == ["Rapport emploi US (NFP)", "USD Unemployment Claims", "CPI US (données sept. 2026)"]

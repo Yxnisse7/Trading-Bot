@@ -153,12 +153,22 @@ def risk_score(items: list[NewsItem], asset_keywords: tuple[str, ...]) -> tuple[
 # ---- Calendrier macro (blackout) -------------------------------------------------
 
 def recurring_macro_events(day: datetime) -> list[MacroEvent]:
-    """Événements récurrents déductibles sans API : NFP (1er vendredi, 12h30 UTC)."""
-    events: list[MacroEvent] = []
-    d = day.astimezone(timezone.utc)
-    if d.weekday() == 4 and d.day <= 7:
-        events.append(MacroEvent("Rapport emploi US (NFP)", d.replace(hour=12, minute=30, second=0, microsecond=0)))
-    return events
+    """Rapport emploi US (NFP) du jour, à 8:30 heure de New York (12:30 UTC l'été, 13:30 l'hiver).
+
+    Dates officielles du BLS quand elles sont connues (`macro_history.NFP`, reports compris : le NFP ne
+    tombe pas toujours le 1er vendredi) ; au-delà, règle du 1er vendredi du mois."""
+    from zoneinfo import ZoneInfo
+
+    from ..macro_history import NFP
+
+    ny = ZoneInfo("America/New_York")
+    d = day.astimezone(ny).date()
+    known_years = {int(x[:4]) for x in NFP}
+    official = d.isoformat() in NFP if d.year in known_years else (d.weekday() == 4 and d.day <= 7)
+    if not official:
+        return []
+    at = datetime(d.year, d.month, d.day, 8, 30, tzinfo=ny).astimezone(timezone.utc)
+    return [MacroEvent("Rapport emploi US (NFP)", at)]
 
 
 def load_calendar(events_raw: list[dict]) -> list[MacroEvent]:

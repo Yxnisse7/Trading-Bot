@@ -50,6 +50,9 @@ NEWS_CATEGORIES = {"nasdaq": ["macro"], "sp500": ["macro"], "bitcoin": ["crypto"
                    "or_physique": ["gold", "macro"]}  # mode halal
 
 
+OTHER_CURRENCIES = {f"{c} " for c in ("CAD", "JPY", "GBP", "AUD", "NZD", "CHF", "CNY")}
+
+
 class Engine:
     def __init__(self, cfg: Config | None = None, store: Store | None = None):
         self.cfg = cfg or load_config()
@@ -485,6 +488,28 @@ class Engine:
             log.warning("calendrier économique : %s", exc)
         return events
 
+    def agenda(self, now: datetime | None = None, days: int = 7) -> list[dict[str, Any]]:
+        """Annonces des `days` prochains jours pour le site, sans réseau : calendrier manuel (CPI, Fed),
+        dates officielles du rapport emploi et dernier calendrier économique téléchargé (prévisions)."""
+        now = now or utcnow()
+        events = newsmod.load_calendar(self.store.calendar()) + calmod.load_cache(self.store.calendar_cache_file)
+        for k in range(days + 1):
+            events += newsmod.recurring_macro_events(now + timedelta(days=k))
+        end = now + timedelta(days=days)
+        out, seen = [], set()
+        for e in sorted(events, key=lambda e: e.at):
+            if not (now - timedelta(hours=2) <= e.at <= end) or e.impact == "low":
+                continue
+            if e.name[:4] in OTHER_CURRENCIES:
+                continue                                  # autres devises (CAD, JPY…) : sans effet sur nos actifs
+            key = (e.at, e.name.split(" (")[0].lower())
+            if key in seen:
+                continue
+            seen.add(key)
+            out.append({"name": e.name, "at": iso(e.at), "impact": e.impact, "assets": list(e.assets or ()),
+                        "blackout": e.impact == "high"})
+        return out[:30]
+
     def _touch_state(self, now: datetime, note: str = "") -> None:
         st = self.store.state()
         st["last_scan"] = iso(now)
@@ -835,6 +860,13 @@ class Engine:
         dash["stress"] = self.store.stress()
         dash["setups"] = self.store.setups()       # évaluation des setups (sans le détail des trades)
         dash["strategies"] = self.store.strategies()
+        try:
+            dash["agenda"] = self.agenda()
+            dash["agenda_rules"] = {"before": self.cfg.news_blackout_before_minutes,
+                                    "after": self.cfg.news_blackout_after_minutes,
+                                    "max_news_risk": self.cfg.max_news_risk_score}
+        except Exception:  # noqa: BLE001 — l'agenda ne doit jamais bloquer le rapport
+            log.exception("agenda")
         self.store.save_dashboard(dash)
         if self.TOPSTEP:
             try:
