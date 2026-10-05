@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-05T17:40:48.458129+02:00",
+  "updated_at": "2026-10-05T17:45:47.182367+02:00",
   "timezone": "Europe/Paris",
   "equity_curve": [
     {
@@ -1304,7 +1304,7 @@
       "avg_pnl_pct": -0.0467
     },
     "open": 1,
-    "open_shadow": 0
+    "open_shadow": 1
   },
   "by_source": {
     "bot": {
@@ -4673,6 +4673,40 @@
   ],
   "open_signals": [
     {
+      "id": "234378c736",
+      "asset": "sp500",
+      "asset_label": "S&P 500 (ES)",
+      "direction": "long",
+      "horizon": "1h",
+      "entry": 7811.0,
+      "take_profit": 7824.0,
+      "stop_loss": 7802.5,
+      "risk_reward": 1.53,
+      "confidence": "moyen",
+      "score": 4.68,
+      "criteria": [
+        "adx",
+        "rsi",
+        "trend_15m",
+        "trend_1h",
+        "trend_5m",
+        "vwap"
+      ],
+      "source": "shadow",
+      "status": "open",
+      "pnl_pct": null,
+      "pnl_gross_pct": null,
+      "duration_minutes": null,
+      "close_price": null,
+      "created_at": "2026-10-05T15:45:37Z",
+      "closed_at": null,
+      "created_local": "05/10 17:45",
+      "expires_at": "2026-10-05T16:45:37Z",
+      "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 21.50 (0.28 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 56%.",
+      "news_context": "actualité à surveiller (score 2) : Falling wages, soaring energy prices and inflation: It’s beginning to look a lot like the 1970s",
+      "manual_exit": null
+    },
+    {
       "id": "b5f905712a",
       "asset": "nasdaq",
       "asset_label": "Nasdaq 100 (NQ)",
@@ -7135,10 +7169,10 @@
     }
   },
   "state": {
-    "last_scan": "2026-10-05T15:40:37Z",
+    "last_scan": "2026-10-05T15:45:37Z",
     "last_scan_note": "0 signal(aux)",
     "last_summary": "2026-10-04T22:06:06Z",
-    "last_track": "2026-10-05T15:40:37Z",
+    "last_track": "2026-10-05T15:45:37Z",
     "last_summary_day": "2026-10-04"
   },
   "limits": {
@@ -17778,6 +17812,13 @@
       "impact": "high",
       "assets": [],
       "blackout": true
+    },
+    {
+      "name": "USD FOMC Member Waller Speaks",
+      "at": "2026-10-08T08:30:00Z",
+      "impact": "medium",
+      "assets": [],
+      "blackout": false
     },
     {
       "name": "USD Unemployment Claims (prévu 200K, précédent 197K)",
