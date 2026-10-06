@@ -75,7 +75,7 @@
       "variant": "horizon_3h",
       "exc": {
         "mfe": 0.4607,
-        "mae": 0.6966,
+        "mae": 0.7416,
         "armed": {
           "0.5": false,
           "0.8": false,
@@ -86,7 +86,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1791302100
+        "last_ts": 1791302400
       }
     }
   },
@@ -177,7 +177,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1791302100
+        "last_ts": 1791302400
       }
     }
   },
@@ -251,6 +251,94 @@
         "range_pct": 0.2962,
         "cost_r": 0.0842,
         "us_open_min": 155.5,
+        "weekday": 1
+      },
+      "variant": "confiance_moyenne",
+      "exc": {
+        "mfe": 0.0333,
+        "mae": 0.0,
+        "armed": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "be": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "last_ts": null
+      }
+    }
+  },
+  {
+    "id": "68dfa7abd7",
+    "asset": "nasdaq",
+    "asset_label": "Nasdaq 100 (NQ)",
+    "direction": "long",
+    "entry": 31566.5,
+    "take_profit": 31622.5,
+    "stop_loss": 31529.0,
+    "risk_reward": 1.49,
+    "confidence": "moyen",
+    "score": 3.75,
+    "criteria": [
+      "adx",
+      "trend_15m",
+      "trend_1h",
+      "vwap"
+    ],
+    "rationale": "Achat : tendance forte (ADX), tendance 15 min, tendance 1 h, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 93.50 (0.30 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 61%.",
+    "news_context": "actualité à surveiller (score 1) : Trade deficit hits $105.6 billion, widest since just before Trump tariffs enacted last year",
+    "created_at": "2026-10-06T16:10:40Z",
+    "expires_at": "2026-10-06T17:10:40Z",
+    "status": "open",
+    "closed_at": null,
+    "close_price": null,
+    "pnl_pct": null,
+    "pnl_gross_pct": null,
+    "duration_minutes": null,
+    "hourly_range": 93.5,
+    "source": "shadow",
+    "horizon": "1h",
+    "horizon_minutes": 60,
+    "meta": {
+      "tick": 0.25,
+      "details": {
+        "trend_5m": "EMA20 31572.49 / EMA50 31540.95 (5 min)",
+        "trend_15m": "EMA20 31534.51 / EMA50 31465.38",
+        "trend_1h": "prix vs EMA20 1 h 31426.36",
+        "adx": "ADX15 30.6 (+DI 21.3 / -DI 13.6)",
+        "vwap": "VWAP jour 31504.34",
+        "rsi": "RSI14 5 min 50.5",
+        "macd": "histogramme MACD -5.5383",
+        "level": "support 31455.00 / résistance -",
+        "volume": "z-score volume -3.22",
+        "pdhl": "veille : haut 31385.25 / bas 30957.50",
+        "activity": "activité de l'heure 1.25× la moyenne",
+        "corr": "VIX -0.6 % sur 15 min"
+      },
+      "support": 31455.0,
+      "resistance": null,
+      "atr_5m": 22.059221127939278,
+      "atr_ratio": 1.2095682028770516,
+      "hourly_range_pct": 0.2962,
+      "adx_15m": 30.627017889971402,
+      "sigma_5m": 0.00048338567934485605,
+      "p_resolution": 0.607,
+      "p_tp_neutral": 0.21666666666666667,
+      "activity_ratio": 1.253,
+      "base_minutes": 5,
+      "ctx": {
+        "adx": 30.63,
+        "rsi_dir": 50.46,
+        "vwap_ext": 0.6648,
+        "ema_ext": -0.064,
+        "atr_ratio": 1.21,
+        "activity": 1.253,
+        "range_pct": 0.2962,
+        "cost_r": 0.0842,
+        "us_open_min": 160.7,
         "weekday": 1
       },
       "variant": "confiance_moyenne"
