@@ -1,6 +1,6 @@
 # Trading-Bot — rapport
 
-_Mis à jour le 06/10/2026 à 18:55 (Europe/Paris)._
+_Mis à jour le 06/10/2026 à 19:01 (Europe/Paris)._
 
 ## Vue d'ensemble
 
@@ -8,7 +8,7 @@ _Mis à jour le 06/10/2026 à 18:55 (Europe/Paris)._
 - Taux de réussite cumulé (TP / (TP+SL)) : **47%** — hasard attendu 42%, avantage **+5%**
 - P&L théorique cumulé, net des coûts estimés (somme des % par trade, sans levier) : **-2.39 %** (brut +0.73 %)
 - Signaux ouverts : **0**
-- Signaux fantômes (suivis en silence pour l'apprentissage) : **229** clôturés, 3 ouverts, taux de réussite 36% (hasard attendu 41%)
+- Signaux fantômes (suivis en silence pour l'apprentissage) : **230** clôturés, 3 ouverts, taux de réussite 36% (hasard attendu 41%)
 
 ## Statistiques
 
@@ -110,18 +110,18 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 
 | Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
 |---|---:|---:|---:|---:|---:|---:|
-| adx | 229 | 69 | 121 | 39 | 36% | -0.037 % |
+| adx | 230 | 69 | 122 | 39 | 36% | -0.037 % |
 | corr | 14 | 1 | 10 | 3 | 9% | -0.203 % |
 | level | 25 | 7 | 9 | 9 | 44% | -0.081 % |
-| macd | 61 | 13 | 38 | 10 | 25% | -0.078 % |
-| orb | 10 | 3 | 6 | 1 | 33% | -0.130 % |
+| macd | 62 | 13 | 39 | 10 | 25% | -0.079 % |
+| orb | 11 | 3 | 7 | 1 | 30% | -0.128 % |
 | pdhl | 29 | 8 | 15 | 6 | 35% | -0.019 % |
 | rsi | 157 | 50 | 87 | 20 | 36% | -0.035 % |
-| trend_15m | 229 | 69 | 121 | 39 | 36% | -0.037 % |
-| trend_1h | 224 | 66 | 120 | 38 | 35% | -0.038 % |
-| trend_5m | 185 | 64 | 99 | 22 | 39% | -0.024 % |
+| trend_15m | 230 | 69 | 122 | 39 | 36% | -0.037 % |
+| trend_1h | 225 | 66 | 121 | 38 | 35% | -0.038 % |
+| trend_5m | 186 | 64 | 100 | 22 | 39% | -0.025 % |
 | volume | 1 | 1 | 0 | 0 | 100% | +0.260 % |
-| vwap | 225 | 69 | 117 | 39 | 37% | -0.034 % |
+| vwap | 226 | 69 | 118 | 39 | 37% | -0.035 % |
 
 ### Fantômes par actif
 
@@ -133,7 +133,7 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 | gold | 37 | 14 | 17 | 6 | 45% | +0.007 % |
 | nasdaq | 56 | 20 | 28 | 8 | 42% | -0.021 % |
 | oil | 40 | 14 | 20 | 6 | 41% | -0.043 % |
-| sp500 | 54 | 11 | 36 | 7 | 23% | -0.054 % |
+| sp500 | 55 | 11 | 37 | 7 | 23% | -0.055 % |
 
 ## Derniers trades
 
@@ -189,12 +189,12 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 
 Corrections par actif :
 
-- sp500 : {'vwap': 0.737}
+- sp500 : {'trend_5m': 0.996, 'trend_15m': 0.996, 'trend_1h': 0.996, 'adx': 0.996, 'vwap': 0.727}
 
 | Variante testée en fantôme | Trades | Gain net moyen | Statut |
 |---|---:|---:|---|
 | indices le matin européen | 44 | -0.37 R | en test |
-| horizon ~3 h | 48 | -0.24 R | en test |
+| horizon ~3 h | 49 | -0.26 R | en test |
 | confiance moyenne | 28 | -0.13 R | en test |
 | entrées dans l'heure avant l'ouverture américaine | 4 | +0.04 R | en test |
 | reprise juste après un stop | 17 | -0.33 R | en test |
@@ -207,9 +207,10 @@ Notes :
 
 - trades réels : +0,12 R ± 0,21 R par trade avant frais sur 116 trades (0 R = hasard)
 - aucun critère ne s'écarte du hasard au-delà de la marge de sécurité : poids par défaut conservés
-- sp500, vwap : -0,17 R contre +0,03 R en global sur 133 trades éq. → poids ×0,98 sur cet actif
+- sp500, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,17 R contre +0,02 R en global sur 137 trades éq. → poids ×1,00 sur cet actif
+- sp500, vwap : -0,18 R contre +0,03 R en global sur 134 trades éq. → poids ×0,97 sur cet actif
 - variante « indices le matin européen » en test : 44 trades, -0,37 R net, encore 56 trades avant décision
-- variante « horizon ~3 h » en test : 48 trades, -0,24 R net, encore 52 trades avant décision
+- variante « horizon ~3 h » en test : 49 trades, -0,26 R net, encore 51 trades avant décision
 - variante « confiance moyenne » en test : 28 trades, -0,13 R net, encore 72 trades avant décision
 - variante « entrées dans l'heure avant l'ouverture américaine » en test : 4 trades, +0,04 R net, encore 96 trades avant décision
 - variante « reprise juste après un stop » en test : 17 trades, -0,33 R net, encore 83 trades avant décision
