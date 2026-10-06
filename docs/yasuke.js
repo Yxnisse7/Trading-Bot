@@ -117,6 +117,30 @@
               : `<a class="plus" href="index.html#trade"><span class="pb">${I.plusBig}</span><span>Trade</span></a>`) + item(PAGES[2]) + item(PAGES[3]) + item(PAGES[4]);
     document.body.appendChild(nav);
     themeButton();
+    fitHeader(host);
+  }
+
+  // Les onglets ne doivent jamais passer sous l'état du bot ou les boutons : on masque les textes
+  // secondaires un par un (fit-1 à fit-4) tant que les onglets débordent.
+  function fitHeader(host) {
+    const tabs = host.querySelector(".yk-tabs"), right = host.querySelector(".yk-right");
+    if (!tabs || !right) return;
+    const LEVELS = ["fit-1", "fit-2", "fit-3", "fit-4"];
+    let queued = false;
+    const fit = () => {
+      queued = false;
+      host.classList.remove(...LEVELS);
+      for (const lvl of LEVELS) {
+        if (tabs.scrollWidth <= tabs.clientWidth + 1) break;
+        host.classList.add(lvl);
+      }
+    };
+    const later = () => { if (!queued) { queued = true; requestAnimationFrame(fit); } };
+    fit();
+    if (window.ResizeObserver) { const ro = new ResizeObserver(later); ro.observe(host); ro.observe(right); }
+    else addEventListener("resize", later);
+    try { new MutationObserver(later).observe(right, { childList: true, subtree: true, characterData: true }); } catch (e) { /* ancien navigateur */ }
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(later);
   }
 
   // ------------------------------------------------------------------ thème

@@ -58,12 +58,13 @@ h3 { font-size: 17px; letter-spacing: -0.01em; margin: 0; font-weight: 600; }
 /* ---------------------------------------------------------------- en-tête */
 .yk-top { position: sticky; top: 0; z-index: 40; background: var(--card); border-bottom: 1px solid var(--line); }
 .yk-top-in { max-width: 1280px; margin: 0 auto; height: 64px; padding: 0 20px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
-.yk-left { display: flex; align-items: center; gap: 40px; min-width: 0; }
+.yk-left { display: flex; align-items: center; gap: 40px; min-width: 0; flex: 1 1 auto; }
 .yk-brand { display: flex; align-items: center; gap: 10px; color: var(--text); text-decoration: none !important; }
 .yk-brand svg { flex: none; }
 .yk-brand b { display: block; font-size: 17px; letter-spacing: -0.02em; line-height: 1.1; }
 .yk-brand small { display: block; font-size: 11px; color: var(--muted); letter-spacing: .04em; font-weight: 500; }
-.yk-tabs { display: flex; gap: 28px; height: 64px; }
+.yk-tabs { display: flex; gap: 28px; height: 64px; min-width: 0; overflow-x: auto; scrollbar-width: none; }
+.yk-tabs::-webkit-scrollbar { display: none; }
 .yk-tab { display: flex; align-items: center; height: 64px; font-size: 14px; font-weight: 500; color: var(--muted); border-bottom: 2px solid transparent; text-decoration: none !important; padding-top: 2px; }
 .yk-tab:hover { color: var(--text); }
 .yk-tab { white-space: nowrap; }
@@ -74,7 +75,15 @@ h3 { font-size: 17px; letter-spacing: -0.01em; margin: 0; font-weight: 600; }
 @media (max-width: 1180px) { .yk-brand small { display: none; } }
 @media (max-width: 1060px) { #btn-sections span, .yk-right .btn-lbl { display: none; } }
 .yk-tab.active { color: var(--text); font-weight: 600; border-bottom-color: var(--brand); }
-.yk-right { display: flex; align-items: center; gap: 8px; }
+.yk-right { display: flex; align-items: center; gap: 8px; flex: none; }
+/* En-tête trop étroit (mesuré par yasuke.js) : on retire d'abord les textes secondaires, jamais les onglets */
+.yk-top.fit-1 .yk-st-sub { display: none; }
+.yk-top.fit-2 #btn-sections span, .yk-top.fit-2 .yk-right .btn-lbl { display: none; }
+.yk-top.fit-3 .yk-brand small { display: none; }
+.yk-top.fit-3 .yk-left { gap: 20px; }
+.yk-top.fit-3 .yk-tabs { gap: 16px; }
+.yk-top.fit-4 .yk-status b { display: none; }
+.yk-top.fit-4 .yk-status { padding: 6px 8px; }
 .yk-status { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; border-radius: 999px; background: var(--neu-soft); color: var(--muted); font-size: 13px; white-space: nowrap; }
 .yk-status b { font-weight: 600; }
 .yk-status .dot { width: 14px; height: 14px; border-radius: 50%; display: grid; place-items: center; background: color-mix(in srgb, currentColor 22%, transparent); }
