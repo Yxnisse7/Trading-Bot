@@ -1,6 +1,6 @@
 # Trading-Bot — rapport
 
-_Mis à jour le 06/10/2026 à 15:45 (Europe/Paris)._
+_Mis à jour le 06/10/2026 à 15:50 (Europe/Paris)._
 
 ## Vue d'ensemble
 
@@ -8,7 +8,7 @@ _Mis à jour le 06/10/2026 à 15:45 (Europe/Paris)._
 - Taux de réussite cumulé (TP / (TP+SL)) : **47%** — hasard attendu 42%, avantage **+6%**
 - P&L théorique cumulé, net des coûts estimés (somme des % par trade, sans levier) : **-2.24 %** (brut +0.85 %)
 - Signaux ouverts : **0**
-- Signaux fantômes (suivis en silence pour l'apprentissage) : **220** clôturés, 2 ouverts, taux de réussite 36% (hasard attendu 41%)
+- Signaux fantômes (suivis en silence pour l'apprentissage) : **221** clôturés, 1 ouverts, taux de réussite 36% (hasard attendu 41%)
 
 ## Statistiques
 
@@ -110,18 +110,18 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 
 | Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
 |---|---:|---:|---:|---:|---:|---:|
-| adx | 220 | 66 | 115 | 39 | 36% | -0.035 % |
+| adx | 221 | 66 | 116 | 39 | 36% | -0.035 % |
 | corr | 14 | 1 | 10 | 3 | 9% | -0.203 % |
 | level | 24 | 7 | 8 | 9 | 47% | -0.058 % |
 | macd | 58 | 13 | 35 | 10 | 27% | -0.066 % |
 | orb | 8 | 3 | 4 | 1 | 43% | -0.127 % |
 | pdhl | 29 | 8 | 15 | 6 | 35% | -0.019 % |
-| rsi | 153 | 47 | 86 | 20 | 35% | -0.038 % |
-| trend_15m | 220 | 66 | 115 | 39 | 36% | -0.035 % |
-| trend_1h | 215 | 63 | 114 | 38 | 36% | -0.036 % |
-| trend_5m | 179 | 61 | 96 | 22 | 39% | -0.025 % |
+| rsi | 154 | 47 | 87 | 20 | 35% | -0.039 % |
+| trend_15m | 221 | 66 | 116 | 39 | 36% | -0.035 % |
+| trend_1h | 216 | 63 | 115 | 38 | 35% | -0.036 % |
+| trend_5m | 180 | 61 | 97 | 22 | 39% | -0.026 % |
 | volume | 1 | 1 | 0 | 0 | 100% | +0.260 % |
-| vwap | 216 | 66 | 111 | 39 | 37% | -0.032 % |
+| vwap | 217 | 66 | 112 | 39 | 37% | -0.032 % |
 
 ### Fantômes par actif
 
@@ -131,7 +131,7 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 | ethereum | 11 | 1 | 7 | 3 | 12% | -0.242 % |
 | euro | 19 | 7 | 11 | 1 | 39% | -0.023 % |
 | gold | 37 | 14 | 17 | 6 | 45% | +0.007 % |
-| nasdaq | 50 | 19 | 23 | 8 | 45% | -0.013 % |
+| nasdaq | 51 | 19 | 24 | 8 | 44% | -0.016 % |
 | oil | 39 | 14 | 19 | 6 | 42% | -0.027 % |
 | sp500 | 52 | 9 | 36 | 7 | 20% | -0.061 % |
 
@@ -189,12 +189,12 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 
 Corrections par actif :
 
-- sp500 : {'trend_5m': 0.96, 'trend_15m': 0.96, 'trend_1h': 0.96, 'adx': 0.96, 'vwap': 0.698}
+- sp500 : {'trend_5m': 0.964, 'trend_15m': 0.964, 'trend_1h': 0.964, 'adx': 0.964, 'vwap': 0.701}
 
 | Variante testée en fantôme | Trades | Gain net moyen | Statut |
 |---|---:|---:|---|
 | indices le matin européen | 44 | -0.37 R | en test |
-| horizon ~3 h | 42 | -0.30 R | en test |
+| horizon ~3 h | 43 | -0.31 R | en test |
 | confiance moyenne | 26 | -0.06 R | en test |
 | entrées dans l'heure avant l'ouverture américaine | 4 | +0.04 R | en test |
 | reprise juste après un stop | 17 | -0.33 R | en test |
@@ -208,9 +208,9 @@ Notes :
 - trades réels : +0,13 R ± 0,21 R par trade avant frais sur 113 trades (0 R = hasard)
 - aucun critère ne s'écarte du hasard au-delà de la marge de sécurité : poids par défaut conservés
 - sp500, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,18 R contre +0,02 R en global sur 133 trades éq. → poids ×0,96 sur cet actif
-- sp500, vwap : -0,19 R contre +0,04 R en global sur 130 trades éq. → poids ×0,93 sur cet actif
+- sp500, vwap : -0,19 R contre +0,03 R en global sur 130 trades éq. → poids ×0,93 sur cet actif
 - variante « indices le matin européen » en test : 44 trades, -0,37 R net, encore 56 trades avant décision
-- variante « horizon ~3 h » en test : 42 trades, -0,30 R net, encore 58 trades avant décision
+- variante « horizon ~3 h » en test : 43 trades, -0,31 R net, encore 57 trades avant décision
 - variante « confiance moyenne » en test : 26 trades, -0,06 R net, encore 74 trades avant décision
 - variante « entrées dans l'heure avant l'ouverture américaine » en test : 4 trades, +0,04 R net, encore 96 trades avant décision
 - variante « reprise juste après un stop » en test : 17 trades, -0,33 R net, encore 83 trades avant décision
