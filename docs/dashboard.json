@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-06T16:05:41.327797+02:00",
+  "updated_at": "2026-10-06T16:10:43.789171+02:00",
   "timezone": "Europe/Paris",
   "equity_curve": [
     {
@@ -1358,7 +1358,7 @@
       "avg_pnl_pct": -0.0346
     },
     "open": 0,
-    "open_shadow": 0
+    "open_shadow": 1
   },
   "by_source": {
     "bot": {
@@ -4717,7 +4717,42 @@
       ]
     }
   ],
-  "open_signals": [],
+  "open_signals": [
+    {
+      "id": "b3f131d122",
+      "asset": "nasdaq",
+      "asset_label": "Nasdaq 100 (NQ)",
+      "direction": "long",
+      "horizon": "3h",
+      "entry": 31556.75,
+      "take_profit": 31625.75,
+      "stop_loss": 31510.75,
+      "risk_reward": 1.5,
+      "confidence": "fort",
+      "score": 5.75,
+      "criteria": [
+        "adx",
+        "macd",
+        "trend_15m",
+        "trend_1h",
+        "trend_5m",
+        "vwap"
+      ],
+      "source": "shadow",
+      "status": "open",
+      "pnl_pct": null,
+      "pnl_gross_pct": null,
+      "duration_minutes": null,
+      "close_price": null,
+      "created_at": "2026-10-06T14:10:34Z",
+      "closed_at": null,
+      "created_local": "06/10 16:10",
+      "expires_at": "2026-10-06T17:10:34Z",
+      "rationale": "Achat : tendance forte (ADX), MACD en expansion, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 114.88 (0.36 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 40%.",
+      "news_context": "actualité à surveiller (score 3) : Fed minutes coming tomorrow could give markets important clues about future rate hikes | Trade deficit hits $105.6 billion, widest since just before Trump tariffs enacted last year",
+      "manual_exit": null
+    }
+  ],
   "recent_trades": [
     {
       "id": "751d4f3ee5",
@@ -7152,7 +7187,7 @@
     }
   },
   "state": {
-    "last_scan": "2026-10-06T14:05:30Z",
+    "last_scan": "2026-10-06T14:10:34Z",
     "last_scan_note": "0 signal(aux)",
     "last_summary": "2026-10-05T22:05:25Z",
     "last_track": "2026-10-06T14:05:30Z",
