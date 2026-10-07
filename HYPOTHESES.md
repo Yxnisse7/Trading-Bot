@@ -307,6 +307,44 @@ leur témoin sans avantage. Utile pour aller vite si la réussite en 10 jours d�
 Avec 17 essais, un ou deux marchés peuvent passer par chance : un marché validé seul part en ombre, rien de
 plus ; le portefeuille n'est retenu que si son gain est positif sur les deux périodes.
 
+## Essai 11 — suivi de tendance sur bougies journalières, 16 marchés, depuis 2007
+
+Écrit le 7 octobre 2026, **avant** de télécharger ces données. Constat (essai 10) : fermée chaque soir, la
+tendance ne rapporte presque rien ; l'effet documenté (Moskowitz, Ooi & Pedersen, 2012 ; Hurst, Ooi & Pedersen,
+2017, plus d'un siècle de données) se joue sur des semaines et des mois. Autre façon de trader : un signal le
+soir après la clôture, des positions gardées des jours ou des semaines, sur beaucoup de marchés.
+
+**Données** : Yahoo Finance, cours journaliers ajustés (dividendes) de 16 ETF qui détiennent les contrats et les
+roulent eux-mêmes : leur prix suit ce que gagne celui qui garde le contrat, sans les sauts artificiels des séries
+« =F ». Or GLD, argent SLV, pétrole USO, gaz UNG, agriculture DBA, métaux industriels DBB, taux US 7-10 ans IEF,
+taux US 20 ans+ TLT, euro FXE, yen FXY, livre FXB, dollar australien FXA, dollar canadien FXC, actions US SPY,
+Nasdaq 100 QQQ, actions émergentes EEM. Période commune : mars 2007 → octobre 2026. Gardées hors du dépôt.
+**Frais** : 0,05 % du prix par aller-retour (écart et commission), en plus des frais déjà dans le prix de l'ETF.
+
+**A. Cassure de Donchian 55/20 (« Turtle », système 2)**, réglages publiés, rien d'ajusté : signal à la clôture
+au-dessus du plus haut (au-dessous du plus bas) des 55 dernières séances, entrée à l'ouverture suivante, stop à
+2 ATR(20) de l'entrée (exécuté à l'ouverture si elle est au-delà), sortie à l'ouverture qui suit une clôture
+sous le plus bas (au-dessus du plus haut) des 20 dernières séances. Une position par marché, achat et vente.
+Résultat en R (gain ÷ risque au stop).
+**B. Momentum sur 12 mois (Moskowitz, Ooi & Pedersen, 2012)** : chaque fin de mois, position dans le sens du
+rendement des 12 derniers mois sur chaque marché, taille inverse à sa volatilité (60 séances), poids égal entre
+marchés, frais sur chaque changement de taille.
+
+**Verdict** (2 essais, 96 au total), jugé sur le **portefeuille** des 16 marchés, pas marché par marché (un
+suivi de tendance n'est rentable qu'en diversifiant ; les résultats par marché sont donnés pour information) :
+deux moitiés, mars 2007 → décembre 2016 et janvier 2017 → octobre 2026. A est retenu si son gain moyen par trade
+est > 0 avec un facteur de profit ≥ 1,1 sur **chaque** moitié et si au moins 60 % des années civiles sont
+positives. B est retenu si son rendement annuel est > 0 et son ratio de Sharpe ≥ 0,3 sur **chaque** moitié.
+Pour information : chute maximale, résultat sans les 5 % meilleurs trades (un suivi de tendance vit de ses
+gros gagnants : ce critère n'est pas éliminatoire ici), corrélation avec les actions.
+
+**Mise en pratique**, pour information : positions gardées la nuit et le week-end, donc **pas chez Topstep** ;
+possible sur un compte CFD qui le permet ou un compte personnel. Simulation d'un défi CFD 50 000 $ type (objectif
++10 % puis +5 %, perte maximale fixe de 10 %, perte journalière de 5 %) sur la courbe de gain journalière de A,
+à 0,5 % et 1 % du compte risqué par trade : chances de réussir et délai. Remarque halal : sur un compte CFD,
+garder une position la nuit coûte des intérêts (« swap ») ; il faudrait un compte sans swap.
+**Suite** : retenu → suivi en ombre sur le marché réel (signal du soir) ; écarté → on le dit.
+
 ## Journal des essais
 
 | Date | Essai | Résultat |
