@@ -1,0 +1,9 @@
+Source : https://github.com/tawf-labs/agent_skills/tree/4cc2fea3372e417c4451004dedb5d36c4e8953b1/sharia-screening
+Licence : MIT (déclarée dans le README du dépôt, sans fichier LICENSE séparé). SKILL.md et references/ copiés sans modification.
+Vérifié le 07/10/2026 : texte et script lus en entier ; aucun envoi de données, aucune commande cachée.
+Script scripts/screen_stock.py NON copié, pour ces défauts :
+  - revenu « impur » = intérêts d'un seul trimestre comparés au chiffre d'affaires annuel, plus la ligne
+    « Other Non Operating Income Expenses » (sans rapport avec l'intérêt) ;
+  - secteur interdit détecté par mots dans la description (« arms » trouvé dans « farms », etc.) ;
+  - dette yfinance « totalDebt » qui inclut les loyers de location.
+Le contrôle charia du projet est codé dans trading_bot/ (ratios AAOIFI 30 % / 30 % / 5 %, avec ces corrections).
