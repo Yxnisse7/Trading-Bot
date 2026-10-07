@@ -243,7 +243,17 @@
       <div class="tbl"><table class="heat"><thead><tr><th>Stop ↓ · objectif →</th>${(st.grid_tp || []).map((tp) => `<th>${mult(tp)}</th>`).join("")}</tr></thead><tbody>
         ${(st.grid_sl || []).map((sl) => `<tr><th>${mult(sl)}</th>${(st.grid_tp || []).map((tp) => cell(find(sl, tp))).join("")}</tr>`).join("")}
       </tbody></table></div>
-      <div class="muted" style="margin-top:10px">Entrée retardée : les niveaux notifiés restent les mêmes, comme sur Topstep où l'entrée arrive après le signal (données des contrats CME différées de 10 min) ; « manqué » = le prix avait déjà dépassé l'objectif ou le stop. Recalculé à chaque backtest hebdomadaire.</div>`;
+      <div class="muted" style="margin-top:10px">Entrée retardée : les niveaux notifiés restent les mêmes, comme sur Topstep où l'entrée arrive après le signal (données des contrats CME différées de 10 min) ; « manqué » = le prix avait déjà dépassé l'objectif ou le stop. Recalculé à chaque backtest hebdomadaire.</div>`
+      + fillsBlock(st.fills);
+  }
+  // Prix d'exécution possibles ? (audit des sorties du backtest, recalculé avec les tests de résistance)
+  function fillsBlock(f) {
+    const t = f && f.total;
+    if (!t) return "";
+    const ok = !t.outside && t.gap_cost_r > -0.01 && t.tiny === 0;
+    const r = (v) => v == null ? "n/a" : Y.signed(v, 3, " R");
+    return `<div style="margin-top:16px"><b style="font-weight:500">Prix d'exécution</b> <span class="pill ${ok ? "up" : "dn"}" style="margin-left:6px">${ok ? "réalistes" : "à corriger"}</span></div>
+      <div class="muted" style="margin-top:6px">${t.n} trades vérifiés bougie par bougie : <b>${t.outside}</b> sortie${t.outside > 1 ? "s" : ""} hors de sa bougie · <b>${t.gaps}</b> stop${t.gaps > 1 ? "s" : ""} franchi${t.gaps > 1 ? "s" : ""} par un saut de prix (coût moyen ${r(t.gap_cost_r)} par trade, pire ${r(t.worst_gap_r)}) · <b>${t.both}</b> bougie${t.both > 1 ? "s" : ""} touchant l'objectif et le stop (comptées en stop, par prudence) · <b>${t.tiny}</b> stop${t.tiny > 1 ? "s" : ""} de moins de 4 ticks · écart moyen entre le prix d'entrée et l'ouverture suivante : ${r(t.entry_r)} (positif = moins bon). Le volume n'est pas vérifié : 1 à 50 micro-contrats restent loin du volume du marché.</div>`;
   }
   // Filtres, contexte et sorties (apprentissage v3)
   function renderLearning2(adj, r2) {

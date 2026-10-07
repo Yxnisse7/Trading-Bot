@@ -1078,6 +1078,9 @@ class Engine:
                 try:
                     stress = stress_test(results, used_candles, {k: a.cost_pct for k, a in self.cfg.assets.items()})
                     if stress:
+                        # prix d'exécution possibles ? (sauts de prix au-delà du stop, sorties hors bougie…)
+                        from .fill_audit import audit
+                        stress["fills"] = audit(results, used_candles, {k: a.tick_size for k, a in self.cfg.assets.items()})
                         stress["updated_at"] = iso(utcnow())
                         self.store.save_stress(stress)
                 except Exception:  # noqa: BLE001 — le backtest reste valable même si l'analyse échoue
