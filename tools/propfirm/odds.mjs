@@ -23,9 +23,14 @@ for (const p of input.profiles) {
         tradesPerDay: p.tradesPerDay, tradesPerDayModel: "poisson",
         risk: { mode: "fixed-amount", value: risk },
       }, { seed: 42, paths });
+      // même tentative limitée à 10 jours de bourse (2 semaines) : ce qui reste quand on veut aller vite
+      const fast = simulate({ ...TOPSTEP_50K, steps: TOPSTEP_50K.steps.map((st) => ({ ...st, maxDays: 10 })) }, {
+        kind: "bootstrap", rSeries: p.rSeries, blockMeanLength: 5, tradesPerDay: p.tradesPerDay,
+        tradesPerDayModel: "poisson", risk: { mode: "fixed-amount", value: risk },
+      }, { seed: 42, paths, includeHistograms: false, simulateFunded: false });
       const a = r.perAttempt;
       const j = r.journey || {};
-      row.risks.push({ risk, pass: a.passProbability, ci: a.passProbabilityCi ? [a.passProbabilityCi.low, a.passProbabilityCi.high] : null,
+      row.risks.push({ risk, pass: a.passProbability, pass10: fast.perAttempt.passProbability, ci: a.passProbabilityCi ? [a.passProbabilityCi.low, a.passProbabilityCi.high] : null,
                        fail: a.failureBreakdown, daysPassed: a.avgDaysWhenPassed, daysFailed: a.avgDaysWhenFailed,
                        funded: j.fundedProbability ?? null, attemptCap: j.attemptCap ?? null,
                        attempts: j.attempts ? j.attempts.mean : null, cost: j.cost ? j.cost.mean : null,
