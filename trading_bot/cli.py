@@ -41,12 +41,12 @@ from .learning import analyze
 from .signals import format_signal
 
 
-HALAL_REFUSED = {"manual", "propose", "commands", "guide", "ui", "loop", "fetch-data", "topstep", "invest", "backup", "fetch-history", "backtest-setups", "strategy-lab", "invest-review", "topstep-odds", "drift-reference", "donchian-day", "intraday-gold"}
+HALAL_REFUSED = {"manual", "propose", "commands", "guide", "ui", "loop", "fetch-data", "topstep", "invest", "backup", "fetch-history", "backtest-setups", "strategy-lab", "invest-review", "topstep-odds", "drift-reference", "donchian-day", "intraday-gold", "multi-trend"}
 
 
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(description="Générateur de signaux de scalping (NQ, BTC, XAU) — données gratuites")
-    p.add_argument("command", choices=["scan", "track", "tick", "summary", "stats", "loop", "status", "test-notify", "backtest", "report", "fetch-data", "manual", "propose", "ui", "commands", "portfolio", "guide", "learn", "flush-outbox", "check-data", "stop", "topstep", "trim-candles", "invest", "backup", "fetch-history", "backtest-setups", "strategy-lab", "invest-review", "topstep-odds", "drift-reference", "donchian-day", "intraday-gold"])
+    p.add_argument("command", choices=["scan", "track", "tick", "summary", "stats", "loop", "status", "test-notify", "backtest", "report", "fetch-data", "manual", "propose", "ui", "commands", "portfolio", "guide", "learn", "flush-outbox", "check-data", "stop", "topstep", "trim-candles", "invest", "backup", "fetch-history", "backtest-setups", "strategy-lab", "invest-review", "topstep-odds", "drift-reference", "donchian-day", "intraday-gold", "multi-trend"])
     p.add_argument("--signal", help="stop : identifiant (ou début) du trade à arrêter, ou son actif ; sans valeur, le seul trade ouvert")
     p.add_argument("--halal", action="store_true", help="mode halal : second bot séparé (achat seulement, sans levier, data/halal)")
     p.add_argument("--dry-run", action="store_true", help="scan sans enregistrer les signaux")
@@ -69,6 +69,7 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--older", action="store_true", help="fetch-history : remonter avant l'historique déjà gardé et fusionner")
     p.add_argument("--max-minutes", type=int, default=0, help="fetch-history : temps maximal par actif (0 = sans limite)")
     p.add_argument("--history", action="store_true", help="backtest-setups : sur l'historique long (data/history) plutôt que les bougies Yahoo")
+    p.add_argument("--refresh", action="store_true", help="multi-trend : retélécharger les bougies de 1 h Yahoo")
     p.add_argument("--rebuild-donchian", action="store_true", help="topstep-odds : recalculer les R de donchian or sur l'historique long")
     p.add_argument("-v", "--verbose", action="store_true")
     args = p.parse_args(argv)
@@ -231,6 +232,28 @@ def main(argv: list[str] | None = None) -> int:
                   f"| sorties {reasons}", flush=True)
         out["updated_at"] = iso(utcnow())
         eng.store._write(eng.store.dir / "essai8.json", out)
+    elif args.command == "multi-trend":
+        # essai 10 (HYPOTHESES.md) : donchian_day sur 17 autres contrats CME (+ l'or en contrôle)
+        from . import multi_trend
+        res = multi_trend.run(refresh=args.refresh)
+        for k, c in res["markets"].items():
+            if "discovery" not in c:
+                print(f"{c['label']:28s} {c['status']}")
+                continue
+            d, f = c["discovery"]["net"], c["confirmation"]["net"]
+            print(f"{c['label']:28s} {c['trades_per_day']:4.2f}/j | découverte n={c['discovery']['n']:3d} {d['mean_r']} PF {d['profit_factor']} "
+                  f"| confirmation n={c['confirmation']['n']:3d} {f['mean_r']} PF {f['profit_factor']} | stop médian {c['median_stop_usd']} $ "
+                  f"jouable 500 $ {c['tradable']['500']} | sauts retirés {c['trades_removed_jumps']} → {c['status']}", flush=True)
+        port = res.get("portfolio")
+        if port:
+            print(f"portefeuille {port['markets']} : {port['n']} trades, {port['trades_per_day']}/j, {port['mean_r']} R "
+                  f"(confirmation {port['mean_r_confirmation']}, découverte {port['mean_r_discovery']}) → retenu {port['kept']}")
+            for x in port.get("combine", []):
+                print(f"   risque {x['risk']:.0f} $ : réussite {x['pass']:.0%} (témoin {x['witness_pass']:.0%}), en 2 semaines "
+                      f"{x['pass10']:.0%} (témoin {x['witness_pass10']:.0%}), financé en {x['funded_days']}, retrait +{x['first_payout']} j")
+        else:
+            print("aucun marché validé et jouable : pas de portefeuille")
+        eng.store._write(eng.store.dir / "essai10.json", res)
     elif args.command == "intraday-gold":
         # essai 9 (HYPOTHESES.md) : 3 stratégies intraday sur l'or, règles fixées d'avance ; réussite du Combine
         # en 10 jours de bourse comparée à leur témoin sans avantage

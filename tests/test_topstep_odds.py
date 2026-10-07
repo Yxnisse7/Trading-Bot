@@ -202,3 +202,30 @@ def test_comex_orb_trades_the_first_close_outside_the_8h20_range():
         candles.append(Candle(ts, o, hi, lo, c))
     tr = sl.comex_orb(sl._Series(candles), "gold")
     assert len(tr) == 1 and tr[0].direction == "long" and tr[0].entry == 101.5 and tr[0].risk == 2.5
+
+
+def test_multi_trend_jump_sessions_and_tradable_flags():
+    from trading_bot import multi_trend as mt
+    from trading_bot.models import Candle
+    t0 = 1_780_000_000 - 1_780_000_000 % 3600
+    candles, px = [], 100.0
+    for day in range(40):
+        base = t0 + day * 86400
+        if day == 20:
+            px += 30.0                                   # saut d'ouverture (changement de contrat)
+        for h in range(22):                              # pause de 2 h chaque jour
+            px += 0.3 if (day // 3) % 2 == 0 else -0.3
+            candles.append(Candle(base + h * 3600, px, px + 0.5, px - 0.5, px))
+    jumps = mt.jump_entries(candles)
+    assert len(jumps) == mt.JUMP_BARS and min(jumps) == t0 + 20 * 86400 + 3600
+    cell = mt.evaluate_market("x", ("X=F", "Test", "X", 1.0, 0.1, 10.0), candles)
+    assert cell["holding"]["overnight"] == 0 and set(cell["tradable"]) == {"250", "500"}
+
+
+def test_multi_trend_fetch_keeps_half_hour_bars_and_drops_live_quote():
+    from trading_bot import multi_trend as mt
+    payload = {"chart": {"result": [{"timestamp": [3600, 5400, 7261],
+                                     "indicators": {"quote": [{"open": [1, 2, 3], "high": [1, 2, 3], "low": [1, 2, 3],
+                                                               "close": [1, 2, 3], "volume": [0, 0, 0]}]}}]}}
+    candles = mt.fetch_1h("X=F", get=lambda *a, **k: payload)
+    assert [c.ts for c in candles] == [3600, 5400]

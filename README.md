@@ -643,6 +643,11 @@ plus de trades par jour ne compense pas des gains par trade trop petits face aux
 2 semaines reste une affaire de chance. La simulation Topstep compte aussi la règle de retrait (5 jours gagnants
 d'au moins 150 $) : délai jusqu'au 1er retrait affiché sous le délai jusqu'au compte financé.
 
+**Tendance sur 17 autres contrats CME** (essai 10, `trading_bot/multi_trend.py`, `python run.py multi-trend`,
+bougies de 1 h Yahoo gardées dans `data/history/*_1h.json`) : la règle fermée chaque soir est écartée sur les 17
+marchés (métaux, énergie, taux, céréales, devises). Avant frais elle ne gagne presque rien en une seule séance :
+le suivi de tendance documenté se joue sur des semaines, pas dans la journée.
+
 Connexion automatique : l'API TopstepX (ProjectX) permet de passer des ordres par programme sur le
 Combine et l'Express Funded (pas sur le Live Funded), mais seulement **depuis votre propre appareil**
 (serveurs distants, VPS et VPN interdits). Le bot, qui tourne sur GitHub Actions, ne passe donc aucun
