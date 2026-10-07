@@ -157,10 +157,10 @@
       : `<tr><td colspan="8" class="empty">Aucun backtest pour l'instant.</td></tr>`;
     renderStress(d.stress || {});
     renderSetups(d.setups || {}, d.assets || []);
-    renderLab(d.strategies || {}, d.assets || [], d.lab_shadow || {});
+    renderLab(d.strategies || {}, d.assets || [], d.lab_shadow || {}, d.drift || {});
   }
   // Laboratoire : stratégie × actif, découverte (12 derniers mois) puis confirmation (année d'avant, jamais vue)
-  function renderLab(lab, assets, shadow) {
+  function renderLab(lab, assets, shadow, drift) {
     const el = $("#lab-box");
     const cells = Object.values(lab.cells || {});
     if (!cells.length) { el.innerHTML = `<div class="muted">Pas encore lancé.</div>`; return; }
@@ -185,7 +185,19 @@
       + Object.values(shadow || {}).map((r) => { const open = (r.trades || []).find((t) => t.status === "open");
         const since = new Date(r.since).toLocaleDateString("fr-FR", { day: "numeric", month: "long" });
         return `<div class="verdict" style="margin-top:14px"><div><span class="pill brand">en ombre</span> <b style="font-weight:500">${esc(r.strategy)} · ${esc(label(r.asset))}</b> <span class="muted">sur le marché réel depuis le ${esc(since)}, sans notification</span></div>
-          <div class="muted">${r.n ? `${r.n} trade${r.n > 1 ? "s" : ""} clôturé${r.n > 1 ? "s" : ""} · gain net moyen <b class="${Y.tone(r.mean_r)}">${r2(r.mean_r)}</b> (frais Topstep)` : "Aucun trade clôturé pour l'instant."}${open ? ` · position en cours : ${open.direction === "long" ? "achat" : "vente"} à ${Y.num(open.entry, 0)}, stop ${Y.num(open.stop, 0)}` : ""} · vérifié chaque heure, avec la même règle que le test.</div></div>`; }).join("");
+          <div class="muted">${r.n ? `${r.n} trade${r.n > 1 ? "s" : ""} clôturé${r.n > 1 ? "s" : ""} · gain net moyen <b class="${Y.tone(r.mean_r)}">${r2(r.mean_r)}</b> (frais Topstep)` : "Aucun trade clôturé pour l'instant."}${open ? ` · position en cours : ${open.direction === "long" ? "achat" : "vente"} à ${Y.num(open.entry, 0)}, stop ${Y.num(open.stop, 0)}` : ""} · vérifié chaque heure, avec la même règle que le test.</div></div>`; }).join("")
+      + driftBlock(drift);
+  }
+  // Essai 7 : les trades réels en ombre restent-ils dans ce que le backtest de 24 mois laissait attendre ?
+  function driftBlock(drift) {
+    const cells = Object.values((drift && drift.cells) || {});
+    if (!cells.length) return "";
+    const pill = { "décroché": "dn", "à surveiller": "dn", "dans la norme": "up", "trop tôt": "neu" };
+    const pc = (x) => `${Y.num(x * 100, 0)}${Y.NB}%`;
+    return `<h3 style="margin:22px 0 6px">Contrôle de décrochage (essai 7)</h3>
+      <div class="muted" style="margin-bottom:8px">Les trades réels de chaque stratégie en ombre sont comparés à 5 000 tirages de même longueur dans son backtest de 24 mois. « À surveiller » dès 5 trades si le gain cumulé est plus bas que 95 % des tirages (ou la pire baisse plus profonde) ; « décroché » dès 10 trades au-delà de 99 %. Message Telegram quand l'état s'aggrave.</div>`
+      + cells.map((c) => `<div class="verdict" style="margin-top:10px"><div><span class="pill ${pill[c.status] || "neu"}"${c.status === "à surveiller" ? ' style="opacity:.75"' : ""}>${esc(c.status)}</span> <b style="font-weight:500">${esc(c.label)}</b></div>
+        <div class="muted">${c.n} trade${c.n > 1 ? "s" : ""} réel${c.n > 1 ? "s" : ""} · cumul <b class="${Y.tone(c.cum_r)}">${Y.signed(c.cum_r, 1, " R")}</b>${c.cum_pct != null ? ` (${pc(c.cum_pct)} des tirages font pire)` : ""} · pire baisse ${Y.signed(-c.dd_r, 1, " R")}${c.band ? ` · attendu sur ${c.n} trade${c.n > 1 ? "s" : ""} : de ${Y.signed(c.band.cum_p5, 1, " R")} à ${Y.signed(c.band.cum_p95, 1, " R")} (9 fois sur 10)` : ""} · backtest : ${c.ref_n} trades, ${Y.signed(c.ref_mean_r, 2, " R")} en moyenne.</div></div>`).join("");
   }
   // Setups pré-enregistrés : jugés sur des critères d'abandon écrits avant le premier test
   function renderSetups(all, assets) {

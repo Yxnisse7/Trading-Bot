@@ -181,6 +181,33 @@ affiché par action (conforme / non conforme AAOIFI / données manquantes) avec 
 (intérêts ÷ chiffre d'affaires). Aucune exclusion automatique : appliquer la norme plus stricte reste un
 choix de Yanisse.
 
+## Essai 7 — alerte de décrochage des stratégies en ombre (`trading_bot/drift.py`)
+
+Écrit le 7 octobre 2026, **avant** de comparer quoi que ce soit (skill `live-vs-backtest-drift-monitoring`).
+Suivies en ombre : `donchian_1h` or et Bitcoin (laboratoire, essai 3) et la variante `horizon_3h_gold`.
+Question : leurs trades réels restent-ils dans ce que leur backtest de 24 mois laissait attendre ?
+
+**Référence figée** : les R nets Topstep du backtest de 24 mois de chaque stratégie (même règle, même
+calcul du R que les trades en ombre), enregistrés une fois dans `data/drift_reference.json`. Elle ne change
+plus, sauf si la règle de la stratégie change (ce qui serait un nouvel essai).
+
+**Mesure**, à chaque nouveau trade clos en ombre (n trades depuis le début du suivi) : 5 000 tirages de n
+trades consécutifs dans la référence (bootstrap en blocs de 5 trades en moyenne, pour garder les séries de
+pertes). Deux chiffres : le **rang du gain cumulé** réel parmi les tirages (percentile) et le **rang de la
+pire baisse** réelle (perte maximale depuis un sommet, en R).
+
+**Seuils fixés d'avance** :
+- « dans la norme » : gain cumulé au-dessus du 5e percentile et pire baisse sous le 95e ;
+- « à surveiller » (dès 5 trades) : gain cumulé sous le 5e percentile **ou** pire baisse au-dessus du 95e ;
+- « décroché » (dès 10 trades) : gain cumulé sous le 1er percentile **ou** pire baisse au-dessus du 99e.
+
+**Action** : message Telegram quand l'état s'aggrave (une fois par changement), état affiché sur la page
+Apprentissage. « Décroché » bloque la promotion de `horizon_3h_gold` tant qu'il dure ; pour Donchian (aucun
+signal réel), le suivi continue, mais la stratégie ne pourra pas passer en signal réel avant d'être
+revenue dans la norme. Aucune autre décision automatique. Un « décroché » peut venir d'un avantage qui
+s'efface, d'une différence de données (Yahoo en direct, Dukascopy et Binance dans le backtest) ou d'un bug :
+la cause est cherchée à la main.
+
 ## Journal des essais
 
 | Date | Essai | Résultat |
@@ -199,3 +226,4 @@ choix de Yanisse.
 | 2026-10-06 | Horizon 3 h sur l'or séparé des autres actifs | En ombre depuis le 06/10 sous la variante `horizon_3h_gold` (promue ou non pour l'or seul, avec la marge corrigée du nombre d'essais). Les 16 trades 3 h de l'or déjà suivis restent dans la variante commune `horizon_3h` (−0,06 R, frais du bot). Ethereum, euro et pétrole étaient déjà à l'essai (aucun signal réel). |
 | 2026-10-07 | **Essai 6** : poche actions et pépites halal contre des témoins du même univers (06/2021 → 10/2026, 500 tirages, frais de rotation 0,3 %) | **Biais du survivant mesuré** : dans l'univers actuel, de simples tirages au hasard font +21 %/an et le poids égal +23,5 %/an, contre +12 %/an pour l'ETF Monde islamique : environ la moitié du +40 %/an de la poche venait du choix de l'univers, pas de la règle. **Poche** : +39,8 %/an contre +23,5 % au poids égal (mieux que 99,8 % des tirages), mais **seulement sur la 1re moitié** (+52 % contre +17 %) ; 2de moitié +28,8 % contre +29,8 % au poids égal (mieux que 60 % des tirages) → **apport non démontré** selon la règle fixée d'avance ; 2,6 fois plus volatile que le poids égal (chute max −29 % contre −12 %). **Pépites** : +11,8 %/an contre +11,9 % au poids égal, mieux que 65 % des tirages, chute max −19 % contre −9 % → **aucun apport**. **Variantes** anti-krach et corrélation : chute maximale inchangée ou pire → **aucune adoptée**. Corrélation moyenne entre les 15 actions retenues : 0,17, aucune paire au-dessus de 0,75 (pas de pari caché mesurable sur 24 mois). **AAOIFI** : les 15 conformes, purification de 0 à 1,3 % (Micron 1,3 %, Atlassian 1,1 %). **Portefeuille Dynamique du site** (poche 20 %, pépites 5 %, Bitcoin 3 %) : +18 %/an, chute max −17 %, pire année −5 %, perte mensuelle à 95 % : −7 % ; 1 000 € puis 200 €/mois → 10 200 € versés, 15 398 € ; pire recul −1 113 € (mars 2025). Ces chiffres incluent le biais de la poche. Recommandation prévue d'avance : poche ramenée à 10 %, pépites ≤ 5 % — **à décider par Yanisse**. Bug corrigé au passage : le mois de classement était la médiane des mois *distincts* (quelques historiques arrêtés tôt l'ont fait reculer à juillet 2026) ; c'est désormais la médiane de toutes les actions. |
 | 2026-10-07 | Chances de réussir le Combine Topstep 50K (outil d'information, **non pré-enregistré**, aucune décision automatique) : Monte Carlo LuxAlgo, 10 000 parcours, bootstrap par blocs des R nets Topstep | Témoin sans avantage (mêmes trades, moyenne 0 R) : 29 % par tentative à 250 $. Bot : 22 % (backtest, 376 trades, −0,02 R) et 28 % (compte simulé, 55 trades, −0,01 R) → **pas mieux que le hasard**. `donchian_1h` or : **48 %** à 250 $ (2,1 essais, 580 $ de frais, 82 jours), 32 % à 500 $ (gain moyen 0,15 R mais 36 % de gagnants : à 500 $, les séries de pertes touchent la perte maximale). Un compte réussi ne prouve rien seul : sans aucun avantage, près de 3 tentatives sur 10 réussissent. |
+| 2026-10-07 | **Essai 7**, référence figée (R nets Topstep, 24 mois) et premier contrôle | Référence : `donchian_1h` or 313 trades, +0,15 R ; `donchian_1h` Bitcoin 511 trades, +0,07 R ; `horizon_3h_gold` 694 trades, +0,10 R. Premier contrôle : Donchian or et Bitcoin 1 trade chacun (−0,5 et −1,0 R) → trop tôt ; `horizon_3h_gold` 5 trades, −3,0 R cumulés, 8,5 % des tirages font pire, pire baisse sous le 81e percentile → **dans la norme**. |

@@ -23,6 +23,7 @@ from .providers import calendar as calmod
 from .providers import market
 from .providers import news as newsmod
 from . import context as ctxmod
+from . import drift
 from .providers.http import ProviderError
 from .report import build_dashboard, build_report
 from .signals import build_signal, round_to_tick
@@ -69,6 +70,7 @@ class Engine:
         adj = self.store.adjustments()
         avoid_hours = set(adj.get("avoid_hours_utc") or [])
         promoted = set(adj.get("promoted_variants") or []) if self.cfg.variants_enabled else set()
+        promoted -= drift.blocked(self.store.drift())        # essai 7 : pas de promotion pendant un décrochage
         variants_on = self.cfg.variants_enabled and self.cfg.shadow_enabled and not dry_run
 
         calendar = self.macro_events(now)
@@ -872,6 +874,7 @@ class Engine:
         dash["setups"] = self.store.setups()       # évaluation des setups (sans le détail des trades)
         dash["strategies"] = self.store.strategies()
         dash["lab_shadow"] = self.store.lab_shadow()
+        dash["drift"] = self.store.drift()
         try:
             dash["agenda"] = self.agenda()
             dash["agenda_rules"] = {"before": self.cfg.news_blackout_before_minutes,
@@ -1289,6 +1292,18 @@ class Engine:
     # ------------------------------------------------------------- laboratoire en ombre
     LAB_DAYS = 8               # historique rechargé : canal de 20 h + position de 120 h au plus
 
+    def check_drift(self, now: datetime | None = None) -> dict[str, Any] | None:
+        """Essai 7 : les trades réels des stratégies en ombre restent-ils dans ce qu'attendait leur backtest ?
+        Message Telegram quand l'état s'aggrave."""
+        ref = self.store.drift_reference()
+        if not ref:
+            return None
+        state = drift.run(self.store.lab_shadow(), self.store.all_signals(), ref, self.store.drift(), now,
+                          send=notify)
+        if state is not None:
+            self.store.save_drift(state)
+        return state
+
     def lab_shadow(self, now: datetime | None = None) -> dict[str, Any]:
         """Rejoue, une fois par heure, les stratégies du laboratoire suivies en ombre (strategies.SHADOW) sur
         les dernières bougies réelles, avec exactement la même règle que le test, et garde leurs trades.
@@ -1408,6 +1423,10 @@ class Engine:
             self.lab_shadow(now)
         except Exception:  # noqa: BLE001 — le suivi en ombre ne doit jamais casser un passage
             log.exception("laboratoire en ombre")
+        try:
+            self.check_drift(now)
+        except Exception:  # noqa: BLE001 — l'alerte de décrochage ne doit jamais casser un passage
+            log.exception("alerte de décrochage")
         st = self.store.state()
         last_scan = parse_iso(st["last_scan"]) if st.get("last_scan") else None
         new: list[Signal] = []

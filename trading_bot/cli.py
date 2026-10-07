@@ -41,12 +41,12 @@ from .learning import analyze
 from .signals import format_signal
 
 
-HALAL_REFUSED = {"manual", "propose", "commands", "guide", "ui", "loop", "fetch-data", "topstep", "invest", "backup", "fetch-history", "backtest-setups", "strategy-lab", "invest-review", "topstep-odds"}
+HALAL_REFUSED = {"manual", "propose", "commands", "guide", "ui", "loop", "fetch-data", "topstep", "invest", "backup", "fetch-history", "backtest-setups", "strategy-lab", "invest-review", "topstep-odds", "drift-reference"}
 
 
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(description="Générateur de signaux de scalping (NQ, BTC, XAU) — données gratuites")
-    p.add_argument("command", choices=["scan", "track", "tick", "summary", "stats", "loop", "status", "test-notify", "backtest", "report", "fetch-data", "manual", "propose", "ui", "commands", "portfolio", "guide", "learn", "flush-outbox", "check-data", "stop", "topstep", "trim-candles", "invest", "backup", "fetch-history", "backtest-setups", "strategy-lab", "invest-review", "topstep-odds"])
+    p.add_argument("command", choices=["scan", "track", "tick", "summary", "stats", "loop", "status", "test-notify", "backtest", "report", "fetch-data", "manual", "propose", "ui", "commands", "portfolio", "guide", "learn", "flush-outbox", "check-data", "stop", "topstep", "trim-candles", "invest", "backup", "fetch-history", "backtest-setups", "strategy-lab", "invest-review", "topstep-odds", "drift-reference"])
     p.add_argument("--signal", help="stop : identifiant (ou début) du trade à arrêter, ou son actif ; sans valeur, le seul trade ouvert")
     p.add_argument("--halal", action="store_true", help="mode halal : second bot séparé (achat seulement, sans levier, data/halal)")
     p.add_argument("--dry-run", action="store_true", help="scan sans enregistrer les signaux")
@@ -194,6 +194,19 @@ def main(argv: list[str] | None = None) -> int:
         ok = [p["key"] for p in data["products"] if p["stats"]]
         print(f"Investissement : {len(ok)} produits sur {len(data['products'])}, {len(data['news'])} actualités"
               + (f" ; indisponibles : {', '.join(data['errors'])}" if data["errors"] else ""))
+    elif args.command == "drift-reference":
+        # essai 7 : R du backtest de 24 mois des stratégies en ombre, figés comme référence (historique long requis)
+        from . import drift
+        ref = drift.build_reference(eng.store, eng.cfg)
+        if not ref:
+            print("pas d'historique long (python run.py fetch-history)")
+        else:
+            eng.store.save_drift_reference(ref)
+            for k, v in ref.items():
+                if isinstance(v, dict):
+                    rs = v["rSeries"]
+                    print(f"{k} : {len(rs)} trades, {sum(rs) / max(1, len(rs)):+.3f} R moyen, {v['period']}")
+            eng.check_drift()
     elif args.command == "topstep-odds":
         # chances de réussir le Combine Topstep 50K (Monte Carlo LuxAlgo, outil d'information, aucun ordre)
         from . import topstep_odds

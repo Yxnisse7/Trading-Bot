@@ -136,6 +136,20 @@ class Store:
     def save_lab_shadow(self, data: dict[str, Any]) -> None:
         self._write(self.dir / "lab_shadow.json", data)
 
+    def drift(self) -> dict[str, Any]:
+        """Alerte de décrochage des stratégies en ombre (essai 7) : état de chaque stratégie suivie."""
+        return self._read(self.dir / "drift.json", {})
+
+    def save_drift(self, data: dict[str, Any]) -> None:
+        self._write(self.dir / "drift.json", data)
+
+    def drift_reference(self) -> dict[str, Any]:
+        """R du backtest de 24 mois de chaque stratégie en ombre, figés (référence de l'essai 7)."""
+        return self._read(self.dir / "drift_reference.json", {})
+
+    def save_drift_reference(self, data: dict[str, Any]) -> None:
+        self._write(self.dir / "drift_reference.json", data)
+
     def strategies(self) -> dict[str, Any]:
         """Laboratoire de stratégies (essai 3) : une case par stratégie × actif."""
         return self._read(self.dir / "strategies.json", {})

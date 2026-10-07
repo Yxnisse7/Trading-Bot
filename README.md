@@ -362,6 +362,15 @@ Nasdaq −2,97 % → −1,17 %, or −2,66 % → −1,41 %, pétrole −2,26 % �
 cryptos (24 h/24) y perdaient, elles gardent le calcul d'origine. L'heure d'ouverture suit New York
 (13:30 UTC l'été, 14:30 UTC l'hiver).
 
+### Alerte de décrochage des stratégies en ombre (essai 7)
+Les stratégies suivies en ombre (`donchian_1h` sur l'or et le Bitcoin, la variante `horizon_3h_gold`) sont
+comparées à chaque trade clos à leur backtest de 24 mois (`data/drift_reference.json`, figé, recalculé
+seulement par `python run.py drift-reference` si une règle change) : 5 000 tirages de même longueur, par
+blocs. « À surveiller » dès 5 trades si le gain cumulé réel est plus bas que 95 % des tirages ou la pire
+baisse plus profonde ; « décroché » dès 10 trades au-delà de 99 %. Message Telegram quand l'état
+s'aggrave, état sur la page Apprentissage (`data/drift.json`). Une variante décrochée ne peut pas être
+promue. Règles écrites d'avance dans HYPOTHESES.md (essai 7).
+
 ### Nouveaux setups et historique long
 Deux idées d'entrée, écrites dans `HYPOTHESES.md` **avant** tout test, avec leurs critères d'abandon :
 A « repli dans une tendance forte » (ADX 15 min ≥ 30, entrée à la reprise après un retour sur l'EMA 20,
