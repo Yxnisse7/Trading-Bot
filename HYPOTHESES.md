@@ -144,6 +144,43 @@ au moins 100 trades, gain net moyen > 0 **chacune des deux années**, facteur de
 encore ≥ 0 **sans les 5 % meilleurs trades**, et gain moyen en % du prix > 0. Un actif qui passe tout part
 en ombre sur le marché réel : c'est là que se fera la vraie confirmation.
 
+## Essai 6 — investissement halal : poche actions et pépites (`trading_bot/invest_review.py`)
+
+Écrit le 7 octobre 2026, **avant** tout calcul. Constat : le backtest de la poche (+40 %/an contre +12 %
+pour l'ETF Monde islamique, 2021 → 2026) part de la composition **actuelle** de l'indice (les 150 plus
+grosses aujourd'hui = celles qui ont le plus monté) : biais du survivant (skill `ml4t-survivorship-bias`).
+Les compositions passées d'iShares ne sont plus téléchargeables gratuitement. Les pépites (rangs 151 à
+400, momentum 6 mois) font +9,7 %/an contre +10,7 % pour l'ETF, deux fois plus volatiles.
+
+**1. Témoins dans le même univers** (mêmes actions, même biais, mêmes frais de 0,3 % par achat ou vente,
+révision tous les 3 mois) : (a) toutes les actions de l'univers à poids égal ; (b) 500 tirages de N actions
+au hasard (N = 10 pour la poche, 5 pour les pépites), mêmes règles de maintien. L'**apport du momentum**
+est l'écart avec ces témoins, pas avec l'ETF. Verdict « apport démontré » si la règle bat le poids égal
+**et** fait mieux que 90 % des tirages, **sur chacune des deux moitiés** de la période. Sinon : apport non
+démontré → je recommande de ramener la part (poche ≤ 10 %, pépites ≤ 5 %) ; rien n'est retiré sans
+l'accord de Yanisse.
+
+**2. Deux variantes de la règle** (2 variantes × 2 poches = 4 essais), appliquées au choix des actions :
+- *anti-krach* : une action ayant perdu 25 % ou plus le mois précédent n'est ni achetée ni gardée ;
+- *corrélation* : une candidate dont les rendements mensuels des 24 derniers mois sont corrélés à plus de
+  0,75 avec une action déjà retenue est sautée (contre les paris cachés sur un seul thème).
+Adoptée seulement si, par rapport à la règle actuelle : chute maximale réduite d'au moins 3 points, CAGR
+pas plus bas de plus de 1 point, et chute maximale pas pire sur chaque moitié. Sinon la règle reste telle
+quelle.
+
+**3. Risque du portefeuille complet**, pour information (skill `historical-risk`) : portefeuille
+« Dynamique » réglé comme sur le site (poche 20 %, pépites 5 %, Bitcoin 3 %, reste en ETF et or),
+rééquilibré chaque mois : chute maximale, pire année glissante, perte mensuelle à 95 %, et ce que cela
+donne en euros pour 1 000 € puis 200 €/mois.
+
+**4. Contrôle charia AAOIFI** (skill `sharia-screening`, norme 21), sur les actions et pépites
+sélectionnées, déjà filtrées par MSCI (dette et liquidités < 33,33 % du **total de l'actif**). AAOIFI
+rapporte à la **capitalisation** : dette portant intérêt (hors loyers) < 30 %, liquidités et placements à
+intérêt < 30 %, revenus d'intérêts < 5 % du chiffre d'affaires, sur les derniers comptes annuels. Résultat
+affiché par action (conforme / non conforme AAOIFI / données manquantes) avec son taux de purification
+(intérêts ÷ chiffre d'affaires). Aucune exclusion automatique : appliquer la norme plus stricte reste un
+choix de Yanisse.
+
 ## Journal des essais
 
 | Date | Essai | Résultat |
