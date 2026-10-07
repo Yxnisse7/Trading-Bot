@@ -239,6 +239,36 @@ ce n'est pas une donnée vierge.
 recalculées avec ses trades ; écarté → la conclusion reste « Donchian n'est jouable que sur un compte qui
 permet de garder la nuit ».
 
+## Essai 9 — stratégies intraday sur l'or, pour aller plus vite au Combine
+
+Écrit le 7 octobre 2026, **avant** de lancer ces stratégies. Constat : `donchian_day` (essai 8) gagne sur l'or
+mais ne fait qu'environ un trade par jour : il réussit le Combine en ~1,5 à 3 mois, et en 2 semaines il fait
+moins bien que le hasard (5 % contre 22 % pour le témoin à 500 $). Pour réussir vite sans compter sur la chance,
+il faut plusieurs trades par jour qui gagnent chacun en moyenne. L'or est le seul marché où une tendance a tenu ;
+les stratégies intraday de l'essai 3 (ORB de 9:30, momentum intraday, comblement d'écart, RSI 2, Londres) n'y ont
+pas tenu. Trois idées nouvelles seulement (3 essais, 77 au total), réglages fixés ici :
+
+- **A. `donchian_15m_day`** : la règle de `donchian_day` sur des bougies de **15 min** (cassure du canal des 20
+  dernières bougies à la clôture, stop à 2 ATR(14) de 15 min, sortie à la clôture d'une bougie qui casse le canal
+  des 10 dernières, 120 bougies au plus, sortie forcée à 15:00 heure de Chicago ou à la dernière clôture d'une
+  séance écourtée, aucune entrée de 15:00 à 17:00) ;
+- **B. `donchian_30m_day`** : la même sur des bougies de **30 min** ;
+- **C. `comex_orb`** : cassure de l'ouverture du COMEX (marché de l'or, 8:20 heure de New York). Range = les 30
+  premières minutes (bougies 5 min de 8:20 à 8:45) ; entrée à la clôture de la première bougie 5 min qui clôture
+  au-dessus ou au-dessous du range, avant 12:00 heure de New York ; stop de l'autre côté du range ; sortie au stop
+  ou à 15:00 heure de Chicago. Un trade par jour au plus.
+
+**Verdict** (frais Topstep réels, données de l'or) : critères de l'essai 3, découverte du 28/09/2025 au
+04/10/2026 puis confirmation 10/2024 → 09/2025 ; « prouvé » avec la marge corrigée pour 77 essais.
+**Utile pour aller vite** si, en plus, la stratégie validée réussit le Combine 50K en 10 jours de bourse au plus
+au moins 10 points plus souvent que son témoin sans avantage (mêmes trades, gain moyen ramené à 0), au risque où
+elle fait le mieux parmi 250, 500 et 750 $. Rien d'autre n'est essayé après coup sur ces données (ni autre
+durée de bougie, ni autre heure) : ce serait un nouvel essai.
+
+**Suite** : validée → suivi en ombre sur le marché réel avec le contrôle de décrochage ; écartée → on le dit.
+Ajout aux règles Topstep simulées : pour retirer, 5 jours gagnants d'au moins 150 $ (pas forcément d'affilée,
+aide Topstep), pour mesurer le délai jusqu'au premier retrait.
+
 ## Journal des essais
 
 | Date | Essai | Résultat |
