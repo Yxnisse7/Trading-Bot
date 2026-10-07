@@ -269,6 +269,44 @@ durée de bougie, ni autre heure) : ce serait un nouvel essai.
 Ajout aux règles Topstep simulées : pour retirer, 5 jours gagnants d'au moins 150 $ (pas forcément d'affilée,
 aide Topstep), pour mesurer le délai jusqu'au premier retrait.
 
+## Essai 10 — la tendance fermée chaque soir sur 17 autres contrats CME
+
+Écrit le 7 octobre 2026, **avant** de télécharger ces données. Constat : la seule règle validée
+(`donchian_day`, essai 8) est un suivi de tendance, l'effet le mieux documenté sur les contrats à terme
+(Moskowitz, Ooi & Pedersen, 2012 ; Hurst, Ooi & Pedersen, 2017), surtout sur les matières premières, les taux
+et les devises. Il a échoué sur les indices actions (Nasdaq, S&P 500), qui ont tendance à revenir en arrière
+dans la journée. Sur l'or seul, il ne fait qu'un trade par jour : trop lent. Si la même règle tient sur
+d'autres marchés de tendance, on aurait plus de trades gagnants en moyenne, donc un Combine plus rapide, pour
+une raison connue et non par réglage.
+
+**Règle** : exactement `donchian_day` (essai 8), sans rien changer, sur des bougies de 1 h.
+**Données** : Yahoo Finance, bougies de 1 h des contrats « =F » (contrat le plus proche), de mai 2024 à
+octobre 2026, gardées hors du dépôt (`data/history/*_1h.json`).
+**Marchés** (17 essais nouveaux, 94 au total) et contrat Topstep le plus petit, frais aller-retour TopstepX
+(help.topstep.com, octobre 2026) + 1 tick de glissement :
+- métaux : argent (SIL, 2,72 $), cuivre (MHG, 1,92 $), platine (PL, 4,32 $) ;
+- énergie : pétrole (MCL, 1,92 $), gaz naturel (MNG, 2,12 $), fioul (HO, 4,02 $), essence (RB, 4,02 $) ;
+- taux : 10 ans US (ZN, 2,62 $), 30 ans US (ZB, 2,76 $) ;
+- céréales : maïs (ZC), soja (ZS), blé (ZW), 5,28 $ chacun ;
+- devises : euro (M6E), livre (M6B), dollar australien (M6A), 1,00 $ chacun ; yen (6J) et dollar canadien
+  (6C), 4,22 $ (pas de micro chez Topstep).
+L'or (MGC) sur ces mêmes données Yahoo sert de contrôle (pas un essai nouveau).
+
+**Verdict par marché** : critères de l'essai 3, découverte du 28/09/2025 au 07/10/2026 puis confirmation de
+mai 2024 au 27/09/2025 ; « prouvé » avec la marge corrigée pour 94 essais.
+**Changements de contrat** : la position est fermée chaque soir, donc jamais tenue pendant un changement ; seule
+une fausse cassure à la reprise est possible. Contrôle fixé d'avance : une séance « avec saut » est une séance
+dont l'écart d'ouverture dépasse 5 fois l'écart d'ouverture médian du marché ; un marché n'est validé que s'il
+passe aussi les critères sans les trades entrés dans les 3 premières bougies de ces séances.
+**Jouable** à un risque donné si, pour au moins 80 % des trades, le stop d'un seul contrat coûte au plus ce
+risque (sinon il faudrait moins d'un contrat).
+**Portefeuille** : les marchés validés et jouables à 500 $ (plus l'or) sont rejoués ensemble dans l'ordre du
+temps : gain moyen sur chacune des deux périodes, puis chances Topstep (réussite, en 2 semaines, délai) contre
+leur témoin sans avantage. Utile pour aller vite si la réussite en 10 jours dépasse le témoin d'au moins
+10 points.
+Avec 17 essais, un ou deux marchés peuvent passer par chance : un marché validé seul part en ombre, rien de
+plus ; le portefeuille n'est retenu que si son gain est positif sur les deux périodes.
+
 ## Journal des essais
 
 | Date | Essai | Résultat |
