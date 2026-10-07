@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-07T12:40:53.668543+02:00",
+  "updated_at": "2026-10-07T12:45:44.328823+02:00",
   "timezone": "Europe/Paris",
   "equity_curve": [
     {
@@ -1394,7 +1394,7 @@
       "avg_pnl_pct": -0.0371
     },
     "open": 0,
-    "open_shadow": 0
+    "open_shadow": 1
   },
   "by_source": {
     "bot": {
@@ -4757,7 +4757,41 @@
       ]
     }
   ],
-  "open_signals": [],
+  "open_signals": [
+    {
+      "id": "0799c34d44",
+      "asset": "gold",
+      "asset_label": "Or (XAU/USD)",
+      "direction": "short",
+      "horizon": "1h",
+      "entry": 4138.4,
+      "take_profit": 4131.5,
+      "stop_loss": 4143.7,
+      "risk_reward": 1.3,
+      "confidence": "moyen",
+      "score": 4.75,
+      "criteria": [
+        "adx",
+        "trend_15m",
+        "trend_1h",
+        "trend_5m",
+        "vwap"
+      ],
+      "source": "shadow",
+      "status": "open",
+      "pnl_pct": null,
+      "pnl_gross_pct": null,
+      "duration_minutes": null,
+      "close_price": null,
+      "created_at": "2026-10-07T10:45:35Z",
+      "closed_at": null,
+      "created_local": "07/10 12:45",
+      "expires_at": "2026-10-07T11:45:35Z",
+      "rationale": "Vente : tendance forte (ADX), tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 13.17 (0.32 %), TP = 53 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 54%.",
+      "news_context": "actualité à surveiller (score 2) : British Pound stays weak below 1.3250 as USD bulls retain control ahead of FOMC Minutes",
+      "manual_exit": null
+    }
+  ],
   "recent_trades": [
     {
       "id": "941c958c6b",
@@ -7195,7 +7229,7 @@
     }
   },
   "state": {
-    "last_scan": "2026-10-07T10:40:38Z",
+    "last_scan": "2026-10-07T10:45:35Z",
     "last_scan_note": "0 signal(aux)",
     "last_summary": "2026-10-06T22:05:29Z",
     "last_track": "2026-10-07T10:15:36Z",
