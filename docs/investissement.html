@@ -104,7 +104,7 @@
   <div class="card">
     <div class="pf-set">
       <div><label for="pf-model">Portefeuille type</label><select id="pf-model"></select></div>
-      <div><label for="pf-sat">Part de la poche actions</label><select id="pf-sat"><option value="0">0 % (ETF seulement)</option><option value="0.1">10 %</option><option value="0.2">20 %</option><option value="0.3">30 % (maximum)</option></select></div>
+      <div><label for="pf-sat">Part de la poche actions</label><select id="pf-sat"><option value="0">0 % (ETF seulement)</option><option value="0.1">10 % (conseillé)</option><option value="0.2">20 %</option><option value="0.3">30 % (maximum)</option></select></div>
       <div><label for="pf-amount">Versement ce mois (€)</label><input id="pf-amount" inputmode="numeric" value="100"></div>
       <div><label for="pf-pep">Part des pépites (risquée)</label><select id="pf-pep"><option value="0">0 %</option><option value="0.05">5 %</option><option value="0.1">10 % (maximum)</option></select></div>
       <div><label for="pf-btc">Part du Bitcoin</label><select id="pf-btc"><option value="0">0 %</option><option value="0.03">3 %</option><option value="0.05">5 % (maximum conseillé)</option></select></div>
@@ -427,7 +427,7 @@
   }
   function setupPortfolio() {
     const good = data.stocks && data.stocks.backtest && data.stocks.backtest.bench_cagr != null && data.stocks.backtest.cagr > data.stocks.backtest.bench_cagr && data.stocks.backtest.beat_12m >= 0.5;
-    if (!pf) pf = loadPf() || { model: "equilibre", sat: good ? 0.2 : 0, pep: 0.05, rev: "trimestrielle", amount: 100, rows: [] };
+    if (!pf) pf = loadPf() || { model: "equilibre", sat: good ? (review && review.pocket && !review.pocket.edge_proven ? 0.1 : 0.2) : 0, pep: 0.05, rev: "trimestrielle", amount: 100, rows: [] };
     if (pf.rev == null) pf.rev = "trimestrielle";
     if (pf.pep == null) pf.pep = 0.05;
     const ms = $("#pf-model");
