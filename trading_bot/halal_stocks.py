@@ -62,7 +62,7 @@ EXCHANGES = [
     (r"singapore", ".SI"), (r"tel aviv", ".TA"), (r"new zealand", ".NZ"), (r"wiener|vienna", ".VI"), (r"irish|dublin", ".IR"),
 ]
 RULES = {"top_n": TOP_N, "keep_rank": KEEP_RANK, "cost": COST_PER_TURNOVER, "sector_cap": SECTOR_CAP, "modes": 1,
-         "revision_every": REVISION_EVERY, "exclude_israel": True, "pepites": [PEPITES_FROM, PEPITES_TO, PEPITES_N, PEPITES_KEEP, PEPITES_CAP, PEPITES_LOOKBACK]}
+         "revision_every": REVISION_EVERY, "exclude_israel": True, "month_rule": 2, "pepites": [PEPITES_FROM, PEPITES_TO, PEPITES_N, PEPITES_KEEP, PEPITES_CAP, PEPITES_LOOKBACK]}
 FX_PAIRS = {c: f"EUR{c}=X" for c in ("USD", "GBP", "JPY", "CHF", "CAD", "AUD", "DKK", "SEK", "NOK", "HKD", "SGD", "ILS", "NZD")}
 
 
@@ -448,6 +448,12 @@ def simulate_modes(series: dict[str, list[tuple[str, float]]], bench: list[tuple
 
 
 # ------------------------------------------------------------------ assemblage
+def last_common_month(series: dict[str, list[tuple[str, float]]]) -> str:
+    """Mois de classement : le dernier mois de la majorité des actions (médiane sur toutes les séries, pas
+    sur les mois distincts : quelques historiques arrêtés plus tôt ne doivent pas faire reculer le classement)."""
+    return st.median_low(sorted(s[-1][0] for s in series.values()))
+
+
 def load_universe(universe: list[dict[str, Any]], fetch_monthly: Callable, pause: float = 0.15
                   ) -> tuple[dict[str, list[tuple[str, float]]], dict[str, dict[str, Any]], list[str]]:
     """Historique mensuel en euros de chaque action (6 ans au plus, 14 mois au moins pour pouvoir classer)."""
@@ -520,9 +526,8 @@ def build(bench: list[tuple[str, float]] | None, now: datetime | None = None,
         log.warning("poche actions : trop peu d'historiques (%d)", len(series))
         return cache.get("result")
 
-    # dernier mois complet commun (le mois en cours est partiel)
-    last = sorted({s[-1][0] for s in series.values()})
-    month = st.median_low(last)
+    # mois de classement : celui de la majorité des actions (le momentum saute de toute façon le dernier mois)
+    month = last_common_month(series)
     table = momentum_table(series, month)
     sectors = {k: meta[k].get("sector", "") for k in series}
     picks = select(table, [], TOP_N, sectors=sectors)

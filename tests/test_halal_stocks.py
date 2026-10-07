@@ -140,3 +140,9 @@ def test_israeli_companies_are_excluded(tmp_path):
     res = hs.build([], NOW, fetch_monthly=fetch, holdings_fn=lambda: holdings, cache_dir=tmp_path, pause=0)
     assert "S39" not in res["prices"] and all(p["yahoo"] != "S39" for p in res["picks"])
     assert res["excluded"][0]["name"] == "Société 39" and res["israel_weight"] == 1.0
+
+
+def test_ranking_month_follows_the_majority_not_stale_histories():
+    series = {f"S{k}": [("2026-08", 1.0), ("2026-09", 1.0), ("2026-10", 1.0)] for k in range(10)}
+    series.update({"OLD1": [("2026-06", 1.0)], "OLD2": [("2026-07", 1.0)], "OLD3": [("2026-05", 1.0)]})
+    assert hs.last_common_month(series) == "2026-10"

@@ -395,7 +395,7 @@ def run(now: datetime | None = None, fetch_monthly: Callable | None = None, hold
             "etf_only": portfolio_risk(model_series, None, None, model, {"pocket": 0, "pepites": 0, "bitcoin": 0})}
 
     # sélection actuelle : corrélations et contrôle AAOIFI
-    month = st.median_low(sorted({s[-1][0] for s in big.values()}))
+    month = hs.last_common_month(big)
     picks = hs.select(hs.momentum_table(big, month), [], hs.TOP_N, sectors=sectors)
     ptable = hs.momentum_table(small, month, hs.PEPITES_LOOKBACK)
     ppicks = hs.select(ptable, [], hs.PEPITES_N, hs.PEPITES_KEEP, sectors=sectors, cap=hs.PEPITES_CAP)
