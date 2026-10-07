@@ -519,6 +519,18 @@ Pas du trading : de l'investissement halal à long terme. Page `investissement.h
   pour se rapprocher des parts visées (portefeuille type + poche actions), sans rien vendre. Les
   actions sorties de la règle sont signalées « à remplacer ». Enregistré dans le navigateur ; un lien
   permet de retrouver son portefeuille sur un autre appareil.
+- **Zakat** : calculateur sur la page (rien ne sort du navigateur). Placements du portefeuille repris
+  automatiquement, plus comptes et livrets, PEE (compté ou non tant qu'il est bloqué), or et argent
+  physiques, dettes de l'année. Nisab en argent (595 g, par défaut) ou en or (85 g) au prix publié chaque
+  jour (contrats GC=F et SI=F en euros), actions à 100 % ou à 25 % (norme AAOIFI 35), année lunaire
+  (2,5 %) ou solaire (2,577 %). Skill `zakat-calculator`.
+- **Revue de la stratégie** (`invest_review.py`, workflow manuel « revue de la stratégie », essai 6 de
+  HYPOTHESES.md) : la poche et les pépites comparées à des **témoins dans le même univers** (toutes les
+  actions à poids égal, 500 tirages au hasard avec la même rotation) pour neutraliser le biais du
+  survivant ; variantes anti-krach et corrélation ; risque du portefeuille « Dynamique » réglé comme sur
+  le site (chute maximale, pire année, perte en euros) ; **contrôle charia AAOIFI** des actions retenues
+  (dette et liquidités < 30 % de la capitalisation, intérêts < 5 % du chiffre d'affaires) avec leur taux
+  de purification. Skills `sharia-screening`, `historical-risk`, `factor-investing`, `rebalancing`.
 
 L'ancien **mode halal de trading** (second bot, `data/halal`) est arrêté : ses étapes ne tournent
 plus que si la variable de dépôt `HALAL_TRADING` vaut `on`. Le code et les données sont gardés.
