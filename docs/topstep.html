@@ -39,7 +39,11 @@
     #hist th:nth-child(7), #hist td:nth-child(7), #hist th:nth-child(11), #hist td:nth-child(11), #cand th:nth-child(1), #cand td:nth-child(1) { display: none; }
     #open .rowbtns button + button { display: none; }
   }
-  @media (max-width: 760px) { #odds th, #odds td { padding: 9px 5px; } #odds td.num { font-size: 12px; } }
+  @media (max-width: 760px) { #odds th, #odds td, #firms th, #firms td { padding: 9px 5px; } #odds td.num, #firms td.num { font-size: 12px; } .fm-ev { display: none; } }
+  .firm-ctl { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; margin-bottom: 12px; font-size: 13px; color: var(--muted); }
+  .firm-ctl label { display: flex; align-items: center; gap: 6px; }
+  .firm-ctl select { width: auto; }
+  .firm-ctl .chk input { width: auto; margin: 0; }
 </style>
 </head>
 <body data-page="topstep">
@@ -117,6 +121,20 @@
     <p class="muted" id="odds-intro" style="margin-top:0">Chargement…</p>
     <div class="tbl"><table id="odds"><thead><tr><th>Risque</th><th class="num">Réussite</th><th class="num">Essais</th><th class="num">Coût</th><th class="num">Durée</th></tr></thead><tbody></tbody></table></div>
     <div class="note-box" style="margin-top:16px"><span id="odds-ic"></span><span id="odds-note"></span></div>
+  </div>
+
+  <h2 id="firmes" data-closed data-hint="mêmes trades, comptes 50K de 25 prop firms">Comparer les prop firms</h2>
+  <div class="card">
+    <p class="muted" id="firms-intro" style="margin-top:0">Chargement…</p>
+    <div class="firm-ctl">
+      <label>Trades <select id="fm-prof"></select></label>
+      <label>Risque <select id="fm-risk"></select></label>
+      <label>Type <select id="fm-type"><option value="">toutes</option><option value="futures">futures</option><option value="cfd">CFD</option></select></label>
+      <label class="chk"><input type="checkbox" id="fm-ok" checked> comptes où la stratégie est permise</label>
+    </div>
+    <div class="tbl"><table id="firms"><thead><tr><th>Compte</th><th class="num">Réussite</th><th class="num">Durée</th><th class="num">Coût</th><th class="num fm-ev">Gain 90 j</th></tr></thead><tbody></tbody></table></div>
+    <div style="margin-top:10px"><button type="button" class="secondary" id="fm-more">Tout afficher</button></div>
+    <div class="note-box warn" style="margin-top:16px"><span id="firms-ic"></span><span id="firms-note"></span></div>
   </div>
 
   <h2 id="regles">Règles des comptes Topstep 50K</h2>
@@ -219,9 +237,56 @@
     }).join("");
     $("#odds-note").innerHTML = `<span><b>Comment lire</b> : « réussite » est la part, par tentative, des comptes qui atteignent +3 000 $ avant de toucher la perte maximale. « Essais » et « coût » : combien de comptes il faudrait acheter en moyenne (49 $ par mois, 49 $ par remise à zéro, 149 $ d'activation) avant d'en réussir un ; « malchance » : le coût n'est dépassé qu'une fois sur 10. « Durée » : jours de bourse pour réussir.`
       + (refPass != null ? ` <b>Le témoin sans avantage</b> (les mêmes trades, gain moyen ramené à 0) réussit déjà ${pct(refPass)} des tentatives : un compte réussi ne prouve donc pas qu'une stratégie gagne. Seule une réussite nettement au-dessus du témoin (en vert) indique un vrai avantage.` : "")
+      + (o.profiles.some((p) => p.key === "donchian_gold") ? ` <b>Attention</b> : Donchian garde ses positions d'un jour à l'autre (deux trades sur trois), ce que Topstep interdit (tout fermer avant 15:10 heure de Chicago) : son chiffre ici est théorique ; voir « Comparer les prop firms » pour les comptes qui le permettent.` : "")
       + ` Hypothèses : les trades passés se répètent, chaque trade se termine dans la journée, la limite journalière (qui coupe seulement la journée chez Topstep) n'est pas simulée. Moteur : ${esc(o.engine || "")}. Outil d'information, aucun ordre.</span>`;
   }
   loadOdds();
+
+  // comparaison des prop firms (mêmes trades, comptes 50K de l'annuaire public de LuxAlgo)
+  let firms = null, firmsAll = false;
+  async function loadFirms() {
+    firms = await Y.getJson("topstep/firms.json");
+    $("#firms-ic").innerHTML = Y.I.warn;
+    if (!firms || !(firms.challenges || []).length) {
+      $("#firms-intro").textContent = "Pas encore calculé : publié au prochain calcul (chaque semaine).";
+      $("#firms tbody").innerHTML = `<tr><td colspan="5" class="empty">Aucun résultat.</td></tr>`;
+      $("#fm-more").hidden = true;
+      return;
+    }
+    $("#fm-prof").innerHTML = firms.profiles.map((p) => `<option value="${esc(p.key)}">${esc(p.label.replace(/ \(.*\)$/, ""))}</option>`).join("");
+    $("#fm-risk").innerHTML = firms.risks.map((r, i) => `<option value="${i}">${Y.money(r, CUR, 0)} (${Y.num(r / firms.account_size * 100, 1)}${Y.NB}%)</option>`).join("");
+    for (const id of ["#fm-prof", "#fm-risk", "#fm-type", "#fm-ok"]) $(id).addEventListener("change", renderFirms);
+    $("#fm-more").addEventListener("click", () => { firmsAll = !firmsAll; renderFirms(); });
+    const h = firms.donchian_holding;
+    $("#firms-intro").textContent = `Les mêmes trades rejoués ${Y.num(firms.paths || 0, 0)} fois sur le compte d'évaluation de 50 000 $ de ${new Set(firms.challenges.map((c) => c.firm)).size} prop firms (${firms.challenges.length} comptes), chacun avec ses règles. Calcul du ${new Date(firms.updated_at).toLocaleDateString("fr-FR", { day: "numeric", month: "long" })}.`;
+    $("#firms-note").innerHTML = `<span><b>À vérifier avant d'acheter</b> : à part Topstep, les règles et les prix viennent de l'annuaire public de LuxAlgo, sans vérification compte par compte (* : règle de perte maximale complétée ou corrigée ici d'après plusieurs sources). `
+      + (h ? `<b>Donchian garde ses positions</b> : ${h.overnight} trades sur ${h.n} restent ouverts après 15:10 heure de Chicago ou d'une journée à l'autre, ${h.weekend} pendant un week-end. Topstep et la plupart des firmes futures imposent de tout fermer chaque jour : là-bas, cette stratégie n'est pas permise telle quelle. ` : "")
+      + `« Réussite » : part des tentatives qui atteignent l'objectif (toutes les étapes) ; entre parenthèses, le témoin sans avantage. « Durée » : jours de bourse pour réussir. « Coût » : frais moyens payés avant de réussir (plusieurs tentatives, remboursements compris). « Gain 90 j » : retraits espérés pendant 90 jours de compte financé, moins les frais (modèle du moteur, très incertain). Les trades sont mesurés avec les frais des contrats futures ; sur CFD l'écart de prix peut coûter un peu plus. La perte journalière est comptée comme éliminatoire et les variations à l'intérieur d'un trade ne sont pas simulées (optimiste pour les pertes maximales qui suivent les gains latents). Firmes israéliennes écartées${firms.excluded && firms.excluded.length ? ` (${esc(firms.excluded.join(", "))})` : ""}. Outil d'information, aucun lien d'affiliation.</span>`;
+    renderFirms();
+  }
+  function renderFirms() {
+    const key = $("#fm-prof").value, ri = Number($("#fm-risk").value || 0), type = $("#fm-type").value, okOnly = $("#fm-ok").checked;
+    const prof = firms.profiles.find((p) => p.key === key) || {};
+    const pct = (x) => `${Y.num(x * 100, 0)}${Y.NB}%`;
+    const allowed = (c) => !prof.holds_overnight || (c.overnight !== false && c.weekend !== false);
+    const rows = firms.challenges.map((c) => ({ c, r: (c.results[key] || [])[ri], w: (c.results.witness || [])[ri] }))
+      .filter((x) => x.r && x.r.pass != null && (!type || x.c.productType === type) && (!okOnly || allowed(x.c)))
+      .sort((a, b) => b.r.pass - a.r.pass);
+    const shown = firmsAll ? rows : rows.slice(0, 15);
+    $("#fm-more").hidden = rows.length <= 15;
+    $("#fm-more").textContent = firmsAll ? "Afficher les 15 premiers" : `Tout afficher (${rows.length})`;
+    const price = (f) => f.price == null ? "prix ?" : `${Y.money(f.price, CUR, 0)}${f.billing === "monthly" ? "/mois" : ""}`;
+    $("#firms tbody").innerHTML = shown.length ? shown.map(({ c, r, w }) => {
+      const name = c.name.replace(c.firm + " - ", "").replace(c.firm + " ", "");
+      const tone = w ? (r.pass > w.pass + 0.05 ? "up" : r.pass < w.pass - 0.05 ? "dn" : "") : "";
+      const warn = prof.holds_overnight && !allowed(c) ? ` · <span class="dn">fermeture chaque jour imposée</span>` : (prof.holds_overnight && (c.overnight == null || c.weekend == null) ? " · nuit et week-end : à vérifier" : "");
+      return `<tr${c.firmId === "topstep" ? ' style="font-weight:500"' : ""}><td><b style="font-weight:500">${esc(c.firm)}</b>${c.completed ? " *" : ""}<div class="muted" style="font-size:12px">${esc(name)} · ${c.productType === "cfd" ? "CFD" : "futures"} · ${price(c.fees)}${warn}</div></td>
+        <td class="num ${tone}"><b style="font-weight:500">${pct(r.pass)}</b>${w && key !== "witness" ? `<div class="muted" style="font-size:12px">(${pct(w.pass)})</div>` : ""}</td>
+        <td class="num nowrap">${r.days ? `${Y.num(r.days, 0)} j` : "—"}</td><td class="num nowrap">${r.cost == null ? "—" : Y.money(r.cost, CUR, 0)}</td>
+        <td class="num nowrap fm-ev ${Y.tone(r.ev || 0)}">${r.ev == null ? "—" : Y.smoney(r.ev, CUR, 0)}</td></tr>`;
+    }).join("") : `<tr><td colspan="5" class="empty">Aucun compte avec ces filtres.</td></tr>`;
+  }
+  loadFirms();
 
   async function load() {
     $("#updated").textContent = "Chargement…";

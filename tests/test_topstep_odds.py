@@ -78,3 +78,65 @@ def test_real_engine_separates_an_edge_from_chance():
                          {"key": "z", "label": "z", "rSeries": zero, "tradesPerDay": 3}], risks=(250.0,), paths=2000)
     g, z = (p["risks"][0]["pass"] for p in out["profiles"])
     assert g > z + 0.3
+
+
+def test_directory_keeps_only_rules_and_drops_excluded_countries():
+    payload = {"data": {"propfirms": [
+        {"propfirmId": "a", "name": "A", "countryIso2": "US", "productTypes": ["Futures"], "offers": [{"affiliateLink": "x"}],
+         "challenges": [{"challengeId": "a-50k", "accountSize": 50000, "price": 99, "promo": "y"}]},
+        {"propfirmId": "b", "name": "B", "countryIso2": "IL", "challenges": []}]}}
+    firms, excluded = to.fetch_directory(lambda: payload)
+    assert excluded == ["B"] and len(firms) == 1
+    assert "offers" not in firms[0] and firms[0]["challenges"] == [{**{k: None for k in to.RULE_FIELDS},
+                                                                   "challengeId": "a-50k", "accountSize": 50000, "price": 99}]
+
+
+def test_build_firms_with_fake_engine(tmp_path):
+    ddir = tmp_path / "data" / "topstep"
+    ddir.mkdir(parents=True)
+    sigs = {"gold": [_sig("gold", 3000.0, 2990.0, 0.5 if k % 2 else -0.3, 1 + k % 20) for k in range(30)]}
+    (tmp_path / "data" / "backtest_trades.json").write_text(json.dumps(sigs))
+    (ddir / to.DONCHIAN_FILE).write_text(json.dumps({"rSeries": [1.0, -1.0] * 10, "tradesPerDay": 0.5,
+                                                     "period": ["2024-01-01", "2026-01-01"],
+                                                     "holding": {"n": 20, "overnight": 12, "weekend": 3}}))
+    seen = {}
+
+    def engine(profiles, firms):
+        seen["profiles"] = [p["key"] for p in profiles]
+        seen["firms"] = [f["name"] for f in firms]
+        return {"paths": 10, "challenges": [{"firm": "A"}], "errors": []}
+
+    payload = {"data": {"propfirms": [{"name": "A", "countryIso2": "FR", "challenges": []},
+                                      {"name": "B", "countryIso2": "il", "challenges": []}]}}
+    res = to.build_firms(data_dir=ddir, fetch=lambda: payload, engine=engine)
+    assert seen == {"profiles": ["donchian_gold", "backtest", "witness"], "firms": ["A"]}
+    assert res["excluded"] == ["B"] and res["donchian_holding"]["overnight"] == 12
+    assert [p["holds_overnight"] for p in res["profiles"]] == [True, False, False]
+
+
+def test_holding_stats_counts_positions_kept_after_the_close():
+    from datetime import datetime, timezone
+    from trading_bot import strategies as sl
+    ts = lambda s: int(datetime.fromisoformat(s).replace(tzinfo=timezone.utc).timestamp())  # noqa: E731
+    same_day = sl.Trade("donchian_1h", "gold", "long", ts("2026-10-06T14:00:00"), ts("2026-10-06T18:00:00"), 1, 1, 1, "x")
+    overnight = sl.Trade("donchian_1h", "gold", "long", ts("2026-10-06T14:00:00"), ts("2026-10-07T15:00:00"), 1, 1, 1, "x")
+    weekend = sl.Trade("donchian_1h", "gold", "long", ts("2026-10-09T14:00:00"), ts("2026-10-12T15:00:00"), 1, 1, 1, "x")
+    assert to.holding_stats([same_day, overnight, weekend]) == {"n": 3, "overnight": 2, "weekend": 1}
+
+
+@pytest.mark.skipif(not shutil.which("node") or not (to.TOOL.parent / "node_modules").exists(),
+                    reason="moteur node non installé")
+def test_real_firms_engine_adapts_directory_rows_and_overrides():
+    firm = {"propfirmId": "ftmo", "name": "FTMO", "productTypes": ["CFD"], "currency": "eur", "challenges": [
+        {"challengeId": "ftmo-normal-challenge-1-step-50k", "challengeName": "FTMO - Normal Challenge - 1-Step 50k",
+         "accountSize": 50000, "steps": 1, "profitTarget": [10], "profitTargetIsPercent": True, "minTradingDays": 2,
+         "dailyLoss": 3, "maxLoss": 10, "maxLossType": "Static", "lossIsPercent": True, "price": 90,
+         "interval": "one time", "profitSplitPercent": 90, "payoutFrequency": "14 days", "overnightHolding": True,
+         "weekendHolding": True}]}
+    good = [1.5, -1.0, 1.5, -1.0, 1.5] * 30
+    out = to.run_firms([{"key": "g", "label": "g", "rSeries": good, "tradesPerDay": 3}], [firm], risks=(250.0,), paths=500)
+    names = {c["firm"]: c for c in out["challenges"]}
+    assert set(names) == {"Topstep", "FTMO"} and not out["errors"]
+    ftmo = names["FTMO"]
+    assert ftmo["fees"]["price"] == 319 and ftmo["completed"] and ftmo["maxLoss"]["mode"] == "trailing-realized-eod"
+    assert names["Topstep"]["overnight"] is False and 0 < ftmo["results"]["g"][0]["pass"] <= 1

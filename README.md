@@ -615,6 +615,19 @@ seul Donchian or à 250 $ fait nettement mieux (48 %, 2,1 essais, 580 $ de frais
 bourse). La limite journalière n'est pas simulée (chez Topstep elle coupe la journée sans éliminer le
 compte). Outil d'information : aucun ordre, aucun message.
 
+**Comparer les prop firms** (même section du calcul, `docs/topstep/firms.json`) : les mêmes séries de trades sont
+rejouées sur le compte d'évaluation de 50 000 $ de chaque prop firm de l'annuaire public de LuxAlgo
+(`https://app.luxalgo.com/api/propfirms/list`, seules les règles sont gardées, ni offres ni liens
+d'affiliation), traduites par l'adaptateur de LuxAlgo, qui refuse un compte dont la perte maximale est ambiguë.
+Pour quelques firmes futures refusées (Apex, Alpha Futures, Earn2Trade, TradeDay, Tradeify) et FTMO 1-Step (prix
+et perte maximale faux dans l'annuaire), la règle est complétée dans `tools/propfirm/firms.mjs` (« * » sur la
+page). Firmes israéliennes écartées. Premier calcul (7 octobre 2026, 55 comptes, 23 firmes) : à 250 $ de risque,
+Donchian or réussit 70 à 80 % des tentatives sur les comptes CFD à perte maximale fixe de 8 à 10 % (FTMO,
+FundingPips, Funding Traders…), mais en 140 à 230 jours de bourse ; 47 % chez Topstep. **Donchian garde ses
+positions** d'un jour à l'autre (215 trades sur 313) et le week-end (67) : interdit chez Topstep et la plupart
+des firmes futures, permis sur la plupart des comptes CFD. La page ne montre par défaut que les comptes où la
+stratégie choisie est permise. Règles et prix à vérifier sur le site de la firme avant tout achat.
+
 Connexion automatique : l'API TopstepX (ProjectX) permet de passer des ordres par programme sur le
 Combine et l'Express Funded (pas sur le Live Funded), mais seulement **depuis votre propre appareil**
 (serveurs distants, VPS et VPN interdits). Le bot, qui tourne sur GitHub Actions, ne passe donc aucun

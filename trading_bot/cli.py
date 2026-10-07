@@ -224,6 +224,14 @@ def main(argv: list[str] | None = None) -> int:
             for r in prof["risks"]:
                 print(f"  risque {r['risk']:.0f} $ : réussite {r['pass']:.1%} par tentative "
                       f"[{r['ci'][0]:.1%}-{r['ci'][1]:.1%}], {r['attempts']:.1f} tentatives, coût {r['cost']:.0f} $")
+        # même calcul sur les comptes 50K des autres prop firms (annuaire public de LuxAlgo)
+        try:
+            firms = topstep_odds.build_firms()
+            topstep_odds.publish(firms, name="firms.json")
+            print(f"prop firms : {len(firms['challenges'])} comptes comparés ({len(firms['errors'])} erreurs), "
+                  f"écartées : {', '.join(firms['excluded']) or 'aucune'}")
+        except Exception as exc:  # noqa: BLE001 — l'annuaire est un service externe : Topstep reste publié
+            print(f"comparaison des prop firms impossible : {exc}")
     elif args.command == "invest-review":
         # revue de la stratégie d'investissement halal (essai 6 de HYPOTHESES.md) : témoins, variantes,
         # risque du portefeuille complet, contrôle charia AAOIFI ; publié pour la page Investir

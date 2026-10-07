@@ -31,6 +31,20 @@ from .topstep import FEES, PRODUCTS, RULES
 log = logging.getLogger(__name__)
 
 TOOL = ROOT_DIR / "tools" / "propfirm" / "odds.mjs"
+FIRMS_TOOL = TOOL.parent / "firms.mjs"
+# Annuaire public des prop firms de LuxAlgo (données de luxalgo.com/prop-firms) : seules les règles sont gardées
+DIRECTORY_URL = "https://app.luxalgo.com/api/propfirms/list"
+EXCLUDED_COUNTRIES = {"IL"}     # sociétés israéliennes écartées, comme pour l'investissement
+FIRM_FIELDS = ("propfirmId", "name", "productTypes", "currency", "countryIso2")
+RULE_FIELDS = ("challengeId", "challengeName", "accountSize", "steps", "profitTarget", "profitTargetIsPercent",
+               "minTradingDays", "dailyLoss", "maxLoss", "dailyLossType", "maxLossType", "lossIsPercent",
+               "activationFee", "resetFee", "profitSplitPercent", "payoutFrequency", "isFeeRefundable", "price",
+               "interval", "maxLossMode", "maxLossLocksAtInitial", "maxLossLockOffset", "maxLossIsPercent",
+               "dailyLossBasis", "dailyLossLimitBasis", "dailyLossIncludesOpenPnl", "dailyLossEvaluation",
+               "dailyLossIsPercent", "consistencyMaxBestDayPct", "payoutIntervalDays", "payoutMinWinningDays",
+               "payoutWinningDayMinProfit", "payoutMaxPct", "payoutMaxAmount", "payoutBufferAmount",
+               "fundedConsistencyPct", "firstPayoutMinDays", "sourceUrl", "lastVerifiedAt", "autoTrading",
+               "overnightHolding", "weekendHolding", "newsTrading")
 REAL_ASSETS = ("nasdaq", "sp500", "bitcoin", "gold")
 RISKS = (250.0, 500.0)          # $ risqués au stop : 0,5 % (réglage du compte simulé) et 1 % de 50 000 $
 DONCHIAN_FILE = "r_donchian_gold.json"
@@ -113,9 +127,28 @@ def build_donchian(candles: list) -> dict[str, Any]:
     rs = [round(sl.trade_rs(t, 0.0, tcost)["net_topstep"], 4) for t in trades]
     start = datetime.fromtimestamp(candles[0].ts, timezone.utc)
     end = datetime.fromtimestamp(candles[-1].ts, timezone.utc)
-    return {"strategy": "donchian_1h", "asset": "gold", "rSeries": rs,
+    return {"strategy": "donchian_1h", "asset": "gold", "rSeries": rs, "holding": holding_stats(trades),
             "tradesPerDay": round(len(rs) / weekdays_between(start, end), 3),
             "period": [iso(start)[:10], iso(end)[:10]], "built_at": iso(utcnow())}
+
+
+def holding_stats(trades: list) -> dict[str, Any]:
+    """Trades gardés au-delà de 15:10 heure de Chicago (heure de fermeture imposée par Topstep et la plupart des
+    firmes futures) ou pendant un week-end."""
+    from zoneinfo import ZoneInfo
+    ct = ZoneInfo("America/Chicago")
+
+    def session(ts: int):                     # journée de trading : 17:00 → 17:00 heure de Chicago
+        d = datetime.fromtimestamp(ts, timezone.utc).astimezone(ct)
+        return (d + timedelta(hours=7)).date()
+
+    def late(ts: int) -> bool:
+        d = datetime.fromtimestamp(ts, timezone.utc).astimezone(ct)
+        return (15, 10) < (d.hour, d.minute) and d.hour < 17
+    over = sum(1 for t in trades if session(t.entry_ts) != session(t.exit_ts - 1) or late(t.exit_ts - 1))
+    weekend = sum(1 for t in trades if datetime.fromtimestamp(t.entry_ts, timezone.utc).isocalendar()[:2]
+                  != datetime.fromtimestamp(t.exit_ts - 1, timezone.utc).isocalendar()[:2])
+    return {"n": len(trades), "overnight": over, "weekend": weekend}
 
 
 def save_donchian(d: dict[str, Any], data_dir: Path | None = None) -> None:
@@ -161,6 +194,68 @@ def run_engine(profiles: list[dict[str, Any]], risks=RISKS, paths: int = 10_000,
         return json.loads(dst.read_text(encoding="utf-8"))
 
 
+def fetch_directory(fetch=None) -> tuple[list[dict[str, Any]], list[str]]:
+    """Firmes de l'annuaire, réduites à leurs règles (ni offres ni liens d'affiliation) ; renvoie aussi les
+    firmes écartées."""
+    if fetch is None:
+        from .providers.http import get_json
+        fetch = lambda: get_json(DIRECTORY_URL, timeout=60)  # noqa: E731
+    rows = (fetch().get("data") or {}).get("propfirms") or []
+    kept, excluded = [], []
+    for f in rows:
+        if (f.get("countryIso2") or "").upper() in EXCLUDED_COUNTRIES:
+            excluded.append(f.get("name") or f.get("propfirmId"))
+            continue
+        kept.append({**{k: f.get(k) for k in FIRM_FIELDS},
+                     "challenges": [{k: c.get(k) for k in RULE_FIELDS} for c in f.get("challenges") or []]})
+    return kept, excluded
+
+
+def run_firms(profiles: list[dict[str, Any]], firms: list[dict[str, Any]], risks=RISKS, paths: int = 3_000,
+              node: str | None = None) -> dict[str, Any]:
+    node = node or shutil.which("node")
+    if not node or not FIRMS_TOOL.exists() or not (TOOL.parent / "node_modules").exists():
+        raise RuntimeError("moteur de simulation absent (node et tools/propfirm/node_modules requis)")
+    with tempfile.TemporaryDirectory() as tmp:
+        src, dst = Path(tmp) / "in.json", Path(tmp) / "out.json"
+        src.write_text(json.dumps({"profiles": [{k: p[k] for k in ("key", "label", "rSeries", "tradesPerDay")} for p in profiles],
+                                   "risks": list(risks), "firms": firms}), encoding="utf-8")
+        subprocess.run([node, str(FIRMS_TOOL), str(src), str(dst), str(paths)], check=True, timeout=1800,
+                       cwd=str(FIRMS_TOOL.parent), capture_output=True)
+        return json.loads(dst.read_text(encoding="utf-8"))
+
+
+def _donchian_holding(ddir: Path) -> dict[str, Any] | None:
+    try:
+        return json.loads((ddir / DONCHIAN_FILE).read_text(encoding="utf-8")).get("holding")
+    except (OSError, ValueError):
+        return None
+
+
+def build_firms(now: datetime | None = None, data_dir: Path | None = None, fetch=None, engine=run_firms) -> dict[str, Any]:
+    """Les mêmes trades rejoués sur le compte d'évaluation 50K de chaque prop firm de l'annuaire."""
+    ddir = data_dir or topstep_dir()
+    profiles = []
+    try:
+        profiles.append(donchian_profile(json.loads((ddir / DONCHIAN_FILE).read_text(encoding="utf-8"))))
+    except (OSError, ValueError):
+        pass
+    try:
+        base = backtest_profile(json.loads((ddir.parent / "backtest_trades.json").read_text(encoding="utf-8")))
+        profiles += [base, witness_profile(base)]
+    except (OSError, ValueError):
+        pass
+    profiles = [p for p in profiles if p]
+    firms, excluded = fetch_directory(fetch)
+    sim = engine(profiles, firms) if profiles and firms else {"challenges": [], "errors": []}
+    return {"updated_at": iso(now or utcnow()), "account_size": 50_000, "risks": list(RISKS),
+            "paths": sim.get("paths"), "excluded": excluded, "errors": sim.get("errors", [])[:20],
+            "profiles": [{"key": p["key"], "label": p["label"], **summarize_r(p["rSeries"]),
+                          "holds_overnight": p["key"] == "donchian_gold"} for p in profiles],
+            "donchian_holding": _donchian_holding(ddir),
+            "challenges": sim.get("challenges", [])}
+
+
 def build(now: datetime | None = None, data_dir: Path | None = None, engine=run_engine) -> dict[str, Any]:
     now = now or utcnow()
     ddir = data_dir or topstep_dir()
@@ -201,8 +296,8 @@ def build(now: datetime | None = None, data_dir: Path | None = None, engine=run_
             "fees": (sim.get("spec") or {}).get("fees"), "flags": sim.get("flags", []), "profiles": sim.get("profiles", [])}
 
 
-def publish(res: dict[str, Any], data_dir: Path | None = None, docs_dir: Path | None = None) -> None:
+def publish(res: dict[str, Any], data_dir: Path | None = None, docs_dir: Path | None = None, name: str = "odds.json") -> None:
     text = json.dumps(res, ensure_ascii=False, separators=(",", ":"))
     for d in (data_dir or topstep_dir(), docs_dir or ROOT_DIR / "docs" / "topstep"):
         d.mkdir(parents=True, exist_ok=True)
-        (d / "odds.json").write_text(text, encoding="utf-8")
+        (d / name).write_text(text, encoding="utf-8")
