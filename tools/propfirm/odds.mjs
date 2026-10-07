@@ -35,7 +35,10 @@ for (const p of input.profiles) {
                        funded: j.fundedProbability ?? null, attemptCap: j.attemptCap ?? null,
                        attempts: j.attempts ? j.attempts.mean : null, cost: j.cost ? j.cost.mean : null,
                        costP90: j.cost ? j.cost.p90 : null,
-                       fundedDays: j.daysToFunded ? { p50: j.daysToFunded.p50, p90: j.daysToFunded.p90 } : null });
+                       fundedDays: j.daysToFunded ? { p50: j.daysToFunded.p50, p90: j.daysToFunded.p90 } : null,
+                       // une fois financé : jours de bourse jusqu'au 1er retrait (5 jours gagnants ≥ 150 $)
+                       firstPayout: r.funded?.daysToFirstPayout ? r.funded.daysToFirstPayout.p50 : null,
+                       payoutProb: r.funded?.payoutProbability ?? null });
       if (!out.flags) out.flags = (r.assumptions?.flags ?? []).map((f) => f.id);
     } catch (e) { row.risks.push({ risk, error: String(e.message || e).slice(0, 300) }); }
   }

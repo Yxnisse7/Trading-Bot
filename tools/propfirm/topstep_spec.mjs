@@ -13,5 +13,7 @@ export const TOPSTEP_50K = {
   dailyLoss: null,
   maxLoss: { amount: 2_000, mode: "trailing-realized-eod", locksAtInitial: true },
   fees: { price: 49, billing: "monthly", resetFee: 49, activationFee: 149 },
-  funded: { profitSplitPct: 90, payoutFrequency: "on-demand" },
+  // retrait : 5 jours gagnants d'au moins 150 $ (pas forcément d'affilée), plafond 2 000 $ par retrait (50K)
+  funded: { profitSplitPct: 90, payoutFrequency: "on-demand",
+            payoutRules: { minWinningDays: 5, winningDayMinProfit: 150, maxPayoutAmount: 2_000 } },
 };

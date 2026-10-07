@@ -636,6 +636,13 @@ Nasdaq, S&P 500 et Bitcoin ; suivi en ombre depuis le 07/10/2026. Chances Topste
 250 $ de risque (compte financé en ~3 mois pour la moitié des parcours), 42 % à 500 $ (~1,5 mois). La page
 affiche pour chaque compte le délai jusqu'au compte financé (tentatives ratées comprises) et le nombre de trades.
 
+**Stratégies intraday sur l'or** (essai 9, `python run.py intraday-gold`, résultat dans `data/essai9.json`) :
+Donchian sur bougies de 15 et 30 min fermé chaque soir, et cassure des 30 premières minutes du COMEX (8:20 heure
+de New York). Les trois sont écartées (facteur de profit trop faible à la confirmation, ou perte en découverte) :
+plus de trades par jour ne compense pas des gains par trade trop petits face aux frais. Réussir le Combine en
+2 semaines reste une affaire de chance. La simulation Topstep compte aussi la règle de retrait (5 jours gagnants
+d'au moins 150 $) : délai jusqu'au 1er retrait affiché sous le délai jusqu'au compte financé.
+
 Connexion automatique : l'API TopstepX (ProjectX) permet de passer des ordres par programme sur le
 Combine et l'Express Funded (pas sur le Live Funded), mais seulement **depuis votre propre appareil**
 (serveurs distants, VPS et VPN interdits). Le bot, qui tourne sur GitHub Actions, ne passe donc aucun

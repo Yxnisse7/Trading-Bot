@@ -1,0 +1,560 @@
+{
+  "essai": 9,
+  "split": "2025-09-28",
+  "n_trials": 77,
+  "cells": {
+    "donchian_15m_day": {
+      "strategy": "donchian_15m_day",
+      "discovery": {
+        "n": 739,
+        "gross": {
+          "n": 739,
+          "mean_r": 0.0722,
+          "se": 0.0567,
+          "profit_factor": 1.14,
+          "win_rate": 0.3451
+        },
+        "net_bot": {
+          "n": 739,
+          "mean_r": 0.0223,
+          "se": 0.0567,
+          "profit_factor": 1.04,
+          "win_rate": 0.3302
+        },
+        "net": {
+          "n": 739,
+          "mean_r": 0.0556,
+          "se": 0.0567,
+          "profit_factor": 1.11,
+          "win_rate": 0.3424
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 369,
+          "mean_r": 0.0749,
+          "se": 0.0855,
+          "profit_factor": 1.14,
+          "win_rate": 0.3198
+        },
+        "second_half": {
+          "n": 370,
+          "mean_r": 0.0363,
+          "se": 0.0747,
+          "profit_factor": 1.07,
+          "win_rate": 0.3649
+        },
+        "first": "2025-09-29",
+        "last": "2026-10-02"
+      },
+      "confirmation": {
+        "n": 745,
+        "gross": {
+          "n": 745,
+          "mean_r": 0.0667,
+          "se": 0.0606,
+          "profit_factor": 1.13,
+          "win_rate": 0.3436
+        },
+        "net_bot": {
+          "n": 745,
+          "mean_r": -0.0167,
+          "se": 0.0606,
+          "profit_factor": 0.97,
+          "win_rate": 0.3248
+        },
+        "net": {
+          "n": 745,
+          "mean_r": 0.026,
+          "se": 0.0606,
+          "profit_factor": 1.05,
+          "win_rate": 0.3383
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 372,
+          "mean_r": -0.0719,
+          "se": 0.0784,
+          "profit_factor": 0.87,
+          "win_rate": 0.3091
+        },
+        "second_half": {
+          "n": 373,
+          "mean_r": 0.1236,
+          "se": 0.0922,
+          "profit_factor": 1.24,
+          "win_rate": 0.3673
+        },
+        "first": "2024-09-23",
+        "last": "2025-09-26"
+      },
+      "all": {
+        "n": 1484,
+        "gross": {
+          "n": 1484,
+          "mean_r": 0.0694,
+          "se": 0.0415,
+          "profit_factor": 1.14,
+          "win_rate": 0.3443
+        },
+        "net_bot": {
+          "n": 1484,
+          "mean_r": 0.0027,
+          "se": 0.0415,
+          "profit_factor": 1.0,
+          "win_rate": 0.3275
+        },
+        "net": {
+          "n": 1484,
+          "mean_r": 0.0407,
+          "se": 0.0415,
+          "profit_factor": 1.08,
+          "win_rate": 0.3403
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 742,
+          "mean_r": 0.0272,
+          "se": 0.0608,
+          "profit_factor": 1.05,
+          "win_rate": 0.3369
+        },
+        "second_half": {
+          "n": 742,
+          "mean_r": 0.0542,
+          "se": 0.0565,
+          "profit_factor": 1.11,
+          "win_rate": 0.3437
+        },
+        "first": "2024-09-23",
+        "last": "2026-10-02"
+      },
+      "status": "écarté (confirmation)",
+      "robust": {
+        "checks": {
+          "au moins 100 trades": true,
+          "gain > 0 en 2024-25": true,
+          "gain > 0 en 2025-26": true,
+          "facteur de profit ≥ 1,1": false,
+          "≥ 0 sans les 5 % meilleurs trades": false,
+          "gain en % du prix > 0": true
+        },
+        "passed": false,
+        "mean_y1": 0.026,
+        "mean_y2": 0.0556,
+        "trimmed_mean": -0.2282,
+        "mean_pct": 0.0143
+      },
+      "holding": {
+        "n": 1484,
+        "overnight": 0,
+        "weekend": 0
+      },
+      "trades_per_day": 2.8,
+      "combine": [
+        {
+          "risk": 250,
+          "pass": 0.3059210526315789,
+          "pass10": 0.07364106988783434,
+          "witness_pass": 0.22479310927208243,
+          "witness_pass10": 0.06000607464216561,
+          "funded_days": {
+            "p50": 38,
+            "p90": 109
+          }
+        },
+        {
+          "risk": 500,
+          "pass": 0.22025945349158157,
+          "pass10": 0.11715506903231758,
+          "witness_pass": 0.1696194929432457,
+          "witness_pass10": 0.09288376129460411,
+          "funded_days": {
+            "p50": 26,
+            "p90": 78
+          }
+        },
+        {
+          "risk": 750,
+          "pass": 0.17491618140109405,
+          "pass10": 0.10976495540253929,
+          "witness_pass": 0.13921254231248886,
+          "witness_pass10": 0.0917283391229925,
+          "funded_days": {
+            "p50": 24,
+            "p90": 68
+          }
+        }
+      ],
+      "fast": false
+    },
+    "donchian_30m_day": {
+      "strategy": "donchian_30m_day",
+      "discovery": {
+        "n": 404,
+        "gross": {
+          "n": 404,
+          "mean_r": 0.0945,
+          "se": 0.0705,
+          "profit_factor": 1.2,
+          "win_rate": 0.4084
+        },
+        "net_bot": {
+          "n": 404,
+          "mean_r": 0.0605,
+          "se": 0.0705,
+          "profit_factor": 1.12,
+          "win_rate": 0.3936
+        },
+        "net": {
+          "n": 404,
+          "mean_r": 0.0831,
+          "se": 0.0705,
+          "profit_factor": 1.17,
+          "win_rate": 0.4035
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 202,
+          "mean_r": 0.0645,
+          "se": 0.0994,
+          "profit_factor": 1.13,
+          "win_rate": 0.3911
+        },
+        "second_half": {
+          "n": 202,
+          "mean_r": 0.1018,
+          "se": 0.1001,
+          "profit_factor": 1.22,
+          "win_rate": 0.4158
+        },
+        "first": "2025-09-29",
+        "last": "2026-10-02"
+      },
+      "confirmation": {
+        "n": 426,
+        "gross": {
+          "n": 426,
+          "mean_r": 0.0768,
+          "se": 0.0714,
+          "profit_factor": 1.15,
+          "win_rate": 0.3662
+        },
+        "net_bot": {
+          "n": 426,
+          "mean_r": 0.0208,
+          "se": 0.0714,
+          "profit_factor": 1.04,
+          "win_rate": 0.3592
+        },
+        "net": {
+          "n": 426,
+          "mean_r": 0.0495,
+          "se": 0.0714,
+          "profit_factor": 1.09,
+          "win_rate": 0.3615
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 213,
+          "mean_r": -0.0283,
+          "se": 0.0963,
+          "profit_factor": 0.95,
+          "win_rate": 0.3427
+        },
+        "second_half": {
+          "n": 213,
+          "mean_r": 0.1272,
+          "se": 0.1054,
+          "profit_factor": 1.25,
+          "win_rate": 0.3803
+        },
+        "first": "2024-09-23",
+        "last": "2025-09-26"
+      },
+      "all": {
+        "n": 830,
+        "gross": {
+          "n": 830,
+          "mean_r": 0.0854,
+          "se": 0.0502,
+          "profit_factor": 1.17,
+          "win_rate": 0.3867
+        },
+        "net_bot": {
+          "n": 830,
+          "mean_r": 0.0401,
+          "se": 0.0502,
+          "profit_factor": 1.08,
+          "win_rate": 0.3759
+        },
+        "net": {
+          "n": 830,
+          "mean_r": 0.0659,
+          "se": 0.0502,
+          "profit_factor": 1.13,
+          "win_rate": 0.3819
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 415,
+          "mean_r": 0.0367,
+          "se": 0.0716,
+          "profit_factor": 1.07,
+          "win_rate": 0.359
+        },
+        "second_half": {
+          "n": 415,
+          "mean_r": 0.095,
+          "se": 0.0703,
+          "profit_factor": 1.2,
+          "win_rate": 0.4048
+        },
+        "first": "2024-09-23",
+        "last": "2026-10-02"
+      },
+      "status": "écarté (confirmation)",
+      "robust": {
+        "checks": {
+          "au moins 100 trades": true,
+          "gain > 0 en 2024-25": true,
+          "gain > 0 en 2025-26": true,
+          "facteur de profit ≥ 1,1": true,
+          "≥ 0 sans les 5 % meilleurs trades": false,
+          "gain en % du prix > 0": true
+        },
+        "passed": false,
+        "mean_y1": 0.0495,
+        "mean_y2": 0.0831,
+        "trimmed_mean": -0.1552,
+        "mean_pct": 0.026
+      },
+      "holding": {
+        "n": 830,
+        "overnight": 0,
+        "weekend": 0
+      },
+      "trades_per_day": 1.566,
+      "combine": [
+        {
+          "risk": 250,
+          "pass": 0.4092909035096695,
+          "pass10": 0.0268374255648911,
+          "witness_pass": 0.2530395136778115,
+          "witness_pass10": 0.0190344242242692,
+          "funded_days": {
+            "p50": 46,
+            "p90": 126
+          }
+        },
+        {
+          "risk": 500,
+          "pass": 0.2870676044208411,
+          "pass10": 0.09133200895214626,
+          "witness_pass": 0.203676282869543,
+          "witness_pass10": 0.07106310403638431,
+          "funded_days": {
+            "p50": 29,
+            "p90": 80
+          }
+        },
+        {
+          "risk": 750,
+          "pass": 0.23743531790876107,
+          "pass10": 0.10263107249883155,
+          "witness_pass": 0.16840181872264479,
+          "witness_pass10": 0.08177808727948004,
+          "funded_days": {
+            "p50": 24,
+            "p90": 70.90000000000009
+          }
+        }
+      ],
+      "fast": false
+    },
+    "comex_orb": {
+      "strategy": "comex_orb",
+      "discovery": {
+        "n": 239,
+        "gross": {
+          "n": 239,
+          "mean_r": -0.0821,
+          "se": 0.0933,
+          "profit_factor": 0.86,
+          "win_rate": 0.3431
+        },
+        "net_bot": {
+          "n": 239,
+          "mean_r": -0.1287,
+          "se": 0.0933,
+          "profit_factor": 0.8,
+          "win_rate": 0.3347
+        },
+        "net": {
+          "n": 239,
+          "mean_r": -0.0976,
+          "se": 0.0933,
+          "profit_factor": 0.84,
+          "win_rate": 0.3431
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 119,
+          "mean_r": 0.0802,
+          "se": 0.1551,
+          "profit_factor": 1.13,
+          "win_rate": 0.3697
+        },
+        "second_half": {
+          "n": 120,
+          "mean_r": -0.274,
+          "se": 0.1025,
+          "profit_factor": 0.57,
+          "win_rate": 0.3167
+        },
+        "first": "2025-09-29",
+        "last": "2026-10-02"
+      },
+      "confirmation": {
+        "n": 239,
+        "gross": {
+          "n": 239,
+          "mean_r": 0.1354,
+          "se": 0.0917,
+          "profit_factor": 1.28,
+          "win_rate": 0.431
+        },
+        "net_bot": {
+          "n": 239,
+          "mean_r": 0.07,
+          "se": 0.0917,
+          "profit_factor": 1.13,
+          "win_rate": 0.4268
+        },
+        "net": {
+          "n": 239,
+          "mean_r": 0.1039,
+          "se": 0.0917,
+          "profit_factor": 1.21,
+          "win_rate": 0.4268
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 119,
+          "mean_r": 0.2062,
+          "se": 0.1342,
+          "profit_factor": 1.47,
+          "win_rate": 0.4538
+        },
+        "second_half": {
+          "n": 120,
+          "mean_r": 0.0024,
+          "se": 0.125,
+          "profit_factor": 1.0,
+          "win_rate": 0.4
+        },
+        "first": "2024-09-23",
+        "last": "2025-09-26"
+      },
+      "all": {
+        "n": 478,
+        "gross": {
+          "n": 478,
+          "mean_r": 0.0266,
+          "se": 0.0655,
+          "profit_factor": 1.05,
+          "win_rate": 0.387
+        },
+        "net_bot": {
+          "n": 478,
+          "mean_r": -0.0293,
+          "se": 0.0655,
+          "profit_factor": 0.95,
+          "win_rate": 0.3808
+        },
+        "net": {
+          "n": 478,
+          "mean_r": 0.0031,
+          "se": 0.0655,
+          "profit_factor": 1.01,
+          "win_rate": 0.3849
+        },
+        "net_key": "net_topstep",
+        "first_half": {
+          "n": 239,
+          "mean_r": 0.1039,
+          "se": 0.0917,
+          "profit_factor": 1.21,
+          "win_rate": 0.4268
+        },
+        "second_half": {
+          "n": 239,
+          "mean_r": -0.0976,
+          "se": 0.0933,
+          "profit_factor": 0.84,
+          "win_rate": 0.3431
+        },
+        "first": "2024-09-23",
+        "last": "2026-10-02"
+      },
+      "status": "écarté (découverte)",
+      "robust": {
+        "checks": {
+          "au moins 100 trades": true,
+          "gain > 0 en 2024-25": true,
+          "gain > 0 en 2025-26": false,
+          "facteur de profit ≥ 1,1": false,
+          "≥ 0 sans les 5 % meilleurs trades": false,
+          "gain en % du prix > 0": false
+        },
+        "passed": false,
+        "mean_y1": 0.1039,
+        "mean_y2": -0.0976,
+        "trimmed_mean": -0.2086,
+        "mean_pct": -0.0122
+      },
+      "holding": {
+        "n": 478,
+        "overnight": 12,
+        "weekend": 3
+      },
+      "trades_per_day": 0.902,
+      "combine": [
+        {
+          "risk": 250,
+          "pass": 0.26511535401750197,
+          "pass10": 0.006350614505798858,
+          "witness_pass": 0.2589378238341969,
+          "witness_pass10": 0.006244935443790179,
+          "funded_days": {
+            "p50": 69,
+            "p90": 208
+          }
+        },
+        {
+          "risk": 500,
+          "pass": 0.20685542418585356,
+          "pass10": 0.043878665384427314,
+          "witness_pass": 0.20432753935292006,
+          "witness_pass10": 0.04350510104620183,
+          "funded_days": {
+            "p50": 38,
+            "p90": 111
+          }
+        },
+        {
+          "risk": 750,
+          "pass": 0.1811217510259918,
+          "pass10": 0.05890826383623957,
+          "witness_pass": 0.18002895665550628,
+          "witness_pass10": 0.05818640747438216,
+          "funded_days": {
+            "p50": 30,
+            "p90": 89
+          }
+        }
+      ],
+      "fast": false
+    }
+  },
+  "updated_at": "2026-10-07T21:36:47Z"
+}

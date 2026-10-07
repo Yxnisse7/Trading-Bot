@@ -166,3 +166,39 @@ def test_donchian_day_never_keeps_a_position_after_the_session():
     assert to.holding_stats(closed)["overnight"] == 0
     assert any(t.reason == "heure" for t in closed)
     assert len(sl.donchian_1h(candles, "gold")) <= len(day) + 50       # même règle d'entrée
+
+
+def test_intraday_gold_strategies_close_each_session():
+    from trading_bot import strategies as sl
+    from trading_bot.models import Candle
+    t0 = 1_780_000_000 - 1_780_000_000 % 3600
+    candles, px = [], 100.0
+    for k in range(24 * 12 * 30):
+        px += 0.05 if (k // 300) % 2 == 0 else -0.05
+        candles.append(Candle(t0 + 300 * k, px, px + 0.1, px - 0.1, px))
+    for fn, name in ((sl.donchian_15m_day, "donchian_15m_day"), (sl.donchian_30m_day, "donchian_30m_day")):
+        tr = [t for t in fn(candles, "gold") if t.reason != "fin des données"]
+        assert tr and {t.strategy for t in tr} == {name}
+        assert to.holding_stats(tr)["overnight"] == 0
+
+
+def test_comex_orb_trades_the_first_close_outside_the_8h20_range():
+    from datetime import datetime, time
+    from trading_bot import strategies as sl
+    from trading_bot.models import Candle
+    day = datetime(2026, 10, 6).date()
+    t820 = int(datetime.combine(day, time(8, 20), sl.NY).timestamp())
+    candles = []
+    for k in range(-12, 120):
+        ts = t820 + 300 * k
+        if 0 <= k <= 5:
+            o = c = 100.0
+            hi, lo = 101.0, 99.0                      # range 99 → 101
+        elif k == 8:
+            o, c, hi, lo = 100.5, 101.5, 101.6, 100.4   # première clôture au-dessus : achat à 101,5
+        else:
+            o = c = 101.5 if k > 8 else 100.0
+            hi, lo = c + 0.2, c - 0.2
+        candles.append(Candle(ts, o, hi, lo, c))
+    tr = sl.comex_orb(sl._Series(candles), "gold")
+    assert len(tr) == 1 and tr[0].direction == "long" and tr[0].entry == 101.5 and tr[0].risk == 2.5

@@ -41,12 +41,12 @@ from .learning import analyze
 from .signals import format_signal
 
 
-HALAL_REFUSED = {"manual", "propose", "commands", "guide", "ui", "loop", "fetch-data", "topstep", "invest", "backup", "fetch-history", "backtest-setups", "strategy-lab", "invest-review", "topstep-odds", "drift-reference", "donchian-day"}
+HALAL_REFUSED = {"manual", "propose", "commands", "guide", "ui", "loop", "fetch-data", "topstep", "invest", "backup", "fetch-history", "backtest-setups", "strategy-lab", "invest-review", "topstep-odds", "drift-reference", "donchian-day", "intraday-gold"}
 
 
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(description="Générateur de signaux de scalping (NQ, BTC, XAU) — données gratuites")
-    p.add_argument("command", choices=["scan", "track", "tick", "summary", "stats", "loop", "status", "test-notify", "backtest", "report", "fetch-data", "manual", "propose", "ui", "commands", "portfolio", "guide", "learn", "flush-outbox", "check-data", "stop", "topstep", "trim-candles", "invest", "backup", "fetch-history", "backtest-setups", "strategy-lab", "invest-review", "topstep-odds", "drift-reference", "donchian-day"])
+    p.add_argument("command", choices=["scan", "track", "tick", "summary", "stats", "loop", "status", "test-notify", "backtest", "report", "fetch-data", "manual", "propose", "ui", "commands", "portfolio", "guide", "learn", "flush-outbox", "check-data", "stop", "topstep", "trim-candles", "invest", "backup", "fetch-history", "backtest-setups", "strategy-lab", "invest-review", "topstep-odds", "drift-reference", "donchian-day", "intraday-gold"])
     p.add_argument("--signal", help="stop : identifiant (ou début) du trade à arrêter, ou son actif ; sans valeur, le seul trade ouvert")
     p.add_argument("--halal", action="store_true", help="mode halal : second bot séparé (achat seulement, sans levier, data/halal)")
     p.add_argument("--dry-run", action="store_true", help="scan sans enregistrer les signaux")
@@ -231,6 +231,63 @@ def main(argv: list[str] | None = None) -> int:
                   f"| sorties {reasons}", flush=True)
         out["updated_at"] = iso(utcnow())
         eng.store._write(eng.store.dir / "essai8.json", out)
+    elif args.command == "intraday-gold":
+        # essai 9 (HYPOTHESES.md) : 3 stratégies intraday sur l'or, règles fixées d'avance ; réussite du Combine
+        # en 10 jours de bourse comparée à leur témoin sans avantage
+        from . import strategies as sl
+        from . import topstep_odds
+        from .topstep import FEES, PRODUCTS
+
+        split = int(datetime(2025, 9, 28, tzinfo=timezone.utc).timestamp())
+        asset = eng.cfg.assets["gold"]
+        candles = eng.store.load_history("gold")
+        tcost = (sum(FEES["gold"]), PRODUCTS["gold"][1])
+        out = {"essai": 9, "split": "2025-09-28", "n_trials": 77, "cells": {}}
+        series = sl._Series(candles)
+        runners = {"donchian_15m_day": lambda: sl.donchian_15m_day(candles, "gold"),
+                   "donchian_30m_day": lambda: sl.donchian_30m_day(candles, "gold"),
+                   "comex_orb": lambda: sl.comex_orb(series, "gold")}
+        start = datetime.fromtimestamp(candles[0].ts, timezone.utc)
+        end = datetime.fromtimestamp(candles[-1].ts, timezone.utc)
+        for name, run in runners.items():
+            tr = sorted((t for t in run() if t.reason != "fin des données"), key=lambda t: t.entry_ts)
+            disc = sl.evaluate(tr, asset.cost_pct, tcost, start_ts=split)
+            conf = sl.evaluate(tr, asset.cost_pct, tcost, end_ts=split)
+            both = sl.evaluate(tr, asset.cost_pct, tcost)
+            ok_d, ok_c = sl.discovery_pass(disc), sl.confirmation_pass(conf)
+            status = ("prouvé" if sl.proven(both, out["n_trials"]) else "validé") if ok_d and ok_c else (
+                "écarté (découverte)" if not ok_d else "écarté (confirmation)")
+            rs = [round(sl.trade_rs(t, 0.0, tcost)["net_topstep"], 4) for t in tr]
+            cell = {"strategy": name, "discovery": disc, "confirmation": conf, "all": both, "status": status,
+                    "robust": sl.robust_check(tr, asset.cost_pct, tcost, split),
+                    "holding": topstep_odds.holding_stats(tr),
+                    "trades_per_day": round(len(rs) / topstep_odds.weekdays_between(start, end), 3)}
+            if rs and len(rs) >= 30:
+                m = sum(rs) / len(rs)
+                prof = {"key": name, "label": name, "rSeries": rs, "tradesPerDay": cell["trades_per_day"]}
+                wit = {"key": "witness", "label": "témoin", "rSeries": [round(r - m, 4) for r in rs],
+                       "tradesPerDay": cell["trades_per_day"]}
+                try:
+                    sim = topstep_odds.run_engine([prof, wit], risks=(250.0, 500.0, 750.0), paths=4000)
+                    by = {p["key"]: p for p in sim["profiles"]}
+                    cell["combine"] = [{"risk": a["risk"], "pass": a["pass"], "pass10": a["pass10"],
+                                        "witness_pass": b["pass"], "witness_pass10": b["pass10"],
+                                        "funded_days": a.get("fundedDays")}
+                                       for a, b in zip(by[name]["risks"], by["witness"]["risks"])]
+                    best = max(cell["combine"], key=lambda x: x["pass10"] - x["witness_pass10"])
+                    cell["fast"] = status in ("validé", "prouvé") and best["pass10"] >= best["witness_pass10"] + 0.10
+                except Exception as exc:  # noqa: BLE001 — le verdict de l'essai 3 reste valable sans le moteur
+                    cell["combine_error"] = str(exc)
+            out["cells"][name] = cell
+            d, c, a = disc["net"], conf["net"], both["net"]
+            print(f"{name:17s} {cell['trades_per_day']} trades/jour | découverte n={disc['n']} {d['mean_r']} PF {d['profit_factor']} "
+                  f"moitiés {disc['first_half']['mean_r']}/{disc['second_half']['mean_r']} | confirmation n={conf['n']} "
+                  f"{c['mean_r']} PF {c['profit_factor']} | 24 mois {a['mean_r']} ± {a['se']} → {status}", flush=True)
+            for x in cell.get("combine", []):
+                print(f"   risque {x['risk']:.0f} $ : réussite {x['pass']:.0%} (témoin {x['witness_pass']:.0%}), "
+                      f"en 2 semaines {x['pass10']:.0%} (témoin {x['witness_pass10']:.0%}), financé en {x['funded_days']}", flush=True)
+        out["updated_at"] = iso(utcnow())
+        eng.store._write(eng.store.dir / "essai9.json", out)
     elif args.command == "drift-reference":
         # essai 7 : R du backtest de 24 mois des stratégies en ombre, figés comme référence (historique long requis)
         from . import drift
