@@ -208,6 +208,37 @@ revenue dans la norme. Aucune autre décision automatique. Un « décroché » p
 s'efface, d'une différence de données (Yahoo en direct, Dukascopy et Binance dans le backtest) ou d'un bug :
 la cause est cherchée à la main.
 
+## Essai 8 — Donchian fermé chaque soir (`donchian_day`), compatible avec Topstep
+
+Écrit le 7 octobre 2026, **avant** de lancer cette version. Constat : `donchian_1h` sur l'or (validé à
+l'essai 3) garde ses positions d'un jour à l'autre (215 trades sur 313) et le week-end (67). Topstep et la
+plupart des firmes futures imposent de tout fermer avant 15:10 heure de Chicago : la stratégie n'y est pas
+permise telle quelle.
+
+**Règle** (aucun réglage nouveau, rien d'ajusté après coup) : exactement `donchian_1h` (cassure du canal des
+20 dernières bougies de 1 h à la clôture, stop à 2 ATR(14), sortie à la clôture d'une bougie qui casse le
+canal des 10 dernières, 120 bougies au plus), avec deux ajouts :
+- **sortie forcée à 15:00 heure de Chicago**, à la clôture de la bougie 1 h qui finit à 15:00, si la position
+  est encore ouverte (10 minutes de marge avant la fermeture imposée de 15:10) ;
+- **aucune entrée** sur une bougie qui clôture entre 15:00 et 17:00 heure de Chicago (fin de séance et
+  pause du marché) ; la séance suivante démarre à 17:00 comme chez Topstep.
+Le vendredi, la sortie de 15:00 évite le week-end.
+
+**Actifs** (4 essais) : or (principal), Nasdaq, S&P 500, Bitcoin, les quatre actifs annoncés par le bot.
+Frais Topstep réels.
+
+**Verdict** avec les critères de l'essai 3 : découverte du 28/09/2025 au 04/10/2026 (≥ 30 trades, gain
+moyen > 0, facteur de profit ≥ 1,1, les deux moitiés positives), puis confirmation sur 10/2024 → 09/2025
+(≥ 30 trades, gain > 0, facteur de profit ≥ 1,1). « Validé » si les deux passent ; « prouvé » si la borne
+basse sur 24 mois reste > 0 avec la marge corrigée pour 74 essais (70 + 4). Les critères de l'essai 5 (deux
+années positives, résultat sans les 5 % meilleurs trades, gain en % du prix) sont donnés pour information.
+Limite connue : ces données ont déjà servi à valider `donchian_1h` ; la règle n'est pas réglée dessus, mais
+ce n'est pas une donnée vierge.
+
+**Suite** : validé sur l'or → suivi en ombre sur le marché réel (comme `donchian_1h`) et chances Topstep
+recalculées avec ses trades ; écarté → la conclusion reste « Donchian n'est jouable que sur un compte qui
+permet de garder la nuit ».
+
 ## Journal des essais
 
 | Date | Essai | Résultat |
