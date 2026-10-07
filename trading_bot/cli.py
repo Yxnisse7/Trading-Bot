@@ -41,12 +41,12 @@ from .learning import analyze
 from .signals import format_signal
 
 
-HALAL_REFUSED = {"manual", "propose", "commands", "guide", "ui", "loop", "fetch-data", "topstep", "invest", "backup", "fetch-history", "backtest-setups", "strategy-lab"}
+HALAL_REFUSED = {"manual", "propose", "commands", "guide", "ui", "loop", "fetch-data", "topstep", "invest", "backup", "fetch-history", "backtest-setups", "strategy-lab", "invest-review"}
 
 
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(description="Générateur de signaux de scalping (NQ, BTC, XAU) — données gratuites")
-    p.add_argument("command", choices=["scan", "track", "tick", "summary", "stats", "loop", "status", "test-notify", "backtest", "report", "fetch-data", "manual", "propose", "ui", "commands", "portfolio", "guide", "learn", "flush-outbox", "check-data", "stop", "topstep", "trim-candles", "invest", "backup", "fetch-history", "backtest-setups", "strategy-lab"])
+    p.add_argument("command", choices=["scan", "track", "tick", "summary", "stats", "loop", "status", "test-notify", "backtest", "report", "fetch-data", "manual", "propose", "ui", "commands", "portfolio", "guide", "learn", "flush-outbox", "check-data", "stop", "topstep", "trim-candles", "invest", "backup", "fetch-history", "backtest-setups", "strategy-lab", "invest-review"])
     p.add_argument("--signal", help="stop : identifiant (ou début) du trade à arrêter, ou son actif ; sans valeur, le seul trade ouvert")
     p.add_argument("--halal", action="store_true", help="mode halal : second bot séparé (achat seulement, sans levier, data/halal)")
     p.add_argument("--dry-run", action="store_true", help="scan sans enregistrer les signaux")
@@ -193,6 +193,25 @@ def main(argv: list[str] | None = None) -> int:
         ok = [p["key"] for p in data["products"] if p["stats"]]
         print(f"Investissement : {len(ok)} produits sur {len(data['products'])}, {len(data['news'])} actualités"
               + (f" ; indisponibles : {', '.join(data['errors'])}" if data["errors"] else ""))
+    elif args.command == "invest-review":
+        # revue de la stratégie d'investissement halal (essai 6 de HYPOTHESES.md) : témoins, variantes,
+        # risque du portefeuille complet, contrôle charia AAOIFI ; publié pour la page Investir
+        from . import invest_review
+        res = invest_review.run()
+        invest_review.publish(res)
+        for key in ("pocket", "pepites"):
+            r = res.get(key)
+            if not r:
+                print(f"{key} : pas assez d'historique")
+                continue
+            ew = r["equal_weight"] or {}
+            print(f"{key} : règle {r['rule']['cagr']:+.1%}/an (chute max {r['rule']['max_dd']:.0%}), poids égal "
+                  f"{ew.get('cagr', float('nan')):+.1%}/an, mieux que {r['random']['rule_beats_share']:.0%} des tirages, "
+                  f"apport démontré : {'oui' if r['edge_proven'] else 'non'}"
+                  + "".join(f" ; {n} {v['cagr']:+.1%}/an chute {v['max_dd']:.0%} → {'adoptée' if v['adopt'] else 'non'}"
+                            for n, v in r["variants"].items()))
+        verdicts = [v.get("verdict") for v in res["current"]["aaoifi"].values()]
+        print(f"Contrôle AAOIFI : {verdicts.count('conforme')} conformes sur {len(verdicts)}")
     elif args.command == "fetch-history":
         # historique long (Binance pour les cryptos, Dukascopy pour le reste) dans data/history/
         from datetime import date

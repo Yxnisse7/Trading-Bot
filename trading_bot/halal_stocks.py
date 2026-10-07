@@ -245,9 +245,12 @@ def momentum_table(series: dict[str, list[tuple[str, float]]], month: str, lookb
 
 
 def select(table: list[dict[str, Any]], held: list[str], n: int = TOP_N, keep_rank: int = KEEP_RANK,
-           sectors: dict[str, str] | None = None, cap: int = SECTOR_CAP) -> list[str]:
+           sectors: dict[str, str] | None = None, cap: int = SECTOR_CAP,
+           exclude: Callable[[dict[str, Any]], bool] | None = None,
+           too_close: Callable[[str, list[str]], bool] | None = None) -> list[str]:
     """Garde les actions détenues encore dans le top `keep_rank` avec leur tendance, complète par les meilleures,
-    sans dépasser `cap` actions d'un même secteur."""
+    sans dépasser `cap` actions d'un même secteur. Variantes testées (essai 6) : `exclude(ligne)` écarte une
+    action (anti-krach), `too_close(clé, retenues)` saute une action trop corrélée à celles déjà retenues."""
     sectors = sectors or {}
     by = {r["key"]: r for r in table}
     kept: list[str] = []
@@ -256,6 +259,10 @@ def select(table: list[dict[str, Any]], held: list[str], n: int = TOP_N, keep_ra
     def add(k: str) -> None:
         sec = sectors.get(k, "")
         if sec and count.get(sec, 0) >= cap:
+            return
+        if exclude and exclude(by[k]):
+            return
+        if too_close and kept and too_close(k, kept):
             return
         kept.append(k)
         if sec:
@@ -273,20 +280,26 @@ def select(table: list[dict[str, Any]], held: list[str], n: int = TOP_N, keep_ra
 
 def backtest(series: dict[str, list[tuple[str, float]]], bench: list[tuple[str, float]] | None,
              n: int = TOP_N, sectors: dict[str, str] | None = None, every: int = 1, lookback: int = 12,
-             keep_rank: int = KEEP_RANK, cap: int = SECTOR_CAP) -> dict[str, Any] | None:
+             keep_rank: int = KEEP_RANK, cap: int = SECTOR_CAP,
+             exclude: Callable[[dict[str, Any]], bool] | None = None,
+             close_at: Callable[[str], Callable[[str, list[str]], bool]] | None = None) -> dict[str, Any] | None:
     """Rejoue la règle : révision tous les `every` mois (entre deux, on garde les mêmes), poche
-    équipondérée à chaque révision, rendement du mois suivant, frais de rotation."""
+    équipondérée à chaque révision, rendement du mois suivant, frais de rotation.
+    `close_at(mois)` fournit le test de corrélation connu à ce mois (variante de l'essai 6)."""
     months = sorted({m for s in series.values() for m, _ in s})
     maps = {k: dict(s) for k, s in series.items()}
     bmap = dict(bench or [])
     held: list[str] = []
     value, bvalue, curve, rows = 1.0, 1.0, [], []
+    months_done: list[str] = []
     for a, b in zip(months, months[1:]):
         table = momentum_table(series, a, lookback)
         if len(table) < 3 * n:
             continue
         step = len(rows)
-        new = select(table, held, n, keep_rank, sectors=sectors, cap=cap) if (not held or step % every == 0) else held
+        new = (select(table, held, n, keep_rank, sectors=sectors, cap=cap, exclude=exclude,
+                      too_close=close_at(a) if close_at else None)
+               if (not held or step % every == 0) else held)
         if not new:
             continue
         turnover = len(set(new) - set(held)) / n if held else 1.0
@@ -303,6 +316,7 @@ def backtest(series: dict[str, list[tuple[str, float]]], bench: list[tuple[str, 
             curve.append((a, 1.0, 1.0))
         curve.append((b, value, bvalue))
         rows.append((r, br, turnover))
+        months_done.append(b)
     if len(rows) < 24:
         return None
     rs = [r for r, _, _ in rows]
@@ -332,6 +346,7 @@ def backtest(series: dict[str, list[tuple[str, float]]], bench: list[tuple[str, 
         "bench_worst_12m": min(b12) if b12 else None,
         "turnover": sum(t for _, _, t in rows) / len(rows),
         "curve": [[m, round(v, 4), round(b, 4)] for m, v, b in curve],
+        "returns": [[m, round(r, 6), round(t, 4)] for m, (r, _, t) in zip(months_done, rows)],
     }
 
 
@@ -433,6 +448,35 @@ def simulate_modes(series: dict[str, list[tuple[str, float]]], bench: list[tuple
 
 
 # ------------------------------------------------------------------ assemblage
+def load_universe(universe: list[dict[str, Any]], fetch_monthly: Callable, pause: float = 0.15
+                  ) -> tuple[dict[str, list[tuple[str, float]]], dict[str, dict[str, Any]], list[str]]:
+    """Historique mensuel en euros de chaque action (6 ans au plus, 14 mois au moins pour pouvoir classer)."""
+    from .invest import month_key
+    fx: dict[str, dict[str, float]] = {}
+    for ccy, sym in FX_PAIRS.items():
+        try:
+            rows, _ = fetch_monthly(sym)
+            fx[ccy] = {month_key(t): v for t, v in rows}
+        except ProviderError:
+            continue
+    series, meta, missing = {}, {}, []
+    for h in universe:
+        try:
+            rows, ccy = fetch_monthly(h["yahoo"])
+        except ProviderError:
+            missing.append(h["yahoo"])
+            continue
+        s = to_eur_series(rows, ccy, fx)[-73:]
+        if len(s) >= 14:
+            series[h["yahoo"]] = s
+            meta[h["yahoo"]] = h
+        else:
+            missing.append(h["yahoo"])
+        if pause:
+            time.sleep(pause)
+    return series, meta, missing
+
+
 def build(bench: list[tuple[str, float]] | None, now: datetime | None = None,
           fetch_monthly: Callable | None = None, holdings_fn: Callable = fetch_holdings,
           cache_dir: Path | None = None, force: bool = False, pause: float = 0.15) -> dict[str, Any] | None:
@@ -466,30 +510,7 @@ def build(bench: list[tuple[str, float]] | None, now: datetime | None = None,
     israel_weight = round(sum(h.get("weight") or 0 for h in excluded), 2)
     universe = [h for h in holdings if not is_israeli(h)][:PEPITES_TO]
 
-    fx: dict[str, dict[str, float]] = {}
-    for ccy, sym in FX_PAIRS.items():
-        try:
-            rows, _ = fetch_monthly(sym)
-            fx[ccy] = {month_key(t): v for t, v in rows}
-        except ProviderError:
-            continue
-    series, meta, missing = {}, {}, []
-    for h in universe:
-        try:
-            rows, ccy = fetch_monthly(h["yahoo"])
-        except ProviderError:
-            missing.append(h["yahoo"])
-            continue
-        s = to_eur_series(rows, ccy, fx)
-        # 6 ans au plus, et au moins 14 mois pour pouvoir classer
-        s = s[-73:]
-        if len(s) >= 14:
-            series[h["yahoo"]] = s
-            meta[h["yahoo"]] = h
-        else:
-            missing.append(h["yahoo"])
-        if pause:
-            time.sleep(pause)
+    series, meta, missing = load_universe(universe, fetch_monthly, pause)
     big_keys = [h["yahoo"] for h in universe[:UNIVERSE_SIZE]]
     small_keys = [h["yahoo"] for h in universe[PEPITES_FROM:PEPITES_TO]]
     all_series = series

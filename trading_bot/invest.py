@@ -339,8 +339,8 @@ def _stocks(bench, now, fetch):
     return halal_stocks.build(bench, now, fetch_monthly=fetch)
 
 
-def build(now: datetime | None = None, fetch=fetch_monthly, news=fetch_invest_news, stocks=_stocks) -> dict[str, Any]:
-    now = now or utcnow()
+def load_series(fetch=fetch_monthly) -> tuple[dict[str, list[tuple[str, float]]], dict[str, dict[str, float]], dict[str, str]]:
+    """Séries mensuelles en euros des produits (et des références longues), taux de change, erreurs."""
     fx: dict[str, dict[str, float]] = {}
     for ccy, sym in FX.items():
         try:
@@ -361,6 +361,12 @@ def build(now: datetime | None = None, fetch=fetch_monthly, news=fetch_invest_ne
         except ProviderError as exc:
             errors[key] = str(exc)[:120]
             log.warning("%s : %s", sym, exc)
+    return series, fx, errors
+
+
+def build(now: datetime | None = None, fetch=fetch_monthly, news=fetch_invest_news, stocks=_stocks) -> dict[str, Any]:
+    now = now or utcnow()
+    series, fx, errors = load_series(fetch)
 
     products = []
     for p in UNIVERSE:

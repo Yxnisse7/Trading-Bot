@@ -1,0 +1,30 @@
+name: Investissement halal — revue de la stratégie
+
+# À la main : essai 6 de HYPOTHESES.md (témoins dans le même univers, variantes anti-krach et
+# corrélation, risque du portefeuille complet, contrôle charia AAOIFI des actions retenues).
+# Résultat publié dans data/invest/review.json et sur la page « Investir ». Aucun ordre, aucun message.
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: trading-bot-invest
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Revue de la stratégie
+        run: bash scripts/run_and_push.sh python run.py invest-review
