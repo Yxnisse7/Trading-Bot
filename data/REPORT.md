@@ -1,6 +1,6 @@
 # Trading-Bot — rapport
 
-_Mis à jour le 07/10/2026 à 22:45 (Europe/Paris)._
+_Mis à jour le 07/10/2026 à 22:50 (Europe/Paris)._
 
 ## Vue d'ensemble
 
@@ -8,7 +8,7 @@ _Mis à jour le 07/10/2026 à 22:45 (Europe/Paris)._
 - Taux de réussite cumulé (TP / (TP+SL)) : **44%** — hasard attendu 42%, avantage **+3%**
 - P&L théorique cumulé, net des coûts estimés (somme des % par trade, sans levier) : **-3.21 %** (brut -0.02 %)
 - Signaux ouverts : **0**
-- Signaux fantômes (suivis en silence pour l'apprentissage) : **264** clôturés, 1 ouverts, taux de réussite 34% (hasard attendu 41%)
+- Signaux fantômes (suivis en silence pour l'apprentissage) : **265** clôturés, 0 ouverts, taux de réussite 34% (hasard attendu 41%)
 
 ## Statistiques
 
@@ -110,14 +110,14 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 
 | Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
 |---|---:|---:|---:|---:|---:|---:|
-| adx | 264 | 76 | 145 | 43 | 34% | -0.043 % |
+| adx | 265 | 76 | 145 | 44 | 34% | -0.042 % |
 | corr | 14 | 1 | 10 | 3 | 9% | -0.203 % |
 | level | 30 | 10 | 11 | 9 | 48% | -0.064 % |
 | macd | 70 | 16 | 43 | 11 | 27% | -0.075 % |
 | orb | 11 | 3 | 7 | 1 | 30% | -0.128 % |
 | pdhl | 37 | 9 | 21 | 7 | 30% | -0.042 % |
 | rsi | 178 | 54 | 101 | 23 | 35% | -0.040 % |
-| trend_15m | 264 | 76 | 145 | 43 | 34% | -0.043 % |
+| trend_15m | 265 | 76 | 145 | 44 | 34% | -0.042 % |
 | trend_1h | 258 | 73 | 143 | 42 | 34% | -0.043 % |
 | trend_5m | 213 | 71 | 117 | 25 | 38% | -0.030 % |
 | volume | 1 | 1 | 0 | 0 | 100% | +0.260 % |
@@ -133,7 +133,7 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 | gold | 46 | 15 | 25 | 6 | 38% | -0.028 % |
 | nasdaq | 68 | 24 | 35 | 9 | 41% | -0.024 % |
 | oil | 42 | 14 | 21 | 7 | 40% | -0.043 % |
-| sp500 | 64 | 13 | 42 | 9 | 24% | -0.053 % |
+| sp500 | 65 | 13 | 42 | 10 | 24% | -0.052 % |
 
 ## Derniers trades
 
@@ -187,10 +187,6 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 | pdhl | 1.0 |
 | corr | 0.5 |
 
-Corrections par actif :
-
-- sp500 : {'trend_5m': 0.999, 'trend_15m': 0.999, 'trend_1h': 0.999, 'adx': 0.999}
-
 | Variante testée en fantôme | Trades | Gain net moyen | Statut |
 |---|---:|---:|---|
 | indices le matin européen | 51 | -0.23 R | en test |
@@ -207,7 +203,6 @@ Notes :
 
 - trades réels : +0,08 R ± 0,20 R par trade avant frais sur 121 trades (0 R = hasard)
 - aucun critère ne s'écarte du hasard au-delà de la marge de sécurité : poids par défaut conservés
-- sp500, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,20 R contre -0,01 R en global sur 146 trades éq. → poids ×1,00 sur cet actif
 - variante « indices le matin européen » en test : 51 trades, -0,23 R net, encore 49 trades avant décision
 - variante « horizon ~3 h » en test : 57 trades, -0,33 R net, encore 43 trades avant décision
 - variante « confiance moyenne » en test : 34 trades, -0,29 R net, encore 66 trades avant décision
@@ -217,7 +212,7 @@ Notes :
 - variante « horizon ~3 h sur Or (XAU/USD) » en test : 5 trades, -0,66 R net, encore 95 trades avant décision
 - variante « nouvel actif : Pétrole WTI (CL) » en test : 42 trades, -0,07 R net, encore 58 trades avant décision
 - variante « nouvel actif : Euro / dollar (6E) » en test : 21 trades, -0,42 R net, encore 79 trades avant décision
-- sortie : stop remonté à l'entrée après +0,5 R ferait mieux (-0,21 R net contre -0,30 R, réels et en ombre) : à décider
+- sortie : stop remonté à l'entrée après +0,5 R ferait mieux (-0,21 R net contre -0,29 R, réels et en ombre) : à décider
 - sortie : stop remonté à l'entrée après +1,0 R ferait mieux (-0,06 R net contre -0,09 R, backtest) : à décider
 
 ## Backtests (données historiques 5 min)
