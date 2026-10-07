@@ -136,6 +136,13 @@ class Store:
     def save_lab_shadow(self, data: dict[str, Any]) -> None:
         self._write(self.dir / "lab_shadow.json", data)
 
+    def trend_shadow(self) -> dict[str, Any]:
+        """Momentum 12 mois suivi en ombre (essai 11) : poids annoncés chaque mois et résultat réel."""
+        return self._read(self.dir / "trend_shadow.json", {})
+
+    def save_trend_shadow(self, data: dict[str, Any]) -> None:
+        self._write(self.dir / "trend_shadow.json", data)
+
     def drift(self) -> dict[str, Any]:
         """Alerte de décrochage des stratégies en ombre (essai 7) : état de chaque stratégie suivie."""
         return self._read(self.dir / "drift.json", {})

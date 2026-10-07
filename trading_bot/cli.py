@@ -41,12 +41,12 @@ from .learning import analyze
 from .signals import format_signal
 
 
-HALAL_REFUSED = {"manual", "propose", "commands", "guide", "ui", "loop", "fetch-data", "topstep", "invest", "backup", "fetch-history", "backtest-setups", "strategy-lab", "invest-review", "topstep-odds", "drift-reference", "donchian-day", "intraday-gold", "multi-trend"}
+HALAL_REFUSED = {"manual", "propose", "commands", "guide", "ui", "loop", "fetch-data", "topstep", "invest", "backup", "fetch-history", "backtest-setups", "strategy-lab", "invest-review", "topstep-odds", "drift-reference", "donchian-day", "intraday-gold", "multi-trend", "trend-daily"}
 
 
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(description="Générateur de signaux de scalping (NQ, BTC, XAU) — données gratuites")
-    p.add_argument("command", choices=["scan", "track", "tick", "summary", "stats", "loop", "status", "test-notify", "backtest", "report", "fetch-data", "manual", "propose", "ui", "commands", "portfolio", "guide", "learn", "flush-outbox", "check-data", "stop", "topstep", "trim-candles", "invest", "backup", "fetch-history", "backtest-setups", "strategy-lab", "invest-review", "topstep-odds", "drift-reference", "donchian-day", "intraday-gold", "multi-trend"])
+    p.add_argument("command", choices=["scan", "track", "tick", "summary", "stats", "loop", "status", "test-notify", "backtest", "report", "fetch-data", "manual", "propose", "ui", "commands", "portfolio", "guide", "learn", "flush-outbox", "check-data", "stop", "topstep", "trim-candles", "invest", "backup", "fetch-history", "backtest-setups", "strategy-lab", "invest-review", "topstep-odds", "drift-reference", "donchian-day", "intraday-gold", "multi-trend", "trend-daily"])
     p.add_argument("--signal", help="stop : identifiant (ou début) du trade à arrêter, ou son actif ; sans valeur, le seul trade ouvert")
     p.add_argument("--halal", action="store_true", help="mode halal : second bot séparé (achat seulement, sans levier, data/halal)")
     p.add_argument("--dry-run", action="store_true", help="scan sans enregistrer les signaux")
@@ -232,6 +232,21 @@ def main(argv: list[str] | None = None) -> int:
                   f"| sorties {reasons}", flush=True)
         out["updated_at"] = iso(utcnow())
         eng.store._write(eng.store.dir / "essai8.json", out)
+    elif args.command == "trend-daily":
+        # essai 11 (HYPOTHESES.md) : tendance journalière sur 16 marchés depuis 2007 ; le momentum 12 mois retenu
+        # est suivi en ombre (poids annoncés chaque mois, résultat réel du mois écoulé)
+        from . import trend_daily
+        shadow = eng.store.trend_shadow()
+        res = trend_daily.run(refresh=args.refresh, shadow=shadow)
+        a, b = res["donchian_55_20"], res["momentum_12m"]
+        print(f"A Donchian 55/20 : {a['first_half']['mean_r']} R puis {a['second_half']['mean_r']} R → retenu {a['kept']}")
+        print(f"B momentum 12 mois : Sharpe {b['first_half'].get('sharpe')} puis {b['second_half'].get('sharpe')} → retenu {b['kept']}")
+        eng.store._write(eng.store.dir / "essai11.json", res)
+        if shadow:
+            eng.store.save_trend_shadow(shadow)
+            cur = shadow["months"][-1]
+            print(f"mois {cur['month']} : " + ", ".join(f"{m} {w:+.0%}" for m, w in sorted(cur["weights"].items(), key=lambda x: -abs(x[1]))))
+        eng.write_report()
     elif args.command == "multi-trend":
         # essai 10 (HYPOTHESES.md) : donchian_day sur 17 autres contrats CME (+ l'or en contrôle)
         from . import multi_trend

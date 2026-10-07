@@ -76,6 +76,9 @@
   <h2 id="resistance" data-hint="les trades du backtest rejoués en conditions dégradées">Tests de résistance</h2>
   <div class="card" id="stress"></div>
 
+  <h2 id="tendance" data-hint="16 marchés, positions revues chaque mois (essai 11)">Tendance mensuelle</h2>
+  <div class="card" id="trend-box"></div>
+
   <h2 id="labo" data-hint="8 méthodes publiées testées sur chaque actif, frais Topstep réels">Laboratoire de stratégies</h2>
   <div class="card" id="lab-box"></div>
 
@@ -158,6 +161,7 @@
     renderStress(d.stress || {});
     renderSetups(d.setups || {}, d.assets || []);
     renderLab(d.strategies || {}, d.assets || [], d.lab_shadow || {}, d.drift || {});
+    renderTrend(d.trend_shadow || {});
   }
   // Laboratoire : stratégie × actif, découverte (12 derniers mois) puis confirmation (année d'avant, jamais vue)
   function renderLab(lab, assets, shadow, drift) {
@@ -187,6 +191,22 @@
         return `<div class="verdict" style="margin-top:14px"><div><span class="pill brand">en ombre</span> <b style="font-weight:500">${esc(r.strategy)} · ${esc(label(r.asset))}</b> <span class="muted">sur le marché réel depuis le ${esc(since)}, sans notification</span></div>
           <div class="muted">${r.n ? `${r.n} trade${r.n > 1 ? "s" : ""} clôturé${r.n > 1 ? "s" : ""} · gain net moyen <b class="${Y.tone(r.mean_r)}">${r2(r.mean_r)}</b> (frais Topstep)` : "Aucun trade clôturé pour l'instant."}${open ? ` · position en cours : ${open.direction === "long" ? "achat" : "vente"} à ${Y.num(open.entry, 0)}, stop ${Y.num(open.stop, 0)}` : ""} · vérifié chaque heure, avec la même règle que le test.</div></div>`; }).join("")
       + driftBlock(drift);
+  }
+  // Essai 11 : momentum 12 mois sur 16 marchés, suivi en ombre (poids annoncés chaque mois, résultat réel)
+  function renderTrend(t) {
+    const el = $("#trend-box");
+    const months = t.months || [];
+    if (!months.length) { el.innerHTML = `<div class="muted">Suivi en ombre lancé au prochain calcul hebdomadaire.</div>`; return; }
+    const cur = months[months.length - 1], labels = t.labels || {};
+    const rows = Object.entries(cur.weights).sort((a, b) => Math.abs(b[1]) - Math.abs(a[1]));
+    const done = months.filter((m) => m.result != null);
+    const pc = (x, d = 0) => `${Y.signed(x * 100, d)}${Y.NB}%`;
+    el.innerHTML = `<div class="muted" style="margin-bottom:10px">Méthode publiée (Moskowitz, Ooi &amp; Pedersen, 2012), testée de 2007 à 2026 sur 16 marchés (essai 11) : chaque mois, achat des marchés qui ont monté sur 12 mois, vente de ceux qui ont baissé, plus petite position sur les plus agités. Sur 19 ans : environ +4 % par an pour 10 % de volatilité, 2 années sur 3 positives, pire baisse −19 %. Suivi en ombre depuis ${esc(t.since || cur.month)}, sans ordre réel.</div>
+      <div class="verdict"><div><span class="pill brand">mois ${esc(cur.month)}</span> <b style="font-weight:500">Positions annoncées</b> <span class="muted">en % du capital, réglées pour 10 % de volatilité par an</span></div>
+        <div class="tbl"><table><thead><tr><th>Marché</th><th>Sens</th><th class="num">Taille</th></tr></thead><tbody>
+        ${rows.map(([m, w]) => `<tr><td>${esc(labels[m] || m)} <span class="muted mono" style="font-size:12px">${esc(m)}</span></td><td>${w > 0 ? '<span class="up">achat</span>' : '<span class="dn">vente</span>'}</td><td class="num">${Y.num(Math.abs(w) * 100, 0)}${Y.NB}%</td></tr>`).join("")}
+        </tbody></table></div></div>
+      <div class="muted" style="margin-top:10px">${done.length ? `Résultat réel : ${done.map((m) => `${esc(m.month)} <b class="${Y.tone(m.result)}">${pc(m.result, 1)}</b>`).join(" · ")} · cumul ${pc((t.nav || 1) - 1, 1)}.` : "Premier résultat à la fin du mois."} La somme des tailles dépasse 100 % : il faut un compte à effet de levier (contrats à terme ou CFD), et un compte CFD facture des intérêts la nuit sauf compte sans swap.</div>`;
   }
   // Essai 7 : les trades réels en ombre restent-ils dans ce que le backtest de 24 mois laissait attendre ?
   function driftBlock(drift) {

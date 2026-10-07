@@ -35,3 +35,5 @@ git checkout -- data/candles 2>/dev/null || true
 git clean -fdq data/candles 2>/dev/null || true
 # chances de réussir le Combine Topstep sur les nouveaux trades (moteur node, installé par le workflow)
 python run.py topstep-odds || echo "Chances Topstep non recalculées cette semaine"
+# tendance mensuelle (essai 11) : cours journaliers des 16 ETF, positions du mois suivies en ombre
+python run.py trend-daily --refresh || echo "Tendance mensuelle non recalculée cette semaine"
