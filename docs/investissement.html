@@ -118,6 +118,7 @@
     <h3 style="margin:22px 0 8px;font-size:16px">Ce mois-ci</h3>
     <div id="plan-alerts"></div>
     <div class="tbl"><table id="plan" class="plan"><thead><tr><th>Ligne</th><th class="num">Part actuelle</th><th class="num">Part visée</th><th class="num">À verser</th></tr></thead><tbody></tbody></table></div>
+    <div id="review-risk"></div>
     <div class="muted" style="margin-top:10px;font-size:13px">Le versement va d'abord aux lignes en retard sur leur part visée : pas besoin de vendre, donc pas d'impôt. Les actions s'achètent en fraction (plans d'investissement de Trade Republic, par exemple). Prix : dernier cours connu, en euros.</div>
   </div>
 
@@ -195,7 +196,7 @@
   const COLORS = { monde: "#2a78d6", emergents: "#e0913a", usa: "#7b61d9", sukuk: "#2aa876", or: "#c9a227", acwi: "#2a78d6" };
   const NAMES = { monde: "Monde islamique", emergents: "Émergents islamiques", usa: "USA islamique", sukuk: "Sukuk", or: "Or physique" };
   const TAGS = { "finance islamique": "brand", "ETF islamiques": "brand", "sukuk": "up", "or": "neu", "marchés": "neu" };
-  let data = null;
+  let data = null, review = null;
   const pct = (v, d = 1) => v == null ? "n/a" : `${Y.signed(v * 100, d)}${Y.NB}%`;
   const pctU = (v, d = 0) => v == null ? "n/a" : `${Y.num(v * 100, d)}${Y.NB}%`;
   const eur = (v) => `${Y.num(Math.round(v), 0)}${Y.NB}€`;
@@ -203,8 +204,8 @@
 
   async function load() {
     $("#updated").textContent = "Chargement…";
-    const [d, dash] = await Promise.all([Y.getJson("invest/data.json"), Y.getJson("dashboard.json")]);
-    data = d;
+    const [d, dash, rv] = await Promise.all([Y.getJson("invest/data.json"), Y.getJson("dashboard.json"), Y.getJson("invest/review.json")]);
+    data = d; review = rv;
     const st = dash && dash.state; Y.status(st ? [st.last_tick, st.last_scan].filter(Boolean).sort().pop() : null, st && st.last_scan_note);
     if (!data) { $("#updated").textContent = "Les données arrivent au prochain passage quotidien (06:30 UTC)."; return; }
     $("#updated").textContent = `Mis à jour le ${new Date(data.updated_at).toLocaleDateString("fr-FR", { day: "numeric", month: "long" })} à ${Y.hhmm(data.updated_at)} · prix mensuels convertis en euros`;
@@ -302,6 +303,44 @@
     try { navigator.clipboard.writeText(el.dataset.copy); Y.toast({ title: "ISIN copié", text: el.dataset.copy, timeout: 3000 }); } catch (err) { /* rien */ } });
 
 
+  // ---------------------------------------------------------------- revue de la stratégie (essai 6)
+  function reviewBlock(r, label) {
+    if (!r) return "";
+    const ew = r.equal_weight || {}, rd = r.random || {}, h = r.rule.halves || [], eh = ew.halves || [];
+    const tag = r.edge_proven ? ["up", "Apport de la règle démontré"] : r.momentum_edge > 0.02 ? ["neu", "Apport de la règle non démontré"] : ["dn", "Aucun apport de la règle"];
+    const line = (l, a, b, c) => `<tr><td>${l}</td><td class="num ${Y.tone(a)}">${pct(a)}</td><td class="num ${Y.tone(b)}">${pct(b)}</td><td class="num ${Y.tone(c)}">${pct(c)}</td></tr>`;
+    return `<div class="note-box" style="margin-top:14px;background:var(--soft);display:block">
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:8px"><b>Revue honnête (${month(r.period[0])} → ${month(r.period[1])})</b><span class="pill ${tag[0]}"><b>${tag[1]}</b></span></div>
+      <div class="muted" style="font-size:13px;margin-bottom:8px">Pour retirer le biais de l'univers (les plus grosses entreprises d'aujourd'hui sont celles qui ont monté), on compare ${label} à des portefeuilles du <b>même univers</b> : toutes les actions à poids égal, et ${rd.draws} tirages au hasard avec la même rotation.</div>
+      <div class="tbl"><table><thead><tr><th>Rendement annuel</th><th class="num">Toute la période</th><th class="num">1re moitié</th><th class="num">2de moitié</th></tr></thead><tbody>
+        ${line(`${label[0].toUpperCase()}${label.slice(1)} (règle)`, r.rule.cagr, h[0] && h[0].cagr, h[1] && h[1].cagr)}
+        ${line("Même univers, poids égal", ew.cagr, eh[0] && eh[0].cagr, eh[1] && eh[1].cagr)}
+        <tr><td>Tirages au hasard (médiane)</td><td class="num">${pct(rd.median_cagr)}</td><td></td><td></td></tr>
+        <tr><td>Part des tirages battus par la règle</td><td class="num">${pctU(rd.rule_beats_share)}</td><td class="num">${pctU((rd.halves_rule_beats_share || [])[0])}</td><td class="num">${pctU((rd.halves_rule_beats_share || [])[1])}</td></tr>
+        <tr><td>Pire baisse : règle / poids égal</td><td class="num dn">${pct(r.rule.max_dd, 0)} / ${pct(ew.max_dd, 0)}</td><td></td><td></td></tr></tbody></table></div>
+      <div class="muted" style="font-size:12px;margin-top:6px">Critère fixé d'avance : battre le poids égal et 90 % des tirages sur chacune des deux moitiés. Variantes testées (anti-krach, corrélation) : ${Object.entries(r.variants || {}).map(([k, v]) => `${k === "anti_krach" ? "anti-krach" : "corrélation"} ${v.adopt ? "adoptée" : "non retenue"}`).join(", ")}.</div></div>`;
+  }
+  function aaoifiBadge(sym) {
+    const a = review && review.current && review.current.aaoifi && review.current.aaoifi[sym];
+    if (!a) return "";
+    const tip = a.debt != null ? `AAOIFI : dette ${pctU(a.debt, 1)}, liquidités ${pctU(a.cash, 1)} de la capitalisation, intérêts ${pctU(a.impure, 1)} du chiffre d'affaires` : "Comptes indisponibles";
+    return a.verdict === "conforme" ? ` <span class="pill up" style="font-size:11px" title="${esc(tip)}">AAOIFI ✓ · purif. ${Y.num(a.purification * 100, 1)}${Y.NB}%</span>`
+      : ` <span class="pill ${a.verdict.startsWith("non") ? "dn" : "neu"}" style="font-size:11px" title="${esc(tip)}">${esc(a.verdict)}</span>`;
+  }
+  function renderRisk() {
+    const box = $("#review-risk"), rk = review && review.risk && review.risk.site;
+    if (!box) return;
+    if (!rk) { box.innerHTML = ""; return; }
+    const p = rk.portfolio, e = (review.risk.etf_only || {}).portfolio || {}, sm = rk.sim;
+    box.innerHTML = `<h3 style="margin:22px 0 8px;font-size:16px">Le risque du portefeuille « Dynamique » (poche ${pctU(review.settings.pocket)}, pépites ${pctU(review.settings.pepites)}, Bitcoin ${pctU(review.settings.bitcoin)})</h3>
+      <div class="outcomes">
+        <div class="outcome"><small>Pire baisse (${month(rk.period[0])} → ${month(rk.period[1])})</small><b class="dn">${pct(p.max_dd, 0)}</b><small>ETF seuls depuis 2014 : ${pct(e.max_dd, 0)}</small></div>
+        <div class="outcome"><small>Pire mois sur 20 (perte possible)</small><b class="dn">−${pctU(p.var95_month, 1)}</b><small>pire année glissante : ${pct(p.worst_12m)}</small></div>
+        <div class="outcome"><small>1 000 € puis 200 €/mois</small><b>${eur(sm.value)}</b><small>${eur(sm.paid)} versés · pire recul ${eur(sm.worst_drop_eur)} (${month(sm.worst_at)})</small></div>
+      </div>
+      <div class="muted" style="font-size:12px;margin-top:6px">Rejoué mois par mois, rééquilibré chaque mois, avant impôts. Le rendement inclut la poche actions, dont le résultat passé est flatté par le choix de l'univers (voir la revue plus haut).</div>`;
+  }
+
   // ---------------------------------------------------------------- poche offensive
   function renderStocks() {
     const st = data.stocks, box = $("#stocks-bt");
@@ -314,15 +353,17 @@
           ${row("Rendement annuel", b.cagr, b.bench_cagr, "t")}${row("Pire baisse", b.max_dd, b.bench_max_dd, "t")}${row("Pire période de 12 mois", b.worst_12m, b.bench_worst_12m, "t")}${row("Variations (volatilité)", b.vol, b.bench_vol, "u")}
           <tr><td>Périodes de 12 mois où la poche a fait mieux</td><td class="num">${pctU(b.beat_12m)}</td><td></td></tr>
           <tr><td>Actions changées par mois (en moyenne)</td><td class="num">${Y.num(b.turnover * st.rules.top_n, 1)}</td><td></td></tr></tbody></table></div>
-        <div class="muted" style="font-size:12px;margin-top:8px">Rejouée mois par mois sur les ${st.priced_n} plus grosses entreprises de l'ETF Monde islamique (filtre charia MSCI), frais de rotation compris (${Y.num(st.rules.cost * 100, 1)} % par achat ou vente), impôts non compris : chaque vente en gain est imposée à 31,4 %. Biais connu : l'univers est la composition actuelle de l'indice, les entreprises sorties ne sont pas rejouées, ce qui flatte un peu le résultat. ${good ? "Gardez la poche à 30 % maximum : elle baisse plus fort que l'ETF dans les mauvaises années." : "Mieux vaut rester sur les ETF (poche à 0 %) tant que la règle ne fait pas mieux."}</div>
+        <div class="muted" style="font-size:12px;margin-top:8px">Rejouée mois par mois sur les ${st.priced_n} plus grosses entreprises de l'ETF Monde islamique (filtre charia MSCI), frais de rotation compris (${Y.num(st.rules.cost * 100, 1)} % par achat ou vente), impôts non compris : chaque vente en gain est imposée à 31,4 %. Biais connu : l'univers est la composition actuelle de l'indice, les entreprises sorties ne sont pas rejouées, ce qui flatte nettement le résultat (mesuré ci-dessous). ${good ? "Gardez la poche à 30 % maximum : elle baisse plus fort que l'ETF dans les mauvaises années." : "Mieux vaut rester sur les ETF (poche à 0 %) tant que la règle ne fait pas mieux."}</div>
       </div><div class="chart" id="bt-curve"></div></div>`
       : `<div class="muted">Historique trop court pour rejouer la règle (au moins 2 ans nécessaires).</div>`;
+    if (b && review) box.insertAdjacentHTML("beforeend", reviewBlock(review.pocket, "la poche"));
     if (b) drawBt(b);
+    renderRisk();
     renderPepites(st.pepites);
     renderModes(st.modes);
     const exclNote = st.rules && st.rules.exclude_israel ? ` · entreprises israéliennes exclues (${(st.excluded || []).length}, ${Y.num(st.israel_weight || 0, 1)} % de l'ETF Monde islamique)` : "";
     $("#picks-note").textContent = `Classement de ${month(st.month)} · ${st.priced_n} entreprises cotées sur ${st.universe_n} (${st.source}) · ${st.rules.sector_cap || 3} actions au plus par secteur · une action détenue n'est à remplacer que si elle sort du top ${st.rules.keep_rank} ou perd sa tendance${exclNote}`;
-    $("#picks tbody").innerHTML = st.picks.map((x) => `<tr><td class="num">${x.rank}</td><td class="nowrap"><b style="font-weight:500">${esc(x.name)}</b></td><td class="muted">${esc(x.sector)}</td><td class="muted">${esc(x.country)}</td>
+    $("#picks tbody").innerHTML = st.picks.map((x) => `<tr><td class="num">${x.rank}</td><td class="nowrap"><b style="font-weight:500">${esc(x.name)}</b>${aaoifiBadge(x.yahoo)}</td><td class="muted">${esc(x.sector)}</td><td class="muted">${esc(x.country)}</td>
       <td class="num ${Y.tone(x.mom)}">${pct(x.mom, 0)}</td><td class="num ${Y.tone(x.r1m)}">${pct(x.r1m, 1)}</td><td class="mono muted" style="font-size:12px">${esc(x.yahoo)}</td></tr>`).join("");
   }
 
@@ -340,7 +381,7 @@
     box.innerHTML = `<div class="muted" style="font-size:13px">Les entreprises <b>plus petites</b> de l'indice islamique (rangs ${pp.rules.from} à ${pp.rules.to} par taille, ${pp.priced_n} cotées), classées par hausse sur ${pp.rules.lookback} mois (sans le dernier) : on les repère plus tôt, quand leur histoire commence à décoller. ${pp.rules.top_n} actions, ${pp.rules.sector_cap} au plus par secteur, révision tous les 3 mois. C'est la part « pari » : elle peut doubler comme perdre la moitié, garde-la petite (5 à 10 % du portefeuille).</div>
       <div style="margin-top:10px"><span class="pill ${good ? "up" : "dn"}"><b>${good ? "A battu l'ETF sur l'historique" : "N'a pas battu l'ETF sur l'historique"}</b></span></div>${cmp}
       <div class="tbl"><table id="pep-picks"><thead><tr><th class="num">Rang</th><th>Entreprise</th><th>Secteur</th><th class="num">${pp.rules.lookback} mois</th><th>Ticker</th></tr></thead><tbody>
-      ${pp.picks.map((x) => `<tr><td class="num">${x.rank}</td><td><b style="font-weight:500">${esc(x.name)}</b> <span class="muted" style="font-size:12px">${esc(x.country)}</span></td><td class="muted">${esc(x.sector)}</td><td class="num ${Y.tone(x.mom)}">${pct(x.mom, 0)}</td><td class="mono muted" style="font-size:12px">${esc(x.yahoo)}</td></tr>`).join("")}</tbody></table></div>`;
+      ${pp.picks.map((x) => `<tr><td class="num">${x.rank}</td><td><b style="font-weight:500">${esc(x.name)}</b> <span class="muted" style="font-size:12px">${esc(x.country)}</span>${aaoifiBadge(x.yahoo)}</td><td class="muted">${esc(x.sector)}</td><td class="num ${Y.tone(x.mom)}">${pct(x.mom, 0)}</td><td class="mono muted" style="font-size:12px">${esc(x.yahoo)}</td></tr>`).join("")}</tbody></table></div>` + reviewBlock(review && review.pepites, "les pépites");
   }
   function renderModes(md) {
     const box = $("#modes");
