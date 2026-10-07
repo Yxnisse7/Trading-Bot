@@ -100,3 +100,10 @@ def test_news_titles_are_cleaned(monkeypatch):
     items = invest.fetch_invest_news(NOW)
     assert items[0]["title"] == "Les sukuk en hausse" and items[0]["source"] == "Les Echos"
     assert len(items) == 1                        # doublons, titres anciens et sites bloqués écartés
+
+
+def test_metal_prices_per_gram_for_the_zakat_nisab():
+    from trading_bot import invest
+    m = invest.metal_prices({"or_long": [("2026-09", 3110.35)], "argent_long": [("2026-09", 31.1035)]})
+    assert m == {"gold_eur_g": 100.0, "silver_eur_g": 1.0, "month": "2026-09"}
+    assert invest.metal_prices({}) is None

@@ -60,6 +60,8 @@
   @media (max-width: 760px) { #modes th:nth-child(2), #modes td:nth-child(2), #modes th:nth-child(4), #modes td:nth-child(4), #modes th:nth-child(7), #modes td:nth-child(7) { display: none; } .pf-set { grid-template-columns: 1fr; } #pf th:nth-child(3), #pf td:nth-child(3), #pf th:nth-child(5), #pf td:nth-child(5) { display: none; }
     #plan th:nth-child(2), #plan td:nth-child(2), #plan th:nth-child(3), #plan td:nth-child(3) { display: none; }
     #picks th:nth-child(3), #picks td:nth-child(3), #picks th:nth-child(4), #picks td:nth-child(4), #picks th:nth-child(6), #picks td:nth-child(6) { display: none; } }
+  .zk-set { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  @media (max-width: 760px) { .zk-set { grid-template-columns: 1fr; } }
   @media (max-width: 980px) { .models, .principles { grid-template-columns: 1fr; } .sim { grid-template-columns: 1fr; } }
   @media (max-width: 760px) { .prod .top { flex-direction: column; } .prods, .rules2 { grid-template-columns: 1fr; } .outcomes { grid-template-columns: 1fr; } .perf { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 </style>
@@ -117,6 +119,25 @@
     <div id="plan-alerts"></div>
     <div class="tbl"><table id="plan" class="plan"><thead><tr><th>Ligne</th><th class="num">Part actuelle</th><th class="num">Part visée</th><th class="num">À verser</th></tr></thead><tbody></tbody></table></div>
     <div class="muted" style="margin-top:10px;font-size:13px">Le versement va d'abord aux lignes en retard sur leur part visée : pas besoin de vendre, donc pas d'impôt. Les actions s'achètent en fraction (plans d'investissement de Trade Republic, par exemple). Prix : dernier cours connu, en euros.</div>
+  </div>
+
+  <h2 id="zakat" data-hint="2,5 % au-delà du nisab, après un an">Zakat</h2>
+  <div class="card">
+    <div class="muted" style="font-size:13px;margin-bottom:12px">Estimation de la zakat sur votre épargne : 2,5 % de ce que vous possédez au-delà du <b>nisab</b> (seuil), si vous l'avez dépassé pendant une année lunaire entière. Vos placements ci-dessus sont repris automatiquement ; complétez le reste. Rien n'est envoyé : tout reste dans ce navigateur.</div>
+    <div class="pf-set zk-set">
+      <div><label for="zk-cash">Comptes et livrets (€)</label><input id="zk-cash" inputmode="decimal" placeholder="0"></div>
+      <div><label for="zk-pee">PEE (épargne salariale, €)</label><input id="zk-pee" inputmode="decimal" placeholder="0"></div>
+      <div><label for="zk-pee-in">PEE bloqué</label><select id="zk-pee-in"><option value="1">Compté (avis prudent)</option><option value="0">Pas compté avant déblocage</option></select></div>
+      <div><label for="zk-gold">Or physique (grammes)</label><input id="zk-gold" inputmode="decimal" placeholder="0"></div>
+      <div><label for="zk-silver">Argent physique (grammes)</label><input id="zk-silver" inputmode="decimal" placeholder="0"></div>
+      <div><label for="zk-debts">Dettes à payer dans l'année (€)</label><input id="zk-debts" inputmode="decimal" placeholder="0"></div>
+      <div><label for="zk-method">Actions et ETF gardés longtemps</label><select id="zk-method"><option value="1">Valeur entière (avis prudent)</option><option value="0.25">Part zakatable ≈ 25 % (norme AAOIFI 35)</option></select></div>
+      <div><label for="zk-nisab">Nisab</label><select id="zk-nisab"><option value="silver">Argent : 595 g (seuil bas)</option><option value="gold">Or : 85 g</option></select></div>
+      <div><label for="zk-year">Année</label><select id="zk-year"><option value="lunar">Lunaire (2,5 %)</option><option value="solar">Solaire (2,577 %)</option></select></div>
+    </div>
+    <div class="outcomes" id="zk-out"></div>
+    <div class="tbl" style="margin-top:12px"><table id="zk-tbl"><thead><tr><th>Compté dans la zakat</th><th class="num">Valeur</th><th class="num">Retenu</th></tr></thead><tbody></tbody></table></div>
+    <div class="muted" style="margin-top:10px;font-size:13px" id="zk-note"></div>
   </div>
 
   <h2 id="simulateur">Simulateur</h2>
@@ -391,6 +412,7 @@
     $("#pf-pep").value = String(pf.pep); $("#pf-rev").value = pf.rev; $("#pf-btc").value = String(pf.btc || 0);
     $("#pf-options").innerHTML = lines().map((l) => `<option value="${esc(l.label)}"></option>`).join("");
     renderPf();
+    setupZakat();
   }
   const lineOf = (id) => lines().find((l) => l.id === id);
   function renderPf() {
@@ -413,8 +435,61 @@
       if (v) v.innerHTML = h.known ? eur(h.value) : `<span class="faint">prix inconnu</span>`;
       if (p) { if (h.cost) { const g = h.value - h.cost; pl += g; plKnown = true; p.innerHTML = `<span class="${Y.tone(g)}">${g >= 0 ? "+" : ""}${eur(g)} (${pct(g / h.cost, 1)})</span>`; } else p.innerHTML = ""; } });
     $("#pf-total").textContent = eur(tot);
+    zakat();
     $("#pf-pl").innerHTML = plKnown ? `<b class="${Y.tone(pl)}">${pl >= 0 ? "+" : ""}${eur(pl)}</b>` : "";
   }
+  // ---------------------------------------------------------------- zakat
+  const ZK_KEY = "tb-invest-zakat", ZK_FIELDS = ["cash", "pee", "pee-in", "gold", "silver", "debts", "method", "nisab", "year"];
+  const NISAB_G = { gold: 85, silver: 595 };
+  let zkReady = false;
+  function setupZakat() {
+    if (!zkReady) {
+      let saved = {};
+      try { saved = JSON.parse(localStorage.getItem(ZK_KEY)) || {}; } catch (e) { /* navigateur privé */ }
+      ZK_FIELDS.forEach((f) => { const el = $(`#zk-${f}`); if (saved[f] != null) el.value = saved[f];
+        el.addEventListener(el.tagName === "SELECT" ? "change" : "input", () => {
+          const v = {}; ZK_FIELDS.forEach((g) => { v[g] = $(`#zk-${g}`).value; });
+          try { localStorage.setItem(ZK_KEY, JSON.stringify(v)); } catch (e) { /* navigateur privé */ }
+          zakat(); }); });
+      zkReady = true;
+    }
+    zakat();
+  }
+  const zkNum = (id) => Math.max(0, Number(($(`#zk-${id}`).value || "").replace(/\s/g, "").replace(",", ".")) || 0);
+  function zakat() {
+    if (!pf || !$("#zk-out")) return;
+    const metals = data.metals || {};
+    const share = Number($("#zk-method").value), year = $("#zk-year").value, nk = $("#zk-nisab").value;
+    let inv = 0, goldEtf = 0, btc = 0;
+    holdings().forEach((h) => { if (h.id === "or") goldEtf += h.value; else if (h.id === "bitcoin") btc += h.value; else inv += h.value; });
+    const gp = metals.gold_eur_g, sp = metals.silver_eur_g;
+    const rows = [
+      ["Comptes et livrets", zkNum("cash"), 1],
+      ["Actions, ETF et pépites (mon portefeuille)", inv, share],
+      ["PEE", zkNum("pee"), $("#zk-pee-in").value === "1" ? share : 0],
+      ["Or (ETC du portefeuille)", goldEtf, 1],
+      ["Bitcoin", btc, 1],
+      ["Or physique", gp ? zkNum("gold") * gp : 0, 1],
+      ["Argent physique", sp ? zkNum("silver") * sp : 0, 1],
+    ];
+    const debts = zkNum("debts");
+    const base = Math.max(0, rows.reduce((a, [, v, k]) => a + v * k, 0) - debts);
+    const price = nk === "gold" ? gp : sp, nisab = price ? NISAB_G[nk] * price : null;
+    const rate = year === "solar" ? 0.025775 : 0.025;
+    const due = nisab != null && base >= nisab ? base * rate : 0;
+    $("#zk-out").innerHTML =
+      `<div class="outcome"><small>Patrimoine soumis à la zakat</small><b>${eur(base)}</b><small>${debts ? `dettes de l'année déduites (${eur(debts)})` : "après déduction des dettes de l'année"}</small></div>`
+      + `<div class="outcome"><small>Nisab (${NISAB_G[nk]} g ${nk === "gold" ? "d'or" : "d'argent"})</small><b>${nisab != null ? eur(nisab) : "n/a"}</b><small>${price ? `${Y.num(price, 2)} € le gramme (${month(metals.month)})` : "prix du métal pas encore publié"}</small></div>`
+      + `<div class="outcome"><small>Zakat à verser</small><b class="${due ? "up" : ""}">${nisab == null ? "n/a" : eur(due)}</b><small>${nisab == null ? "" : due ? `${Y.num(rate * 100, 3)} % de ${eur(base)}` : "sous le nisab : rien à verser"}</small></div>`;
+    $("#zk-tbl tbody").innerHTML = rows.filter(([, v]) => v > 0).map(([l, v, k]) => `<tr><td>${esc(l)}</td><td class="num">${eur(v)}</td><td class="num">${k === 1 ? "100 %" : k ? pctU(k) : "0 %"}</td></tr>`).join("")
+      || `<tr><td colspan="3" class="empty">Saisissez votre épargne ou vos placements.</td></tr>`;
+    $("#zk-note").innerHTML = "La zakat est due quand votre patrimoine reste au-dessus du nisab pendant une année lunaire (hawl) : notez la date où vous l'avez dépassé et calculez chaque année à cette date. "
+      + "Le nisab en argent est plus bas, il fait payer plus de personnes au profit des pauvres ; certains savants retiennent 87,48 g d'or ou 612,36 g d'argent. "
+      + "Pour les actions gardées longtemps, une partie des savants (norme AAOIFI 35) ne compte que la part des actifs zakatables de l'entreprise, souvent estimée à 25 % ; l'autre avis compte la valeur entière. "
+      + "Les intérêts d'un livret (riba) ne font pas partie de votre bien : donnez-les à part (purification), ils ne comptent pas comme zakat. "
+      + "Estimation : pour un cas particulier, demandez à un savant de confiance.";
+  }
+
   const MONTHS = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
   function plan() {
     const m = data.models[pf.model], st = data.stocks;

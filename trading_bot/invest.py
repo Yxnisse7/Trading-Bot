@@ -85,6 +85,7 @@ STATIC_PRODUCTS: list[dict[str, Any]] = [
 ]
 # séries longues servant de référence (pas des produits à acheter)
 PROXIES = {"or_long": {"name": "prix de l'or (contrat à terme, référence)", "yahoo": "GC=F"},
+           "argent_long": {"name": "prix de l'argent (contrat à terme, pour le nisab de la zakat)", "yahoo": "SI=F"},
            # Les ETF de sukuk n'existent que depuis 2023 : pour estimer leur comportement sur longue période, on
            # prend des obligations d'État américaines de 3 à 7 ans (même devise, durée et qualité proches).
            # Non halal : sert uniquement de référence de calcul, jamais de produit à acheter.
@@ -400,12 +401,26 @@ def build(now: datetime | None = None, fetch=fetch_monthly, news=fetch_invest_ne
         except Exception:  # noqa: BLE001 — la poche actions ne doit jamais bloquer le reste de la page
             log.exception("poche actions halal")
     prices = {p["key"]: round(series[p["key"]][-1][1], 4) for p in UNIVERSE if p["key"] in series}
+    metals = metal_prices(series)
     prices.update({p["key"]: p["price_eur"] for p in STATIC_PRODUCTS})
     return {"updated_at": iso(now), "products": products, "static_products": STATIC_PRODUCTS, "models": models,
-            "stocks": stock_part, "prices": prices,
+            "stocks": stock_part, "prices": prices, "metals": metals,
             "revision": {"months": list(REVISION_MONTHS), "next": next_revision(now), "now": now.month in REVISION_MONTHS},
             "news": news(now) if news else [], "errors": errors,
             "fx_last": {c: (sorted(v.items())[-1][1] if v else None) for c, v in fx.items()}}
+
+
+TROY_OUNCE_G = 31.1035
+
+
+def metal_prices(series: dict[str, list[tuple[str, float]]]) -> dict[str, Any] | None:
+    """Prix de l'or et de l'argent en euros par gramme (dernier cours mensuel), pour le nisab de la zakat."""
+    gold, silver = series.get("or_long"), series.get("argent_long")
+    if not gold and not silver:
+        return None
+    return {"gold_eur_g": round(gold[-1][1] / TROY_OUNCE_G, 4) if gold else None,
+            "silver_eur_g": round(silver[-1][1] / TROY_OUNCE_G, 4) if silver else None,
+            "month": (gold or silver)[-1][0]}
 
 
 def publish(data: dict[str, Any], data_dir: Path | None = None, docs_dir: Path | None = None) -> None:
