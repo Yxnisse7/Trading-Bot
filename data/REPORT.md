@@ -1,6 +1,6 @@
 # Trading-Bot — rapport
 
-_Mis à jour le 07/10/2026 à 16:31 (Europe/Paris)._
+_Mis à jour le 07/10/2026 à 16:35 (Europe/Paris)._
 
 ## Vue d'ensemble
 
@@ -8,7 +8,7 @@ _Mis à jour le 07/10/2026 à 16:31 (Europe/Paris)._
 - Taux de réussite cumulé (TP / (TP+SL)) : **45%** — hasard attendu 42%, avantage **+4%**
 - P&L théorique cumulé, net des coûts estimés (somme des % par trade, sans levier) : **-2.92 %** (brut +0.24 %)
 - Signaux ouverts : **0**
-- Signaux fantômes (suivis en silence pour l'apprentissage) : **253** clôturés, 1 ouverts, taux de réussite 36% (hasard attendu 41%)
+- Signaux fantômes (suivis en silence pour l'apprentissage) : **254** clôturés, 1 ouverts, taux de réussite 36% (hasard attendu 41%)
 
 ## Statistiques
 
@@ -110,18 +110,18 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 
 | Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
 |---|---:|---:|---:|---:|---:|---:|
-| adx | 253 | 76 | 134 | 43 | 36% | -0.037 % |
+| adx | 254 | 76 | 135 | 43 | 36% | -0.037 % |
 | corr | 14 | 1 | 10 | 3 | 9% | -0.203 % |
 | level | 28 | 10 | 9 | 9 | 53% | -0.060 % |
 | macd | 68 | 16 | 41 | 11 | 28% | -0.071 % |
 | orb | 11 | 3 | 7 | 1 | 30% | -0.128 % |
 | pdhl | 31 | 9 | 15 | 7 | 38% | -0.013 % |
-| rsi | 171 | 54 | 94 | 23 | 36% | -0.035 % |
-| trend_15m | 253 | 76 | 134 | 43 | 36% | -0.037 % |
-| trend_1h | 248 | 73 | 133 | 42 | 35% | -0.038 % |
-| trend_5m | 206 | 71 | 110 | 25 | 39% | -0.024 % |
+| rsi | 172 | 54 | 95 | 23 | 36% | -0.036 % |
+| trend_15m | 254 | 76 | 135 | 43 | 36% | -0.037 % |
+| trend_1h | 249 | 73 | 134 | 42 | 35% | -0.038 % |
+| trend_5m | 207 | 71 | 111 | 25 | 39% | -0.025 % |
 | volume | 1 | 1 | 0 | 0 | 100% | +0.260 % |
-| vwap | 249 | 76 | 130 | 43 | 37% | -0.034 % |
+| vwap | 250 | 76 | 131 | 43 | 37% | -0.035 % |
 
 ### Fantômes par actif
 
@@ -131,7 +131,7 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 | ethereum | 11 | 1 | 7 | 3 | 12% | -0.242 % |
 | euro | 21 | 7 | 13 | 1 | 35% | -0.027 % |
 | gold | 42 | 15 | 21 | 6 | 42% | -0.011 % |
-| nasdaq | 64 | 24 | 31 | 9 | 44% | -0.017 % |
+| nasdaq | 65 | 24 | 32 | 9 | 43% | -0.019 % |
 | oil | 41 | 14 | 20 | 7 | 41% | -0.036 % |
 | sp500 | 62 | 13 | 40 | 9 | 25% | -0.052 % |
 
@@ -189,12 +189,12 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 
 Corrections par actif :
 
-- sp500 : {'vwap': 0.739}
+- sp500 : {'vwap': 0.742}
 
 | Variante testée en fantôme | Trades | Gain net moyen | Statut |
 |---|---:|---:|---|
 | indices le matin européen | 51 | -0.23 R | en test |
-| horizon ~3 h | 54 | -0.29 R | en test |
+| horizon ~3 h | 55 | -0.30 R | en test |
 | confiance moyenne | 32 | -0.23 R | en test |
 | entrées dans l'heure avant l'ouverture américaine | 5 | -0.18 R | en test |
 | reprise juste après un stop | 18 | -0.35 R | en test |
@@ -207,9 +207,9 @@ Notes :
 
 - trades réels : +0,09 R ± 0,21 R par trade avant frais sur 119 trades (0 R = hasard)
 - aucun critère ne s'écarte du hasard au-delà de la marge de sécurité : poids par défaut conservés
-- sp500, vwap : -0,18 R contre +0,02 R en global sur 141 trades éq. → poids ×0,99 sur cet actif
+- sp500, vwap : -0,18 R contre +0,01 R en global sur 141 trades éq. → poids ×0,99 sur cet actif
 - variante « indices le matin européen » en test : 51 trades, -0,23 R net, encore 49 trades avant décision
-- variante « horizon ~3 h » en test : 54 trades, -0,29 R net, encore 46 trades avant décision
+- variante « horizon ~3 h » en test : 55 trades, -0,30 R net, encore 45 trades avant décision
 - variante « confiance moyenne » en test : 32 trades, -0,23 R net, encore 68 trades avant décision
 - variante « entrées dans l'heure avant l'ouverture américaine » en test : 5 trades, -0,18 R net, encore 95 trades avant décision
 - variante « reprise juste après un stop » en test : 18 trades, -0,35 R net, encore 82 trades avant décision
