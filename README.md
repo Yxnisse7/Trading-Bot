@@ -593,6 +593,19 @@ Données : `data/topstep/account.json` (vos choix) et `data/topstep/dashboard.js
 copié dans `docs/topstep/` à chaque passage. Sur GitHub : workflow « tick », commande `topstep`, note
 `pris <id> 3`, `sortie <id>`, `retirer <id>`, `journal …` ou `risque 0.5`.
 
+**Chances de réussir le Combine** (section de la page, `python run.py topstep-odds`, chaque dimanche après le
+backtest) : Monte Carlo du moteur open source de LuxAlgo (`@luxalgo/prop-firm-sim-core` 1.3.0, MIT, dans
+`tools/propfirm/`, lancé par node, sans réseau). Les trades réels en R (frais TopstepX compris) sont rejoués
+10 000 fois dans un ordre tiré au hasard par blocs (les séries de pertes restent groupées), avec un risque
+fixe de 250 $ ou 500 $ au stop, sous les règles du Combine 50K. Séries comparées : le compte simulé, le
+dernier backtest des quatre actifs annoncés, un **témoin sans avantage** (les mêmes trades, gain moyen
+ramené à 0) et `donchian_1h` sur l'or (24 mois, `data/topstep/r_donchian_gold.json`, recalculé avec
+`--rebuild-donchian` quand l'historique long est présent). Premier calcul (7 octobre 2026) : le témoin
+réussit déjà 29 % des tentatives, le bot 22 % (backtest) et 28 % (compte simulé), donc **aucun avantage** ;
+seul Donchian or à 250 $ fait nettement mieux (48 %, 2,1 essais, 580 $ de frais en moyenne, 82 jours de
+bourse). La limite journalière n'est pas simulée (chez Topstep elle coupe la journée sans éliminer le
+compte). Outil d'information : aucun ordre, aucun message.
+
 Connexion automatique : l'API TopstepX (ProjectX) permet de passer des ordres par programme sur le
 Combine et l'Express Funded (pas sur le Live Funded), mais seulement **depuis votre propre appareil**
 (serveurs distants, VPS et VPN interdits). Le bot, qui tourne sur GitHub Actions, ne passe donc aucun

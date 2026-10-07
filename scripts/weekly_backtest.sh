@@ -33,3 +33,5 @@ python run.py backtest --days "$DAYS" --offline
 python run.py learn          # les poids tiennent compte du nouveau backtest sans attendre
 git checkout -- data/candles 2>/dev/null || true
 git clean -fdq data/candles 2>/dev/null || true
+# chances de réussir le Combine Topstep sur les nouveaux trades (moteur node, installé par le workflow)
+python run.py topstep-odds || echo "Chances Topstep non recalculées cette semaine"

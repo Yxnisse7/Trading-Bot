@@ -39,6 +39,7 @@
     #hist th:nth-child(7), #hist td:nth-child(7), #hist th:nth-child(11), #hist td:nth-child(11), #cand th:nth-child(1), #cand td:nth-child(1) { display: none; }
     #open .rowbtns button + button { display: none; }
   }
+  @media (max-width: 760px) { #odds th, #odds td { padding: 9px 5px; } #odds td.num { font-size: 12px; } }
 </style>
 </head>
 <body data-page="topstep">
@@ -111,6 +112,13 @@
     </form>
   </div>
 
+  <h2 id="chances" data-closed data-hint="Monte Carlo sur les trades du bot">Chances de réussir le Combine</h2>
+  <div class="card">
+    <p class="muted" id="odds-intro" style="margin-top:0">Chargement…</p>
+    <div class="tbl"><table id="odds"><thead><tr><th>Risque</th><th class="num">Réussite</th><th class="num">Essais</th><th class="num">Coût</th><th class="num">Durée</th></tr></thead><tbody></tbody></table></div>
+    <div class="note-box" style="margin-top:16px"><span id="odds-ic"></span><span id="odds-note"></span></div>
+  </div>
+
   <h2 id="regles">Règles des comptes Topstep 50K</h2>
   <div class="card">
     <div class="rules">
@@ -181,6 +189,39 @@
   $("#products tbody").innerHTML = Object.entries(PRODUCTS).map(([k, [sym, mult, label]]) =>
     `<tr><td>${esc(label)}</td><td class="mono">${sym}</td><td class="num">${Y.money(mult, CUR, mult < 1 ? 2 : 0)}</td></tr>`).join("");
   $("#j-asset").innerHTML = Object.entries(PRODUCTS).map(([k, [sym, , label]]) => `<option value="${k}">${sym} · ${esc(label)}</option>`).join("");
+
+  // chances de réussir le Combine (Monte Carlo LuxAlgo sur les trades du bot, publié par « topstep-odds »)
+  async function loadOdds() {
+    const o = await Y.getJson("topstep/odds.json");
+    $("#odds-ic").innerHTML = Y.I.info;
+    if (!o || !(o.profiles || []).length) {
+      $("#odds-intro").textContent = "Pas encore calculé : publié au prochain calcul (chaque semaine).";
+      $("#odds tbody").innerHTML = `<tr><td colspan="8" class="empty">Aucun résultat.</td></tr>`;
+      return;
+    }
+    const pct = (x) => `${Y.num(x * 100, 0)}${Y.NB}%`;
+    const ref = o.profiles.find((p) => p.key === "witness");
+    const refPass = ref && ref.risks.length ? ref.risks[0].pass : null;
+    $("#odds-intro").textContent = `« Risque » : perte au stop de chaque trade. Chaque série de trades est rejouée ${Y.num(o.paths || 0, 0)} fois dans un ordre tiré au hasard (par blocs, pour garder les séries de pertes), avec les règles du Combine 50K et les frais réels de TopstepX. Calcul du ${new Date(o.updated_at).toLocaleDateString("fr-FR", { day: "numeric", month: "long" })}.`;
+    const refFor = (i) => ref && (ref.risks[i] || ref.risks[0]);
+    $("#odds tbody").innerHTML = o.profiles.map((p) => {
+      const st = p.stats || {};
+      const head = `<tr><td colspan="5" style="background:var(--bg-2, transparent);padding-top:14px"><b style="font-weight:500">${esc(p.label)}</b>
+        <div class="muted" style="font-size:12px">${st.n ?? 0} trades · gain moyen <span class="${Y.tone(st.mean_r || 0)}">${st.mean_r == null ? "—" : Y.num(st.mean_r, 2) + " R"}</span>${p.period ? ` · ${esc(p.period[0])} → ${esc(p.period[1])}` : ""}</div></td></tr>`;
+      return head + (p.risks || []).map((r, i) => {
+        if (r.error) return `<tr><td>${Y.money(r.risk, CUR, 0)}</td><td colspan="4" class="muted">${esc(r.error)}</td></tr>`;
+        const w = p.key !== "witness" && refFor(i);
+        const tone = w ? (r.pass > w.pass + 0.05 ? "up" : r.pass < w.pass - 0.05 ? "dn" : "") : "";
+        return `<tr><td class="nowrap">${Y.money(r.risk, CUR, 0)}</td><td class="num ${tone}"><b style="font-weight:500">${pct(r.pass)}</b></td>
+          <td class="num">${Y.num(r.attempts, 1)}</td><td class="num"><span class="nowrap">${Y.money(r.cost, CUR, 0)}</span><div class="muted" style="font-size:12px">malchance ${Y.money(r.costP90, CUR, 0)}</div></td>
+          <td class="num nowrap">${r.daysPassed ? `${Y.num(r.daysPassed, 0)} j` : "—"}</td></tr>`;
+      }).join("");
+    }).join("");
+    $("#odds-note").innerHTML = `<span><b>Comment lire</b> : « réussite » est la part, par tentative, des comptes qui atteignent +3 000 $ avant de toucher la perte maximale. « Essais » et « coût » : combien de comptes il faudrait acheter en moyenne (49 $ par mois, 49 $ par remise à zéro, 149 $ d'activation) avant d'en réussir un ; « malchance » : le coût n'est dépassé qu'une fois sur 10. « Durée » : jours de bourse pour réussir.`
+      + (refPass != null ? ` <b>Le témoin sans avantage</b> (les mêmes trades, gain moyen ramené à 0) réussit déjà ${pct(refPass)} des tentatives : un compte réussi ne prouve donc pas qu'une stratégie gagne. Seule une réussite nettement au-dessus du témoin (en vert) indique un vrai avantage.` : "")
+      + ` Hypothèses : les trades passés se répètent, chaque trade se termine dans la journée, la limite journalière (qui coupe seulement la journée chez Topstep) n'est pas simulée. Moteur : ${esc(o.engine || "")}. Outil d'information, aucun ordre.</span>`;
+  }
+  loadOdds();
 
   async function load() {
     $("#updated").textContent = "Chargement…";

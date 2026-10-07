@@ -41,12 +41,12 @@ from .learning import analyze
 from .signals import format_signal
 
 
-HALAL_REFUSED = {"manual", "propose", "commands", "guide", "ui", "loop", "fetch-data", "topstep", "invest", "backup", "fetch-history", "backtest-setups", "strategy-lab", "invest-review"}
+HALAL_REFUSED = {"manual", "propose", "commands", "guide", "ui", "loop", "fetch-data", "topstep", "invest", "backup", "fetch-history", "backtest-setups", "strategy-lab", "invest-review", "topstep-odds"}
 
 
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(description="Générateur de signaux de scalping (NQ, BTC, XAU) — données gratuites")
-    p.add_argument("command", choices=["scan", "track", "tick", "summary", "stats", "loop", "status", "test-notify", "backtest", "report", "fetch-data", "manual", "propose", "ui", "commands", "portfolio", "guide", "learn", "flush-outbox", "check-data", "stop", "topstep", "trim-candles", "invest", "backup", "fetch-history", "backtest-setups", "strategy-lab", "invest-review"])
+    p.add_argument("command", choices=["scan", "track", "tick", "summary", "stats", "loop", "status", "test-notify", "backtest", "report", "fetch-data", "manual", "propose", "ui", "commands", "portfolio", "guide", "learn", "flush-outbox", "check-data", "stop", "topstep", "trim-candles", "invest", "backup", "fetch-history", "backtest-setups", "strategy-lab", "invest-review", "topstep-odds"])
     p.add_argument("--signal", help="stop : identifiant (ou début) du trade à arrêter, ou son actif ; sans valeur, le seul trade ouvert")
     p.add_argument("--halal", action="store_true", help="mode halal : second bot séparé (achat seulement, sans levier, data/halal)")
     p.add_argument("--dry-run", action="store_true", help="scan sans enregistrer les signaux")
@@ -69,6 +69,7 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--older", action="store_true", help="fetch-history : remonter avant l'historique déjà gardé et fusionner")
     p.add_argument("--max-minutes", type=int, default=0, help="fetch-history : temps maximal par actif (0 = sans limite)")
     p.add_argument("--history", action="store_true", help="backtest-setups : sur l'historique long (data/history) plutôt que les bougies Yahoo")
+    p.add_argument("--rebuild-donchian", action="store_true", help="topstep-odds : recalculer les R de donchian or sur l'historique long")
     p.add_argument("-v", "--verbose", action="store_true")
     args = p.parse_args(argv)
 
@@ -193,6 +194,23 @@ def main(argv: list[str] | None = None) -> int:
         ok = [p["key"] for p in data["products"] if p["stats"]]
         print(f"Investissement : {len(ok)} produits sur {len(data['products'])}, {len(data['news'])} actualités"
               + (f" ; indisponibles : {', '.join(data['errors'])}" if data["errors"] else ""))
+    elif args.command == "topstep-odds":
+        # chances de réussir le Combine Topstep 50K (Monte Carlo LuxAlgo, outil d'information, aucun ordre)
+        from . import topstep_odds
+        if args.rebuild_donchian:
+            candles = eng.store.load_history("gold")
+            if candles:
+                topstep_odds.save_donchian(topstep_odds.build_donchian(candles))
+            else:
+                print("pas d'historique long de l'or (python run.py fetch-history --asset gold)")
+        res = topstep_odds.build()
+        topstep_odds.publish(res)
+        for prof in res["profiles"]:
+            st = prof["stats"]
+            print(f"{prof['label']} : {st['n']} trades, {st['mean_r']} R moyen")
+            for r in prof["risks"]:
+                print(f"  risque {r['risk']:.0f} $ : réussite {r['pass']:.1%} par tentative "
+                      f"[{r['ci'][0]:.1%}-{r['ci'][1]:.1%}], {r['attempts']:.1f} tentatives, coût {r['cost']:.0f} $")
     elif args.command == "invest-review":
         # revue de la stratégie d'investissement halal (essai 6 de HYPOTHESES.md) : témoins, variantes,
         # risque du portefeuille complet, contrôle charia AAOIFI ; publié pour la page Investir

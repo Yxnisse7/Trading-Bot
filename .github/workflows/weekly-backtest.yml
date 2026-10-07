@@ -2,7 +2,7 @@ name: Trading bot — backtest hebdomadaire
 
 # Chaque dimanche à 20:00 UTC (marchés fermés) : 60 jours de bougies fraîches ajoutés à l'historique
 # gardé (release « candles »), puis backtest sur 180 jours, pour que l'apprentissage ne s'appuie pas
-# sur un backtest figé. Lançable aussi à la main.
+# sur un backtest figé. Puis les chances de réussir le Combine Topstep. Lançable aussi à la main.
 on:
   schedule:
     - cron: "0 20 * * 0"
@@ -28,6 +28,11 @@ jobs:
           python-version: "3.11"
           cache: pip
       - run: pip install -r requirements.txt
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Moteur de simulation Topstep (LuxAlgo, MIT)
+        run: npm ci --prefix tools/propfirm --no-audit --no-fund
       - name: Historique des bougies et backtest sur 180 jours
         env:
           GH_TOKEN: ${{ github.token }}
