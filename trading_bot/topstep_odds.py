@@ -5,7 +5,8 @@ réels compris :
   - « compte simulé » : les trades du compte Topstep simulé du bot, au fil de l'eau ;
   - « backtest du bot » : le dernier backtest des quatre actifs annoncés (Nasdaq, S&P 500, Bitcoin, or) ;
   - « donchian or » : la seule stratégie validée par le laboratoire, rejouée sur 24 mois (fichier figé
-    `data/topstep/r_donchian_gold.json`, recalculé par `python run.py topstep-odds --rebuild-donchian`).
+    `data/topstep/r_donchian_gold.json`), et sa version fermée chaque soir (essai 8, `r_donchian_day_gold.json`),
+    recalculés par `python run.py topstep-odds --rebuild-donchian`.
 
 Le Monte Carlo est fait par le moteur open source de LuxAlgo (`tools/propfirm/odds.mjs`, MIT) : bootstrap en
 blocs des R réels (les séries de pertes restent groupées), règles Topstep exactes (perte maximale qui suit le
@@ -47,7 +48,14 @@ RULE_FIELDS = ("challengeId", "challengeName", "accountSize", "steps", "profitTa
                "overnightHolding", "weekendHolding", "newsTrading")
 REAL_ASSETS = ("nasdaq", "sp500", "bitcoin", "gold")
 RISKS = (250.0, 500.0)          # $ risqués au stop : 0,5 % (réglage du compte simulé) et 1 % de 50 000 $
-DONCHIAN_FILE = "r_donchian_gold.json"
+# Stratégies validées du laboratoire, rejouées sur 24 mois (historique long hors du dépôt), R figés dans data/topstep
+STRATEGY_PROFILES = {
+    "donchian_gold": {"strategy": "donchian_1h", "file": "r_donchian_gold.json",
+                      "label": "Donchian 1 h sur l'or (garde la nuit et le week-end)"},
+    "donchian_day_gold": {"strategy": "donchian_day", "file": "r_donchian_day_gold.json",
+                          "label": "Donchian or fermé chaque soir (essai 8)"},
+}
+DONCHIAN_FILE = STRATEGY_PROFILES["donchian_gold"]["file"]
 
 
 def topstep_dir() -> Path:
@@ -115,11 +123,11 @@ def account_profile(dash: dict[str, Any]) -> dict[str, Any] | None:
             "period": [iso(start)[:10], iso(end)[:10]]}
 
 
-def build_donchian(candles: list) -> dict[str, Any]:
-    """Rejoue donchian_1h sur l'or (historique long gardé hors du dépôt, `store.load_history("gold")`) et garde
-    ses R nets Topstep, calculés exactement comme dans le laboratoire."""
+def build_donchian(candles: list, strategy: str = "donchian_1h") -> dict[str, Any]:
+    """Rejoue une stratégie Donchian sur l'or (historique long gardé hors du dépôt, `store.load_history("gold")`)
+    et garde ses R nets Topstep, calculés exactement comme dans le laboratoire."""
     from . import strategies as sl
-    trades = sorted(sl.donchian_1h(candles, "gold"), key=lambda t: t.entry_ts)
+    trades = sorted(sl.RUNNERS_1H[strategy](candles, "gold"), key=lambda t: t.entry_ts)
     trades = [t for t in trades if t.reason != "fin des données"]
     if not trades:
         raise ValueError("aucun trade donchian sur l'historique de l'or")
@@ -127,7 +135,7 @@ def build_donchian(candles: list) -> dict[str, Any]:
     rs = [round(sl.trade_rs(t, 0.0, tcost)["net_topstep"], 4) for t in trades]
     start = datetime.fromtimestamp(candles[0].ts, timezone.utc)
     end = datetime.fromtimestamp(candles[-1].ts, timezone.utc)
-    return {"strategy": "donchian_1h", "asset": "gold", "rSeries": rs, "holding": holding_stats(trades),
+    return {"strategy": strategy, "asset": "gold", "rSeries": rs, "holding": holding_stats(trades),
             "tradesPerDay": round(len(rs) / weekdays_between(start, end), 3),
             "period": [iso(start)[:10], iso(end)[:10]], "built_at": iso(utcnow())}
 
@@ -146,22 +154,47 @@ def holding_stats(trades: list) -> dict[str, Any]:
         d = datetime.fromtimestamp(ts, timezone.utc).astimezone(ct)
         return (15, 10) < (d.hour, d.minute) and d.hour < 17
     over = sum(1 for t in trades if session(t.entry_ts) != session(t.exit_ts - 1) or late(t.exit_ts - 1))
-    weekend = sum(1 for t in trades if datetime.fromtimestamp(t.entry_ts, timezone.utc).isocalendar()[:2]
-                  != datetime.fromtimestamp(t.exit_ts - 1, timezone.utc).isocalendar()[:2])
+    def has_saturday(t) -> bool:                # un samedi entier ou en partie pendant la position
+        d, end = datetime.fromtimestamp(t.entry_ts, timezone.utc).date(), datetime.fromtimestamp(t.exit_ts - 1, timezone.utc).date()
+        while d <= end:
+            if d.weekday() == 5:
+                return True
+            d += timedelta(days=1)
+        return False
+    weekend = sum(1 for t in trades if has_saturday(t))
     return {"n": len(trades), "overnight": over, "weekend": weekend}
 
 
-def save_donchian(d: dict[str, Any], data_dir: Path | None = None) -> None:
+def save_donchian(d: dict[str, Any], data_dir: Path | None = None, key: str = "donchian_gold") -> None:
     ddir = data_dir or topstep_dir()
     ddir.mkdir(parents=True, exist_ok=True)
-    (ddir / DONCHIAN_FILE).write_text(json.dumps(d, separators=(",", ":")), encoding="utf-8")
+    (ddir / STRATEGY_PROFILES[key]["file"]).write_text(json.dumps(d, separators=(",", ":")), encoding="utf-8")
 
 
-def donchian_profile(d: dict[str, Any] | None) -> dict[str, Any] | None:
+def rebuild_strategies(candles: list, data_dir: Path | None = None) -> None:
+    for key, spec in STRATEGY_PROFILES.items():
+        save_donchian(build_donchian(candles, spec["strategy"]), data_dir, key)
+
+
+def donchian_profile(d: dict[str, Any] | None, key: str = "donchian_gold") -> dict[str, Any] | None:
     if not d or len(d.get("rSeries") or []) < 10:
         return None
-    return {"key": "donchian_gold", "label": "Donchian 1 h sur l'or (stratégie validée, 24 mois)",
-            "rSeries": d["rSeries"], "tradesPerDay": d["tradesPerDay"], "period": d["period"]}
+    hold = d.get("holding") or {}
+    return {"key": key, "label": STRATEGY_PROFILES[key]["label"], "rSeries": d["rSeries"],
+            "tradesPerDay": d["tradesPerDay"], "period": d["period"], "holding": hold or None,
+            "holds_overnight": bool(hold.get("overnight") or hold.get("weekend")) if hold else key == "donchian_gold"}
+
+
+def strategy_profiles(ddir: Path) -> list[dict[str, Any]]:
+    out = []
+    for key, spec in STRATEGY_PROFILES.items():
+        try:
+            p = donchian_profile(json.loads((ddir / spec["file"]).read_text(encoding="utf-8")), key)
+        except (OSError, ValueError):
+            continue
+        if p:
+            out.append(p)
+    return out
 
 
 def witness_profile(base: dict[str, Any] | None) -> dict[str, Any] | None:
@@ -225,21 +258,10 @@ def run_firms(profiles: list[dict[str, Any]], firms: list[dict[str, Any]], risks
         return json.loads(dst.read_text(encoding="utf-8"))
 
 
-def _donchian_holding(ddir: Path) -> dict[str, Any] | None:
-    try:
-        return json.loads((ddir / DONCHIAN_FILE).read_text(encoding="utf-8")).get("holding")
-    except (OSError, ValueError):
-        return None
-
-
 def build_firms(now: datetime | None = None, data_dir: Path | None = None, fetch=None, engine=run_firms) -> dict[str, Any]:
     """Les mêmes trades rejoués sur le compte d'évaluation 50K de chaque prop firm de l'annuaire."""
     ddir = data_dir or topstep_dir()
-    profiles = []
-    try:
-        profiles.append(donchian_profile(json.loads((ddir / DONCHIAN_FILE).read_text(encoding="utf-8"))))
-    except (OSError, ValueError):
-        pass
+    profiles = strategy_profiles(ddir)
     try:
         base = backtest_profile(json.loads((ddir.parent / "backtest_trades.json").read_text(encoding="utf-8")))
         profiles += [base, witness_profile(base)]
@@ -251,8 +273,8 @@ def build_firms(now: datetime | None = None, data_dir: Path | None = None, fetch
     return {"updated_at": iso(now or utcnow()), "account_size": 50_000, "risks": list(RISKS),
             "paths": sim.get("paths"), "excluded": excluded, "errors": sim.get("errors", [])[:20],
             "profiles": [{"key": p["key"], "label": p["label"], **summarize_r(p["rSeries"]),
-                          "holds_overnight": p["key"] == "donchian_gold"} for p in profiles],
-            "donchian_holding": _donchian_holding(ddir),
+                          "trades_per_day": p["tradesPerDay"], "holds_overnight": bool(p.get("holds_overnight")),
+                          "holding": p.get("holding")} for p in profiles],
             "challenges": sim.get("challenges", [])}
 
 
@@ -273,18 +295,14 @@ def build(now: datetime | None = None, data_dir: Path | None = None, engine=run_
             profiles += [p, witness_profile(p)]
     except (OSError, ValueError):
         pass
-    try:
-        p = donchian_profile(json.loads((ddir / DONCHIAN_FILE).read_text(encoding="utf-8")))
-        if p:
-            profiles.append(p)
-    except (OSError, ValueError):
-        pass
+    profiles += strategy_profiles(ddir)
     sim = engine(profiles) if profiles else {"profiles": []}
     by = {p["key"]: p for p in profiles}
     for row in sim.get("profiles", []):
         src = by.get(row["key"], {})
         row["stats"] = summarize_r(src.get("rSeries") or [])
         row["period"] = src.get("period")
+        row["holds_overnight"] = bool(src.get("holds_overnight"))
         for r in row.get("risks", []):
             fail = r.get("fail") or {}
             total = sum(fail.values())             # le moteur compte toutes les tentatives : on garde des parts

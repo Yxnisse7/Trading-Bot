@@ -29,7 +29,8 @@ for (const p of input.profiles) {
                        fail: a.failureBreakdown, daysPassed: a.avgDaysWhenPassed, daysFailed: a.avgDaysWhenFailed,
                        funded: j.fundedProbability ?? null, attemptCap: j.attemptCap ?? null,
                        attempts: j.attempts ? j.attempts.mean : null, cost: j.cost ? j.cost.mean : null,
-                       costP90: j.cost ? j.cost.p90 : null });
+                       costP90: j.cost ? j.cost.p90 : null,
+                       fundedDays: j.daysToFunded ? { p50: j.daysToFunded.p50, p90: j.daysToFunded.p90 } : null });
       if (!out.flags) out.flags = (r.assumptions?.flags ?? []).map((f) => f.id);
     } catch (e) { row.risks.push({ risk, error: String(e.message || e).slice(0, 300) }); }
   }

@@ -26,6 +26,7 @@ from . import indicators as ind
 from .models import Candle
 
 NY = ZoneInfo("America/New_York")
+CT = ZoneInfo("America/Chicago")
 
 STRATEGIES = {
     "orb5": "Cassure de la 1re bougie de 5 min de New York (Zarattini & Aziz, 2023)",
@@ -44,7 +45,8 @@ INFO_ONLY = {"pre_fomc"}
 ROBUST_ONLY = {"noise_area_v2"}   # plus de données vierges : critères de l'essai 5 sur les 24 mois
 # Suivis en ombre sur le marché réel (aucune notification) : (stratégie, actif) → date de début
 SHADOW = {("donchian_1h", "bitcoin"): "2026-10-05T19:00:00Z",
-          ("donchian_1h", "gold"): "2026-10-05T20:00:00Z"}     # validé à l'essai 3 (confirmation 2024-25)
+          ("donchian_1h", "gold"): "2026-10-05T20:00:00Z",      # validé à l'essai 3 (confirmation 2024-25)
+          ("donchian_day", "gold"): "2026-10-07T21:00:00Z"}     # validé à l'essai 8 (fermé chaque soir)
 MIN_TRADES = {"news_breakout": 20}
 
 
@@ -371,7 +373,23 @@ def london_breakout(s: _Series, asset: str) -> list[Trade]:
 
 
 # ---------------------------------------------------------------- stratégies (bougies 1 h)
-def donchian_1h(candles: list[Candle], asset: str, entry_n: int = 20, exit_n: int = 10) -> list[Trade]:
+def session_close_ts(ts: int) -> int | None:
+    """Essai 8 : heure de sortie forcée (15:00 heure de Chicago) de la séance Topstep qui contient l'instant
+    `ts` ; None entre 15:00 et 17:00 (fin de séance et pause du marché : pas d'entrée)."""
+    d = datetime.fromtimestamp(ts, timezone.utc).astimezone(CT)
+    if 15 <= d.hour < 17:
+        return None
+    day = d.date() + timedelta(days=1) if d.hour >= 17 else d.date()
+    return int(datetime.combine(day, time(15, 0), CT).timestamp())
+
+
+def donchian_day(candles: list[Candle], asset: str) -> list[Trade]:
+    """Essai 8 : `donchian_1h` fermé chaque jour à 15:00 heure de Chicago, sans entrée de 15:00 à 17:00."""
+    return donchian_1h(candles, asset, day_close=True)
+
+
+def donchian_1h(candles: list[Candle], asset: str, entry_n: int = 20, exit_n: int = 10,
+                day_close: bool = False) -> list[Trade]:
     h = ind.resample(candles, 60)
     atr = ind.atr(h, 14)
     out, i = [], max(entry_n, 15)
@@ -382,12 +400,17 @@ def donchian_1h(candles: list[Candle], asset: str, entry_n: int = 20, exit_n: in
             i += 1
             continue
         hi, lo = max(x.high for x in prev), min(x.low for x in prev)
-        if b.close > hi or b.close < lo:
+        close_at = session_close_ts(b.ts + 3600) if day_close else None
+        # séance plus courte (jour férié) : la dernière bougie de la séance ne permet pas d'entrer
+        last_of_session = close_at is not None and h[i + 1].ts >= close_at
+        if (b.close > hi or b.close < lo) and (not day_close or (close_at is not None and not last_of_session)):
             long = b.close > hi
             risk = 2 * atr[i]
             stop = b.close - risk if long else b.close + risk
 
-            def trail(j, bar, st, long=long):
+            def trail(j, bar, st, long=long, close_at=close_at):
+                if close_at is not None and (j + 1 >= len(h) or h[j + 1].ts >= close_at):
+                    return ("heure", bar.close)            # dernière clôture de la séance (15:00, ou plus tôt)
                 w = h[max(0, j - exit_n):j]
                 if long and bar.close < min(x.low for x in w):
                     return ("canal", bar.close)
@@ -396,8 +419,8 @@ def donchian_1h(candles: list[Candle], asset: str, entry_n: int = 20, exit_n: in
                 return None
 
             px, j, why = simulate(h, i, "long" if long else "short", b.close, stop, max_bars=120,
-                                  on_close=trail, bar_seconds=3600)
-            out.append(Trade("donchian_1h", asset, "long" if long else "short", b.ts + 3600, h[j].ts + 3600,
+                                  on_close=trail, bar_seconds=3600, exit_ts=close_at)
+            out.append(Trade("donchian_day" if day_close else "donchian_1h", asset, "long" if long else "short", b.ts + 3600, h[j].ts + 3600,
                              b.close, px, risk, why))
             i = j + 1
             continue
@@ -491,7 +514,7 @@ def pre_fomc(candles: list[Candle], asset: str) -> list[Trade]:
 RUNNERS_5M = {"orb5": orb5, "orb30": orb30, "intraday_mom": intraday_mom, "noise_area": noise_area,
               "gap_fade": gap_fade, "london_breakout": london_breakout, "news_breakout": news_breakout,
               "noise_area_v2": noise_area_v2}
-RUNNERS_1H = {"donchian_1h": donchian_1h, "rsi2_1h": rsi2_1h, "pre_fomc": pre_fomc}
+RUNNERS_1H = {"donchian_1h": donchian_1h, "rsi2_1h": rsi2_1h, "pre_fomc": pre_fomc, "donchian_day": donchian_day}
 
 
 def run_all(asset: str, candles: list[Candle], only: list[str] | None = None) -> list[Trade]:

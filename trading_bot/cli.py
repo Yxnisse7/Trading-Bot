@@ -41,12 +41,12 @@ from .learning import analyze
 from .signals import format_signal
 
 
-HALAL_REFUSED = {"manual", "propose", "commands", "guide", "ui", "loop", "fetch-data", "topstep", "invest", "backup", "fetch-history", "backtest-setups", "strategy-lab", "invest-review", "topstep-odds", "drift-reference"}
+HALAL_REFUSED = {"manual", "propose", "commands", "guide", "ui", "loop", "fetch-data", "topstep", "invest", "backup", "fetch-history", "backtest-setups", "strategy-lab", "invest-review", "topstep-odds", "drift-reference", "donchian-day"}
 
 
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(description="Générateur de signaux de scalping (NQ, BTC, XAU) — données gratuites")
-    p.add_argument("command", choices=["scan", "track", "tick", "summary", "stats", "loop", "status", "test-notify", "backtest", "report", "fetch-data", "manual", "propose", "ui", "commands", "portfolio", "guide", "learn", "flush-outbox", "check-data", "stop", "topstep", "trim-candles", "invest", "backup", "fetch-history", "backtest-setups", "strategy-lab", "invest-review", "topstep-odds", "drift-reference"])
+    p.add_argument("command", choices=["scan", "track", "tick", "summary", "stats", "loop", "status", "test-notify", "backtest", "report", "fetch-data", "manual", "propose", "ui", "commands", "portfolio", "guide", "learn", "flush-outbox", "check-data", "stop", "topstep", "trim-candles", "invest", "backup", "fetch-history", "backtest-setups", "strategy-lab", "invest-review", "topstep-odds", "drift-reference", "donchian-day"])
     p.add_argument("--signal", help="stop : identifiant (ou début) du trade à arrêter, ou son actif ; sans valeur, le seul trade ouvert")
     p.add_argument("--halal", action="store_true", help="mode halal : second bot séparé (achat seulement, sans levier, data/halal)")
     p.add_argument("--dry-run", action="store_true", help="scan sans enregistrer les signaux")
@@ -194,6 +194,43 @@ def main(argv: list[str] | None = None) -> int:
         ok = [p["key"] for p in data["products"] if p["stats"]]
         print(f"Investissement : {len(ok)} produits sur {len(data['products'])}, {len(data['news'])} actualités"
               + (f" ; indisponibles : {', '.join(data['errors'])}" if data["errors"] else ""))
+    elif args.command == "donchian-day":
+        # essai 8 (HYPOTHESES.md) : donchian_1h fermé chaque jour à 15:00 heure de Chicago, règle fixée d'avance
+        from . import strategies as sl
+        from .providers import history as hist
+        from .topstep import FEES, PRODUCTS
+
+        split = int(datetime(2025, 9, 28, tzinfo=timezone.utc).timestamp())
+        out = {"essai": 8, "strategy": "donchian_day", "split": "2025-09-28", "n_trials": 74, "cells": {}}
+        for key in ("gold", "nasdaq", "sp500", "bitcoin"):
+            asset = eng.cfg.assets[key]
+            candles = eng.store.load_history(key)
+            if key in hist.BINANCE:
+                candles = sorted({c.ts: c for c in candles + eng.store.load_candles(key)}.values(), key=lambda c: c.ts)
+            if not candles:
+                continue
+            tr = [t for t in sl.donchian_day(candles, key) if t.reason != "fin des données"]
+            fee = FEES.get(key)
+            tcost = (sum(fee), PRODUCTS[key][1]) if fee and key in PRODUCTS else None
+            disc = sl.evaluate(tr, asset.cost_pct, tcost, start_ts=split)
+            conf = sl.evaluate(tr, asset.cost_pct, tcost, end_ts=split)
+            both = sl.evaluate(tr, asset.cost_pct, tcost)
+            ok_d, ok_c = sl.discovery_pass(disc), sl.confirmation_pass(conf)
+            status = ("prouvé" if sl.proven(both, out["n_trials"]) else "validé") if ok_d and ok_c else (
+                "écarté (découverte)" if not ok_d else "écarté (confirmation)")
+            reasons = {}
+            for t in tr:
+                reasons[t.reason] = reasons.get(t.reason, 0) + 1
+            out["cells"][key] = {"asset": key, "asset_label": asset.label, "discovery": disc, "confirmation": conf,
+                                 "all": both, "status": status, "robust": sl.robust_check(tr, asset.cost_pct, tcost, split),
+                                 "exits": reasons}
+            d, c, a = disc["net"], conf["net"], both["net"]
+            print(f"{key:8s} découverte n={disc['n']:4d} {d['mean_r']} PF {d['profit_factor']} moitiés "
+                  f"{disc['first_half']['mean_r']}/{disc['second_half']['mean_r']} | confirmation n={conf['n']:4d} "
+                  f"{c['mean_r']} PF {c['profit_factor']} | 24 mois n={both['n']} {a['mean_r']} ± {a['se']} → {status} "
+                  f"| sorties {reasons}", flush=True)
+        out["updated_at"] = iso(utcnow())
+        eng.store._write(eng.store.dir / "essai8.json", out)
     elif args.command == "drift-reference":
         # essai 7 : R du backtest de 24 mois des stratégies en ombre, figés comme référence (historique long requis)
         from . import drift
@@ -213,7 +250,7 @@ def main(argv: list[str] | None = None) -> int:
         if args.rebuild_donchian:
             candles = eng.store.load_history("gold")
             if candles:
-                topstep_odds.save_donchian(topstep_odds.build_donchian(candles))
+                topstep_odds.rebuild_strategies(candles)
             else:
                 print("pas d'historique long de l'or (python run.py fetch-history --asset gold)")
         res = topstep_odds.build()

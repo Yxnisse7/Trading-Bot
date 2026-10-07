@@ -20,6 +20,7 @@ WATCH_N, DRIFT_N = 5, 10  # trades réels minimum avant « à surveiller » / «
 WATCH, DRIFT = 0.05, 0.01
 VARIANT = "horizon_3h_gold"
 LABELS = {"donchian_1h:gold": "Donchian 1 h · or", "donchian_1h:bitcoin": "Donchian 1 h · Bitcoin",
+          "donchian_day:gold": "Donchian fermé chaque soir · or",
           VARIANT: "Horizon 3 h · or"}
 RANK = {"trop tôt": 0, "dans la norme": 0, "à surveiller": 1, "décroché": 2}
 

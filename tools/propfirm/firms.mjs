@@ -69,8 +69,14 @@ if (import.meta.url === `file://${process.argv[1]}`) {
                                        tradesPerDayModel: "poisson", risk: { mode: "fixed-amount", value: risk } },
                              { seed: 42, paths, includeHistograms: false });
           const a = r.perAttempt, j = r.journey || {};
+          const f = r.funded || {};
           row.results[p.key].push({ risk, pass: a.passProbability, attempts: j.attempts?.mean ?? null,
                                     cost: j.cost?.mean ?? null, days: a.avgDaysWhenPassed ?? null,
+                                    funded: j.fundedProbability ?? null,
+                                    // jours de bourse jusqu'au compte financé, tentatives ratées comprises
+                                    fundedDays: j.daysToFunded ? { p25: j.daysToFunded.p25, p50: j.daysToFunded.p50, p90: j.daysToFunded.p90 } : null,
+                                    firstPayoutDays: f.daysToFirstPayout ? f.daysToFirstPayout.p50 : null,
+                                    payoutProb: f.payoutProbability ?? null, blown: f.blownProbability ?? null,
                                     ev: r.ev?.evTotal ?? null, evPositive: r.ev?.pPositive ?? null });
         } catch (e) { out.errors.push(`${c.spec.name} : ${String(e.message || e).slice(0, 200)}`); }
       }

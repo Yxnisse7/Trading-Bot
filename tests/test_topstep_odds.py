@@ -41,7 +41,7 @@ def test_build_donchian_keeps_closed_trades_in_r(monkeypatch):
     candles = [Candle(1_700_000_000 + 300 * i, 1, 1, 1, 1) for i in range(5000)]
     fake = [sl.Trade("donchian_1h", "gold", "long", candles[10].ts, candles[20].ts, 100.0, 104.0, 2.0, "sortie"),
             sl.Trade("donchian_1h", "gold", "long", candles[30].ts, candles[-1].ts, 100.0, 101.0, 2.0, "fin des données")]
-    monkeypatch.setattr(sl, "donchian_1h", lambda c, a: fake)
+    monkeypatch.setitem(sl.RUNNERS_1H, "donchian_1h", lambda c, a: fake)
     d = to.build_donchian(candles)
     assert len(d["rSeries"]) == 1 and d["rSeries"][0] < 2.0 and d["tradesPerDay"] > 0
 
@@ -110,7 +110,7 @@ def test_build_firms_with_fake_engine(tmp_path):
                                       {"name": "B", "countryIso2": "il", "challenges": []}]}}
     res = to.build_firms(data_dir=ddir, fetch=lambda: payload, engine=engine)
     assert seen == {"profiles": ["donchian_gold", "backtest", "witness"], "firms": ["A"]}
-    assert res["excluded"] == ["B"] and res["donchian_holding"]["overnight"] == 12
+    assert res["excluded"] == ["B"] and res["profiles"][0]["holding"]["overnight"] == 12
     assert [p["holds_overnight"] for p in res["profiles"]] == [True, False, False]
 
 
@@ -140,3 +140,29 @@ def test_real_firms_engine_adapts_directory_rows_and_overrides():
     ftmo = names["FTMO"]
     assert ftmo["fees"]["price"] == 319 and ftmo["completed"] and ftmo["maxLoss"]["mode"] == "trailing-realized-eod"
     assert names["Topstep"]["overnight"] is False and 0 < ftmo["results"]["g"][0]["pass"] <= 1
+
+
+def test_session_close_is_15h_chicago_and_blocks_entries_until_17h():
+    from datetime import datetime, timezone
+    from trading_bot import strategies as sl
+    ts = lambda s: int(datetime.fromisoformat(s).replace(tzinfo=timezone.utc).timestamp())  # noqa: E731
+    # 7 octobre 2026 : Chicago en heure d'été (UTC−5) → 15:00 CT = 20:00 UTC
+    assert sl.session_close_ts(ts("2026-10-07T14:00:00")) == ts("2026-10-07T20:00:00")
+    assert sl.session_close_ts(ts("2026-10-07T20:00:00")) is None            # 15:00 CT : plus d'entrée
+    assert sl.session_close_ts(ts("2026-10-07T23:00:00")) == ts("2026-10-08T20:00:00")   # 18:00 CT : séance suivante
+
+
+def test_donchian_day_never_keeps_a_position_after_the_session():
+    from trading_bot import strategies as sl
+    from trading_bot.models import Candle
+    t0 = 1_780_000_000 - 1_780_000_000 % 3600
+    candles, px = [], 100.0
+    for k in range(24 * 30 * 12):                       # 30 jours de bougies 5 min avec de longues tendances
+        px += 0.05 if (k // 600) % 2 == 0 else -0.05
+        candles.append(Candle(t0 + 300 * k, px, px + 0.1, px - 0.1, px))
+    day = sl.donchian_day(candles, "gold")
+    assert day
+    closed = [t for t in day if t.reason != "fin des données"]
+    assert to.holding_stats(closed)["overnight"] == 0
+    assert any(t.reason == "heure" for t in closed)
+    assert len(sl.donchian_1h(candles, "gold")) <= len(day) + 50       # même règle d'entrée

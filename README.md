@@ -628,6 +628,14 @@ positions** d'un jour à l'autre (215 trades sur 313) et le week-end (67) : inte
 des firmes futures, permis sur la plupart des comptes CFD. La page ne montre par défaut que les comptes où la
 stratégie choisie est permise. Règles et prix à vérifier sur le site de la firme avant tout achat.
 
+**Donchian fermé chaque soir** (essai 8, `donchian_day` dans `trading_bot/strategies.py`, `python run.py
+donchian-day`) : la même règle que `donchian_1h`, avec une sortie forcée à 15:00 heure de Chicago (ou à la
+dernière clôture d'une séance écourtée) et aucune entrée de 15:00 à 17:00 : aucune position la nuit ni le
+week-end, donc permise chez Topstep. Validé sur l'or (+0,11 R puis +0,07 R, 482 trades sur 24 mois), écarté sur
+Nasdaq, S&P 500 et Bitcoin ; suivi en ombre depuis le 07/10/2026. Chances Topstep 50K : 58 % par tentative à
+250 $ de risque (compte financé en ~3 mois pour la moitié des parcours), 42 % à 500 $ (~1,5 mois). La page
+affiche pour chaque compte le délai jusqu'au compte financé (tentatives ratées comprises) et le nombre de trades.
+
 Connexion automatique : l'API TopstepX (ProjectX) permet de passer des ordres par programme sur le
 Combine et l'Express Funded (pas sur le Live Funded), mais seulement **depuis votre propre appareil**
 (serveurs distants, VPS et VPN interdits). Le bot, qui tourne sur GitHub Actions, ne passe donc aucun
