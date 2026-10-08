@@ -393,6 +393,11 @@ deux moitiés (2010 → 2017-03, 2017-04 → 2024-09). **H3, la Fed** (4 essais,
 décisions de la Fed seulement, mêmes critères (moitiés : 2013 → 2018, 2019 → 2024). Pour information : sortie le
 lendemain, réactions fortes, emploi et inflation séparés.
 Une piste retenue ici serait suivie en ombre sur les annonces à venir avant tout signal réel.
+**Modification avant tout résultat (8 octobre 2026)** : Dukascopy limite le débit (10 à 25 s par fichier puis
+refus, plus de 20 h pour 15 ans) ; la source devient **HistData.com** (bougies 1 min gratuites, une année par
+fichier ; or XAUUSD, euro EURUSD, S&P 500 SPXUSD, Nasdaq 100 NSXUSD ; heure de l'Est sans changement d'heure,
+convertie en UTC). Règles et critères inchangés. Contrôle prévu : la plus forte agitation des jours d'emploi doit
+tomber dans la bougie de 8:30 heure de New York (sinon décalage d'heure, corrigé avant tout verdict).
 
 ## Journal des essais
 

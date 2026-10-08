@@ -1,9 +1,9 @@
 """Essai 13 (HYPOTHESES.md) : l'essai 12 rejoué sur 2010-2024, période jamais regardée.
 
 Annonces : `data/macro_events_2010_2024.json` (emploi et inflation depuis 2010, décisions prévues de la Fed
-depuis 2013). Prix : bougies 1 min Dukascopy regroupées en 5 min, seulement la veille, le jour et le lendemain de
-chaque annonce, gardées hors du dépôt (`data/history/events_<actif>_5m.json`). Le téléchargement reprend là où
-il s'est arrêté.
+depuis 2013). Prix : bougies 1 min (HistData.com, une année par fichier ; Dukascopy en secours, trop limité en débit pour
+15 ans) regroupées en 5 min, seulement la veille, le jour et le lendemain de chaque annonce, gardées hors du dépôt
+(`data/history/events_<actif>_1m_days.json`). Le téléchargement reprend là où il s'est arrêté.
 """
 from __future__ import annotations
 
@@ -111,6 +111,70 @@ def load_candles(asset: str) -> list[Candle]:
     cache = json.loads(f.read_text(encoding="utf-8"))
     one = sorted((Candle(r[0], r[1], r[2], r[3], r[4]) for rows in cache["days"].values() for r in rows), key=lambda c: c.ts)
     return hist.resample_5m(one)
+
+
+# HistData.com : une année de bougies 1 min par fichier (heure de l'Est sans changement d'heure, UTC−5)
+HISTDATA = {"gold": "XAUUSD", "euro": "EURUSD", "sp500": "SPXUSD", "nasdaq": "NSXUSD"}
+HD_PAGE = "https://www.histdata.com/download-free-forex-historical-data/?/ascii/1-minute-bar-quotes/{pair}/{year}"
+
+
+def parse_histdata(text: str, keep: set[str]) -> dict[str, list[list[float]]]:
+    """Lignes « AAAAMMJJ HHMMSS;ouverture;haut;bas;clôture;volume » en heure fixe UTC−5 → bougies 1 min UTC,
+    regroupées par jour UTC, seulement pour les jours de `keep`."""
+    out: dict[str, list[list[float]]] = {}
+    for line in text.splitlines():
+        parts = line.strip().split(";")
+        if len(parts) < 5 or len(parts[0]) != 15:
+            continue
+        dt = datetime.strptime(parts[0], "%Y%m%d %H%M%S").replace(tzinfo=timezone.utc) + timedelta(hours=5)
+        day = dt.date().isoformat()
+        if day not in keep:
+            continue
+        o, h, lo, c = (float(x) for x in parts[1:5])
+        out.setdefault(day, []).append([int(dt.timestamp()), o, h, lo, c])
+    return out
+
+
+def download_histdata(asset: str, days: list[date], pause: float = 2.0) -> dict[str, Any]:
+    """Télécharge les années nécessaires sur HistData et ne garde que les jours utiles."""
+    import io
+    import re
+    import zipfile
+    import requests
+    f = cache_file(asset)
+    cache = json.loads(f.read_text(encoding="utf-8")) if f.exists() else {"days": {}}
+    cache.setdefault("days", {})
+    keep = {d.isoformat() for d in days}
+    done_years = set(cache.get("histdata_years", []))
+    pair = HISTDATA[asset]
+    s = requests.Session()
+    s.headers["User-Agent"] = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0 Safari/537.36"
+    for year in sorted({d.year for d in days}):
+        if year in done_years:
+            continue
+        page = HD_PAGE.format(pair=pair.lower(), year=year)
+        html = s.get(page, timeout=60).text
+        tk = re.search(r'id="tk" value="([0-9a-f]+)"', html)
+        if not tk:
+            log.warning("HistData %s %s : pas de fichier", pair, year)
+            continue
+        r = s.post("https://www.histdata.com/get.php", timeout=300, headers={"Referer": page},
+                   data={"tk": tk.group(1), "date": str(year), "datemonth": str(year), "platform": "ASCII",
+                         "timeframe": "M1", "fxpair": pair})
+        try:
+            z = zipfile.ZipFile(io.BytesIO(r.content))
+        except zipfile.BadZipFile:
+            log.warning("HistData %s %s : réponse illisible (%s octets)", pair, year, len(r.content))
+            continue
+        name = next(n for n in z.namelist() if n.lower().endswith(".csv"))
+        for day, rows in parse_histdata(z.read(name).decode("ascii", "ignore"), keep).items():
+            cache["days"][day] = rows
+        done_years.add(year)
+        cache["histdata_years"] = sorted(done_years)
+        f.parent.mkdir(parents=True, exist_ok=True)
+        f.write_text(json.dumps(cache), encoding="utf-8")
+        time.sleep(pause)
+    return {"asset": asset, "years": sorted(done_years), "days_with_data": sum(1 for d in keep if cache["days"].get(d))}
 
 
 def judge(rows: list[dict[str, Any]], split: int) -> dict[str, Any]:
