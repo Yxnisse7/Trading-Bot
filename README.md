@@ -659,6 +659,11 @@ légèrement perdante depuis) ; **momentum 12 mois retenu** (Sharpe 0,42 puis 0,
 volatilité). Suivi en ombre arrêté le 08/10/2026 : c'est du placement sur des mois, pas du trading (le calcul
 reste disponible à la main avec `python run.py trend-daily`).
 
+**Annonces macro gardées plus longtemps** (essai 12, `trading_bot/macro_drift.py`, `python run.py macro-drift`) :
+faute d'historique gratuit des prévisions, la surprise est lue dans la réaction du marché 30 min après l'annonce
+(emploi, inflation, Fed). Entrer dans ce sens et garder jusqu'à la fin de séance ne gagne pas de façon fiable
+(or +0,32 ATR mais trop incertain, euro plutôt en retournement) ; pas de filtre pour Donchian or (trop peu de cas).
+
 Connexion automatique : l'API TopstepX (ProjectX) permet de passer des ordres par programme sur le
 Combine et l'Express Funded (pas sur le Live Funded), mais seulement **depuis votre propre appareil**
 (serveurs distants, VPS et VPN interdits). Le bot, qui tourne sur GitHub Actions, ne passe donc aucun

@@ -41,12 +41,12 @@ from .learning import analyze
 from .signals import format_signal
 
 
-HALAL_REFUSED = {"manual", "propose", "commands", "guide", "ui", "loop", "fetch-data", "topstep", "invest", "backup", "fetch-history", "backtest-setups", "strategy-lab", "invest-review", "topstep-odds", "drift-reference", "donchian-day", "intraday-gold", "multi-trend", "trend-daily"}
+HALAL_REFUSED = {"manual", "propose", "commands", "guide", "ui", "loop", "fetch-data", "topstep", "invest", "backup", "fetch-history", "backtest-setups", "strategy-lab", "invest-review", "topstep-odds", "drift-reference", "donchian-day", "intraday-gold", "multi-trend", "trend-daily", "macro-drift"}
 
 
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(description="Générateur de signaux de scalping (NQ, BTC, XAU) — données gratuites")
-    p.add_argument("command", choices=["scan", "track", "tick", "summary", "stats", "loop", "status", "test-notify", "backtest", "report", "fetch-data", "manual", "propose", "ui", "commands", "portfolio", "guide", "learn", "flush-outbox", "check-data", "stop", "topstep", "trim-candles", "invest", "backup", "fetch-history", "backtest-setups", "strategy-lab", "invest-review", "topstep-odds", "drift-reference", "donchian-day", "intraday-gold", "multi-trend", "trend-daily"])
+    p.add_argument("command", choices=["scan", "track", "tick", "summary", "stats", "loop", "status", "test-notify", "backtest", "report", "fetch-data", "manual", "propose", "ui", "commands", "portfolio", "guide", "learn", "flush-outbox", "check-data", "stop", "topstep", "trim-candles", "invest", "backup", "fetch-history", "backtest-setups", "strategy-lab", "invest-review", "topstep-odds", "drift-reference", "donchian-day", "intraday-gold", "multi-trend", "trend-daily", "macro-drift"])
     p.add_argument("--signal", help="stop : identifiant (ou début) du trade à arrêter, ou son actif ; sans valeur, le seul trade ouvert")
     p.add_argument("--halal", action="store_true", help="mode halal : second bot séparé (achat seulement, sans levier, data/halal)")
     p.add_argument("--dry-run", action="store_true", help="scan sans enregistrer les signaux")
@@ -232,6 +232,24 @@ def main(argv: list[str] | None = None) -> int:
                   f"| sorties {reasons}", flush=True)
         out["updated_at"] = iso(utcnow())
         eng.store._write(eng.store.dir / "essai8.json", out)
+    elif args.command == "macro-drift":
+        # essai 12 (HYPOTHESES.md) : la réaction du marché aux annonces continue-t-elle jusqu'à la fin de séance ?
+        from . import macro_drift
+        res = macro_drift.run(eng.store)
+        for k, a in res["assets"].items():
+            if "all" not in a:
+                print(k, a)
+                continue
+            s1, s2, al = a["year1"], a["year2"], a["all"]
+            print(f"{k:7s} {al['n']} annonces : {al['mean']} ATR (t {al['t']}, gagnants {al.get('win_rate')}) | "
+                  f"an 1 {s1['mean']} · an 2 {s2['mean']} | fortes {a['strong']['mean']} (n {a['strong']['n']}) | "
+                  f"lendemain {a['next_day']['mean']} | NFP {a['by_kind']['nfp']['mean']} CPI {a['by_kind']['cpi']['mean']} "
+                  f"FOMC {a['by_kind']['fomc']['mean']} → retenu {a['kept']}")
+        f = res.get("donchian_filter")
+        if f:
+            print(f"Donchian or les jours d'annonce : dans le sens {f['aligned']} | contre {f['opposed']} | "
+                  f"autres jours {f['other_days']} → filtre proposé {f['propose_filter']}")
+        eng.store._write(eng.store.dir / "essai12.json", res)
     elif args.command == "trend-daily":
         # essai 11 (HYPOTHESES.md) : tendance journalière sur 16 marchés depuis 2007 ; le momentum 12 mois retenu
         # est suivi en ombre (poids annoncés chaque mois, résultat réel du mois écoulé)
