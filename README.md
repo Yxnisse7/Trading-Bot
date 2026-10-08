@@ -664,6 +664,11 @@ faute d'historique gratuit des prévisions, la surprise est lue dans la réactio
 (emploi, inflation, Fed). Entrer dans ce sens et garder jusqu'à la fin de séance ne gagne pas de façon fiable
 (or +0,32 ATR mais trop incertain, euro plutôt en retournement) ; pas de filtre pour Donchian or (trop peu de cas).
 
+**Annonces sur 15 ans** (essai 13, `trading_bot/macro_long.py`, `python run.py macro-long`) : l'essai 12 rejoué sur
+2010-2024 (dates des archives du BLS et de la Fed dans `data/macro_events_2010_2024.json`, bougies 1 min HistData
+des jours d'annonce, gardées hors du dépôt). Environ 430 annonces emploi/inflation et 87 décisions de la Fed par
+actif : aucun effet ; les pistes vues sur 2 ans (or, Fed) ne se confirment pas.
+
 Connexion automatique : l'API TopstepX (ProjectX) permet de passer des ordres par programme sur le
 Combine et l'Express Funded (pas sur le Live Funded), mais seulement **depuis votre propre appareil**
 (serveurs distants, VPS et VPN interdits). Le bot, qui tourne sur GitHub Actions, ne passe donc aucun
