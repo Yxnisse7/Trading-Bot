@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-08T21:45:53.529014+02:00",
+  "updated_at": "2026-10-08T21:50:45.885027+02:00",
   "timezone": "Europe/Paris",
   "equity_curve": [
     {
@@ -1482,15 +1482,15 @@
       "avg_pnl_pct": -0.0329
     },
     "shadow": {
-      "n": 292,
+      "n": 293,
       "tp": 87,
       "sl": 157,
-      "expired": 48,
+      "expired": 49,
       "win_rate": 0.35655737704918034,
       "neutral_win_rate": 0.4134,
       "edge": -0.0568,
-      "pnl_pct": -11.9071,
-      "avg_pnl_pct": -0.0408
+      "pnl_pct": -11.8638,
+      "avg_pnl_pct": -0.0405
     },
     "open": 0,
     "open_shadow": 3
@@ -1530,15 +1530,15 @@
       "avg_pnl_pct": 0.0
     },
     "shadow": {
-      "n": 292,
+      "n": 293,
       "tp": 87,
       "sl": 157,
-      "expired": 48,
+      "expired": 49,
       "win_rate": 0.35655737704918034,
       "neutral_win_rate": 0.4134,
       "edge": -0.0568,
-      "pnl_pct": -11.9071,
-      "avg_pnl_pct": -0.0408
+      "pnl_pct": -11.8638,
+      "avg_pnl_pct": -0.0405
     }
   },
   "by_horizon": {
@@ -1586,15 +1586,15 @@
         "avg_pnl_pct": 0.0049
       },
       "shadow": {
-        "n": 76,
+        "n": 77,
         "tp": 29,
         "sl": 38,
-        "expired": 9,
+        "expired": 10,
         "win_rate": 0.43283582089552236,
-        "neutral_win_rate": 0.4139,
-        "edge": 0.0189,
-        "pnl_pct": -1.4598,
-        "avg_pnl_pct": -0.0192
+        "neutral_win_rate": 0.4137,
+        "edge": 0.0191,
+        "pnl_pct": -1.4165,
+        "avg_pnl_pct": -0.0184
       },
       "open": 0,
       "session_utc": [
@@ -1859,15 +1859,15 @@
       "label": "Tendance 5 min",
       "weight": 1.0,
       "stats": {
-        "n": 351,
+        "n": 352,
         "tp": 121,
         "sl": 178,
-        "expired": 52,
+        "expired": 53,
         "win_rate": 0.40468227424749165,
-        "neutral_win_rate": 0.4135,
-        "edge": -0.0088,
-        "pnl_pct": -9.8077,
-        "avg_pnl_pct": -0.0279
+        "neutral_win_rate": 0.4134,
+        "edge": -0.0087,
+        "pnl_pct": -9.7644,
+        "avg_pnl_pct": -0.0277
       },
       "by_source": {
         "bot": {
@@ -1904,18 +1904,52 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 236,
+          "n": 237,
           "tp": 80,
           "sl": 127,
-          "expired": 29,
+          "expired": 30,
           "win_rate": 0.3864734299516908,
           "neutral_win_rate": 0.4126,
           "edge": -0.0261,
-          "pnl_pct": -6.8264,
-          "avg_pnl_pct": -0.0289
+          "pnl_pct": -6.7831,
+          "avg_pnl_pct": -0.0286
         }
       },
       "last_trades": [
+        {
+          "id": "20baa73c21",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 30942.0,
+          "take_profit": 30883.0,
+          "stop_loss": 30981.25,
+          "risk_reward": 1.5,
+          "confidence": "fort",
+          "score": 5.75,
+          "criteria": [
+            "adx",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "expired",
+          "pnl_pct": 0.0433,
+          "pnl_gross_pct": 0.0533,
+          "duration_minutes": 60,
+          "close_price": 30925.5,
+          "created_at": "2026-10-08T18:50:34Z",
+          "closed_at": "2026-10-08T19:50:34Z",
+          "created_local": "08/10 20:50",
+          "expires_at": "2026-10-08T19:50:34Z",
+          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 98.21 (0.32 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 97%.",
+          "news_context": "actualité à surveiller (score 2) : Inflation on many everyday items was entirely due to tariffs, NY Fed says",
+          "manual_exit": null
+        },
         {
           "id": "bcb010f85c",
           "asset": "nasdaq",
@@ -2152,41 +2186,6 @@
           "expires_at": "2026-10-08T18:35:26Z",
           "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 13.22 (0.17 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 96%.",
           "news_context": "prudence post-USD FOMC Meeting Minutes : critères renforcés · actualité à surveiller (score 2) : Inflation on many everyday items was entirely due to tariffs, NY Fed says",
-          "manual_exit": null
-        },
-        {
-          "id": "3dffd7a02f",
-          "asset": "ethereum",
-          "asset_label": "Ethereum (ETH/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 2418.2,
-          "take_profit": 2405.6,
-          "stop_loss": 2426.6,
-          "risk_reward": 1.5,
-          "confidence": "fort",
-          "score": 6.25,
-          "criteria": [
-            "adx",
-            "corr",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.4274,
-          "pnl_gross_pct": -0.3474,
-          "duration_minutes": 49,
-          "close_price": 2426.6,
-          "created_at": "2026-10-08T17:30:52Z",
-          "closed_at": "2026-10-08T18:20:00Z",
-          "created_local": "08/10 19:30",
-          "expires_at": "2026-10-08T18:30:52Z",
-          "rationale": "Vente : tendance forte (ADX), marché meneur favorable, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 21.03 (0.87 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 95%.",
-          "news_context": "prudence post-USD FOMC Meeting Minutes : critères renforcés · actualité à surveiller (score 3) : U.S. government moves $1 billion in bitcoin from Bitfinex hack wallet, no sale indicated | Inflation on many everyday items was entirely due to tariffs, NY Fed says",
           "manual_exit": null
         }
       ]
@@ -2196,15 +2195,15 @@
       "label": "Tendance 15 min",
       "weight": 1.0,
       "stats": {
-        "n": 419,
+        "n": 420,
         "tp": 131,
         "sl": 217,
-        "expired": 71,
+        "expired": 72,
         "win_rate": 0.3764367816091954,
         "neutral_win_rate": 0.4139,
         "edge": -0.0375,
-        "pnl_pct": -15.9641,
-        "avg_pnl_pct": -0.0381
+        "pnl_pct": -15.9208,
+        "avg_pnl_pct": -0.0379
       },
       "by_source": {
         "bot": {
@@ -2241,18 +2240,52 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 292,
+          "n": 293,
           "tp": 87,
           "sl": 157,
-          "expired": 48,
+          "expired": 49,
           "win_rate": 0.35655737704918034,
           "neutral_win_rate": 0.4134,
           "edge": -0.0568,
-          "pnl_pct": -11.9071,
-          "avg_pnl_pct": -0.0408
+          "pnl_pct": -11.8638,
+          "avg_pnl_pct": -0.0405
         }
       },
       "last_trades": [
+        {
+          "id": "20baa73c21",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 30942.0,
+          "take_profit": 30883.0,
+          "stop_loss": 30981.25,
+          "risk_reward": 1.5,
+          "confidence": "fort",
+          "score": 5.75,
+          "criteria": [
+            "adx",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "expired",
+          "pnl_pct": 0.0433,
+          "pnl_gross_pct": 0.0533,
+          "duration_minutes": 60,
+          "close_price": 30925.5,
+          "created_at": "2026-10-08T18:50:34Z",
+          "closed_at": "2026-10-08T19:50:34Z",
+          "created_local": "08/10 20:50",
+          "expires_at": "2026-10-08T19:50:34Z",
+          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 98.21 (0.32 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 97%.",
+          "news_context": "actualité à surveiller (score 2) : Inflation on many everyday items was entirely due to tariffs, NY Fed says",
+          "manual_exit": null
+        },
         {
           "id": "bcb010f85c",
           "asset": "nasdaq",
@@ -2489,41 +2522,6 @@
           "expires_at": "2026-10-08T18:35:26Z",
           "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 13.22 (0.17 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 96%.",
           "news_context": "prudence post-USD FOMC Meeting Minutes : critères renforcés · actualité à surveiller (score 2) : Inflation on many everyday items was entirely due to tariffs, NY Fed says",
-          "manual_exit": null
-        },
-        {
-          "id": "3dffd7a02f",
-          "asset": "ethereum",
-          "asset_label": "Ethereum (ETH/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 2418.2,
-          "take_profit": 2405.6,
-          "stop_loss": 2426.6,
-          "risk_reward": 1.5,
-          "confidence": "fort",
-          "score": 6.25,
-          "criteria": [
-            "adx",
-            "corr",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.4274,
-          "pnl_gross_pct": -0.3474,
-          "duration_minutes": 49,
-          "close_price": 2426.6,
-          "created_at": "2026-10-08T17:30:52Z",
-          "closed_at": "2026-10-08T18:20:00Z",
-          "created_local": "08/10 19:30",
-          "expires_at": "2026-10-08T18:30:52Z",
-          "rationale": "Vente : tendance forte (ADX), marché meneur favorable, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 21.03 (0.87 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 95%.",
-          "news_context": "prudence post-USD FOMC Meeting Minutes : critères renforcés · actualité à surveiller (score 3) : U.S. government moves $1 billion in bitcoin from Bitfinex hack wallet, no sale indicated | Inflation on many everyday items was entirely due to tariffs, NY Fed says",
           "manual_exit": null
         }
       ]
@@ -2533,15 +2531,15 @@
       "label": "Tendance 1 h",
       "weight": 1.0,
       "stats": {
-        "n": 412,
+        "n": 413,
         "tp": 128,
         "sl": 215,
-        "expired": 69,
+        "expired": 70,
         "win_rate": 0.37317784256559766,
         "neutral_win_rate": 0.4142,
         "edge": -0.041,
-        "pnl_pct": -15.9476,
-        "avg_pnl_pct": -0.0387
+        "pnl_pct": -15.9043,
+        "avg_pnl_pct": -0.0385
       },
       "by_source": {
         "bot": {
@@ -2578,18 +2576,52 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 285,
+          "n": 286,
           "tp": 84,
           "sl": 155,
-          "expired": 46,
+          "expired": 47,
           "win_rate": 0.3514644351464435,
           "neutral_win_rate": 0.4138,
           "edge": -0.0623,
-          "pnl_pct": -11.8906,
-          "avg_pnl_pct": -0.0417
+          "pnl_pct": -11.8473,
+          "avg_pnl_pct": -0.0414
         }
       },
       "last_trades": [
+        {
+          "id": "20baa73c21",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 30942.0,
+          "take_profit": 30883.0,
+          "stop_loss": 30981.25,
+          "risk_reward": 1.5,
+          "confidence": "fort",
+          "score": 5.75,
+          "criteria": [
+            "adx",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "expired",
+          "pnl_pct": 0.0433,
+          "pnl_gross_pct": 0.0533,
+          "duration_minutes": 60,
+          "close_price": 30925.5,
+          "created_at": "2026-10-08T18:50:34Z",
+          "closed_at": "2026-10-08T19:50:34Z",
+          "created_local": "08/10 20:50",
+          "expires_at": "2026-10-08T19:50:34Z",
+          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 98.21 (0.32 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 97%.",
+          "news_context": "actualité à surveiller (score 2) : Inflation on many everyday items was entirely due to tariffs, NY Fed says",
+          "manual_exit": null
+        },
         {
           "id": "bcb010f85c",
           "asset": "nasdaq",
@@ -2826,41 +2858,6 @@
           "expires_at": "2026-10-08T18:35:26Z",
           "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 13.22 (0.17 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 96%.",
           "news_context": "prudence post-USD FOMC Meeting Minutes : critères renforcés · actualité à surveiller (score 2) : Inflation on many everyday items was entirely due to tariffs, NY Fed says",
-          "manual_exit": null
-        },
-        {
-          "id": "3dffd7a02f",
-          "asset": "ethereum",
-          "asset_label": "Ethereum (ETH/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 2418.2,
-          "take_profit": 2405.6,
-          "stop_loss": 2426.6,
-          "risk_reward": 1.5,
-          "confidence": "fort",
-          "score": 6.25,
-          "criteria": [
-            "adx",
-            "corr",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.4274,
-          "pnl_gross_pct": -0.3474,
-          "duration_minutes": 49,
-          "close_price": 2426.6,
-          "created_at": "2026-10-08T17:30:52Z",
-          "closed_at": "2026-10-08T18:20:00Z",
-          "created_local": "08/10 19:30",
-          "expires_at": "2026-10-08T18:30:52Z",
-          "rationale": "Vente : tendance forte (ADX), marché meneur favorable, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 21.03 (0.87 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 95%.",
-          "news_context": "prudence post-USD FOMC Meeting Minutes : critères renforcés · actualité à surveiller (score 3) : U.S. government moves $1 billion in bitcoin from Bitfinex hack wallet, no sale indicated | Inflation on many everyday items was entirely due to tariffs, NY Fed says",
           "manual_exit": null
         }
       ]
@@ -2870,15 +2867,15 @@
       "label": "Force de tendance (ADX)",
       "weight": 1.0,
       "stats": {
-        "n": 419,
+        "n": 420,
         "tp": 131,
         "sl": 217,
-        "expired": 71,
+        "expired": 72,
         "win_rate": 0.3764367816091954,
         "neutral_win_rate": 0.4139,
         "edge": -0.0375,
-        "pnl_pct": -15.9641,
-        "avg_pnl_pct": -0.0381
+        "pnl_pct": -15.9208,
+        "avg_pnl_pct": -0.0379
       },
       "by_source": {
         "bot": {
@@ -2915,18 +2912,52 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 292,
+          "n": 293,
           "tp": 87,
           "sl": 157,
-          "expired": 48,
+          "expired": 49,
           "win_rate": 0.35655737704918034,
           "neutral_win_rate": 0.4134,
           "edge": -0.0568,
-          "pnl_pct": -11.9071,
-          "avg_pnl_pct": -0.0408
+          "pnl_pct": -11.8638,
+          "avg_pnl_pct": -0.0405
         }
       },
       "last_trades": [
+        {
+          "id": "20baa73c21",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 30942.0,
+          "take_profit": 30883.0,
+          "stop_loss": 30981.25,
+          "risk_reward": 1.5,
+          "confidence": "fort",
+          "score": 5.75,
+          "criteria": [
+            "adx",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "expired",
+          "pnl_pct": 0.0433,
+          "pnl_gross_pct": 0.0533,
+          "duration_minutes": 60,
+          "close_price": 30925.5,
+          "created_at": "2026-10-08T18:50:34Z",
+          "closed_at": "2026-10-08T19:50:34Z",
+          "created_local": "08/10 20:50",
+          "expires_at": "2026-10-08T19:50:34Z",
+          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 98.21 (0.32 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 97%.",
+          "news_context": "actualité à surveiller (score 2) : Inflation on many everyday items was entirely due to tariffs, NY Fed says",
+          "manual_exit": null
+        },
         {
           "id": "bcb010f85c",
           "asset": "nasdaq",
@@ -3164,41 +3195,6 @@
           "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 13.22 (0.17 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 96%.",
           "news_context": "prudence post-USD FOMC Meeting Minutes : critères renforcés · actualité à surveiller (score 2) : Inflation on many everyday items was entirely due to tariffs, NY Fed says",
           "manual_exit": null
-        },
-        {
-          "id": "3dffd7a02f",
-          "asset": "ethereum",
-          "asset_label": "Ethereum (ETH/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 2418.2,
-          "take_profit": 2405.6,
-          "stop_loss": 2426.6,
-          "risk_reward": 1.5,
-          "confidence": "fort",
-          "score": 6.25,
-          "criteria": [
-            "adx",
-            "corr",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.4274,
-          "pnl_gross_pct": -0.3474,
-          "duration_minutes": 49,
-          "close_price": 2426.6,
-          "created_at": "2026-10-08T17:30:52Z",
-          "closed_at": "2026-10-08T18:20:00Z",
-          "created_local": "08/10 19:30",
-          "expires_at": "2026-10-08T18:30:52Z",
-          "rationale": "Vente : tendance forte (ADX), marché meneur favorable, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 21.03 (0.87 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 95%.",
-          "news_context": "prudence post-USD FOMC Meeting Minutes : critères renforcés · actualité à surveiller (score 3) : U.S. government moves $1 billion in bitcoin from Bitfinex hack wallet, no sale indicated | Inflation on many everyday items was entirely due to tariffs, NY Fed says",
-          "manual_exit": null
         }
       ]
     },
@@ -3207,15 +3203,15 @@
       "label": "VWAP",
       "weight": 0.75,
       "stats": {
-        "n": 410,
+        "n": 411,
         "tp": 131,
         "sl": 209,
-        "expired": 70,
+        "expired": 71,
         "win_rate": 0.38529411764705884,
         "neutral_win_rate": 0.4141,
         "edge": -0.0288,
-        "pnl_pct": -14.3867,
-        "avg_pnl_pct": -0.0351
+        "pnl_pct": -14.3434,
+        "avg_pnl_pct": -0.0349
       },
       "by_source": {
         "bot": {
@@ -3252,18 +3248,52 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 285,
+          "n": 286,
           "tp": 87,
           "sl": 151,
-          "expired": 47,
+          "expired": 48,
           "win_rate": 0.36554621848739494,
-          "neutral_win_rate": 0.4136,
-          "edge": -0.0481,
-          "pnl_pct": -10.9461,
-          "avg_pnl_pct": -0.0384
+          "neutral_win_rate": 0.4135,
+          "edge": -0.048,
+          "pnl_pct": -10.9028,
+          "avg_pnl_pct": -0.0381
         }
       },
       "last_trades": [
+        {
+          "id": "20baa73c21",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 30942.0,
+          "take_profit": 30883.0,
+          "stop_loss": 30981.25,
+          "risk_reward": 1.5,
+          "confidence": "fort",
+          "score": 5.75,
+          "criteria": [
+            "adx",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "expired",
+          "pnl_pct": 0.0433,
+          "pnl_gross_pct": 0.0533,
+          "duration_minutes": 60,
+          "close_price": 30925.5,
+          "created_at": "2026-10-08T18:50:34Z",
+          "closed_at": "2026-10-08T19:50:34Z",
+          "created_local": "08/10 20:50",
+          "expires_at": "2026-10-08T19:50:34Z",
+          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 98.21 (0.32 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 97%.",
+          "news_context": "actualité à surveiller (score 2) : Inflation on many everyday items was entirely due to tariffs, NY Fed says",
+          "manual_exit": null
+        },
         {
           "id": "bcb010f85c",
           "asset": "nasdaq",
@@ -3501,41 +3531,6 @@
           "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 13.22 (0.17 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 96%.",
           "news_context": "prudence post-USD FOMC Meeting Minutes : critères renforcés · actualité à surveiller (score 2) : Inflation on many everyday items was entirely due to tariffs, NY Fed says",
           "manual_exit": null
-        },
-        {
-          "id": "3dffd7a02f",
-          "asset": "ethereum",
-          "asset_label": "Ethereum (ETH/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 2418.2,
-          "take_profit": 2405.6,
-          "stop_loss": 2426.6,
-          "risk_reward": 1.5,
-          "confidence": "fort",
-          "score": 6.25,
-          "criteria": [
-            "adx",
-            "corr",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.4274,
-          "pnl_gross_pct": -0.3474,
-          "duration_minutes": 49,
-          "close_price": 2426.6,
-          "created_at": "2026-10-08T17:30:52Z",
-          "closed_at": "2026-10-08T18:20:00Z",
-          "created_local": "08/10 19:30",
-          "expires_at": "2026-10-08T18:30:52Z",
-          "rationale": "Vente : tendance forte (ADX), marché meneur favorable, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 21.03 (0.87 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 95%.",
-          "news_context": "prudence post-USD FOMC Meeting Minutes : critères renforcés · actualité à surveiller (score 3) : U.S. government moves $1 billion in bitcoin from Bitfinex hack wallet, no sale indicated | Inflation on many everyday items was entirely due to tariffs, NY Fed says",
-          "manual_exit": null
         }
       ]
     },
@@ -3544,15 +3539,15 @@
       "label": "RSI",
       "weight": 1.0,
       "stats": {
-        "n": 306,
+        "n": 307,
         "tp": 101,
         "sl": 159,
-        "expired": 46,
+        "expired": 47,
         "win_rate": 0.38846153846153847,
-        "neutral_win_rate": 0.4144,
-        "edge": -0.0259,
-        "pnl_pct": -10.2645,
-        "avg_pnl_pct": -0.0335
+        "neutral_win_rate": 0.4143,
+        "edge": -0.0258,
+        "pnl_pct": -10.2212,
+        "avg_pnl_pct": -0.0333
       },
       "by_source": {
         "bot": {
@@ -3589,18 +3584,52 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 197,
+          "n": 198,
           "tp": 62,
           "sl": 110,
-          "expired": 25,
+          "expired": 26,
           "win_rate": 0.36046511627906974,
           "neutral_win_rate": 0.4134,
           "edge": -0.0529,
-          "pnl_pct": -7.7769,
-          "avg_pnl_pct": -0.0395
+          "pnl_pct": -7.7336,
+          "avg_pnl_pct": -0.0391
         }
       },
       "last_trades": [
+        {
+          "id": "20baa73c21",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 30942.0,
+          "take_profit": 30883.0,
+          "stop_loss": 30981.25,
+          "risk_reward": 1.5,
+          "confidence": "fort",
+          "score": 5.75,
+          "criteria": [
+            "adx",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "expired",
+          "pnl_pct": 0.0433,
+          "pnl_gross_pct": 0.0533,
+          "duration_minutes": 60,
+          "close_price": 30925.5,
+          "created_at": "2026-10-08T18:50:34Z",
+          "closed_at": "2026-10-08T19:50:34Z",
+          "created_local": "08/10 20:50",
+          "expires_at": "2026-10-08T19:50:34Z",
+          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 98.21 (0.32 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 97%.",
+          "news_context": "actualité à surveiller (score 2) : Inflation on many everyday items was entirely due to tariffs, NY Fed says",
+          "manual_exit": null
+        },
         {
           "id": "bcb010f85c",
           "asset": "nasdaq",
@@ -3840,40 +3869,6 @@
           "expires_at": "2026-10-08T18:01:06Z",
           "rationale": "Vente : tendance forte (ADX), MACD en expansion, cassure des extrêmes de la veille, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 14.08 (0.18 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 90%.",
           "news_context": "prudence post-USD FOMC Meeting Minutes : critères renforcés · actualité à surveiller (score 2) : Inflation on many everyday items was entirely due to tariffs, NY Fed says",
-          "manual_exit": null
-        },
-        {
-          "id": "0d256194c0",
-          "asset": "bitcoin",
-          "asset_label": "Bitcoin (BTC/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 81013.0,
-          "take_profit": 80702.0,
-          "stop_loss": 81220.0,
-          "risk_reward": 1.5,
-          "confidence": "fort",
-          "score": 5.75,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "tp",
-          "pnl_pct": 0.3239,
-          "pnl_gross_pct": 0.3839,
-          "duration_minutes": 9,
-          "close_price": 80702.0,
-          "created_at": "2026-10-08T16:55:30Z",
-          "closed_at": "2026-10-08T17:05:00Z",
-          "created_local": "08/10 18:55",
-          "expires_at": "2026-10-08T17:55:30Z",
-          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 517.6 (0.64 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 92%.",
-          "news_context": "prudence post-USD FOMC Meeting Minutes : critères renforcés · actualité à surveiller (score 3) : U.S. government moves $1 billion in bitcoin from Bitfinex hack wallet, no sale indicated | Inflation on many everyday items was entirely due to tariffs, NY Fed says",
           "manual_exit": null
         }
       ]
@@ -4843,6 +4838,40 @@
   ],
   "open_signals": [
     {
+      "id": "b17b466bd8",
+      "asset": "nasdaq",
+      "asset_label": "Nasdaq 100 (NQ)",
+      "direction": "short",
+      "horizon": "1h",
+      "entry": 30928.0,
+      "take_profit": 30868.5,
+      "stop_loss": 30967.75,
+      "risk_reward": 1.5,
+      "confidence": "fort",
+      "score": 5.75,
+      "criteria": [
+        "adx",
+        "rsi",
+        "trend_15m",
+        "trend_1h",
+        "trend_5m",
+        "vwap"
+      ],
+      "source": "shadow",
+      "status": "open",
+      "pnl_pct": null,
+      "pnl_gross_pct": null,
+      "duration_minutes": null,
+      "close_price": null,
+      "created_at": "2026-10-08T19:50:34Z",
+      "closed_at": null,
+      "created_local": "08/10 21:50",
+      "expires_at": "2026-10-08T20:50:34Z",
+      "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 99.09 (0.32 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 97%.",
+      "news_context": "actualité calme sur les 2 dernières heures",
+      "manual_exit": null
+    },
+    {
       "id": "525640c84a",
       "asset": "sp500",
       "asset_label": "S&P 500 (ES)",
@@ -4875,40 +4904,6 @@
       "expires_at": "2026-10-08T22:40:38Z",
       "rationale": "Vente : tendance forte (ADX), cassure des extrêmes de la veille, RSI en momentum, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 22.30 (0.29 %), TP = 32 % du range, SL = 27 % du range, probabilité de résolution sous 3 h ≈ 100%.",
       "news_context": "actualité calme sur les 2 dernières heures",
-      "manual_exit": null
-    },
-    {
-      "id": "20baa73c21",
-      "asset": "nasdaq",
-      "asset_label": "Nasdaq 100 (NQ)",
-      "direction": "short",
-      "horizon": "1h",
-      "entry": 30942.0,
-      "take_profit": 30883.0,
-      "stop_loss": 30981.25,
-      "risk_reward": 1.5,
-      "confidence": "fort",
-      "score": 5.75,
-      "criteria": [
-        "adx",
-        "rsi",
-        "trend_15m",
-        "trend_1h",
-        "trend_5m",
-        "vwap"
-      ],
-      "source": "shadow",
-      "status": "open",
-      "pnl_pct": null,
-      "pnl_gross_pct": null,
-      "duration_minutes": null,
-      "close_price": null,
-      "created_at": "2026-10-08T18:50:34Z",
-      "closed_at": null,
-      "created_local": "08/10 20:50",
-      "expires_at": "2026-10-08T19:50:34Z",
-      "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 98.21 (0.32 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 97%.",
-      "news_context": "actualité à surveiller (score 2) : Inflation on many everyday items was entirely due to tariffs, NY Fed says",
       "manual_exit": null
     },
     {
@@ -6560,19 +6555,19 @@
       "variante « horizon ~3 h » en test : 59 trades, -0,36 R net, encore 41 trades avant décision",
       "variante « confiance moyenne » en test : 35 trades, -0,23 R net, encore 65 trades avant décision",
       "variante « entrées dans l'heure avant l'ouverture américaine » en test : 5 trades, -0,18 R net, encore 95 trades avant décision",
-      "variante « reprise juste après un stop » en test : 26 trades, -0,31 R net, encore 74 trades avant décision",
+      "variante « reprise juste après un stop » en test : 27 trades, -0,29 R net, encore 73 trades avant décision",
       "variante « nouvel actif : Ethereum (ETH/USD) » en test : 7 trades, -0,39 R net, encore 93 trades avant décision",
       "variante « horizon ~3 h sur Or (XAU/USD) » en test : 5 trades, -0,66 R net, encore 95 trades avant décision",
       "variante « nouvel actif : Pétrole WTI (CL) » en test : 47 trades, -0,10 R net, encore 53 trades avant décision",
       "variante « nouvel actif : Euro / dollar (6E) » en test : 23 trades, -0,38 R net, encore 77 trades avant décision",
-      "sortie : stop remonté à l'entrée après +0,5 R ferait mieux (-0,18 R net contre -0,27 R, réels et en ombre) : à décider",
+      "sortie : stop remonté à l'entrée après +0,5 R ferait mieux (-0,18 R net contre -0,26 R, réels et en ombre) : à décider",
       "sortie : stop remonté à l'entrée après +1,0 R ferait mieux (-0,06 R net contre -0,09 R, backtest) : à décider"
     ],
     "avoid_hours_utc": [],
-    "sample": 1069,
+    "sample": 1070,
     "sample_by_source": {
       "bot": 127,
-      "shadow": 292,
+      "shadow": 293,
       "manual": 1,
       "backtest": 649
     },
@@ -6699,30 +6694,30 @@
           "trend_1h",
           "adx"
         ],
-        "n": 1068,
-        "n_eff": 791.1,
-        "mean_r": -0.0175,
-        "margin_r": 0.0783,
+        "n": 1069,
+        "n_eff": 792.1,
+        "mean_r": -0.0169,
+        "margin_r": 0.0782,
         "multiplier": 1.0
       },
       "vwap": {
         "members": [
           "vwap"
         ],
-        "n": 952,
-        "n_eff": 712.1,
-        "mean_r": -0.0081,
-        "margin_r": 0.083,
+        "n": 953,
+        "n_eff": 713.1,
+        "mean_r": -0.0075,
+        "margin_r": 0.0829,
         "multiplier": 1.0
       },
       "rsi": {
         "members": [
           "rsi"
         ],
-        "n": 867,
-        "n_eff": 628.0,
-        "mean_r": -0.0063,
-        "margin_r": 0.0878,
+        "n": 868,
+        "n_eff": 629.0,
+        "mean_r": -0.0056,
+        "margin_r": 0.0877,
         "multiplier": 1.0
       },
       "macd": {
@@ -6793,9 +6788,9 @@
         "margin_r": 0.1977
       },
       "fantômes": {
-        "n": 292,
-        "mean_r": -0.1045,
-        "margin_r": 0.1316
+        "n": 293,
+        "mean_r": -0.1027,
+        "margin_r": 0.1312
       },
       "backtest": {
         "n": 649,
@@ -6838,11 +6833,11 @@
       },
       "reprise_apres_stop": {
         "label": "reprise juste après un stop",
-        "n": 26,
-        "mean_net_r": -0.3093,
-        "lower_r": -0.9345,
+        "n": 27,
+        "mean_net_r": -0.2852,
+        "lower_r": -0.8901,
         "promoted": false,
-        "missing": 74
+        "missing": 73
       },
       "essai_ethereum": {
         "label": "nouvel actif : Ethereum (ETH/USD)",
@@ -6883,9 +6878,9 @@
     },
     "variants_z": 2.61,
     "promoted_variants": [],
-    "updated_at": "2026-10-08T18:25:30.459535+00:00",
+    "updated_at": "2026-10-08T19:50:35.583324+00:00",
     "context": {
-      "n": 837,
+      "n": 838,
       "features": {
         "adx": {
           "label": "force de tendance (ADX 15 min)",
@@ -6903,21 +6898,21 @@
             {
               "label": "milieu (26 à 36)",
               "lo": 26.3,
-              "hi": 36.03,
+              "hi": 35.93,
               "n": 279,
-              "n_eff": 205.1,
-              "mean_r": -0.0169,
-              "margin_r": 0.1906,
+              "n_eff": 205.3,
+              "mean_r": -0.0118,
+              "margin_r": 0.1901,
               "avoid": false
             },
             {
               "label": "haut (≥ 36)",
-              "lo": 36.03,
+              "lo": 35.93,
               "hi": 1000000000.0,
-              "n": 279,
-              "n_eff": 214.7,
-              "mean_r": -0.0285,
-              "margin_r": 0.1938,
+              "n": 280,
+              "n_eff": 215.5,
+              "mean_r": -0.0309,
+              "margin_r": 0.1933,
               "avoid": false
             }
           ]
@@ -6928,21 +6923,21 @@
             {
               "label": "bas (< 59)",
               "lo": -1000000000.0,
-              "hi": 58.62,
+              "hi": 58.51,
               "n": 279,
-              "n_eff": 215.1,
-              "mean_r": -0.0382,
-              "margin_r": 0.1885,
+              "n_eff": 215.2,
+              "mean_r": -0.033,
+              "margin_r": 0.188,
               "avoid": false
             },
             {
               "label": "milieu (59 à 66)",
-              "lo": 58.62,
+              "lo": 58.51,
               "hi": 65.74,
-              "n": 278,
-              "n_eff": 212.6,
-              "mean_r": -0.1433,
-              "margin_r": 0.1808,
+              "n": 279,
+              "n_eff": 213.4,
+              "mean_r": -0.1456,
+              "margin_r": 0.1804,
               "avoid": false
             },
             {
@@ -6984,10 +6979,10 @@
               "label": "haut (≥ 1,35)",
               "lo": 1.3487,
               "hi": 1000000000.0,
-              "n": 248,
-              "n_eff": 186.1,
-              "mean_r": 0.0278,
-              "margin_r": 0.2108,
+              "n": 249,
+              "n_eff": 187.0,
+              "mean_r": 0.0307,
+              "margin_r": 0.2096,
               "avoid": false
             }
           ]
@@ -7008,21 +7003,21 @@
             {
               "label": "milieu (0,22 à 0,50)",
               "lo": 0.2206,
-              "hi": 0.5028,
+              "hi": 0.4974,
               "n": 279,
-              "n_eff": 205.5,
-              "mean_r": -0.0003,
-              "margin_r": 0.1858,
+              "n_eff": 205.7,
+              "mean_r": 0.0049,
+              "margin_r": 0.1853,
               "avoid": false
             },
             {
               "label": "haut (≥ 0,50)",
-              "lo": 0.5028,
+              "lo": 0.4974,
               "hi": 1000000000.0,
-              "n": 279,
-              "n_eff": 215.4,
-              "mean_r": -0.0613,
-              "margin_r": 0.1978,
+              "n": 280,
+              "n_eff": 216.2,
+              "mean_r": -0.0638,
+              "margin_r": 0.1973,
               "avoid": false
             }
           ]
@@ -7054,10 +7049,10 @@
               "label": "haut (≥ 1,45)",
               "lo": 1.445,
               "hi": 1000000000.0,
-              "n": 279,
-              "n_eff": 204.0,
-              "mean_r": -0.078,
-              "margin_r": 0.2026,
+              "n": 280,
+              "n_eff": 205.0,
+              "mean_r": -0.075,
+              "margin_r": 0.2016,
               "avoid": false
             }
           ]
@@ -7069,10 +7064,10 @@
               "label": "bas (< 1,06)",
               "lo": -1000000000.0,
               "hi": 1.061,
-              "n": 267,
-              "n_eff": 207.4,
-              "mean_r": 0.0088,
-              "margin_r": 0.1866,
+              "n": 268,
+              "n_eff": 208.2,
+              "mean_r": 0.0118,
+              "margin_r": 0.1857,
               "avoid": false
             },
             {
@@ -7103,31 +7098,31 @@
             {
               "label": "bas (< 0,36)",
               "lo": -1000000000.0,
-              "hi": 0.3601,
+              "hi": 0.3599,
               "n": 279,
-              "n_eff": 215.8,
-              "mean_r": -0.1235,
-              "margin_r": 0.1926,
+              "n_eff": 216.1,
+              "mean_r": -0.1187,
+              "margin_r": 0.1922,
               "avoid": false
             },
             {
               "label": "milieu (0,36 à 0,76)",
-              "lo": 0.3601,
-              "hi": 0.7606,
+              "lo": 0.3599,
+              "hi": 0.7604,
               "n": 279,
               "n_eff": 198.4,
-              "mean_r": 0.0494,
-              "margin_r": 0.1902,
+              "mean_r": 0.043,
+              "margin_r": 0.19,
               "avoid": false
             },
             {
               "label": "haut (≥ 0,76)",
-              "lo": 0.7606,
+              "lo": 0.7604,
               "hi": 1000000000.0,
-              "n": 279,
-              "n_eff": 244.9,
-              "mean_r": -0.0297,
-              "margin_r": 0.1705,
+              "n": 280,
+              "n_eff": 245.9,
+              "mean_r": -0.0249,
+              "margin_r": 0.1704,
               "avoid": false
             }
           ]
@@ -7138,31 +7133,31 @@
             {
               "label": "bas (< 0,08)",
               "lo": -1000000000.0,
-              "hi": 0.0825,
-              "n": 279,
-              "n_eff": 209.4,
-              "mean_r": -0.0779,
-              "margin_r": 0.1802,
+              "hi": 0.0824,
+              "n": 278,
+              "n_eff": 208.8,
+              "mean_r": -0.082,
+              "margin_r": 0.1796,
               "avoid": false
             },
             {
               "label": "milieu (0,08 à 0,13)",
-              "lo": 0.0825,
-              "hi": 0.1336,
-              "n": 279,
-              "n_eff": 212.2,
-              "mean_r": -0.0492,
-              "margin_r": 0.1841,
+              "lo": 0.0824,
+              "hi": 0.1326,
+              "n": 280,
+              "n_eff": 213.0,
+              "mean_r": -0.0393,
+              "margin_r": 0.1842,
               "avoid": false
             },
             {
               "label": "haut (≥ 0,13)",
-              "lo": 0.1336,
+              "lo": 0.1326,
               "hi": 1000000000.0,
-              "n": 279,
-              "n_eff": 212.4,
-              "mean_r": 0.0102,
-              "margin_r": 0.2011,
+              "n": 280,
+              "n_eff": 213.2,
+              "mean_r": 0.0075,
+              "margin_r": 0.2006,
               "avoid": false
             }
           ]
@@ -7194,10 +7189,10 @@
               "label": "plus de 1 h 30 après l'ouverture US",
               "lo": 90.0,
               "hi": 1000000000.0,
-              "n": 386,
-              "n_eff": 281.0,
-              "mean_r": -0.0436,
-              "margin_r": 0.1608,
+              "n": 387,
+              "n_eff": 281.9,
+              "mean_r": -0.0416,
+              "margin_r": 0.1603,
               "avoid": false
             }
           ]
@@ -7239,10 +7234,10 @@
               "label": "jeudi",
               "lo": 3,
               "hi": 4,
-              "n": 240,
-              "n_eff": 182.9,
-              "mean_r": -0.0281,
-              "margin_r": 0.2158,
+              "n": 241,
+              "n_eff": 183.9,
+              "mean_r": -0.0251,
+              "margin_r": 0.2146,
               "avoid": false
             },
             {
@@ -7282,9 +7277,9 @@
     },
     "exits": {
       "réels et en ombre": {
-        "n": 189,
-        "current_net_r": -0.2677,
-        "mfe_median": 0.669,
+        "n": 190,
+        "current_net_r": -0.2645,
+        "mfe_median": 0.699,
         "sl_reached": {
           "0.5": 31,
           "0.8": 15,
@@ -7293,21 +7288,21 @@
         "n_sl": 105,
         "rules": {
           "0.5": {
-            "net_r": -0.1779,
-            "diff_r": 0.0898,
-            "margin_r": 0.0747,
+            "net_r": -0.1774,
+            "diff_r": 0.0871,
+            "margin_r": 0.0745,
             "better": true
           },
           "0.8": {
-            "net_r": -0.2403,
-            "diff_r": 0.0274,
-            "margin_r": 0.0569,
+            "net_r": -0.2395,
+            "diff_r": 0.025,
+            "margin_r": 0.0568,
             "better": false
           },
           "1.0": {
-            "net_r": -0.2575,
-            "diff_r": 0.0102,
-            "margin_r": 0.0458,
+            "net_r": -0.2566,
+            "diff_r": 0.0079,
+            "margin_r": 0.0457,
             "better": false
           }
         }
@@ -7382,10 +7377,10 @@
     }
   },
   "state": {
-    "last_scan": "2026-10-08T19:45:41Z",
+    "last_scan": "2026-10-08T19:50:34Z",
     "last_scan_note": "0 signal(aux)",
     "last_summary": "2026-10-07T22:05:28Z",
-    "last_track": "2026-10-08T19:45:41Z",
+    "last_track": "2026-10-08T19:50:34Z",
     "last_summary_day": "2026-10-07"
   },
   "limits": {
