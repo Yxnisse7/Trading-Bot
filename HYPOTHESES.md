@@ -345,6 +345,32 @@ possible sur un compte CFD qui le permet ou un compte personnel. Simulation d'un
 garder une position la nuit coûte des intérêts (« swap ») ; il faudrait un compte sans swap.
 **Suite** : retenu → suivi en ombre sur le marché réel (signal du soir) ; écarté → on le dit.
 
+## Essai 12 — la réaction aux annonces macro, gardée plus longtemps
+
+Écrit le 8 octobre 2026, **avant** de mesurer quoi que ce soit. Idée de Yanisse : ajouter ce que les calculs
+de prix ne voient pas, les annonces, sur un horizon plus long que le direct. Aucune source gratuite accessible
+ne donne l'historique des prévisions (consensus) : ForexFactory, Myfxbook, Investing.com bloquent, Trading
+Economics est payant, le jeu de données ouvert fxmacrodata n'est pas encore publié. La surprise est donc
+mesurée par **la réaction du marché** : sens du mouvement entre la clôture de la bougie 5 min juste avant
+l'annonce et 30 min après. C'est la lecture du chiffre par le marché, quelle qu'ait été la prévision.
+Différence avec l'essai 4 (`news_breakout`, cassure du range de 15 min, déjà écartée) : on ne joue pas la
+cassure en direct, on se demande si le sens donné par l'annonce **continue pendant des heures**.
+
+**Annonces** : emploi (NFP) et inflation (CPI) à 8:30 heure de New York, décisions de la Fed (FOMC) à 14:00,
+octobre 2024 → octobre 2026 (`macro_history.py`, environ 60 avec données). **Actifs** : or, Nasdaq, S&P 500,
+euro (bougies 5 min de l'historique long, frais Topstep).
+
+**H1, dérive après l'annonce** (4 essais, 100 au total) : entrée 30 min après l'annonce dans le sens de la
+réaction, sortie à 15:00 heure de Chicago le même jour (compatible Topstep). Résultat en unités d'ATR 1 h
+(14) au moment de l'entrée, frais compris. Retenue pour un actif si le gain moyen est > 0 avec une statistique
+t ≥ 2, **et** positif sur chacune des deux années (10/2024 → 09/2025, 10/2025 → 10/2026). Pour information :
+même trade gardé jusqu'au lendemain 15:00 ; réactions fortes seulement (au-dessus de la médiane de l'actif).
+**H2, filtre pour Donchian or** (information, pas d'essai) : les jours d'annonce, trades de `donchian_day` sur
+l'or ouverts après la réaction, séparés en « dans le sens de la réaction » et « contre ». Si les trades contre
+font au moins 0,3 R de moins avec au moins 15 trades de chaque côté, un filtre est proposé, suivi d'abord en
+ombre ; sinon rien ne change.
+Limite connue : environ 60 annonces, donc un échantillon petit ; seul un effet net peut passer.
+
 ## Journal des essais
 
 | Date | Essai | Résultat |
