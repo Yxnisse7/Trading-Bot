@@ -371,6 +371,29 @@ font au moins 0,3 R de moins avec au moins 15 trades de chaque côté, un filtre
 ombre ; sinon rien ne change.
 Limite connue : environ 60 annonces, donc un échantillon petit ; seul un effet net peut passer.
 
+## Essai 13 — l'essai 12 rejoué sur 2010-2024, données jamais regardées
+
+Écrit le 8 octobre 2026, **avant** de télécharger ces données. L'essai 12 (deux ans, ~60 annonces) n'a rien
+retenu, mais deux pistes restaient ouvertes : l'or (+0,32 ATR, positif les deux années, t 1,03) et, observé
+après coup, les décisions de la Fed (réaction qui continue sur les 4 actifs, 15-16 décisions). Les rejouer sur
+une période **jamais regardée** est le seul moyen honnête de trancher.
+
+**Annonces** : emploi (NFP) et inflation (CPI), 8:30 heure de New York, janvier 2010 → septembre 2024 (dates
+exactes tirées des archives du BLS, via la copie de la Wayback Machine, bls.gov bloquant les robots) ; décisions
+prévues de la Fed, 14:00 heure de New York, janvier 2013 → septembre 2024 (dates des communiqués sur
+federalreserve.gov ; avant 2013 l'heure variait, donc exclu ; communiqués extraordinaires exclus).
+**Prix** : bougies 1 min Dukascopy regroupées en 5 min, seulement la veille, le jour et le lendemain de chaque
+annonce, pour l'or, le S&P 500, le Nasdaq et l'euro (un indice absent de Dukascopy les premières années est
+simplement absent). Gardés hors du dépôt.
+
+**Règles** : exactement celles de l'essai 12 (réaction entre la bougie 5 min d'avant l'annonce et 30 min
+après, entrée dans ce sens, sortie à 15:00 heure de Chicago, résultat en ATR 1 h, frais Topstep).
+**H1** (4 essais) : par actif, toutes annonces confondues : gain moyen > 0, t ≥ 2, et positif sur chacune des
+deux moitiés (2010 → 2017-03, 2017-04 → 2024-09). **H3, la Fed** (4 essais, 108 au total) : par actif, sur les
+décisions de la Fed seulement, mêmes critères (moitiés : 2013 → 2018, 2019 → 2024). Pour information : sortie le
+lendemain, réactions fortes, emploi et inflation séparés.
+Une piste retenue ici serait suivie en ombre sur les annonces à venir avant tout signal réel.
+
 ## Journal des essais
 
 | Date | Essai | Résultat |
