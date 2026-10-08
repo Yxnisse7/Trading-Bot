@@ -34,3 +34,12 @@ def test_long_events_file_and_needed_days():
     assert all(datetime.fromtimestamp(ts, timezone.utc).year >= 2013 for ts in fomc)
     days = ml.needed_days([(int(datetime(2015, 1, 9, 13, 30, tzinfo=timezone.utc).timestamp()), "nfp")])
     assert days == [date(2015, 1, 8), date(2015, 1, 9), date(2015, 1, 12)]   # veille, jour, lundi suivant
+
+
+def test_histdata_lines_are_shifted_from_fixed_est_to_utc():
+    from trading_bot import macro_long as ml
+    text = "20150109 083000;1220.1;1221.0;1219.5;1220.8;0\n20150109 083100;1220.8;1222.0;1220.0;1221.5;0\nbad line\n"
+    out = ml.parse_histdata(text, {"2015-01-09"})
+    ts = out["2015-01-09"][0][0]
+    assert datetime.fromtimestamp(ts, timezone.utc).strftime("%H:%M") == "13:30" and len(out["2015-01-09"]) == 2
+    assert ml.parse_histdata(text, {"2015-01-10"}) == {}

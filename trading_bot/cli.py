@@ -237,8 +237,7 @@ def main(argv: list[str] | None = None) -> int:
         from . import macro_long
         days = macro_long.needed_days(macro_long.events())
         for asset in macro_long.ASSETS:
-            ref = (eng.store.load_history(asset) or [None])[-1]
-            print(macro_long.download(asset, days, ref.close if ref else None), flush=True)
+            print(macro_long.download_histdata(asset, days), flush=True)
         res = macro_long.run()
         for k, a in res["assets"].items():
             if "h1" not in a:
