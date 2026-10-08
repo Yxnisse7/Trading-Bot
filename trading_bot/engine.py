@@ -1321,6 +1321,8 @@ class Engine:
         for (strat, key), since in sl.SHADOW.items():
             name = f"{strat}:{key}"
             rec = data.setdefault(name, {"strategy": strat, "asset": key, "since": since, "trades": []})
+            live_since = sl.LIVE.get((strat, key))
+            rec["live"] = bool(live_since)
             if rec.get("checked_hour") == iso(hour) or key not in self.cfg.assets:
                 continue
             asset = self.cfg.assets[key]
@@ -1330,12 +1332,18 @@ class Engine:
                 log.info("laboratoire en ombre %s : données indisponibles (%s)", name, exc)
                 continue
             candles = ind.closed_candles(raw, int(now.timestamp()), 300)
+            # signal réel : on revient à chaque passage (5 min) tant que la bougie 1 h close n'est pas arrivée
+            # (données Yahoo des contrats CME en retard d'environ 10 min), 40 min au plus
+            hour_seen = bool(candles) and candles[-1].ts >= int(hour.timestamp())
+            if live_since and not hour_seen and now - hour < timedelta(minutes=40):
+                continue
             runner = sl.RUNNERS_1H.get(strat) or sl.RUNNERS_5M.get(strat)
             trades = runner(candles, key) if strat in sl.RUNNERS_1H else runner(sl._Series(candles), key)
             fee = FEES.get(key)
             tcost = (sum(fee), PRODUCTS[key][1]) if fee and key in PRODUCTS else None
             start = parse_iso(since).timestamp()
             done = [t for t in rec["trades"] if t["status"] == "closed"]
+            before = {t["entry_ts"]: t for t in rec["trades"]}
             last_exit = max((t["exit_ts"] for t in done), default=0)
             kept = {t["entry_ts"]: t for t in done}
             for t in trades:
@@ -1351,6 +1359,11 @@ class Engine:
                                     "last": t.exit if still_open else None,
                                     "r_topstep": None if still_open else round(rs.get("net_topstep", rs["net_bot"]), 4),
                                     "r_bot": None if still_open else round(rs["net_bot"], 4)}
+                for flag in ("notified_entry", "notified_exit", "micros", "close_at"):
+                    if flag in before.get(t.entry_ts, {}):
+                        kept[t.entry_ts][flag] = before[t.entry_ts][flag]
+            if live_since:
+                self._live_signals(name, asset, list(kept.values()), parse_iso(live_since), now)
             rec["trades"] = sorted(kept.values(), key=lambda t: t["entry_ts"])
             rec["checked_hour"] = iso(hour)
             closed_rs = [t["r_topstep"] for t in rec["trades"] if t["status"] == "closed"]
@@ -1360,6 +1373,64 @@ class Engine:
         if changed:
             self.store.save_lab_shadow(data)
         return data
+
+    def _topstep_balance(self) -> float:
+        try:
+            import json as _json
+            return float(_json.loads((self.store.dir / "topstep" / "dashboard.json").read_text(encoding="utf-8"))["balance"])
+        except (OSError, ValueError, KeyError, TypeError):
+            return 50_000.0
+
+    def _live_signals(self, name: str, asset, trades: list[dict[str, Any]], since: datetime, now: datetime) -> None:
+        """Stratégie passée en signaux réels (strategies.LIVE) : message Telegram à l'entrée (avec les micros
+        Topstep) et à la sortie ; la sortie est aussi inscrite au journal du compte Topstep simulé."""
+        from . import strategies as sl
+        from .topstep import PRODUCTS
+        tz = ZoneInfo(self.cfg.timezone)
+        acct = self.topstep()
+        mult = PRODUCTS[asset.key][1] if asset.key in PRODUCTS else 1.0
+        symbol = PRODUCTS[asset.key][0] if asset.key in PRODUCTS else asset.label
+        digits = self._digits(asset.key)
+        fmt = lambda x: f"{x:,.{digits}f}".replace(",", " ").replace(".", ",")  # noqa: E731
+        money = lambda x: f"{x:,.0f}".replace(",", " ")  # noqa: E731
+        for t in sorted(trades, key=lambda x: x["entry_ts"]):
+            opened = datetime.fromtimestamp(t["entry_ts"], timezone.utc)
+            if opened < since or now - opened > timedelta(hours=6) and not t.get("notified_entry"):
+                continue                                    # rien d'ancien n'est envoyé au lancement
+            long = t["direction"] == "long"
+            if not t.get("notified_entry"):
+                close_at = sl.session_close_ts(t["entry_ts"])
+                risk_usd = self._topstep_balance() * acct.risk_pct() / 100.0
+                per_micro = t["risk"] * mult
+                micros = max(1, min(50, int(risk_usd // per_micro))) if per_micro > 0 else 1
+                t["micros"], t["close_at"] = micros, close_at
+                end = datetime.fromtimestamp(close_at, timezone.utc).astimezone(tz).strftime("%H:%M") if close_at else "?"
+                lines = [f"{'🟢' if long else '🔴'} SIGNAL RÉEL · {asset.label} ({symbol}) · {'ACHAT' if long else 'VENTE'}",
+                         f"Entrée : {fmt(t['entry'])} (clôture de la bougie 1 h de {opened.astimezone(tz).strftime('%H:%M')})",
+                         f"Stop : {fmt(t['stop'])} (2 ATR, à placer tout de suite)",
+                         f"Sortie : clôture d'une bougie 1 h qui casse le canal des 10 dernières heures, "
+                         f"ou au plus tard à {end} (heure de Paris, 15:00 à Chicago) — je préviens.",
+                         f"Topstep : {micros} micro{'s' if micros > 1 else ''} {symbol} ≈ {money(micros * per_micro)} $ "
+                         f"de risque ({format(acct.risk_pct(), 'g').replace('.', ',')} % de la balance)",
+                         "Donchian or fermé chaque soir (essai 8) : validé en backtest, pas encore prouvé en réel. "
+                         "Le bot ne passe aucun ordre."]
+                notify("\n".join(lines), buttons=msg.site_buttons(self.cfg.site_url, asset.key))
+                t["notified_entry"] = iso(now)
+            if t["status"] == "closed" and not t.get("notified_exit"):
+                micros = int(t.get("micros") or 1)
+                why = {"heure": "fin de séance (15:00 à Chicago)", "canal": "cassure du canal 10 h", "stop": "stop touché",
+                       "durée": "durée maximale", "trou": "trou dans les données"}.get(t.get("reason"), t.get("reason") or "")
+                usd = (t["exit"] - t["entry"]) * (1 if long else -1) * mult * micros
+                notify(f"⚪ SORTIE · {asset.label} ({symbol}) · {why}\n"
+                       f"Sortie : {fmt(t['exit'])} · {t['r_topstep']:+.2f} R frais compris · ".replace(".", ",") +
+                       f"≈ {'+' if usd >= 0 else '−'}{money(abs(usd))} $ avec {micros} micro{'s' if micros > 1 else ''} (avant frais)",
+                       buttons=msg.site_buttons(self.cfg.site_url, asset.key))
+                t["notified_exit"] = iso(now)
+                try:
+                    acct.add_journal(asset.key, t["direction"], t["entry"], t["exit"], micros, opened,
+                                     datetime.fromtimestamp(t["exit_ts"], timezone.utc), note=f"signal réel {name}")
+                except ValueError as exc:
+                    log.info("journal Topstep : %s", exc)
 
     # ------------------------------------------------------------- live
     LIVE_CANDLES = 288         # 24 h de bougies 5 min (le site en tire aussi les vues 15 min et 1 h)

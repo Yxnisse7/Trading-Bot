@@ -47,6 +47,9 @@ ROBUST_ONLY = {"noise_area_v2"}   # plus de données vierges : critères de l'es
 SHADOW = {("donchian_1h", "bitcoin"): "2026-10-05T19:00:00Z",
           ("donchian_1h", "gold"): "2026-10-05T20:00:00Z",      # validé à l'essai 3 (confirmation 2024-25)
           ("donchian_day", "gold"): "2026-10-07T21:00:00Z"}     # validé à l'essai 8 (fermé chaque soir)
+# Envoyées en signaux réels sur Telegram (entrée, stop, sortie), en plus du suivi : (stratégie, actif) → date de début.
+# Choix de Yanisse le 08/10/2026 : validée en backtest (essai 8), pas encore prouvée sur le marché réel.
+LIVE = {("donchian_day", "gold"): "2026-10-08T07:30:00Z"}
 MIN_TRADES = {"news_breakout": 20}
 
 

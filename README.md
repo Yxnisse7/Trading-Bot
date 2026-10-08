@@ -632,7 +632,10 @@ stratégie choisie est permise. Règles et prix à vérifier sur le site de la f
 donchian-day`) : la même règle que `donchian_1h`, avec une sortie forcée à 15:00 heure de Chicago (ou à la
 dernière clôture d'une séance écourtée) et aucune entrée de 15:00 à 17:00 : aucune position la nuit ni le
 week-end, donc permise chez Topstep. Validé sur l'or (+0,11 R puis +0,07 R, 482 trades sur 24 mois), écarté sur
-Nasdaq, S&P 500 et Bitcoin ; suivi en ombre depuis le 07/10/2026. Chances Topstep 50K : 58 % par tentative à
+Nasdaq, S&P 500 et Bitcoin ; suivi en ombre depuis le 07/10/2026, **en signaux réels depuis le 08/10/2026**
+(choix de Yanisse) : message Telegram à l'entrée (prix, stop, heure de sortie au plus tard, micros MGC selon le risque
+du compte Topstep simulé) et à la sortie ; la sortie est inscrite au journal du compte Topstep simulé. Le contrôle se
+fait à chaque passage jusqu'à recevoir la bougie 1 h close (données CME en retard d'environ 10 min). Aucun ordre. Chances Topstep 50K : 58 % par tentative à
 250 $ de risque (compte financé en ~3 mois pour la moitié des parcours), 42 % à 500 $ (~1,5 mois). La page
 affiche pour chaque compte le délai jusqu'au compte financé (tentatives ratées comprises) et le nombre de trades.
 

@@ -58,3 +58,35 @@ def test_engine_skips_promotion_of_a_drifting_variant(tmp_path, monkeypatch):
     st = Store(tmp_path)
     st.save_drift({"cells": {drift.VARIANT: {"status": "décroché"}, "donchian_1h:gold": {"status": "décroché"}}})
     assert drift.blocked(st.drift()) == {drift.VARIANT}
+
+
+def test_live_strategy_sends_entry_then_exit_and_journals_topstep(tmp_path, monkeypatch):
+    from datetime import datetime, timedelta, timezone
+    from trading_bot import engine as engmod
+    from trading_bot import strategies as sl
+    from trading_bot.config import load_config
+    sent = []
+    monkeypatch.setattr(engmod, "notify", lambda text, **k: sent.append(text))
+    cfg = load_config()
+    eng = engmod.Engine(cfg)
+    from trading_bot.storage import Store
+    eng.store = Store(tmp_path)
+    now = datetime(2026, 10, 8, 14, 20, tzinfo=timezone.utc)
+    t0 = int(datetime(2026, 10, 8, 14, 0, tzinfo=timezone.utc).timestamp())
+    trade = {"entry_ts": t0, "direction": "long", "entry": 4000.0, "risk": 10.0, "stop": 3990.0, "status": "open",
+             "reason": None, "exit_ts": None, "exit": None, "r_topstep": None}
+    since = datetime(2026, 10, 8, 7, 30, tzinfo=timezone.utc)
+    asset = cfg.assets["gold"]
+    eng._live_signals("donchian_day:gold", asset, [trade], since, now)
+    assert len(sent) == 1 and "SIGNAL RÉEL" in sent[0] and "ACHAT" in sent[0] and "Stop : 3 990,00" in sent[0]
+    assert trade["micros"] == 2 and trade["close_at"] == sl.session_close_ts(t0)       # 250 $ ÷ (10 pts × 10 $)
+    eng._live_signals("donchian_day:gold", asset, [trade], since, now)
+    assert len(sent) == 1                                                               # pas de doublon
+    trade.update(status="closed", reason="heure", exit_ts=t0 + 3600 * 6, exit=4012.5, r_topstep=1.21)
+    eng._live_signals("donchian_day:gold", asset, [trade], since, now + timedelta(hours=6))
+    assert len(sent) == 2 and "SORTIE" in sent[1] and "+1,21 R" in sent[1] and "+250 $" in sent[1]
+    journal = eng.topstep().state["journal"]
+    assert len(journal) == 1 and journal[0]["contracts"] == 2 and journal[0]["exit"] == 4012.5
+    old = dict(trade, entry_ts=t0 - 86_400 * 3, notified_entry=None, notified_exit=None)
+    eng._live_signals("donchian_day:gold", asset, [old], since, now)
+    assert len(sent) == 2                                                               # rien d'ancien
