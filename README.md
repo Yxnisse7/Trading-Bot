@@ -649,13 +649,12 @@ marchés (métaux, énergie, taux, céréales, devises). Avant frais elle ne gag
 le suivi de tendance documenté se joue sur des semaines, pas dans la journée.
 
 **Tendance mensuelle sur 16 marchés** (essai 11, `trading_bot/trend_daily.py`, `python run.py trend-daily
-[--refresh]`, chaque dimanche après le backtest) : cours journaliers ajustés de 16 ETF qui détiennent les contrats
+[--refresh]`) : cours journaliers ajustés de 16 ETF qui détiennent les contrats
 (or, argent, pétrole, gaz, agriculture, métaux, taux US, euro, yen, livre, dollars australien et canadien, actions
 US, Nasdaq, émergents), mars 2007 → octobre 2026. Cassure de Donchian 55/20 écartée (gagnante jusqu'en 2016,
 légèrement perdante depuis) ; **momentum 12 mois retenu** (Sharpe 0,42 puis 0,54, ~+4 % par an pour 10 % de
-volatilité) et suivi en ombre : positions annoncées chaque mois (`data/trend_shadow.json`, page Apprentissage,
-« Tendance mensuelle »), résultat réel du mois écoulé. Positions gardées des semaines : pas chez Topstep ; compte à
-effet de levier (contrats ou CFD sans swap) nécessaire.
+volatilité). Suivi en ombre arrêté le 08/10/2026 : c'est du placement sur des mois, pas du trading (le calcul
+reste disponible à la main avec `python run.py trend-daily`).
 
 Connexion automatique : l'API TopstepX (ProjectX) permet de passer des ordres par programme sur le
 Combine et l'Express Funded (pas sur le Live Funded), mais seulement **depuis votre propre appareil**

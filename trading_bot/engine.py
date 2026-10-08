@@ -875,7 +875,6 @@ class Engine:
         dash["strategies"] = self.store.strategies()
         dash["lab_shadow"] = self.store.lab_shadow()
         dash["drift"] = self.store.drift()
-        dash["trend_shadow"] = self.store.trend_shadow()
         try:
             dash["agenda"] = self.agenda()
             dash["agenda_rules"] = {"before": self.cfg.news_blackout_before_minutes,
