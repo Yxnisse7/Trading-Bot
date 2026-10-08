@@ -20,3 +20,17 @@ def test_reaction_direction_and_session_exit_in_atr_units():
     assert len(rows) == 1 and rows[0]["dir"] == 1 and rows[0]["r_day"] > 0 and "r_next" in rows[0]
     j = md.judge(rows * 25)
     assert j["all"]["n"] == 25 and set(j["by_kind"]) == {"nfp", "cpi", "fomc"}
+
+
+def test_long_events_file_and_needed_days():
+    from datetime import date
+    from trading_bot import macro_long as ml
+    ev = ml.events()
+    kinds = {k for _, k in ev}
+    assert kinds == {"nfp", "cpi", "fomc"} and len(ev) > 400
+    t0 = datetime.fromtimestamp(ev[0][0], timezone.utc)
+    assert t0.year == 2010 and t0.hour in (13, 14)                     # 8:30 à New York = 13:30 ou 12:30 UTC
+    fomc = [ts for ts, k in ev if k == "fomc"]
+    assert all(datetime.fromtimestamp(ts, timezone.utc).year >= 2013 for ts in fomc)
+    days = ml.needed_days([(int(datetime(2015, 1, 9, 13, 30, tzinfo=timezone.utc).timestamp()), "nfp")])
+    assert days == [date(2015, 1, 8), date(2015, 1, 9), date(2015, 1, 12)]   # veille, jour, lundi suivant
