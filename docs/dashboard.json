@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-08T18:05:40.888341+02:00",
+  "updated_at": "2026-10-08T18:10:45.141544+02:00",
   "timezone": "Europe/Paris",
   "equity_curve": [
     {
@@ -1447,7 +1447,7 @@
       "pnl_pct": -11.4236,
       "avg_pnl_pct": -0.0407
     },
-    "open": 0,
+    "open": 1,
     "open_shadow": 1
   },
   "by_source": {
@@ -1551,7 +1551,7 @@
         "pnl_pct": -1.2951,
         "avg_pnl_pct": -0.0177
       },
-      "open": 0,
+      "open": 1,
       "session_utc": [
         13,
         20
@@ -4779,6 +4779,40 @@
   ],
   "open_signals": [
     {
+      "id": "fe19952fc2",
+      "asset": "nasdaq",
+      "asset_label": "Nasdaq 100 (NQ)",
+      "direction": "short",
+      "horizon": "1h",
+      "entry": 31193.0,
+      "take_profit": 31160.0,
+      "stop_loss": 31220.5,
+      "risk_reward": 1.2,
+      "confidence": "fort",
+      "score": 5.75,
+      "criteria": [
+        "adx",
+        "rsi",
+        "trend_15m",
+        "trend_1h",
+        "trend_5m",
+        "vwap"
+      ],
+      "source": "bot",
+      "status": "open",
+      "pnl_pct": null,
+      "pnl_gross_pct": null,
+      "duration_minutes": null,
+      "close_price": null,
+      "created_at": "2026-10-08T16:10:35Z",
+      "closed_at": null,
+      "created_local": "08/10 18:10",
+      "expires_at": "2026-10-08T17:10:35Z",
+      "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 75.73 (0.24 %), TP = 44 % du range, SL = 36 % du range, probabilité de résolution sous 1 h ≈ 97%.",
+      "news_context": "prudence post-USD FOMC Meeting Minutes : critères renforcés · actualité à surveiller (score 2) : Inflation on many everyday items was entirely due to tariffs, NY Fed says",
+      "manual_exit": null
+    },
+    {
       "id": "40befbbde6",
       "asset": "oil",
       "asset_label": "Pétrole WTI (CL)",
@@ -7254,10 +7288,10 @@
     }
   },
   "state": {
-    "last_scan": "2026-10-08T16:05:31Z",
-    "last_scan_note": "0 signal(aux)",
+    "last_scan": "2026-10-08T16:10:35Z",
+    "last_scan_note": "1 signal(aux)",
     "last_summary": "2026-10-07T22:05:28Z",
-    "last_track": "2026-10-08T16:05:31Z",
+    "last_track": "2026-10-08T16:10:35Z",
     "last_summary_day": "2026-10-07"
   },
   "limits": {
@@ -7281,9 +7315,9 @@
     "losses": 59,
     "avg_win": 58.38,
     "avg_loss": -48.47,
-    "open_positions": 0,
+    "open_positions": 1,
     "skipped": 0,
-    "risky": 82
+    "risky": 83
   },
   "stress": {
     "n_trades": 649,
@@ -18971,7 +19005,7 @@
       "asset": "gold",
       "since": "2026-10-07T21:00:00Z",
       "trades": [],
-      "checked_hour": "2026-10-08T15:00:00Z",
+      "checked_hour": "2026-10-08T16:00:00Z",
       "n": 0,
       "mean_r": null,
       "live": true
