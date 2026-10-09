@@ -1,6 +1,6 @@
 # Trading-Bot — rapport
 
-_Mis à jour le 09/10/2026 à 14:10 (Europe/Paris)._
+_Mis à jour le 09/10/2026 à 14:16 (Europe/Paris)._
 
 ## Vue d'ensemble
 
@@ -8,7 +8,7 @@ _Mis à jour le 09/10/2026 à 14:10 (Europe/Paris)._
 - Taux de réussite cumulé (TP / (TP+SL)) : **42%** — hasard attendu 42%, avantage **+0%**
 - P&L théorique cumulé, net des coûts estimés (somme des % par trade, sans levier) : **-4.47 %** (brut -0.88 %)
 - Signaux ouverts : **0**
-- Signaux fantômes (suivis en silence pour l'apprentissage) : **307** clôturés, 1 ouverts, taux de réussite 37% (hasard attendu 41%)
+- Signaux fantômes (suivis en silence pour l'apprentissage) : **308** clôturés, 0 ouverts, taux de réussite 37% (hasard attendu 41%)
 
 ## Statistiques
 
@@ -112,18 +112,18 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 
 | Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
 |---|---:|---:|---:|---:|---:|---:|
-| adx | 307 | 93 | 160 | 54 | 37% | -0.039 % |
+| adx | 308 | 94 | 160 | 54 | 37% | -0.039 % |
 | corr | 16 | 2 | 11 | 3 | 15% | -0.176 % |
 | level | 38 | 16 | 12 | 10 | 57% | -0.030 % |
 | macd | 78 | 17 | 46 | 15 | 27% | -0.085 % |
 | orb | 12 | 3 | 7 | 2 | 30% | -0.156 % |
 | pdhl | 40 | 9 | 23 | 8 | 28% | -0.044 % |
-| rsi | 203 | 63 | 113 | 27 | 36% | -0.041 % |
-| trend_15m | 307 | 93 | 160 | 54 | 37% | -0.039 % |
-| trend_1h | 300 | 90 | 158 | 52 | 36% | -0.040 % |
-| trend_5m | 243 | 81 | 130 | 32 | 38% | -0.030 % |
+| rsi | 204 | 64 | 113 | 27 | 36% | -0.040 % |
+| trend_15m | 308 | 94 | 160 | 54 | 37% | -0.039 % |
+| trend_1h | 301 | 91 | 158 | 52 | 37% | -0.039 % |
+| trend_5m | 244 | 82 | 130 | 32 | 39% | -0.030 % |
 | volume | 2 | 1 | 0 | 1 | 100% | -0.021 % |
-| vwap | 300 | 93 | 154 | 53 | 38% | -0.037 % |
+| vwap | 301 | 94 | 154 | 53 | 38% | -0.036 % |
 
 ### Fantômes par actif
 
@@ -133,7 +133,7 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 | ethereum | 13 | 2 | 8 | 3 | 20% | -0.203 % |
 | euro | 23 | 8 | 14 | 1 | 36% | -0.024 % |
 | gold | 49 | 17 | 25 | 7 | 40% | -0.023 % |
-| nasdaq | 80 | 30 | 40 | 10 | 43% | -0.021 % |
+| nasdaq | 81 | 31 | 40 | 10 | 44% | -0.019 % |
 | oil | 47 | 14 | 23 | 10 | 38% | -0.059 % |
 | sp500 | 73 | 15 | 47 | 11 | 24% | -0.051 % |
 
@@ -191,11 +191,11 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 
 Corrections par actif :
 
-- sp500 : {'trend_5m': 0.997, 'trend_15m': 0.997, 'trend_1h': 0.997, 'adx': 0.997, 'vwap': 0.745}
+- sp500 : {'trend_5m': 0.994, 'trend_15m': 0.994, 'trend_1h': 0.994, 'adx': 0.994, 'vwap': 0.742}
 
 | Variante testée en fantôme | Trades | Gain net moyen | Statut |
 |---|---:|---:|---|
-| indices le matin européen | 60 | -0.16 R | en test |
+| indices le matin européen | 61 | -0.14 R | en test |
 | horizon ~3 h | 61 | -0.38 R | en test |
 | confiance moyenne | 44 | -0.11 R | en test |
 | entrées dans l'heure avant l'ouverture américaine | 5 | -0.18 R | en test |
@@ -209,9 +209,9 @@ Notes :
 
 - trades réels : +0,03 R ± 0,19 R par trade avant frais sur 133 trades (0 R = hasard)
 - macd : -0,16 R ± 0,15 R sur 213 trades éq. → poids ×0,96
-- sp500, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,19 R contre -0,01 R en global sur 157 trades éq. → poids ×1,00 sur cet actif
+- sp500, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,19 R contre -0,01 R en global sur 157 trades éq. → poids ×0,99 sur cet actif
 - sp500, vwap : -0,19 R contre -0,00 R en global sur 151 trades éq. → poids ×0,99 sur cet actif
-- variante « indices le matin européen » en test : 60 trades, -0,16 R net, encore 40 trades avant décision
+- variante « indices le matin européen » en test : 61 trades, -0,14 R net, encore 39 trades avant décision
 - variante « horizon ~3 h » en test : 61 trades, -0,38 R net, encore 39 trades avant décision
 - variante « confiance moyenne » en test : 44 trades, -0,11 R net, encore 56 trades avant décision
 - variante « entrées dans l'heure avant l'ouverture américaine » en test : 5 trades, -0,18 R net, encore 95 trades avant décision
