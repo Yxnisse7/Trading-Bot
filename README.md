@@ -681,6 +681,11 @@ est écarté ; le Bitcoin reste perdant quoi qu'on change (−0,18 à −0,57 R)
 Nasdaq, acheter un creux cassé puis repris dans la tendance 1 h (+0,09 R). Avec autant d'essais, le hasard peut
 en expliquer une partie. Tout le reste est écarté.
 
+**Le swing** (essai 16, `trading_bot/essai16.py`, `python run.py essai16`) : tendance journalière et 1 h dans le
+même sens, repli du RSI en 15 min, stop sous le 2e creux, gardé jusqu'à 5 jours (fermé le vendredi sur l'or et
+les indices). Seule la sortie en deux unités sur le S&P 500 passe les deux périodes (+0,08 R sur 150 trades), sans
+être « prouvée ». Avec ce stop, les positions ne durent que 7 à 11 h en moyenne.
+
 Connexion automatique : l'API TopstepX (ProjectX) permet de passer des ordres par programme sur le
 Combine et l'Express Funded (pas sur le Live Funded), mais seulement **depuis votre propre appareil**
 (serveurs distants, VPS et VPN interdits). Le bot, qui tourne sur GitHub Actions, ne passe donc aucun
