@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-09T04:05:41.157870+02:00",
+  "updated_at": "2026-10-09T04:10:38.018280+02:00",
   "timezone": "Europe/Paris",
   "equity_curve": [
     {
@@ -7334,7 +7334,7 @@
     }
   },
   "state": {
-    "last_scan": "2026-10-09T02:05:36Z",
+    "last_scan": "2026-10-09T02:10:33Z",
     "last_scan_note": "0 signal(aux)",
     "last_summary": "2026-10-08T22:05:29Z",
     "last_track": "2026-10-08T22:30:55Z",
@@ -19050,15 +19050,35 @@
       "strategy": "donchian_day",
       "asset": "gold",
       "since": "2026-10-07T21:00:00Z",
-      "trades": [],
-      "checked_hour": "2026-10-09T01:00:00Z",
-      "n": 0,
-      "mean_r": null,
+      "trades": [
+        {
+          "entry_ts": 1791511200,
+          "entry_at": "2026-10-09T02:00:00Z",
+          "direction": "long",
+          "entry": 4199.7998046875,
+          "risk": 30.324022,
+          "stop": 4169.475783,
+          "status": "closed",
+          "reason": "heure",
+          "exit_ts": 1791514800,
+          "exit": 4198.7998046875,
+          "last": null,
+          "r_topstep": -0.0426,
+          "r_bot": -0.0607,
+          "micros": 1,
+          "close_at": 1791576000,
+          "notified_entry": "2026-10-09T02:10:33Z",
+          "notified_exit": "2026-10-09T02:10:33Z"
+        }
+      ],
+      "checked_hour": "2026-10-09T02:00:00Z",
+      "n": 1,
+      "mean_r": -0.0426,
       "live": true
     }
   },
   "drift": {
-    "updated_at": "2026-10-08T02:00:58Z",
+    "updated_at": "2026-10-09T02:10:33Z",
     "cells": {
       "donchian_1h:bitcoin": {
         "n": 1,
@@ -19105,14 +19125,20 @@
         "since_status": "2026-10-07T19:35:32Z"
       },
       "donchian_day:gold": {
-        "n": 0,
-        "cum_r": 0,
-        "dd_r": 0.0,
+        "n": 1,
+        "cum_r": -0.0426,
+        "dd_r": 0.0426,
         "ref_n": 482,
         "ref_mean_r": 0.0882,
+        "cum_pct": 0.523,
+        "dd_pct": 0.477,
         "status": "trop tôt",
-        "cum_pct": null,
-        "dd_pct": null,
+        "band": {
+          "cum_p5": -1.023,
+          "cum_p50": -0.136,
+          "cum_p95": 2.275,
+          "dd_p95": 1.023
+        },
         "label": "Donchian fermé chaque soir · or",
         "ref_period": [
           "2024-09-22",
