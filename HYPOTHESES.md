@@ -466,6 +466,96 @@ information. Une cellule validée irait **en ombre** sur le marché réel, jamai
 Les idées « risque » (1 % par trade, perte maximale par jour) ne sont pas testées : ce sont des réglages
 de prudence, pas des sources d'avantage.
 
+## Essai 15 — les autres règles codables : 22 idées, 97 cellules
+
+Écrit le 9 octobre 2026, **avant** tout calcul. Après l'essai 14, Yanisse a demandé de tester toutes les règles
+codables restantes de notre liste. Déjà testées ailleurs (pas refaites) : pause autour des annonces (essai 4),
+ouverture américaine et ORB (essais 3, 9, 14), étirement, obstacle, marge du RSI, repli, bougie étroite,
+cassure avec volume, cassure ratée, deux moitiés, stop temps (essai 14), clôture avant la fin de séance
+(essai 8). Non testables ici : liste fermée de marchés (le bot n'en suit déjà que 4), filtres sur actions
+(pas de données d'actions dans le bot), ne jamais reculer son stop ni renforcer une perte (le bot ne le fait
+jamais).
+
+**Données, découpage, frais, indicateurs** : identiques à l'essai 14 (4 actifs, découverte 28/09/2025 →
+10/2026, confirmation 10/2024 → 27/09/2025, frais Topstep, Bitcoin frais du bot, bougies clôturées
+seulement). En plus : stochastique lent 21,3,3 (%K brut sur 21 bougies lissé sur 3, %D = moyenne 3 du %K
+lissé) ; VWAP de séance pondéré par le volume.
+
+**Famille F — filtres sur les trades du bot** (mêmes trades rejoués qu'à l'essai 14) :
+- **F1 biais moyenne 1 h** : retiré si la clôture 1 h est du mauvais côté de la moyenne 20 (1 h) ou si
+  cette moyenne va dans l'autre sens sur 3 bougies.
+- **F2 biais oscillateur 1 h** : retiré si le RSI 21 et le %K du stochastique (1 h) sont tous les deux du
+  mauvais côté de 50.
+- **F3 tendance journalière** : retiré si la clôture de la veille (jour UTC) est du mauvais côté de la
+  moyenne 20 des clôtures journalières.
+- **F4 bougie de contrôle** : retiré si, parmi les 8 dernières bougies 15 min, une bougie a un range d'au
+  moins 2 ATR 14 (15 min) et que le prix d'entrée est encore entre son plus haut et son plus bas.
+- **F5 marché plat** : retiré si la moyenne 20 (15 min) a bougé de moins de 0,25 ATR sur 4 bougies **et** si
+  le RSI 21 (15 min) est entre 45 et 55.
+- **F6 range trop étroit** : retiré si le range des 12 dernières bougies 5 min est inférieur à 2 × (distance au
+  stop + coût aller-retour en points).
+- **F8 heures actives** : gardé seulement entre 8:00 et 12:00 (sauf 9:30-9:45) et entre 14:00 et 16:00 heure de
+  New York, pour les 4 actifs.
+
+**Famille G — gestion des trades du bot** (mêmes entrées) :
+- **G30 objectif 3 R** (même stop), sortie au plus tard après 3 h.
+- **G31 stop sous les 2 dernières bougies 5 min** moins 0,1 ATR (au-dessus pour une vente), objectif recalé à
+  1,5 fois ce nouveau risque ; résultat en R du nouveau risque.
+- **G34 stop suiveur** : pas d'objectif ; après chaque bougie, stop remonté au plus bas des 3 dernières
+  bougies (plus haut pour une vente) s'il est meilleur ; 3 h au plus.
+- **G35 objectif posé un peu avant** : distance de l'objectif réduite de 7 % (1,4 R au lieu de 1,5 R).
+- **G36 oscillateur qui repasse 50** : sortie à la clôture quand le RSI 21 (5 min) repasse sous 50 (au-dessus
+  pour une vente) ; stop et objectif inchangés.
+- **G37 bougie exceptionnelle** : sortie à la clôture d'une bougie 5 min dans le sens du trade dont le range
+  vaut au moins 2,5 ATR 14 ; le reste inchangé.
+- **G38 renfort** : moitié de la taille à l'entrée, objectif 3 R ; à +1 R, l'autre moitié est ajoutée et le
+  stop des deux passe au prix d'entrée ; 3 h au plus ; résultat en R de la taille complète.
+- **G39 demi-taille en marché indécis** : taille divisée par deux quand le trade aurait été retiré par F5 ou
+  par A2 (essai 14).
+- **G40 limites du jour** : par actif, au plus 3 trades par jour de New York, et plus aucun après 2 pertes
+  dans la journée.
+
+**Famille S — nouveaux setups en 15 min** (règles communes de la famille B de l'essai 14 : pas d'entrée de
+15:00 à 17:00 heure de Chicago sur les futures, sortie forcée à 15:00 Chicago, 16 bougies au plus, risque
+entre 0,3 et 3 ATR 14 (15 min), objectif 3 R sauf mention, une position à la fois ; ventes symétriques) :
+- **S15 repli du RSI** : tendance 1 h (comme B6) ; le RSI 21 est monté au-dessus de 55 dans les 12 dernières
+  bougies, n'est pas passé sous 40 depuis 6 bougies, était entre 40 et 50 à la bougie précédente et repasse
+  au-dessus de 50 → achat à la clôture, stop sous le plus bas des 5 dernières bougies.
+- **S16 divergence validée** : un plus bas des 20 bougies avec RSI sous 30, puis dans les 30 bougies un
+  nouveau plus bas plus bas avec RSI au-dessus de 30, puis le RSI repasse au-dessus de 50 → achat à la clôture,
+  stop sous le second creux.
+- **S17 divergence avortée** : tendance 1 h haussière ; nouveau plus haut des 20 bougies avec un RSI plus bas
+  qu'au plus haut précédent (dans les 30 bougies) ; puis une clôture au-dessus de ce nouveau plus haut dans
+  les 10 bougies → achat, stop sous le plus bas des 5 dernières bougies.
+- **S25 creux cassé puis repris** : tendance 1 h haussière ; une bougie casse le plus bas des 10 précédentes
+  et une des 2 bougies suivantes clôture au-dessus de ce plus bas → achat à cette clôture, stop sous le
+  nouveau plus bas moins 0,1 ATR.
+- **S26 retournement en 4 temps** : baisse préalable (moyenne 20 en baisse sur 10 bougies, prix dessous) ;
+  clôture au-dessus de la moyenne 20 ; creux plus haut que le plus bas de la baisse (pivot 2 bougies de chaque
+  côté) ; dans les 30 bougies après la clôture au-dessus de la moyenne, clôture au-dessus du sommet entre les
+  deux creux → achat, stop sous le creux plus haut.
+- **S27 double creux** : deux pivots bas (2 bougies de chaque côté) à moins de 0,3 ATR l'un de l'autre, à 5 à
+  30 bougies d'écart ; achat à la première clôture au-dessus du plus haut entre eux, dans les 10 bougies après
+  le second ; stop sous le plus bas des deux ; objectif = ce plus haut + la hauteur de la figure (ignoré si
+  moins de 1 R).
+- **S28 VWAP** : VWAP de séance (indices 9:30, or 8:20 heure de New York, Bitcoin 0:00 UTC), pas avant 30 min ;
+  VWAP plus haut que 4 bougies avant, bougie dont le plus bas touche le VWAP et qui clôture au-dessus → achat
+  à la clôture, stop sous la bougie moins 0,1 ATR, objectif 2 R, sortie au plus tard à 16:00 heure de New
+  York (Bitcoin 24:00 UTC).
+- **S21 milieu de la première bougie** (Nasdaq, S&P 500, or ; ouverture comme B10) : à la clôture de la
+  première heure, achat si la clôture est au-dessus du milieu de la première bougie 5 min, vente sinon ; stop
+  de l'autre côté du range de la première heure ; pas d'objectif, sortie à 15:00 heure de Chicago.
+- **S22 écarts d'ouverture** (Nasdaq, S&P 500) : ouverture de 9:30 à au moins 0,3 % de la clôture de 16:00 de
+  la veille ; si le volume de la première bougie 5 min vaut au moins 1,5 fois la moyenne des 20 dernières
+  premières bougies, entrée dans le sens de l'écart, sinon contre l'écart ; entrée à la clôture de cette
+  bougie, stop à son autre extrême, objectif 2 R, sortie à 15:00 heure de Chicago.
+
+**Pour information, sans verdict** : la règle du risque à 1 % par trade est comparée au 10 % actuel du compte
+simulé (pire baisse et capital final sur les trades du bot rejoués, 4 actifs ensemble).
+
+**Verdict par cellule** : mêmes critères qu'à l'essai 14. « Prouvé » avec la marge corrigée pour **254 essais**
+(157 + 97). Une cellule validée irait en ombre, jamais directement en signal réel.
+
 ## Journal des essais
 
 | Date | Essai | Résultat |
@@ -498,3 +588,4 @@ de prudence, pas des sources d'avantage.
 | 2026-10-08 | **Essai 13** : essai 12 rejoué sur 2010-2024, jamais regardé (HistData, ~430 annonces emploi/inflation, ~87 décisions de la Fed par actif). Contrôle d'heure réussi : jours d'emploi, agitation maximale dans la bougie de 8:30 sur les 4 actifs (3 à 5 fois les autres) | **Rien n'est retenu, et les pistes de l'essai 12 ne se confirment pas.** H1 : or −0,10 ATR (t −0,58 ; +0,12 puis −0,31), S&P 500 −0,33 (t −1,77), Nasdaq −0,37 (t −1,87), euro +0,05 (t 0,29). H3, la Fed : or −0,13 (t −0,37), S&P 500 +0,02, Nasdaq +0,25 (t 0,76, −0,08 puis +0,62), euro +0,05. Sur les indices, la réaction tend même à se retourner un peu avant la clôture (non significatif, non pré-enregistré). Conclusion : sur 15 ans, le sens donné par une annonce ne prédit pas la suite de la journée ; ce qu'on avait vu sur 2 ans était du hasard. |
 | 2026-10-09 | **Essai 14** : 13 idées, 49 cellules, 24 mois (découverte 28/09/2025 → 10/2026, confirmation 10/2024 → 09/2025), frais Topstep (Bitcoin : frais du bot). Bot rejoué : or 1 113 trades +0,02 R, Nasdaq 943 +0,02 R, S&P 500 867 −0,06 R, Bitcoin 1 102 −0,20 R | **Une seule cellule validée : A1 (pas d'entrée étirée) sur l'or** — découverte +0,06 R (348 trades, PF 1,13, moitiés +0,10 / +0,02), confirmation +0,07 R (279, PF 1,15) ; 24 mois +0,07 R ± 0,04 (627 trades) contre +0,02 R pour le bot seul ; pas « prouvé » (157 essais). **Tout le reste est écarté.** Nasdaq : A1, A2, A3, A5, C11, C12 passent la découverte (+0,05 à +0,09 R) mais tombent à zéro ou en négatif à la confirmation. S&P 500 et Bitcoin : aucune règle ne rend le bot positif (Bitcoin −0,18 à −0,21 R quel que soit le filtre ou la sortie). Sorties C11-C13 : rien de mieux que la sortie actuelle. Setups 15 min : B6 repli −0,07 à −0,51 R, B8 bougie étroite −0,22 à −0,57 R, B9 cassure ratée négatif partout sauf la découverte de l'or (+0,09 R puis −0,13 R) ; B7 (cassure avec volume) et B10 (ouverture hors du range de la veille) n'ont que 25 à 90 trades par période et changent de signe. Conclusion : sur ces données, entrer « sur repli » ne crée pas d'avantage ; seul le refus des entrées étirées aide un peu, et seulement sur l'or. Mise en ombre d'A1 sur l'or : à décider par Yanisse. |
 | 2026-10-09 | Essai 14, suite | **A1 sur l'or mis en ombre** (accord de Yanisse) : chaque signal réel de l'or en 1 h est marqué `sans_etirement_or` s'il est étiré, sans rien changer aux notifications. Le filtre ne s'applique que s'il fait ses preuves sur les trades marqués (même règle que les autres filtres, page Apprentissage). |
+| 2026-10-09 | Pré-enregistrement de l'essai 15 (22 idées, 97 cellules) | — |
