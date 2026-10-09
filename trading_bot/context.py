@@ -237,7 +237,18 @@ def exit_report(closed: list[Signal], cfg: Config) -> dict[str, Any]:
 FILTERS = {
     "sans_ouverture_us": "pas d'entrée sur les indices et l'or de 15:00 à 17:00 (ouverture US)",
     "filtre_contexte": "contextes appris comme perdants évités",
+    "sans_etirement_or": "or : pas d'entrée à plus de 1,5 ATR de la moyenne 20 en 5 min (essai 14)",
 }
+
+
+def stretched(candles, direction: str, limit: float = 1.5) -> bool:
+    """Essai 14, filtre A1 : dernière clôture 5 min à plus de `limit` ATR 14 de sa moyenne 20, dans le sens du trade."""
+    if len(candles) < 21:
+        return False
+    sma, atr = ind.sma([c.close for c in candles], 20)[-1], ind.atr(candles, 14)[-1]
+    if sma is None or not atr:
+        return False
+    return (candles[-1].close - sma) * (1 if direction == "long" else -1) > limit * atr
 
 
 def filter_report(closed: list[Signal], cfg: Config, z: float | None = None) -> dict[str, Any]:

@@ -62,3 +62,13 @@ def test_verdict_shape():
     t = sl.Trade("x", "gold", "long", c[10].ts, c[20].ts, 100.0, 101.0, 1.0, "")
     v = e14.verdict([t] * 40, 0.01, None)
     assert v["status"].startswith(("écarté", "validé", "prouvé"))
+
+
+def test_live_stretch_flag_matches_lab_filter():
+    from trading_bot import context as ctxmod
+    c = make_candles(n=600, noise=0.0002, seed=5)
+    for k in range(560, 570):
+        p = c[k - 1].close * 1.004
+        c[k] = type(c[k])(c[k].ts, c[k - 1].close, p * 1.0005, c[k - 1].close * 0.9998, p, c[k].volume)
+    assert ctxmod.stretched(c[:570], "long") and not ctxmod.stretched(c[:570], "short")
+    assert not ctxmod.stretched(c[:400], "long")

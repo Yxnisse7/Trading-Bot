@@ -249,6 +249,8 @@ class Engine:
                     if hits:
                         flags.append("filtre_contexte")
                         sig.meta["ctx_avoid"] = hits
+                    if asset.key == "gold" and base == 5 and ctxmod.stretched(candles, sig.direction):
+                        flags.append("sans_etirement_or")
                     sig.meta["filters"] = flags
                     sig.meta["filters_checked"] = True
                     applied = [f for f in flags if f in promoted]
