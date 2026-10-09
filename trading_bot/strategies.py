@@ -46,7 +46,8 @@ ROBUST_ONLY = {"noise_area_v2"}   # plus de données vierges : critères de l'es
 # Suivis en ombre sur le marché réel (aucune notification) : (stratégie, actif) → date de début
 SHADOW = {("donchian_1h", "bitcoin"): "2026-10-05T19:00:00Z",
           ("donchian_1h", "gold"): "2026-10-05T20:00:00Z",      # validé à l'essai 3 (confirmation 2024-25)
-          ("donchian_day", "gold"): "2026-10-07T21:00:00Z"}     # validé à l'essai 8 (fermé chaque soir)
+          ("donchian_day", "gold"): "2026-10-07T21:00:00Z",     # validé à l'essai 8 (fermé chaque soir)
+          ("creux_repris_15m", "nasdaq"): "2026-10-09T22:00:00Z"}  # validé à l'essai 15 (S25)
 # Envoyées en signaux réels sur Telegram (entrée, stop, sortie), en plus du suivi : (stratégie, actif) → date de début.
 # Choix de Yanisse le 08/10/2026 : validée en backtest (essai 8), pas encore prouvée sur le marché réel.
 LIVE = {("donchian_day", "gold"): "2026-10-08T07:30:00Z"}
@@ -556,8 +557,14 @@ def pre_fomc(candles: list[Candle], asset: str) -> list[Trade]:
 RUNNERS_5M = {"orb5": orb5, "orb30": orb30, "intraday_mom": intraday_mom, "noise_area": noise_area,
               "gap_fade": gap_fade, "london_breakout": london_breakout, "news_breakout": news_breakout,
               "noise_area_v2": noise_area_v2, "comex_orb": comex_orb}
+def creux_repris_15m(candles: list[Candle], asset: str) -> list[Trade]:
+    """Essai 15, S25 : creux cassé puis repris en 2 bougies 15 min, dans la tendance 1 h (règle de essai15.py)."""
+    from . import essai15
+    return essai15.setup_trades("S25", asset, essai15.Ctx(candles))
+
+
 RUNNERS_1H = {"donchian_1h": donchian_1h, "rsi2_1h": rsi2_1h, "pre_fomc": pre_fomc, "donchian_day": donchian_day,
-              "donchian_15m_day": donchian_15m_day, "donchian_30m_day": donchian_30m_day}
+              "donchian_15m_day": donchian_15m_day, "donchian_30m_day": donchian_30m_day, "creux_repris_15m": creux_repris_15m}
 
 
 def run_all(asset: str, candles: list[Candle], only: list[str] | None = None) -> list[Trade]:

@@ -238,7 +238,19 @@ FILTERS = {
     "sans_ouverture_us": "pas d'entrée sur les indices et l'or de 15:00 à 17:00 (ouverture US)",
     "filtre_contexte": "contextes appris comme perdants évités",
     "sans_etirement_or": "or : pas d'entrée à plus de 1,5 ATR de la moyenne 20 en 5 min (essai 14)",
+    "limites_jour_or": "or : 3 trades par jour au plus, arrêt après 2 pertes (essai 15)",
 }
+
+
+def day_limit_hit(asset_key: str, sigs: list[Signal], now: datetime, max_trades: int = 3, max_losses: int = 2) -> bool:
+    """Essai 15, G40 : déjà `max_trades` signaux réels ce jour (heure de New York) sur l'actif, ou `max_losses` pertes."""
+    from zoneinfo import ZoneInfo
+    ny = ZoneInfo("America/New_York")
+    day = now.astimezone(ny).date()
+    same = [s for s in sigs if s.asset == asset_key and s.source == "bot" and s.created_at
+            and parse_iso(s.created_at).astimezone(ny).date() == day]
+    losses = sum(1 for s in same if s.status == "sl" or (s.status == "expired" and (s.pnl_pct or 0) < 0))
+    return len(same) >= max_trades or losses >= max_losses
 
 
 def stretched(candles, direction: str, limit: float = 1.5) -> bool:

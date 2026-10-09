@@ -42,3 +42,23 @@ def test_stoch_and_risk_curve():
     assert all(x is None or 0 <= x <= 100 for x in k) and k[-1] is not None
     r = e15.risk_curve([(1, -1.0), (2, -1.0), (3, 2.0)], 10.0)
     assert r["max_drawdown_pct"] == 19.0 and abs(r["final"] - 0.81 * 1.2) < 1e-9
+
+
+def test_day_limit_flag_and_shadow_runner():
+    from datetime import datetime, timezone
+    from trading_bot import context as ctxmod
+    from trading_bot import strategies as sl
+    from trading_bot.models import Signal
+    now = datetime(2026, 10, 9, 16, 0, tzinfo=timezone.utc)
+
+    def sig(i, status, pnl):
+        s = Signal.__new__(Signal)
+        s.asset, s.source, s.status, s.pnl_pct = "gold", "bot", status, pnl
+        s.created_at = f"2026-10-09T1{3 + i}:00:00Z"
+        return s
+    assert not ctxmod.day_limit_hit("gold", [sig(0, "tp", 0.1)], now)
+    assert ctxmod.day_limit_hit("gold", [sig(0, "sl", -0.1), sig(1, "sl", -0.1)], now)
+    assert ctxmod.day_limit_hit("gold", [sig(i, "tp", 0.1) for i in range(3)], now)
+    c = make_candles(n=3000, drift=0.0001, noise=0.0015, seed=11)
+    assert ("creux_repris_15m", "nasdaq") in sl.SHADOW
+    assert sl.RUNNERS_1H["creux_repris_15m"](c, "nasdaq") == e15.setup_trades("S25", "nasdaq", e15.Ctx(c))
