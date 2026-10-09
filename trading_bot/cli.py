@@ -41,12 +41,12 @@ from .learning import analyze
 from .signals import format_signal
 
 
-HALAL_REFUSED = {"manual", "propose", "commands", "guide", "ui", "loop", "fetch-data", "topstep", "invest", "backup", "fetch-history", "backtest-setups", "strategy-lab", "invest-review", "topstep-odds", "drift-reference", "donchian-day", "intraday-gold", "multi-trend", "trend-daily", "macro-drift", "macro-long"}
+HALAL_REFUSED = {"manual", "propose", "commands", "guide", "ui", "loop", "fetch-data", "topstep", "invest", "backup", "fetch-history", "backtest-setups", "strategy-lab", "invest-review", "topstep-odds", "drift-reference", "donchian-day", "intraday-gold", "multi-trend", "trend-daily", "macro-drift", "macro-long", "essai14"}
 
 
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(description="Générateur de signaux de scalping (NQ, BTC, XAU) — données gratuites")
-    p.add_argument("command", choices=["scan", "track", "tick", "summary", "stats", "loop", "status", "test-notify", "backtest", "report", "fetch-data", "manual", "propose", "ui", "commands", "portfolio", "guide", "learn", "flush-outbox", "check-data", "stop", "topstep", "trim-candles", "invest", "backup", "fetch-history", "backtest-setups", "strategy-lab", "invest-review", "topstep-odds", "drift-reference", "donchian-day", "intraday-gold", "multi-trend", "trend-daily", "macro-drift", "macro-long"])
+    p.add_argument("command", choices=["scan", "track", "tick", "summary", "stats", "loop", "status", "test-notify", "backtest", "report", "fetch-data", "manual", "propose", "ui", "commands", "portfolio", "guide", "learn", "flush-outbox", "check-data", "stop", "topstep", "trim-candles", "invest", "backup", "fetch-history", "backtest-setups", "strategy-lab", "invest-review", "topstep-odds", "drift-reference", "donchian-day", "intraday-gold", "multi-trend", "trend-daily", "macro-drift", "macro-long", "essai14"])
     p.add_argument("--signal", help="stop : identifiant (ou début) du trade à arrêter, ou son actif ; sans valeur, le seul trade ouvert")
     p.add_argument("--halal", action="store_true", help="mode halal : second bot séparé (achat seulement, sans levier, data/halal)")
     p.add_argument("--dry-run", action="store_true", help="scan sans enregistrer les signaux")
@@ -232,6 +232,46 @@ def main(argv: list[str] | None = None) -> int:
                   f"| sorties {reasons}", flush=True)
         out["updated_at"] = iso(utcnow())
         eng.store._write(eng.store.dir / "essai8.json", out)
+    elif args.command == "essai14":
+        # essai 14 (HYPOTHESES.md) : filtres et sorties sur le bot rejoué, setups de repli, règles fixées d'avance
+        from . import essai14 as e14
+        from .backtest import run_backtest
+        from .topstep import FEES, PRODUCTS
+
+        out = {"essai": 14, "split": "2025-09-28", "n_trials": e14.N_TRIALS, "cells": {}, "baseline": {}}
+        ctxs = {}
+        for key in e14.ASSETS:
+            candles = eng.store.load_history(key)
+            if candles:
+                ctxs[key] = e14.Ctx(candles)
+        for key, ctx in ctxs.items():
+            asset = eng.cfg.assets[key]
+            tcost = (sum(FEES[key]), PRODUCTS[key][1]) if key in e14.FUTURES else None
+            cache = eng.store.dir / "history" / f"essai14_bot_{key}.json"
+            rows = eng.store._read(cache, None) if args.note == "cache" else None
+            if rows is None:
+                rows = run_backtest(asset, ctx.m5.c, eng.cfg)["trades"]
+                eng.store._write(cache, rows)
+            base = e14.bot_trades(rows, key)
+            bv = e14.verdict(base, asset.cost_pct, tcost)
+            out["baseline"][key] = bv
+            print(f"{key:8s} bot seul : {bv['all']['n']} trades, {bv['all']['net']['mean_r']} R", flush=True)
+            other = ctxs.get({"nasdaq": "sp500", "sp500": "nasdaq"}.get(key, ""))
+            cells = [(f, [t for t in base if not e14.removed_by(f, t, ctx, other)]) for f in e14.FILTERS
+                     if f != "A5" or key in ("nasdaq", "sp500")]
+            cells += [(e, [x for x in (e14.exit_variant(e, t, ctx) for t in base) if x is not None]) for e in e14.EXITS]
+            cells += [(b, e14.setup_trades(b, key, ctx)) for b in e14.SETUPS if b != "B10" or key in e14.OPEN_NY]
+            for name, trades in cells:
+                v = e14.verdict(trades, asset.cost_pct, tcost)
+                v.update({"idea": name, "asset": key, "asset_label": asset.label})
+                out["cells"][f"{name}:{key}"] = v
+                d, c, a = v["discovery"], v["confirmation"], v["all"]
+                print(f"{name:4s} {key:8s} découverte n={d['n']:5d} {d['net']['mean_r']} PF {d['net']['profit_factor']} "
+                      f"moitiés {d['first_half']['mean_r']}/{d['second_half']['mean_r']} | confirmation n={c['n']:5d} "
+                      f"{c['net']['mean_r']} PF {c['net']['profit_factor']} | 24 mois {a['net']['mean_r']} ± {a['net']['se']} "
+                      f"→ {v['status']}", flush=True)
+        out["updated_at"] = iso(utcnow())
+        eng.store._write(eng.store.dir / "essai14.json", out)
     elif args.command == "macro-long":
         # essai 13 (HYPOTHESES.md) : l'essai 12 rejoué sur 2010-2024 (jours d'annonce Dukascopy, reprise possible)
         from . import macro_long

@@ -669,6 +669,12 @@ faute d'historique gratuit des prévisions, la surprise est lue dans la réactio
 des jours d'annonce, gardées hors du dépôt). Environ 430 annonces emploi/inflation et 87 décisions de la Fed par
 actif : aucun effet ; les pistes vues sur 2 ans (or, Fed) ne se confirment pas.
 
+**Entrer sur repli plutôt qu'après l'accélération** (essai 14, `trading_bot/essai14.py`, `python run.py essai14`) :
+13 idées sur 24 mois (5 filtres sur les signaux du bot, 3 façons de sortir, 5 setups en 15 min), 49 cellules.
+Une seule passe les deux périodes : sur l'or, refuser les entrées à plus de 1,5 ATR de la moyenne 20 en 5 min
+(+0,07 R ± 0,04 sur 627 trades contre +0,02 R pour le bot seul), validée mais pas « prouvée ». Tout le reste
+est écarté ; le Bitcoin reste perdant quoi qu'on change (−0,18 à −0,57 R).
+
 Connexion automatique : l'API TopstepX (ProjectX) permet de passer des ordres par programme sur le
 Combine et l'Express Funded (pas sur le Live Funded), mais seulement **depuis votre propre appareil**
 (serveurs distants, VPS et VPN interdits). Le bot, qui tourne sur GitHub Actions, ne passe donc aucun
