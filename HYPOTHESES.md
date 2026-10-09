@@ -556,6 +556,48 @@ simulé (pire baisse et capital final sur les trades du bot rejoués, 4 actifs e
 **Verdict par cellule** : mêmes critères qu'à l'essai 14. « Prouvé » avec la marge corrigée pour **254 essais**
 (157 + 97). Une cellule validée irait en ombre, jamais directement en signal réel.
 
+## Essai 16 — le swing : tendance journalière et 1 h, repli en 15 min, 2 à 5 jours (3 variantes, 12 cellules)
+
+Écrit le 9 octobre 2026, **avant** tout calcul. Quinze essais montrent que le scalping en 5 min n'a pas
+d'avantage solide, alors que les stratégies plus longues (Donchian sur l'or) en ont un peu, les frais pesant
+moins. Yanisse a demandé de tester un vrai style swing : positions de 2 à 5 jours, prises dans une tendance
+nette, sur un repli. Topstep interdit de garder une position la nuit : ce style viserait un compte CFD
+(compte islamique sans swap pour le halal).
+
+**Données** : historique long 5 min des 4 actifs (or, Nasdaq, S&P 500, Bitcoin), rééchantillonné en 15 min,
+1 h et jour (UTC). Découverte du 28/09/2025 au 04/10/2026, confirmation du 10/2024 au 27/09/2025, comme les
+essais 14 et 15. **Frais du bot** (estimation prudente en % du prix, valable pour tout courtier : or 0,02 %,
+indices 0,01 %, Bitcoin 0,06 %) ; l'estimation IC Markets (plus basse) est donnée pour information. Le swap
+(frais de nuit) n'est pas compté : il est nul sur un compte islamique, qui peut facturer à la place des frais
+de dossier non modélisés ici.
+
+**Entrée (commune aux 3 variantes)**, à la clôture d'une bougie 15 min, une position à la fois par actif :
+1. **Tendance journalière** : la clôture de la veille est au-dessus de la moyenne 20 des clôtures
+   journalières, et cette moyenne est plus haute qu'il y a 5 jours (vente : l'inverse).
+2. **Tendance 1 h** dans le même sens : clôture 1 h au-dessus de la moyenne 20 (1 h), moyenne plus haute
+   qu'il y a 3 bougies.
+3. **Pas après un mouvement étiré** : clôture 1 h à moins de 2 ATR 14 (1 h) de la moyenne 20 (1 h).
+4. **Repli sur la zone neutre en 15 min** : le RSI 21 est monté au-dessus de 55 dans les 12 dernières bougies,
+   n'est pas passé sous 40 depuis 6 bougies, était entre 40 et 50 à la bougie précédente et repasse au-dessus
+   de 50 (vente : symétrique autour de 50-60).
+5. **Heures** : entrée seulement entre 8:00 et 22:00 heure de Paris ; pas d'entrée le vendredi après 12:00
+   heure de New York (sauf Bitcoin).
+6. **Stop sous le 2e creux** : sous le plus bas des 2 derniers creux 15 min (pivot, 2 bougies de chaque côté)
+   des 40 dernières bougies, moins 0,1 ATR 14 (15 min) ; s'il n'y a pas 2 creux, sous le plus bas des 10
+   dernières bougies. Trade ignoré si ce risque sort de 0,3 à 3 ATR 14 (1 h).
+
+**Sortie** (stop toujours prioritaire ; durée maximale 5 jours ; or et indices fermés le vendredi à 16:00
+heure de New York, pas de week-end) :
+- **W1 une sortie** : objectif 3 R, stop fixe.
+- **W2 deux unités** : moitié à +1 R, stop de l'autre moitié au prix d'entrée, puis remonté sous chaque
+  nouveau creux 1 h (pivot, 2 bougies de chaque côté) apparu depuis l'entrée, moins 0,1 ATR 14 (1 h).
+- **W3 suiveur seul** : pas d'objectif, stop remonté sous chaque nouveau creux 1 h comme W2, sans sortie
+  partielle.
+
+**Verdict par cellule** (variante × actif) : critères de l'essai 3 (découverte ≥ 30 trades, gain net > 0,
+facteur de profit ≥ 1,1, deux moitiés positives ; confirmation ≥ 30 trades, gain > 0, facteur ≥ 1,1).
+« Prouvé » avec la marge corrigée pour **266 essais** (254 + 12). Une cellule validée irait en ombre.
+
 ## Journal des essais
 
 | Date | Essai | Résultat |
@@ -592,3 +634,4 @@ simulé (pire baisse et capital final sur les trades du bot rejoués, 4 actifs e
 | 2026-10-09 | Essai 15, correction avant tout calcul sur données réelles | S27 : en entrant au-dessus de la ligne de cou avec le stop sous les creux, l'objectif « ligne de cou + hauteur » vaut **toujours** moins de 1 R (vu en testant le code sur des bougies synthétiques : 0 trade). La condition « ignoré si moins de 1 R » est retirée ; le reste de la règle est inchangé. |
 | 2026-10-09 | **Essai 15** : 25 idées, 97 cellules, 24 mois, frais Topstep (Bitcoin : frais du bot), mêmes trades du bot rejoués qu'à l'essai 14 | **Deux cellules validées, aucune « prouvée » (254 essais).** **G40 limites du jour sur l'or** (3 trades par jour au plus, arrêt après 2 pertes) : découverte +0,09 R (412 trades, PF 1,18, moitiés +0,05 / +0,12), confirmation +0,06 R (374, PF 1,12) ; 24 mois +0,07 R ± 0,04 contre +0,02 R pour le bot seul. **S25 creux cassé puis repris sur le Nasdaq** : découverte +0,09 R (323, PF 1,15, moitiés +0,13 / +0,05), confirmation +0,10 R (338, PF 1,16) ; 24 mois +0,09 R ± 0,06. Avec 97 cellules, le hasard seul en ferait passer quelques-unes : ces deux-là restent à confirmer en ombre. Passés près : S25 or (+0,08 / +0,07 R, mais une moitié de découverte à −0,01 R), S26 retournement Nasdaq (+0,08 / +0,08 R, une moitié à −0,04 R). **Tout le reste est écarté** : aucun des 7 filtres F ne tient sur un actif ; sorties et stops G (objectif 3 R, stop sous 2 bougies −0,06 à −0,45 R, stop suiveur, renfort, sortie RSI, bougie exceptionnelle, demi-taille) ne font pas mieux que la sortie actuelle ; setups divergence (S16, 13 à 18 trades seulement), VWAP (S28, négatif partout), double creux (S27, négatif partout), milieu de la 1re bougie (S21) et écarts d'ouverture (S22) écartés. Bitcoin négatif dans les 25 idées. **Pour information**, bot complet rejoué (4 actifs ensemble, 4 025 trades) : à 10 % de risque par trade le compte est vidé ; à 1 %, il finit à 8 % du départ (pire baisse −94 %) : la règle du 1 % ralentit la chute, elle ne crée pas d'avantage. |
 | 2026-10-09 | Essai 15, suite | **Mis en ombre** (accord de Yanisse), sans rien changer aux notifications : G40 sur l'or (signal réel de l'or marqué `limites_jour_or` s'il arrive après 3 signaux du jour ou après 2 pertes, jugé comme les autres filtres) ; S25 sur le Nasdaq (`creux_repris_15m`, suivi en ombre dans le laboratoire depuis le 09/10/2026 22:00 UTC, avec le contrôle de décrochage de l'essai 7). |
+| 2026-10-09 | Pré-enregistrement de l'essai 16 (swing, 3 variantes, 12 cellules) | — |
