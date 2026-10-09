@@ -1,6 +1,6 @@
 # Trading-Bot — rapport
 
-_Mis à jour le 09/10/2026 à 11:55 (Europe/Paris)._
+_Mis à jour le 09/10/2026 à 12:01 (Europe/Paris)._
 
 ## Vue d'ensemble
 
@@ -8,7 +8,7 @@ _Mis à jour le 09/10/2026 à 11:55 (Europe/Paris)._
 - Taux de réussite cumulé (TP / (TP+SL)) : **42%** — hasard attendu 42%, avantage **+0%**
 - P&L théorique cumulé, net des coûts estimés (somme des % par trade, sans levier) : **-4.47 %** (brut -0.88 %)
 - Signaux ouverts : **0**
-- Signaux fantômes (suivis en silence pour l'apprentissage) : **306** clôturés, 1 ouverts, taux de réussite 37% (hasard attendu 41%)
+- Signaux fantômes (suivis en silence pour l'apprentissage) : **307** clôturés, 0 ouverts, taux de réussite 37% (hasard attendu 41%)
 
 ## Statistiques
 
@@ -112,18 +112,18 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 
 | Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
 |---|---:|---:|---:|---:|---:|---:|
-| adx | 306 | 93 | 160 | 53 | 37% | -0.038 % |
+| adx | 307 | 93 | 160 | 54 | 37% | -0.039 % |
 | corr | 16 | 2 | 11 | 3 | 15% | -0.176 % |
 | level | 38 | 16 | 12 | 10 | 57% | -0.030 % |
 | macd | 78 | 17 | 46 | 15 | 27% | -0.085 % |
 | orb | 12 | 3 | 7 | 2 | 30% | -0.156 % |
 | pdhl | 40 | 9 | 23 | 8 | 28% | -0.044 % |
-| rsi | 202 | 63 | 113 | 26 | 36% | -0.040 % |
-| trend_15m | 306 | 93 | 160 | 53 | 37% | -0.038 % |
-| trend_1h | 299 | 90 | 158 | 51 | 36% | -0.039 % |
-| trend_5m | 242 | 81 | 130 | 31 | 38% | -0.030 % |
+| rsi | 203 | 63 | 113 | 27 | 36% | -0.041 % |
+| trend_15m | 307 | 93 | 160 | 54 | 37% | -0.039 % |
+| trend_1h | 300 | 90 | 158 | 52 | 36% | -0.040 % |
+| trend_5m | 243 | 81 | 130 | 32 | 38% | -0.030 % |
 | volume | 2 | 1 | 0 | 1 | 100% | -0.021 % |
-| vwap | 299 | 93 | 154 | 52 | 38% | -0.036 % |
+| vwap | 300 | 93 | 154 | 53 | 38% | -0.037 % |
 
 ### Fantômes par actif
 
@@ -132,7 +132,7 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 | bitcoin | 22 | 7 | 3 | 12 | 70% | +0.021 % |
 | ethereum | 13 | 2 | 8 | 3 | 20% | -0.203 % |
 | euro | 23 | 8 | 14 | 1 | 36% | -0.024 % |
-| gold | 48 | 17 | 25 | 6 | 40% | -0.019 % |
+| gold | 49 | 17 | 25 | 7 | 40% | -0.023 % |
 | nasdaq | 80 | 30 | 40 | 10 | 43% | -0.021 % |
 | oil | 47 | 14 | 23 | 10 | 38% | -0.059 % |
 | sp500 | 73 | 15 | 47 | 11 | 24% | -0.051 % |
@@ -191,7 +191,7 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 
 Corrections par actif :
 
-- sp500 : {'trend_5m': 0.996, 'trend_15m': 0.996, 'trend_1h': 0.996, 'adx': 0.996, 'vwap': 0.743}
+- sp500 : {'trend_5m': 0.997, 'trend_15m': 0.997, 'trend_1h': 0.997, 'adx': 0.997, 'vwap': 0.745}
 
 | Variante testée en fantôme | Trades | Gain net moyen | Statut |
 |---|---:|---:|---|
@@ -201,7 +201,7 @@ Corrections par actif :
 | entrées dans l'heure avant l'ouverture américaine | 5 | -0.18 R | en test |
 | reprise juste après un stop | 28 | -0.31 R | en test |
 | nouvel actif : Ethereum (ETH/USD) | 7 | -0.39 R | en test |
-| horizon ~3 h sur Or (XAU/USD) | 5 | -0.66 R | en test |
+| horizon ~3 h sur Or (XAU/USD) | 6 | -0.66 R | en test |
 | nouvel actif : Pétrole WTI (CL) | 47 | -0.10 R | en test |
 | nouvel actif : Euro / dollar (6E) | 23 | -0.38 R | en test |
 
@@ -217,7 +217,7 @@ Notes :
 - variante « entrées dans l'heure avant l'ouverture américaine » en test : 5 trades, -0,18 R net, encore 95 trades avant décision
 - variante « reprise juste après un stop » en test : 28 trades, -0,31 R net, encore 72 trades avant décision
 - variante « nouvel actif : Ethereum (ETH/USD) » en test : 7 trades, -0,39 R net, encore 93 trades avant décision
-- variante « horizon ~3 h sur Or (XAU/USD) » en test : 5 trades, -0,66 R net, encore 95 trades avant décision
+- variante « horizon ~3 h sur Or (XAU/USD) » en test : 6 trades, -0,66 R net, encore 94 trades avant décision
 - variante « nouvel actif : Pétrole WTI (CL) » en test : 47 trades, -0,10 R net, encore 53 trades avant décision
 - variante « nouvel actif : Euro / dollar (6E) » en test : 23 trades, -0,38 R net, encore 77 trades avant décision
 - sortie : stop remonté à l'entrée après +0,5 R ferait mieux (-0,15 R net contre -0,24 R, réels et en ombre) : à décider
