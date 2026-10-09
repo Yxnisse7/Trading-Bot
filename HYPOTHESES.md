@@ -399,6 +399,73 @@ fichier ; or XAUUSD, euro EURUSD, S&P 500 SPXUSD, Nasdaq 100 NSXUSD ; heure de l
 convertie en UTC). Règles et critères inchangés. Contrôle prévu : la plus forte agitation des jours d'emploi doit
 tomber dans la bougie de 8:30 heure de New York (sinon décalage d'heure, corrigé avant tout verdict).
 
+## Essai 14 — entrer sur repli plutôt qu'après l'accélération : 13 idées, 49 cellules
+
+Écrit le 9 octobre 2026, **avant** de lancer le moindre calcul. Constat de départ : du 6 au 8 octobre, le bot
+a perdu 12 trades sur 13, presque tous des entrées prises après un mouvement déjà fait, stoppées au premier
+rebond (c'est le défaut connu depuis le premier essai). Idée commune : n'entrer que sur un repli près de la
+moyenne, dans le sens de la tendance de l'unité supérieure, avec de la place devant soi et un objectif plus
+lointain que le risque. Yanisse a demandé de tester toutes les idées codables en une fois.
+
+**Données** : historique long 5 min (release « history »), or, Nasdaq, S&P 500, Bitcoin (les 4 actifs
+annoncés). Découverte du 28/09/2025 au 04/10/2026, confirmation du 10/2024 au 27/09/2025. Frais Topstep réels
+(Bitcoin : frais du bot). Indicateurs calculés sur des bougies **clôturées** uniquement. Moyenne 20 = moyenne
+simple des 20 dernières clôtures ; ATR 14 ; RSI 21. « Veille » = la journée UTC de cotation précédente.
+
+**Famille A — filtres sur les trades du bot actuel** (le bot est rejoué sur les 24 mois avec ses réglages du
+jour ; un filtre retire des trades, il n'en ajoute pas) :
+- **A1 étirement** : trade retiré si, à l'entrée, la clôture est à plus de 1,5 ATR 14 (5 min) de la moyenne 20
+  (5 min), du côté du trade.
+- **A2 journée sans direction** : trade retiré si le prix d'entrée est dans le range (plus haut / plus bas) de
+  la veille **et** si la moyenne 20 en 15 min a bougé de moins de 0,25 ATR 14 (15 min) sur les 4 dernières
+  bougies de 15 min.
+- **A3 obstacle** : trade retiré si le plus haut de la veille (achat) ou le plus bas de la veille (vente) se
+  trouve entre l'entrée et l'objectif.
+- **A4 marge de l'unité supérieure** : trade retiré si le RSI 21 en 1 h est au-dessus de 65 (achat) ou en
+  dessous de 35 (vente).
+- **A5 indices qui ne suivent pas** (Nasdaq et S&P 500 seulement) : trade retiré si l'autre indice clôture
+  du mauvais côté de sa moyenne 20 en 15 min (sous la moyenne pour un achat, au-dessus pour une vente).
+
+**Famille C — autres sorties sur les mêmes entrées du bot** (même entrée, même stop initial) :
+- **C11 deux moitiés** : la moitié sort à +1 R ; le stop du reste passe alors au prix d'entrée, puis suit le
+  plus bas (achat) ou le plus haut (vente) des 3 dernières bougies 5 min clôturées ; pas d'objectif ; sortie au
+  plus tard après 36 bougies (3 h). Résultat = moyenne des deux moitiés.
+- **C12 stop temps** : sortie à la clôture de la 6e bougie (30 min) si le trade n'a jamais atteint +0,5 R ;
+  sinon sortie normale du bot (objectif, stop ou 1 h).
+- **C13 retour sous la moyenne** : sortie à la clôture d'une bougie 5 min qui finit du mauvais côté de la
+  moyenne 20 (5 min) ; sinon sortie normale du bot.
+
+**Famille B — nouveaux setups** (bougies 15 min regroupées depuis le 5 min ; aucune entrée de 15:00 à 17:00
+heure de Chicago, sortie forcée à 15:00 heure de Chicago, au plus 16 bougies de 15 min ; Bitcoin : sortie
+après 16 bougies seulement ; trade ignoré si le risque sort de 0,3 à 3 ATR 14 (15 min) ; objectif 3 R sauf
+mention) :
+- **B6 repli** : tendance 1 h (clôture au-dessus de la moyenne 20 en 1 h, et moyenne plus haute qu'il y a
+  3 bougies ; vente symétrique) ; au moins 3 plus bas descendants d'affilée en 15 min (au plus 6) ; plus bas de
+  la dernière bougie à moins de 0,5 ATR de la moyenne 20 (15 min). Entrée si la bougie suivante dépasse le plus
+  haut de la dernière bougie (à ce prix) ; stop sous le plus bas des 2 dernières bougies.
+- **B7 cassure avec volume** : clôture au-dessus du plus haut des 20 bougies précédentes avec un volume au
+  moins 2 fois la moyenne de ces 20 bougies (vente symétrique) ; entrée à la clôture ; stop sous le plus bas de
+  ces 20 bougies.
+- **B8 bougie étroite** : bougie au range le plus petit des 7 dernières, clôture à moins de 0,5 ATR de la
+  moyenne 20 (15 min), tendance 1 h comme B6 ; entrée si la bougie suivante dépasse son extrême dans le sens de
+  la tendance ; stop à l'autre extrême.
+- **B9 cassure ratée** : une bougie dépasse le plus haut des 20 précédentes avec un volume sous leur moyenne,
+  puis clôture en dessous de ce plus haut → vente à la clôture, stop 0,1 ATR au-dessus de son plus haut,
+  objectif le plus bas des 20 bougies (achat symétrique) ; ignoré si l'objectif vaut moins de 1 R.
+- **B10 ouverture hors du range de la veille** (Nasdaq, S&P 500 : 9:30 heure de New York ; or : 8:20) :
+  range des 15 premières minutes ; si la clôture de 15 min est au-dessus du plus haut de la veille, achat à la
+  première clôture 5 min au-dessus du range avant 12:00 heure de New York (vente symétrique sous le plus bas
+  de la veille) ; stop de l'autre côté du range ; objectif 3 R ; sortie à 15:00 heure de Chicago.
+
+**Verdict par cellule** (idée × actif) : critères de l'essai 3, sur le résultat **avec** la règle (bot filtré,
+bot avec la nouvelle sortie, ou setup seul) : découverte (≥ 30 trades, gain moyen net > 0, facteur de profit
+≥ 1,1, deux moitiés positives) puis confirmation (≥ 30 trades, gain > 0, facteur de profit ≥ 1,1).
+« Validé » si les deux passent ; « prouvé » si la borne basse sur 24 mois reste > 0 avec la marge corrigée pour
+**157 essais** (108 + 49). Pour les familles A et C, on donne aussi l'écart avec le bot sans la règle, pour
+information. Une cellule validée irait **en ombre** sur le marché réel, jamais directement en signal réel.
+Les idées « risque » (1 % par trade, perte maximale par jour) ne sont pas testées : ce sont des réglages
+de prudence, pas des sources d'avantage.
+
 ## Journal des essais
 
 | Date | Essai | Résultat |
