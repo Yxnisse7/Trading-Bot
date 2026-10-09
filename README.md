@@ -675,6 +675,12 @@ Une seule passe les deux périodes : sur l'or, refuser les entrées à plus de 1
 (+0,07 R ± 0,04 sur 627 trades contre +0,02 R pour le bot seul), validée mais pas « prouvée ». Tout le reste
 est écarté ; le Bitcoin reste perdant quoi qu'on change (−0,18 à −0,57 R).
 
+**Les autres règles codables** (essai 15, `trading_bot/essai15.py`, `python run.py essai15`) : 25 idées, 97 cellules
+(7 filtres, 9 façons de gérer les trades du bot, 9 setups en 15 min). Deux passent les deux périodes, sans être
+« prouvées » : sur l'or, 3 trades par jour au plus et arrêt après 2 pertes (+0,07 R contre +0,02 R) ; sur le
+Nasdaq, acheter un creux cassé puis repris dans la tendance 1 h (+0,09 R). Avec autant d'essais, le hasard peut
+en expliquer une partie. Tout le reste est écarté.
+
 Connexion automatique : l'API TopstepX (ProjectX) permet de passer des ordres par programme sur le
 Combine et l'Express Funded (pas sur le Live Funded), mais seulement **depuis votre propre appareil**
 (serveurs distants, VPS et VPN interdits). Le bot, qui tourne sur GitHub Actions, ne passe donc aucun

@@ -41,12 +41,12 @@ from .learning import analyze
 from .signals import format_signal
 
 
-HALAL_REFUSED = {"manual", "propose", "commands", "guide", "ui", "loop", "fetch-data", "topstep", "invest", "backup", "fetch-history", "backtest-setups", "strategy-lab", "invest-review", "topstep-odds", "drift-reference", "donchian-day", "intraday-gold", "multi-trend", "trend-daily", "macro-drift", "macro-long", "essai14"}
+HALAL_REFUSED = {"manual", "propose", "commands", "guide", "ui", "loop", "fetch-data", "topstep", "invest", "backup", "fetch-history", "backtest-setups", "strategy-lab", "invest-review", "topstep-odds", "drift-reference", "donchian-day", "intraday-gold", "multi-trend", "trend-daily", "macro-drift", "macro-long", "essai14", "essai15"}
 
 
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(description="Générateur de signaux de scalping (NQ, BTC, XAU) — données gratuites")
-    p.add_argument("command", choices=["scan", "track", "tick", "summary", "stats", "loop", "status", "test-notify", "backtest", "report", "fetch-data", "manual", "propose", "ui", "commands", "portfolio", "guide", "learn", "flush-outbox", "check-data", "stop", "topstep", "trim-candles", "invest", "backup", "fetch-history", "backtest-setups", "strategy-lab", "invest-review", "topstep-odds", "drift-reference", "donchian-day", "intraday-gold", "multi-trend", "trend-daily", "macro-drift", "macro-long", "essai14"])
+    p.add_argument("command", choices=["scan", "track", "tick", "summary", "stats", "loop", "status", "test-notify", "backtest", "report", "fetch-data", "manual", "propose", "ui", "commands", "portfolio", "guide", "learn", "flush-outbox", "check-data", "stop", "topstep", "trim-candles", "invest", "backup", "fetch-history", "backtest-setups", "strategy-lab", "invest-review", "topstep-odds", "drift-reference", "donchian-day", "intraday-gold", "multi-trend", "trend-daily", "macro-drift", "macro-long", "essai14", "essai15"])
     p.add_argument("--signal", help="stop : identifiant (ou début) du trade à arrêter, ou son actif ; sans valeur, le seul trade ouvert")
     p.add_argument("--halal", action="store_true", help="mode halal : second bot séparé (achat seulement, sans levier, data/halal)")
     p.add_argument("--dry-run", action="store_true", help="scan sans enregistrer les signaux")
@@ -232,6 +232,61 @@ def main(argv: list[str] | None = None) -> int:
                   f"| sorties {reasons}", flush=True)
         out["updated_at"] = iso(utcnow())
         eng.store._write(eng.store.dir / "essai8.json", out)
+    elif args.command == "essai15":
+        # essai 15 (HYPOTHESES.md) : autres règles codables, mêmes trades du bot rejoués qu'à l'essai 14 (cache)
+        from . import essai14 as e14
+        from . import essai15 as e15
+        from .backtest import run_backtest
+        from .strategies import trade_rs
+        from .topstep import FEES, PRODUCTS
+        out = {"essai": 15, "split": "2025-09-28", "n_trials": e15.N_TRIALS, "cells": {}, "info_risk": {}}
+        rows_all: list = []
+        for key in e15.ASSETS:
+            candles = eng.store.load_history(key)
+            if not candles:
+                continue
+            ctx = e15.Ctx(candles)
+            asset = eng.cfg.assets[key]
+            tcost = (sum(FEES[key]), PRODUCTS[key][1]) if key in e15.FUTURES else None
+            cost_pts = tcost[0] / tcost[1] if tcost else 0.0
+            cache = eng.store.dir / "history" / f"essai14_bot_{key}.json"
+            rows = eng.store._read(cache, None)
+            if rows is None:
+                rows = run_backtest(asset, ctx.m5.c, eng.cfg)["trades"]
+                eng.store._write(cache, rows)
+            base = e14.bot_trades(rows, key)
+            for t in base:
+                rr = trade_rs(t, asset.cost_pct, tcost)
+                rows_all.append((t.exit_ts, rr["net_topstep"] if tcost else rr["net_bot"]))
+            cells = []
+            for f in e15.FILTERS:
+                cells.append((f, [t for t in base if not e15.removed_by(
+                    f, t, ctx, cost_pts if tcost else asset.cost_pct / 100 * t.entry)]))
+            for g in e15.GESTION:
+                if g == "G39":
+                    cells.append((g, e15.half_size(base, ctx)))
+                elif g == "G40":
+                    cells.append((g, e15.day_limits(base)))
+                else:
+                    cells.append((g, [x for x in (e15.manage(g, t, ctx) for t in base) if x is not None]))
+            for s in e15.SETUPS:
+                if (s == "S21" and key not in e15.OPEN_NY) or (s == "S22" and key not in e15.INDICES):
+                    continue
+                cells.append((s, e15.setup_trades(s, key, ctx)))
+            for name, trades in cells:
+                v = e15.verdict(trades, asset.cost_pct, tcost)
+                v.update({"idea": name, "asset": key, "asset_label": asset.label})
+                out["cells"][f"{name}:{key}"] = v
+                d, c, a = v["discovery"], v["confirmation"], v["all"]
+                print(f"{name:4s} {key:8s} découverte n={d['n']:5d} {d['net']['mean_r']} PF {d['net']['profit_factor']} "
+                      f"moitiés {d['first_half']['mean_r']}/{d['second_half']['mean_r']} | confirmation n={c['n']:5d} "
+                      f"{c['net']['mean_r']} PF {c['net']['profit_factor']} | 24 mois {a['net']['mean_r']} ± {a['net']['se']} "
+                      f"→ {v['status']}", flush=True)
+        for pct in (1.0, 10.0):
+            out["info_risk"][f"{pct:g}%"] = e15.risk_curve(rows_all, pct)
+        print("risque par trade (pour information) :", out["info_risk"], flush=True)
+        out["updated_at"] = iso(utcnow())
+        eng.store._write(eng.store.dir / "essai15.json", out)
     elif args.command == "essai14":
         # essai 14 (HYPOTHESES.md) : filtres et sorties sur le bot rejoué, setups de repli, règles fixées d'avance
         from . import essai14 as e14
