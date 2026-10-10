@@ -41,12 +41,12 @@ from .learning import analyze
 from .signals import format_signal
 
 
-HALAL_REFUSED = {"manual", "propose", "commands", "guide", "ui", "loop", "fetch-data", "topstep", "invest", "backup", "fetch-history", "backtest-setups", "strategy-lab", "invest-review", "topstep-odds", "drift-reference", "donchian-day", "intraday-gold", "multi-trend", "trend-daily", "macro-drift", "macro-long", "essai14", "essai15", "essai16"}
+HALAL_REFUSED = {"manual", "propose", "commands", "guide", "ui", "loop", "fetch-data", "topstep", "invest", "backup", "fetch-history", "backtest-setups", "strategy-lab", "invest-review", "topstep-odds", "drift-reference", "donchian-day", "intraday-gold", "multi-trend", "trend-daily", "macro-drift", "macro-long", "essai14", "essai15", "essai16", "essai17"}
 
 
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(description="Générateur de signaux de scalping (NQ, BTC, XAU) — données gratuites")
-    p.add_argument("command", choices=["scan", "track", "tick", "summary", "stats", "loop", "status", "test-notify", "backtest", "report", "fetch-data", "manual", "propose", "ui", "commands", "portfolio", "guide", "learn", "flush-outbox", "check-data", "stop", "topstep", "trim-candles", "invest", "backup", "fetch-history", "backtest-setups", "strategy-lab", "invest-review", "topstep-odds", "drift-reference", "donchian-day", "intraday-gold", "multi-trend", "trend-daily", "macro-drift", "macro-long", "essai14", "essai15", "essai16"])
+    p.add_argument("command", choices=["scan", "track", "tick", "summary", "stats", "loop", "status", "test-notify", "backtest", "report", "fetch-data", "manual", "propose", "ui", "commands", "portfolio", "guide", "learn", "flush-outbox", "check-data", "stop", "topstep", "trim-candles", "invest", "backup", "fetch-history", "backtest-setups", "strategy-lab", "invest-review", "topstep-odds", "drift-reference", "donchian-day", "intraday-gold", "multi-trend", "trend-daily", "macro-drift", "macro-long", "essai14", "essai15", "essai16", "essai17"])
     p.add_argument("--signal", help="stop : identifiant (ou début) du trade à arrêter, ou son actif ; sans valeur, le seul trade ouvert")
     p.add_argument("--halal", action="store_true", help="mode halal : second bot séparé (achat seulement, sans levier, data/halal)")
     p.add_argument("--dry-run", action="store_true", help="scan sans enregistrer les signaux")
@@ -232,6 +232,40 @@ def main(argv: list[str] | None = None) -> int:
                   f"| sorties {reasons}", flush=True)
         out["updated_at"] = iso(utcnow())
         eng.store._write(eng.store.dir / "essai8.json", out)
+    elif args.command == "essai17":
+        # essai 17 (HYPOTHESES.md) : toutes nos stratégies sur le DAX et l'Euro Stoxx 50 (horloge européenne)
+        from . import essai14 as e14
+        from . import essai15 as e15
+        from . import essai17 as e17
+        from .backtest import run_backtest
+        e17.enable_european_sessions()
+        out = {"essai": 17, "split": "2025-09-28", "n_trials": e17.N_TRIALS, "cells": {}}
+        data = {}
+        for key in e17.ASSETS:
+            real = eng.store.load_history(key)
+            if real:
+                rem = e17.remap(real)
+                data[key] = (real, rem, e15.Ctx(rem))
+        for key, (real, rem, ctx) in data.items():
+            acfg = e17.asset_config(eng.cfg, key)
+            cache = eng.store.dir / "history" / f"essai17_bot_{key}.json"
+            rows = eng.store._read(cache, None)
+            if rows is None:
+                rows = run_backtest(acfg, rem, eng.cfg)["trades"]
+                eng.store._write(cache, rows)
+            base = e14.bot_trades(rows, key)
+            other = next((v[2] for k, v in data.items() if k != key), None)
+            for name, trades in e17.cells(key, real, rem, ctx, other, base, acfg.cost_pct):
+                v = e17.verdict(trades, acfg.cost_pct)
+                v.update({"idea": name, "asset": key, "asset_label": acfg.label})
+                out["cells"][f"{name}:{key}"] = v
+                d, c, a = v["discovery"], v["confirmation"], v["all"]
+                print(f"{name:17s} {key:6s} découverte n={d['n']:5d} {d['net']['mean_r']} PF {d['net']['profit_factor']} "
+                      f"moitiés {d['first_half']['mean_r']}/{d['second_half']['mean_r']} | confirmation n={c['n']:5d} "
+                      f"{c['net']['mean_r']} PF {c['net']['profit_factor']} | 24 mois {a['net']['mean_r']} ± {a['net']['se']} "
+                      f"brut {a['gross']['mean_r']} → {v['status']}", flush=True)
+        out["updated_at"] = iso(utcnow())
+        eng.store._write(eng.store.dir / "essai17.json", out)
     elif args.command == "essai16":
         # essai 16 (HYPOTHESES.md) : swing de 2 à 5 jours, 3 sorties, frais du bot
         from . import essai16 as e16

@@ -686,6 +686,10 @@ même sens, repli du RSI en 15 min, stop sous le 2e creux, gardé jusqu'à 5 jou
 les indices). Seule la sortie en deux unités sur le S&P 500 passe les deux périodes (+0,08 R sur 150 trades), sans
 être « prouvée ». Avec ce stop, les positions ne durent que 7 à 11 h en moyenne.
 
+**DAX et Euro Stoxx 50** (essai 17, `trading_bot/essai17.py`, `python run.py essai17`) : nos 54 stratégies
+existantes rejouées sur 25 mois (Dukascopy, horaires de Francfort transposés). Aucune ne passe ; même nos
+stratégies validées sur l'or et le Nasdaq sont nulles ou négatives sur ces deux indices.
+
 Connexion automatique : l'API TopstepX (ProjectX) permet de passer des ordres par programme sur le
 Combine et l'Express Funded (pas sur le Live Funded), mais seulement **depuis votre propre appareil**
 (serveurs distants, VPS et VPN interdits). Le bot, qui tourne sur GitHub Actions, ne passe donc aucun
