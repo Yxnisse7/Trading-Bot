@@ -598,6 +598,42 @@ heure de New York, pas de week-end) :
 facteur de profit ≥ 1,1, deux moitiés positives ; confirmation ≥ 30 trades, gain > 0, facteur ≥ 1,1).
 « Prouvé » avec la marge corrigée pour **266 essais** (254 + 12). Une cellule validée irait en ombre.
 
+## Essai 17 — toutes nos stratégies sur le DAX et l'Euro Stoxx 50 (54 idées, 108 cellules)
+
+Écrit le 10 octobre 2026, **avant** de télécharger les données. Ce sont les deux indices européens que notre
+liste de règles cite parmi les meilleurs marchés à trader, et nous ne les avons jamais testés. Topstep ne les
+propose pas : ils se traderaient chez un courtier CFD. Yanisse a demandé de leur appliquer toutes nos
+stratégies existantes, sans en inventer de nouvelles.
+
+**Données** : bougies 1 min Dukascopy (CFD au comptant, DEUIDXEUR et EUSIDXEUR), regroupées en 5 min, 25 mois.
+Découverte du 28/09/2025 à octobre 2026, confirmation de octobre 2024 au 27/09/2025, comme les essais 14 à 16.
+**Frais du bot** en % du prix (pas de Topstep) : DAX 0,01 % (spread CFD d'environ 1 à 1,5 point plus un peu de
+glissement), Euro Stoxx 50 0,03 % (spread d'environ 1,5 point sur un indice 4 à 5 fois plus bas).
+
+**Horloge européenne** : nos stratégies de séance sont écrites à l'heure de New York (ouverture 9:30, fin
+16:00, sortie forcée 15:00 heure de Chicago). Pour les indices européens, chaque bougie est replacée à l'heure
+de Paris moins 30 minutes, lue comme une heure de New York : l'ouverture de 9:30 du code devient 9:00 à Paris
+(ouverture de Francfort), la sortie forcée de 16:00 devient 15:30 à Paris, la pause sans entrée de 15:00-17:00
+heure de Chicago devient 15:30-17:30 à Paris. Les R ne changent pas, seuls les horaires sont transposés.
+Restent à l'heure réelle : `london_breakout` (déjà écrite en heure UTC autour de l'ouverture de Londres),
+`donchian_1h` et `rsi2_1h` (sans horaires de séance), et le swing de l'essai 16 (entrées 8:00-22:00 à Paris,
+sortie le vendredi à 16:00 heure de New York, soit 22:00 à Paris).
+
+**Stratégies testées (mêmes règles et mêmes réglages que dans leur essai d'origine), sur chacun des 2 indices** :
+- le **bot actuel** rejoué (réglages de l'indice S&P 500, horizon 1 h) ;
+- laboratoire de l'essai 3 et 5 : `orb5`, `orb30`, `intraday_mom`, `noise_area`, `noise_area_v2`, `gap_fade`,
+  `london_breakout`, `donchian_1h`, `rsi2_1h` (`news_breakout` et `pre_fomc` sont propres aux annonces
+  américaines, `comex_orb` à l'or : non testés) ;
+- `donchian_day`, `donchian_15m_day`, `donchian_30m_day` (essais 8 et 9) ;
+- essai 14 : filtres A1 à A5 sur le bot (A5 : l'autre indice européen), sorties C11 à C13, setups B6 à B10 ;
+- essai 15 : filtres F1 à F8, gestion G30 à G40, setups S15 à S28, S21 et S22 ;
+- essai 16 : swing W1 à W3.
+
+**Verdict par cellule** : critères de l'essai 3 (découverte puis confirmation), frais ci-dessus. « Prouvé »
+avec la marge corrigée pour **374 essais** (266 + 108). DAX et Euro Stoxx 50 bougent presque ensemble : une
+stratégie validée sur les deux compte comme un seul indice, pas comme deux confirmations. Une cellule validée
+irait en ombre, jamais directement en signal réel.
+
 ## Journal des essais
 
 | Date | Essai | Résultat |
@@ -636,3 +672,4 @@ facteur de profit ≥ 1,1, deux moitiés positives ; confirmation ≥ 30 trades,
 | 2026-10-09 | Essai 15, suite | **Mis en ombre** (accord de Yanisse), sans rien changer aux notifications : G40 sur l'or (signal réel de l'or marqué `limites_jour_or` s'il arrive après 3 signaux du jour ou après 2 pertes, jugé comme les autres filtres) ; S25 sur le Nasdaq (`creux_repris_15m`, suivi en ombre dans le laboratoire depuis le 09/10/2026 22:00 UTC, avec le contrôle de décrochage de l'essai 7). |
 | 2026-10-09 | Pré-enregistrement de l'essai 16 (swing, 3 variantes, 12 cellules) | — |
 | 2026-10-09 | **Essai 16** : swing (tendance jour + 1 h, repli du RSI en 15 min, stop sous le 2e creux 15 min), 24 mois, frais du bot | **Une cellule validée, pas « prouvée » (266 essais) : W2 deux unités sur le S&P 500** — découverte +0,05 R (71 trades, PF 1,12, moitiés +0,01 / +0,10), confirmation +0,10 R (79, PF 1,22) ; 24 mois +0,08 R ± 0,10 (150 trades ; estimation IC Markets +0,07 R). **Tout le reste est écarté** : or −0,06 à −0,08 R, Nasdaq −0,10 à −0,21 R ; Bitcoin très bon en découverte (W3 +0,62 R, W1 +0,36 R) mais nul ou négatif sur l'année d'avant (W1 −0,23 R, W3 +0,03 R). **Constat important** : avec un stop sous le 2e creux en 15 min, les positions ne durent que 7 à 11 h en moyenne (70 à 100 % des sorties au stop) : ce n'est pas encore un vrai swing de 2 à 5 jours ; le stop est trop proche pour l'horizon visé. Un stop sous les creux 1 h serait un nouvel essai. Environ 60 à 90 trades par an et par actif, donc des marges d'erreur larges (± 0,10 à 0,33 R). |
+| 2026-10-10 | Pré-enregistrement de l'essai 17 (toutes nos stratégies sur le DAX et l'Euro Stoxx 50, 108 cellules) | — |
