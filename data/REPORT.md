@@ -1,6 +1,6 @@
 # Trading-Bot — rapport
 
-_Mis à jour le 12/10/2026 à 01:25 (Europe/Paris)._
+_Mis à jour le 12/10/2026 à 01:29 (Europe/Paris)._
 
 ## Vue d'ensemble
 
@@ -182,16 +182,12 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 | adx | 1.0 |
 | vwap | 0.75 |
 | rsi | 1.0 |
-| macd | 0.922 |
+| macd | 0.919 |
 | level | 1.0 |
 | volume | 0.75 |
 | orb | 1.0 |
 | pdhl | 1.0 |
 | corr | 0.5 |
-
-Corrections par actif :
-
-- sp500 : {'trend_5m': 0.978, 'trend_15m': 0.978, 'trend_1h': 0.978, 'adx': 0.978, 'vwap': 0.731}
 
 | Variante testée en fantôme | Trades | Gain net moyen | Statut |
 |---|---:|---:|---|
@@ -208,9 +204,7 @@ Corrections par actif :
 Notes :
 
 - trades réels : +0,02 R ± 0,19 R par trade avant frais sur 138 trades (0 R = hasard)
-- macd : -0,18 R ± 0,14 R sur 217 trades éq. → poids ×0,92
-- sp500, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,20 R contre -0,02 R en global sur 157 trades éq. → poids ×0,98 sur cet actif
-- sp500, vwap : -0,19 R contre -0,01 R en global sur 151 trades éq. → poids ×0,97 sur cet actif
+- macd : -0,17 R ± 0,14 R sur 226 trades éq. → poids ×0,92
 - variante « indices le matin européen » en test : 61 trades, -0,14 R net, encore 39 trades avant décision
 - variante « horizon ~3 h » en test : 64 trades, -0,40 R net, encore 36 trades avant décision
 - variante « confiance moyenne » en test : 48 trades, -0,06 R net, encore 52 trades avant décision
@@ -221,19 +215,18 @@ Notes :
 - variante « nouvel actif : Pétrole WTI (CL) » en test : 47 trades, -0,10 R net, encore 53 trades avant décision
 - variante « nouvel actif : Euro / dollar (6E) » en test : 23 trades, -0,38 R net, encore 77 trades avant décision
 - sortie : stop remonté à l'entrée après +0,5 R ferait mieux (-0,16 R net contre -0,24 R, réels et en ombre) : à décider
-- sortie : stop remonté à l'entrée après +1,0 R ferait mieux (-0,06 R net contre -0,09 R, backtest) : à décider
 
 ## Backtests (données historiques 5 min)
 
 | Actif | Période | Signaux | TP | SL | Expirés | Taux de réussite | Hasard attendu | Avantage | P&L net | Espérance nette / trade |
 |---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| Nasdaq 100 (NQ) | 09/07/2026 → 04/10/2026 | 87 | 22 | 42 | 23 | 34% | 42% | -7% | -1.15 % | -0.013 % |
-| S&P 500 (ES) | 09/07/2026 → 04/10/2026 | 104 | 35 | 53 | 16 | 40% | 42% | -2% | -0.64 % | -0.006 % |
-| Bitcoin (BTC/USD) | 20/07/2026 → 04/10/2026 | 55 | 20 | 23 | 12 | 47% | 41% | +6% | -0.99 % | -0.018 % |
-| Ethereum (ETH/USD) | 20/07/2026 → 04/10/2026 | 56 | 11 | 27 | 18 | 29% | 40% | -11% | -6.67 % | -0.119 % |
-| Or (XAU/USD) | 09/07/2026 → 04/10/2026 | 130 | 43 | 52 | 35 | 45% | 42% | +3% | -1.47 % | -0.011 % |
-| Pétrole WTI (CL) | 14/07/2026 → 04/10/2026 | 186 | 60 | 85 | 41 | 41% | 41% | +0% | +2.42 % | +0.013 % |
-| Euro / dollar (6E) | 14/07/2026 → 04/10/2026 | 31 | 9 | 19 | 3 | 32% | 40% | -8% | -0.65 % | -0.021 % |
+| Nasdaq 100 (NQ) | 09/07/2026 → 11/10/2026 | 98 | 25 | 47 | 26 | 35% | 41% | -7% | -1.17 % | -0.012 % |
+| S&P 500 (ES) | 09/07/2026 → 11/10/2026 | 115 | 42 | 54 | 19 | 44% | 42% | +2% | -0.10 % | -0.001 % |
+| Bitcoin (BTC/USD) | 20/07/2026 → 11/10/2026 | 59 | 22 | 25 | 12 | 47% | 40% | +6% | -1.00 % | -0.017 % |
+| Ethereum (ETH/USD) | 20/07/2026 → 11/10/2026 | 58 | 12 | 28 | 18 | 30% | 40% | -10% | -6.67 % | -0.115 % |
+| Or (XAU/USD) | 09/07/2026 → 11/10/2026 | 139 | 45 | 58 | 36 | 44% | 42% | +2% | -2.31 % | -0.017 % |
+| Pétrole WTI (CL) | 14/07/2026 → 11/10/2026 | 193 | 64 | 88 | 41 | 42% | 41% | +1% | +3.61 % | +0.019 % |
+| Euro / dollar (6E) | 14/07/2026 → 11/10/2026 | 35 | 9 | 22 | 4 | 29% | 40% | -11% | -0.86 % | -0.024 % |
 
 ---
 
