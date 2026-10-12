@@ -41,12 +41,12 @@ from .learning import analyze
 from .signals import format_signal
 
 
-HALAL_REFUSED = {"manual", "propose", "commands", "guide", "ui", "loop", "fetch-data", "topstep", "invest", "backup", "fetch-history", "backtest-setups", "strategy-lab", "invest-review", "topstep-odds", "drift-reference", "donchian-day", "intraday-gold", "multi-trend", "trend-daily", "macro-drift", "macro-long", "essai14", "essai15", "essai16", "essai17"}
+HALAL_REFUSED = {"manual", "propose", "commands", "guide", "ui", "loop", "fetch-data", "topstep", "invest", "backup", "fetch-history", "backtest-setups", "strategy-lab", "invest-review", "topstep-odds", "drift-reference", "donchian-day", "intraday-gold", "multi-trend", "trend-daily", "macro-drift", "macro-long", "essai14", "essai15", "essai16", "essai17", "essai18"}
 
 
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(description="Générateur de signaux de scalping (NQ, BTC, XAU) — données gratuites")
-    p.add_argument("command", choices=["scan", "track", "tick", "summary", "stats", "loop", "status", "test-notify", "backtest", "report", "fetch-data", "manual", "propose", "ui", "commands", "portfolio", "guide", "learn", "flush-outbox", "check-data", "stop", "topstep", "trim-candles", "invest", "backup", "fetch-history", "backtest-setups", "strategy-lab", "invest-review", "topstep-odds", "drift-reference", "donchian-day", "intraday-gold", "multi-trend", "trend-daily", "macro-drift", "macro-long", "essai14", "essai15", "essai16", "essai17"])
+    p.add_argument("command", choices=["scan", "track", "tick", "summary", "stats", "loop", "status", "test-notify", "backtest", "report", "fetch-data", "manual", "propose", "ui", "commands", "portfolio", "guide", "learn", "flush-outbox", "check-data", "stop", "topstep", "trim-candles", "invest", "backup", "fetch-history", "backtest-setups", "strategy-lab", "invest-review", "topstep-odds", "drift-reference", "donchian-day", "intraday-gold", "multi-trend", "trend-daily", "macro-drift", "macro-long", "essai14", "essai15", "essai16", "essai17", "essai18"])
     p.add_argument("--signal", help="stop : identifiant (ou début) du trade à arrêter, ou son actif ; sans valeur, le seul trade ouvert")
     p.add_argument("--halal", action="store_true", help="mode halal : second bot séparé (achat seulement, sans levier, data/halal)")
     p.add_argument("--dry-run", action="store_true", help="scan sans enregistrer les signaux")
@@ -232,6 +232,15 @@ def main(argv: list[str] | None = None) -> int:
                   f"| sorties {reasons}", flush=True)
         out["updated_at"] = iso(utcnow())
         eng.store._write(eng.store.dir / "essai8.json", out)
+    elif args.command == "essai18":
+        # essai 18 (HYPOTHESES.md) : scalping de quelques minutes sur l'or, bougies 1 min Dukascopy
+        from datetime import date as _date
+        from . import essai18 as e18
+        path = eng.store.dir / "history" / "gold_1m_days.json"
+        print(e18.download(path, _date(2024, 9, 30), _date.today()), flush=True)
+        out = e18.run(e18.load(path), log=lambda line: print(line, flush=True))
+        out["updated_at"] = iso(utcnow())
+        eng.store._write(eng.store.dir / "essai18.json", out)
     elif args.command == "essai17":
         # essai 17 (HYPOTHESES.md) : toutes nos stratégies sur le DAX et l'Euro Stoxx 50 (horloge européenne)
         from . import essai14 as e14
