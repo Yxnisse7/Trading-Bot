@@ -634,6 +634,62 @@ avec la marge corrigée pour **374 essais** (266 + 108). DAX et Euro Stoxx 50 bo
 stratégie validée sur les deux compte comme un seul indice, pas comme deux confirmations. Une cellule validée
 irait en ombre, jamais directement en signal réel.
 
+## Essai 18 — scalping de quelques minutes sur l'or, règles reformulées (10 idées, 10 cellules)
+
+Écrit le 12 octobre 2026, **avant** d'avoir regardé les données (téléchargement lancé en parallèle). Yanisse veut
+essayer le vrai scalping (trades de quelques minutes, un seul à la fois) sur un compte démo MetaTrader 5, puis
+peut-être en réel. Avant tout démo, on teste les règles de scalping de notre liste de règles, reformulées ici,
+sur l'or (notre meilleur marché), avec les frais d'un courtier ECN.
+
+**Données** : bougies 1 min Dukascopy (or au comptant XAUUSD, prix acheteur BID, volume en ticks), 10/2024 →
+10/2026. Les bougies 5 min, 15 min et 1 h sont reconstruites à partir des bougies 1 min, et une décision ne lit
+que des bougies closes. Découverte du 28/09/2025 à octobre 2026, confirmation de octobre 2024 au 27/09/2025,
+comme les essais 14 à 17. Les ticks (seconde par seconde) sont trop lents à télécharger sur 2 ans : la vérification
+sur ticks ne se fera que pour une cellule validée (dernier mois), avant tout démo.
+
+**Frais** : 0,30 $ par once et par aller-retour (compte ECN type Vantage RAW : écart achat-vente d'environ 0,12 à
+0,25 $ aux heures actives, commission 6 $ par lot de 100 onces, plus un peu de glissement), retirés de chaque trade
+et exprimés en R (frais ÷ distance du stop).
+
+**Indicateurs** : moyennes mobiles simples 20 et 50 (MM20, MM50), RSI 21, stochastique 21-3-3, ATR 14.
+
+**Contexte obligatoire (achat ; vente symétrique)** :
+- 15 min et 5 min : clôture au-dessus de la MM20, MM20 plus haute que 3 bougies plus tôt, RSI 21 au-dessus de 50 ;
+- 1 h : clôture au-dessus de la MM20 (on ne trade pas contre l'heure) ;
+- pas étiré : clôture 5 min moins MM20 5 min inférieure à 2 ATR 5 min ;
+- de la place : le plus haut des 24 dernières bougies 1 h est soit sous le prix (cassure), soit à au moins
+  1,5 fois la distance du stop au-dessus de l'entrée (on n'achète pas juste sous une résistance) ;
+- horaires : entrées de 7:00 à 20:00 UTC du lundi au vendredi (19:00 le vendredi), aucune entrée de 8:25 à 8:45
+  ni de 9:55 à 10:05 heure de New York (annonces américaines), toute position fermée à 20:30 UTC.
+
+**Entrées (signal sur une bougie 1 min close, entrée à l'ouverture de la suivante)** :
+- **R1 repli sur la moyenne** : dans les 5 dernières bougies 1 min, un plus bas a touché la MM20 1 min, la clôture
+  est restée au-dessus de la MM50 1 min, puis la stochastique 1 min repart vers le haut (%K croise %D, %K sous 50 au
+  croisement) et la bougie du signal clôture au-dessus de la MM20 ;
+- **R2 cassure d'une pause** : les 4 dernières bougies 5 min tiennent dans une hauteur d'au plus 1 ATR 5 min, une
+  bougie 1 min clôture au-dessus de leur plus haut avec un volume supérieur à 1,5 fois la moyenne des 20 dernières ;
+- **R3 retour au RSI 50** : le RSI 21 en 5 min est passé entre 45 et 52 sur l'une des 3 dernières bougies 5 min,
+  puis une bougie 1 min clôture au-dessus du plus haut de la précédente ;
+- **R4 chiffre rond** : niveaux tous les 10 $ ; une bougie 1 min a clôturé au-dessus d'un niveau dans les 30 dernières
+  minutes, le prix est revenu à moins de 0,3 ATR 5 min du niveau sans clôturer en dessous, puis une bougie 1 min
+  haussière clôture au-dessus du plus haut de la précédente ;
+- **R1-R4 ensemble** : le premier signal venu des quatre.
+
+**Stop** : sous le plus bas des 10 dernières bougies 1 min, moins 0,25 $ de marge. Distance au moins 0,5 ATR 5 min
+(jamais un stop minuscule) ; au-delà de 1,5 ATR 5 min, pas de trade.
+
+**Sorties (2 variantes par entrée)** :
+- **X1 1 pour 1** : objectif à 1 fois la distance du stop, durée maximale 60 min ;
+- **X2 moitié puis suiveur** : moitié fermée à 1 fois la distance du stop, stop de l'autre moitié remonté à l'entrée,
+  puis suivi sous le plus bas des 5 dernières bougies 1 min closes, durée maximale 60 min.
+Stop et objectif touchés dans la même bougie 1 min : compté en stop (prudent). Un seul trade à la fois par cellule.
+
+**Verdict par cellule** : critères de l'essai 3 (découverte puis confirmation), frais ci-dessus, 5 entrées × 2
+sorties = 10 cellules. « Prouvé » avec la marge corrigée pour **384 essais** (374 + 10). On rapporte aussi le
+résultat avant frais et le nombre de trades par jour. Une cellule validée ne va ni en signal réel ni en ombre
+directement : vérification sur ticks du dernier mois, puis démo MetaTrader 5 de quelques semaines. Aucun ordre
+réel.
+
 ## Journal des essais
 
 | Date | Essai | Résultat |
