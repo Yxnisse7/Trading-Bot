@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-12T15:05:43.679189+02:00",
+  "updated_at": "2026-10-12T15:10:44.977511+02:00",
   "timezone": "Europe/Paris",
   "equity_curve": [
     {
@@ -1583,7 +1583,7 @@
       "avg_pnl_pct": -0.0391
     },
     "open": 0,
-    "open_shadow": 0
+    "open_shadow": 1
   },
   "by_source": {
     "bot": {
@@ -4977,7 +4977,42 @@
       ]
     }
   ],
-  "open_signals": [],
+  "open_signals": [
+    {
+      "id": "a85d6a0665",
+      "asset": "oil",
+      "asset_label": "Pétrole WTI (CL)",
+      "direction": "long",
+      "horizon": "1h",
+      "entry": 93.58,
+      "take_profit": 94.16,
+      "stop_loss": 93.19,
+      "risk_reward": 1.49,
+      "confidence": "fort",
+      "score": 5.75,
+      "criteria": [
+        "adx",
+        "rsi",
+        "trend_15m",
+        "trend_1h",
+        "trend_5m",
+        "vwap"
+      ],
+      "source": "shadow",
+      "status": "open",
+      "pnl_pct": null,
+      "pnl_gross_pct": null,
+      "duration_minutes": null,
+      "close_price": null,
+      "created_at": "2026-10-12T13:10:34Z",
+      "closed_at": null,
+      "created_local": "12/10 15:10",
+      "expires_at": "2026-10-12T14:10:34Z",
+      "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 0.97 (1.04 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 43%.",
+      "news_context": "actualité à surveiller (score 2) : Gold fails to sustain a break above $4,200, US CPI in focus | Mired in their worst losing streak in years, small caps could be the best way for investors to play crucial CPI data",
+      "manual_exit": null
+    }
+  ],
   "recent_trades": [
     {
       "id": "5f2c46db83",
@@ -7423,7 +7458,7 @@
     }
   },
   "state": {
-    "last_scan": "2026-10-12T13:05:34Z",
+    "last_scan": "2026-10-12T13:10:34Z",
     "last_scan_note": "0 signal(aux)",
     "last_summary": "2026-10-11T22:05:31Z",
     "last_track": "2026-10-12T11:40:36Z",
@@ -19329,11 +19364,30 @@
           "close_at": 1791835200,
           "notified_entry": "2026-10-12T02:10:38Z",
           "notified_exit": "2026-10-12T02:10:38Z"
+        },
+        {
+          "entry_ts": 1791810000,
+          "entry_at": "2026-10-12T13:00:00Z",
+          "direction": "short",
+          "entry": 4188.89990234375,
+          "risk": 24.729765,
+          "stop": 4213.629667,
+          "status": "closed",
+          "reason": "heure",
+          "exit_ts": 1791813600,
+          "exit": 4188.7998046875,
+          "last": null,
+          "r_topstep": -0.0078,
+          "r_bot": -0.0298,
+          "micros": 1,
+          "close_at": 1791835200,
+          "notified_entry": "2026-10-12T13:10:34Z",
+          "notified_exit": "2026-10-12T13:10:34Z"
         }
       ],
-      "checked_hour": "2026-10-12T12:00:00Z",
-      "n": 2,
-      "mean_r": -0.0008,
+      "checked_hour": "2026-10-12T13:00:00Z",
+      "n": 3,
+      "mean_r": -0.0031,
       "live": true
     },
     "creux_repris_15m:nasdaq": {
@@ -19364,7 +19418,7 @@
     }
   },
   "drift": {
-    "updated_at": "2026-10-12T09:01:05Z",
+    "updated_at": "2026-10-12T13:10:34Z",
     "cells": {
       "donchian_1h:bitcoin": {
         "n": 5,
@@ -19411,19 +19465,19 @@
         "since_status": "2026-10-07T19:35:32Z"
       },
       "donchian_day:gold": {
-        "n": 2,
-        "cum_r": -0.0016,
+        "n": 3,
+        "cum_r": -0.0094,
         "dd_r": 0.0426,
         "ref_n": 482,
         "ref_mean_r": 0.0882,
-        "cum_pct": 0.5126,
-        "dd_pct": 0.2248,
+        "cum_pct": 0.496,
+        "dd_pct": 0.0996,
         "status": "trop tôt",
         "band": {
-          "cum_p5": -2.025,
-          "cum_p50": -0.079,
-          "cum_p95": 3.156,
-          "dd_p95": 2.025
+          "cum_p5": -2.506,
+          "cum_p50": -0.003,
+          "cum_p95": 3.776,
+          "dd_p95": 2.506
         },
         "label": "Donchian fermé chaque soir · or",
         "ref_period": [
