@@ -1,0 +1,236 @@
+"""Pont MetaTrader 5 (PC Windows) : les règles de l'essai 18 en direct sur l'or, un seul trade à la fois.
+
+Modes (fichier config.json à côté du dossier du bot) :
+- « observe » : le pont lit le marché et note dans le journal les trades qu'il aurait pris, sans aucun ordre ;
+- « demo » : il passe les ordres, **seulement sur un compte démo** ; un compte réel est toujours refusé.
+Le terminal MetaTrader 5 doit être ouvert et connecté. Aucun identifiant n'est lu ni écrit ici.
+Lancement : `python -m trading_bot.mt5_bridge E:\\TradingBot` (ou lancer.bat).
+"""
+from __future__ import annotations
+
+import csv
+import json
+import logging
+import sys
+import time
+from datetime import datetime, timezone
+from pathlib import Path
+from typing import Any
+
+from . import essai18 as e18
+from .models import Candle
+
+log = logging.getLogger("mt5_bridge")
+
+DEFAULTS: dict[str, Any] = {
+    "mode": "observe",            # observe | demo
+    "symbol": "XAUUSD",
+    "entry": "R1-R4",             # R1, R2, R3, R4 ou R1-R4 (essai 18)
+    "exit": "X1",                 # X1 : objectif à 1 fois le stop
+    "lot": 0.01,
+    "virtual_capital": 100.0,     # le pont trade comme si le compte ne valait que ça
+    "daily_loss_limit": 10.0,     # en $ : plus aucun trade ce jour-là une fois atteint
+    "magic": 180018,
+    "bars": 3000,
+    "poll_seconds": 2,
+    "agent": {"enabled": False, "model": "", "library": ""},
+}
+
+
+def load_config(root: Path) -> dict[str, Any]:
+    f = root / "config.json"
+    cfg = json.loads(json.dumps(DEFAULTS))
+    if f.exists():
+        user = json.loads(f.read_text(encoding="utf-8"))
+        cfg.update({k: v for k, v in user.items() if k != "agent"})
+        cfg["agent"].update(user.get("agent", {}))
+    else:
+        f.write_text(json.dumps(cfg, indent=2, ensure_ascii=False), encoding="utf-8")
+    return cfg
+
+
+class Bridge:
+    def __init__(self, mt5, cfg: dict[str, Any], root: Path, agent=None, clock=time.time):
+        self.mt5, self.cfg, self.root, self.agent, self.clock = mt5, cfg, root, agent, clock
+        self.sym, self.magic = cfg["symbol"], int(cfg["magic"])
+        self.last_bar: int | None = None
+        self.limit_day: str | None = None
+        if cfg["exit"] != "X1":
+            raise ValueError("seule la sortie X1 est branchée en direct pour l'instant")
+
+    # ------------------------------------------------------------ lecture du terminal
+    def offset(self) -> int:
+        """Décalage de l'heure du serveur (les bougies MT5 sont datées à l'heure du serveur), arrondi à l'heure."""
+        tick = self.mt5.symbol_info_tick(self.sym)
+        return round((tick.time - self.clock()) / 3600) * 3600
+
+    def candles(self, offset: int) -> list[Candle]:
+        rates = self.mt5.copy_rates_from_pos(self.sym, self.mt5.TIMEFRAME_M1, 0, int(self.cfg["bars"]) + 1)
+        if rates is None or len(rates) < 2:
+            return []
+        return [Candle(int(r["time"]) - offset, float(r["open"]), float(r["high"]), float(r["low"]),
+                       float(r["close"]), float(r["tick_volume"])) for r in rates[:-1]]     # la dernière est en cours
+
+    def is_demo(self) -> bool:
+        a = self.mt5.account_info()
+        return a is not None and a.trade_mode == self.mt5.ACCOUNT_TRADE_MODE_DEMO
+
+    def positions(self) -> list:
+        return [p for p in (self.mt5.positions_get(symbol=self.sym) or []) if p.magic == self.magic]
+
+    def today_pnl(self, offset: int) -> float:
+        """Résultat des trades du pont fermés aujourd'hui (UTC), frais compris."""
+        now = self.clock()
+        day0 = int(now // 86400 * 86400)
+        lo = datetime.fromtimestamp(day0 + offset - 86400, timezone.utc)
+        hi = datetime.fromtimestamp(now + offset + 86400, timezone.utc)
+        deals = self.mt5.history_deals_get(lo, hi) or []
+        return sum(d.profit + d.commission + d.swap for d in deals
+                   if d.magic == self.magic and d.time - offset >= day0)
+
+    # ------------------------------------------------------------ journal
+    def journal(self, event: str, **kw) -> None:
+        now = datetime.fromtimestamp(self.clock(), timezone.utc)
+        f = self.root / "journal" / f"{now:%Y-%m}.csv"
+        f.parent.mkdir(parents=True, exist_ok=True)
+        new = not f.exists()
+        cols = ["heure_utc", "evenement", "sens", "prix", "stop", "objectif", "lot", "note"]
+        with f.open("a", newline="", encoding="utf-8") as fh:
+            w = csv.DictWriter(fh, fieldnames=cols)
+            if new:
+                w.writeheader()
+            w.writerow({"heure_utc": now.strftime("%Y-%m-%d %H:%M:%S"), "evenement": event,
+                        **{k: kw.get(k, "") for k in cols[2:]}})
+        log.info("%s %s", event, kw)
+
+    # ------------------------------------------------------------ ordres
+    def _filling(self) -> int:
+        info = self.mt5.symbol_info(self.sym)
+        mode = getattr(info, "filling_mode", 0)
+        if mode & 1:
+            return self.mt5.ORDER_FILLING_FOK
+        if mode & 2:
+            return self.mt5.ORDER_FILLING_IOC
+        return self.mt5.ORDER_FILLING_RETURN
+
+    def close(self, p, why: str) -> None:
+        if self.cfg["mode"] != "demo" or not self.is_demo():
+            return
+        tick = self.mt5.symbol_info_tick(self.sym)
+        long = p.type == self.mt5.POSITION_TYPE_BUY
+        res = self.mt5.order_send({
+            "action": self.mt5.TRADE_ACTION_DEAL, "symbol": self.sym, "volume": p.volume, "position": p.ticket,
+            "type": self.mt5.ORDER_TYPE_SELL if long else self.mt5.ORDER_TYPE_BUY,
+            "price": tick.bid if long else tick.ask, "deviation": 30, "magic": self.magic,
+            "comment": f"essai18 {why}", "type_time": self.mt5.ORDER_TIME_GTC, "type_filling": self._filling()})
+        self.journal("sortie", sens="achat" if long else "vente", prix=tick.bid if long else tick.ask,
+                     lot=p.volume, note=f"{why} (code {getattr(res, 'retcode', None)})")
+
+    def manage(self, offset: int) -> bool:
+        """Sorties au temps (60 min, 20:30 UTC). Renvoie True si une position du pont reste ouverte."""
+        now = self.clock()
+        open_ = self.positions()
+        for p in open_:
+            opened = p.time - offset
+            if now >= opened + e18.MAX_HOLD or now >= e18._close_ts(opened):
+                self.close(p, "durée")
+        return bool(open_)
+
+    # ------------------------------------------------------------ une itération
+    def step(self) -> str:
+        off = self.offset()
+        bars = self.candles(off)
+        now = self.clock()
+        if not bars or now - (bars[-1].ts + 60) > 180:
+            return "flux arrêté"
+        if self.manage(off):
+            return "position ouverte"
+        if bars[-1].ts == self.last_bar:
+            return "rien de neuf"
+        self.last_bar = bars[-1].ts
+        day = datetime.fromtimestamp(now, timezone.utc).date().isoformat()
+        if self.today_pnl(off) <= -float(self.cfg["daily_loss_limit"]):
+            if self.limit_day != day:
+                self.limit_day = day
+                self.journal("limite du jour", note=f"perte du jour ≥ {self.cfg['daily_loss_limit']} $ : arrêt jusqu'à demain")
+            return "limite du jour"
+        i = len(bars) - 1
+        if not e18.hours_ok(bars[i].ts + 60):
+            return "hors horaires"
+        x = e18.Ctx(bars)
+        d = e18.signal(self.cfg["entry"], x, i)
+        if not d:
+            return "pas de signal"
+        tick = self.mt5.symbol_info_tick(self.sym)
+        px = tick.ask if d > 0 else tick.bid
+        sens = "achat" if d > 0 else "vente"
+        p = e18.plan(x, i, d, px)
+        if p is None:
+            self.journal("signal refusé", sens=sens, prix=px, note="stop trop large ou obstacle trop proche")
+            return "refusé"
+        stop, dist = p
+        target = px + d * dist
+        info = self.mt5.symbol_info(self.sym)
+        digits = getattr(info, "digits", 2)
+        stop, target = round(stop, digits), round(target, digits)
+        min_dist = getattr(info, "trade_stops_level", 0) * getattr(info, "point", 0.01)
+        if dist <= min_dist:
+            self.journal("signal refusé", sens=sens, prix=px, stop=stop, note="stop plus court que le minimum du courtier")
+            return "refusé"
+        if self.agent is not None:
+            ok, why = self.agent.ask({"sens": sens, "prix": px, "stop": stop, "objectif": target,
+                                      "bougies_1m": [c.__dict__ for c in bars[-60:]]})
+            if not ok:
+                self.journal("refusé par l'agent", sens=sens, prix=px, stop=stop, objectif=target, note=why)
+                return "refusé par l'agent"
+        if self.cfg["mode"] != "demo":
+            self.journal("observé", sens=sens, prix=px, stop=stop, objectif=target, lot=self.cfg["lot"],
+                         note="mode observation : aucun ordre")
+            return "observé"
+        if not self.is_demo():
+            self.journal("REFUSÉ", sens=sens, prix=px, note="compte réel : le pont ne trade que sur un compte démo")
+            return "compte réel refusé"
+        res = self.mt5.order_send({
+            "action": self.mt5.TRADE_ACTION_DEAL, "symbol": self.sym, "volume": float(self.cfg["lot"]),
+            "type": self.mt5.ORDER_TYPE_BUY if d > 0 else self.mt5.ORDER_TYPE_SELL, "price": px,
+            "sl": stop, "tp": target, "deviation": 30, "magic": self.magic, "comment": "essai18",
+            "type_time": self.mt5.ORDER_TIME_GTC, "type_filling": self._filling()})
+        code = getattr(res, "retcode", None)
+        ok = code == self.mt5.TRADE_RETCODE_DONE
+        self.journal("entrée" if ok else "ordre rejeté", sens=sens, prix=getattr(res, "price", px) or px,
+                     stop=stop, objectif=target, lot=self.cfg["lot"], note=f"code {code}")
+        return "entrée" if ok else "ordre rejeté"
+
+
+def main(argv: list[str]) -> int:
+    import MetaTrader5 as mt5                     # module officiel, Windows seulement
+
+    from .agent_hook import Agent
+    root = Path(argv[1]) if len(argv) > 1 else Path.cwd()
+    logging.basicConfig(level=logging.INFO, format="%(asctime)s %(message)s",
+                        handlers=[logging.StreamHandler(), logging.FileHandler(root / "pont.log", encoding="utf-8")])
+    cfg = load_config(root)
+    if not mt5.initialize():
+        log.error("MetaTrader 5 injoignable (%s) : ouvre le terminal et connecte-toi", mt5.last_error())
+        return 1
+    if not mt5.symbol_select(cfg["symbol"], True):
+        log.error("symbole %s introuvable chez ce courtier", cfg["symbol"])
+        return 1
+    bridge = Bridge(mt5, cfg, root, agent=Agent(cfg["agent"], root))
+    log.info("pont lancé : mode %s, %s, entrée %s, compte démo : %s", cfg["mode"], cfg["symbol"], cfg["entry"], bridge.is_demo())
+    last = ""
+    while True:
+        try:
+            state = bridge.step()
+            if state != last:
+                log.info("état : %s", state)
+                last = state
+        except Exception:                          # le pont ne doit pas s'arrêter sur une erreur passagère
+            log.exception("erreur, nouvel essai")
+            time.sleep(10)
+            mt5.initialize()
+        time.sleep(float(cfg["poll_seconds"]))
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv))

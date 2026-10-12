@@ -223,6 +223,27 @@ def _close_ts(ts: int) -> int:
     return int(u.replace(hour=20, minute=30, second=0).timestamp())
 
 
+def plan(x: Ctx, i: int, d: int, entry_px: float) -> tuple[float, float] | None:
+    """Stop et distance du stop pour un signal sur la bougie 1 min `i`, ou None si le trade est refusé
+    (stop trop large, ou obstacle de l'heure trop proche). Sert au backtest comme au direct."""
+    c = x.m1
+    a5 = x.f5.atr[x.i5[i]]
+    w = c[i - 9:i + 1]
+    stop = (min(b.low for b in w) - STOP_PAD) if d > 0 else (max(b.high for b in w) + STOP_PAD)
+    dist = d * (entry_px - stop)
+    if dist < 0.5 * a5:
+        dist = 0.5 * a5
+        stop = entry_px - d * dist
+    if dist > 1.5 * a5:
+        return None
+    j60 = x.i60[i]
+    w60 = x.f60.c[max(0, j60 - 23):j60 + 1]
+    wall = max(b.high for b in w60) if d > 0 else min(b.low for b in w60)
+    if d * (wall - entry_px) > 0 and d * (wall - entry_px) < 1.5 * dist:
+        return None
+    return stop, dist
+
+
 def simulate(x: Ctx, entry: str, exit_: str) -> list[sl.Trade]:
     c, out, i, n = x.m1, [], 60, len(x.m1)
     while i < n - 1:
@@ -233,28 +254,16 @@ def simulate(x: Ctx, entry: str, exit_: str) -> list[sl.Trade]:
         if not d:
             i += 1
             continue
-        j5 = x.i5[i]
-        a5 = x.f5.atr[j5]
         e_bar = i + 1
         if c[e_bar].ts - c[i].ts > 300:                        # trou dans les données (week-end, coupure)
             i += 1
             continue
         entry_px = c[e_bar].open
-        w = c[i - 9:i + 1]
-        stop = (min(b.low for b in w) - STOP_PAD) if d > 0 else (max(b.high for b in w) + STOP_PAD)
-        dist = d * (entry_px - stop)
-        if dist < 0.5 * a5:
-            dist = 0.5 * a5
-            stop = entry_px - d * dist
-        if dist > 1.5 * a5:
+        p = plan(x, i, d, entry_px)
+        if p is None:
             i += 1
             continue
-        j60 = x.i60[i]
-        w60 = x.f60.c[max(0, j60 - 23):j60 + 1]
-        wall = max(b.high for b in w60) if d > 0 else min(b.low for b in w60)
-        if d * (wall - entry_px) > 0 and d * (wall - entry_px) < 1.5 * dist:
-            i += 1
-            continue
+        stop, dist = p
         t = manage(c, e_bar, d, entry_px, stop, dist, exit_)
         if t is None:
             break
