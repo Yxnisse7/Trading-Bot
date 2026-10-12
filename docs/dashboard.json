@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-12T13:31:07.350391+02:00",
+  "updated_at": "2026-10-12T13:35:49.049124+02:00",
   "timezone": "Europe/Paris",
   "equity_curve": [
     {
@@ -1572,18 +1572,18 @@
       "avg_pnl_pct": -0.0337
     },
     "shadow": {
-      "n": 320,
+      "n": 321,
       "tp": 95,
-      "sl": 164,
+      "sl": 165,
       "expired": 61,
-      "win_rate": 0.3667953667953668,
+      "win_rate": 0.36538461538461536,
       "neutral_win_rate": 0.4147,
-      "edge": -0.0479,
-      "pnl_pct": -12.5242,
-      "avg_pnl_pct": -0.0391
+      "edge": -0.0493,
+      "pnl_pct": -12.6293,
+      "avg_pnl_pct": -0.0393
     },
     "open": 0,
-    "open_shadow": 2
+    "open_shadow": 1
   },
   "by_source": {
     "bot": {
@@ -1620,15 +1620,15 @@
       "avg_pnl_pct": 0.0
     },
     "shadow": {
-      "n": 320,
+      "n": 321,
       "tp": 95,
-      "sl": 164,
+      "sl": 165,
       "expired": 61,
-      "win_rate": 0.3667953667953668,
+      "win_rate": 0.36538461538461536,
       "neutral_win_rate": 0.4147,
-      "edge": -0.0479,
-      "pnl_pct": -12.5242,
-      "avg_pnl_pct": -0.0391
+      "edge": -0.0493,
+      "pnl_pct": -12.6293,
+      "avg_pnl_pct": -0.0393
     }
   },
   "by_horizon": {
@@ -1676,15 +1676,15 @@
         "avg_pnl_pct": 0.0045
       },
       "shadow": {
-        "n": 86,
+        "n": 87,
         "tp": 31,
-        "sl": 42,
+        "sl": 43,
         "expired": 13,
-        "win_rate": 0.4246575342465753,
-        "neutral_win_rate": 0.4158,
-        "edge": 0.0089,
-        "pnl_pct": -1.9284,
-        "avg_pnl_pct": -0.0224
+        "win_rate": 0.4189189189189189,
+        "neutral_win_rate": 0.4159,
+        "edge": 0.003,
+        "pnl_pct": -2.0335,
+        "avg_pnl_pct": -0.0234
       },
       "open": 0,
       "session_utc": [
@@ -1949,15 +1949,15 @@
       "label": "Tendance 5 min",
       "weight": 1.0,
       "stats": {
-        "n": 375,
+        "n": 376,
         "tp": 125,
-        "sl": 188,
+        "sl": 189,
         "expired": 62,
-        "win_rate": 0.3993610223642173,
-        "neutral_win_rate": 0.4144,
-        "edge": -0.015,
-        "pnl_pct": -11.233,
-        "avg_pnl_pct": -0.03
+        "win_rate": 0.3980891719745223,
+        "neutral_win_rate": 0.4145,
+        "edge": -0.0164,
+        "pnl_pct": -11.3381,
+        "avg_pnl_pct": -0.0302
       },
       "by_source": {
         "bot": {
@@ -1994,18 +1994,52 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 252,
+          "n": 253,
           "tp": 83,
-          "sl": 134,
+          "sl": 135,
           "expired": 35,
-          "win_rate": 0.3824884792626728,
-          "neutral_win_rate": 0.4137,
-          "edge": -0.0312,
-          "pnl_pct": -8.1858,
-          "avg_pnl_pct": -0.0325
+          "win_rate": 0.38073394495412843,
+          "neutral_win_rate": 0.4138,
+          "edge": -0.0331,
+          "pnl_pct": -8.2909,
+          "avg_pnl_pct": -0.0328
         }
       },
       "last_trades": [
+        {
+          "id": "8c59aa28cf",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 31035.5,
+          "take_profit": 30995.5,
+          "stop_loss": 31065.0,
+          "risk_reward": 1.36,
+          "confidence": "fort",
+          "score": 5.67,
+          "criteria": [
+            "adx",
+            "macd",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.1051,
+          "pnl_gross_pct": -0.0951,
+          "duration_minutes": 1,
+          "close_price": 31065.0,
+          "created_at": "2026-10-12T11:20:38Z",
+          "closed_at": "2026-10-12T11:22:00Z",
+          "created_local": "12/10 13:20",
+          "expires_at": "2026-10-12T12:20:38Z",
+          "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 73.96 (0.24 %), TP = 54 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 67%.",
+          "news_context": "actualité à surveiller (score 2) : Fed officials want to hold off a rate hike this month. Will this week’s inflation data let them?",
+          "manual_exit": null
+        },
         {
           "id": "b9d5c082ea",
           "asset": "oil",
@@ -2244,41 +2278,6 @@
           "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 23.76 (0.56 %), TP = 35 % du range, SL = 29 % du range, probabilité de résolution sous 3 h ≈ 86%.",
           "news_context": "actualité calme sur les 2 dernières heures",
           "manual_exit": null
-        },
-        {
-          "id": "5bc9ab80ca",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "long",
-          "horizon": "1h",
-          "entry": 4213.0,
-          "take_profit": 4220.8,
-          "stop_loss": 4206.5,
-          "risk_reward": 1.2,
-          "confidence": "fort",
-          "score": 6.7,
-          "criteria": [
-            "adx",
-            "macd",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "bot",
-          "status": "expired",
-          "pnl_pct": -0.001,
-          "pnl_gross_pct": 0.019,
-          "duration_minutes": 64,
-          "close_price": 4213.8,
-          "created_at": "2026-10-09T15:30:53Z",
-          "closed_at": "2026-10-09T16:35:27Z",
-          "created_local": "09/10 17:30",
-          "expires_at": "2026-10-09T16:30:53Z",
-          "rationale": "Achat : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 17.10 (0.41 %), TP = 46 % du range, SL = 38 % du range, probabilité de résolution sous 1 h ≈ 73%.",
-          "news_context": "actualité calme sur les 2 dernières heures",
-          "manual_exit": null
         }
       ]
     },
@@ -2287,15 +2286,15 @@
       "label": "Tendance 15 min",
       "weight": 1.0,
       "stats": {
-        "n": 457,
+        "n": 458,
         "tp": 140,
-        "sl": 227,
+        "sl": 228,
         "expired": 90,
-        "win_rate": 0.3814713896457766,
+        "win_rate": 0.3804347826086957,
         "neutral_win_rate": 0.415,
-        "edge": -0.0335,
-        "pnl_pct": -17.0124,
-        "avg_pnl_pct": -0.0372
+        "edge": -0.0346,
+        "pnl_pct": -17.1175,
+        "avg_pnl_pct": -0.0374
       },
       "by_source": {
         "bot": {
@@ -2332,18 +2331,52 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 320,
+          "n": 321,
           "tp": 95,
-          "sl": 164,
+          "sl": 165,
           "expired": 61,
-          "win_rate": 0.3667953667953668,
+          "win_rate": 0.36538461538461536,
           "neutral_win_rate": 0.4147,
-          "edge": -0.0479,
-          "pnl_pct": -12.5242,
-          "avg_pnl_pct": -0.0391
+          "edge": -0.0493,
+          "pnl_pct": -12.6293,
+          "avg_pnl_pct": -0.0393
         }
       },
       "last_trades": [
+        {
+          "id": "8c59aa28cf",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 31035.5,
+          "take_profit": 30995.5,
+          "stop_loss": 31065.0,
+          "risk_reward": 1.36,
+          "confidence": "fort",
+          "score": 5.67,
+          "criteria": [
+            "adx",
+            "macd",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.1051,
+          "pnl_gross_pct": -0.0951,
+          "duration_minutes": 1,
+          "close_price": 31065.0,
+          "created_at": "2026-10-12T11:20:38Z",
+          "closed_at": "2026-10-12T11:22:00Z",
+          "created_local": "12/10 13:20",
+          "expires_at": "2026-10-12T12:20:38Z",
+          "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 73.96 (0.24 %), TP = 54 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 67%.",
+          "news_context": "actualité à surveiller (score 2) : Fed officials want to hold off a rate hike this month. Will this week’s inflation data let them?",
+          "manual_exit": null
+        },
         {
           "id": "b9d5c082ea",
           "asset": "oil",
@@ -2577,38 +2610,6 @@
           "created_local": "09/10 18:40",
           "expires_at": "2026-10-09T17:40:38Z",
           "rationale": "Vente : tendance forte (ADX), tendance 15 min, tendance 1 h. Range moyen sur 1 h ≈ 162.50 (0.52 %), TP = 32 % du range, SL = 27 % du range, probabilité de résolution sous 1 h ≈ 86%.",
-          "news_context": "actualité calme sur les 2 dernières heures",
-          "manual_exit": null
-        },
-        {
-          "id": "dd9405570d",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "long",
-          "horizon": "1h",
-          "entry": 4212.5,
-          "take_profit": 4220.8,
-          "stop_loss": 4205.6,
-          "risk_reward": 1.2,
-          "confidence": "moyen",
-          "score": 3.75,
-          "criteria": [
-            "adx",
-            "trend_15m",
-            "trend_1h",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "expired",
-          "pnl_pct": 0.1058,
-          "pnl_gross_pct": 0.1258,
-          "duration_minutes": 64,
-          "close_price": 4217.8,
-          "created_at": "2026-10-09T16:40:38Z",
-          "closed_at": "2026-10-09T17:45:36Z",
-          "created_local": "09/10 18:40",
-          "expires_at": "2026-10-09T17:40:38Z",
-          "rationale": "Achat : tendance forte (ADX), tendance 15 min, tendance 1 h, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 17.60 (0.42 %), TP = 47 % du range, SL = 39 % du range, probabilité de résolution sous 1 h ≈ 72%.",
           "news_context": "actualité calme sur les 2 dernières heures",
           "manual_exit": null
         }
@@ -2619,15 +2620,15 @@
       "label": "Tendance 1 h",
       "weight": 1.0,
       "stats": {
-        "n": 450,
+        "n": 451,
         "tp": 137,
-        "sl": 225,
+        "sl": 226,
         "expired": 88,
-        "win_rate": 0.3784530386740331,
+        "win_rate": 0.3774104683195592,
         "neutral_win_rate": 0.4153,
-        "edge": -0.0368,
-        "pnl_pct": -16.9959,
-        "avg_pnl_pct": -0.0378
+        "edge": -0.0379,
+        "pnl_pct": -17.101,
+        "avg_pnl_pct": -0.0379
       },
       "by_source": {
         "bot": {
@@ -2664,18 +2665,52 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 313,
+          "n": 314,
           "tp": 92,
-          "sl": 162,
+          "sl": 163,
           "expired": 59,
-          "win_rate": 0.36220472440944884,
-          "neutral_win_rate": 0.415,
-          "edge": -0.0528,
-          "pnl_pct": -12.5077,
-          "avg_pnl_pct": -0.04
+          "win_rate": 0.3607843137254902,
+          "neutral_win_rate": 0.4151,
+          "edge": -0.0543,
+          "pnl_pct": -12.6128,
+          "avg_pnl_pct": -0.0402
         }
       },
       "last_trades": [
+        {
+          "id": "8c59aa28cf",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 31035.5,
+          "take_profit": 30995.5,
+          "stop_loss": 31065.0,
+          "risk_reward": 1.36,
+          "confidence": "fort",
+          "score": 5.67,
+          "criteria": [
+            "adx",
+            "macd",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.1051,
+          "pnl_gross_pct": -0.0951,
+          "duration_minutes": 1,
+          "close_price": 31065.0,
+          "created_at": "2026-10-12T11:20:38Z",
+          "closed_at": "2026-10-12T11:22:00Z",
+          "created_local": "12/10 13:20",
+          "expires_at": "2026-10-12T12:20:38Z",
+          "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 73.96 (0.24 %), TP = 54 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 67%.",
+          "news_context": "actualité à surveiller (score 2) : Fed officials want to hold off a rate hike this month. Will this week’s inflation data let them?",
+          "manual_exit": null
+        },
         {
           "id": "b9d5c082ea",
           "asset": "oil",
@@ -2909,38 +2944,6 @@
           "created_local": "09/10 18:40",
           "expires_at": "2026-10-09T17:40:38Z",
           "rationale": "Vente : tendance forte (ADX), tendance 15 min, tendance 1 h. Range moyen sur 1 h ≈ 162.50 (0.52 %), TP = 32 % du range, SL = 27 % du range, probabilité de résolution sous 1 h ≈ 86%.",
-          "news_context": "actualité calme sur les 2 dernières heures",
-          "manual_exit": null
-        },
-        {
-          "id": "dd9405570d",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "long",
-          "horizon": "1h",
-          "entry": 4212.5,
-          "take_profit": 4220.8,
-          "stop_loss": 4205.6,
-          "risk_reward": 1.2,
-          "confidence": "moyen",
-          "score": 3.75,
-          "criteria": [
-            "adx",
-            "trend_15m",
-            "trend_1h",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "expired",
-          "pnl_pct": 0.1058,
-          "pnl_gross_pct": 0.1258,
-          "duration_minutes": 64,
-          "close_price": 4217.8,
-          "created_at": "2026-10-09T16:40:38Z",
-          "closed_at": "2026-10-09T17:45:36Z",
-          "created_local": "09/10 18:40",
-          "expires_at": "2026-10-09T17:40:38Z",
-          "rationale": "Achat : tendance forte (ADX), tendance 15 min, tendance 1 h, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 17.60 (0.42 %), TP = 47 % du range, SL = 39 % du range, probabilité de résolution sous 1 h ≈ 72%.",
           "news_context": "actualité calme sur les 2 dernières heures",
           "manual_exit": null
         }
@@ -2951,15 +2954,15 @@
       "label": "Force de tendance (ADX)",
       "weight": 1.0,
       "stats": {
-        "n": 457,
+        "n": 458,
         "tp": 140,
-        "sl": 227,
+        "sl": 228,
         "expired": 90,
-        "win_rate": 0.3814713896457766,
+        "win_rate": 0.3804347826086957,
         "neutral_win_rate": 0.415,
-        "edge": -0.0335,
-        "pnl_pct": -17.0124,
-        "avg_pnl_pct": -0.0372
+        "edge": -0.0346,
+        "pnl_pct": -17.1175,
+        "avg_pnl_pct": -0.0374
       },
       "by_source": {
         "bot": {
@@ -2996,18 +2999,52 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 320,
+          "n": 321,
           "tp": 95,
-          "sl": 164,
+          "sl": 165,
           "expired": 61,
-          "win_rate": 0.3667953667953668,
+          "win_rate": 0.36538461538461536,
           "neutral_win_rate": 0.4147,
-          "edge": -0.0479,
-          "pnl_pct": -12.5242,
-          "avg_pnl_pct": -0.0391
+          "edge": -0.0493,
+          "pnl_pct": -12.6293,
+          "avg_pnl_pct": -0.0393
         }
       },
       "last_trades": [
+        {
+          "id": "8c59aa28cf",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 31035.5,
+          "take_profit": 30995.5,
+          "stop_loss": 31065.0,
+          "risk_reward": 1.36,
+          "confidence": "fort",
+          "score": 5.67,
+          "criteria": [
+            "adx",
+            "macd",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.1051,
+          "pnl_gross_pct": -0.0951,
+          "duration_minutes": 1,
+          "close_price": 31065.0,
+          "created_at": "2026-10-12T11:20:38Z",
+          "closed_at": "2026-10-12T11:22:00Z",
+          "created_local": "12/10 13:20",
+          "expires_at": "2026-10-12T12:20:38Z",
+          "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 73.96 (0.24 %), TP = 54 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 67%.",
+          "news_context": "actualité à surveiller (score 2) : Fed officials want to hold off a rate hike this month. Will this week’s inflation data let them?",
+          "manual_exit": null
+        },
         {
           "id": "b9d5c082ea",
           "asset": "oil",
@@ -3243,38 +3280,6 @@
           "rationale": "Vente : tendance forte (ADX), tendance 15 min, tendance 1 h. Range moyen sur 1 h ≈ 162.50 (0.52 %), TP = 32 % du range, SL = 27 % du range, probabilité de résolution sous 1 h ≈ 86%.",
           "news_context": "actualité calme sur les 2 dernières heures",
           "manual_exit": null
-        },
-        {
-          "id": "dd9405570d",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "long",
-          "horizon": "1h",
-          "entry": 4212.5,
-          "take_profit": 4220.8,
-          "stop_loss": 4205.6,
-          "risk_reward": 1.2,
-          "confidence": "moyen",
-          "score": 3.75,
-          "criteria": [
-            "adx",
-            "trend_15m",
-            "trend_1h",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "expired",
-          "pnl_pct": 0.1058,
-          "pnl_gross_pct": 0.1258,
-          "duration_minutes": 64,
-          "close_price": 4217.8,
-          "created_at": "2026-10-09T16:40:38Z",
-          "closed_at": "2026-10-09T17:45:36Z",
-          "created_local": "09/10 18:40",
-          "expires_at": "2026-10-09T17:40:38Z",
-          "rationale": "Achat : tendance forte (ADX), tendance 15 min, tendance 1 h, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 17.60 (0.42 %), TP = 47 % du range, SL = 39 % du range, probabilité de résolution sous 1 h ≈ 72%.",
-          "news_context": "actualité calme sur les 2 dernières heures",
-          "manual_exit": null
         }
       ]
     },
@@ -3283,15 +3288,15 @@
       "label": "VWAP",
       "weight": 0.75,
       "stats": {
-        "n": 445,
+        "n": 446,
         "tp": 140,
-        "sl": 219,
+        "sl": 220,
         "expired": 86,
-        "win_rate": 0.38997214484679665,
+        "win_rate": 0.3888888888888889,
         "neutral_win_rate": 0.415,
-        "edge": -0.025,
-        "pnl_pct": -15.4323,
-        "avg_pnl_pct": -0.0347
+        "edge": -0.0261,
+        "pnl_pct": -15.5374,
+        "avg_pnl_pct": -0.0348
       },
       "by_source": {
         "bot": {
@@ -3328,18 +3333,52 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 310,
+          "n": 311,
           "tp": 95,
-          "sl": 158,
+          "sl": 159,
           "expired": 57,
-          "win_rate": 0.37549407114624506,
+          "win_rate": 0.37401574803149606,
           "neutral_win_rate": 0.4146,
-          "edge": -0.0391,
-          "pnl_pct": -11.5605,
-          "avg_pnl_pct": -0.0373
+          "edge": -0.0406,
+          "pnl_pct": -11.6656,
+          "avg_pnl_pct": -0.0375
         }
       },
       "last_trades": [
+        {
+          "id": "8c59aa28cf",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 31035.5,
+          "take_profit": 30995.5,
+          "stop_loss": 31065.0,
+          "risk_reward": 1.36,
+          "confidence": "fort",
+          "score": 5.67,
+          "criteria": [
+            "adx",
+            "macd",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.1051,
+          "pnl_gross_pct": -0.0951,
+          "duration_minutes": 1,
+          "close_price": 31065.0,
+          "created_at": "2026-10-12T11:20:38Z",
+          "closed_at": "2026-10-12T11:22:00Z",
+          "created_local": "12/10 13:20",
+          "expires_at": "2026-10-12T12:20:38Z",
+          "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 73.96 (0.24 %), TP = 54 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 67%.",
+          "news_context": "actualité à surveiller (score 2) : Fed officials want to hold off a rate hike this month. Will this week’s inflation data let them?",
+          "manual_exit": null
+        },
         {
           "id": "b9d5c082ea",
           "asset": "oil",
@@ -3574,38 +3613,6 @@
           "created_local": "09/10 18:40",
           "expires_at": "2026-10-09T19:40:38Z",
           "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 23.76 (0.56 %), TP = 35 % du range, SL = 29 % du range, probabilité de résolution sous 3 h ≈ 86%.",
-          "news_context": "actualité calme sur les 2 dernières heures",
-          "manual_exit": null
-        },
-        {
-          "id": "9da6e65cd5",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "long",
-          "horizon": "1h",
-          "entry": 4213.4,
-          "take_profit": 4220.9,
-          "stop_loss": 4207.2,
-          "risk_reward": 1.21,
-          "confidence": "moyen",
-          "score": 3.75,
-          "criteria": [
-            "adx",
-            "trend_15m",
-            "trend_1h",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "expired",
-          "pnl_pct": 0.0583,
-          "pnl_gross_pct": 0.0783,
-          "duration_minutes": 65,
-          "close_price": 4216.7,
-          "created_at": "2026-10-09T16:35:27Z",
-          "closed_at": "2026-10-09T17:40:35Z",
-          "created_local": "09/10 18:35",
-          "expires_at": "2026-10-09T17:35:27Z",
-          "rationale": "Achat : tendance forte (ADX), tendance 15 min, tendance 1 h, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 17.60 (0.42 %), TP = 42 % du range, SL = 35 % du range, probabilité de résolution sous 1 h ≈ 79%.",
           "news_context": "actualité calme sur les 2 dernières heures",
           "manual_exit": null
         }
@@ -3953,17 +3960,17 @@
     {
       "key": "macd",
       "label": "MACD",
-      "weight": 0.919,
+      "weight": 0.909,
       "stats": {
-        "n": 121,
+        "n": 122,
         "tp": 26,
-        "sl": 72,
+        "sl": 73,
         "expired": 23,
-        "win_rate": 0.2653061224489796,
-        "neutral_win_rate": 0.4139,
-        "edge": -0.1486,
-        "pnl_pct": -10.8925,
-        "avg_pnl_pct": -0.09
+        "win_rate": 0.26262626262626265,
+        "neutral_win_rate": 0.414,
+        "edge": -0.1514,
+        "pnl_pct": -10.9976,
+        "avg_pnl_pct": -0.0901
       },
       "by_source": {
         "bot": {
@@ -4000,18 +4007,52 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 80,
+          "n": 81,
           "tp": 17,
-          "sl": 48,
+          "sl": 49,
           "expired": 15,
-          "win_rate": 0.26153846153846155,
-          "neutral_win_rate": 0.4145,
-          "edge": -0.153,
-          "pnl_pct": -6.9328,
-          "avg_pnl_pct": -0.0867
+          "win_rate": 0.25757575757575757,
+          "neutral_win_rate": 0.4146,
+          "edge": -0.157,
+          "pnl_pct": -7.0379,
+          "avg_pnl_pct": -0.0869
         }
       },
       "last_trades": [
+        {
+          "id": "8c59aa28cf",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 31035.5,
+          "take_profit": 30995.5,
+          "stop_loss": 31065.0,
+          "risk_reward": 1.36,
+          "confidence": "fort",
+          "score": 5.67,
+          "criteria": [
+            "adx",
+            "macd",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.1051,
+          "pnl_gross_pct": -0.0951,
+          "duration_minutes": 1,
+          "close_price": 31065.0,
+          "created_at": "2026-10-12T11:20:38Z",
+          "closed_at": "2026-10-12T11:22:00Z",
+          "created_local": "12/10 13:20",
+          "expires_at": "2026-10-12T12:20:38Z",
+          "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 73.96 (0.24 %), TP = 54 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 67%.",
+          "news_context": "actualité à surveiller (score 2) : Fed officials want to hold off a rate hike this month. Will this week’s inflation data let them?",
+          "manual_exit": null
+        },
         {
           "id": "388214b5db",
           "asset": "gold",
@@ -4250,40 +4291,6 @@
           "expires_at": "2026-10-08T22:10:35Z",
           "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 562.5 (0.69 %), TP = 60 % du range, SL = 44 % du range, probabilité de résolution sous 1 h ≈ 76%.",
           "news_context": "actualité calme sur les 2 dernières heures",
-          "manual_exit": null
-        },
-        {
-          "id": "18f6633781",
-          "asset": "nasdaq",
-          "asset_label": "Nasdaq 100 (NQ)",
-          "direction": "short",
-          "horizon": "3h",
-          "entry": 30873.5,
-          "take_profit": 30790.75,
-          "stop_loss": 30928.75,
-          "risk_reward": 1.5,
-          "confidence": "fort",
-          "score": 5.75,
-          "criteria": [
-            "adx",
-            "macd",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.189,
-          "pnl_gross_pct": -0.179,
-          "duration_minutes": 11,
-          "close_price": 30928.75,
-          "created_at": "2026-10-08T18:01:37Z",
-          "closed_at": "2026-10-08T18:13:00Z",
-          "created_local": "08/10 20:01",
-          "expires_at": "2026-10-08T21:01:37Z",
-          "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 137.95 (0.45 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 97%.",
-          "news_context": "actualité à surveiller (score 2) : Inflation on many everyday items was entirely due to tariffs, NY Fed says",
           "manual_exit": null
         }
       ]
@@ -4966,40 +4973,6 @@
     }
   ],
   "open_signals": [
-    {
-      "id": "8c59aa28cf",
-      "asset": "nasdaq",
-      "asset_label": "Nasdaq 100 (NQ)",
-      "direction": "short",
-      "horizon": "1h",
-      "entry": 31035.5,
-      "take_profit": 30995.5,
-      "stop_loss": 31065.0,
-      "risk_reward": 1.36,
-      "confidence": "fort",
-      "score": 5.67,
-      "criteria": [
-        "adx",
-        "macd",
-        "trend_15m",
-        "trend_1h",
-        "trend_5m",
-        "vwap"
-      ],
-      "source": "shadow",
-      "status": "open",
-      "pnl_pct": null,
-      "pnl_gross_pct": null,
-      "duration_minutes": null,
-      "close_price": null,
-      "created_at": "2026-10-12T11:20:38Z",
-      "closed_at": null,
-      "created_local": "12/10 13:20",
-      "expires_at": "2026-10-12T12:20:38Z",
-      "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 73.96 (0.24 %), TP = 54 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 67%.",
-      "news_context": "actualité à surveiller (score 2) : Fed officials want to hold off a rate hike this month. Will this week’s inflation data let them?",
-      "manual_exit": null
-    },
     {
       "id": "a7f0b3188e",
       "asset": "sp500",
@@ -6634,8 +6607,8 @@
   "adjustments": {
     "notes": [
       "trades réels : +0,02 R ± 0,19 R par trade avant frais sur 138 trades (0 R = hasard)",
-      "macd : -0,17 R ± 0,14 R sur 226 trades éq. → poids ×0,92",
-      "variante « indices le matin européen » en test : 61 trades, -0,14 R net, encore 39 trades avant décision",
+      "macd : -0,18 R ± 0,14 R sur 227 trades éq. → poids ×0,91",
+      "variante « indices le matin européen » en test : 62 trades, -0,16 R net, encore 38 trades avant décision",
       "variante « horizon ~3 h » en test : 64 trades, -0,40 R net, encore 36 trades avant décision",
       "variante « confiance moyenne » en test : 48 trades, -0,06 R net, encore 52 trades avant décision",
       "variante « entrées dans l'heure avant l'ouverture américaine » en test : 5 trades, -0,18 R net, encore 95 trades avant décision",
@@ -6644,13 +6617,13 @@
       "variante « horizon ~3 h sur Or (XAU/USD) » en test : 10 trades, -0,49 R net, encore 90 trades avant décision",
       "variante « nouvel actif : Pétrole WTI (CL) » en test : 48 trades, -0,13 R net, encore 52 trades avant décision",
       "variante « nouvel actif : Euro / dollar (6E) » en test : 23 trades, -0,38 R net, encore 77 trades avant décision",
-      "sortie : stop remonté à l'entrée après +0,5 R ferait mieux (-0,17 R net contre -0,24 R, réels et en ombre) : à décider"
+      "sortie : stop remonté à l'entrée après +0,5 R ferait mieux (-0,17 R net contre -0,25 R, réels et en ombre) : à décider"
     ],
     "avoid_hours_utc": [],
-    "sample": 1155,
+    "sample": 1156,
     "sample_by_source": {
       "bot": 137,
-      "shadow": 320,
+      "shadow": 321,
       "manual": 1,
       "backtest": 697
     },
@@ -6662,7 +6635,7 @@
       "adx": 1.0,
       "vwap": 0.75,
       "rsi": 1.0,
-      "macd": 0.919,
+      "macd": 0.909,
       "level": 1.0,
       "volume": 0.75,
       "orb": 1.0,
@@ -6677,7 +6650,7 @@
         "adx": 1.0,
         "vwap": 0.75,
         "rsi": 1.0,
-        "macd": 0.919,
+        "macd": 0.909,
         "level": 1.0,
         "volume": 0.75,
         "orb": 1.0,
@@ -6691,7 +6664,7 @@
         "adx": 1.0,
         "vwap": 0.75,
         "rsi": 1.0,
-        "macd": 0.919,
+        "macd": 0.909,
         "level": 1.0,
         "volume": 0.75,
         "orb": 1.0,
@@ -6705,7 +6678,7 @@
         "adx": 1.0,
         "vwap": 0.75,
         "rsi": 1.0,
-        "macd": 0.919,
+        "macd": 0.909,
         "level": 1.0,
         "volume": 0.75,
         "orb": 1.0,
@@ -6719,7 +6692,7 @@
         "adx": 1.0,
         "vwap": 0.75,
         "rsi": 1.0,
-        "macd": 0.919,
+        "macd": 0.909,
         "level": 1.0,
         "volume": 0.75,
         "orb": 1.0,
@@ -6733,7 +6706,7 @@
         "adx": 1.0,
         "vwap": 0.75,
         "rsi": 1.0,
-        "macd": 0.919,
+        "macd": 0.909,
         "level": 1.0,
         "volume": 0.75,
         "orb": 1.0,
@@ -6747,7 +6720,7 @@
         "adx": 1.0,
         "vwap": 0.75,
         "rsi": 1.0,
-        "macd": 0.919,
+        "macd": 0.909,
         "level": 1.0,
         "volume": 0.75,
         "orb": 1.0,
@@ -6761,7 +6734,7 @@
         "adx": 1.0,
         "vwap": 0.75,
         "rsi": 1.0,
-        "macd": 0.919,
+        "macd": 0.909,
         "level": 1.0,
         "volume": 0.75,
         "orb": 1.0,
@@ -6777,9 +6750,9 @@
           "trend_1h",
           "adx"
         ],
-        "n": 1154,
-        "n_eff": 856.3,
-        "mean_r": -0.012,
+        "n": 1155,
+        "n_eff": 857.3,
+        "mean_r": -0.0132,
         "margin_r": 0.0746,
         "multiplier": 1.0
       },
@@ -6787,10 +6760,10 @@
         "members": [
           "vwap"
         ],
-        "n": 1028,
-        "n_eff": 769.7,
-        "mean_r": -0.0032,
-        "margin_r": 0.0792,
+        "n": 1029,
+        "n_eff": 770.7,
+        "mean_r": -0.0045,
+        "margin_r": 0.0791,
         "multiplier": 1.0
       },
       "rsi": {
@@ -6807,11 +6780,11 @@
         "members": [
           "macd"
         ],
-        "n": 308,
-        "n_eff": 226.1,
-        "mean_r": -0.1738,
-        "margin_r": 0.1416,
-        "multiplier": 0.919
+        "n": 309,
+        "n_eff": 227.1,
+        "mean_r": -0.1774,
+        "margin_r": 0.1411,
+        "multiplier": 0.909
       },
       "level": {
         "members": [
@@ -6871,9 +6844,9 @@
         "margin_r": 0.1867
       },
       "fantômes": {
-        "n": 320,
-        "mean_r": -0.0875,
-        "margin_r": 0.1243
+        "n": 321,
+        "mean_r": -0.0904,
+        "margin_r": 0.124
       },
       "backtest": {
         "n": 697,
@@ -6884,11 +6857,11 @@
     "variants": {
       "hors_session": {
         "label": "indices le matin européen",
-        "n": 61,
-        "mean_net_r": -0.1426,
-        "lower_r": -0.5207,
+        "n": 62,
+        "mean_net_r": -0.1581,
+        "lower_r": -0.5324,
         "promoted": false,
-        "missing": 39
+        "missing": 38
       },
       "horizon_3h": {
         "label": "horizon ~3 h",
@@ -6961,9 +6934,9 @@
     },
     "variants_z": 2.67,
     "promoted_variants": [],
-    "updated_at": "2026-10-12T10:15:37.898553+00:00",
+    "updated_at": "2026-10-12T11:35:36.966492+00:00",
     "context": {
-      "n": 923,
+      "n": 924,
       "features": {
         "adx": {
           "label": "force de tendance (ADX 15 min)",
@@ -6971,31 +6944,31 @@
             {
               "label": "bas (< 26)",
               "lo": -1000000000.0,
-              "hi": 26.1,
-              "n": 306,
-              "n_eff": 231.6,
-              "mean_r": -0.0237,
-              "margin_r": 0.1724,
+              "hi": 26.19,
+              "n": 308,
+              "n_eff": 233.2,
+              "mean_r": -0.0183,
+              "margin_r": 0.1719,
               "avoid": false
             },
             {
               "label": "milieu (26 à 36)",
-              "lo": 26.1,
-              "hi": 36.06,
-              "n": 309,
-              "n_eff": 226.2,
-              "mean_r": -0.0519,
-              "margin_r": 0.1783,
+              "lo": 26.19,
+              "hi": 36.07,
+              "n": 308,
+              "n_eff": 225.4,
+              "mean_r": -0.0539,
+              "margin_r": 0.1787,
               "avoid": false
             },
             {
               "label": "haut (≥ 36)",
-              "lo": 36.06,
+              "lo": 36.07,
               "hi": 1000000000.0,
               "n": 308,
-              "n_eff": 236.1,
-              "mean_r": -0.0105,
-              "margin_r": 0.1841,
+              "n_eff": 236.3,
+              "mean_r": -0.0193,
+              "margin_r": 0.1838,
               "avoid": false
             }
           ]
@@ -7006,31 +6979,31 @@
             {
               "label": "bas (< 58)",
               "lo": -1000000000.0,
-              "hi": 58.23,
-              "n": 307,
-              "n_eff": 233.4,
-              "mean_r": -0.021,
-              "margin_r": 0.1763,
+              "hi": 58.26,
+              "n": 308,
+              "n_eff": 234.1,
+              "mean_r": -0.023,
+              "margin_r": 0.176,
               "avoid": false
             },
             {
               "label": "milieu (58 à 66)",
-              "lo": 58.23,
+              "lo": 58.26,
               "hi": 65.56,
-              "n": 308,
-              "n_eff": 235.8,
-              "mean_r": -0.1039,
-              "margin_r": 0.1728,
+              "n": 307,
+              "n_eff": 235.0,
+              "mean_r": -0.1017,
+              "margin_r": 0.1731,
               "avoid": false
             },
             {
               "label": "haut (≥ 66)",
               "lo": 65.56,
               "hi": 1000000000.0,
-              "n": 308,
-              "n_eff": 227.9,
-              "mean_r": 0.0302,
-              "margin_r": 0.184,
+              "n": 309,
+              "n_eff": 228.8,
+              "mean_r": 0.0247,
+              "margin_r": 0.1835,
               "avoid": false
             }
           ]
@@ -7039,33 +7012,33 @@
           "label": "écart au VWAP dans le sens du trade (en range)",
           "buckets": [
             {
-              "label": "bas (< 0,81)",
+              "label": "bas (< 0,82)",
               "lo": -1000000000.0,
-              "hi": 0.815,
-              "n": 274,
-              "n_eff": 208.2,
-              "mean_r": -0.0574,
-              "margin_r": 0.1817,
+              "hi": 0.8165,
+              "n": 275,
+              "n_eff": 208.9,
+              "mean_r": -0.054,
+              "margin_r": 0.1816,
               "avoid": false
             },
             {
-              "label": "milieu (0,81 à 1,31)",
-              "lo": 0.815,
-              "hi": 1.3064,
+              "label": "milieu (0,82 à 1,31)",
+              "lo": 0.8165,
+              "hi": 1.3139,
               "n": 275,
               "n_eff": 209.2,
-              "mean_r": -0.0371,
-              "margin_r": 0.1852,
+              "mean_r": -0.0434,
+              "margin_r": 0.1849,
               "avoid": false
             },
             {
               "label": "haut (≥ 1,31)",
-              "lo": 1.3064,
+              "lo": 1.3139,
               "hi": 1000000000.0,
               "n": 275,
-              "n_eff": 205.6,
-              "mean_r": 0.0138,
-              "margin_r": 0.1995,
+              "n_eff": 205.7,
+              "mean_r": 0.0099,
+              "margin_r": 0.1994,
               "avoid": false
             }
           ]
@@ -7076,31 +7049,31 @@
             {
               "label": "bas (< 0,21)",
               "lo": -1000000000.0,
-              "hi": 0.2138,
-              "n": 307,
-              "n_eff": 232.7,
-              "mean_r": -0.0338,
-              "margin_r": 0.1717,
+              "hi": 0.2146,
+              "n": 308,
+              "n_eff": 233.5,
+              "mean_r": -0.0306,
+              "margin_r": 0.1716,
               "avoid": false
             },
             {
               "label": "milieu (0,21 à 0,49)",
-              "lo": 0.2138,
-              "hi": 0.4861,
+              "lo": 0.2146,
+              "hi": 0.487,
               "n": 308,
-              "n_eff": 223.2,
-              "mean_r": 0.0039,
-              "margin_r": 0.1759,
+              "n_eff": 223.4,
+              "mean_r": 0.0041,
+              "margin_r": 0.1753,
               "avoid": false
             },
             {
               "label": "haut (≥ 0,49)",
-              "lo": 0.4861,
+              "lo": 0.487,
               "hi": 1000000000.0,
               "n": 308,
               "n_eff": 239.5,
-              "mean_r": -0.0568,
-              "margin_r": 0.187,
+              "mean_r": -0.0663,
+              "margin_r": 0.1871,
               "avoid": false
             }
           ]
@@ -7112,10 +7085,10 @@
               "label": "bas (< 1,11)",
               "lo": -1000000000.0,
               "hi": 1.106,
-              "n": 307,
-              "n_eff": 233.1,
-              "mean_r": 0.0051,
-              "margin_r": 0.1682,
+              "n": 308,
+              "n_eff": 234.0,
+              "mean_r": -0.0001,
+              "margin_r": 0.1678,
               "avoid": false
             },
             {
@@ -7144,33 +7117,33 @@
           "label": "activité de l'heure / moyenne",
           "buckets": [
             {
-              "label": "bas (< 1,07)",
+              "label": "bas (< 1,06)",
               "lo": -1000000000.0,
-              "hi": 1.069,
+              "hi": 1.065,
               "n": 293,
               "n_eff": 223.4,
-              "mean_r": 0.0134,
-              "margin_r": 0.1779,
+              "mean_r": 0.0052,
+              "margin_r": 0.178,
               "avoid": false
             },
             {
-              "label": "milieu (1,07 à 1,36)",
-              "lo": 1.069,
-              "hi": 1.359,
+              "label": "milieu (1,06 à 1,36)",
+              "lo": 1.065,
+              "hi": 1.358,
               "n": 293,
               "n_eff": 225.4,
-              "mean_r": 0.0492,
-              "margin_r": 0.1838,
+              "mean_r": 0.0535,
+              "margin_r": 0.1836,
               "avoid": false
             },
             {
               "label": "haut (≥ 1,36)",
-              "lo": 1.359,
+              "lo": 1.358,
               "hi": 1000000000.0,
-              "n": 293,
-              "n_eff": 208.9,
-              "mean_r": -0.0452,
-              "margin_r": 0.1897,
+              "n": 294,
+              "n_eff": 209.6,
+              "mean_r": -0.0474,
+              "margin_r": 0.1893,
               "avoid": false
             }
           ]
@@ -7182,10 +7155,10 @@
               "label": "bas (< 0,35)",
               "lo": -1000000000.0,
               "hi": 0.354,
-              "n": 307,
-              "n_eff": 235.3,
-              "mean_r": -0.0923,
-              "margin_r": 0.185,
+              "n": 308,
+              "n_eff": 236.3,
+              "mean_r": -0.0967,
+              "margin_r": 0.1845,
               "avoid": false
             },
             {
@@ -7227,10 +7200,10 @@
               "label": "milieu (0,08 à 0,14)",
               "lo": 0.0841,
               "hi": 0.1356,
-              "n": 308,
-              "n_eff": 228.7,
-              "mean_r": -0.0566,
-              "margin_r": 0.1757,
+              "n": 309,
+              "n_eff": 229.6,
+              "mean_r": -0.0618,
+              "margin_r": 0.1752,
               "avoid": false
             },
             {
@@ -7252,10 +7225,10 @@
               "label": "plus de 30 min avant l'ouverture US",
               "lo": -1000000000.0,
               "hi": -30.0,
-              "n": 355,
-              "n_eff": 283.2,
-              "mean_r": 0.0602,
-              "margin_r": 0.1658,
+              "n": 356,
+              "n_eff": 284.0,
+              "mean_r": 0.0549,
+              "margin_r": 0.1656,
               "avoid": false
             },
             {
@@ -7287,10 +7260,10 @@
               "label": "lundi",
               "lo": 0,
               "hi": 1,
-              "n": 136,
-              "n_eff": 103.0,
-              "mean_r": 0.1743,
-              "margin_r": 0.268,
+              "n": 137,
+              "n_eff": 103.8,
+              "mean_r": 0.1584,
+              "margin_r": 0.2672,
               "avoid": false
             },
             {
@@ -7360,32 +7333,32 @@
     },
     "exits": {
       "réels et en ombre": {
-        "n": 227,
-        "current_net_r": -0.2415,
+        "n": 228,
+        "current_net_r": -0.2453,
         "mfe_median": 0.722,
         "sl_reached": {
           "0.5": 33,
           "0.8": 17,
           "1.0": 10
         },
-        "n_sl": 115,
+        "n_sl": 116,
         "rules": {
           "0.5": {
-            "net_r": -0.1685,
-            "diff_r": 0.073,
-            "margin_r": 0.0655,
+            "net_r": -0.1726,
+            "diff_r": 0.0727,
+            "margin_r": 0.0652,
             "better": true
           },
           "0.8": {
-            "net_r": -0.2215,
+            "net_r": -0.2254,
             "diff_r": 0.02,
-            "margin_r": 0.0509,
+            "margin_r": 0.0507,
             "better": false
           },
           "1.0": {
-            "net_r": -0.2287,
+            "net_r": -0.2326,
             "diff_r": 0.0128,
-            "margin_r": 0.0394,
+            "margin_r": 0.0392,
             "better": false
           }
         }
@@ -7480,10 +7453,10 @@
     }
   },
   "state": {
-    "last_scan": "2026-10-12T11:30:57Z",
+    "last_scan": "2026-10-12T11:35:32Z",
     "last_scan_note": "0 signal(aux)",
     "last_summary": "2026-10-11T22:05:31Z",
-    "last_track": "2026-10-12T11:30:57Z",
+    "last_track": "2026-10-12T11:35:32Z",
     "last_summary_day": "2026-10-11"
   },
   "limits": {
