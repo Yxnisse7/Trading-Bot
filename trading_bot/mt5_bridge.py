@@ -41,7 +41,7 @@ def load_config(root: Path) -> dict[str, Any]:
     f = root / "config.json"
     cfg = json.loads(json.dumps(DEFAULTS))
     if f.exists():
-        user = json.loads(f.read_text(encoding="utf-8"))
+        user = json.loads(f.read_text(encoding="utf-8-sig"))     # Bloc-notes ajoute parfois une marque BOM
         cfg.update({k: v for k, v in user.items() if k != "agent"})
         cfg["agent"].update(user.get("agent", {}))
     else:
