@@ -70,7 +70,22 @@
         "weekday": 0
       },
       "price_time": "2026-10-12T17:10:00Z",
-      "variant": "horizon_3h"
+      "variant": "horizon_3h",
+      "exc": {
+        "mfe": 0.0,
+        "mae": 0.0147,
+        "armed": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "be": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "last_ts": null
+      }
     }
   },
   {
@@ -141,6 +156,95 @@
         "range_pct": 0.3954,
         "cost_r": 0.1552,
         "us_open_min": 225.8,
+        "weekday": 0
+      },
+      "variant": "confiance_moyenne",
+      "exc": {
+        "mfe": 0.0,
+        "mae": 0.463,
+        "armed": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "be": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "last_ts": null
+      }
+    }
+  },
+  {
+    "id": "3dc75a05f8",
+    "asset": "gold",
+    "asset_label": "Or (XAU/USD)",
+    "direction": "short",
+    "entry": 4192.5,
+    "take_profit": 4183.5,
+    "stop_loss": 4198.5,
+    "risk_reward": 1.5,
+    "confidence": "moyen",
+    "score": 4.75,
+    "criteria": [
+      "adx",
+      "level",
+      "trend_15m",
+      "trend_1h",
+      "vwap"
+    ],
+    "rationale": "Vente : tendance forte (ADX), niveau clé favorable, tendance 15 min, tendance 1 h, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 15.07 (0.36 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 44%.",
+    "news_context": "actualité calme sur les 2 dernières heures",
+    "created_at": "2026-10-12T17:20:37Z",
+    "expires_at": "2026-10-12T18:20:37Z",
+    "status": "open",
+    "closed_at": null,
+    "close_price": null,
+    "pnl_pct": null,
+    "pnl_gross_pct": null,
+    "duration_minutes": null,
+    "hourly_range": 15.066569,
+    "source": "shadow",
+    "horizon": "1h",
+    "horizon_minutes": 60,
+    "meta": {
+      "tick": 0.1,
+      "details": {
+        "trend_5m": "EMA20 4189.29 / EMA50 4190.83 (5 min)",
+        "trend_15m": "EMA20 4191.56 / EMA50 4198.36",
+        "trend_1h": "prix vs EMA20 1 h 4200.27",
+        "adx": "ADX15 34.4 (+DI 14.1 / -DI 25.1)",
+        "vwap": "VWAP jour 4203.77",
+        "rsi": "RSI14 5 min 57.4",
+        "macd": "histogramme MACD 0.5601",
+        "level": "support 4182.50 / résistance 4194.90",
+        "volume": "z-score volume -2.01",
+        "pdhl": "veille : haut 4224.40 / bas 4209.10",
+        "activity": "activité de l'heure 1.17× la moyenne",
+        "corr": "DXY -0.00 % sur 1 h, taux 10 ans +0.0 % sur 1 h"
+      },
+      "support": 4182.5,
+      "resistance": 4194.89990234375,
+      "atr_5m": 2.8309689099649185,
+      "atr_ratio": 0.8274967726535181,
+      "hourly_range_pct": 0.3594,
+      "adx_15m": 34.41495092899303,
+      "sigma_5m": 0.0004739512794783917,
+      "p_resolution": 0.44266666666666665,
+      "p_tp_neutral": 0.145,
+      "activity_ratio": 1.17,
+      "base_minutes": 5,
+      "ctx": {
+        "adx": 34.41,
+        "rsi_dir": 42.63,
+        "vwap_ext": 0.7478,
+        "ema_ext": -0.2129,
+        "atr_ratio": 0.827,
+        "activity": 1.17,
+        "range_pct": 0.3594,
+        "cost_r": 0.1398,
+        "us_open_min": 230.6,
         "weekday": 0
       },
       "variant": "confiance_moyenne"
