@@ -451,8 +451,10 @@ def donchian_1h(candles: list[Candle], asset: str, entry_n: int = 20, exit_n: in
             stop = b.close - risk if long else b.close + risk
 
             def trail(j, bar, st, long=long, close_at=close_at):
-                if close_at is not None and (j + 1 >= len(h) or h[j + 1].ts >= close_at):
-                    return ("heure", bar.close)            # dernière clôture de la séance (15:00, ou plus tôt)
+                # dernière clôture de la séance (15:00, ou plus tôt) ; la fin des données n'en est pas une :
+                # en direct, la dernière bougie 1 h est encore en cours
+                if close_at is not None and (bar.ts + sec >= close_at or j + 1 < len(h) and h[j + 1].ts >= close_at):
+                    return ("heure", bar.close)
                 w = h[max(0, j - exit_n):j]
                 if long and bar.close < min(x.low for x in w):
                     return ("canal", bar.close)

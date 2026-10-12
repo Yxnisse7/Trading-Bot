@@ -1354,7 +1354,8 @@ class Engine:
                 if t.entry_ts < start or t.entry_ts < last_exit or t.entry_ts in kept:
                     continue                                    # une position à la fois, comme dans le test
                 rs = sl.trade_rs(t, asset.cost_pct, tcost)
-                still_open = t.reason == "fin des données"
+                # sortie lue sur la bougie en cours (pas encore close) : la position reste ouverte
+                still_open = t.reason == "fin des données" or t.exit_ts > int(now.timestamp())
                 kept[t.entry_ts] = {"entry_ts": t.entry_ts, "entry_at": iso(datetime.fromtimestamp(t.entry_ts, timezone.utc)),
                                     "direction": t.direction, "entry": t.entry, "risk": round(t.risk, 6),
                                     "stop": round(t.entry - t.risk if t.direction == "long" else t.entry + t.risk, 6),

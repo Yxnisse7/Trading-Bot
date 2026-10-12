@@ -90,3 +90,17 @@ def test_live_strategy_sends_entry_then_exit_and_journals_topstep(tmp_path, monk
     old = dict(trade, entry_ts=t0 - 86_400 * 3, notified_entry=None, notified_exit=None)
     eng._live_signals("donchian_day:gold", asset, [old], since, now)
     assert len(sent) == 2                                                               # rien d'ancien
+
+
+def test_live_donchian_day_does_not_exit_on_the_unfinished_last_hour():
+    """En direct, la dernière bougie 1 h n'a qu'une bougie 5 min : ce n'est pas la fin de séance."""
+    from datetime import datetime, timezone
+    from trading_bot import strategies as sl
+    from trading_bot.models import Candle
+    t0 = int(datetime(2026, 10, 6, 13, 0, tzinfo=timezone.utc).timestamp())       # 8:00 à Chicago
+    candles = [Candle(t0 + 300 * k, 100.0, 100.5, 99.5, 100.0, 1.0) for k in range(12 * 25)]
+    end = candles[-1].ts + 300
+    candles += [Candle(end + 300 * k, 100.0 + k / 2, 100.6 + k / 2, 99.9 + k / 2, 100.5 + k / 2, 1.0) for k in range(12)]
+    candles.append(Candle(end + 3600, 106.0, 106.2, 105.8, 106.0, 1.0))           # heure suivante, en cours
+    trades = sl.donchian_day(candles, "gold")
+    assert len(trades) == 1 and trades[0].reason == "fin des données"
