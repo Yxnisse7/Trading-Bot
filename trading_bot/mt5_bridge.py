@@ -59,10 +59,14 @@ class Bridge:
             raise ValueError("seule la sortie X1 est branchée en direct pour l'instant")
 
     # ------------------------------------------------------------ lecture du terminal
-    def offset(self) -> int:
-        """Décalage de l'heure du serveur (les bougies MT5 sont datées à l'heure du serveur), arrondi à l'heure."""
+    def offset(self) -> int | None:
+        """Décalage de l'heure du serveur (les bougies MT5 sont datées à l'heure du serveur), arrondi à la
+        demi-heure ; None sans cotation récente (marché fermé, terminal pas encore à jour)."""
         tick = self.mt5.symbol_info_tick(self.sym)
-        return round((tick.time - self.clock()) / 3600) * 3600
+        if tick is None or not tick.time:
+            return None
+        off = round((tick.time - self.clock()) / 1800) * 1800
+        return off if abs(tick.time - off - self.clock()) <= 180 else None
 
     def candles(self, offset: int) -> list[Candle]:
         rates = self.mt5.copy_rates_from_pos(self.sym, self.mt5.TIMEFRAME_M1, 0, int(self.cfg["bars"]) + 1)
@@ -139,6 +143,8 @@ class Bridge:
     # ------------------------------------------------------------ une itération
     def step(self) -> str:
         off = self.offset()
+        if off is None:
+            return "flux arrêté"
         bars = self.candles(off)
         now = self.clock()
         if not bars or now - (bars[-1].ts + 60) > 180:

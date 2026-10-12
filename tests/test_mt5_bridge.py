@@ -105,3 +105,9 @@ def test_stale_feed_does_nothing(tmp_path, forced_buy):
 def test_agent_is_off_without_key(tmp_path):
     a = Agent({"enabled": True, "model": "x", "library": ""}, tmp_path, env={})
     assert not a.enabled and a.ask({}) == (True, "agent inactif")
+
+
+def test_no_quote_means_no_trading(tmp_path, forced_buy):
+    mt5 = FakeMT5()
+    mt5.symbol_info_tick = lambda sym: NS(time=0, bid=0.0, ask=0.0)
+    assert bridge(tmp_path, mt5, "demo").step() == "flux arrêté" and mt5.sent == []
