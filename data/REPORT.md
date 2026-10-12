@@ -1,14 +1,21 @@
 # Trading-Bot — rapport
 
-_Mis à jour le 12/10/2026 à 16:20 (Europe/Paris)._
+_Mis à jour le 12/10/2026 à 16:25 (Europe/Paris)._
 
 ## Vue d'ensemble
 
 - Trades clôturés : **139**
 - Taux de réussite cumulé (TP / (TP+SL)) : **42%** — hasard attendu 42%, avantage **+0%**
 - P&L théorique cumulé, net des coûts estimés (somme des % par trade, sans levier) : **-4.46 %** (brut -0.79 %)
-- Signaux ouverts : **0**
+- Signaux ouverts : **2**
 - Signaux fantômes (suivis en silence pour l'apprentissage) : **324** clôturés, 1 ouverts, taux de réussite 37% (hasard attendu 41%)
+
+## Signaux ouverts
+
+| Heure | Actif | Sens | Entrée | TP | SL | Confiance | Source | Expire |
+|---|---|---|---:|---:|---:|---|---|---|
+| 12/10 16:25 | S&P 500 (ES) | short | 7856.5 | 7848.5 | 7863.0 | fort | signaux du bot | 17:25 |
+| 12/10 16:25 | Or (XAU/USD) | short | 4191.6 | 4180.9 | 4198.7 | fort | signaux du bot | 17:25 |
 
 ## Statistiques
 
