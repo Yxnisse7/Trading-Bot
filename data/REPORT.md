@@ -1,14 +1,20 @@
 # Trading-Bot — rapport
 
-_Mis à jour le 12/10/2026 à 15:55 (Europe/Paris)._
+_Mis à jour le 12/10/2026 à 16:15 (Europe/Paris)._
 
 ## Vue d'ensemble
 
 - Trades clôturés : **138**
 - Taux de réussite cumulé (TP / (TP+SL)) : **42%** — hasard attendu 42%, avantage **-0%**
 - P&L théorique cumulé, net des coûts estimés (somme des % par trade, sans levier) : **-4.65 %** (brut -0.99 %)
-- Signaux ouverts : **0**
-- Signaux fantômes (suivis en silence pour l'apprentissage) : **323** clôturés, 1 ouverts, taux de réussite 37% (hasard attendu 41%)
+- Signaux ouverts : **1**
+- Signaux fantômes (suivis en silence pour l'apprentissage) : **324** clôturés, 1 ouverts, taux de réussite 37% (hasard attendu 41%)
+
+## Signaux ouverts
+
+| Heure | Actif | Sens | Entrée | TP | SL | Confiance | Source | Expire |
+|---|---|---|---:|---:|---:|---|---|---|
+| 12/10 16:15 | Nasdaq 100 (NQ) | short | 30943.75 | 30897.5 | 30982.25 | fort | signaux du bot | 17:15 |
 
 ## Statistiques
 
@@ -112,18 +118,18 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 
 | Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
 |---|---:|---:|---:|---:|---:|---:|
-| adx | 323 | 96 | 165 | 62 | 37% | -0.038 % |
+| adx | 324 | 96 | 165 | 63 | 37% | -0.038 % |
 | corr | 16 | 2 | 11 | 3 | 15% | -0.176 % |
 | level | 39 | 16 | 12 | 11 | 57% | -0.031 % |
 | macd | 81 | 17 | 49 | 15 | 26% | -0.087 % |
 | orb | 12 | 3 | 7 | 2 | 30% | -0.156 % |
 | pdhl | 42 | 9 | 24 | 9 | 27% | -0.048 % |
-| rsi | 212 | 66 | 115 | 31 | 36% | -0.039 % |
-| trend_15m | 323 | 96 | 165 | 62 | 37% | -0.038 % |
-| trend_1h | 315 | 93 | 163 | 59 | 36% | -0.039 % |
-| trend_5m | 255 | 84 | 135 | 36 | 38% | -0.031 % |
+| rsi | 213 | 66 | 115 | 32 | 36% | -0.039 % |
+| trend_15m | 324 | 96 | 165 | 63 | 37% | -0.038 % |
+| trend_1h | 316 | 93 | 163 | 60 | 36% | -0.039 % |
+| trend_5m | 256 | 84 | 135 | 37 | 38% | -0.031 % |
 | volume | 2 | 1 | 0 | 1 | 100% | -0.021 % |
-| vwap | 313 | 96 | 159 | 58 | 38% | -0.036 % |
+| vwap | 314 | 96 | 159 | 59 | 38% | -0.036 % |
 
 ### Fantômes par actif
 
@@ -134,7 +140,7 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 | euro | 23 | 8 | 14 | 1 | 36% | -0.024 % |
 | gold | 55 | 18 | 26 | 11 | 41% | -0.020 % |
 | nasdaq | 88 | 32 | 43 | 13 | 43% | -0.020 % |
-| oil | 48 | 14 | 24 | 10 | 37% | -0.064 % |
+| oil | 49 | 14 | 24 | 11 | 37% | -0.063 % |
 | sp500 | 74 | 15 | 47 | 12 | 24% | -0.050 % |
 
 ## Derniers trades
@@ -198,7 +204,7 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 | reprise juste après un stop | 28 | -0.31 R | en test |
 | nouvel actif : Ethereum (ETH/USD) | 7 | -0.39 R | en test |
 | horizon ~3 h sur Or (XAU/USD) | 10 | -0.49 R | en test |
-| nouvel actif : Pétrole WTI (CL) | 48 | -0.13 R | en test |
+| nouvel actif : Pétrole WTI (CL) | 49 | -0.12 R | en test |
 | nouvel actif : Euro / dollar (6E) | 23 | -0.38 R | en test |
 
 Notes :
@@ -212,7 +218,7 @@ Notes :
 - variante « reprise juste après un stop » en test : 28 trades, -0,31 R net, encore 72 trades avant décision
 - variante « nouvel actif : Ethereum (ETH/USD) » en test : 7 trades, -0,39 R net, encore 93 trades avant décision
 - variante « horizon ~3 h sur Or (XAU/USD) » en test : 10 trades, -0,49 R net, encore 90 trades avant décision
-- variante « nouvel actif : Pétrole WTI (CL) » en test : 48 trades, -0,13 R net, encore 52 trades avant décision
+- variante « nouvel actif : Pétrole WTI (CL) » en test : 49 trades, -0,12 R net, encore 51 trades avant décision
 - variante « nouvel actif : Euro / dollar (6E) » en test : 23 trades, -0,38 R net, encore 77 trades avant décision
 - sortie : stop remonté à l'entrée après +0,5 R ferait mieux (-0,16 R net contre -0,23 R, réels et en ombre) : à décider
 
