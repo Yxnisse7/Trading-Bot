@@ -32,6 +32,9 @@ from .summary import daily_summary
 from .tracker import update_signal
 
 log = logging.getLogger(__name__)
+# Filtres appliqués aux signaux réels par décision de Yanisse (13/10/2026) : G40 sur l'or passe les singes
+# (essai 21) et les 5 contrôles de l'essai 22. Les signaux écartés restent suivis en silence.
+MANUAL_FILTERS = {"limites_jour_or"}
 
 
 def chat_keys(values) -> list[str]:
@@ -71,6 +74,7 @@ class Engine:
         avoid_hours = set(adj.get("avoid_hours_utc") or [])
         promoted = set(adj.get("promoted_variants") or []) if self.cfg.variants_enabled else set()
         promoted -= drift.blocked(self.store.drift())        # essai 7 : pas de promotion pendant un décrochage
+        promoted |= MANUAL_FILTERS
         variants_on = self.cfg.variants_enabled and self.cfg.shadow_enabled and not dry_run
 
         calendar = self.macro_events(now)
@@ -1320,7 +1324,6 @@ class Engine:
 
         now = now or utcnow()
         data = self.store.lab_shadow()
-        hour = now.replace(minute=0, second=0, microsecond=0)
         changed = False
         for (strat, key), since in sl.SHADOW.items():
             name = f"{strat}:{key}"
@@ -1328,6 +1331,8 @@ class Engine:
             live_since = sl.LIVE.get((strat, key))
             live_end = parse_iso(sl.LIVE_END[(strat, key)]) if (strat, key) in sl.LIVE_END else None
             rec["live"] = bool(live_since) and (live_end is None or now < live_end)
+            slot = sl.LIVE_SLOT.get(strat, 3600) if rec["live"] else 3600
+            hour = datetime.fromtimestamp(int(now.timestamp()) // slot * slot, timezone.utc)
             if rec.get("checked_hour") == iso(hour) or key not in self.cfg.assets:
                 continue
             asset = self.cfg.assets[key]
@@ -1414,21 +1419,38 @@ class Engine:
                 micros = max(1, min(50, int(risk_usd // per_micro))) if per_micro > 0 else 1
                 t["micros"], t["close_at"] = micros, close_at
                 end = datetime.fromtimestamp(close_at, timezone.utc).astimezone(tz).strftime("%H:%M") if close_at else "?"
-                lines = [f"{'🟢' if long else '🔴'} SIGNAL RÉEL · {asset.label} ({symbol}) · {'ACHAT' if long else 'VENTE'}",
-                         f"Entrée : {fmt(t['entry'])} (clôture de la bougie 1 h de {opened.astimezone(tz).strftime('%H:%M')})",
-                         f"Stop : {fmt(t['stop'])} (2 ATR, à placer tout de suite)",
-                         f"Sortie : clôture d'une bougie 1 h qui casse le canal des 10 dernières heures, "
-                         f"ou au plus tard à {end} (heure de Paris, 15:00 à Chicago) — je préviens.",
-                         f"Topstep : {micros} micro{'s' if micros > 1 else ''} {symbol} ≈ {money(micros * per_micro)} $ "
-                         f"de risque ({format(acct.risk_pct(), 'g').replace('.', ',')} % de la balance)",
-                         "Donchian or fermé chaque soir (essai 8) : validé en backtest, pas encore prouvé en réel. "
-                         "Le bot ne passe aucun ordre."]
+                head = f"{'🟢' if long else '🔴'} SIGNAL RÉEL · {asset.label} ({symbol}) · {'ACHAT' if long else 'VENTE'}"
+                size = (f"Topstep : {micros} micro{'s' if micros > 1 else ''} {symbol} ≈ {money(micros * per_micro)} $ "
+                        f"de risque ({format(acct.risk_pct(), 'g').replace('.', ',')} % de la balance)")
+                if name.startswith("creux_repris_15m"):
+                    # bougie 15 min close à l'heure d'entrée : son début est 15 min plus tôt
+                    bar = (opened - timedelta(minutes=15)).astimezone(tz).strftime("%H:%M")
+                    target = t["entry"] + (3 if long else -3) * t["risk"]
+                    lines = [head,
+                             f"Entrée : {fmt(t['entry'])} (clôture de la bougie 15 min de {bar})",
+                             f"Stop : {fmt(t['stop'])} (sous le creux repris, à placer tout de suite)",
+                             f"Objectif : {fmt(target)} (3 fois le risque)",
+                             f"Sortie : objectif, stop, au bout de 4 h, ou au plus tard à {end} "
+                             f"(heure de Paris, 15:00 à Chicago) — je préviens.",
+                             size,
+                             "Creux repris Nasdaq (essai 15) : bat les entrées au hasard (essai 21) et tient les 5 "
+                             "contrôles de l'essai 22, pas encore prouvé en réel. Le bot ne passe aucun ordre."]
+                else:
+                    lines = [head,
+                             f"Entrée : {fmt(t['entry'])} (clôture de la bougie 1 h de {opened.astimezone(tz).strftime('%H:%M')})",
+                             f"Stop : {fmt(t['stop'])} (2 ATR, à placer tout de suite)",
+                             f"Sortie : clôture d'une bougie 1 h qui casse le canal des 10 dernières heures, "
+                             f"ou au plus tard à {end} (heure de Paris, 15:00 à Chicago) — je préviens.",
+                             size,
+                             "Donchian or fermé chaque soir (essai 8) : validé en backtest, pas encore prouvé en réel. "
+                             "Le bot ne passe aucun ordre."]
                 notify("\n".join(lines), buttons=msg.site_buttons(self.cfg.site_url, asset.key))
                 t["notified_entry"] = iso(now)
             if t["status"] == "closed" and not t.get("notified_exit"):
                 micros = int(t.get("micros") or 1)
                 why = {"heure": "fin de séance (15:00 à Chicago)", "canal": "cassure du canal 10 h", "stop": "stop touché",
-                       "durée": "durée maximale", "trou": "trou dans les données"}.get(t.get("reason"), t.get("reason") or "")
+                       "durée": "durée maximale (4 h)" if name.startswith("creux_repris_15m") else "durée maximale",
+                       "objectif": "objectif touché", "trou": "trou dans les données"}.get(t.get("reason"), t.get("reason") or "")
                 usd = (t["exit"] - t["entry"]) * (1 if long else -1) * mult * micros
                 notify(f"⚪ SORTIE · {asset.label} ({symbol}) · {why}\n"
                        f"Sortie : {fmt(t['exit'])} · {t['r_topstep']:+.2f} R frais compris · ".replace(".", ",") +

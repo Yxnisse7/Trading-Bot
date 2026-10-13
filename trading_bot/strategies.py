@@ -50,7 +50,12 @@ SHADOW = {("donchian_1h", "bitcoin"): "2026-10-05T19:00:00Z",
           ("creux_repris_15m", "nasdaq"): "2026-10-09T22:00:00Z"}  # validé à l'essai 15 (S25)
 # Envoyées en signaux réels sur Telegram (entrée, stop, sortie), en plus du suivi : (stratégie, actif) → date de début.
 # Choix de Yanisse le 08/10/2026 : validée en backtest (essai 8), pas encore prouvée sur le marché réel.
-LIVE = {("donchian_day", "gold"): "2026-10-08T07:30:00Z"}
+LIVE = {("donchian_day", "gold"): "2026-10-08T07:30:00Z",
+        # choix de Yanisse le 13/10/2026 : seule stratégie du laboratoire qui passe les singes (essai 21) et les
+        # 5 contrôles de l'essai 22 (avec le filtre G40 de l'or, appliqué au bot : engine.MANUAL_FILTERS)
+        ("creux_repris_15m", "nasdaq"): "2026-10-13T20:00:00Z"}
+# Durée (secondes) entre deux relectures d'une stratégie en signaux réels : 1 h par défaut, 15 min pour le 15 min
+LIVE_SLOT = {"creux_repris_15m": 900}
 # Fin des signaux réels : plus aucune nouvelle entrée envoyée après cette date, la position déjà annoncée reçoit
 # encore son message de sortie ; le suivi en ombre continue. Donchian or : choix de Yanisse le 13/10/2026 après
 # l'essai 21 (il ne bat pas les entrées au hasard).

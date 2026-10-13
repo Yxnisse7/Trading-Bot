@@ -124,3 +124,27 @@ def test_live_signals_stop_new_entries_after_end_but_still_send_the_exit(tmp_pat
            "reason": None, "exit_ts": None, "exit": None, "r_topstep": None}
     eng._live_signals("donchian_day:gold", cfg.assets["gold"], [known, new], since, end + timedelta(days=1), end)
     assert len(sent) == 1 and "SORTIE" in sent[0] and not new.get("notified_entry")
+
+
+def test_live_s25_nasdaq_message_has_15m_bar_target_and_exit(tmp_path, monkeypatch):
+    from datetime import datetime, timedelta, timezone
+    from trading_bot import engine as engmod
+    from trading_bot import strategies as sl
+    from trading_bot.config import load_config
+    from trading_bot.storage import Store
+    sent = []
+    monkeypatch.setattr(engmod, "notify", lambda text, **k: sent.append(text))
+    cfg = load_config()
+    eng = engmod.Engine(cfg)
+    eng.store = Store(tmp_path)
+    assert ("creux_repris_15m", "nasdaq") in sl.LIVE and "limites_jour_or" in engmod.MANUAL_FILTERS
+    t0 = int(datetime(2026, 10, 14, 14, 45, tzinfo=timezone.utc).timestamp())
+    trade = {"entry_ts": t0, "direction": "long", "entry": 25000.0, "risk": 20.0, "stop": 24980.0, "status": "open",
+             "reason": None, "exit_ts": None, "exit": None, "r_topstep": None}
+    since = datetime(2026, 10, 13, 20, tzinfo=timezone.utc)
+    now = datetime(2026, 10, 14, 14, 55, tzinfo=timezone.utc)
+    eng._live_signals("creux_repris_15m:nasdaq", cfg.assets["nasdaq"], [trade], since, now)
+    assert len(sent) == 1 and "bougie 15 min de 16:30" in sent[0] and "Objectif : 25 060,00" in sent[0]
+    trade.update(status="closed", reason="objectif", exit_ts=t0 + 3600, exit=25060.0, r_topstep=2.9)
+    eng._live_signals("creux_repris_15m:nasdaq", cfg.assets["nasdaq"], [trade], since, now + timedelta(hours=1))
+    assert len(sent) == 2 and "objectif touché" in sent[1]
