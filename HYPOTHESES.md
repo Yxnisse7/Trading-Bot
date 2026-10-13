@@ -834,6 +834,31 @@ programme refuse toute nouvelle entrée et le note au journal ; seul Yanisse peu
   6 pertes d'affilée. Pas de backtest à comparer : ses entrées sont jugées à la main.
 - La limite de 10 $ par jour du pont reste en place.
 
+## Essai 23 — toutes nos stratégies rejouées sur 2014-2024, années jamais regardées
+
+Écrit le 13 octobre 2026, **avant** tout téléchargement et tout résultat, à la demande de Yanisse (« rejoue tout »).
+Nos essais 14 à 22 ne regardent que 10/2024 → 10/2026, une seule époque (l'or monte fort). On rejoue les mêmes
+règles, **sans rien changer**, sur les dix années d'avant.
+
+**Données** : bougies 1 min Dukascopy (CFD) regroupées en 5 min pour l'or, le Nasdaq et le S&P 500, du 01/01/2014
+au début de nos données actuelles (fin septembre 2024) ; Bitcoin : Binance 5 min d'août 2017 à septembre 2024.
+Échelle des prix fixée sur une journée récente (les prix de 2014 sont très différents de ceux d'aujourd'hui).
+
+**Stratégies** : les 54 de l'essai 17 (bot rejoué, laboratoire, essais 14, 15 et 16) sur les 4 actifs, mêmes réglages,
+mêmes frais que l'essai 21 (Topstep pour l'or, le Nasdaq et le S&P 500 ; ceux du bot pour le Bitcoin).
+
+**Verdict par cellule** sur 2014-2024 : elle **tient** si elle a au moins 100 trades, un R net moyen > 0, un facteur
+de profit ≥ 1,1, et un R net > 0 dans au moins la moitié des années complètes. Pour information : le résultat de
+chaque année, et le test des singes de l'essai 21 sur cette période.
+
+**Décidé d'avance** :
+- G40 sur l'or et S25 sur le Nasdaq, passés en réel le 13/10 : s'ils ne tiennent pas, proposition à Yanisse de
+  revenir en ombre. S'ils tiennent, ils restent.
+- Donchian or (en ombre depuis le 13/10) : s'il tient, on peut en reparler, mais il ne bat toujours pas les singes
+  de 2024-2026 ; rien ne change sans l'accord de Yanisse.
+- Une stratégie écartée sur 2024-2026 qui tient sur 2014-2024 n'est **pas** repêchée : elle a échoué sur les
+  années récentes, qui comptent le plus.
+
 ## Journal des essais
 
 | Date | Essai | Résultat |
@@ -885,3 +910,4 @@ programme refuse toute nouvelle entrée et le note au journal ; seul Yanisse peu
 | 2026-10-13 | Essais 21 et 22, suite | **Passent en réel** (choix de Yanisse, les deux seules qui passent les singes et les 5 contrôles) : **G40 sur l'or** appliqué aux signaux du bot (au-delà de 3 signaux dans la journée ou après 2 pertes, le signal de l'or n'est plus envoyé et reste suivi en silence) et **S25 creux repris sur le Nasdaq** en signaux réels Telegram (entrée, stop, objectif 3 R, sortie au bout de 4 h ou à 15:00 à Chicago ; relu toutes les 15 min). Validés, pas « prouvés » ; aucun ordre n'est passé par le bot. Le Donchian or reste en ombre. |
 | 2026-10-13 | Variante de G40 proposée par Yanisse (mesure, **non pré-enregistrée**, rien changé) : pas de plafond de 3 trades, arrêt seulement après 2 pertes d'affilée | Bot or rejoué sur 24 mois : 982 trades, +0,04 R par trade, +42 R au total, frais ×2 −0,02 R, contre G40 actuel 786 trades, +0,07 R, **+58 R**, frais ×2 +0,02 R. Les 196 trades en plus (4e trade et suivants, ou après perte-gain-perte) perdent −0,08 R chacun (−0,13 R en découverte, −0,03 R en confirmation). G40 reste tel quel. |
 | 2026-10-13 | Copie des signaux Telegram du bot sur le démo MetaTrader 5 (demande de Yanisse) | `mt5_copy.py`, magic 200001, mêmes distances de stop et d'objectif que le signal, 1 % du solde démo au stop. Règle d'arrêt écrite avant le premier trade : perte cumulée de 100 $ ou 8 pertes d'affilée. |
+| 2026-10-13 | Pré-enregistrement de l'essai 23 (toutes nos stratégies sur 2014-2024) | — |
