@@ -690,6 +690,37 @@ résultat avant frais et le nombre de trades par jour. Une cellule validée ne v
 directement : vérification sur ticks du dernier mois, puis démo MetaTrader 5 de quelques semaines. Aucun ordre
 réel.
 
+## Essai 19 — scalping de quelques secondes sur l'or (6 cellules)
+
+Écrit le 13 octobre 2026, **avant** d'avoir regardé les ticks (téléchargement lancé en parallèle). Après l'essai 18
+(trades de plusieurs minutes, tous écartés), Yanisse veut tester le scalping qu'il pratique à la main : beaucoup de
+trades de quelques secondes, sortie dès qu'on est gagnant, au bon moment.
+
+**Données** : ticks Dukascopy de l'or au comptant (prix acheteur et vendeur réels), de 7:00 à 21:00 UTC, du
+01/09/2026 au 12/10/2026. Découverte du 21/09 au 12/10, confirmation du 01/09 au 20/09 (la plus ancienne, comme
+les essais précédents). Les ticks du courtier Vantage enregistrés par le pont MetaTrader 5 serviront ensuite à
+vérifier l'écart réel, sans changer les règles.
+
+**Exécution** : achat au prix vendeur (ask), vente au prix acheteur (bid), donc l'écart réel de chaque instant est
+payé ; commission de 0,06 $ par once et par aller-retour en plus.
+
+**Contexte (achat ; vente symétrique)** : bougies 5 min et 15 min reconstruites à partir des ticks (prix milieu),
+clôture au-dessus de la MM20, MM20 plus haute que 3 bougies plus tôt, RSI 21 au-dessus de 50 (mêmes règles que le
+contexte de l'essai 18, sans l'heure). Entrées de 7:00 à 20:00 UTC, aucune de 8:25 à 8:45 ni de 9:55 à 10:05 heure
+de New York.
+
+**Entrée, départ brusque** : le prix milieu dépasse le plus haut des 60 dernières secondes **et** a monté d'au moins
+0,30 $ en 10 secondes. Entrée au tick suivant.
+
+**Sortie** : objectif quand le prix de sortie (bid pour un achat) dépasse l'entrée de **X** ; stop quand il recule de
+**S** ; sinon sortie au marché au bout de **60 secondes**. X ∈ {0,10 ; 0,30 ; 0,60} $, S ∈ {0,50 ; 1,00} $ : 6
+cellules. R = résultat ÷ S. Un seul trade à la fois, 10 secondes de pause après chaque sortie.
+
+**Verdict par cellule** : critères de l'essai 3 (au moins 30 trades, moyenne nette positive, facteur de profit
+≥ 1,1, les deux moitiés de la découverte positives, puis confirmation). « Prouvé » avec la marge corrigée pour
+**390 essais** (384 + 6). On rapporte le taux de réussite, les trades par jour et la part des frais. Une cellule
+validée irait en démo sur MetaTrader 5, jamais en réel sans la demande de Yanisse.
+
 ## Journal des essais
 
 | Date | Essai | Résultat |
