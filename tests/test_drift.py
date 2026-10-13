@@ -104,3 +104,23 @@ def test_live_donchian_day_does_not_exit_on_the_unfinished_last_hour():
     candles.append(Candle(end + 3600, 106.0, 106.2, 105.8, 106.0, 1.0))           # heure suivante, en cours
     trades = sl.donchian_day(candles, "gold")
     assert len(trades) == 1 and trades[0].reason == "fin des données"
+
+def test_live_signals_stop_new_entries_after_end_but_still_send_the_exit(tmp_path, monkeypatch):
+    from datetime import datetime, timedelta, timezone
+    from trading_bot import engine as engmod
+    from trading_bot.config import load_config
+    from trading_bot.storage import Store
+    sent = []
+    monkeypatch.setattr(engmod, "notify", lambda text, **k: sent.append(text))
+    cfg = load_config()
+    eng = engmod.Engine(cfg)
+    eng.store = Store(tmp_path)
+    since, end = datetime(2026, 10, 8, 7, 30, tzinfo=timezone.utc), datetime(2026, 10, 13, 19, 30, tzinfo=timezone.utc)
+    t0 = int(datetime(2026, 10, 13, 18, 0, tzinfo=timezone.utc).timestamp())
+    known = {"entry_ts": t0, "direction": "short", "entry": 4000.0, "risk": 10.0, "stop": 4010.0, "status": "closed",
+             "reason": "heure", "exit_ts": t0 + 7200, "exit": 3990.0, "r_topstep": 0.98,
+             "notified_entry": "2026-10-13T18:10:00Z", "micros": 2, "close_at": t0 + 7200}
+    new = {"entry_ts": t0 + 86_400, "direction": "long", "entry": 4000.0, "risk": 10.0, "stop": 3990.0, "status": "open",
+           "reason": None, "exit_ts": None, "exit": None, "r_topstep": None}
+    eng._live_signals("donchian_day:gold", cfg.assets["gold"], [known, new], since, end + timedelta(days=1), end)
+    assert len(sent) == 1 and "SORTIE" in sent[0] and not new.get("notified_entry")

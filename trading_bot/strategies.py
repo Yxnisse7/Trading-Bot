@@ -51,6 +51,10 @@ SHADOW = {("donchian_1h", "bitcoin"): "2026-10-05T19:00:00Z",
 # Envoyées en signaux réels sur Telegram (entrée, stop, sortie), en plus du suivi : (stratégie, actif) → date de début.
 # Choix de Yanisse le 08/10/2026 : validée en backtest (essai 8), pas encore prouvée sur le marché réel.
 LIVE = {("donchian_day", "gold"): "2026-10-08T07:30:00Z"}
+# Fin des signaux réels : plus aucune nouvelle entrée envoyée après cette date, la position déjà annoncée reçoit
+# encore son message de sortie ; le suivi en ombre continue. Donchian or : choix de Yanisse le 13/10/2026 après
+# l'essai 21 (il ne bat pas les entrées au hasard).
+LIVE_END = {("donchian_day", "gold"): "2026-10-13T19:30:00Z"}
 MIN_TRADES = {"news_breakout": 20}
 
 

@@ -1326,7 +1326,8 @@ class Engine:
             name = f"{strat}:{key}"
             rec = data.setdefault(name, {"strategy": strat, "asset": key, "since": since, "trades": []})
             live_since = sl.LIVE.get((strat, key))
-            rec["live"] = bool(live_since)
+            live_end = parse_iso(sl.LIVE_END[(strat, key)]) if (strat, key) in sl.LIVE_END else None
+            rec["live"] = bool(live_since) and (live_end is None or now < live_end)
             if rec.get("checked_hour") == iso(hour) or key not in self.cfg.assets:
                 continue
             asset = self.cfg.assets[key]
@@ -1368,7 +1369,7 @@ class Engine:
                     if flag in before.get(t.entry_ts, {}):
                         kept[t.entry_ts][flag] = before[t.entry_ts][flag]
             if live_since:
-                self._live_signals(name, asset, list(kept.values()), parse_iso(live_since), now)
+                self._live_signals(name, asset, list(kept.values()), parse_iso(live_since), now, live_end)
             rec["trades"] = sorted(kept.values(), key=lambda t: t["entry_ts"])
             rec["checked_hour"] = iso(hour)
             closed_rs = [t["r_topstep"] for t in rec["trades"] if t["status"] == "closed"]
@@ -1386,7 +1387,8 @@ class Engine:
         except (OSError, ValueError, KeyError, TypeError):
             return 50_000.0
 
-    def _live_signals(self, name: str, asset, trades: list[dict[str, Any]], since: datetime, now: datetime) -> None:
+    def _live_signals(self, name: str, asset, trades: list[dict[str, Any]], since: datetime, now: datetime,
+                      until: datetime | None = None) -> None:
         """Stratégie passée en signaux réels (strategies.LIVE) : message Telegram à l'entrée (avec les micros
         Topstep) et à la sortie ; la sortie est aussi inscrite au journal du compte Topstep simulé."""
         from . import strategies as sl
@@ -1402,6 +1404,8 @@ class Engine:
             opened = datetime.fromtimestamp(t["entry_ts"], timezone.utc)
             if opened < since or now - opened > timedelta(hours=6) and not t.get("notified_entry"):
                 continue                                    # rien d'ancien n'est envoyé au lancement
+            if until is not None and opened >= until and not t.get("notified_entry"):
+                continue                                    # signaux réels arrêtés : plus de nouvelle entrée
             long = t["direction"] == "long"
             if not t.get("notified_entry"):
                 close_at = sl.session_close_ts(t["entry_ts"])
