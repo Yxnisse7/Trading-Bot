@@ -725,6 +725,33 @@ cellules. R = résultat ÷ S. Un seul trade à la fois, 10 secondes de pause apr
 **390 essais** (384 + 6). On rapporte le taux de réussite, les trades par jour et la part des frais. Une cellule
 validée irait en démo sur MetaTrader 5, jamais en réel sans la demande de Yanisse.
 
+## Essai 20 — rebond après une bougie d'épuisement sur l'or (4 cellules)
+
+Écrit le 13 octobre 2026, **avant** tout résultat. Idée de Yanisse, vue en direct le matin même : une bougie 5 min
+de baisse beaucoup plus grande que les autres arrive sur un niveau sans le casser, puis le prix repart.
+
+**Données** : bougies 1 min Dukascopy de l'or (celles de l'essai 18, 10/2024 → 10/2026), bougies 5 min reconstruites.
+Découverte du 28/09/2025 à octobre 2026, confirmation de octobre 2024 au 27/09/2025. Frais de Vantage RAW : 0,21 $
+par once et par aller-retour (écart 0,15 $ + commission 0,06 $).
+
+**Bougie d'épuisement (achat ; vente symétrique)** : bougie 5 min close, baissière, dont la hauteur fait au moins
+2 fois la moyenne des 20 bougies 5 min précédentes, clôturée entre 7:00 et 20:00 UTC (hors 8:25-8:45 et
+9:55-10:05 heure de New York).
+
+**Niveau** (cellules « niveau ») : son plus bas passe à moins de 1 $ d'un chiffre rond (multiple de 10 $) ou du plus
+bas des 3 heures précédentes, et sa clôture reste au-dessus de ce niveau (il n'est pas cassé). Cellules « sans
+niveau » : toute bougie d'épuisement.
+
+**Entrée** : dans les 5 minutes qui suivent, une bougie 1 min clôture au moins 0,20 $ au-dessus de la clôture de la
+bougie d'épuisement ; entrée à l'ouverture de la minute suivante. Sinon, pas de trade.
+
+**Stop** sous le plus bas de la bougie d'épuisement, moins 0,25 $. **Objectif** à 1 fois ou 2 fois la distance du
+stop ; sortie au marché au bout de 30 minutes. Stop et objectif dans la même minute : compté en stop. Un trade à
+la fois.
+
+**Cellules** : {niveau, sans niveau} × {objectif 1R, 2R} = 4. Verdict selon les critères de l'essai 3, « prouvé »
+avec la marge corrigée pour **394 essais** (390 + 4). Une cellule validée irait en démo sur MetaTrader 5.
+
 ## Journal des essais
 
 | Date | Essai | Résultat |
