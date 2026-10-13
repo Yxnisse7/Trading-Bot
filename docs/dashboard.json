@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-13T16:25:49.433203+02:00",
+  "updated_at": "2026-10-13T16:31:17.187235+02:00",
   "timezone": "Europe/Paris",
   "equity_curve": [
     {
@@ -1655,7 +1655,7 @@
       "avg_pnl_pct": -0.0396
     },
     "open": 0,
-    "open_shadow": 0
+    "open_shadow": 1
   },
   "by_source": {
     "bot": {
@@ -5052,7 +5052,43 @@
       ]
     }
   ],
-  "open_signals": [],
+  "open_signals": [
+    {
+      "id": "267c4db91d",
+      "asset": "oil",
+      "asset_label": "Pétrole WTI (CL)",
+      "direction": "long",
+      "horizon": "1h",
+      "entry": 93.64,
+      "take_profit": 94.02,
+      "stop_loss": 93.33,
+      "risk_reward": 1.23,
+      "confidence": "fort",
+      "score": 6.75,
+      "criteria": [
+        "adx",
+        "orb",
+        "rsi",
+        "trend_15m",
+        "trend_1h",
+        "trend_5m",
+        "vwap"
+      ],
+      "source": "shadow",
+      "status": "open",
+      "pnl_pct": null,
+      "pnl_gross_pct": null,
+      "duration_minutes": null,
+      "close_price": null,
+      "created_at": "2026-10-13T14:31:06Z",
+      "closed_at": null,
+      "created_local": "13/10 16:31",
+      "expires_at": "2026-10-13T15:31:06Z",
+      "rationale": "Achat : tendance forte (ADX), cassure du range d'ouverture, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 1.01 (1.08 %), TP = 37 % du range, SL = 31 % du range, probabilité de résolution sous 1 h ≈ 72%.",
+      "news_context": "actualité à surveiller (score 1) : US Dollar: Supported but capped by CPI risks – OCBC",
+      "manual_exit": null
+    }
+  ],
   "recent_trades": [
     {
       "id": "96892da747",
@@ -7496,7 +7532,7 @@
     }
   },
   "state": {
-    "last_scan": "2026-10-13T14:25:38Z",
+    "last_scan": "2026-10-13T14:31:06Z",
     "last_scan_note": "0 signal(aux)",
     "last_summary": "2026-10-12T22:05:28Z",
     "last_track": "2026-10-13T13:15:45Z",
