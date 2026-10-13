@@ -1,6 +1,6 @@
 # Trading-Bot — rapport
 
-_Mis à jour le 13/10/2026 à 15:10 (Europe/Paris)._
+_Mis à jour le 13/10/2026 à 15:15 (Europe/Paris)._
 
 ## Vue d'ensemble
 
@@ -8,7 +8,7 @@ _Mis à jour le 13/10/2026 à 15:10 (Europe/Paris)._
 - Taux de réussite cumulé (TP / (TP+SL)) : **42%** — hasard attendu 42%, avantage **+1%**
 - P&L théorique cumulé, net des coûts estimés (somme des % par trade, sans levier) : **-4.57 %** (brut -0.75 %)
 - Signaux ouverts : **0**
-- Signaux fantômes (suivis en silence pour l'apprentissage) : **342** clôturés, 1 ouverts, taux de réussite 36% (hasard attendu 42%)
+- Signaux fantômes (suivis en silence pour l'apprentissage) : **343** clôturés, 0 ouverts, taux de réussite 36% (hasard attendu 42%)
 
 ## Statistiques
 
@@ -113,18 +113,18 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 
 | Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
 |---|---:|---:|---:|---:|---:|---:|
-| adx | 342 | 97 | 172 | 73 | 36% | -0.040 % |
+| adx | 343 | 98 | 172 | 73 | 36% | -0.040 % |
 | corr | 18 | 2 | 13 | 3 | 13% | -0.202 % |
 | level | 42 | 17 | 12 | 13 | 59% | -0.030 % |
 | macd | 85 | 18 | 49 | 18 | 27% | -0.079 % |
 | orb | 15 | 3 | 7 | 5 | 30% | -0.105 % |
 | pdhl | 42 | 9 | 24 | 9 | 27% | -0.048 % |
-| rsi | 221 | 67 | 118 | 36 | 36% | -0.041 % |
-| trend_15m | 342 | 97 | 172 | 73 | 36% | -0.040 % |
-| trend_1h | 334 | 94 | 170 | 70 | 36% | -0.041 % |
-| trend_5m | 265 | 84 | 139 | 42 | 38% | -0.035 % |
+| rsi | 222 | 68 | 118 | 36 | 37% | -0.040 % |
+| trend_15m | 343 | 98 | 172 | 73 | 36% | -0.040 % |
+| trend_1h | 335 | 95 | 170 | 70 | 36% | -0.041 % |
+| trend_5m | 266 | 85 | 139 | 42 | 38% | -0.034 % |
 | volume | 2 | 1 | 0 | 1 | 100% | -0.021 % |
-| vwap | 330 | 96 | 165 | 69 | 37% | -0.038 % |
+| vwap | 331 | 97 | 165 | 69 | 37% | -0.037 % |
 
 ### Fantômes par actif
 
@@ -134,7 +134,7 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 | ethereum | 15 | 2 | 10 | 3 | 17% | -0.231 % |
 | euro | 23 | 8 | 14 | 1 | 36% | -0.024 % |
 | gold | 64 | 18 | 30 | 16 | 38% | -0.024 % |
-| nasdaq | 92 | 33 | 43 | 16 | 43% | -0.016 % |
+| nasdaq | 93 | 34 | 43 | 16 | 44% | -0.014 % |
 | oil | 52 | 14 | 25 | 13 | 36% | -0.067 % |
 | sp500 | 74 | 15 | 47 | 12 | 24% | -0.050 % |
 
@@ -192,7 +192,7 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 
 | Variante testée en fantôme | Trades | Gain net moyen | Statut |
 |---|---:|---:|---|
-| indices le matin européen | 65 | -0.12 R | en test |
+| indices le matin européen | 66 | -0.10 R | en test |
 | horizon ~3 h | 67 | -0.35 R | en test |
 | confiance moyenne | 56 | -0.11 R | en test |
 | entrées dans l'heure avant l'ouverture américaine | 5 | -0.18 R | en test |
@@ -206,7 +206,7 @@ Notes :
 
 - trades réels : +0,03 R ± 0,18 R par trade avant frais sur 146 trades (0 R = hasard)
 - macd : -0,17 R ± 0,14 R sur 233 trades éq. → poids ×0,93
-- variante « indices le matin européen » en test : 65 trades, -0,12 R net, encore 35 trades avant décision
+- variante « indices le matin européen » en test : 66 trades, -0,10 R net, encore 34 trades avant décision
 - variante « horizon ~3 h » en test : 67 trades, -0,35 R net, encore 33 trades avant décision
 - variante « confiance moyenne » en test : 56 trades, -0,11 R net, encore 44 trades avant décision
 - variante « entrées dans l'heure avant l'ouverture américaine » en test : 5 trades, -0,18 R net, encore 95 trades avant décision
@@ -215,7 +215,7 @@ Notes :
 - variante « horizon ~3 h sur Or (XAU/USD) » en test : 11 trades, -0,54 R net, encore 89 trades avant décision
 - variante « nouvel actif : Pétrole WTI (CL) » en test : 52 trades, -0,14 R net, encore 48 trades avant décision
 - variante « nouvel actif : Euro / dollar (6E) » en test : 23 trades, -0,38 R net, encore 77 trades avant décision
-- sortie : stop remonté à l'entrée après +0,5 R ferait mieux (-0,15 R net contre -0,23 R, réels et en ombre) : à décider
+- sortie : stop remonté à l'entrée après +0,5 R ferait mieux (-0,15 R net contre -0,22 R, réels et en ombre) : à décider
 
 ## Backtests (données historiques 5 min)
 
