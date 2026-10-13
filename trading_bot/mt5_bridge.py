@@ -33,6 +33,7 @@ DEFAULTS: dict[str, Any] = {
     "magic": 180018,
     "bars": 3000,
     "poll_seconds": 2,
+    "record_ticks": True,         # enregistre chaque prix (achat/vente) du courtier dans ticks/AAAA-MM-JJ.csv
     "agent": {"enabled": False, "model": "", "library": ""},
 }
 
@@ -55,6 +56,7 @@ class Bridge:
         self.sym, self.magic = cfg["symbol"], int(cfg["magic"])
         self.last_bar: int | None = None
         self.limit_day: str | None = None
+        self.tick_from: int | None = None
         if cfg["exit"] != "X1":
             raise ValueError("seule la sortie X1 est branchée en direct pour l'instant")
 
@@ -93,6 +95,28 @@ class Bridge:
                    if d.magic == self.magic and d.time - offset >= day0)
 
     # ------------------------------------------------------------ journal
+    def record_ticks(self) -> int:
+        """Ajoute les nouveaux ticks du courtier (heure du serveur en ms, achat, vente) au fichier du jour."""
+        if not self.cfg.get("record_ticks"):
+            return 0
+        if self.tick_from is None:
+            tick = self.mt5.symbol_info_tick(self.sym)
+            if tick is None or not tick.time:
+                return 0
+            self.tick_from = (tick.time - 60) * 1000
+        start = datetime.fromtimestamp(self.tick_from / 1000, timezone.utc)
+        ticks = self.mt5.copy_ticks_from(self.sym, start, 100000, self.mt5.COPY_TICKS_ALL)
+        rows = [t for t in (ticks if ticks is not None else []) if int(t["time_msc"]) > self.tick_from]
+        if not rows:
+            return 0
+        day = datetime.fromtimestamp(self.clock(), timezone.utc).strftime("%Y-%m-%d")
+        f = self.root / "ticks" / f"{day}.csv"
+        f.parent.mkdir(parents=True, exist_ok=True)
+        with f.open("a", encoding="utf-8") as fh:
+            fh.writelines(f"{int(t['time_msc'])},{float(t['bid'])},{float(t['ask'])}\n" for t in rows)
+        self.tick_from = int(rows[-1]["time_msc"])
+        return len(rows)
+
     def journal(self, event: str, **kw) -> None:
         now = datetime.fromtimestamp(self.clock(), timezone.utc)
         f = self.root / "journal" / f"{now:%Y-%m}.csv"
@@ -142,6 +166,10 @@ class Bridge:
 
     # ------------------------------------------------------------ une itération
     def step(self) -> str:
+        try:
+            self.record_ticks()
+        except Exception:                          # l'enregistrement ne doit jamais bloquer le trading
+            log.exception("enregistrement des ticks")
         off = self.offset()
         if off is None:
             return "flux arrêté"

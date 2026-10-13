@@ -57,7 +57,7 @@ def forced_buy(monkeypatch):
 
 def bridge(tmp_path, mt5, mode):
     cfg = mb.load_config(tmp_path)
-    cfg.update(mode=mode, bars=200)
+    cfg.update(mode=mode, bars=200, record_ticks=False)
     return mb.Bridge(mt5, cfg, tmp_path, clock=lambda: NOW)
 
 
@@ -111,3 +111,17 @@ def test_no_quote_means_no_trading(tmp_path, forced_buy):
     mt5 = FakeMT5()
     mt5.symbol_info_tick = lambda sym: NS(time=0, bid=0.0, ask=0.0)
     assert bridge(tmp_path, mt5, "demo").step() == "flux arrêté" and mt5.sent == []
+
+
+def test_ticks_are_appended_once(tmp_path):
+    mt5 = FakeMT5()
+    mt5.COPY_TICKS_ALL = 0
+    base = (NOW + OFFSET) * 1000
+    mt5.copy_ticks_from = lambda sym, start, n, flags: [
+        {"time_msc": base - 30000, "bid": 4100.0, "ask": 4100.15},
+        {"time_msc": base - 1000, "bid": 4100.1, "ask": 4100.25}]
+    b = bridge(tmp_path, mt5, "observe")
+    b.cfg["record_ticks"] = True
+    assert b.record_ticks() == 2 and b.record_ticks() == 0
+    lines = next((tmp_path / "ticks").glob("*.csv")).read_text().splitlines()
+    assert lines == [f"{base - 30000},4100.0,4100.15", f"{base - 1000},4100.1,4100.25"]
