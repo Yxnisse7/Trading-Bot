@@ -1,10 +1,10 @@
 """Poste de lecture et d'ordres pour les passages manuels de l'assistant sur le compte démo MetaTrader 5.
 
     python -m trading_bot.claude_desk look                 # résumé compact du marché de l'or et du compte
-    python -m trading_bot.claude_desk order buy|sell SL TP "raison"   # ordre 0,01 lot, stop obligatoire
+    python -m trading_bot.claude_desk order buy|sell SL TP "raison"   # ordre risquant 1 % du solde, stop obligatoire
     python -m trading_bot.claude_desk close "raison"       # ferme les positions de l'assistant
 
-Garde-fous : compte démo uniquement, 0,01 lot, un stop sur chaque ordre, une seule position à la fois, numéro
+Garde-fous : compte démo uniquement, taille calculée pour perdre 1 % du solde au stop (0,01 à 0,10 lot), un stop sur chaque ordre, une seule position à la fois, numéro
 magique distinct du pont (ses trades sont comptés à part), journal dans journal/assistant.csv.
 """
 from __future__ import annotations
@@ -21,7 +21,8 @@ from .models import Candle
 ROOT = Path(__file__).resolve().parents[2]          # E:\TradingBot (le code est dans E:\TradingBot\bot)
 SYMBOL = "XAUUSD+"
 MAGIC = 777001
-LOT = 0.01
+RISK_PCT = 0.01                                     # perte au stop = 1 % du solde
+MIN_LOT, MAX_LOT = 0.01, 0.10
 CALENDAR = "https://nfs.faireconomy.media/ff_calendar_thisweek.json"
 
 
@@ -103,6 +104,14 @@ def _filling(mt5) -> int:
     return mt5.ORDER_FILLING_FOK if mode & 1 else mt5.ORDER_FILLING_IOC if mode & 2 else mt5.ORDER_FILLING_RETURN
 
 
+def lot_for(balance: float, dist: float, contract: float = 100.0) -> float:
+    """Lot qui perd RISK_PCT du solde si le stop (à dist $ du prix) est touché, arrondi vers le bas à 0,01."""
+    if dist <= 0:
+        return MIN_LOT
+    lot = int(balance * RISK_PCT / (dist * contract) * 100) / 100
+    return max(MIN_LOT, min(MAX_LOT, lot))
+
+
 def order(mt5, side: str, sl: float, tp: float, why: str) -> str:
     acc = mt5.account_info()
     if acc is None or acc.trade_mode != mt5.ACCOUNT_TRADE_MODE_DEMO:
@@ -114,14 +123,15 @@ def order(mt5, side: str, sl: float, tp: float, why: str) -> str:
     px = tick.ask if buy else tick.bid
     if (buy and not sl < px < tp) or (not buy and not tp < px < sl):
         return f"REFUSÉ : stop {sl} et objectif {tp} incohérents avec le prix {px}"
-    res = mt5.order_send({"action": mt5.TRADE_ACTION_DEAL, "symbol": SYMBOL, "volume": LOT,
+    lot = lot_for(acc.balance, abs(px - sl), mt5.symbol_info(SYMBOL).trade_contract_size)
+    res = mt5.order_send({"action": mt5.TRADE_ACTION_DEAL, "symbol": SYMBOL, "volume": lot,
                           "type": mt5.ORDER_TYPE_BUY if buy else mt5.ORDER_TYPE_SELL, "price": px, "sl": sl, "tp": tp,
                           "deviation": 30, "magic": MAGIC, "comment": "assistant", "type_time": mt5.ORDER_TIME_GTC,
                           "type_filling": _filling(mt5)})
     ok = getattr(res, "retcode", None) == mt5.TRADE_RETCODE_DONE
     _journal({"action": ("achat" if buy else "vente") if ok else "rejeté", "prix": getattr(res, "price", px),
               "stop": sl, "objectif": tp, "resultat": "", "raison": why})
-    return f"{'OK' if ok else 'REJETÉ'} code {getattr(res, 'retcode', None)} prix {getattr(res, 'price', px)}"
+    return f"{'OK' if ok else 'REJETÉ'} code {getattr(res, 'retcode', None)} prix {getattr(res, 'price', px)} lot {lot}"
 
 
 def close(mt5, why: str) -> str:
