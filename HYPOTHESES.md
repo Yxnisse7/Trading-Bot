@@ -701,8 +701,12 @@ trades de quelques secondes, sortie dès qu'on est gagnant, au bon moment.
 les essais précédents). Les ticks du courtier Vantage enregistrés par le pont MetaTrader 5 serviront ensuite à
 vérifier l'écart réel, sans changer les règles.
 
-**Exécution** : achat au prix vendeur (ask), vente au prix acheteur (bid), donc l'écart réel de chaque instant est
-payé ; commission de 0,06 $ par once et par aller-retour en plus.
+**Exécution** : prix milieu des ticks Dukascopy, plus les frais de Vantage RAW : écart de 0,15 $ (mesuré sur le
+compte démo le 12/10) payé à moitié à l'entrée et à moitié à la sortie, plus 0,06 $ de commission, soit **0,21 $
+par once et par aller-retour**. Correction écrite avant tout résultat : la première version faisait payer l'écart
+Dukascopy, mais en ouvrant un fichier on voit qu'il est d'environ 0,55 $, presque 4 fois celui de Vantage ; il
+aurait condamné l'essai pour une raison qui n'est pas celle de Yanisse. Le résultat avec l'écart Dukascopy réel
+sera donné pour information.
 
 **Contexte (achat ; vente symétrique)** : bougies 5 min et 15 min reconstruites à partir des ticks (prix milieu),
 clôture au-dessus de la MM20, MM20 plus haute que 3 bougies plus tôt, RSI 21 au-dessus de 50 (mêmes règles que le
