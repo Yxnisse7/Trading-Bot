@@ -844,6 +844,11 @@ règles, **sans rien changer**, sur les dix années d'avant.
 au début de nos données actuelles (fin septembre 2024) ; Bitcoin : Binance 5 min d'août 2017 à septembre 2024.
 Échelle des prix fixée sur une journée récente (les prix de 2014 sont très différents de ceux d'aujourd'hui).
 
+**Changement de source, écrit avant tout résultat (13/10/2026 au soir)** : Dukascopy nous a freinés (1 an d'or en 2 h,
+puis erreurs 429/503). On prend à la place les bougies 1 min HistData (or XAUUSD, S&P 500 SPXUSD, Nasdaq NSXUSD),
+heure de New York avec heure d'été. Contrôle fait sur l'automne 2024, où les deux sources se recouvrent : mêmes prix
+que nos bougies Dukascopy à la bougie près (décalage UTC−4 l'été, UTC−5 l'hiver). Rien d'autre ne change.
+
 **Stratégies** : les 54 de l'essai 17 (bot rejoué, laboratoire, essais 14, 15 et 16) sur les 4 actifs, mêmes réglages,
 mêmes frais que l'essai 21 (Topstep pour l'or, le Nasdaq et le S&P 500 ; ceux du bot pour le Bitcoin).
 
