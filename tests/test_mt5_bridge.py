@@ -57,7 +57,7 @@ def forced_buy(monkeypatch):
 
 def bridge(tmp_path, mt5, mode):
     cfg = mb.load_config(tmp_path)
-    cfg.update(mode=mode, bars=200, record_ticks=False)
+    cfg.update(mode=mode, bars=200, record_ticks=False, copy_bot=False)
     return mb.Bridge(mt5, cfg, tmp_path, clock=lambda: NOW)
 
 

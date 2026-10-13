@@ -34,7 +34,8 @@ DEFAULTS: dict[str, Any] = {
     "magic": 180018,
     "bars": 3000,
     "poll_seconds": 2,
-    "record_ticks": True,         # enregistre chaque prix (achat/vente) du courtier dans ticks/AAAA-MM-JJ.csv
+    "record_ticks": True,
+    "copy_bot": True,             # copie aussi les signaux Telegram du bot sur le démo (mt5_copy.py)         # enregistre chaque prix (achat/vente) du courtier dans ticks/AAAA-MM-JJ.csv
     "agent": {"enabled": False, "model": "", "library": ""},
 }
 
@@ -58,6 +59,10 @@ class Bridge:
         self.last_bar: int | None = None
         self.limit_day: str | None = None
         self.stop_rule: str | None = None
+        self.copier = None
+        if cfg.get("copy_bot") and cfg["mode"] == "demo":
+            from .mt5_copy import Copier
+            self.copier = Copier(mt5, root, self.journal, clock)
         self.tick_from: int | None = None
         if cfg["exit"] != "X1":
             raise ValueError("seule la sortie X1 est branchée en direct pour l'instant")
@@ -172,6 +177,14 @@ class Bridge:
             self.record_ticks()
         except Exception:                          # l'enregistrement ne doit jamais bloquer le trading
             log.exception("enregistrement des ticks")
+        if self.copier is not None:
+            try:
+                state = self.copier.step()
+                if state and state != getattr(self, "_copy_state", ""):
+                    log.info("%s", state)
+                    self._copy_state = state
+            except Exception:                      # la copie ne doit jamais bloquer le scalping
+                log.exception("copie des signaux du bot")
         off = self.offset()
         if off is None:
             return "flux arrêté"

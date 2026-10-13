@@ -14,6 +14,7 @@ R1_ONE_R_PER_LOT = 371.0          # 1 R ≈ 3,71 $ à 0,01 lot (stop moyen de R1
 RULES: dict[int, dict[str, Any]] = {
     180018: {"name": "pont R1", "max_loss": 25.0, "max_streak": 8, "check_after": 40, "min_mean_r": -0.30},
     777001: {"name": "poste de l'assistant", "max_loss": 100.0, "max_streak": 6},
+    200001: {"name": "copie des signaux du bot", "max_loss": 100.0, "max_streak": 8},
 }
 
 
