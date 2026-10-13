@@ -790,6 +790,50 @@ accord. Une cellule écartée par nos essais qui bat les singes n'est **pas** re
 filtre en plus, jamais une porte d'entrée. L'horizon 3 h de l'or (`horizon_3h_gold`) n'est pas dans la liste (il
 demanderait de rejouer le bot) et reste jugé par l'essai 7.
 
+## Essai 22 — les autres contrôles de la vidéo : plateau, centaines de trades, régimes, walk-forward, frais doublés
+
+Écrit le 13 octobre 2026, **avant** tout résultat, à la demande de Yanisse (même vidéo que l'essai 21). Le test
+des singes (essai 21), la partie cachée jamais regardée (découverte et confirmation), la correction du nombre
+d'essais et l'entrée à l'ouverture de la bougie suivante sont déjà en place ; on ajoute le reste.
+
+**Stratégies contrôlées** : celles qu'on suit encore. Donchian fermé chaque soir sur l'or (`donchian_day`, en ombre
+depuis l'essai 21), Donchian 1 h sur l'or et le Bitcoin, A1 sans étirement et G40 limites du jour sur l'or (filtres
+du bot), S25 creux repris sur le Nasdaq. Mêmes données (24 mois, 10/2024 → 10/2026) et mêmes frais que l'essai 21.
+
+**Grilles de réglages** (le réglage actuel est au milieu ou presque) :
+- Donchian : canal d'entrée 10, 15, **20**, 25, 30 heures × canal de sortie 5, **10**, 15 heures (15 réglages) ;
+- A1 : écart à la moyenne 1, 1,25, **1,5**, 1,75, 2 ATR (5) ;
+- G40 : 2, **3**, 4, 5 trades par jour × arrêt après 1, **2**, 3 pertes (12) ;
+- S25 : creux des 6, 8, **10**, 12, 15 bougies × reprise en 1, **2**, 3 bougies (15).
+
+**Cinq contrôles**, tous sur les 24 mois, R net moyen par trade :
+1. **Plateau** : au moins 2 réglages sur 3 de la grille gagnent (R net > 0, au moins 30 trades), **et** tous les
+   voisins directs du réglage actuel gagnent.
+2. **Centaines de trades** : au moins 200 trades.
+3. **Régimes** : chaque trade est classé selon le marché des 20 jours précédents (rendement sur 20 jours divisé par
+   son agitation normale : au-dessus de +0,5 « hausse », sous −0,5 « baisse », entre les deux « plat ») ; il faut un
+   R net > 0 dans au moins 2 des régimes qui comptent au moins 30 trades.
+4. **Walk-forward** : tous les 3 mois, on choisit le meilleur réglage de la grille sur les 6 mois précédents, puis
+   on le joue sur les 3 mois suivants, jamais vus ; il faut que la suite de ces trimestres gagne (R net > 0).
+5. **Frais doublés** : le réglage actuel garde un R net > 0 avec des frais multipliés par 2.
+
+Une stratégie est **robuste** si elle passe les 5. **Décidé d'avance** : une stratégie qui échoue est signalée à
+Yanisse avec la proposition de l'arrêter ; rien n'est changé sans son accord, et aucun réglage n'est changé pour le
+« meilleur » de la grille (ce serait refaire le courtier de Baltimore).
+
+## Règles d'arrêt du démo MetaTrader 5 (écrites à froid le 13 octobre 2026)
+
+Comptées à partir du 14/10/2026 00:00 UTC, sur les trades fermés, frais compris. Quand une règle est franchie, le
+programme refuse toute nouvelle entrée et le note au journal ; seul Yanisse peut relancer, après en avoir parlé.
+
+- **Pont R1** (magic 180018, 0,01 lot, compte vu comme 100 $) : perte cumulée de 25 $ ; ou 8 pertes d'affilée ;
+  ou, après 40 trades, une moyenne pire que −0,30 R (1 R ≈ 3,71 $ à 0,01 lot, stop moyen de l'essai 18). Le
+  backtest promet −0,04 R ; on s'attend à moins bien (la vidéo dit de diviser par deux ce que promet le test), d'où
+  la marge.
+- **Poste de l'assistant** (magic 777001, 1 % du solde par trade) : perte cumulée de 100 $ (10 % des 1 000 $) ; ou
+  6 pertes d'affilée. Pas de backtest à comparer : ses entrées sont jugées à la main.
+- La limite de 10 $ par jour du pont reste en place.
+
 ## Journal des essais
 
 | Date | Essai | Résultat |
@@ -836,3 +880,4 @@ demanderait de rejouer le bot) et reste jugé par l'essai 7.
 | 2026-10-13 | Pré-enregistrement de l'essai 21 (test des 1000 singes sur toutes nos stratégies) | — |
 | 2026-10-13 | **Essai 21** : test des 1000 singes (mêmes sens, stops, objectifs et durées, entrées tirées au hasard à la même heure) sur 230 cellules : les 54 stratégies de l'essai 17 sur l'or, le Nasdaq, le S&P 500 et le Bitcoin, et les essais 18 et 20. Précision avant tout résultat : pour les trades du bot, le singe garde l'objectif du signal même quand il n'a pas été touché | **220 cellules jugées, 29 battent les singes, une seule nettement : G40 limites du jour sur l'or** (+0,07 R contre −0,07 R pour les singes, battus 1000/1000, z 4,7 ; elle bat aussi 994 filtres au hasard). Les singes perdent en moyenne −0,08 R : sans signal, frais et gestion coûtent. **Stratégies suivies qui ne battent pas les singes** : Donchian or en signaux réels (+0,09 R, singes +0,02 R, battus 911/1000), Donchian 1 h or (886) et Bitcoin (927), W2 S&P 500 (799) ; A1 sans étirement or bat les entrées au hasard (1000) mais pas les filtres au hasard (949, seuil 950). Le marché de l'or qui montait explique une partie du gain du Donchian. Battent les singes : bot or (1000) et Nasdaq (973), S25 Nasdaq (964), R1 du démo (952, mais −0,04 R après frais). Signalé à Yanisse avec la proposition d'arrêter les stratégies suivies qui ne passent pas ; rien n'est changé sans son accord. |
 | 2026-10-13 | Essai 21, suite | **Donchian or : fin des signaux réels, suivi en ombre** (choix de Yanisse). Plus aucune nouvelle entrée envoyée après le 13/10 19:30 UTC ; la vente ouverte à 18:00 UTC reçoit encore son message de sortie. Les autres stratégies en ombre continuent. |
+| 2026-10-13 | Pré-enregistrement de l'essai 22 (plateau, centaines de trades, régimes, walk-forward, frais doublés) et des règles d'arrêt du démo | — |
