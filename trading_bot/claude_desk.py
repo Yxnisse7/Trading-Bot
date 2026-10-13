@@ -22,6 +22,7 @@ ROOT = Path(__file__).resolve().parents[2]          # E:\TradingBot (le code est
 SYMBOL = "XAUUSD+"
 MAGIC = 777001
 LOT = 0.01
+CALENDAR = "https://nfs.faireconomy.media/ff_calendar_thisweek.json"
 
 
 def _offset(mt5) -> int:
@@ -65,6 +66,25 @@ def look(mt5) -> str:
     lines.append(_frame("M15", _bars(mt5, mt5.TIMEFRAME_M15, 80, off)[:-1], 12))
     lines.append(_frame("M5", _bars(mt5, mt5.TIMEFRAME_M5, 80, off)[:-1], 18))
     return "\n".join(lines)
+
+
+def news(hours: float = 36.0) -> str:
+    """Annonces USD fortes et moyennes à venir (calendrier gratuit de la semaine, sans clé)."""
+    import requests
+    from zoneinfo import ZoneInfo
+    try:
+        rows = requests.get(CALENDAR, timeout=15, headers={"User-Agent": "Mozilla/5.0"}).json()
+    except (requests.RequestException, ValueError) as exc:
+        return f"annonces : calendrier injoignable ({exc.__class__.__name__})"
+    now = datetime.now(timezone.utc)
+    out = []
+    for e in rows:
+        if e.get("country") != "USD" or e.get("impact") not in ("High", "Medium"):
+            continue
+        at = datetime.fromisoformat(e["date"]).astimezone(timezone.utc)
+        if -3600 <= (at - now).total_seconds() <= hours * 3600:
+            out.append(f"  {at.astimezone(ZoneInfo('Europe/Paris')):%a %H:%M} Paris  {e['impact']:6s} {e['title']}")
+    return "annonces USD (−1 h à +36 h) :\n" + ("\n".join(out) or "  aucune")
 
 
 def _journal(row: dict) -> None:
@@ -128,6 +148,7 @@ def main(argv: list[str]) -> int:
     cmd = argv[1] if len(argv) > 1 else "look"
     if cmd == "look":
         print(look(mt5))
+        print(news())
     elif cmd == "order":
         print(order(mt5, argv[2], float(argv[3]), float(argv[4]), argv[5] if len(argv) > 5 else ""))
     elif cmd == "close":
