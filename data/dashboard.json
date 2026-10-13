@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-13T03:05:36.926478+02:00",
+  "updated_at": "2026-10-13T03:10:51.065257+02:00",
   "timezone": "Europe/Paris",
   "equity_curve": [
     {
@@ -1646,7 +1646,7 @@
       "avg_pnl_pct": -0.0391
     },
     "open": 0,
-    "open_shadow": 0
+    "open_shadow": 1
   },
   "by_source": {
     "bot": {
@@ -5039,7 +5039,42 @@
       ]
     }
   ],
-  "open_signals": [],
+  "open_signals": [
+    {
+      "id": "48549b1fd4",
+      "asset": "ethereum",
+      "asset_label": "Ethereum (ETH/USD)",
+      "direction": "short",
+      "horizon": "1h",
+      "entry": 2429.8,
+      "take_profit": 2417.6,
+      "stop_loss": 2438.0,
+      "risk_reward": 1.49,
+      "confidence": "fort",
+      "score": 5.5,
+      "criteria": [
+        "adx",
+        "corr",
+        "rsi",
+        "trend_15m",
+        "trend_1h",
+        "trend_5m"
+      ],
+      "source": "shadow",
+      "status": "open",
+      "pnl_pct": null,
+      "pnl_gross_pct": null,
+      "duration_minutes": null,
+      "close_price": null,
+      "created_at": "2026-10-13T01:10:37Z",
+      "closed_at": null,
+      "created_local": "13/10 03:10",
+      "expires_at": "2026-10-13T02:10:37Z",
+      "rationale": "Vente : tendance forte (ADX), marché meneur favorable, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min. Range moyen sur 1 h ≈ 20.41 (0.84 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 80%.",
+      "news_context": "actualité calme sur les 2 dernières heures",
+      "manual_exit": null
+    }
+  ],
   "recent_trades": [
     {
       "id": "256f4de878",
@@ -7483,7 +7518,7 @@
     }
   },
   "state": {
-    "last_scan": "2026-10-13T01:05:29Z",
+    "last_scan": "2026-10-13T01:10:37Z",
     "last_scan_note": "0 signal(aux)",
     "last_summary": "2026-10-12T22:05:28Z",
     "last_track": "2026-10-13T00:40:36Z",
