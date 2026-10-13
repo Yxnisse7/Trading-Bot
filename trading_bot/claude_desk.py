@@ -84,7 +84,7 @@ def news(hours: float = 36.0) -> str:
         at = datetime.fromisoformat(e["date"]).astimezone(timezone.utc)
         if -3600 <= (at - now).total_seconds() <= hours * 3600:
             out.append(f"  {at.astimezone(ZoneInfo('Europe/Paris')):%a %H:%M} Paris  {e['impact']:6s} {e['title']}")
-    return "annonces USD (−1 h à +36 h) :\n" + ("\n".join(out) or "  aucune")
+    return "annonces USD (-1 h a +36 h) :\n" + ("\n".join(out) or "  aucune")
 
 
 def _journal(row: dict) -> None:
@@ -140,6 +140,8 @@ def close(mt5, why: str) -> str:
 
 
 def main(argv: list[str]) -> int:
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     import MetaTrader5 as mt5
     if not mt5.initialize():
         print("MetaTrader 5 injoignable", mt5.last_error())
