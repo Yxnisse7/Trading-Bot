@@ -752,6 +752,44 @@ la fois.
 **Cellules** : {niveau, sans niveau} × {objectif 1R, 2R} = 4. Verdict selon les critères de l'essai 3, « prouvé »
 avec la marge corrigée pour **394 essais** (390 + 4). Une cellule validée irait en démo sur MetaTrader 5.
 
+## Essai 21 — le test des 1000 singes : nos stratégies battent-elles des entrées au hasard ? (≈ 230 cellules)
+
+Écrit le 13 octobre 2026, **avant** tout résultat. Idée tirée d'une vidéo envoyée par Yanisse : garder les stops,
+les objectifs, la durée et le sens des trades d'une stratégie, mais remplacer ses entrées par des entrées tirées
+au hasard, 1 000 fois. Si la stratégie ne se détache pas des singes, ce n'est pas son signal qui gagnait, mais le
+marché ou la gestion du trade.
+
+**Stratégies** (à la demande de Yanisse : toutes, pas seulement celles en ombre) : les 54 de l'essai 17 (bot rejoué,
+laboratoire des essais 3, 5, 8 et 9, essais 14, 15 et 16) sur l'or, le Nasdaq, le S&P 500 et le Bitcoin (bougies
+5 min Dukascopy et Binance, 10/2024 → 10/2026), plus les 10 cellules de l'essai 18 et les 4 de l'essai 20 (or,
+bougies 1 min). Le DAX et l'Euro Stoxx 50 (essai 17, rien de validé, marchés non tradés) et l'essai 19 (ticks) ne
+sont pas repris. Frais : Topstep pour l'or, le Nasdaq et le S&P 500, ceux du bot pour le Bitcoin, 0,30 $ et 0,21 $
+par once pour les essais 18 et 20 (les mêmes que dans chaque essai d'origine).
+
+**Un singe** : pour chaque trade réel de la cellule, une entrée à l'ouverture d'une bougie tirée au hasard (bougies
+5 min, ou 1 min pour les essais 18 et 20) **à la même heure de la journée** (heure de New York) n'importe où dans
+les 24 mois, **même sens**, **même distance de stop**, objectif à la même distance que le gain réel quand le trade
+réel est sorti à l'objectif (sinon pas d'objectif), et sortie à la clôture au bout du **même nombre de bougies** que
+le trade réel si ni le stop ni l'objectif n'ont été touchés. Stop et objectif dans la même bougie : compté en stop.
+On calcule le R net moyen de ces faux trades. 1 000 singes par cellule (graine fixée, résultats reproductibles).
+
+**Singe filtre** (en plus, pour les cellules qui ne font que retirer des trades du bot : filtres A1-A5, F1-F8 et
+limites G40) : 1 000 tirages au hasard du même nombre de trades parmi ceux du bot. Le filtre doit faire mieux qu'un
+filtre au hasard.
+
+**Verdict par cellule**, sur les 24 mois : la cellule **bat les singes** si son R net moyen dépasse au moins 950 des
+1 000 singes (moins de 5 % de chances par hasard). « **Nettement** » si l'écart, compté en écarts types des singes,
+reste au-dessus du seuil corrigé pour le nombre de cellules testées (même correction que nos « prouvé »). Pour
+information : la moyenne des singes (ce que la gestion et le marché donnent sans signal), et la position de la
+cellule sur la découverte et la confirmation séparément. Moins de 30 trades : pas de verdict.
+
+**Ce qu'on en fera, décidé d'avance** : une stratégie suivie aujourd'hui (Donchian or en signaux réels, Donchian
+Bitcoin et or en ombre, A1 sans étirement sur l'or, G40 sur l'or, S25 sur le Nasdaq, R1 sur le démo MetaTrader 5)
+qui **ne bat pas** les singes est signalée à Yanisse avec la proposition de l'arrêter ; rien n'est arrêté sans son
+accord. Une cellule écartée par nos essais qui bat les singes n'est **pas** repêchée : le test des singes est un
+filtre en plus, jamais une porte d'entrée. L'horizon 3 h de l'or (`horizon_3h_gold`) n'est pas dans la liste (il
+demanderait de rejouer le bot) et reste jugé par l'essai 7.
+
 ## Journal des essais
 
 | Date | Essai | Résultat |
@@ -795,3 +833,4 @@ avec la marge corrigée pour **394 essais** (390 + 4). Une cellule validée irai
 | 2026-10-13 | **Essai 18** : scalping de quelques minutes sur l'or (bougies 1 min Dukascopy 10/2024 → 10/2026, 4 entrées + leur réunion × 2 sorties, frais 0,30 $ par once, 384 essais) | **Les 10 cellules sont écartées.** Seule R1 (repli sur la MM20) passe la découverte en sortie 1 pour 1 : +0,06 R (263 trades, PF 1,12, moitiés +0,02 / +0,09), puis s'effondre en confirmation : −0,13 R (245, PF 0,76) ; 24 mois −0,04 R ± 0,04 (brut +0,09 R, frais 0,08 R par trade). R3 (RSI 50) −0,10 R, R4 (chiffre rond, 4,5 trades/jour) −0,10 R et **déjà −0,02 R avant frais**, R2 (cassure de pause) 14 trades seulement, réunion R1-R4 −0,11 R (5,6 trades/jour). La sortie moitié + suiveur ne change presque rien. Stop moyen 3,7 à 5,5 $ : les frais d'un compte ECN coûtent 0,06 à 0,08 R par trade. Conclusion : sur ces règles, le scalping de quelques minutes n'a pas d'avantage sur l'or, même avant frais pour la plupart des entrées ; rien ne va en démo. |
 | 2026-10-13 | **Essai 20** : rebond après une bougie 5 min d'épuisement sur l'or (idée de Yanisse ; bougies 1 min 10/2024 → 10/2026, frais Vantage 0,21 $, 394 essais) | **Les 4 cellules sont écartées.** Avec niveau tenu, objectif 2R : découverte +0,08 R (258 trades, PF 1,14, moitiés +0,12 / +0,03) puis confirmation **−0,32 R** (181, PF 0,57) ; 24 mois −0,08 R, brut 0,00 R. Niveau 1R : +0,01 puis −0,25 R. Sans niveau (≈ 1 800 trades) : −0,05 à −0,17 R. Avant frais, le rebond après une bougie d'épuisement est à zéro (−0,01 à +0,01 R) : sur l'or, ce schéma ne donne pas d'avantage mesurable ; le bon exemple du 13/10 au matin était un cas favorable parmi d'autres. |
 | 2026-10-13 | **Essai 19** : scalping de quelques secondes sur l'or (ticks Dukascopy du 31/08 au 12/10/2026, 6,1 millions de ticks, départ brusque de 0,30 $ en 10 s dans le sens du contexte 5 et 15 min, sortie à +X / −S / 60 s, frais Vantage 0,21 $, 390 essais) | **Les 6 cellules sont écartées dès la découverte.** Toutes perdent environ **0,21 $ par once et par trade**, c'est-à-dire exactement les frais : avant frais, le résultat est à zéro (−0,014 à −0,003 $). En R : −0,21 à −0,23 R (stop 1 $), −0,43 à −0,46 R (stop 0,50 $), les deux périodes pareilles. Taux de réussite 33 % à 71 % selon l'objectif, sans que cela compense. Le signal se déclenche très souvent (200 à 280 trades par jour actif) : un départ de 0,30 $ en 10 s sur l'or est du bruit ordinaire, pas une information. Avec l'écart réel Dukascopy (≈ 0,55 $), pour information : −0,65 $ par trade. 4 fichiers horaires sur 434 manquants (2 absents, 2 en échec), sans effet sur la conclusion. |
+| 2026-10-13 | Pré-enregistrement de l'essai 21 (test des 1000 singes sur toutes nos stratégies) | — |
