@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Graphique · Yasuke Trading-Bot</title>
+<meta name="description" content="Graphique des actifs du bot avec la structure du marché : sommets, chasses aux stops, trous de prix, sessions, signaux et annonces.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="yasuke.css?v=dc546e33d5">
+<script>try { const t = localStorage.getItem("tb-theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}</script>
+<style>
+  .gx-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin-bottom: 14px; }
+  .gx-bar select { width: auto; max-width: 100%; font: inherit; font-size: 14px; padding: 7px 10px; border-radius: 10px; border: 1px solid var(--line); background: var(--card); color: var(--text); }
+  .gx-bar .faint { font-size: 12px; }
+  .gx { display: grid; grid-template-columns: minmax(0, 1fr) 290px; gap: 16px; align-items: start; }
+  .gx-chart { position: relative; height: min(72vh, 680px); min-height: 380px; padding: 0; overflow: hidden; }
+  .gx-chart .box { position: absolute; inset: 0; }
+  .gx-chart canvas.ov { position: absolute; inset: 0; pointer-events: none; z-index: 3; }
+  .gx-chart .legend { position: absolute; top: 10px; left: 12px; z-index: 4; font: 500 12px "Geist Mono", ui-monospace, monospace; color: var(--muted); pointer-events: none; }
+  .gx-side { display: grid; gap: 16px; }
+  .gx-side .card { padding: 16px; }
+  .gx-side h3 { margin: 0 0 10px; font-size: 13px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 600; }
+  .ly { display: grid; gap: 2px; }
+  .ly label { display: grid; grid-template-columns: 18px 12px minmax(0, 1fr) auto; align-items: center; gap: 8px; padding: 6px 6px; border-radius: 8px; cursor: pointer; font-size: 13px; }
+  .ly label:hover { background: var(--soft); }
+  .ly label small { display: block; color: var(--muted); font-size: 11px; }
+  .ly i { width: 12px; height: 12px; border-radius: 3px; display: block; }
+  .ly .n { font: 500 12px "Geist Mono", ui-monospace, monospace; color: var(--muted); }
+  .ly-all { display: flex; gap: 8px; margin-top: 8px; }
+  .ly-all button { font-size: 12px; padding: 4px 10px; }
+  #insp { font-size: 13px; line-height: 1.5; }
+  #insp .k { color: var(--muted); }
+  #insp dl { display: grid; grid-template-columns: auto 1fr; gap: 2px 10px; margin: 8px 0 0; }
+  #insp dt { color: var(--muted); } #insp dd { margin: 0; font-family: "Geist Mono", ui-monospace, monospace; }
+  #insp .it { padding: 8px 0; border-top: 1px solid var(--line); } #insp .it:first-of-type { border-top: 0; }
+  @media (max-width: 960px) { .gx { grid-template-columns: 1fr; } .gx-chart { height: 62vh; } }
+</style>
+</head>
+<body data-page="chart">
+<header id="yk-header"></header>
+<div class="wrap">
+  <div class="pagehead">
+    <div><h1>Graphique</h1><div class="sub" id="updated">Chargement…</div></div>
+    <div class="actions"><button class="btn-icon" id="btn-refresh" type="button" aria-label="Actualiser" title="Actualiser"></button></div>
+  </div>
+
+  <div class="gx-bar">
+    <select id="asset" aria-label="Actif"></select>
+    <div class="seg" id="tf" role="group" aria-label="Unité de temps">
+      <button type="button" data-tf="300">5 min</button><button type="button" data-tf="900">15 min</button><button type="button" data-tf="3600">1 h</button>
+    </div>
+    <span class="faint" id="span"></span>
+    <span class="faint">Cliquez sur une bougie pour voir ce qui s'y passe · double-clic pour recadrer</span>
+  </div>
+
+  <div class="gx">
+    <div class="card gx-chart"><div class="box" id="box"></div><canvas class="ov" id="ov"></canvas><div class="legend" id="legend"></div></div>
+    <div class="gx-side">
+      <div class="card"><h3>Calques</h3><div class="ly" id="layers"></div>
+        <div class="ly-all"><button type="button" class="secondary" id="ly-on">Tout</button><button type="button" class="secondary" id="ly-off">Rien</button><button type="button" class="secondary" id="ly-def">Par défaut</button></div></div>
+      <div class="card"><h3>Inspecteur</h3><div id="insp" class="muted">Cliquez sur une bougie du graphique.</div></div>
+    </div>
+  </div>
+  <p class="faint" style="margin-top:14px;font-size:12px">Structure calculée dans votre navigateur sur les 24 dernières heures publiées par le bot. Outil de lecture, pas un signal : les essais du bot n'ont trouvé aucun avantage mesurable à ces repères pris seuls. Graphique : <a href="https://www.tradingview.com/lightweight-charts/" rel="noopener" target="_blank">TradingView Lightweight Charts</a>, licence Apache 2.0.</p>
+</div>
+
+<script src="vendor/lightweight-charts.standalone.production.js"></script>
+<script src="yasuke.js?v=74f05b57ff"></script>
+<script src="live-chart.js?v=974fc956eb"></script>
+<script src="structures.js?v=0525d87a9f"></script>
+<script>
+(function () {
+  "use strict";
+  const Y = window.YK, $ = Y.$, esc = Y.esc, S = window.Struct, L = window.LightweightCharts;
+  const ASSETS = window.LiveChart.DEFAULT_ASSETS;
+  const LAYERS = [
+    ["ma", "Moyennes 20 et 50", "tendance", "brand", true],
+    ["liq", "Sommets et creux", "stops au-dessus / en dessous", "up", true],
+    ["sweep", "Chasses aux stops", "mèche au-delà, clôture revenue", "dn", true],
+    ["brk", "Cassures franches", "clôture au-delà d'un sommet ou creux", "neu", false],
+    ["fvg", "Trous de prix (FVG)", "zones laissées vides", "brand-soft", true],
+    ["sess", "Sessions", "Asie, Londres, New York", "neu-soft", true],
+    ["round", "Chiffres ronds", "niveaux psychologiques", "faint", false],
+    ["range", "Plus haut / bas 24 h", "", "muted", false],
+    ["bot", "Signaux et trades du bot", "entrée, stop, objectif", "brand", true],
+    ["news", "Annonces économiques", "agenda du bot", "dn", true],
+  ];
+  const DEF = Object.fromEntries(LAYERS.map((l) => [l[0], l[4]]));
+  const read = (k, d) => { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } };
+  const save = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* navigation privée */ } };
+  const qs = new URLSearchParams(location.search);
+  let on = { ...DEF, ...read("tb-gx-layers", {}) };
+  let asset = qs.get("a") || read("tb-gx-asset", "gold"), tf = +(qs.get("tf") || read("tb-gx-tf", 300)), focus = +(qs.get("t") || 0);
+  if (!ASSETS.some((a) => a[0] === asset)) asset = "gold";
+  let chart, candle, ma20, ma50, raw = null, dash = null, A = null, lines = [];
+
+  $("#btn-refresh").innerHTML = Y.I.refresh;
+  $("#asset").innerHTML = ASSETS.map(([k, l]) => `<option value="${k}">${esc(l)}</option>`).join("");
+  $("#asset").value = asset;
+
+  const css = (n) => getComputedStyle(document.documentElement).getPropertyValue("--" + n).trim();
+  const alpha = (c, a) => { const d = document.createElement("canvas").getContext("2d"); d.fillStyle = c; const h = d.fillStyle;
+    if (h.startsWith("#")) { const n = parseInt(h.slice(1), 16); return `rgba(${n >> 16},${(n >> 8) & 255},${n & 255},${a})`; } return h; };
+  const when = (t) => new Date(t * 1000).toLocaleString("fr-FR", { weekday: "short", day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" });
+  const hm = (t) => new Date(t * 1000).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
+
+  function drawLayers() {
+    const n = A ? { ma: 2, liq: A.swings.filter((s) => s.how !== "break").length, sweep: A.sweeps.length, brk: A.swings.filter((s) => s.how === "break").length,
+                    fvg: A.fvgs.length, sess: A.sessions.length, round: A.rounds.length, range: 2, bot: botItems().length, news: newsItems().length } : {};
+    $("#layers").innerHTML = LAYERS.map(([k, l, sub, col]) => `<label><input type="checkbox" data-k="${k}"${on[k] ? " checked" : ""}>
+      <i style="background:var(--${col})"></i><span>${esc(l)}${sub ? `<small>${esc(sub)}</small>` : ""}</span><span class="n">${n[k] ?? ""}</span></label>`).join("");
+  }
+  $("#layers").addEventListener("change", (e) => { const k = e.target.dataset.k; if (!k) return; on[k] = e.target.checked; save("tb-gx-layers", on); paint(); });
+  const setAll = (v) => { on = typeof v === "object" ? { ...v } : Object.fromEntries(LAYERS.map((l) => [l[0], v])); save("tb-gx-layers", on); drawLayers(); paint(); };
+  $("#ly-on").onclick = () => setAll(true); $("#ly-off").onclick = () => setAll(false); $("#ly-def").onclick = () => setAll(DEF);
+
+  function botItems() {
+    if (!raw) return [];
+    const t0 = A && A.candles.length ? A.candles[0].t : 0;
+    const sig = (raw.open_signals || []).map((s) => ({ ...s, open: true }));
+    return sig.concat((raw.trades || []).map((s) => ({ ...s, open: false }))).filter((s) => Date.parse(s.created_at) / 1000 >= t0 - 86400);
+  }
+  function newsItems() {
+    if (!dash || !A || !A.candles.length) return [];
+    const t0 = A.candles[0].t, t1 = A.candles[A.candles.length - 1].t + 86400 * 2;
+    return (dash.agenda || []).filter((e) => { const t = Date.parse(e.at) / 1000; return t >= t0 && t <= t1 && (!(e.assets || []).length || e.assets.includes(asset)); });
+  }
+
+  function ensureChart() {
+    if (chart) return;
+    chart = L.createChart($("#box"), { autoSize: true,
+      layout: { background: { color: "transparent" }, textColor: css("muted"), fontFamily: "Geist, system-ui, sans-serif" },
+      grid: { vertLines: { color: css("grid") }, horzLines: { color: css("grid") } },
+      rightPriceScale: { borderColor: css("line") },
+      timeScale: { borderColor: css("line"), timeVisible: true, secondsVisible: false, rightOffset: 6,
+                   tickMarkFormatter: (t, type) => type <= 2 ? new Date(t * 1000).toLocaleDateString("fr-FR", { day: "2-digit", month: "2-digit" }) : hm(t) },
+      localization: { locale: "fr-FR", timeFormatter: when },
+      crosshair: { mode: 0 } });
+    candle = chart.addCandlestickSeries({ upColor: css("up"), downColor: css("dn"), wickUpColor: css("up"), wickDownColor: css("dn"), borderVisible: false });
+    ma20 = chart.addLineSeries({ color: css("brand"), lineWidth: 1.5, priceLineVisible: false, lastValueVisible: false, crosshairMarkerVisible: false });
+    ma50 = chart.addLineSeries({ color: css("dn"), lineWidth: 1.5, lineStyle: 0, priceLineVisible: false, lastValueVisible: false, crosshairMarkerVisible: false });
+    chart.timeScale().subscribeVisibleLogicalRangeChange(() => requestAnimationFrame(overlay));
+    chart.subscribeCrosshairMove((p) => {
+      const b = p && p.time ? p.seriesData.get(candle) : null;
+      $("#legend").textContent = b ? `${when(p.time)}  O ${S.fmt(b.open)}  H ${S.fmt(b.high)}  B ${S.fmt(b.low)}  C ${S.fmt(b.close)}` : "";
+    });
+    chart.subscribeClick((p) => inspect(p && p.time));
+    $("#box").addEventListener("dblclick", () => chart.timeScale().fitContent());
+    new ResizeObserver(() => requestAnimationFrame(overlay)).observe($("#box"));
+  }
+
+  // Rectangles et segments (sessions, trous de prix, niveaux) dessinés sur un calque transparent au-dessus du graphique.
+  function overlay() {
+    const cv = $("#ov"), box = $("#box"), dpr = window.devicePixelRatio || 1;
+    const w = box.clientWidth, h = box.clientHeight;
+    cv.width = w * dpr; cv.height = h * dpr; cv.style.width = w + "px"; cv.style.height = h + "px";
+    const g = cv.getContext("2d"); g.setTransform(dpr, 0, 0, dpr, 0, 0); g.clearRect(0, 0, w, h);
+    if (!A || !chart) return;
+    const ts = chart.timeScale(), plotW = w - (chart.priceScale("right").width() || 0);
+    const last = A.candles.length ? A.candles[A.candles.length - 1].t + tf : 0;
+    const X = (t) => { const x = ts.timeToCoordinate(Math.max(A.candles[0].t, Math.min(t, A.candles[A.candles.length - 1].t))); return x == null ? null : x; };
+    const Xend = (t) => (t == null || t >= last ? plotW : X(t));
+    const Yp = (p) => candle.priceToCoordinate(p);
+    g.save(); g.beginPath(); g.rect(0, 0, plotW, h); g.clip();
+    const font = "500 10px Geist, system-ui, sans-serif"; g.font = font; g.textBaseline = "bottom";
+    if (on.sess) for (const s of A.sessions) {
+      const x0 = X(s.first), x1 = X(s.last), y0 = Yp(s.hi), y1 = Yp(s.lo);
+      if (x0 == null || x1 == null || y0 == null || y1 == null) continue;
+      g.fillStyle = alpha(css("neu"), 0.07); g.fillRect(x0, y0, x1 - x0 + 4, y1 - y0);
+      g.strokeStyle = alpha(css("neu"), 0.35); g.setLineDash([3, 3]); g.strokeRect(x0, y0, x1 - x0 + 4, y1 - y0); g.setLineDash([]);
+      g.fillStyle = css("muted"); g.fillText(s.label, x0 + 3, y0 - 2);
+    }
+    if (on.fvg) for (const f of A.fvgs) {
+      const x0 = X(f.t), x1 = Xend(f.end), y0 = Yp(f.top), y1 = Yp(f.bottom);
+      if (x0 == null || x1 == null || y0 == null || y1 == null) continue;
+      g.fillStyle = alpha(css(f.dir === "long" ? "up" : "dn"), f.end ? 0.08 : 0.2); g.fillRect(x0, y0, Math.max(2, x1 - x0), Math.max(1, y1 - y0));
+    }
+    const seg = (x0, x1, y, col, dash, label) => {
+      if (x0 == null || x1 == null || y == null) return;
+      g.strokeStyle = col; g.lineWidth = 1; g.setLineDash(dash); g.beginPath(); g.moveTo(x0, y); g.lineTo(x1, y); g.stroke(); g.setLineDash([]);
+      if (label) { g.fillStyle = col; g.fillText(label, x0 + 2, y - 1); }
+    };
+    if (on.liq || on.brk) for (const s of A.swings) {
+      if (s.how === "break" ? !on.brk : !on.liq) continue;
+      const col = s.how === "break" ? css("faint") : css(s.kind === "high" ? "up" : "dn");
+      seg(X(s.t), Xend(s.end), Yp(s.price), alpha(col, s.end ? 0.55 : 0.95), s.end ? [2, 3] : [], s.end ? "" : (s.kind === "high" ? "stops ↑" : "stops ↓"));
+    }
+    if (on.round) for (const p of A.rounds) seg(0, plotW, Yp(p), alpha(css("faint"), 0.6), [1, 4], S.fmt(p));
+    if (on.range) { seg(0, plotW, Yp(A.hi), css("muted"), [6, 4], "haut 24 h"); seg(0, plotW, Yp(A.lo), css("muted"), [6, 4], "bas 24 h"); }
+    if (on.bot) for (const s of botItems()) {
+      const t0 = Date.parse(s.created_at) / 1000, t1 = s.closed_at ? Date.parse(s.closed_at) / 1000 : null;
+      const x0 = X(t0), x1 = Xend(t1);
+      seg(x0, x1, Yp(s.entry), css("brand"), [], "entrée");
+      if (s.stop_loss) seg(x0, x1, Yp(s.stop_loss), css("dn"), [4, 3], "stop");
+      if (s.take_profit) seg(x0, x1, Yp(s.take_profit), css("up"), [4, 3], "objectif");
+    }
+    if (on.news) for (const e of newsItems()) {
+      const x = ts.timeToCoordinate(Math.floor(Date.parse(e.at) / 1000 / tf) * tf);
+      if (x == null) continue;
+      g.strokeStyle = alpha(css("dn"), 0.7); g.setLineDash([2, 3]); g.beginPath(); g.moveTo(x, 14); g.lineTo(x, h); g.stroke(); g.setLineDash([]);
+      g.fillStyle = css("dn-text"); g.fillText("annonce", x + 3, 26);
+    }
+    g.restore();
+  }
+
+  function markers() {
+    const m = [];
+    if (on.sweep) for (const s of A.sweeps) m.push({ time: s.t, position: s.dir === "short" ? "aboveBar" : "belowBar", color: css("dn"),
+      shape: s.dir === "short" ? "arrowDown" : "arrowUp", text: "" });
+    if (on.brk) for (const s of A.swings) if (s.how === "break") m.push({ time: s.end, position: s.kind === "high" ? "aboveBar" : "belowBar", color: css("muted"), shape: "circle", text: "" });
+    if (on.bot) for (const s of botItems()) {
+      const t = Math.floor(Date.parse(s.created_at) / 1000 / tf) * tf, long = s.direction === "long";
+      m.push({ time: t, position: long ? "belowBar" : "aboveBar", color: css("brand"), shape: long ? "arrowUp" : "arrowDown", text: long ? "bot achat" : "bot vente" });
+      if (s.closed_at) m.push({ time: Math.floor(Date.parse(s.closed_at) / 1000 / tf) * tf, position: "inBar", color: s.pnl_pct > 0 ? css("up") : css("dn"), shape: "square",
+        text: (s.status || "").toUpperCase() });
+    }
+    const t0 = A.candles[0].t, t1 = A.candles[A.candles.length - 1].t;
+    return m.filter((x) => x.time >= t0 && x.time <= t1).sort((a, b) => a.time - b.time);
+  }
+
+  function paint() {
+    if (!raw) return;
+    ensureChart();
+    const c = A.candles;
+    candle.setData(c.map((b) => ({ time: b.t, open: b.o, high: b.h, low: b.l, close: b.c })));
+    ma20.setData(on.ma ? A.ma20 : []); ma50.setData(on.ma ? A.ma50 : []);
+    candle.setMarkers(markers());
+    for (const l of lines) candle.removePriceLine(l); lines = [];
+    drawLayers();
+    requestAnimationFrame(overlay);
+  }
+
+  function inspect(t) {
+    if (!t || !A) { $("#insp").innerHTML = "Cliquez sur une bougie du graphique."; return; }
+    const b = A.candles.find((x) => x.t === t); if (!b) return;
+    const near = (x) => x != null && x >= t - tf * 2 && x <= t + tf * 2;
+    const it = [];
+    for (const s of A.sweeps) if (near(s.t)) it.push(["Chasse aux stops", `${s.dir === "short" ? "au-dessus du sommet" : "sous le creux"} ${S.fmt(s.price)}, mèche à ${S.fmt(s.wick)}. Les stops posés là ont été déclenchés puis le prix est revenu.`]);
+    for (const s of A.swings) { if (near(s.t)) it.push([s.kind === "high" ? "Sommet" : "Creux", `${S.fmt(s.price)} · ${s.how === "sweep" ? "chassé plus tard" : s.how === "break" ? "cassé plus tard" : "toujours intact"}`]);
+                                if (s.how === "break" && near(s.end)) it.push(["Cassure", `${s.kind === "high" ? "sommet" : "creux"} ${S.fmt(s.price)} franchi en clôture`]); }
+    for (const f of A.fvgs) if (near(f.t)) it.push(["Trou de prix", `${f.dir === "long" ? "haussier" : "baissier"} ${S.fmt(f.bottom)} – ${S.fmt(f.top)} · ${f.end ? "comblé à " + hm(f.end) : "pas encore comblé"}`]);
+    for (const s of A.sessions) if (t >= s.first && t <= s.last) it.push([`Session ${s.label}`, `ouverture ${S.fmt(s.open)} · haut ${S.fmt(s.hi)} · bas ${S.fmt(s.lo)}`]);
+    for (const s of botItems()) { const a = Date.parse(s.created_at) / 1000; if (near(a)) it.push([`Signal du bot (${s.direction === "long" ? "achat" : "vente"})`,
+      `entrée ${S.fmt(s.entry)}${s.stop_loss ? ` · stop ${S.fmt(s.stop_loss)}` : ""}${s.take_profit ? ` · objectif ${S.fmt(s.take_profit)}` : ""}${s.status ? ` · ${s.status}` : ""}`]); }
+    for (const e of newsItems()) if (near(Math.floor(Date.parse(e.at) / 1000 / tf) * tf)) it.push(["Annonce", e.name]);
+    $("#insp").innerHTML = `<div><b>${esc(when(t))}</b></div>
+      <dl><dt>Ouverture</dt><dd>${S.fmt(b.o)}</dd><dt>Haut</dt><dd>${S.fmt(b.h)}</dd><dt>Bas</dt><dd>${S.fmt(b.l)}</dd><dt>Clôture</dt><dd>${S.fmt(b.c)}</dd></dl>
+      <div style="margin-top:10px">${it.length ? it.map(([k, v]) => `<div class="it"><b>${esc(k)}</b><div class="muted">${esc(v)}</div></div>`).join("") : '<div class="muted">Rien de particulier sur cette bougie.</div>'}</div>`;
+  }
+
+  async function load(force) {
+    $("#tf").querySelectorAll("button").forEach((b) => b.setAttribute("aria-pressed", String(+b.dataset.tf === tf)));
+    const [d, ds] = await Promise.all([window.LiveChart.snapshot(asset, force ? 0 : 55000), dash && !force ? dash : Y.getJson("dashboard.json")]);
+    dash = ds || dash;
+    if (dash) Y.status(dash.updated_at);
+    if (!d || !(d.candles || []).length) { $("#updated").textContent = "Pas encore de données pour cet actif."; raw = null; return; }
+    raw = d;
+    A = S.analyze(S.resample(d.candles, tf), asset);
+    $("#updated").textContent = `${d.label} · mis à jour ${Y.ago ? Y.ago(d.updated_at) : d.updated_at}`;
+    $("#span").textContent = `${A.candles.length} bougies · ${hm(A.candles[0].t)} → ${hm(A.candles[A.candles.length - 1].t)}`;
+    paint();
+    if (focus) { const i = A.candles.findIndex((b) => b.t >= focus); if (i >= 0) { chart.timeScale().setVisibleLogicalRange({ from: i - 40, to: i + 40 }); inspect(A.candles[i].t); } focus = 0; }
+    else if (force !== "keep") chart.timeScale().fitContent();
+  }
+
+  $("#asset").addEventListener("change", (e) => { asset = e.target.value; save("tb-gx-asset", asset); load(); });
+  $("#tf").addEventListener("click", (e) => { const v = +e.target.dataset.tf; if (!v) return; tf = v; save("tb-gx-tf", tf); load(); });
+  $("#btn-refresh").addEventListener("click", () => load(true));
+  new MutationObserver(() => { if (chart) { chart.remove(); chart = null; load("keep"); } }).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+  if (!L || !L.createChart) { $("#updated").textContent = "La bibliothèque du graphique n'a pas pu se charger."; return; }
+  drawLayers();
+  load();
+  Y.poll(() => load("keep"));
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Événements · Yasuke Trading-Bot</title>
+<meta name="description" content="Journal des événements de marché : chasses aux stops, cassures, trous de prix, sessions, signaux du bot et annonces économiques.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="yasuke.css?v=dc546e33d5">
+<script>try { const t = localStorage.getItem("tb-theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}</script>
+<style>
+  .ev-filters { display: grid; gap: 10px; margin-bottom: 18px; }
+  .ev-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .ev-chips button { font-size: 12px; padding: 5px 11px; border-radius: 999px; border: 1px solid var(--line); background: var(--card); color: var(--text); font-weight: 500; }
+  .ev-chips button[aria-pressed="false"] { color: var(--faint); background: transparent; }
+  .ev-chips button .n { color: var(--muted); font-family: "Geist Mono", ui-monospace, monospace; margin-left: 4px; }
+  .ev-sum { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; margin-bottom: 18px; }
+  .ev-sum .card { padding: 14px 16px; } .ev-sum b { display: block; font-size: 22px; font-weight: 600; } .ev-sum span { color: var(--muted); font-size: 12px; }
+  .ev-day { margin: 22px 0 8px; font-size: 13px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+  .ev-list { padding: 4px 0; }
+  .ev { display: grid; grid-template-columns: 52px 130px 118px minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 10px 18px; border-top: 1px solid var(--line); font-size: 13px; color: var(--text); text-decoration: none; }
+  .ev:first-child { border-top: 0; }
+  .ev:hover { background: var(--soft); }
+  .ev .t { font-family: "Geist Mono", ui-monospace, monospace; color: var(--muted); }
+  .ev .a { font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ev .go { color: var(--faint); font-size: 12px; }
+  @media (max-width: 760px) { .ev { grid-template-columns: 44px minmax(0, 1fr); gap: 2px 10px; padding: 10px 14px; }
+    .ev .a, .ev .ty { grid-column: 2; } .ev .tx { grid-column: 1 / -1; } .ev .go { display: none; } }
+</style>
+</head>
+<body data-page="events">
+<header id="yk-header"></header>
+<div class="wrap">
+  <div class="pagehead">
+    <div><h1>Événements</h1><div class="sub" id="updated">Chargement…</div></div>
+    <div class="actions"><button class="btn-icon" id="btn-refresh" type="button" aria-label="Actualiser" title="Actualiser"></button></div>
+  </div>
+
+  <div class="ev-sum" id="sum"></div>
+  <div class="ev-filters">
+    <div class="ev-chips" id="f-asset" aria-label="Actifs"></div>
+    <div class="ev-chips" id="f-type" aria-label="Types"></div>
+  </div>
+  <div id="list"><div class="card"><span class="sk t" style="width:60%"></span><span class="sk t" style="width:80%"></span></div></div>
+  <p class="faint" style="margin-top:18px;font-size:12px">Repères de structure calculés dans votre navigateur sur les 24 dernières heures publiées par le bot (bougies 5 min). Les signaux et trades viennent du bot, les annonces de son agenda. Cliquez sur une ligne pour la voir sur le graphique.</p>
+</div>
+
+<script src="yasuke.js?v=74f05b57ff"></script>
+<script src="live-chart.js?v=974fc956eb"></script>
+<script src="structures.js?v=0525d87a9f"></script>
+<script>
+(function () {
+  "use strict";
+  const Y = window.YK, $ = Y.$, esc = Y.esc, S = window.Struct;
+  const ASSETS = window.LiveChart.DEFAULT_ASSETS;
+  const LABEL = Object.fromEntries(ASSETS.map(([k, l]) => [k, l]));
+  const TYPES = [["news", "Annonces", "dn"], ["signal", "Signaux du bot", "brand"], ["trade", "Trades clôturés", "brand"], ["sweep", "Chasses aux stops", "dn"],
+                 ["break", "Cassures", "neu"], ["fvg", "Trous de prix", "up"], ["session", "Sessions", "neu"]];
+  const TNAME = Object.fromEntries(TYPES.map(([k, l]) => [k, l]));
+  const read = (k, d) => { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } };
+  const save = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* navigation privée */ } };
+  let offA = new Set(read("tb-ev-offa", [])), offT = new Set(read("tb-ev-offt", ["session", "fvg"])), all = [];
+  $("#btn-refresh").innerHTML = Y.I.refresh;
+
+  const day = (t) => new Date(t * 1000).toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" });
+  const hm = (t) => new Date(t * 1000).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
+  const pill = (dir) => dir === "long" ? '<span class="pill up"><span class="d"></span>haussier</span>' : dir === "short" ? '<span class="pill dn"><span class="d"></span>baissier</span>' : "";
+
+  async function load(force) {
+    const [dash, ...lives] = await Promise.all([Y.getJson("dashboard.json"), ...ASSETS.map(([k]) => window.LiveChart.snapshot(k, force ? 0 : 55000))]);
+    const ev = [];
+    ASSETS.forEach(([k], i) => {
+      const d = lives[i]; if (!d || !(d.candles || []).length) return;
+      for (const e of S.events(S.analyze(S.resample(d.candles, 300), k))) ev.push({ ...e, asset: k });
+      for (const s of d.open_signals || []) ev.push({ t: Date.parse(s.created_at) / 1000, type: "signal", dir: s.direction, asset: k,
+        text: `Signal ${s.direction === "long" ? "d'achat" : "de vente"} en cours : entrée ${S.fmt(s.entry)}${s.stop_loss ? `, stop ${S.fmt(s.stop_loss)}` : ""}${s.take_profit ? `, objectif ${S.fmt(s.take_profit)}` : ""}` });
+      for (const s of d.trades || []) if (s.closed_at) ev.push({ t: Date.parse(s.closed_at) / 1000, type: "trade", dir: s.direction, asset: k,
+        text: `Trade ${s.direction === "long" ? "achat" : "vente"} clôturé (${({ tp: "objectif", sl: "stop", expired: "expiré", manual: "sortie" })[s.status] || s.status}) à ${S.fmt(s.close_price)} · ${Y.signed ? Y.signed(s.pnl_pct, 2) : s.pnl_pct} %` });
+    });
+    for (const e of (dash && dash.agenda) || []) ev.push({ t: Date.parse(e.at) / 1000, type: "news", dir: null, asset: (e.assets || [])[0] || null,
+      text: `${e.name}${e.impact === "high" ? " · impact fort" : ""}${e.blackout ? " · le bot ne trade pas autour" : ""}` });
+    all = ev.filter((e) => Number.isFinite(e.t)).sort((a, b) => b.t - a.t);
+    if (dash) Y.status(dash.updated_at);
+    $("#updated").textContent = `${all.length} événements · 24 dernières heures et agenda à venir`;
+    render();
+  }
+
+  function chips() {
+    const cntA = {}, cntT = {};
+    for (const e of all) { if (e.asset) cntA[e.asset] = (cntA[e.asset] || 0) + 1; cntT[e.type] = (cntT[e.type] || 0) + 1; }
+    $("#f-asset").innerHTML = ASSETS.map(([k, l]) => `<button type="button" data-a="${k}" aria-pressed="${!offA.has(k)}">${esc(l.split(" (")[0])}<span class="n">${cntA[k] || 0}</span></button>`).join("");
+    $("#f-type").innerHTML = TYPES.map(([k, l]) => `<button type="button" data-t="${k}" aria-pressed="${!offT.has(k)}">${esc(l)}<span class="n">${cntT[k] || 0}</span></button>`).join("");
+  }
+  $("#f-asset").addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b) return; const k = b.dataset.a; offA.has(k) ? offA.delete(k) : offA.add(k); save("tb-ev-offa", [...offA]); render(); });
+  $("#f-type").addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b) return; const k = b.dataset.t; offT.has(k) ? offT.delete(k) : offT.add(k); save("tb-ev-offt", [...offT]); render(); });
+
+  function render() {
+    chips();
+    const shown = all.filter((e) => !offT.has(e.type) && !(e.asset && offA.has(e.asset)));
+    const now = Date.now() / 1000, past = shown.filter((e) => e.t <= now);
+    const cnt = (ty) => past.filter((e) => e.type === ty).length;
+    $("#sum").innerHTML = [["sweep", "chasses aux stops"], ["break", "cassures"], ["signal", "signaux en cours"], ["trade", "trades clôturés"]]
+      .map(([k, l]) => `<div class="card"><b>${cnt(k)}</b><span>${l}</span></div>`).join("") +
+      `<div class="card"><b>${shown.filter((e) => e.type === "news" && e.t > now).length}</b><span>annonces à venir</span></div>`;
+    if (!shown.length) { $("#list").innerHTML = '<div class="card muted">Aucun événement avec ces filtres.</div>'; return; }
+    let html = "", cur = "";
+    for (const e of shown.slice(0, 400)) {
+      const d = day(e.t);
+      if (d !== cur) { if (cur) html += "</div>"; html += `<div class="ev-day">${esc(d)}${e.t > now ? " · à venir" : ""}</div><div class="card ev-list" style="padding:0">`; cur = d; }
+      const href = e.asset ? `graphique.html?a=${e.asset}&tf=300&t=${Math.floor(e.t)}` : "#";
+      html += `<a class="ev" href="${href}"><span class="t">${hm(e.t)}</span><span class="a">${esc(e.asset ? LABEL[e.asset].split(" (")[0] : "Tous marchés")}</span>
+        <span class="ty"><span class="pill ${e.type === "news" ? "dn" : e.type === "signal" || e.type === "trade" ? "brand" : "neu"}">${esc(TNAME[e.type])}</span></span>
+        <span class="tx">${esc(e.text)} ${pill(e.dir)}</span><span class="go">${e.asset ? "voir →" : ""}</span></a>`;
+    }
+    $("#list").innerHTML = html + "</div>";
+  }
+
+  $("#btn-refresh").addEventListener("click", () => load(true));
+  load();
+  Y.poll(() => load(true));
+})();
+</script>
+</body>
+</html>

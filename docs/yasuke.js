@@ -92,6 +92,8 @@
   const PAGES = [["dashboard", "index.html", "Tableau de bord", "Tableau", "home"], ["simulation", "portfolio.html", "Simulation", "Simulation", "wallet"],
                  ["learning", "apprentissage.html", "Apprentissage", "Apprendre", "learn"], ["invest", "investissement.html", "Investir", "Investir", "crescent"],
                  ["topstep", "topstep.html", "Topstep", "Topstep", "flag"]];
+  // pages d'analyse : onglets en haut, et petite barre sous l'en-tête sur téléphone (la navigation du bas est pleine)
+  const EXTRA = [["chart", "graphique.html", "Graphique"], ["events", "evenements.html", "Événements"]];
   function header(page) {
     const host = document.getElementById("yk-header");
     if (!host) return;
@@ -102,7 +104,7 @@
     host.innerHTML = `<div class="yk-top-in">
       <div class="yk-left">
         <a class="yk-brand" href="index.html" aria-label="Yasuke, tableau de bord">${I.logo(32)}<span><b>Yasuke</b><small>Trading-Bot</small></span></a>
-        <nav class="yk-tabs" aria-label="Pages">${PAGES.map(([k, href, l]) => `<a class="yk-tab${k === page ? " active" : ""}" href="${href}"${k === page ? ' aria-current="page"' : ""}>${l}</a>`).join("")}</nav>
+        <nav class="yk-tabs" aria-label="Pages">${[PAGES[0], ...EXTRA, ...PAGES.slice(1)].map(([k, href, l]) => `<a class="yk-tab${k === page ? " active" : ""}" href="${href}"${k === page ? ' aria-current="page"' : ""}>${l}</a>`).join("")}</nav>
       </div>
       <div class="yk-right">
         <span class="yk-status" id="yk-status" role="status"><span class="dot"></span><b>Chargement</b><span class="yk-st-sub"></span></span>
@@ -116,6 +118,10 @@
       (onDash ? `<button type="button" class="plus" id="bnav-trade"><span class="pb">${I.plusBig}</span><span>Trade</span></button>`
               : `<a class="plus" href="index.html#trade"><span class="pb">${I.plusBig}</span><span>Trade</span></a>`) + item(PAGES[2]) + item(PAGES[3]) + item(PAGES[4]);
     document.body.appendChild(nav);
+    const sub = document.createElement("nav");
+    sub.className = "yk-sub"; sub.setAttribute("aria-label", "Analyse");
+    sub.innerHTML = EXTRA.map(([k, href, l]) => `<a href="${href}"${k === page ? ' class="active" aria-current="page"' : ""}>${l}</a>`).join("");
+    host.after(sub);
     themeButton();
     fitHeader(host);
   }
