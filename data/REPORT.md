@@ -1,6 +1,6 @@
 # Trading-Bot — rapport
 
-_Mis à jour le 13/10/2026 à 09:50 (Europe/Paris)._
+_Mis à jour le 13/10/2026 à 09:55 (Europe/Paris)._
 
 ## Vue d'ensemble
 
@@ -8,7 +8,7 @@ _Mis à jour le 13/10/2026 à 09:50 (Europe/Paris)._
 - Taux de réussite cumulé (TP / (TP+SL)) : **42%** — hasard attendu 42%, avantage **+1%**
 - P&L théorique cumulé, net des coûts estimés (somme des % par trade, sans levier) : **-4.57 %** (brut -0.75 %)
 - Signaux ouverts : **0**
-- Signaux fantômes (suivis en silence pour l'apprentissage) : **335** clôturés, 3 ouverts, taux de réussite 36% (hasard attendu 41%)
+- Signaux fantômes (suivis en silence pour l'apprentissage) : **337** clôturés, 1 ouverts, taux de réussite 36% (hasard attendu 42%)
 
 ## Statistiques
 
@@ -113,18 +113,18 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 
 | Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
 |---|---:|---:|---:|---:|---:|---:|
-| adx | 335 | 96 | 169 | 70 | 36% | -0.040 % |
+| adx | 337 | 96 | 171 | 70 | 36% | -0.041 % |
 | corr | 18 | 2 | 13 | 3 | 13% | -0.202 % |
 | level | 41 | 16 | 12 | 13 | 57% | -0.035 % |
 | macd | 82 | 17 | 49 | 16 | 26% | -0.084 % |
 | orb | 15 | 3 | 7 | 5 | 30% | -0.105 % |
 | pdhl | 42 | 9 | 24 | 9 | 27% | -0.048 % |
 | rsi | 216 | 66 | 117 | 33 | 36% | -0.042 % |
-| trend_15m | 335 | 96 | 169 | 70 | 36% | -0.040 % |
-| trend_1h | 327 | 93 | 167 | 67 | 36% | -0.041 % |
+| trend_15m | 337 | 96 | 171 | 70 | 36% | -0.041 % |
+| trend_1h | 329 | 93 | 169 | 67 | 35% | -0.042 % |
 | trend_5m | 261 | 84 | 138 | 39 | 38% | -0.035 % |
 | volume | 2 | 1 | 0 | 1 | 100% | -0.021 % |
-| vwap | 324 | 96 | 162 | 66 | 37% | -0.037 % |
+| vwap | 326 | 96 | 164 | 66 | 37% | -0.038 % |
 
 ### Fantômes par actif
 
@@ -133,7 +133,7 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 | bitcoin | 22 | 7 | 3 | 12 | 70% | +0.021 % |
 | ethereum | 15 | 2 | 10 | 3 | 17% | -0.231 % |
 | euro | 23 | 8 | 14 | 1 | 36% | -0.024 % |
-| gold | 61 | 18 | 27 | 16 | 40% | -0.018 % |
+| gold | 63 | 18 | 29 | 16 | 38% | -0.022 % |
 | nasdaq | 90 | 32 | 43 | 15 | 43% | -0.018 % |
 | oil | 50 | 14 | 25 | 11 | 36% | -0.070 % |
 | sp500 | 74 | 15 | 47 | 12 | 24% | -0.050 % |
@@ -194,7 +194,7 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 |---|---:|---:|---|
 | indices le matin européen | 63 | -0.15 R | en test |
 | horizon ~3 h | 67 | -0.35 R | en test |
-| confiance moyenne | 54 | -0.07 R | en test |
+| confiance moyenne | 56 | -0.11 R | en test |
 | entrées dans l'heure avant l'ouverture américaine | 5 | -0.18 R | en test |
 | reprise juste après un stop | 28 | -0.31 R | en test |
 | nouvel actif : Ethereum (ETH/USD) | 9 | -0.58 R | en test |
@@ -208,14 +208,14 @@ Notes :
 - macd : -0,18 R ± 0,14 R sur 230 trades éq. → poids ×0,91
 - variante « indices le matin européen » en test : 63 trades, -0,15 R net, encore 37 trades avant décision
 - variante « horizon ~3 h » en test : 67 trades, -0,35 R net, encore 33 trades avant décision
-- variante « confiance moyenne » en test : 54 trades, -0,07 R net, encore 46 trades avant décision
+- variante « confiance moyenne » en test : 56 trades, -0,11 R net, encore 44 trades avant décision
 - variante « entrées dans l'heure avant l'ouverture américaine » en test : 5 trades, -0,18 R net, encore 95 trades avant décision
 - variante « reprise juste après un stop » en test : 28 trades, -0,31 R net, encore 72 trades avant décision
 - variante « nouvel actif : Ethereum (ETH/USD) » en test : 9 trades, -0,58 R net, encore 91 trades avant décision
 - variante « horizon ~3 h sur Or (XAU/USD) » en test : 10 trades, -0,49 R net, encore 90 trades avant décision
 - variante « nouvel actif : Pétrole WTI (CL) » en test : 50 trades, -0,14 R net, encore 50 trades avant décision
 - variante « nouvel actif : Euro / dollar (6E) » en test : 23 trades, -0,38 R net, encore 77 trades avant décision
-- sortie : stop remonté à l'entrée après +0,5 R ferait mieux (-0,16 R net contre -0,23 R, réels et en ombre) : à décider
+- sortie : stop remonté à l'entrée après +0,5 R ferait mieux (-0,16 R net contre -0,24 R, réels et en ombre) : à décider
 
 ## Backtests (données historiques 5 min)
 
