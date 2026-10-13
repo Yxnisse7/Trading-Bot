@@ -55,6 +55,7 @@ SETUPS = {
     "S22": "écart d'ouverture : suivi si gros volume, comblé sinon",
 }
 INDICES = ("nasdaq", "sp500")
+S25_LOOKBACK, S25_WINDOW = 10, 2     # S25 : creux des 10 bougies précédentes, repris en 2 bougies au plus
 
 
 # ---------------------------------------------------------------- séries
@@ -239,14 +240,14 @@ def half_size(trades: list[sl.Trade], ctx: Ctx) -> list[sl.Trade]:
     return out
 
 
-def day_limits(trades: list[sl.Trade]) -> list[sl.Trade]:
+def day_limits(trades: list[sl.Trade], max_trades: int = 3, max_losses: int = 2) -> list[sl.Trade]:
     """G40 : 3 trades par jour de New York au plus, plus aucun après 2 pertes dans la journée."""
     out, count, losses = [], {}, {}
     for t in sorted(trades, key=lambda x: x.entry_ts):
         d = datetime.fromtimestamp(t.entry_ts, sl.NY).date()
         lost = sum(1 for x in out if datetime.fromtimestamp(x.entry_ts, sl.NY).date() == d
                    and x.exit_ts <= t.entry_ts and x.gross_points() < 0)
-        if count.get(d, 0) >= 3 or lost >= 2:
+        if count.get(d, 0) >= max_trades or lost >= max_losses:
             continue
         count[d] = count.get(d, 0) + 1
         out.append(t)
@@ -372,8 +373,8 @@ def setup_trades(name: str, asset: str, ctx: Ctx) -> list[sl.Trade]:
             elif name == "S25":
                 if ctx.trend_1h(T) != d:
                     continue
-                for m in (k - 1, k - 2):
-                    L = ext_lo(lo(x) for x in c[m - 10: m])
+                for m in range(k - 1, k - 1 - S25_WINDOW, -1):
+                    L = ext_lo(lo(x) for x in c[m - S25_LOOKBACK: m])
                     broke = better(L, lo(c[m])) and not better(c[m].close, L)
                     first = not any(better(x.close, L) for x in c[m + 1: k])
                     if broke and first and better(c[k].close, L):

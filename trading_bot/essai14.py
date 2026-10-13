@@ -19,6 +19,7 @@ from . import strategies as sl
 from .models import Candle, parse_iso
 
 N_TRIALS = 157
+A1_ATR = 1.5                      # A1 : écart à la moyenne 20 (en ATR) au-delà duquel le prix est « étiré »
 SPLIT = int(datetime(2025, 9, 28, tzinfo=timezone.utc).timestamp())
 ASSETS = ("gold", "nasdaq", "sp500", "bitcoin")
 FUTURES = {"gold", "nasdaq", "sp500"}
@@ -123,7 +124,7 @@ def removed_by(f: str, t: sl.Trade, ctx: Ctx, other: Ctx | None) -> bool:
         i = ctx.m5.closed_at(T)
         if i is None or ctx.m5.sma[i] is None or not ctx.m5.atr[i]:
             return False
-        return (ctx.m5.c[i].close - ctx.m5.sma[i]) * sign > 1.5 * ctx.m5.atr[i]
+        return (ctx.m5.c[i].close - ctx.m5.sma[i]) * sign > A1_ATR * ctx.m5.atr[i]
     if f == "A2":
         pd, k = ctx.prev_day(T), ctx.m15.closed_at(T)
         if pd is None or k is None or k < 4 or ctx.m15.sma[k] is None or ctx.m15.sma[k - 4] is None or not ctx.m15.atr[k]:
