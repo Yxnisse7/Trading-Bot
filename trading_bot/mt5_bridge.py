@@ -17,6 +17,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+from . import demo_rules
 from . import essai18 as e18
 from .models import Candle
 
@@ -56,6 +57,7 @@ class Bridge:
         self.sym, self.magic = cfg["symbol"], int(cfg["magic"])
         self.last_bar: int | None = None
         self.limit_day: str | None = None
+        self.stop_rule: str | None = None
         self.tick_from: int | None = None
         if cfg["exit"] != "X1":
             raise ValueError("seule la sortie X1 est branchée en direct pour l'instant")
@@ -188,6 +190,14 @@ class Bridge:
                 self.limit_day = day
                 self.journal("limite du jour", note=f"perte du jour ≥ {self.cfg['daily_loss_limit']} $ : arrêt jusqu'à demain")
             return "limite du jour"
+        if self.cfg["mode"] == "demo":
+            why = demo_rules.check(self.mt5, self.magic, float(self.cfg["lot"]),
+                                   datetime.fromtimestamp(now + off, timezone.utc))
+            if why:
+                if self.stop_rule != why:
+                    self.stop_rule = why
+                    self.journal("arrêt du démo", note=f"règle d'arrêt franchie : {why} (HYPOTHESES.md)")
+                return "règle d'arrêt"
         i = len(bars) - 1
         if not e18.hours_ok(bars[i].ts + 60):
             return "hors horaires"

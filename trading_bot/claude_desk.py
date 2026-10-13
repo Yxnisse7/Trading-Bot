@@ -15,6 +15,7 @@ import time
 from datetime import datetime, timezone
 from pathlib import Path
 
+from . import demo_rules
 from . import indicators as ind
 from .models import Candle
 
@@ -118,6 +119,9 @@ def order(mt5, side: str, sl: float, tp: float, why: str) -> str:
         return "REFUSÉ : ce n'est pas un compte démo"
     if [p for p in (mt5.positions_get(symbol=SYMBOL) or []) if p.magic == MAGIC]:
         return "REFUSÉ : l'assistant a déjà une position ouverte"
+    why = demo_rules.check(mt5, MAGIC)
+    if why:
+        return f"REFUSÉ : règle d'arrêt du démo franchie ({why}), voir HYPOTHESES.md"
     tick = mt5.symbol_info_tick(SYMBOL)
     buy = side == "buy"
     px = tick.ask if buy else tick.bid
