@@ -100,3 +100,14 @@ def test_noise_area_v2_stop_is_at_least_one_15min_atr_and_caps_losses():
         assert t.gross_points() / t.risk >= -1.5                      # perte bornée par le stop dur
     v1 = st.noise_area(s, "nasdaq")
     assert min(t.risk for t in trades) >= min(t.risk for t in v1)
+
+
+def test_noise_area_keeps_position_open_when_data_ends_mid_session():
+    """Le 14/10 : entrée annoncée à 17:41 puis « sortie fin de séance » à la même minute, faute de bougies après."""
+    start = int(datetime(2026, 3, 2, 0, 0, tzinfo=timezone.utc).timestamp())
+    candles = make_candles(n=288 * 30, drift=0.00002, noise=0.0015, seed=21, start_ts=start)
+    full = st.noise_area(st._Series(candles), "nasdaq")
+    t = next(x for x in reversed(full) if x.reason in ("heure", "bornes") and x.exit_ts - x.entry_ts > 1800)
+    cut = [c for c in candles if c.ts < t.entry_ts + 300]
+    last = [x for x in st.noise_area(st._Series(cut), "nasdaq") if x.entry_ts == t.entry_ts]
+    assert last and last[0].reason == "fin des données"

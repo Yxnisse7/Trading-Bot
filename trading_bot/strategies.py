@@ -345,9 +345,10 @@ def noise_area(s: _Series, asset: str, lookback: int = 14, realistic_stop: bool 
                             pos = None
             k += 1
         if pos is not None:
+            # plus de bougies avant 16:00 : en direct, la séance n'est pas finie (la position reste ouverte)
             last = s.c[k - 1]
             out.append(Trade(name, asset, pos[0], s.c[pos[4]].ts + 300, last.ts + 300,
-                             pos[1], last.close, pos[3], "heure"))
+                             pos[1], last.close, pos[3], "fin des données" if k >= len(s.c) else "heure"))
         hist.append(d)
     return out
 
