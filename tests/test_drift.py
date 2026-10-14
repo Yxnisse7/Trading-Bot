@@ -71,6 +71,9 @@ def test_live_strategy_sends_entry_then_exit_and_journals_topstep(tmp_path, monk
     eng = engmod.Engine(cfg)
     from trading_bot.storage import Store
     eng.store = Store(tmp_path)
+    from trading_bot.portfolio import Portfolio
+    eng.portfolio = Portfolio(eng.store, cfg)
+    eng.portfolio.data["started_at"] = "2026-10-01T00:00:00Z"
     now = datetime(2026, 10, 8, 14, 20, tzinfo=timezone.utc)
     t0 = int(datetime(2026, 10, 8, 14, 0, tzinfo=timezone.utc).timestamp())
     trade = {"entry_ts": t0, "direction": "long", "entry": 4000.0, "risk": 10.0, "stop": 3990.0, "status": "open",
@@ -87,6 +90,8 @@ def test_live_strategy_sends_entry_then_exit_and_journals_topstep(tmp_path, monk
     assert len(sent) == 2 and "SORTIE" in sent[1] and "+1,21 R" in sent[1] and "+250 $" in sent[1]
     journal = eng.topstep().state["journal"]
     assert len(journal) == 1 and journal[0]["contracts"] == 2 and journal[0]["exit"] == 4012.5
+    hist = eng.portfolio.data["history"]                                              # onglet Simulation aussi
+    assert len(hist) == 1 and hist[0]["source"] == "lab" and hist[0]["exit"] == 4012.5 and hist[0]["pnl_gross"] > 0
     old = dict(trade, entry_ts=t0 - 86_400 * 3, notified_entry=None, notified_exit=None)
     eng._live_signals("donchian_day:gold", asset, [old], since, now)
     assert len(sent) == 2                                                               # rien d'ancien

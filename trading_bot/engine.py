@@ -1517,6 +1517,7 @@ class Engine:
                              "Le bot ne passe aucun ordre."]
                 notify("\n".join(lines), buttons=msg.site_buttons(self.cfg.site_url, asset.key))
                 t["notified_entry"] = iso(now)
+                self._lab_portfolio(name, asset, t, opened, open_=True)
             if t["status"] == "closed" and not t.get("notified_exit"):
                 micros = int(t.get("micros") or 1)
                 why = {"heure": "fin de séance (15:00 à Chicago)", "canal": "cassure du canal 10 h", "stop": "stop touché",
@@ -1532,11 +1533,33 @@ class Engine:
                        f"≈ {'+' if usd >= 0 else '−'}{money(abs(usd))} $ avec {micros} micro{'s' if micros > 1 else ''} (avant frais)",
                        buttons=msg.site_buttons(self.cfg.site_url, asset.key))
                 t["notified_exit"] = iso(now)
+                self._lab_portfolio(name, asset, t, opened, open_=False)
                 try:
                     acct.add_journal(asset.key, t["direction"], t["entry"], t["exit"], micros, opened,
                                      datetime.fromtimestamp(t["exit_ts"], timezone.utc), note=f"signal réel {name}")
                 except ValueError as exc:
                     log.info("journal Topstep : %s", exc)
+
+    def _lab_portfolio(self, name: str, asset, t: dict[str, Any], opened: datetime, open_: bool) -> None:
+        """Les signaux réels des stratégies prouvées passent aussi par la simulation de compte (onglet Simulation),
+        comme ceux du bot : taille au même % de risque à l'entrée, résultat appliqué à la sortie."""
+        stop = t.get("stop") or t["entry"]
+        sig = Signal(id=f"lab-{name.split(':')[0]}-{t['entry_ts']}", asset=asset.key, asset_label=asset.label,
+                     direction=t["direction"], entry=t["entry"], take_profit=t.get("target") or t["entry"],
+                     stop_loss=stop, risk_reward=0.0, confidence="moyen", score=0.0, criteria=[],
+                     rationale=name.split(":")[0], news_context="", created_at=iso(opened), expires_at=iso(opened),
+                     source="lab")
+        if self.portfolio.store is not self.store:            # magasin remplacé après coup (tests, outils)
+            self.portfolio = Portfolio(self.store, self.cfg)
+        try:
+            if open_:
+                self.portfolio.on_open(sig, asset)
+            else:
+                sig.status, sig.close_price = t.get("reason") or "closed", t["exit"]
+                sig.closed_at = iso(datetime.fromtimestamp(t["exit_ts"], timezone.utc))
+                self.portfolio.on_close(sig, asset)
+        except (KeyError, TypeError, ValueError) as exc:
+            log.info("simulation (%s) : %s", name, exc)
 
     # ------------------------------------------------------------- live
     LIVE_CANDLES = 288         # 24 h de bougies 5 min (le site en tire aussi les vues 15 min et 1 h)
