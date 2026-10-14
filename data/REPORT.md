@@ -1,6 +1,6 @@
 # Trading-Bot — rapport
 
-_Mis à jour le 14/10/2026 à 17:01 (Europe/Paris)._
+_Mis à jour le 14/10/2026 à 17:05 (Europe/Paris)._
 
 ## Vue d'ensemble
 
@@ -8,7 +8,7 @@ _Mis à jour le 14/10/2026 à 17:01 (Europe/Paris)._
 - Taux de réussite cumulé (TP / (TP+SL)) : **43%** — hasard attendu 42%, avantage **+1%**
 - P&L théorique cumulé, net des coûts estimés (somme des % par trade, sans levier) : **-4.40 %** (brut -0.57 %)
 - Signaux ouverts : **1**
-- Signaux fantômes (suivis en silence pour l'apprentissage) : **378** clôturés, 21 ouverts, taux de réussite 34% (hasard attendu 41%)
+- Signaux fantômes (suivis en silence pour l'apprentissage) : **379** clôturés, 23 ouverts, taux de réussite 35% (hasard attendu 41%)
 
 ## Signaux ouverts
 
@@ -119,18 +119,18 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 
 | Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
 |---|---:|---:|---:|---:|---:|---:|
-| adx | 378 | 104 | 199 | 75 | 34% | -0.044 % |
+| adx | 379 | 105 | 199 | 75 | 35% | -0.044 % |
 | corr | 21 | 3 | 15 | 3 | 17% | -0.178 % |
 | level | 44 | 18 | 13 | 13 | 58% | -0.028 % |
 | macd | 93 | 20 | 55 | 18 | 27% | -0.080 % |
-| orb | 16 | 4 | 7 | 5 | 36% | -0.075 % |
+| orb | 17 | 5 | 7 | 5 | 42% | -0.065 % |
 | pdhl | 52 | 12 | 30 | 10 | 29% | -0.046 % |
 | rsi | 253 | 73 | 142 | 38 | 34% | -0.046 % |
-| trend_15m | 378 | 104 | 199 | 75 | 34% | -0.044 % |
-| trend_1h | 370 | 101 | 197 | 72 | 34% | -0.045 % |
-| trend_5m | 298 | 90 | 164 | 44 | 35% | -0.041 % |
+| trend_15m | 379 | 105 | 199 | 75 | 35% | -0.044 % |
+| trend_1h | 371 | 102 | 197 | 72 | 34% | -0.044 % |
+| trend_5m | 299 | 91 | 164 | 44 | 36% | -0.040 % |
 | volume | 2 | 1 | 0 | 1 | 100% | -0.021 % |
-| vwap | 364 | 102 | 191 | 71 | 35% | -0.042 % |
+| vwap | 365 | 103 | 191 | 71 | 35% | -0.042 % |
 
 ### Fantômes par actif
 
@@ -142,7 +142,7 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 | gold | 84 | 19 | 47 | 18 | 29% | -0.048 % |
 | nasdaq | 101 | 36 | 49 | 16 | 42% | -0.019 % |
 | oil | 58 | 17 | 28 | 13 | 38% | -0.058 % |
-| sp500 | 75 | 15 | 48 | 12 | 24% | -0.050 % |
+| sp500 | 76 | 16 | 48 | 12 | 25% | -0.048 % |
 
 ## Derniers trades
 
@@ -203,7 +203,7 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 | confiance moyenne | 56 | -0.11 R | en test |
 | entrées dans l'heure avant l'ouverture américaine | 5 | -0.18 R | en test |
 | reprise juste après un stop | 28 | -0.31 R | en test |
-| nouvel actif : S&P 500 (ES) | 1 | -1.11 R | en test |
+| nouvel actif : S&P 500 (ES) | 2 | +0.12 R | en test |
 | nouvel actif : Bitcoin (BTC/USD) | 0 | n/a | en test |
 | nouvel actif : Ethereum (ETH/USD) | 9 | -0.58 R | en test |
 | horizon ~3 h sur Or (XAU/USD) | 12 | -0.59 R | en test |
@@ -219,12 +219,12 @@ Notes :
 - variante « confiance moyenne » en test : 56 trades, -0,11 R net, encore 44 trades avant décision
 - variante « entrées dans l'heure avant l'ouverture américaine » en test : 5 trades, -0,18 R net, encore 95 trades avant décision
 - variante « reprise juste après un stop » en test : 28 trades, -0,31 R net, encore 72 trades avant décision
-- variante « nouvel actif : S&P 500 (ES) » en test : 1 trades, -1,11 R net, encore 99 trades avant décision
+- variante « nouvel actif : S&P 500 (ES) » en test : 2 trades, +0,12 R net, encore 98 trades avant décision
 - variante « nouvel actif : Ethereum (ETH/USD) » en test : 9 trades, -0,58 R net, encore 91 trades avant décision
 - variante « horizon ~3 h sur Or (XAU/USD) » en test : 12 trades, -0,59 R net, encore 88 trades avant décision
 - variante « nouvel actif : Pétrole WTI (CL) » en test : 58 trades, -0,12 R net, encore 42 trades avant décision
 - variante « nouvel actif : Euro / dollar (6E) » en test : 23 trades, -0,38 R net, encore 77 trades avant décision
-- contexte perdant repéré : jour de la semaine : mercredi (-0,30 R sur 197 trades), testé en silence avant d'être filtré
+- contexte perdant repéré : jour de la semaine : mercredi (-0,29 R sur 198 trades), testé en silence avant d'être filtré
 - sortie : stop remonté à l'entrée après +0,5 R ferait mieux (-0,17 R net contre -0,27 R, réels et en ombre) : à décider
 
 ## Backtests (données historiques 5 min)
