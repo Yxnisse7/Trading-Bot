@@ -41,6 +41,18 @@ MANUAL_FILTERS: set[str] = {"modele_arbres", "bot_en_ombre"}
 # Bot classique mis en ombre (choix de Yanisse le 14/10/2026) : perdant sur 2014-2026 (essais 23 et 24) et aucun
 # filtre ne le sauve. Ses signaux sont suivis en silence ; les stratégies prouvées de ces marchés continuent.
 SHADOW_ASSETS: set[str] = {"sp500", "bitcoin", "ethereum"}
+# Début court des messages de signaux réels (choix de Yanisse le 14/10/2026 : « que le début soit clair ») :
+# stratégie → (nom affiché, comment la position se ferme quand il n'y a pas d'objectif)
+LIVE_SUMMARY = {
+    "creux_repris_15m": ("Creux repris", "objectif, stop ou au bout de 4 h"),
+    "noise_area": ("Zone de bruit", "quand le prix revient dans la zone (contrôlé chaque demi-heure) ou au SL"),
+    "noise_area_v2": ("Zone de bruit v2", "quand le prix revient dans la zone (contrôlé chaque demi-heure) ou au SL"),
+    "swing_w3": ("Swing W3", "SL suiveur remonté sous les creux 1 h"),
+    "nuit_asie": ("Nuit asiatique", "vente à 03:00 New York ou au SL"),
+    "donchian_1h": ("Donchian 1 h", "cassure du canal des 10 dernières heures ou SL"),
+    "cassure_williams": ("Cassure Williams", "vente à 00:00 UTC ou au SL"),
+    "donchian_day": ("Donchian or", "cassure du canal ou fin de séance"),
+}
 
 
 def chat_keys(values) -> list[str]:
@@ -1515,7 +1527,15 @@ class Engine:
                              size,
                              "Donchian or fermé chaque soir (essai 8) : validé en backtest, pas encore prouvé en réel. "
                              "Le bot ne passe aucun ordre."]
-                notify("\n".join(lines), buttons=msg.site_buttons(self.cfg.site_url, asset.key))
+                strat = name.split(":")[0]
+                label, exit_rule = LIVE_SUMMARY.get(strat, (strat, "à la clôture de la règle"))
+                tp = fmt(t["entry"] + (3 if long else -3) * t["risk"]) if strat == "creux_repris_15m" else "aucun"
+                top = [f"{'🟢' if long else '🔴'} SIGNAL RÉEL · {'ACHAT' if long else 'VENTE'} · {asset.label.split(' (')[0]} · {label}",
+                       f"Entrée {fmt(t['entry'])} · SL {fmt(t['stop'])} · TP {tp}",
+                       f"Sortie : {exit_rule}" + (f", au plus tard {end} (Paris)" if close_at else ""),
+                       f"Risque : {money(micros * per_micro)} $ ({micros} micro{'s' if micros > 1 else ''} {symbol})",
+                       "", "Détails :"]
+                notify("\n".join(top + lines[1:]), buttons=msg.site_buttons(self.cfg.site_url, asset.key))
                 t["notified_entry"] = iso(now)
                 self._lab_portfolio(name, asset, t, opened, open_=True)
             if t["status"] == "closed" and not t.get("notified_exit"):
