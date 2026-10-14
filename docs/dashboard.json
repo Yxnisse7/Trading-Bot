@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-14T17:35:59.506481+02:00",
+  "updated_at": "2026-10-14T17:41:10.543392+02:00",
   "timezone": "Europe/Paris",
   "equity_curve": [
     {
@@ -1664,7 +1664,7 @@
       "avg_pnl_pct": -0.0404
     },
     "open": 2,
-    "open_shadow": 26
+    "open_shadow": 28
   },
   "by_source": {
     "bot": {
@@ -5065,6 +5065,74 @@
     }
   ],
   "open_signals": [
+    {
+      "id": "9a680eac51",
+      "asset": "nasdaq",
+      "asset_label": "Nasdaq 100 (NQ)",
+      "direction": "short",
+      "horizon": "24h",
+      "entry": 30395.75,
+      "take_profit": 30194.5,
+      "stop_loss": 30463.0,
+      "risk_reward": 2.99,
+      "confidence": "fort",
+      "score": 5.75,
+      "criteria": [
+        "adx",
+        "rsi",
+        "trend_15m",
+        "trend_1h",
+        "trend_5m",
+        "vwap"
+      ],
+      "source": "shadow",
+      "status": "open",
+      "pnl_pct": null,
+      "pnl_gross_pct": null,
+      "duration_minutes": null,
+      "close_price": null,
+      "created_at": "2026-10-14T15:40:53Z",
+      "closed_at": null,
+      "created_local": "14/10 17:40",
+      "expires_at": "2026-10-15T15:40:53Z",
+      "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 112.08 (0.37 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 98%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+      "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité calme sur les 2 dernières heures",
+      "manual_exit": null
+    },
+    {
+      "id": "fdc419a6a9",
+      "asset": "gold",
+      "asset_label": "Or (XAU/USD)",
+      "direction": "short",
+      "horizon": "1h",
+      "entry": 4113.6,
+      "take_profit": 4104.6,
+      "stop_loss": 4119.6,
+      "risk_reward": 1.5,
+      "confidence": "fort",
+      "score": 5.75,
+      "criteria": [
+        "adx",
+        "rsi",
+        "trend_15m",
+        "trend_1h",
+        "trend_5m",
+        "vwap"
+      ],
+      "source": "shadow",
+      "status": "open",
+      "pnl_pct": null,
+      "pnl_gross_pct": null,
+      "duration_minutes": null,
+      "close_price": null,
+      "created_at": "2026-10-14T15:40:53Z",
+      "closed_at": null,
+      "created_local": "14/10 17:40",
+      "expires_at": "2026-10-14T16:40:53Z",
+      "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 15.03 (0.37 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 100%.",
+      "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité calme sur les 2 dernières heures",
+      "manual_exit": null
+    },
     {
       "id": "2f445b9466",
       "asset": "nasdaq",
@@ -8511,10 +8579,10 @@
     }
   },
   "state": {
-    "last_scan": "2026-10-14T15:35:44Z",
+    "last_scan": "2026-10-14T15:40:53Z",
     "last_scan_note": "0 signal(aux)",
     "last_summary": "2026-10-13T22:05:31Z",
-    "last_track": "2026-10-14T15:35:44Z",
+    "last_track": "2026-10-14T15:40:53Z",
     "last_summary_day": "2026-10-13"
   },
   "limits": {
@@ -8524,23 +8592,23 @@
   },
   "portfolio": {
     "currency": "$",
-    "balance": 447.74,
+    "balance": 437.58,
     "balance_initial": 500.0,
     "risk_pct": 10.0,
     "started_at": "2026-09-18T13:50:15Z",
     "is_default": false,
-    "pnl": -52.26,
-    "pnl_pct": -10.45,
+    "pnl": -62.42,
+    "pnl_pct": -12.48,
     "peak": 1273.64,
-    "drawdown_pct": 64.85,
-    "trades": 135,
+    "drawdown_pct": 65.64,
+    "trades": 137,
     "wins": 60,
-    "losses": 75,
+    "losses": 77,
     "avg_win": 56.78,
-    "avg_loss": -46.12,
+    "avg_loss": -45.06,
     "open_positions": 2,
     "skipped": 0,
-    "risky": 103
+    "risky": 105
   },
   "stress": {
     "n_trades": 697,
@@ -20698,21 +20766,61 @@
       "strategy": "noise_area",
       "asset": "nasdaq",
       "since": "2026-10-14T08:00:00Z",
-      "trades": [],
+      "trades": [
+        {
+          "entry_ts": 1791991800,
+          "entry_at": "2026-10-14T15:30:00Z",
+          "direction": "short",
+          "entry": 30393.25,
+          "risk": 57.180446,
+          "stop": 30450.430446,
+          "status": "closed",
+          "reason": "heure",
+          "exit_ts": 1791992100,
+          "exit": 30392.75,
+          "last": null,
+          "r_topstep": -0.0063,
+          "r_bot": -0.0444,
+          "micros": 2,
+          "close_at": 1792008000,
+          "notified_entry": "2026-10-14T15:40:53Z",
+          "notified_exit": "2026-10-14T15:40:53Z"
+        }
+      ],
       "live": true,
-      "checked_hour": "2026-10-14T15:00:00Z",
-      "n": 0,
-      "mean_r": null
+      "checked_hour": "2026-10-14T15:30:00Z",
+      "n": 1,
+      "mean_r": -0.0063
     },
     "noise_area_v2:nasdaq": {
       "strategy": "noise_area_v2",
       "asset": "nasdaq",
       "since": "2026-10-14T08:00:00Z",
-      "trades": [],
+      "trades": [
+        {
+          "entry_ts": 1791991800,
+          "entry_at": "2026-10-14T15:30:00Z",
+          "direction": "short",
+          "entry": 30393.25,
+          "risk": 77.273968,
+          "stop": 30470.523968,
+          "status": "closed",
+          "reason": "heure",
+          "exit_ts": 1791992100,
+          "exit": 30392.75,
+          "last": null,
+          "r_topstep": -0.0047,
+          "r_bot": -0.0329,
+          "micros": 1,
+          "close_at": 1792008000,
+          "notified_entry": "2026-10-14T15:40:53Z",
+          "notified_exit": "2026-10-14T15:40:53Z"
+        }
+      ],
       "live": true,
-      "checked_hour": "2026-10-14T15:00:00Z",
-      "n": 0,
-      "mean_r": null
+      "checked_hour": "2026-10-14T15:30:00Z",
+      "n": 1,
+      "mean_r": -0.0047
     },
     "swing_w3:bitcoin": {
       "strategy": "swing_w3",
@@ -20730,7 +20838,7 @@
       "since": "2026-10-14T12:00:00Z",
       "trades": [],
       "live": true,
-      "checked_hour": "2026-10-14T15:15:00Z",
+      "checked_hour": "2026-10-14T15:30:00Z",
       "n": 0,
       "mean_r": null
     },
