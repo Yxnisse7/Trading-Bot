@@ -100,3 +100,18 @@ def test_min_lot_exception_for_asian_night():
     assert mc.lot_for(1000, 41.0, info) == 0.0                     # 41 $ au lot minimum : plus que 2 %
     assert mc.lot_for(1000, 41.0, info, mc.MIN_LOT_MAX_RISK["nuit_asie"]) == 0.01
     assert mc.lot_for(1000, 60.0, info, mc.MIN_LOT_MAX_RISK["nuit_asie"]) == 0.0   # au-delà de 5 %
+
+
+def test_zero_quote_is_retried_not_sent(tmp_path, monkeypatch):
+    """Le 14/10, NAS100 : premier prix à 0 juste après symbol_select → ordre envoyé avec un stop à 64 et rejeté."""
+    monkeypatch.setattr(mc.time, "sleep", lambda s: None)
+    mt5 = FakeMT5()
+    mt5.symbol_info_tick = lambda sym: NS(bid=0.0, ask=0.0)
+    created = mc._ts("2026-10-14T13:50:00Z")
+    c = mc.Copier(mt5, tmp_path, lambda *a, **k: None, lambda: created + 60, get=site([sig()]))
+    c.step()
+    assert mt5.sent == []
+    mt5.symbol_info_tick = lambda sym: NS(bid=4200.0, ask=4200.2)       # la cotation arrive : copie au passage suivant
+    c.last = 0
+    c.step()
+    assert len(mt5.sent) == 1 and mt5.sent[0]["sl"] == 4208.0

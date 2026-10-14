@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import json
 import logging
+import time
 import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
@@ -165,6 +166,8 @@ class Copier:
                 self.state[key]["status"] = "trop ancien"
                 continue
             self.state[key].update(self._open(s, acc.balance))
+            if self.state[key]["status"] == "pas de prix":
+                del self.state[key]                 # pas encore de cotation : on réessaie au passage suivant
         self._save()
         return f"copie : {sum(1 for r in self.state.values() if r.get('status') == 'ouvert')} position(s)"
 
@@ -172,11 +175,16 @@ class Copier:
         sym = SYMBOLS[s["asset"]]
         if not self.mt5.symbol_select(sym, True):
             return {"status": f"symbole {sym} indisponible"}
-        info, tick = self.mt5.symbol_info(sym), self.mt5.symbol_info_tick(sym)
-        if info is None or tick is None:
-            return {"status": "pas de prix"}
         long = s["direction"] == "long"
-        px = tick.ask if long else tick.bid
+        info, px = self.mt5.symbol_info(sym), 0.0
+        for attempt in range(5):           # juste après symbol_select, le premier prix vaut souvent 0
+            tick = self.mt5.symbol_info_tick(sym)
+            px = (tick.ask if long else tick.bid) if tick is not None else 0.0
+            if px > 0:
+                break
+            time.sleep(0.5)
+        if info is None or px <= 0:
+            return {"status": "pas de prix"}
         sg = 1 if long else -1
         sl = round(px - sg * s["stop"], info.digits)
         tp = round(px + sg * s["target"], info.digits) if s["target"] else 0.0
