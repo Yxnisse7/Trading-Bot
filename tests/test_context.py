@@ -108,3 +108,14 @@ def test_backtest_trades_keep_context_and_excursions(tmp_path):
     st.save_backtests({"nasdaq": {"asset_label": "NQ", "trades": [s.to_dict()]}}, replace=True)
     back = st.backtest_trades()[0]
     assert back.meta == {"ctx": {"adx": 30.0}, "exc": {"mfe": 0.4, "mae": 1.0, "be": {}, "armed": {}}}
+
+
+def test_classic_bot_in_shadow_on_chosen_assets(tmp_path, monkeypatch):
+    """Choix de Yanisse le 14/10/2026 : les signaux classiques du Bitcoin (et S&P 500, Ethereum) sont suivis en silence."""
+    from trading_bot import engine as engmod
+    monkeypatch.setattr(engmod, "SHADOW_ASSETS", {"bitcoin"})
+    now = THU.replace(hour=14, minute=15)
+    eng = _engine(tmp_path, monkeypatch, now)
+    real = eng.scan(now)
+    assert real and all(s.asset != "bitcoin" for s in real)
+    assert ("bitcoin", "bot_en_ombre") in {(s.asset, (s.meta or {}).get("variant")) for s in eng.store.open_shadow()}

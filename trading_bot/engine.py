@@ -37,7 +37,10 @@ log = logging.getLogger(__name__)
 # 14/10/2026 : il ne tient pas sur 2014-2026 (essais 23 et 24) ; il reste suivi en ombre comme les autres variantes.
 # Bot appris (essai 25), choix de Yanisse le 14/10/2026 : sur l'or et le Nasdaq, seuls les signaux dont le R prévu
 # par le modèle d'arbres est > 0 sont annoncés.
-MANUAL_FILTERS: set[str] = {"modele_arbres"}
+MANUAL_FILTERS: set[str] = {"modele_arbres", "bot_en_ombre"}
+# Bot classique mis en ombre (choix de Yanisse le 14/10/2026) : perdant sur 2014-2026 (essais 23 et 24) et aucun
+# filtre ne le sauve. Ses signaux sont suivis en silence ; les stratégies prouvées de ces marchés continuent.
+SHADOW_ASSETS: set[str] = {"sp500", "bitcoin", "ethereum"}
 
 
 def chat_keys(values) -> list[str]:
@@ -262,6 +265,8 @@ class Engine:
                         flags.append("limites_jour_or")
                     if base == 5 and bot_model.rejects(sig):
                         flags.append("modele_arbres")
+                    if asset.key in SHADOW_ASSETS:
+                        flags.append("bot_en_ombre")
                     sig.meta["filters"] = flags
                     sig.meta["filters_checked"] = True
                     applied = [f for f in flags if f in promoted]

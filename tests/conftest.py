@@ -80,3 +80,10 @@ def _no_exit_override(monkeypatch):
     """Les tests des signaux gardent les sorties d'origine ; l'élargissement de l'essai 29 a son propre test."""
     from trading_bot import signals
     monkeypatch.setattr(signals, "EXIT_OVERRIDE", {})
+
+
+@pytest.fixture(autouse=True)
+def _no_shadow_assets(monkeypatch):
+    """Les tests du moteur annoncent les signaux de tous les actifs ; la mise en ombre du 14/10 a son propre test."""
+    from trading_bot import engine
+    monkeypatch.setattr(engine, "SHADOW_ASSETS", set())
