@@ -30,7 +30,8 @@ MAX_AGE = 15 * 60
 EVERY = 30
 SYMBOLS = {"gold": "XAUUSD+", "nasdaq": "NAS100", "sp500": "SP500", "bitcoin": "BTCUSD", "ethereum": "ETHUSD",
            "oil": "CL-OIL", "euro": "EURUSD"}
-SITE = "https://yxnisse7.github.io/Trading-Bot/live/{asset}.json"
+# Lu directement dans le dépôt (pas le site) : disponible dès la sauvegarde du bot, sans attendre la mise en ligne
+SITE = "https://raw.githubusercontent.com/Yxnisse7/Trading-Bot/main/docs/live/{asset}.json"
 LAB = "https://raw.githubusercontent.com/Yxnisse7/Trading-Bot/main/data/lab_shadow.json"
 LAB_TARGET_R = {"creux_repris_15m": 3.0}
 
@@ -42,6 +43,7 @@ def _ts(s: str | None) -> int | None:
 
 
 def _get(url: str) -> Any:
+    url += f"?t={int(time.time())}"              # contourne le cache (jusqu'à 5 min) du serveur de fichiers
     with urllib.request.urlopen(url, timeout=10) as r:
         return json.loads(r.read().decode("utf-8"))
 
