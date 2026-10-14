@@ -1470,6 +1470,17 @@ class Engine:
                              "compte CFD (démo MT5).",
                              "Swing W3 Bitcoin : prouvé sur 2017-2026 (essai 24, tous les contrôles). "
                              "Le bot ne passe aucun ordre."]
+                elif name.startswith("nuit_asie"):
+                    lines = [head,
+                             f"Entrée : {fmt(t['entry'])} (ouverture de la bougie de "
+                             f"{opened.astimezone(tz).strftime('%H:%M')}, 18:00 à New York)",
+                             f"Stop de sécurité : {fmt(t['stop'])} (1 % sous l'entrée, à placer tout de suite)",
+                             f"Sortie : vente à {end} (heure de Paris, 03:00 à New York, ouverture de Londres), "
+                             f"ou au stop — je préviens.",
+                             "Position gardée la nuit : interdit chez Topstep, à suivre sur un compte CFD (démo MT5). "
+                             "L'écart du courtier est souvent large juste à la réouverture.",
+                             "Or heures asiatiques : prouvée sur 2014-2026 (essai 27), petit gain par trade, surtout "
+                             "depuis 2020. Le bot ne passe aucun ordre."]
                 elif name.startswith("donchian_1h"):
                     lines = [head,
                              f"Entrée : {fmt(t['entry'])} (clôture de la bougie 1 h de {opened.astimezone(tz).strftime('%H:%M')})",
@@ -1496,7 +1507,8 @@ class Engine:
                        "durée": "durée maximale (4 h)" if name.startswith("creux_repris_15m") else
                        "durée maximale (5 jours)" if name.startswith("swing_w3") else "durée maximale",
                        "objectif": "objectif touché", "trou": "trou dans les données",
-                       "bornes": "retour dans la zone de bruit", "vendredi": "fin de semaine"}.get(t.get("reason"), t.get("reason") or "")
+                       "bornes": "retour dans la zone de bruit", "vendredi": "fin de semaine",
+                       "matin": "fin de la nuit (03:00 à New York)"}.get(t.get("reason"), t.get("reason") or "")
                 usd = (t["exit"] - t["entry"]) * (1 if long else -1) * mult * micros
                 notify(f"⚪ SORTIE · {asset.label} ({symbol}) · {why}\n"
                        f"Sortie : {fmt(t['exit'])} · {t['r_topstep']:+.2f} R frais compris · ".replace(".", ",") +
