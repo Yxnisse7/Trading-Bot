@@ -864,6 +864,38 @@ chaque année, et le test des singes de l'essai 21 sur cette période.
 - Une stratégie écartée sur 2024-2026 qui tient sur 2014-2024 n'est **pas** repêchée : elle a échoué sur les
   années récentes, qui comptent le plus.
 
+## Essai 24 — tout de A à Z sur 2014-2026, d'un seul bloc
+
+Écrit le 14 octobre 2026, **avant** tout calcul, à la demande de Yanisse (« faire les tests sur 2014-2026 en faisant
+tous les tests, de A à Z, pour ne pas être biaisé »). Les essais 14 à 23 ont regardé les années par morceaux ; ici
+chaque stratégie passe **tous** les contrôles d'un coup, sur les 12 ans réunis.
+
+**Données** : bougies 5 min de l'essai 23 (2014 → 09/2024) suivies de nos données actuelles (09/2024 → 10/2026), sans
+trou ni recouvrement ; Bitcoin dès 08/2017. Bot rejoué : trades de l'essai 23 suivis de ceux de l'essai 14 (mêmes règles).
+
+**Stratégies** : les 54 de l'essai 17 sur les 4 actifs (216 cellules), réglages actuels, frais de l'essai 21.
+
+**Contrôles** (une cellule est **robuste** si elle passe tous ceux qui s'appliquent à elle) :
+1. au moins 200 trades ;
+2. R net moyen > 0 et facteur de profit ≥ 1,1 sur 2014-2026 ;
+3. R net > 0 dans au moins 60 % des années complètes ;
+4. les deux moitiés positives : avant 2020 et depuis 2020 ;
+5. les deux dernières années (10/2024 → 10/2026) positives : les années récentes comptent ;
+6. toujours positive avec les frais doublés ;
+7. positive dans au moins 2 des 3 régimes de marché (hausse, baisse, plat, comme à l'essai 22, 30 trades minimum) ;
+8. bat les 1000 singes (≥ 950), et pour un filtre, bat aussi les filtres au hasard (≥ 950) ;
+9. pour les stratégies qui ont des réglages (Donchian jour et 1 h, A1, G40, S25, sur chaque actif) : plateau des
+   réglages et walk-forward > 0, comme à l'essai 22. Les autres n'ont pas de réglage à faire varier : contrôle sans objet.
+
+**Prouvée** : robuste et écart aux singes au-delà du seuil corrigé du nombre de cellules (Bonferroni, comme l'essai 21).
+
+**Décidé d'avance** :
+- G40 or et S25 Nasdaq (en réel) : s'ils ne sont pas robustes, proposition de les remettre en ombre.
+- Une cellule robuste qui n'est pas suivie aujourd'hui (y compris celles écartées avant) : proposition de la mettre
+  **en ombre** d'abord, jamais directement en réel. Cette règle remplace, pour cet essai seulement, le « pas de
+  repêchage » de l'essai 23, car le contrôle 5 exige déjà que les années récentes soient gagnantes.
+- Rien ne change sans l'accord de Yanisse.
+
 ## Journal des essais
 
 | Date | Essai | Résultat |
@@ -917,3 +949,4 @@ chaque année, et le test des singes de l'essai 21 sur cette période.
 | 2026-10-13 | Copie des signaux Telegram du bot sur le démo MetaTrader 5 (demande de Yanisse) | `mt5_copy.py`, magic 200001, mêmes distances de stop et d'objectif que le signal, 1 % du solde démo au stop. Règle d'arrêt écrite avant le premier trade : perte cumulée de 100 $ ou 8 pertes d'affilée. |
 | 2026-10-13 | Pré-enregistrement de l'essai 23 (toutes nos stratégies sur 2014-2024) | — |
 | 2026-10-14 | **Essai 23** : les 54 stratégies sur 2014 → 09/2024 (HistData 1 min, Bitcoin Binance dès 08/2017), frais Topstep (Bitcoin : frais du bot), 216 cellules | **G40 or ne tient pas** : 3 662 trades, −0,16 R, PF 0,73, 0 année positive sur 10 (avant frais +0,01 R : l'avantage vu en 2024-2026 n'existe pas sur les 10 ans d'avant). **S25 Nasdaq ne tient pas** : 3 901 trades, −0,13 R, PF 0,82, 2/10 (avant frais +0,02 R). **Donchian or** : jour −0,01 R (6/10), 1 h +0,03 R PF 1,05 (7/10) → ne tiennent pas. Bot seul : or −0,15 R, Nasdaq −0,02, S&P 500 −0,11, Bitcoin −0,10 → négatif partout. A1, W2, R1 : négatifs. **Tiennent** (6 sur 216) : `noise_area` Nasdaq +0,21 R (9/10), `noise_area_v2` Nasdaq +0,12 R, `donchian_1h` Nasdaq +0,06 R, `donchian_1h` Bitcoin +0,18 R (6/7), `orb30` Bitcoin +0,11 R, W3 Bitcoin +0,40 R (720 trades) — toutes écartées sur 2024-2026, donc **pas repêchées** (règle écrite d'avance). Conséquence prévue : proposer à Yanisse de remettre G40 et S25 en ombre. |
+| 2026-10-14 | Pré-enregistrement de l'essai 24 (tout de A à Z sur 2014-2026) | — |
