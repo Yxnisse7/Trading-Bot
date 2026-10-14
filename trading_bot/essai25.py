@@ -75,7 +75,7 @@ def walk_forward(rows, make) -> tuple[np.ndarray, dict[int, Any]]:
     fitted = {}
     for yr in range(FIRST_TEST_YEAR, int(years.max()) + 1):
         tr, te = years < yr, years == yr
-        if not te.any():
+        if not te.any() or not tr.any():
             continue
         m = make()
         m.fit(X[tr], y[tr])
