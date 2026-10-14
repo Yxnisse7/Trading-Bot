@@ -90,23 +90,30 @@
 
   // ------------------------------------------------------------------ en-tête, onglets, navigation du bas
   const PAGES = [["dashboard", "index.html", "Tableau de bord", "Tableau", "home"], ["simulation", "portfolio.html", "Simulation", "Simulation", "wallet"],
-                 ["learning", "apprentissage.html", "Apprentissage", "Apprendre", "learn"], ["invest", "investissement.html", "Investir", "Investir", "crescent"],
-                 ["topstep", "topstep.html", "Topstep", "Topstep", "flag"]];
+                 ["learning", "apprentissage.html", "Apprentissage", "Apprendre", "learn"], ["topstep", "topstep.html", "Topstep", "Topstep", "flag"]];
   // pages d'analyse : onglets en haut, et petite barre sous l'en-tête sur téléphone (la navigation du bas est pleine)
   const EXTRA = [["chart", "graphique.html", "Graphique"], ["events", "evenements.html", "Événements"]];
+  // Espace Investir (page à part) : ses onglets sont les parties de la page
+  const INVEST = [["portefeuilles", "Portefeuilles", "Portef.", "wallet"], ["poche", "Actions", "Actions", "learn"], ["pepites", "Pépites", "", ""],
+                  ["plan-mois", "Mon plan", "Mon plan", "home"], ["zakat", "Zakat", "Zakat", "crescent"], ["simulateur", "Simulateur", "", ""],
+                  ["produits", "Produits", "", ""], ["actus", "Actualités", "", ""], ["comment", "Guide", "", ""]];
+  const spaceSwitch = (space) => `<div class="yk-space" role="group" aria-label="Espace">
+      <a href="index.html"${space === "trade" ? ' aria-current="page"' : ""}>Trading</a><a href="investissement.html"${space === "invest" ? ' aria-current="page"' : ""}>Investir</a></div>`;
   function header(page) {
     const host = document.getElementById("yk-header");
     if (!host) return;
+    if (page === "invest") return investHeader(host);
     const onDash = page === "dashboard";
-    const trade = page === "invest" ? "" : onDash ? `<button type="button" id="btn-trade">${I.plus}<span class="btn-lbl">Nouveau trade</span></button>`
+    const trade = onDash ? `<button type="button" id="btn-trade">${I.plus}<span class="btn-lbl">Nouveau trade</span></button>`
                          : `<a class="btn" id="btn-trade" href="index.html#trade">${I.plus}<span class="btn-lbl">Nouveau trade</span></a>`;
     host.className = "yk-top";
     host.innerHTML = `<div class="yk-top-in">
       <div class="yk-left">
-        <a class="yk-brand" href="index.html" aria-label="Yasuke, tableau de bord">${I.logo(32)}<span><b>Yasuke</b><small>Trading-Bot</small></span></a>
+        <a class="yk-brand" href="index.html" aria-label="Yasuke, tableau de bord">${I.logo(32)}<span><b>Yasuke</b><small>Trading</small></span></a>
         <nav class="yk-tabs" aria-label="Pages">${[PAGES[0], ...EXTRA, ...PAGES.slice(1)].map(([k, href, l]) => `<a class="yk-tab${k === page ? " active" : ""}" href="${href}"${k === page ? ' aria-current="page"' : ""}>${l}</a>`).join("")}</nav>
       </div>
       <div class="yk-right">
+        ${spaceSwitch("trade")}
         <span class="yk-status" id="yk-status" role="status"><span class="dot"></span><b>Chargement</b><span class="yk-st-sub"></span></span>
         <button type="button" class="btn-icon" id="btn-theme" aria-label="Changer de thème" title="Thème clair ou sombre"></button>
         ${trade}
@@ -116,14 +123,77 @@
     const item = ([k, href, , short, ic]) => `<a href="${href}" class="${k === page ? "active" : ""}"${k === page ? ' aria-current="page"' : ""}>${I[ic]}<span>${short}</span></a>`;
     nav.innerHTML = item(PAGES[0]) + item(PAGES[1]) +
       (onDash ? `<button type="button" class="plus" id="bnav-trade"><span class="pb">${I.plusBig}</span><span>Trade</span></button>`
-              : `<a class="plus" href="index.html#trade"><span class="pb">${I.plusBig}</span><span>Trade</span></a>`) + item(PAGES[2]) + item(PAGES[3]) + item(PAGES[4]);
+              : `<a class="plus" href="index.html#trade"><span class="pb">${I.plusBig}</span><span>Trade</span></a>`) + item(PAGES[2]) + item(PAGES[3]);
     document.body.appendChild(nav);
     const sub = document.createElement("nav");
     sub.className = "yk-sub"; sub.setAttribute("aria-label", "Analyse");
-    sub.innerHTML = EXTRA.map(([k, href, l]) => `<a href="${href}"${k === page ? ' class="active" aria-current="page"' : ""}>${l}</a>`).join("");
+    sub.innerHTML = EXTRA.map(([k, href, l]) => `<a href="${href}"${k === page ? ' class="active" aria-current="page"' : ""}>${l}</a>`).join("")
+      + `<a class="yk-sub-space" href="investissement.html">Investir ${I.chevR}</a>`;
     host.after(sub);
     themeButton();
     fitHeader(host);
+    ticker(sub);
+  }
+
+  // Espace Investir : marque et couleur à part, onglets = parties de la page, suivis au défilement
+  function investHeader(host) {
+    document.documentElement.dataset.space = "invest";
+    host.className = "yk-top";
+    host.innerHTML = `<div class="yk-top-in">
+      <div class="yk-left">
+        <a class="yk-brand" href="investissement.html" aria-label="Yasuke Invest">${I.logo(32)}<span><b>Yasuke</b><small>Invest · halal</small></span></a>
+        <nav class="yk-tabs" aria-label="Parties">${INVEST.map(([id, l]) => `<a class="yk-tab" href="#${id}" data-sec="${id}">${l}</a>`).join("")}</nav>
+      </div>
+      <div class="yk-right">
+        ${spaceSwitch("invest")}
+        <button type="button" class="btn-icon" id="btn-theme" aria-label="Changer de thème" title="Thème clair ou sombre"></button>
+      </div></div>`;
+    const nav = document.createElement("nav");
+    nav.className = "yk-bnav"; nav.setAttribute("aria-label", "Navigation");
+    nav.innerHTML = INVEST.filter((x) => x[2]).map(([id, , short, ic]) => `<a href="#${id}" data-sec="${id}">${I[ic]}<span>${short}</span></a>`).join("")
+      + `<a href="index.html">${I.flag}<span>Trading</span></a>`;
+    document.body.appendChild(nav);
+    const sub = document.createElement("nav");
+    sub.className = "yk-sub"; sub.setAttribute("aria-label", "Parties");
+    sub.innerHTML = INVEST.map(([id, l]) => `<a href="#${id}" data-sec="${id}">${l}</a>`).join("");
+    host.after(sub);
+    themeButton();
+    fitHeader(host);
+    const links = [...document.querySelectorAll("[data-sec]")];
+    const mark = (id) => links.forEach((a) => {
+      const on = a.dataset.sec === id;
+      a.classList.toggle("active", on);
+      if (on && a.parentElement.scrollWidth > a.parentElement.clientWidth) a.parentElement.scrollTo({ left: a.offsetLeft - 16, behavior: "smooth" });
+    });
+    if (!window.IntersectionObserver) return;
+    const seen = new Map();
+    const io = new IntersectionObserver((es) => {
+      es.forEach((e) => seen.set(e.target.id, e.isIntersecting ? e.boundingClientRect.top : null));
+      const vis = [...seen].filter(([, t]) => t !== null).sort((a, b) => a[1] - b[1]);
+      if (vis.length) mark(vis[0][0]);
+    }, { rootMargin: "-120px 0px -55% 0px" });
+    const watch = () => INVEST.forEach(([id]) => { const el = document.getElementById(id); if (el) io.observe(el); });
+    watch();
+  }
+
+  // Bandeau des prix en direct (widget gratuit TradingView, données CFD et crypto en temps réel)
+  const TICKS = [["OANDA:XAUUSD", "Or"], ["OANDA:NAS100USD", "Nasdaq 100"], ["OANDA:SPX500USD", "S&P 500"], ["BINANCE:BTCUSDT", "Bitcoin"],
+                 ["BINANCE:ETHUSDT", "Ethereum"], ["TVC:USOIL", "Pétrole WTI"], ["FX:EURUSD", "Euro / dollar"]];
+  function ticker(after) {
+    if (document.body.dataset.ticker === "off") return;
+    const box = document.createElement("div");
+    box.className = "yk-ticker"; box.setAttribute("aria-label", "Prix en direct");
+    after.after(box);
+    const paint = () => {
+      box.innerHTML = '<div class="tradingview-widget-container"><div class="tradingview-widget-container__widget"></div></div>';
+      const sc = document.createElement("script");
+      sc.src = "https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js"; sc.async = true;
+      sc.text = JSON.stringify({ symbols: TICKS.map(([proName, title]) => ({ proName, title })), showSymbolLogo: false,
+        isTransparent: true, displayMode: "compact", colorTheme: isDark() ? "dark" : "light", locale: "fr" });
+      box.firstChild.appendChild(sc);
+    };
+    paint();
+    document.addEventListener("yk:theme", paint);
   }
 
   // Les onglets ne doivent jamais passer sous l'état du bot ou les boutons : on masque les textes
@@ -267,7 +337,8 @@
     return null;
   }
   // Rafraîchissement : toutes les minutes en lecture directe et en local (python run.py ui), toutes les 2 min sur GitHub Pages
-  function poll(fn) { let n = 0; setInterval(() => { n++; if (S.direct || S.mode === "local" || n % 2 === 0) fn(); }, 60000); }
+  // relecture toutes les 30 s (le bot publie toutes les 5 min ; la page se met à jour sans être rechargée)
+  function poll(fn) { setInterval(() => { if (!document.hidden) fn(); }, 30000); document.addEventListener("visibilitychange", () => { if (!document.hidden) fn(); }); }
   function ghRepo() { const s = ghSettings(); return { owner: (s && s.owner) || GH_DEFAULT.owner, repo: (s && s.repo) || GH_DEFAULT.repo }; }
   // Branche le bloc « Mode GitHub Actions » (champs gh-owner, gh-repo, gh-token, boutons gh-save, gh-test, texte gh-status)
   function bindGhSettings(onSaved) {

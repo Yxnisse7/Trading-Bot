@@ -8,7 +8,7 @@
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
-<link rel="stylesheet" href="yasuke.css?v=dc546e33d5">
+<link rel="stylesheet" href="yasuke.css?v=341ca20728">
 <script>try { const t = localStorage.getItem("tb-theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}</script>
 <style>
   .asset-rows { display: grid; gap: 12px; }
@@ -52,7 +52,10 @@
     </div>
   </section>
 
-  <div class="card" id="ch-live"></div>
+  <h2 id="en-reel" data-hint="stratégies prouvées qui envoient des signaux réels">Stratégies en réel</h2>
+  <div class="live-grid" id="live-strats"><div class="card live-s"><span class="sk t"></span><span class="sk" style="height:24px;width:90px"></span></div></div>
+
+  <div class="card" id="ch-live" style="margin-top:20px"></div>
 
   <div class="row2" style="margin-top:20px">
     <div class="card">
@@ -154,7 +157,7 @@
 
 <div id="tip" role="tooltip"></div>
 <script src="vendor/lightweight-charts.standalone.production.js"></script>
-<script src="yasuke.js?v=74f05b57ff"></script>
+<script src="yasuke.js?v=3d4b49f1bb"></script>
 <script src="charts.js?v=232a285ab5"></script>
 <script src="live-chart.js?v=974fc956eb"></script>
 <script src="sections.js?v=0d56d6cb86"></script>
@@ -206,7 +209,7 @@
     try { YKCharts.equityLine($("#ch-equity"), d.equity_curve || [], { height: 220 }); } catch (e) { console.error("courbe :", e); }
     const tot = d.overview.visible.pnl_pct;
     $("#eq-total").innerHTML = d.overview.visible.n ? `<span class="pill ${Y.tone(tot)}"><b>${Y.pctv(tot, 2)}</b></span>` : "";
-    renderAssets(); renderOpen(); renderAgenda(); renderTrades(); renderLinks();
+    renderAssets(); renderLive(); renderOpen(); renderAgenda(); renderTrades(); renderLinks();
     if (location.hash === "#trade" && !$("#trade-modal").open) openTrade();
   }
 
@@ -292,6 +295,28 @@
           ${hint ? `<div class="muted" style="font-size:12px;margin-top:3px">${esc(hint)}</div>` : ""}
           ${e.blackout ? `<div style="font-size:12px;margin-top:3px">⏸ Pause des signaux ${rules.before || 45} min avant → ${rules.after || 30} min après${e.assets && e.assets.length ? " (" + e.assets.map((k) => esc(lab(k))).join(", ") + ")" : " (tous les actifs)"}</div>` : ""}</div></div>`; }).join("") + `
       <div class="muted" style="margin-top:10px">Annonces américaines à fort et moyen impact, plus la BCE pour l'euro (prévision et chiffre précédent quand ils sont publiés). Le bot n'envoie aucun signal pendant les pauses et, avant chaque signal, lit les titres de la presse financière des 2 dernières heures : au-delà d'un score de risque de ${rules.max_news_risk ?? 3}, il s'abstient. Les réactions indiquées sont habituelles, pas garanties : le marché réagit à l'écart avec la prévision, et pas toujours dans le même sens. Sur 12 mois, les trades du bot pris près d'une annonce ont fait pire que les autres (−0,34 R contre −0,09 R, sur 23 trades seulement) ; trader la cassure qui suit une annonce n'a rien donné (essai 4, page Apprentissage).</div>`;
+  }
+
+  // stratégies du labo passées en signaux réels (essais 24 à 30) : résultat depuis leur départ et position ouverte
+  const LIVE_NAMES = { noise_area: "Zone de bruit", noise_area_v2: "Zone de bruit v2", donchian_1h: "Donchian 1 h", swing_w3: "Repli W3",
+    nuit_asie: "Nuit asiatique", cassure_williams: "Cassure Williams", creux_repris_15m: "Creux repris", donchian_day: "Donchian jour" };
+  function renderLive() {
+    const lab = (k) => (data.assets.find((a) => a.key === k) || {}).label || k;
+    const rows = Object.values(data.lab_shadow || {}).filter((v) => v.live);
+    const box = $("#live-strats");
+    if (!rows.length) { box.innerHTML = `<div class="card live-s"><div class="empty">Aucune stratégie en réel.</div></div>`; return; }
+    box.innerHTML = rows.map((v) => {
+      const open = (v.trades || []).find((t) => t.status === "open");
+      const tot = v.n ? v.mean_r * v.n : null;
+      const dg = v.asset === "euro" ? 5 : 2;
+      const since = new Date(v.since).toLocaleDateString("fr-FR", { day: "2-digit", month: "2-digit" });
+      return `<div class="card live-s">
+        <div class="t"><div><b>${esc(LIVE_NAMES[v.strategy] || v.strategy)}</b><small>${esc(lab(v.asset))} · depuis le ${since}</small></div><span class="live-dot${open ? "" : " idle"}" title="${open ? "position ouverte" : "en attente d'un signal"}"></span></div>
+        <div class="v ${tot === null ? "neu" : Y.tone(tot)}">${tot === null ? "—" : Y.signed(tot, 2, " R")}</div>
+        <div class="s">${v.n ? `${v.n} trade${v.n > 1 ? "s" : ""} clôturé${v.n > 1 ? "s" : ""} · ${Y.signed(v.mean_r, 2, " R")} en moyenne` : "Aucun trade clôturé pour l'instant"}</div>
+        ${open ? `<div class="pos"><span>${open.direction === "long" ? '<b class="up">Achat</b>' : '<b class="dn">Vente</b>'} à ${Y.price(open.entry, dg)}</span><span>SL ${open.stop ? Y.price(open.stop, dg) : "—"}</span></div>` : ""}
+      </div>`;
+    }).join("");
   }
 
   function renderAssets() {
