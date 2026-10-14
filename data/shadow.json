@@ -81,7 +81,7 @@
       "variant": "avant_ouverture",
       "exc": {
         "mfe": 0.0083,
-        "mae": 0.147,
+        "mae": 0.2526,
         "armed": {
           "0.5": false,
           "0.8": false,
@@ -92,7 +92,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": null
+        "last_ts": 1791983700
       }
     }
   },
@@ -178,7 +178,7 @@
       "variant": "avant_ouverture",
       "exc": {
         "mfe": 0.0,
-        "mae": 0.092,
+        "mae": 0.1801,
         "armed": {
           "0.5": false,
           "0.8": false,
@@ -269,7 +269,7 @@
       "variant": "essai_sp500",
       "exc": {
         "mfe": 0.0,
-        "mae": 0.2143,
+        "mae": 0.5357,
         "armed": {
           "0.5": false,
           "0.8": false,
@@ -364,6 +364,104 @@
         "source": "essai 29"
       },
       "price_time": "2026-10-14T13:15:00Z",
+      "variant": "avant_ouverture",
+      "exc": {
+        "mfe": 0.0,
+        "mae": 0.0524,
+        "armed": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "be": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "last_ts": null
+      }
+    }
+  },
+  {
+    "id": "31c6b1a2dd",
+    "asset": "nasdaq",
+    "asset_label": "Nasdaq 100 (NQ)",
+    "direction": "short",
+    "entry": 30588.25,
+    "take_profit": 30192.25,
+    "stop_loss": 30720.25,
+    "risk_reward": 3.0,
+    "confidence": "fort",
+    "score": 6.75,
+    "criteria": [
+      "adx",
+      "pdhl",
+      "rsi",
+      "trend_15m",
+      "trend_1h",
+      "trend_5m",
+      "vwap"
+    ],
+    "rationale": "Vente : tendance forte (ADX), cassure des extrêmes de la veille, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 219.75 (0.72 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 62%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+    "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité calme sur les 2 dernières heures",
+    "created_at": "2026-10-14T13:25:44Z",
+    "expires_at": "2026-10-15T13:25:44Z",
+    "status": "open",
+    "closed_at": null,
+    "close_price": null,
+    "pnl_pct": null,
+    "pnl_gross_pct": null,
+    "duration_minutes": null,
+    "hourly_range": 219.75,
+    "source": "shadow",
+    "horizon": "24h",
+    "horizon_minutes": 1440,
+    "meta": {
+      "tick": 0.25,
+      "details": {
+        "trend_5m": "EMA20 30658.74 / EMA50 30717.89 (5 min)",
+        "trend_15m": "EMA20 30717.62 / EMA50 30760.99",
+        "trend_1h": "prix vs EMA20 1 h 30749.47",
+        "adx": "ADX15 31.6 (+DI 12.6 / -DI 34.9)",
+        "vwap": "VWAP jour 30736.70",
+        "rsi": "RSI14 5 min 34.1",
+        "macd": "histogramme MACD -11.8679",
+        "level": "support - / résistance 30682.75",
+        "volume": "z-score volume -1.08",
+        "pdhl": "veille : haut 30845.00 / bas 30591.25",
+        "activity": "activité de l'heure 1.95× la moyenne",
+        "corr": "VIX +0.6 % sur 15 min"
+      },
+      "support": null,
+      "resistance": 30682.75,
+      "atr_5m": 40.113038362686254,
+      "atr_ratio": 1.7689337622494412,
+      "hourly_range_pct": 0.7184,
+      "adx_15m": 31.615666817788426,
+      "sigma_5m": 0.0012058618846090892,
+      "p_resolution": 0.6186666666666667,
+      "p_tp_neutral": 0.23,
+      "activity_ratio": 1.949,
+      "base_minutes": 5,
+      "ctx": {
+        "adx": 31.62,
+        "rsi_dir": 65.88,
+        "vwap_ext": 0.6755,
+        "ema_ext": 0.3208,
+        "atr_ratio": 1.769,
+        "activity": 1.949,
+        "range_pct": 0.7184,
+        "cost_r": 0.0348,
+        "us_open_min": -4.3,
+        "weekday": 2
+      },
+      "exit_override": {
+        "stop_x": 1.5,
+        "target_x": 3.0,
+        "minutes": 1440,
+        "source": "essai 29"
+      },
+      "price_time": "2026-10-14T13:20:00Z",
       "variant": "avant_ouverture"
     }
   }
