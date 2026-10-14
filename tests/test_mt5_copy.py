@@ -92,3 +92,11 @@ def test_shadow_signals_and_real_accounts_are_ignored(tmp_path):
     mt5.account_info = lambda: NS(trade_mode=2, balance=1000.0)
     c = mc.Copier(mt5, tmp_path / "r", lambda *a, **k: None, lambda: created + 60, get=site([sig()]))
     assert "réel" in c.step() and mt5.sent == []
+
+
+def test_min_lot_exception_for_asian_night():
+    from types import SimpleNamespace
+    info = SimpleNamespace(trade_contract_size=100.0, volume_step=0.01, volume_min=0.01, volume_max=1.0)
+    assert mc.lot_for(1000, 41.0, info) == 0.0                     # 41 $ au lot minimum : plus que 2 %
+    assert mc.lot_for(1000, 41.0, info, mc.MIN_LOT_MAX_RISK["nuit_asie"]) == 0.01
+    assert mc.lot_for(1000, 60.0, info, mc.MIN_LOT_MAX_RISK["nuit_asie"]) == 0.0   # au-delà de 5 %

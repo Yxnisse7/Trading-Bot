@@ -22,6 +22,9 @@ log = logging.getLogger("mt5_copy")
 
 MAGIC = 200001
 RISK_PCT = 0.01
+# Risque toléré au lot minimum du courtier (part du solde), par stratégie, quand il dépasse 2 fois RISK_PCT :
+# « heures asiatiques » or a un stop de sécurité à 1 % du prix (≈ 41 $ à 0,01 lot), choix de Yanisse le 14/10/2026.
+MIN_LOT_MAX_RISK = {"nuit_asie": 0.05}
 MAX_AGE = 15 * 60
 EVERY = 30
 SYMBOLS = {"gold": "XAUUSD+", "nasdaq": "NAS100", "sp500": "SP500", "bitcoin": "BTCUSD", "ethereum": "ETHUSD",
@@ -78,7 +81,7 @@ def read_signals(get: Callable[[str], Any] = _get) -> tuple[list[dict[str, Any]]
     return out, ok
 
 
-def lot_for(balance: float, dist: float, info) -> float:
+def lot_for(balance: float, dist: float, info, min_lot_risk: float | None = None) -> float:
     """Lot qui risque RISK_PCT du solde au stop, arrondi au pas du courtier ; 0 si même le minimum risque trop."""
     contract, step = float(info.trade_contract_size), float(info.volume_step)
     if dist <= 0 or contract <= 0 or step <= 0:
@@ -86,8 +89,9 @@ def lot_for(balance: float, dist: float, info) -> float:
     raw = balance * RISK_PCT / (dist * contract)
     lot = int(raw / step + 1e-9) * step
     if lot < info.volume_min:
-        # le minimum du courtier risque plus que prévu : toléré jusqu'à 2 fois le risque voulu
-        return float(info.volume_min) if info.volume_min * dist * contract <= 2 * balance * RISK_PCT else 0.0
+        # le minimum du courtier risque plus que prévu : toléré jusqu'à 2 fois le risque voulu (ou l'exception)
+        cap = max(2 * RISK_PCT, min_lot_risk or 0.0)
+        return float(info.volume_min) if info.volume_min * dist * contract <= cap * balance else 0.0
     return round(min(lot, float(info.volume_max)), 2)
 
 
@@ -178,7 +182,8 @@ class Copier:
         tp = round(px + sg * s["target"], info.digits) if s["target"] else 0.0
         if s["stop"] < info.trade_stops_level * info.point:
             return {"status": "stop plus court que le minimum du courtier"}
-        lot = lot_for(balance, s["stop"], info)
+        strat = s["key"].split(":")[1] if s["key"].startswith("lab:") else None
+        lot = lot_for(balance, s["stop"], info, MIN_LOT_MAX_RISK.get(strat))
         if lot <= 0:
             return {"status": "taille minimale trop risquée"}
         res = self.mt5.order_send({
