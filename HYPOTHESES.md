@@ -924,6 +924,28 @@ année). Prouvé si l'écart aux filtres au hasard dépasse le seuil corrigé (8
 actif (réentraîné chaque année sur tout l'historique). Sinon, on le dit : apprendre sur ces critères ne crée pas
 d'avantage, et la piste suivante serait de changer les critères eux-mêmes. Rien ne change sans son accord.
 
+## Essai 26 — apprendre par groupe de marchés (et le DAX)
+
+Écrit le 14 octobre 2026, **avant** tout calcul, à la demande de Yanisse : un bot qui apprend sur chaque marché (ou
+groupe de marchés qui bougent ensemble) séparément marche-t-il mieux qu'un seul bot qui mélange tout ?
+
+**Données** : celles de l'essai 25, plus le **DAX** (bougies 1 min HistData 2014 → 08/2024, mêmes prix que nos
+bougies Dukascopy à la bougie près sur l'automne 2024, puis nos données jusqu'à 10/2026), bot rejoué sur l'horloge
+européenne de l'essai 17, frais du bot (CFD, 0,01 %).
+
+**Trois façons d'apprendre**, même modèle d'arbres que l'essai 25 (mêmes réglages), mêmes années cachées
+(apprend sur les années avant Y, décide sur Y, de 2017 à 2026) :
+- **seul** : un modèle par marché, qui n'apprend que sur ses propres signaux (or, Nasdaq, S&P 500, DAX, Bitcoin) ;
+- **groupe indices** : un modèle pour Nasdaq + S&P 500 + DAX ensemble (l'or et le Bitcoin restent seuls) ;
+- **tout ensemble** : un modèle pour les 5 marchés (comme l'essai 25, DAX en plus).
+
+**Verdict** : 13 cellules (5 + 3 + 5), contrôles de l'essai 25 (dont les filtres au hasard la même année), « prouvé »
+avec le seuil corrigé pour 13 cellules. Pour information : corrélation des rendements journaliers entre marchés.
+
+**Décidé d'avance** : sur chaque marché, si une autre façon d'apprendre est prouvée et fait un meilleur R moyen que
+celle branchée aujourd'hui (tout ensemble, essai 25), proposition de la brancher. Un marché prouvé qui n'est pas
+branché (S&P 500, Bitcoin, DAX) : proposition de le brancher. Rien ne change sans l'accord de Yanisse.
+
 ## Journal des essais
 
 | Date | Essai | Résultat |
@@ -983,3 +1005,4 @@ d'avantage, et la piste suivante serait de changer les critères eux-mêmes. Rie
 | 2026-10-14 | Pré-enregistrement de l'essai 25 (apprentissage du bot sur 12 ans, années cachées) | — |
 | 2026-10-14 | **Essai 25** : le bot apprend sur ses signaux de 2014-2026, jugé année par année sur des années cachées (2017-2026), 8 cellules (seuil z > 2,5) | Bot seul 2017-2026 : or −0,08 R, Nasdaq +0,01, S&P 500 −0,07, Bitcoin −0,12. **Poids des critères (linéaire) : rien ne passe** (au mieux Nasdaq +0,03 R, PF 1,06). **Arbres : prouvés sur l'or et le Nasdaq.** Or : garde 284 signaux sur 4 430 (6 %), +0,14 R, PF 1,32, frais ×2 +0,05, 3 régimes positifs, bat les singes 1000 et les filtres au hasard 1000 (z 3,4) ; année 2022 −0,70 R. Nasdaq : garde 1 468 sur 4 458 (33 %), +0,09 R, PF 1,18, 8 années positives sur 10, filtres au hasard 999 (z 3,1). S&P 500 (−0,05 R) et Bitcoin (−0,04 R) : pas robustes. Conséquence prévue : proposer de brancher le modèle d'arbres sur le bot pour l'or et le Nasdaq. |
 | 2026-10-14 | Choix de Yanisse après l'essai 25 | **Bot appris branché en réel** sur l'or et le Nasdaq : modèle d'arbres de l'essai 25 entraîné sur les 24 389 signaux 2014-2026 (data/models/bot_arbres.pkl), un signal n'est annoncé que si son R prévu est > 0 (filtre `modele_arbres`, les autres suivis en silence). **S&P 500 et Bitcoin mis à l'essai** (le bot y perd, avec ou sans apprentissage). Les stratégies du laboratoire sur ces actifs ne changent pas. À réentraîner chaque année. |
+| 2026-10-14 | Pré-enregistrement de l'essai 26 (apprentissage par groupe de marchés, DAX) | — |
