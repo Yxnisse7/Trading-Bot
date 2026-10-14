@@ -993,6 +993,26 @@ même sens) plus **au moins 100 trades** ; « prouvé » : tout passe et z > seu
 **Décidé d'avance** : une cellule prouvée → proposition de la passer en signaux réels comme l'essai 27. Rien ne
 change sans l'accord de Yanisse.
 
+## Essai 29 — largeur du stop et ratio objectif/stop sur les signaux du bot
+
+Écrit le 14 octobre 2026, **avant** tout calcul, à la demande de Yanisse (« le SL coupe-t-il nos trades trop tôt ?
+plus large, ça touche le TP après ? plusieurs réglages et ratios, jusqu'à 5-10 % »). On garde les **entrées** du
+bot (heure, sens, prix, 2014-2026, or, Nasdaq, S&P 500, Bitcoin) et on change seulement la sortie :
+- **Famille 1** (stop proportionnel à celui du bot) : stop × 0,5 / 1 / 1,5 / 2 / 3, objectif à 0,5 / 1 / 1,5 / 2 /
+  3 / 5 fois le stop, sortie au plus tard 1 jour après l'entrée (30 réglages par actif) ;
+- **Famille 2** (stop en % du prix) : stop 1 / 2 / 5 / 10 %, objectif à 1 / 2 / 3 fois le stop, sortie au plus
+  tard 20 jours après l'entrée (12 réglages par actif ; position gardée la nuit, pas chez Topstep).
+Si le stop et l'objectif sont touchés dans la même bougie de 5 min, on compte le stop (prudent). Frais du bot.
+
+**Mesures** : part des trades qui touchent l'objectif, le stop, ou finissent à l'heure ; R net moyen. **Contrôles**
+de l'essai 24 (200 trades, R > 0 et PF ≥ 1,1, 60 % des années, deux moitiés avant/depuis 2020, 2 dernières années,
+frais doublés) puis, seulement pour les réglages qui les passent tous, **singes** : 200 séries d'entrées au hasard
+le même jour, même sens, même sortie, à battre au moins 190 fois. « Prouvé » : tout passe et z > seuil corrigé pour
+les 168 réglages (3,43).
+
+**Décidé d'avance** : un réglage prouvé → proposition de l'appliquer aux signaux du bot sur cet actif. Rien ne
+change sans l'accord de Yanisse.
+
 ## Journal des essais
 
 | Date | Essai | Résultat |
