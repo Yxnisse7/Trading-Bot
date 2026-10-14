@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-14T15:05:59.323066+02:00",
+  "updated_at": "2026-10-14T15:11:06.983900+02:00",
   "timezone": "Europe/Paris",
   "equity_curve": [
     {
@@ -1664,7 +1664,7 @@
       "avg_pnl_pct": -0.0402
     },
     "open": 0,
-    "open_shadow": 1
+    "open_shadow": 2
   },
   "by_source": {
     "bot": {
@@ -5084,6 +5084,40 @@
   ],
   "open_signals": [
     {
+      "id": "2dd188d259",
+      "asset": "nasdaq",
+      "asset_label": "Nasdaq 100 (NQ)",
+      "direction": "short",
+      "horizon": "24h",
+      "entry": 30560.75,
+      "take_profit": 30198.5,
+      "stop_loss": 30681.5,
+      "risk_reward": 3.0,
+      "confidence": "fort",
+      "score": 5.75,
+      "criteria": [
+        "adx",
+        "pdhl",
+        "trend_15m",
+        "trend_1h",
+        "trend_5m",
+        "vwap"
+      ],
+      "source": "shadow",
+      "status": "open",
+      "pnl_pct": null,
+      "pnl_gross_pct": null,
+      "duration_minutes": null,
+      "close_price": null,
+      "created_at": "2026-10-14T13:10:48Z",
+      "closed_at": null,
+      "created_local": "14/10 15:10",
+      "expires_at": "2026-10-15T13:10:48Z",
+      "rationale": "Vente : tendance forte (ADX), cassure des extrêmes de la veille, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 201.00 (0.66 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 67%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+      "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité calme sur les 2 dernières heures",
+      "manual_exit": null
+    },
+    {
       "id": "ecbdf40543",
       "asset": "oil",
       "asset_label": "Pétrole WTI (CL)",
@@ -7596,10 +7630,10 @@
     }
   },
   "state": {
-    "last_scan": "2026-10-14T13:05:42Z",
+    "last_scan": "2026-10-14T13:10:48Z",
     "last_scan_note": "0 signal(aux)",
     "last_summary": "2026-10-13T22:05:31Z",
-    "last_track": "2026-10-14T12:20:45Z",
+    "last_track": "2026-10-14T13:10:48Z",
     "last_summary_day": "2026-10-13"
   },
   "limits": {
@@ -19679,12 +19713,12 @@
           "reason": null,
           "exit_ts": null,
           "exit": null,
-          "last": 4163.7998046875,
+          "last": 4110.2001953125,
           "r_topstep": null,
           "r_bot": null
         }
       ],
-      "checked_hour": "2026-10-14T12:00:00Z",
+      "checked_hour": "2026-10-14T13:00:00Z",
       "n": 5,
       "mean_r": -0.4405,
       "live": false
@@ -19775,7 +19809,7 @@
         }
       ],
       "live": false,
-      "checked_hour": "2026-10-14T12:00:00Z",
+      "checked_hour": "2026-10-14T13:00:00Z",
       "n": 5,
       "mean_r": 0.4323
     },
@@ -19785,7 +19819,7 @@
       "since": "2026-10-14T08:00:00Z",
       "trades": [],
       "live": true,
-      "checked_hour": "2026-10-14T12:30:00Z",
+      "checked_hour": "2026-10-14T13:00:00Z",
       "n": 0,
       "mean_r": null
     },
@@ -19795,7 +19829,7 @@
       "since": "2026-10-14T08:00:00Z",
       "trades": [],
       "live": true,
-      "checked_hour": "2026-10-14T12:30:00Z",
+      "checked_hour": "2026-10-14T13:00:00Z",
       "n": 0,
       "mean_r": null
     },
@@ -19815,7 +19849,7 @@
       "since": "2026-10-14T12:00:00Z",
       "trades": [],
       "live": true,
-      "checked_hour": "2026-10-14T12:45:00Z",
+      "checked_hour": "2026-10-14T13:00:00Z",
       "n": 0,
       "mean_r": null
     }
