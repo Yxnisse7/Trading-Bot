@@ -1,6 +1,6 @@
 # Trading-Bot — rapport
 
-_Mis à jour le 14/10/2026 à 12:46 (Europe/Paris)._
+_Mis à jour le 14/10/2026 à 12:50 (Europe/Paris)._
 
 ## Vue d'ensemble
 
@@ -8,7 +8,7 @@ _Mis à jour le 14/10/2026 à 12:46 (Europe/Paris)._
 - Taux de réussite cumulé (TP / (TP+SL)) : **43%** — hasard attendu 42%, avantage **+1%**
 - P&L théorique cumulé, net des coûts estimés (somme des % par trade, sans levier) : **-4.40 %** (brut -0.57 %)
 - Signaux ouverts : **0**
-- Signaux fantômes (suivis en silence pour l'apprentissage) : **351** clôturés, 3 ouverts, taux de réussite 36% (hasard attendu 42%)
+- Signaux fantômes (suivis en silence pour l'apprentissage) : **352** clôturés, 2 ouverts, taux de réussite 36% (hasard attendu 42%)
 
 ## Statistiques
 
@@ -113,18 +113,18 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 
 | Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
 |---|---:|---:|---:|---:|---:|---:|
-| adx | 351 | 101 | 177 | 73 | 36% | -0.039 % |
+| adx | 352 | 101 | 177 | 74 | 36% | -0.039 % |
 | corr | 18 | 2 | 13 | 3 | 13% | -0.202 % |
 | level | 44 | 18 | 13 | 13 | 58% | -0.028 % |
 | macd | 89 | 19 | 52 | 18 | 27% | -0.080 % |
 | orb | 16 | 4 | 7 | 5 | 36% | -0.075 % |
-| pdhl | 47 | 11 | 27 | 9 | 29% | -0.047 % |
-| rsi | 227 | 70 | 121 | 36 | 37% | -0.038 % |
-| trend_15m | 351 | 101 | 177 | 73 | 36% | -0.039 % |
-| trend_1h | 343 | 98 | 175 | 70 | 36% | -0.040 % |
-| trend_5m | 271 | 87 | 142 | 42 | 38% | -0.034 % |
+| pdhl | 48 | 11 | 27 | 10 | 29% | -0.047 % |
+| rsi | 228 | 70 | 121 | 37 | 37% | -0.038 % |
+| trend_15m | 352 | 101 | 177 | 74 | 36% | -0.039 % |
+| trend_1h | 344 | 98 | 175 | 71 | 36% | -0.040 % |
+| trend_5m | 272 | 87 | 142 | 43 | 38% | -0.034 % |
 | volume | 2 | 1 | 0 | 1 | 100% | -0.021 % |
-| vwap | 337 | 99 | 169 | 69 | 37% | -0.037 % |
+| vwap | 338 | 99 | 169 | 70 | 37% | -0.037 % |
 
 ### Fantômes par actif
 
@@ -133,7 +133,7 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 | bitcoin | 22 | 7 | 3 | 12 | 70% | +0.021 % |
 | ethereum | 15 | 2 | 10 | 3 | 17% | -0.231 % |
 | euro | 23 | 8 | 14 | 1 | 36% | -0.024 % |
-| gold | 64 | 18 | 30 | 16 | 38% | -0.024 % |
+| gold | 65 | 18 | 30 | 17 | 38% | -0.024 % |
 | nasdaq | 98 | 35 | 47 | 16 | 43% | -0.017 % |
 | oil | 55 | 16 | 26 | 13 | 38% | -0.058 % |
 | sp500 | 74 | 15 | 47 | 12 | 24% | -0.050 % |
