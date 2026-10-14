@@ -946,6 +946,27 @@ avec le seuil corrigé pour 13 cellules. Pour information : corrélation des ren
 celle branchée aujourd'hui (tout ensemble, essai 25), proposition de la brancher. Un marché prouvé qui n'est pas
 branché (S&P 500, Bitcoin, DAX) : proposition de le brancher. Rien ne change sans l'accord de Yanisse.
 
+## Essai 27 — l'or la nuit (idées trouvées sur le web)
+
+Écrit le 14 octobre 2026, **avant** tout calcul, à la demande de Yanisse (« cherche sur le web des stratégies sur
+l'or »). Déjà testés et écartés ici : cassure du range asiatique (`london_breakout`), Donchian, momentum 12 mois,
+tendance journalière, annonces, scalping, idées de la formation. Idées nouvelles retenues (sources : Blose,
+Gondhalekar et Kort, *Journal of Economics and Finance* 2018 : l'or monte la nuit et baisse le jour ; mémoire CBS
+Donati et Jung : l'or monte pendant les heures asiatiques) :
+- **N1 nuit COMEX** : achat à 13:30 heure de New York (fin de séance COMEX), vente le lendemain à 08:20 ;
+- **N2 heures asiatiques** : achat à 18:00 New York, vente à 03:00 (ouverture de Londres) ;
+- **N3 vente le jour** : vente à 08:20 New York, rachat à 13:30.
+Du lundi au vendredi, une position à la fois, bougies 5 min 2014-2026 (HistData puis les nôtres), frais Vantage
+RAW 0,30 $ l'once aller-retour (swap ignoré : compte sans swap).
+
+**Contrôles** (rendement net en % par trade) : > 0 ; 60 % des années ; deux moitiés (avant et depuis 2020) ; 2
+dernières années ; frais doublés ; **singes** : 1000 séries de trades à des heures tirées au hasard le même jour,
+même durée, même sens, à battre au moins 950 fois (pour ne pas confondre l'idée avec la hausse de l'or depuis
+2014). « Prouvé » : tout passe et z > seuil corrigé pour 3 cellules (2,39).
+
+**Décidé d'avance** : une cellule prouvée → proposition de la suivre en ombre, puis sur le démo MT5. Rien ne
+change sans l'accord de Yanisse.
+
 ## Journal des essais
 
 | Date | Essai | Résultat |
