@@ -1050,6 +1050,45 @@ la même heure. « Prouvé » : tout passe et z > seuil corrigé pour 12 cellule
 **Décidé d'avance** : une cellule prouvée → proposition de la passer en signaux réels (copie démo comprise). Rien
 ne change sans l'accord de Yanisse.
 
+## Essai 31 — pétrole et euro sur 2014-2026
+
+Écrit le 14 octobre 2026, **avant** tout calcul, à la demande de Yanisse (« le pétrole et l'euro, on en a fait des
+tests ? il existe des stratégies pour ces actifs ? »). Jusqu'ici, ils n'avaient que 24 mois de test (essais 3, 5,
+10). Bougies 1 min HistData (EURUSD 2014 → 09/10/2026 ; WTIUSD 2014-2023 et juin-octobre 2026, complétées par
+Dukascopy LIGHTCMDUSD de janvier 2024 à mai 2026, HistData n'ayant pas ces mois), regroupées en 5 min. Frais du
+bot : pétrole 0,03 %, euro 0,01 % aller-retour. Ouverture de la séance de jour (pour les règles qui en ont besoin) :
+pétrole 09:00, euro 08:20 (New York).
+
+**Partie A** : les 54 stratégies de l'essai 24, bot classique compris (rejoué sur les 12 ans), mêmes contrôles
+(200 trades, R > 0 et PF ≥ 1,1, 60 % des années, deux moitiés, 2 dernières années, frais doublés, 2 régimes sur 3,
+singes de l'essai 21) ; « prouvée » : tout passe et z > seuil corrigé pour toutes les cellules jugées.
+
+**Partie B** : idées d'une recherche large (études, Quantpedia, blogs, forums), contrôles de l'essai 30 (rendement
+net en % par trade, 200 trades, années, moitiés, 2 dernières années, frais doublés, 1 000 singes à battre 950 fois ;
+le même jour à une heure au hasard pour les règles d'horaire, n'importe quel jour à la même heure pour P4 et P5) ;
+« prouvé » : z > seuil corrigé pour 11 cellules (2,61). Heures de New York sauf mention.
+- **P1 suite du rapport EIA** (Wen et al. 2023) : mercredi, position 14:00 → 14:30 dans le sens de 10:30 → 11:00 ;
+- **P2 la matinée prédit la clôture** (Wen et al. 2021) : autres jours de semaine, position 14:00 → 14:30 dans le
+  sens de 14:30 la veille → 10:00 ;
+- **P3 la journée prédit la clôture** (Baltussen et al. 2021) : chaque jour, position 14:00 → 14:30 dans le sens de
+  14:30 la veille → 14:00 ;
+- **P4 cassure de bande à l'ouverture** (Holmberg et al. 2013) : bande à l'ouverture de 09:00 ± (|moyenne| + 1,28 ×
+  écart-type des 60 rendements 09:00 → 14:30 d'avant), achat ou vente au premier franchissement, sortie à 14:30 ;
+- **P5 contre le rapport EIA** (Geman et Li) : mercredi, si 10:30 → 10:35 dépasse 2 σ (52 mercredis d'avant),
+  position contraire 10:35 → 11:00 ;
+- **P6 rapport API la veille** : mardi, sens de 16:30 → 17:00, position de 18:00 à 10:25 le lendemain ;
+- **E1a vente avant le fixing BCE** (Krohn, Mueller et Whelan 2024) : vente 02:00 New York → 14:15 Francfort ;
+- **E1b achat après le fixing de Londres** (même étude) : achat 16:00 Londres → 17:00 New York ;
+- **E2a vente pendant Londres** (Breedon et Ranaldo 2013) : vente 03:00 → 11:00 ;
+- **E2b achat l'après-midi new-yorkais** (même étude) : achat 11:00 → 16:00 ;
+- **E6 la journée prédit la clôture** (Baltussen et al.) : position 14:30 → 15:00 dans le sens de 15:00 la veille →
+  14:30.
+Écartées : OPEC (trop peu d'événements, calendrier à reconstruire), fixing de fin de mois et FOMC (moins de 200
+trades), rapports avec prévisions consensus, carnet d'ordres, options.
+
+**Décidé d'avance** : une cellule prouvée → proposition de la passer en signaux réels (copie démo comprise) ; le
+pétrole et l'euro restent « à l'essai » sinon. Rien ne change sans l'accord de Yanisse.
+
 ## Journal des essais
 
 | Date | Essai | Résultat |
