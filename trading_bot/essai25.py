@@ -23,24 +23,16 @@ from . import essai24 as e24
 from .essai21 import Bars, bot_cost, judge
 from .essai23 import load
 
-ASSETS = ("gold", "nasdaq", "sp500", "bitcoin")
-CRITERIA = ("trend_5m", "trend_15m", "trend_1h", "adx", "vwap", "rsi", "macd", "level", "volume", "orb", "pdhl", "corr")
-CTX = ("adx", "rsi_dir", "ema_ext", "atr_ratio", "activity", "range_pct", "cost_r", "us_open_min", "weekday")
+from .bot_model import ASSETS, CRITERIA, CTX
+from .bot_model import features as _features
+
 FIRST_TEST_YEAR = 2017
 HALF = int(datetime(2022, 1, 1, tzinfo=timezone.utc).timestamp())
 N_MONKEYS = 1000
 
 
 def features(row: dict[str, Any], key: str) -> list[float]:
-    crit = set(row.get("criteria") or [])
-    ctx = (row.get("meta") or {}).get("ctx") or {}
-    hour = datetime.fromisoformat(row["created_at"].replace("Z", "+00:00")).hour
-    x = [1.0 if c in crit else 0.0 for c in CRITERIA]
-    x += [float(ctx.get(k) or 0.0) for k in CTX] + [1.0 if ctx else 0.0]
-    x += [float(row.get("score") or 0.0), 1.0 if row["direction"] == "long" else -1.0,
-          np.sin(2 * np.pi * hour / 24), np.cos(2 * np.pi * hour / 24)]
-    x += [1.0 if key == a else 0.0 for a in ASSETS]
-    return x
+    return _features(row.get("criteria"), row.get("meta"), row["created_at"], row.get("score"), row["direction"], key)
 
 
 def dataset(store, cfg, root: Path) -> dict[str, Any]:
@@ -170,11 +162,34 @@ def run(store, cfg, root: Path, log: Callable[[str], None] = print) -> dict[str,
     return out
 
 
+def train_final(store, cfg, root: Path) -> dict[str, Any]:
+    """Modèle d'arbres de l'essai 25 entraîné sur tous les signaux 2014-2026, pour le bot en direct."""
+    import pickle
+
+    import sklearn
+
+    from .bot_model import PATH
+    rows = dataset(store, cfg, root)["rows"]
+    m = models()["arbres"]()
+    m.fit(np.array([x for _, _, x, _ in rows], dtype=float), np.array([r for _, _, _, r in rows], dtype=float))
+    info = {"n_rows": len(rows), "sklearn": sklearn.__version__,
+            "last_entry": datetime.fromtimestamp(rows[-1][1].entry_ts, timezone.utc).isoformat()}
+    PATH.parent.mkdir(parents=True, exist_ok=True)
+    with open(PATH, "wb") as f:
+        pickle.dump({"model": m, **info}, f)
+    return info
+
+
 def main() -> None:
+    import sys
+
     from .config import load_config
     from .engine import Engine
     from .models import iso, utcnow
     eng = Engine(load_config())
+    if "--train" in sys.argv:
+        print(train_final(eng.store, eng.cfg, eng.store.dir))
+        return
     out = run(eng.store, eng.cfg, eng.store.dir, log=lambda s: print(s, flush=True))
     out["updated_at"] = iso(utcnow())
     for k, v in out["cells"].items():

@@ -27,6 +27,7 @@ from . import drift
 from .providers.http import ProviderError
 from .report import build_dashboard, build_report
 from .signals import build_signal, round_to_tick
+from . import bot_model
 from .storage import Store
 from .summary import daily_summary
 from .tracker import update_signal
@@ -34,7 +35,9 @@ from .tracker import update_signal
 log = logging.getLogger(__name__)
 # Filtres appliqués aux signaux réels par décision de Yanisse. G40 sur l'or (13/10/2026) en est retiré le
 # 14/10/2026 : il ne tient pas sur 2014-2026 (essais 23 et 24) ; il reste suivi en ombre comme les autres variantes.
-MANUAL_FILTERS: set[str] = set()
+# Bot appris (essai 25), choix de Yanisse le 14/10/2026 : sur l'or et le Nasdaq, seuls les signaux dont le R prévu
+# par le modèle d'arbres est > 0 sont annoncés.
+MANUAL_FILTERS: set[str] = {"modele_arbres"}
 
 
 def chat_keys(values) -> list[str]:
@@ -257,6 +260,8 @@ class Engine:
                         flags.append("sans_etirement_or")
                     if asset.key == "gold" and base == 5 and ctxmod.day_limit_hit(asset.key, all_sigs, now):
                         flags.append("limites_jour_or")
+                    if base == 5 and bot_model.rejects(sig):
+                        flags.append("modele_arbres")
                     sig.meta["filters"] = flags
                     sig.meta["filters_checked"] = True
                     applied = [f for f in flags if f in promoted]

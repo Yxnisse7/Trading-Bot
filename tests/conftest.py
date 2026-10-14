@@ -66,3 +66,10 @@ def _no_network(monkeypatch):
     monkeypatch.setattr(requests, "get", _blocked)
     monkeypatch.setattr(requests, "post", _blocked)
     monkeypatch.setattr("trading_bot.providers.http.time.sleep", lambda s: None)
+
+
+@pytest.fixture(autouse=True)
+def _no_bot_model(monkeypatch):
+    """Le bot appris (essai 25) ne filtre rien dans les tests, sauf ceux qui le testent exprès."""
+    from trading_bot import bot_model
+    monkeypatch.setattr(bot_model, "APPLIED", set())
