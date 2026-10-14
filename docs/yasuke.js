@@ -130,6 +130,15 @@
     sub.innerHTML = EXTRA.map(([k, href, l]) => `<a href="${href}"${k === page ? ' class="active" aria-current="page"' : ""}>${l}</a>`).join("")
       + `<a class="yk-sub-space" href="investissement.html">Investir ${I.chevR}</a>`;
     host.after(sub);
+    // onglet « Démo MT5 » : seulement dans l'appli du PC (ou son adresse privée), où le pont écrit l'état du compte
+    const addDemo = () => {
+      if (host.querySelector('[data-k="demo"]')) return;
+      const on = page === "demo" ? ' active" aria-current="page' : "";
+      host.querySelector(".yk-tabs").insertAdjacentHTML("beforeend", `<a class="yk-tab${on}" data-k="demo" href="demo.html">Démo MT5</a>`);
+      sub.querySelector(".yk-sub-space").insertAdjacentHTML("beforebegin", `<a data-k="demo" href="demo.html"${page === "demo" ? ' class="active"' : ""}>Démo MT5</a>`);
+    };
+    if (page === "demo") addDemo();
+    else fetch("/api/ping", { cache: "no-store" }).then((r) => r.ok ? r.json() : null).then((j) => { if (j && j.demo) addDemo(); }).catch(() => { /* site en ligne */ });
     themeButton();
     fitHeader(host);
     ticker(sub);

@@ -101,6 +101,43 @@ class Bridge:
         return sum(d.profit + d.commission + d.swap for d in deals
                    if d.magic == self.magic and d.time - offset >= day0)
 
+    # ------------------------------------------------------------ état en direct pour l'interface locale
+    ORIGINS = {200001: "Copie du bot", 777001: "Claude", 0: "Manuel"}
+
+    def snapshot(self) -> dict[str, Any] | None:
+        """Compte, positions ouvertes et trades fermés des dernières 36 h (heures en UTC), pour l'onglet « Démo MT5 »
+        de l'interface locale. Aucun identifiant (numéro de compte, serveur) n'est écrit."""
+        a = self.mt5.account_info()
+        if a is None:
+            return None
+        off = self.offset() or 0
+        origin = lambda m: "Pont (or)" if m == self.magic else self.ORIGINS.get(m, f"Autre ({m})")  # noqa: E731
+        pos = [{"ticket": p.ticket, "symbol": p.symbol, "side": "achat" if p.type == 0 else "vente", "volume": p.volume,
+                "open": p.price_open, "price": p.price_current, "sl": p.sl or None, "tp": p.tp or None,
+                "profit": round(p.profit + p.swap, 2), "opened": int(p.time) - off, "origin": origin(p.magic),
+                "comment": p.comment} for p in (self.mt5.positions_get() or [])]
+        now = self.clock()
+        lo = datetime.fromtimestamp(now + off - 36 * 3600, timezone.utc)
+        hi = datetime.fromtimestamp(now + off + 86400, timezone.utc)
+        deals = [{"ticket": d.position_id, "symbol": d.symbol, "side": "vente" if d.type == 1 else "achat", "volume": d.volume,
+                  "price": d.price, "profit": round(d.profit + d.commission + d.swap, 2), "closed": int(d.time) - off,
+                  "origin": origin(d.magic), "comment": d.comment}
+                 for d in (self.mt5.history_deals_get(lo, hi) or []) if d.entry == 1 and d.symbol]   # 1 = sortie de position
+        return {"updated_at": datetime.fromtimestamp(now, timezone.utc).isoformat().replace("+00:00", "Z"),
+                "demo": a.trade_mode == self.mt5.ACCOUNT_TRADE_MODE_DEMO, "currency": a.currency,
+                "balance": a.balance, "equity": a.equity, "profit": a.profit, "margin_free": a.margin_free,
+                "stopped": self.stop_rule, "positions": pos, "deals": sorted(deals, key=lambda d: -d["closed"])}
+
+    def write_snapshot(self) -> None:
+        snap = self.snapshot()
+        if snap is None:
+            return
+        f = self.root / "journal" / "demo_live.json"
+        f.parent.mkdir(exist_ok=True)
+        tmp = f.with_suffix(".tmp")
+        tmp.write_text(json.dumps(snap, ensure_ascii=False), encoding="utf-8")
+        tmp.replace(f)
+
     # ------------------------------------------------------------ journal
     def record_ticks(self) -> int:
         """Ajoute les nouveaux ticks du courtier (heure du serveur en ms, achat, vente) au fichier du jour."""
@@ -279,6 +316,7 @@ def main(argv: list[str]) -> int:
     while True:
         try:
             state = bridge.step()
+            bridge.write_snapshot()
             if state != last:
                 log.info("état : %s", state)
                 last = state

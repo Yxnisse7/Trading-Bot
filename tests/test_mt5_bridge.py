@@ -1,3 +1,4 @@
+import json
 from datetime import datetime, timezone
 from types import SimpleNamespace as NS
 
@@ -35,7 +36,7 @@ class FakeMT5:
     def account_info(self):
         return NS(trade_mode=self.mode)
 
-    def positions_get(self, symbol):
+    def positions_get(self, symbol=None):
         return self.positions
 
     def history_deals_get(self, lo, hi):
@@ -125,3 +126,20 @@ def test_ticks_are_appended_once(tmp_path):
     assert b.record_ticks() == 2 and b.record_ticks() == 0
     lines = next((tmp_path / "ticks").glob("*.csv")).read_text().splitlines()
     assert lines == [f"{base - 30000},4100.0,4100.15", f"{base - 1000},4100.1,4100.25"]
+
+
+def test_snapshot_for_local_interface(tmp_path):
+    mt5 = FakeMT5()
+    mt5.account_info = lambda: NS(trade_mode=0, currency="USD", balance=998.7, equity=1001.2, profit=2.5, margin_free=990.0, login=123456)
+    mt5.positions = [NS(ticket=7, symbol="NAS100", type=1, volume=0.5, price_open=29900.0, price_current=29890.0, sl=29960.0,
+                        tp=29720.0, profit=5.0, swap=0.0, time=NOW + OFFSET - 600, magic=200001, comment="nasdaq")]
+    mt5.deals = [NS(position_id=6, symbol="XAUUSD+", type=1, volume=0.01, price=4101.0, profit=-3.0, commission=-0.07, swap=0.0,
+                    time=NOW + OFFSET - 3600, magic=180018, entry=1, comment=""),
+                 NS(position_id=6, symbol="XAUUSD+", type=0, volume=0.01, price=4104.0, profit=0.0, commission=0.0, swap=0.0,
+                    time=NOW + OFFSET - 4000, magic=180018, entry=0, comment="")]
+    b = bridge(tmp_path, mt5, "demo")
+    b.write_snapshot()
+    snap = json.loads((tmp_path / "journal" / "demo_live.json").read_text(encoding="utf-8"))
+    assert snap["demo"] and snap["equity"] == 1001.2 and "login" not in json.dumps(snap)
+    assert snap["positions"][0]["origin"] == "Copie du bot" and snap["positions"][0]["opened"] == NOW - 600
+    assert [d["profit"] for d in snap["deals"]] == [-3.07] and snap["deals"][0]["origin"] == "Pont (or)"

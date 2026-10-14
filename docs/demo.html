@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Démo MT5 · Yasuke Trading-Bot</title>
+<meta name="description" content="Compte démo MetaTrader 5 en direct : solde, positions ouvertes et trades fermés, lus par le pont du PC.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="yasuke.css?v=341ca20728">
+<script>try { const t = localStorage.getItem("tb-theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}</script>
+<style>
+  .dm-tiles { display: grid; gap: 14px; grid-template-columns: repeat(4, minmax(0, 1fr)); margin-bottom: 8px; }
+  .dm-tiles .card { padding: 18px 20px; display: grid; gap: 6px; }
+  .dm-tiles .l { color: var(--muted); font-size: 13px; font-weight: 500; }
+  .dm-tiles b { font-size: 26px; font-weight: 600; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+  .dm-tiles small { color: var(--muted); font-size: 12px; }
+  .dm-live { display: inline-flex; align-items: center; gap: 8px; }
+  .dm-stop { margin: 12px 0 0; padding: 12px 16px; border-radius: 12px; background: var(--dn-soft); color: var(--dn-text); font-size: 14px; }
+  .orig { font-size: 12px; color: var(--muted); white-space: nowrap; }
+  @media (max-width: 860px) { .dm-tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); } .dm-tiles b { font-size: 21px; } }
+</style>
+</head>
+<body data-page="demo" data-ticker="on">
+<header id="yk-header"></header>
+<div class="wrap">
+  <div class="pagehead">
+    <div><h1>Démo MT5</h1><div class="sub"><span class="dm-live"><span class="live-dot idle" id="dot"></span><span id="updated">Chargement…</span></span></div></div>
+    <div class="actions"><span class="muted">Compte démo Vantage · lu par le pont du PC toutes les 2 s</span></div>
+  </div>
+
+  <div id="body">
+    <div class="dm-tiles" id="tiles">
+      <div class="card"><span class="sk t"></span><span class="sk" style="height:26px;width:110px"></span></div>
+      <div class="card"><span class="sk t"></span><span class="sk" style="height:26px;width:110px"></span></div>
+      <div class="card"><span class="sk t"></span><span class="sk" style="height:26px;width:110px"></span></div>
+      <div class="card"><span class="sk t"></span><span class="sk" style="height:26px;width:110px"></span></div>
+    </div>
+    <div id="stop"></div>
+
+    <h2>Positions ouvertes</h2>
+    <div class="card"><div class="tbl"><table><thead><tr><th>Ouverte</th><th>Actif</th><th>Sens</th><th class="num">Lot</th><th class="num">Entrée</th><th class="num">Prix</th><th class="num">SL</th><th class="num">TP</th><th class="num">Résultat</th><th>Origine</th></tr></thead><tbody id="pos"></tbody></table></div></div>
+
+    <h2>Trades fermés (36 dernières heures)</h2>
+    <div class="card"><div class="tbl"><table><thead><tr><th>Fermé</th><th>Actif</th><th>Sens</th><th class="num">Lot</th><th class="num">Sortie</th><th class="num">Résultat</th><th>Origine</th></tr></thead><tbody id="deals"></tbody></table></div></div>
+  </div>
+  <p class="faint" style="margin-top:18px;font-size:12px">« Copie du bot » : signaux Telegram recopiés par le pont (prix du CFD, distances du signal). « Pont (or) » : règle R1 du pont. « Claude » : trades du poste horaire. Résultats en dollars, frais et swap compris. Compte démo seulement : le pont refuse tout compte réel.</p>
+</div>
+<script src="yasuke.js?v=a5cfc52c2e"></script>
+<script>
+(function () {
+  const Y = window.YK, $ = Y.$, esc = Y.esc;
+  const t = (s) => new Date(s * 1000).toLocaleString("fr-FR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" });
+  const dg = (sym) => /EUR|USD$/.test(sym) && !/XAU|BTC|ETH/.test(sym) ? 5 : 2;
+  const side = (s) => s === "achat" ? `<span class="dir"><b class="up">↗</b>Achat</span>` : `<span class="dir"><b class="dn">↘</b>Vente</span>`;
+  const usd = (v) => `<span class="${Y.tone(v)}">${Y.smoney(v, "$")}</span>`;
+  let failed = 0, ok = false;
+
+  function render(d) {
+    const ageS = Math.round((Date.now() - new Date(d.updated_at).getTime()) / 1000);
+    const live = ageS < 30;
+    $("#dot").className = "live-dot" + (live ? "" : " idle");
+    $("#updated").textContent = live ? `En direct · ${new Date(d.updated_at).toLocaleTimeString("fr-FR")}`
+      : `Pont arrêté ? dernière lecture ${Y.ago(d.updated_at)}`;
+    const midnight = new Date(); midnight.setHours(0, 0, 0, 0);
+    const today = d.deals.filter((x) => x.closed * 1000 >= midnight.getTime());
+    const dayPnl = today.reduce((a, x) => a + x.profit, 0);
+    $("#tiles").innerHTML = `
+      <div class="card"><span class="l">Solde</span><b>${Y.money(d.balance, "$")}</b><small>${d.demo ? "compte démo" : "⚠ pas un compte démo"}</small></div>
+      <div class="card"><span class="l">Équité</span><b>${Y.money(d.equity, "$")}</b><small>solde + positions ouvertes</small></div>
+      <div class="card"><span class="l">En cours</span><b>${usd(d.profit)}</b><small>${d.positions.length} position${d.positions.length > 1 ? "s" : ""} ouverte${d.positions.length > 1 ? "s" : ""}</small></div>
+      <div class="card"><span class="l">Aujourd'hui</span><b>${usd(dayPnl)}</b><small>${today.length} trade${today.length > 1 ? "s" : ""} fermé${today.length > 1 ? "s" : ""}</small></div>`;
+    $("#stop").innerHTML = d.stopped ? `<div class="dm-stop">Le pont s'est arrêté de trader : ${esc(d.stopped)}</div>` : "";
+    $("#pos").innerHTML = d.positions.length ? d.positions.map((p) => `<tr>
+        <td class="nowrap mono" style="font-size:12px">${t(p.opened)}</td><td><b>${esc(p.symbol)}</b></td><td>${side(p.side)}</td>
+        <td class="num">${Y.num(p.volume, 2)}</td><td class="num">${Y.price(p.open, dg(p.symbol))}</td><td class="num">${Y.price(p.price, dg(p.symbol))}</td>
+        <td class="num">${p.sl ? Y.price(p.sl, dg(p.symbol)) : "—"}</td><td class="num">${p.tp ? Y.price(p.tp, dg(p.symbol)) : "—"}</td>
+        <td class="num"><b>${usd(p.profit)}</b></td><td class="orig">${esc(p.origin)}</td></tr>`).join("")
+      : `<tr><td colspan="10" class="empty">Aucune position ouverte.</td></tr>`;
+    // une sortie de vente ferme un achat : on affiche le sens de la position
+    $("#deals").innerHTML = d.deals.length ? d.deals.map((x) => `<tr>
+        <td class="nowrap mono" style="font-size:12px">${t(x.closed)}</td><td><b>${esc(x.symbol)}</b></td><td>${side(x.side === "vente" ? "achat" : "vente")}</td>
+        <td class="num">${Y.num(x.volume, 2)}</td><td class="num">${Y.price(x.price, dg(x.symbol))}</td>
+        <td class="num"><b>${usd(x.profit)}</b></td><td class="orig">${esc(x.origin)}</td></tr>`).join("")
+      : `<tr><td colspan="7" class="empty">Aucun trade fermé sur les 36 dernières heures.</td></tr>`;
+  }
+
+  async function load() {
+    try {
+      const r = await fetch("/api/demo", { cache: "no-store" });
+      if (!r.ok) throw new Error(r.status);
+      render(await r.json()); failed = 0; ok = true;
+    } catch (e) {
+      if (ok) { $("#updated").textContent = "Connexion au PC perdue, nouvel essai…"; $("#dot").className = "live-dot idle"; return; }
+      if (++failed > 1) {
+        $("#updated").textContent = "Indisponible ici";
+        $("#body").innerHTML = `<div class="card"><div class="empty" style="padding:8px 0">Le démo MT5 se lit seulement depuis l'appli du PC (icône « Interface »), ou depuis son adresse privée une fois le tunnel Cloudflare en place. Le pont doit tourner.</div></div>`;
+      }
+    }
+  }
+  const bot = async () => { const d = await Y.getJson("dashboard.json"); if (d && d.state) Y.status(d.state.last_scan, d.state.last_scan_note); };
+  bot(); setInterval(bot, 30000);
+  load();
+  setInterval(() => { if (!document.hidden) load(); }, 2000);
+})();
+</script>
+</body>
+</html>
