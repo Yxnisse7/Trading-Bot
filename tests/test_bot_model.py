@@ -41,3 +41,15 @@ def test_nasdaq_uses_indices_model():
     path, assets = bot_model.MODELS["nasdaq"]
     assert path == bot_model.INDICES_PATH and "dax" in assets
     assert bot_model.MODELS["gold"] == (bot_model.PATH, bot_model.ASSETS)
+
+
+def test_nasdaq_exits_widened():
+    from trading_bot.models import Signal
+    from trading_bot.signals import widen_exits
+    sig = Signal(id="x", asset="nasdaq", asset_label="Nasdaq", direction="long", entry=100.0, take_profit=101.5,
+                 stop_loss=99.0, risk_reward=1.5, confidence="fort", score=5.0, criteria=[], rationale="r",
+                 news_context=None, created_at="2026-10-14T14:00:00Z", expires_at="2026-10-14T15:00:00Z",
+                 hourly_range=2.5, horizon="1h", horizon_minutes=60, meta={})
+    widen_exits(sig, 1.5, 3.0, 1440, 0.25)
+    assert sig.stop_loss == 98.5 and sig.take_profit == 104.5 and sig.risk_reward == 3.0
+    assert sig.expires_at.startswith("2026-10-15T14:00") and sig.horizon_minutes == 1440

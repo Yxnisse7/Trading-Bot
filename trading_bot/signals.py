@@ -30,6 +30,9 @@ _LABELS = {
     "corr": "marché meneur favorable",
 }
 
+# Sorties élargies par actif (essai 29, choix de Yanisse le 14/10/2026) : (stop ×, objectif × stop, durée max en min)
+EXIT_OVERRIDE: dict[str, tuple[float, float, int]] = {"nasdaq": (1.5, 3.0, 1440)}
+
 
 def horizon_label(minutes: int) -> str:
     return f"{minutes // 60} h" if minutes % 60 == 0 else f"{minutes} min"
@@ -184,7 +187,24 @@ def build_signal(asset: AssetConfig, a: Assessment, cfg: Config, news_context: s
               "activity_ratio": a.activity_ratio, "base_minutes": a.base_minutes},
     )
     sig.meta["ctx"] = signal_context(a.features, a.direction, entry, sl, asset.cost_pct, hr_pct, now)
+    if asset.key in EXIT_OVERRIDE:
+        widen_exits(sig, *EXIT_OVERRIDE[asset.key], tick=asset.tick_size)
     return sig, reasons
+
+
+def widen_exits(sig: Signal, stop_x: float, target_x: float, minutes: int, tick: float) -> None:
+    """Essai 29 : même entrée, stop élargi (× stop_x), objectif à target_x fois ce stop, sortie au plus tard
+    après `minutes`. Le contexte (meta.ctx) reste celui du stop d'origine, comme pour l'apprentissage du bot."""
+    sign = 1 if sig.direction == "long" else -1
+    sl_dist = abs(sig.entry - sig.stop_loss) * stop_x
+    sig.stop_loss = round_to_tick(sig.entry - sign * sl_dist, tick)
+    sig.take_profit = round_to_tick(sig.entry + sign * sl_dist * target_x, tick)
+    sig.risk_reward = round(abs(sig.take_profit - sig.entry) / abs(sig.entry - sig.stop_loss), 2)
+    sig.expires_at = iso(parse_iso(sig.created_at) + timedelta(minutes=minutes))
+    sig.horizon, sig.horizon_minutes = horizon_label(minutes).replace(" ", ""), minutes
+    sig.meta["exit_override"] = {"stop_x": stop_x, "target_x": target_x, "minutes": minutes, "source": "essai 29"}
+    sig.rationale += (f" Sortie élargie (essai 29) : stop {stop_x:g} fois plus large, objectif à {target_x:g} fois "
+                      f"le stop, au plus tard {horizon_label(minutes)}.")
 
 
 def _fmt_price(v: float) -> str:

@@ -73,3 +73,10 @@ def _no_bot_model(monkeypatch):
     """Le bot appris (essai 25) ne filtre rien dans les tests, sauf ceux qui le testent exprès."""
     from trading_bot import bot_model
     monkeypatch.setattr(bot_model, "APPLIED", set())
+
+
+@pytest.fixture(autouse=True)
+def _no_exit_override(monkeypatch):
+    """Les tests des signaux gardent les sorties d'origine ; l'élargissement de l'essai 29 a son propre test."""
+    from trading_bot import signals
+    monkeypatch.setattr(signals, "EXIT_OVERRIDE", {})
