@@ -92,7 +92,7 @@
   const PAGES = [["dashboard", "index.html", "Tableau de bord", "Tableau", "home"], ["simulation", "portfolio.html", "Simulation", "Simulation", "wallet"],
                  ["learning", "apprentissage.html", "Apprentissage", "Apprendre", "learn"], ["topstep", "topstep.html", "Topstep", "Topstep", "flag"]];
   // pages d'analyse : onglets en haut, et petite barre sous l'en-tête sur téléphone (la navigation du bas est pleine)
-  const EXTRA = [["chart", "graphique.html", "Graphique"], ["events", "evenements.html", "Événements"]];
+  const EXTRA = [["chart", "graphique.html", "Graphique"], ["events", "evenements.html", "Événements"], ["labo", "labo.html", "Labo"]];
   // Espace Investir (page à part) : ses onglets sont les parties de la page
   const INVEST = [["portefeuilles", "Portefeuilles", "Portef.", "wallet"], ["poche", "Actions", "Actions", "learn"], ["pepites", "Pépites", "", ""],
                   ["plan-mois", "Mon plan", "Mon plan", "home"], ["zakat", "Zakat", "Zakat", "crescent"], ["simulateur", "Simulateur", "", ""],

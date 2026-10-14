@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Labo · Yasuke Trading-Bot</title>
+<meta name="description" content="Toutes les stratégies testées, rejouées sur 2014-2026 : résultat cumulé avec et sans frais, creux, années, et 1 000 singes.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="yasuke.css?v=341ca20728">
+<script>try { const t = localStorage.getItem("tb-theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}</script>
+<style>
+  .lb-bar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 16px; }
+  .lb-bar .seg { flex-wrap: wrap; }
+  .lb-bar select, .lb-bar input { width: auto; padding: 8px 12px; font-size: 13px; border-radius: 10px; }
+  .lb-bar select { padding-right: 34px; }
+  .lb-sub { color: var(--muted); font-size: 13px; margin: -6px 0 14px; }
+  .lb-grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); }
+  .lb-cell { padding: 14px 14px 12px; display: grid; gap: 6px; cursor: pointer; text-align: left; color: var(--text); font: inherit; border: 1px solid var(--line); }
+  .lb-cell:hover { border-color: color-mix(in srgb, var(--brand) 45%, var(--line)); }
+  .lb-cell[aria-current="true"] { border-color: var(--brand); box-shadow: 0 0 0 1px var(--brand); }
+  .lb-cell .h { display: flex; justify-content: space-between; gap: 8px; align-items: start; }
+  .lb-cell .h b { font-size: 13px; font-weight: 600; line-height: 1.3; }
+  .lb-cell .h small { display: block; color: var(--muted); font-size: 11px; font-weight: 500; }
+  .lb-cell .r { display: flex; justify-content: space-between; align-items: baseline; font-size: 12px; color: var(--muted); }
+  .lb-cell .r b { font-size: 16px; font-variant-numeric: tabular-nums; }
+  .lb-cell svg { width: 100%; height: 46px; display: block; }
+  .vd { font-size: 11px; padding: 2px 8px; }
+  .vd.ok { background: var(--up-soft); color: var(--up-text); } .vd.ko { background: var(--dn-soft); color: var(--dn-text); }
+  .vd.mid { background: var(--brand-soft); color: var(--brand-text); }
+  .lb-detail { margin-bottom: 26px; display: grid; gap: 16px; }
+  .lb-detail .card-head h3 { font-size: 20px; }
+  .lb-stats { display: grid; gap: 10px; grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .lb-stats div { background: var(--soft); border-radius: 12px; padding: 12px 14px; display: grid; gap: 2px; }
+  .lb-stats span { color: var(--muted); font-size: 12px; } .lb-stats b { font-size: 18px; font-variant-numeric: tabular-nums; font-weight: 600; }
+  .lb-charts { display: grid; gap: 16px; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); }
+  .lb-chart svg { width: 100%; display: block; overflow: visible; }
+  .lb-chart .t { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 8px; }
+  .lb-chart .t b { font-size: 14px; }
+  .leg { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12px; color: var(--muted); margin-top: 8px; }
+  .leg i { display: inline-block; width: 14px; height: 3px; border-radius: 2px; vertical-align: middle; margin-right: 5px; }
+  .leg i.band { height: 10px; opacity: .35; }
+  .ax { font: 11px "Geist Mono", ui-monospace, monospace; fill: var(--faint); }
+  .lb-read { font-size: 14px; color: var(--text); background: var(--soft); border-radius: 12px; padding: 12px 16px; }
+  .toggle { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); cursor: pointer; }
+  .toggle input { width: 34px; height: 20px; appearance: none; background: var(--line); border-radius: 999px; position: relative; border: 0; padding: 0; cursor: pointer; transition: background .2s; }
+  .toggle input::after { content: ""; position: absolute; top: 3px; left: 3px; width: 14px; height: 14px; border-radius: 50%; background: #fff; transition: left .2s; }
+  .toggle input:checked { background: var(--brand); } .toggle input:checked::after { left: 17px; }
+  .toggle input:focus { box-shadow: none; }
+  @media (max-width: 1000px) { .lb-stats { grid-template-columns: repeat(3, minmax(0, 1fr)); } .lb-charts { grid-template-columns: 1fr; } }
+  @media (max-width: 560px) { .lb-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; } .lb-cell { padding: 10px; } .lb-cell .r b { font-size: 14px; } }
+</style>
+</head>
+<body data-page="labo">
+<header id="yk-header"></header>
+<div class="wrap">
+  <div class="pagehead">
+    <div><h1>Labo</h1><div class="sub" id="updated">Chargement…</div></div>
+    <div class="actions"><span class="muted">Rejoué sur les bougies 5 min de 2014 à 2026, frais compris</span></div>
+  </div>
+
+  <section class="lb-detail" id="detail" hidden></section>
+
+  <div class="lb-bar">
+    <div class="seg" role="group" aria-label="Essai" id="groups"></div>
+    <select id="f-asset" aria-label="Marché"><option value="">Tous les marchés</option></select>
+    <select id="f-verdict" aria-label="Verdict"><option value="">Tous les verdicts</option><option value="ok">Prouvées ou robustes</option><option value="ko">Échouent</option></select>
+    <select id="f-sort" aria-label="Tri"><option value="total">Meilleur résultat</option><option value="mean">Meilleur R moyen</option><option value="n">Plus de trades</option></select>
+  </div>
+  <div class="lb-sub" id="group-sub"></div>
+  <div class="lb-grid" id="grid"></div>
+  <p class="faint" style="margin-top:18px;font-size:12px">R = ce qu'on risque sur un trade (distance du stop). +1 R = on gagne une fois sa mise de risque. Résultat cumulé = somme des R trade après trade. « Singes » : 500 faux traders qui entrent au hasard à la même heure, avec le même sens, le même stop et la même durée (essai 21) ; l'éventail montre 90 % de leurs résultats. Une stratégie qui ne sort pas nettement au-dessus de l'éventail ne bat pas le hasard.</p>
+</div>
+<script src="yasuke.js?v=035df63a84"></script>
+<script>
+(function () {
+  const Y = window.YK, $ = Y.$, esc = Y.esc;
+  const ASSETS = { gold: "Or", nasdaq: "Nasdaq 100", sp500: "S&P 500", bitcoin: "Bitcoin", ethereum: "Ethereum", oil: "Pétrole", euro: "Euro / dollar", dax: "DAX" };
+  let index = null, group = null, current = null, fees = true;
+  const cache = {};
+
+  const vclass = (v) => /prouv|en réel/.test(v) ? "ok" : /robuste/.test(v) && !/pas/.test(v) ? "mid" : "ko";
+  const vlabel = (v) => ({ "pas robuste": "échoue", "pas mieux": "pas mieux" }[v] || v);
+  const tone = (v) => v > 0 ? "var(--up)" : v < 0 ? "var(--dn)" : "var(--neu)";
+
+  function spark(vals) {
+    if (!vals || vals.length < 2) return "";
+    const W = 200, H = 46, mn = Math.min(0, ...vals), mx = Math.max(0, ...vals), sp = (mx - mn) || 1;
+    const X = (i) => i * W / (vals.length - 1), Yv = (v) => H - 3 - (v - mn) / sp * (H - 6);
+    const d = vals.map((v, i) => `${i ? "L" : "M"}${X(i).toFixed(1)} ${Yv(v).toFixed(1)}`).join("");
+    const end = vals[vals.length - 1];
+    return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true"><line x1="0" x2="${W}" y1="${Yv(0)}" y2="${Yv(0)}" stroke="var(--line)" stroke-dasharray="3 3" vector-effect="non-scaling-stroke"/><path d="${d}" fill="none" stroke="${tone(end)}" stroke-width="1.6" vector-effect="non-scaling-stroke" stroke-linejoin="round"/></svg>`;
+  }
+
+  // graphique ligne : x = dates (s), séries [{v, color, dash, w}], bande {lo, hi, color}
+  function lineChart({ x, series, band, height = 260, zeroLine = true, area = null, width = 760 }) {
+    const W = width, H = height, L = 46, R = 8, T = 8, B = 22;
+    const all = series.flatMap((s) => s.v).concat(band ? band.lo.concat(band.hi) : [], area ? area.v : [], zeroLine ? [0] : []);
+    let mn = Math.min(...all), mx = Math.max(...all); const pad = (mx - mn) * 0.06 || 1; mn -= pad; mx += pad;
+    const x0 = x[0], x1 = x[x.length - 1] || x0 + 1;
+    const X = (t) => L + (t - x0) / ((x1 - x0) || 1) * (W - L - R), Yv = (v) => T + (mx - v) / (mx - mn) * (H - T - B);
+    const path = (v) => v.map((y, i) => `${i ? "L" : "M"}${X(x[i]).toFixed(1)} ${Yv(y).toFixed(1)}`).join("");
+    const ticks = [], step = niceStep((mx - mn) / 5);
+    for (let v = Math.ceil(mn / step) * step; v <= mx; v += step) ticks.push(v);
+    const y0 = new Date(x0 * 1000).getUTCFullYear(), y1 = new Date(x1 * 1000).getUTCFullYear(), yr = [];
+    const every = Math.max(1, Math.ceil((y1 - y0 + 1) / 7));
+    for (let y = y0 + 1; y <= y1; y += every) yr.push(y);
+    let s = `<svg viewBox="0 0 ${W} ${H}" role="img">`;
+    s += ticks.map((v) => `<line x1="${L}" x2="${W - R}" y1="${Yv(v)}" y2="${Yv(v)}" stroke="var(--grid)"/><text class="ax" x="${L - 8}" y="${Yv(v) + 4}" text-anchor="end">${Y.num(v, Math.abs(step) < 1 ? 1 : 0)}</text>`).join("");
+    s += yr.map((y) => { const t = Date.UTC(y, 0, 1) / 1000; return `<text class="ax" x="${X(t)}" y="${H - 4}" text-anchor="middle">${y}</text>`; }).join("");
+    if (zeroLine) s += `<line x1="${L}" x2="${W - R}" y1="${Yv(0)}" y2="${Yv(0)}" stroke="var(--c-axis)" stroke-width="1"/>`;
+    if (band) s += `<path d="${path(band.hi)} ${band.lo.map((y, i) => `L${X(x[band.lo.length - 1 - i]).toFixed(1)} ${Yv(band.lo[band.lo.length - 1 - i]).toFixed(1)}`).join("")}Z" fill="${band.color}" opacity=".16"/>`;
+    if (area) s += `<path d="${path(area.v)} L${X(x1)} ${Yv(0)} L${X(x0)} ${Yv(0)}Z" fill="${area.color}" opacity=".22"/><path d="${path(area.v)}" fill="none" stroke="${area.color}" stroke-width="1.4"/>`;
+    s += series.map((se) => `<path d="${path(se.v)}" fill="none" stroke="${se.color}" stroke-width="${se.w || 2}" ${se.dash ? `stroke-dasharray="${se.dash}"` : ""} stroke-linejoin="round"/>`).join("");
+    return s + "</svg>";
+  }
+  function niceStep(r) { const p = Math.pow(10, Math.floor(Math.log10(r || 1))), f = r / p; return (f < 1.5 ? 1 : f < 3.5 ? 2 : f < 7.5 ? 5 : 10) * p; }
+
+  function bars(years) {
+    const ks = Object.keys(years), vals = ks.map((k) => years[k]);
+    const W = 360, H = 220, B = 22, T = 8, mx = Math.max(1, ...vals.map(Math.abs));
+    const bw = (W - 10) / ks.length, Yv = (v) => T + (H - T - B) / 2 - v / mx * (H - T - B) / 2;
+    return `<svg viewBox="0 0 ${W} ${H}" role="img"><line x1="0" x2="${W}" y1="${Yv(0)}" y2="${Yv(0)}" stroke="var(--c-axis)"/>` + ks.map((k, i) => {
+      const v = years[k], y = Math.min(Yv(0), Yv(v)), h = Math.max(1, Math.abs(Yv(v) - Yv(0)));
+      return `<rect x="${5 + i * bw + bw * 0.15}" y="${y}" width="${bw * 0.7}" height="${h}" rx="2" fill="${tone(v)}"><title>${k} : ${Y.signed(v, 1, " R")}</title></rect>`
+        + (ks.length <= 14 ? `<text class="ax" x="${5 + i * bw + bw / 2}" y="${H - 4}" text-anchor="middle">${k.slice(2)}</text>` : "");
+    }).join("") + "</svg>";
+  }
+
+  function reading(d) {
+    const s = d.stats, m = d.monkeys;
+    const parts = [];
+    parts.push(s.total_r > 0 ? `Sur ${Y.num(s.n, 0)} trades, la stratégie gagne ${Y.num(s.total_r, 0)} R après frais (${Y.signed(s.mean_r, 2)} R par trade).`
+      : `Sur ${Y.num(s.n, 0)} trades, elle perd ${Y.num(-s.total_r, 0)} R après frais (${Y.signed(s.mean_r, 2)} R par trade).`);
+    if (s.gross_r !== null) parts.push(s.gross_r > 0 && s.mean_r <= 0 ? `Avant frais elle gagnait (${Y.signed(s.gross_r, 2)} R) : ce sont les frais qui la tuent.`
+      : s.gross_r <= 0 ? `Même sans frais elle ne gagne rien (${Y.signed(s.gross_r, 2)} R) : aucun avantage.` : `Sans frais : ${Y.signed(s.gross_r, 2)} R par trade.`);
+    if (m) parts.push(m.beaten >= m.n * 0.95 ? `Elle bat ${m.beaten} singes sur ${m.n} : son résultat ne s'explique pas par le hasard.`
+      : `Elle ne bat que ${m.beaten} singes sur ${m.n} : impossible de la distinguer du hasard.`);
+    parts.push(`Pire creux : ${Y.num(s.max_dd, 0)} R sous un sommet.`);
+    return parts.join(" ");
+  }
+
+  async function show(id, scroll) {
+    current = id;
+    document.querySelectorAll(".lb-cell").forEach((b) => b.setAttribute("aria-current", b.dataset.id === id ? "true" : "false"));
+    const box = $("#detail");
+    box.hidden = false;
+    if (!cache[id]) { box.innerHTML = `<div class="card"><span class="sk t" style="width:40%"></span><span class="sk" style="height:220px"></span></div>`; cache[id] = await Y.getJson(`labo/cells/${id}.json`); }
+    const d = cache[id];
+    if (!d || current !== id) return;
+    const s = d.stats, x = d.x;
+    const series = [];
+    if (d.compare) series.push({ v: d.compare.net, color: "var(--neu)", w: 1.6 });
+    if (!fees || d.group === "reel") series.push({ v: d.gross, color: "var(--faint)", dash: "5 4", w: 1.6 });
+    series.push({ v: fees ? d.net : d.gross, color: "var(--brand)", w: 2.4 });
+    const band = d.monkeys ? { lo: d.monkeys.p5, hi: d.monkeys.p95, color: "var(--neu)" } : null;
+    if (d.monkeys) series.unshift({ v: d.monkeys.p50, color: "var(--neu)", dash: "2 4", w: 1.2 });
+    box.innerHTML = `<div class="card">
+      <div class="card-head"><div><h3>${esc(d.title)}</h3><div class="sub">${esc(d.note || "")}${s.first ? ` · du ${s.first.split("-").reverse().join("/")} au ${s.last.split("-").reverse().join("/")}` : ""}</div></div>
+        <span class="pill vd ${vclass(d.verdict)}">${esc(vlabel(d.verdict))}</span></div>
+      <div class="lb-stats">
+        <div><span>Trades</span><b>${Y.num(s.n, 0)}</b></div>
+        <div><span>Résultat cumulé</span><b style="color:${tone(fees ? s.total_r : s.total_gross_r)}">${Y.signed(fees ? s.total_r : s.total_gross_r, 0, " R")}</b></div>
+        <div><span>Par trade ${fees ? "(net)" : "(sans frais)"}</span><b>${Y.signed(fees ? s.mean_r : s.gross_r, 2, " R")}</b></div>
+        <div><span>Gagnants</span><b>${Y.pct(s.win_rate, 0)}</b></div>
+        <div><span>Profit factor</span><b>${s.pf === null ? "—" : Y.num(s.pf, 2)}</b></div>
+        <div><span>Pire creux</span><b style="color:var(--dn-text)">${Y.num(s.max_dd, 0)} R</b></div>
+      </div>
+      <div class="lb-read" style="margin-top:14px">${esc(reading(d))}</div>
+    </div>
+    <div class="lb-charts">
+      <div class="card lb-chart"><div class="t"><b>Résultat cumulé (R)</b><label class="toggle">frais <input type="checkbox" id="fees" ${fees ? "checked" : ""}></label></div>
+        ${lineChart({ x, series, band })}
+        <div class="leg"><span><i style="background:var(--brand)"></i>${fees ? "après frais" : "sans frais"}</span>
+          ${fees && (d.group === "reel") ? `<span><i style="background:var(--faint)"></i>sans frais</span>` : ""}
+          ${d.compare ? `<span><i style="background:var(--neu)"></i>${esc(d.compare.label)}</span>` : ""}
+          ${d.monkeys ? `<span><i class="band" style="background:var(--neu)"></i>90 % des singes</span>` : ""}</div></div>
+      <div class="card lb-chart"><div class="t"><b>Par année (R)</b></div>${bars(d.years)}</div>
+      <div class="card lb-chart" style="grid-column:1/-1"><div class="t"><b>Creux sous le dernier sommet (R)</b><span class="muted">ce que la stratégie rend avant de repartir</span></div>
+        ${lineChart({ x, series: [], area: { v: d.dd, color: "var(--dn)" }, height: 170, width: 1180 })}</div>
+    </div>`;
+    $("#fees").addEventListener("change", (e) => { fees = e.target.checked; show(id); });
+    if (scroll) box.scrollIntoView({ behavior: "smooth", block: "start" });
+    try { history.replaceState(null, "", "#" + id); } catch (e) { /* rien */ }
+  }
+
+  function renderGrid() {
+    const a = $("#f-asset").value, v = $("#f-verdict").value, sort = $("#f-sort").value;
+    const g = index.groups.find((x) => x.id === group);
+    $("#group-sub").textContent = g ? g.sub : "";
+    let cells = index.cells.filter((c) => c.group === group && c.n > 0 && (!a || c.asset === a) && (!v || (v === "ok" ? vclass(c.verdict) !== "ko" : vclass(c.verdict) === "ko")));
+    if (group !== "reel") cells = cells.slice().sort((p, q) => sort === "n" ? q.n - p.n : sort === "mean" ? (q.mean_r ?? -9) - (p.mean_r ?? -9) : (q.total_r ?? -9e9) - (p.total_r ?? -9e9));
+    $("#grid").innerHTML = cells.map((c) => `<button type="button" class="card lb-cell" data-id="${esc(c.id)}" aria-current="${c.id === current}">
+        <div class="h"><b>${esc(c.title.split(" · ").slice(0, group === "essai32" ? 3 : 1).join(" · ").replace(/^.*? · .*? · /, ""))}<small>${esc(ASSETS[c.asset] || c.asset)}${group === "essai32" ? " · " + esc(c.title.split(" · ")[0]) : ""}</small></b>
+          <span class="pill vd ${vclass(c.verdict)}">${esc(vlabel(c.verdict))}</span></div>
+        ${spark(c.spark)}
+        <div class="r"><span>${Y.num(c.n, 0)} trades</span><b style="color:${tone(c.total_r)}">${Y.signed(c.total_r, 0, " R")}</b></div></button>`).join("")
+      || `<div class="empty">Aucune stratégie pour ce filtre.</div>`;
+    document.querySelectorAll(".lb-cell").forEach((b) => b.addEventListener("click", () => show(b.dataset.id, true)));
+  }
+
+  function setGroup(id) {
+    group = id;
+    document.querySelectorAll("#groups button").forEach((b) => b.setAttribute("aria-pressed", b.dataset.v === id));
+    renderGrid();
+  }
+
+  async function load() {
+    index = await Y.getJson("labo/index.json");
+    if (!index) { $("#updated").textContent = "Données du labo introuvables"; return; }
+    $("#updated").textContent = `${index.cells.length} stratégies testées · calculé le ${new Date(index.updated_at).toLocaleDateString("fr-FR")}`;
+    $("#groups").innerHTML = index.groups.map((g) => `<button type="button" data-v="${g.id}">${esc(g.title)}</button>`).join("");
+    document.querySelectorAll("#groups button").forEach((b) => b.addEventListener("click", () => setGroup(b.dataset.v)));
+    const used = [...new Set(index.cells.map((c) => c.asset))];
+    $("#f-asset").innerHTML = `<option value="">Tous les marchés</option>` + used.map((k) => `<option value="${k}">${esc(ASSETS[k] || k)}</option>`).join("");
+    ["#f-asset", "#f-verdict", "#f-sort"].forEach((s) => $(s).addEventListener("change", renderGrid));
+    const want = decodeURIComponent(location.hash.slice(1));
+    const start = index.cells.find((c) => c.id === want) || index.cells[0];
+    setGroup(start.group);
+    show(start.id, false);
+    Y.getJson("dashboard.json").then((d) => { if (d && d.state) Y.status(d.state.last_scan, d.state.last_scan_note); });
+  }
+  load();
+})();
+</script>
+</body>
+</html>
