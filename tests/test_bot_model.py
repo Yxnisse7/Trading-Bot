@@ -29,9 +29,15 @@ def test_missing_model_rejects(monkeypatch):
     assert bot_model.rejects(s) and s.meta["model_r"] is None
 
 
-def test_saved_model_predicts():
+def test_saved_models_predict():
     bot_model._cache.clear()
-    m = bot_model.load()
-    if m is None:                                    # bibliothèque absente : rien à vérifier ici
-        return
-    assert isinstance(bot_model.predicted_r(_sig()), float)
+    for asset, (path, _) in bot_model.MODELS.items():
+        if bot_model.load(path) is None:             # bibliothèque absente : rien à vérifier ici
+            continue
+        assert isinstance(bot_model.predicted_r(_sig(asset)), float)
+
+
+def test_nasdaq_uses_indices_model():
+    path, assets = bot_model.MODELS["nasdaq"]
+    assert path == bot_model.INDICES_PATH and "dax" in assets
+    assert bot_model.MODELS["gold"] == (bot_model.PATH, bot_model.ASSETS)

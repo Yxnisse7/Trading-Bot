@@ -19,11 +19,11 @@ from . import essai14 as e14
 from . import essai17 as e17
 from . import essai24 as e24
 from . import essai25 as e25
+from .bot_model import ASSETS_26 as ASSETS
 from .bot_model import features as _features
 from .essai21 import Bars, judge
 from .essai23 import load
 
-ASSETS = ("gold", "nasdaq", "sp500", "dax", "bitcoin")
 MODES = {
     "seul": [("gold",), ("nasdaq",), ("sp500",), ("dax",), ("bitcoin",)],
     "groupe indices": [("nasdaq", "sp500", "dax")],
@@ -33,8 +33,8 @@ MODES = {
 
 def features(row: dict[str, Any], key: str) -> list[float]:
     """Entrées de l'essai 25, avec l'actif codé sur les 5 marchés (le DAX compris)."""
-    x = _features(row.get("criteria"), row.get("meta"), row["created_at"], row.get("score"), row["direction"], key)
-    return x[:-4] + [1.0 if key == a else 0.0 for a in ASSETS]
+    return _features(row.get("criteria"), row.get("meta"), row["created_at"], row.get("score"), row["direction"], key,
+                     ASSETS)
 
 
 def dax_rows(store, cfg, root: Path, log: Callable[[str], None]) -> tuple[list, list, Callable[[float], float]]:
@@ -175,11 +175,34 @@ def run(store, cfg, root: Path, log: Callable[[str], None] = print) -> dict[str,
     return out
 
 
+def train_indices(store, cfg, root: Path) -> dict[str, Any]:
+    """Modèle « groupe indices » entraîné sur tous les signaux Nasdaq + S&P 500 + DAX 2014-2026, pour le bot en direct."""
+    import pickle
+
+    import sklearn
+
+    from .bot_model import INDICES_PATH
+    rows = [z for z in dataset(store, cfg, root, print)["rows"] if z[0] in MODES["groupe indices"][0]]
+    m = e25.models()["arbres"]()
+    m.fit(np.array([x for _, _, x, _ in rows], dtype=float), np.array([r for _, _, _, r in rows], dtype=float))
+    info = {"n_rows": len(rows), "sklearn": sklearn.__version__, "assets": list(MODES["groupe indices"][0]),
+            "last_entry": datetime.fromtimestamp(rows[-1][1].entry_ts, timezone.utc).isoformat()}
+    INDICES_PATH.parent.mkdir(parents=True, exist_ok=True)
+    with open(INDICES_PATH, "wb") as f:
+        pickle.dump({"model": m, **info}, f)
+    return info
+
+
 def main() -> None:
+    import sys
+
     from .config import load_config
     from .engine import Engine
     from .models import iso, utcnow
     eng = Engine(load_config())
+    if "--train" in sys.argv:
+        print(train_indices(eng.store, eng.cfg, eng.store.dir))
+        return
     out = run(eng.store, eng.cfg, eng.store.dir, log=lambda s: print(s, flush=True))
     out["updated_at"] = iso(utcnow())
     for k, v in out["cells"].items():
