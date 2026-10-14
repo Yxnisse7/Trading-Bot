@@ -896,6 +896,34 @@ trou ni recouvrement ; Bitcoin dès 08/2017. Bot rejoué : trades de l'essai 23 
   repêchage » de l'essai 23, car le contrôle 5 exige déjà que les années récentes soient gagnantes.
 - Rien ne change sans l'accord de Yanisse.
 
+## Essai 25 — faire apprendre le bot principal sur 12 ans, jugé sur des années cachées
+
+Écrit le 14 octobre 2026, **avant** tout calcul, à la demande de Yanisse (« entraîner le bot avec les données
+historiques, en cachant une partie du graphique »). Jusqu'ici le bot n'apprenait que de ses propres signaux réels
+(quelques centaines), trop peu pour séparer les bons critères du hasard.
+
+**Données** : tous les signaux du bot rejoué sur 2014 → 10/2026 (essais 23 et 14 ; or, Nasdaq, S&P 500, Bitcoin),
+avec ce que le bot voyait à l'entrée : les critères alignés (tendances 5 min / 15 min / 1 h, ADX, VWAP, RSI, MACD,
+niveau, volume, ouverture, veille, marché meneur), le score, le sens, l'heure, le jour, l'ADX, le RSI, l'étirement,
+l'agitation (ATR), l'activité, le range de l'heure, le coût en R, la distance à l'ouverture américaine, l'actif.
+Cible : le R net du trade (frais de l'essai 21).
+
+**Apprentissage, années cachées (walk-forward)** : pour chaque année Y de 2017 à 2026, le modèle n'apprend que sur
+les années avant Y, puis décide sur l'année Y qu'il n'a jamais vue ; il prend un signal seulement si le R prévu est
+> 0. Deux modèles, fixés d'avance : (a) **poids des critères** (régression linéaire avec pénalité, lisible comme des
+poids) ; (b) **arbres** (gradient boosting, 200 arbres de profondeur 3). Un seul modèle pour les 4 actifs (l'actif est
+une des entrées).
+
+**Verdict par actif et par modèle**, sur les signaux gardés de 2017-2026 (tous vus pour la première fois) : les
+contrôles de l'essai 24 — au moins 200 trades ; R net > 0 et PF ≥ 1,1 ; R > 0 dans 60 % des années ; deux moitiés
+positives (2017-2021 et 2022-2026) ; 2 dernières années positives ; frais doublés positifs ; 2 régimes sur 3 ; bat les
+1000 singes **et** les 1000 « filtres au hasard » (même nombre de signaux tirés au hasard parmi ceux du bot, la même
+année). Prouvé si l'écart aux filtres au hasard dépasse le seuil corrigé (8 cellules).
+
+**Décidé d'avance** : si un modèle passe tout sur un actif, proposition à Yanisse de le brancher sur le bot pour cet
+actif (réentraîné chaque année sur tout l'historique). Sinon, on le dit : apprendre sur ces critères ne crée pas
+d'avantage, et la piste suivante serait de changer les critères eux-mêmes. Rien ne change sans son accord.
+
 ## Journal des essais
 
 | Date | Essai | Résultat |
@@ -952,3 +980,4 @@ trou ni recouvrement ; Bitcoin dès 08/2017. Bot rejoué : trades de l'essai 23 
 | 2026-10-14 | Pré-enregistrement de l'essai 24 (tout de A à Z sur 2014-2026) | — |
 | 2026-10-14 | **Essai 24** : 216 cellules sur 2014-2026 d'un seul bloc, 10 contrôles (seuil singes corrigé z > 3,5) | **4 cellules prouvées, tout le reste échoue.** `noise_area` Nasdaq : 2 620 trades, +0,21 R, PF 1,17, 11 années positives sur 12, avant 2020 +0,17 / depuis +0,24, 2 dernières années +0,21, frais ×2 +0,08, singes 1000 (z 4,6). `noise_area_v2` Nasdaq : 2 912, +0,11 R, 9/12, singes 1000 (z 3,9). `donchian_1h` Bitcoin : 2 094, +0,15 R, 6/8, récent +0,05, singes 998 (z 4,1). W3 Bitcoin : 886, +0,39 R, 5/8, récent +0,32, singes 996 (z 4,8). **Pour information, hors règle** : `noise_area` Nasdaq vit de ses gros gagnants (−0,48 R sans les 5 % meilleurs ; v2 −0,19 R), stop médian 11,8 points, 6 stops < 4 ticks. **G40 or** : −0,12 R, 1/12 → pas robuste ; **S25 Nasdaq** : −0,10 R, 4/12, singes 569 → pas robuste ; Donchian or jour +0,00 R, 1 h +0,05 R PF 1,08 → pas robustes. Conséquences prévues : proposer G40 et S25 en ombre, et `noise_area` / `noise_area_v2` Nasdaq et W3 Bitcoin en ombre (`donchian_1h` Bitcoin y est déjà). |
 | 2026-10-14 | Choix de Yanisse après l'essai 24 | **En signaux réels** (Telegram et copie sur le démo MT5) depuis le 14/10 08:00 UTC : `noise_area` et `noise_area_v2` Nasdaq, `donchian_1h` Bitcoin, W3 Bitcoin (`swing_w3`). **Remis en ombre** : G40 or (retiré des filtres appliqués au bot) et S25 Nasdaq (`LIVE_END`). Pas de passage préalable en ombre pour les quatre nouvelles : choix de Yanisse, contraire à la proposition écrite d'avance. Le bot ne passe aucun ordre réel. |
+| 2026-10-14 | Pré-enregistrement de l'essai 25 (apprentissage du bot sur 12 ans, années cachées) | — |
