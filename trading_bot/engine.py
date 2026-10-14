@@ -32,9 +32,9 @@ from .summary import daily_summary
 from .tracker import update_signal
 
 log = logging.getLogger(__name__)
-# Filtres appliqués aux signaux réels par décision de Yanisse (13/10/2026) : G40 sur l'or passe les singes
-# (essai 21) et les 5 contrôles de l'essai 22. Les signaux écartés restent suivis en silence.
-MANUAL_FILTERS = {"limites_jour_or"}
+# Filtres appliqués aux signaux réels par décision de Yanisse. G40 sur l'or (13/10/2026) en est retiré le
+# 14/10/2026 : il ne tient pas sur 2014-2026 (essais 23 et 24) ; il reste suivi en ombre comme les autres variantes.
+MANUAL_FILTERS: set[str] = set()
 
 
 def chat_keys(values) -> list[str]:
@@ -1337,7 +1337,7 @@ class Engine:
                 continue
             asset = self.cfg.assets[key]
             try:
-                raw = market.fetch_candles_5m(asset, days=self.LAB_DAYS)
+                raw = market.fetch_candles_5m(asset, days=sl.LAB_DAYS.get(strat, self.LAB_DAYS))
             except ProviderError as exc:
                 log.info("laboratoire en ombre %s : données indisponibles (%s)", name, exc)
                 continue
@@ -1413,12 +1413,18 @@ class Engine:
                 continue                                    # signaux réels arrêtés : plus de nouvelle entrée
             long = t["direction"] == "long"
             if not t.get("notified_entry"):
-                close_at = sl.session_close_ts(t["entry_ts"])
+                strat = name.split(":")[0]
+                if strat in sl.OVERNIGHT:
+                    hold = sl.OVERNIGHT[strat]
+                    close_at = t["entry_ts"] + hold if hold else None
+                else:
+                    close_at = sl.session_close_ts(t["entry_ts"])
                 risk_usd = self._topstep_balance() * acct.risk_pct() / 100.0
                 per_micro = t["risk"] * mult
                 micros = max(1, min(50, int(risk_usd // per_micro))) if per_micro > 0 else 1
                 t["micros"], t["close_at"] = micros, close_at
-                end = datetime.fromtimestamp(close_at, timezone.utc).astimezone(tz).strftime("%H:%M") if close_at else "?"
+                fmt_end = "%d/%m %H:%M" if close_at and close_at - t["entry_ts"] > 86400 else "%H:%M"
+                end = datetime.fromtimestamp(close_at, timezone.utc).astimezone(tz).strftime(fmt_end) if close_at else "?"
                 head = f"{'🟢' if long else '🔴'} SIGNAL RÉEL · {asset.label} ({symbol}) · {'ACHAT' if long else 'VENTE'}"
                 size = (f"Topstep : {micros} micro{'s' if micros > 1 else ''} {symbol} ≈ {money(micros * per_micro)} $ "
                         f"de risque ({format(acct.risk_pct(), 'g').replace('.', ',')} % de la balance)")
@@ -1435,6 +1441,39 @@ class Engine:
                              size,
                              "Creux repris Nasdaq (essai 15) : bat les entrées au hasard (essai 21) et tient les 5 "
                              "contrôles de l'essai 22, pas encore prouvé en réel. Le bot ne passe aucun ordre."]
+                elif name.startswith("noise_area"):
+                    v2 = name.startswith("noise_area_v2")
+                    bar = (opened - timedelta(minutes=5)).astimezone(tz).strftime("%H:%M")
+                    lines = [head,
+                             f"Entrée : {fmt(t['entry'])} (clôture de la bougie 5 min de {bar} : le prix sort de sa "
+                             f"zone de bruit autour de l'ouverture)",
+                             f"Stop : {fmt(t['stop'])} ({'au moins 1 ATR 15 min, ' if v2 else ''}à placer tout de suite)",
+                             f"Sortie : à une demi-heure où le prix repasse dans la zone (ou de l'autre côté du VWAP), "
+                             f"au stop, ou au plus tard à {end} (heure de Paris, 16:00 à New York) — je préviens.",
+                             size,
+                             f"Zone de bruit{' v2' if v2 else ''} Nasdaq : prouvée sur 2014-2026 (essai 24, tous les "
+                             "contrôles). Elle vit de quelques gros gagnants : beaucoup de petites pertes entre deux. "
+                             "Le bot ne passe aucun ordre."]
+                elif name.startswith("swing_w3"):
+                    bar = (opened - timedelta(minutes=15)).astimezone(tz).strftime("%H:%M")
+                    lines = [head,
+                             f"Entrée : {fmt(t['entry'])} (clôture de la bougie 15 min de {bar})",
+                             f"Stop de départ : {fmt(t['stop'])} (sous le 2e creux, à placer tout de suite)",
+                             f"Sortie : stop suiveur remonté sous les creux 1 h, ou au bout de 5 jours au plus "
+                             f"({end}) — je préviens à la sortie.",
+                             "Position gardée la nuit et le week-end : interdit chez Topstep, à suivre sur un "
+                             "compte CFD (démo MT5).",
+                             "Swing W3 Bitcoin : prouvé sur 2017-2026 (essai 24, tous les contrôles). "
+                             "Le bot ne passe aucun ordre."]
+                elif name.startswith("donchian_1h"):
+                    lines = [head,
+                             f"Entrée : {fmt(t['entry'])} (clôture de la bougie 1 h de {opened.astimezone(tz).strftime('%H:%M')})",
+                             f"Stop : {fmt(t['stop'])} (2 ATR, à placer tout de suite)",
+                             "Sortie : clôture d'une bougie 1 h qui casse le canal des 10 dernières heures, ou le "
+                             "stop — je préviens.",
+                             "Position gardée la nuit : interdit chez Topstep, à suivre sur un compte CFD (démo MT5).",
+                             "Donchian 1 h Bitcoin : prouvé sur 2017-2026 (essai 24, tous les contrôles). "
+                             "Le bot ne passe aucun ordre."]
                 else:
                     lines = [head,
                              f"Entrée : {fmt(t['entry'])} (clôture de la bougie 1 h de {opened.astimezone(tz).strftime('%H:%M')})",
@@ -1449,8 +1488,10 @@ class Engine:
             if t["status"] == "closed" and not t.get("notified_exit"):
                 micros = int(t.get("micros") or 1)
                 why = {"heure": "fin de séance (15:00 à Chicago)", "canal": "cassure du canal 10 h", "stop": "stop touché",
-                       "durée": "durée maximale (4 h)" if name.startswith("creux_repris_15m") else "durée maximale",
-                       "objectif": "objectif touché", "trou": "trou dans les données"}.get(t.get("reason"), t.get("reason") or "")
+                       "durée": "durée maximale (4 h)" if name.startswith("creux_repris_15m") else
+                       "durée maximale (5 jours)" if name.startswith("swing_w3") else "durée maximale",
+                       "objectif": "objectif touché", "trou": "trou dans les données",
+                       "bornes": "retour dans la zone de bruit", "vendredi": "fin de semaine"}.get(t.get("reason"), t.get("reason") or "")
                 usd = (t["exit"] - t["entry"]) * (1 if long else -1) * mult * micros
                 notify(f"⚪ SORTIE · {asset.label} ({symbol}) · {why}\n"
                        f"Sortie : {fmt(t['exit'])} · {t['r_topstep']:+.2f} R frais compris · ".replace(".", ",") +

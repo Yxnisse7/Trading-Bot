@@ -137,7 +137,7 @@ def test_live_s25_nasdaq_message_has_15m_bar_target_and_exit(tmp_path, monkeypat
     cfg = load_config()
     eng = engmod.Engine(cfg)
     eng.store = Store(tmp_path)
-    assert ("creux_repris_15m", "nasdaq") in sl.LIVE and "limites_jour_or" in engmod.MANUAL_FILTERS
+    assert ("creux_repris_15m", "nasdaq") in sl.LIVE and "limites_jour_or" not in engmod.MANUAL_FILTERS
     t0 = int(datetime(2026, 10, 14, 14, 45, tzinfo=timezone.utc).timestamp())
     trade = {"entry_ts": t0, "direction": "long", "entry": 25000.0, "risk": 20.0, "stop": 24980.0, "status": "open",
              "reason": None, "exit_ts": None, "exit": None, "r_topstep": None}
@@ -148,3 +148,34 @@ def test_live_s25_nasdaq_message_has_15m_bar_target_and_exit(tmp_path, monkeypat
     trade.update(status="closed", reason="objectif", exit_ts=t0 + 3600, exit=25060.0, r_topstep=2.9)
     eng._live_signals("creux_repris_15m:nasdaq", cfg.assets["nasdaq"], [trade], since, now + timedelta(hours=1))
     assert len(sent) == 2 and "objectif touché" in sent[1]
+
+
+def test_live_essai24_messages_and_exits(tmp_path, monkeypatch):
+    """Essai 24 : zone de bruit (sortie en fin de séance), Donchian 1 h Bitcoin (gardé la nuit), W3 (5 jours)."""
+    from datetime import datetime, timezone
+    from trading_bot import engine as engmod
+    from trading_bot import strategies as sl
+    from trading_bot.config import load_config
+    from trading_bot.storage import Store
+    sent = []
+    monkeypatch.setattr(engmod, "notify", lambda text, **k: sent.append(text))
+    cfg = load_config()
+    eng = engmod.Engine(cfg)
+    eng.store = Store(tmp_path)
+    for key in (("noise_area", "nasdaq"), ("noise_area_v2", "nasdaq"), ("donchian_1h", "bitcoin"), ("swing_w3", "bitcoin")):
+        assert key in sl.LIVE and key in sl.SHADOW
+    assert "creux_repris_15m" not in sl.OVERNIGHT and ("creux_repris_15m", "nasdaq") in sl.LIVE_END
+    t0 = int(datetime(2026, 10, 14, 14, 30, tzinfo=timezone.utc).timestamp())
+    since = datetime(2026, 10, 14, 8, tzinfo=timezone.utc)
+    now = datetime(2026, 10, 14, 14, 35, tzinfo=timezone.utc)
+    trades = {}
+    for name, asset in (("noise_area:nasdaq", "nasdaq"), ("donchian_1h:bitcoin", "bitcoin"), ("swing_w3:bitcoin", "bitcoin")):
+        t = {"entry_ts": t0, "direction": "long", "entry": 100.0, "risk": 2.0, "stop": 98.0, "status": "open",
+             "reason": None, "exit_ts": None, "exit": None, "r_topstep": None}
+        eng._live_signals(name, cfg.assets[asset], [t], since, now)
+        trades[name] = t
+    assert len(sent) == 3
+    assert "zone de bruit" in sent[0] and "22:00" in sent[0]
+    assert trades["noise_area:nasdaq"]["close_at"] == sl.session_close_ts(t0)
+    assert "canal des 10 dernières heures" in sent[1] and trades["donchian_1h:bitcoin"]["close_at"] is None
+    assert "stop suiveur" in sent[2] and trades["swing_w3:bitcoin"]["close_at"] == t0 + 5 * 86400 and "19/10" in sent[2]

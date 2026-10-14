@@ -14,6 +14,7 @@ def _engine(tmp_path, monkeypatch, candles):
     eng.store = Store(tmp_path / "data", tmp_path / "docs")
     monkeypatch.setattr("trading_bot.engine.market.fetch_candles_5m", lambda asset, days=5: candles)
     monkeypatch.setattr(sl, "SHADOW", {("donchian_1h", "bitcoin"): "2026-01-01T00:00:00Z"})
+    monkeypatch.setattr(sl, "LIVE", {})                 # suivi en ombre seul : aucun signal réel
     return eng
 
 

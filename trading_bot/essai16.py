@@ -162,6 +162,26 @@ def trades(variant: str, asset: str, ctx: Ctx) -> list[sl.Trade]:
     return out
 
 
+def live_trades(variant: str, asset: str, ctx: Ctx) -> list[sl.Trade]:
+    """Comme `trades`, mais la position encore ouverte à la fin des bougies est gardée (« fin des données »),
+    pour le suivi sur le marché réel."""
+    out: list[sl.Trade] = []
+    busy = -1
+    c = ctx.m15.c
+    for k, d, entry, stop in signals(asset, ctx):
+        if k <= busy:
+            continue
+        t, j = follow(variant, asset, ctx, k, d, entry, stop)
+        if t is None:
+            risk = (entry - stop) * (1 if d == "long" else -1)
+            out.append(sl.Trade(variant, asset, d, c[k].ts + ctx.m15.sec, c[-1].ts + ctx.m15.sec, entry,
+                                c[-1].close, risk, "fin des données"))
+            break
+        out.append(t)
+        busy = j
+    return out
+
+
 def verdict(tr: list[sl.Trade], cost_pct: float, asset: str) -> dict[str, Any]:
     disc = sl.evaluate(tr, cost_pct, None, start_ts=e14.SPLIT)
     conf = sl.evaluate(tr, cost_pct, None, end_ts=e14.SPLIT)

@@ -63,13 +63,13 @@ def read_signals(get: Callable[[str], Any] = _get) -> tuple[list[dict[str, Any]]
         lab = get(LAB)
         ok.add("lab")
         for name, rec in lab.items():
-            if not rec.get("live") or rec.get("asset") not in SYMBOLS:
+            if rec.get("asset") not in SYMBOLS:         # seuls les signaux réels sont annoncés (notified_entry)
                 continue
             for t in rec.get("trades") or []:
                 if t.get("status") != "open" or not t.get("notified_entry"):
                     continue
                 k = LAB_TARGET_R.get(rec.get("strategy"))
-                out.append({"key": f"lab:{rec['strategy'][:8]}:{t['entry_ts']}", "asset": rec["asset"],
+                out.append({"key": f"lab:{rec['strategy']}:{t['entry_ts']}", "asset": rec["asset"],
                             "direction": t["direction"], "entry": t["entry"], "stop": t["risk"],
                             "target": k * t["risk"] if k else None, "created": t["entry_ts"],
                             "expires": t.get("close_at")})

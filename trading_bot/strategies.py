@@ -40,6 +40,7 @@ STRATEGIES = {
     "news_breakout": "Cassure du range des 15 min qui suivent une annonce (emploi, inflation, Fed)",
     "pre_fomc": "Achat des indices la veille d'une décision de la Fed (Lucca & Moench, 2015)",
     "noise_area_v2": "Zone de bruit avec un stop réaliste, au moins 1 ATR 15 min (essai 5)",
+    "swing_w3": "Swing de 2 à 5 jours dans la tendance, stop suiveur sous les creux 1 h (essai 16, W3)",
 }
 INFO_ONLY = {"pre_fomc"}
 ROBUST_ONLY = {"noise_area_v2"}   # plus de données vierges : critères de l'essai 5 sur les 24 mois
@@ -47,19 +48,31 @@ ROBUST_ONLY = {"noise_area_v2"}   # plus de données vierges : critères de l'es
 SHADOW = {("donchian_1h", "bitcoin"): "2026-10-05T19:00:00Z",
           ("donchian_1h", "gold"): "2026-10-05T20:00:00Z",      # validé à l'essai 3 (confirmation 2024-25)
           ("donchian_day", "gold"): "2026-10-07T21:00:00Z",     # validé à l'essai 8 (fermé chaque soir)
-          ("creux_repris_15m", "nasdaq"): "2026-10-09T22:00:00Z"}  # validé à l'essai 15 (S25)
+          ("creux_repris_15m", "nasdaq"): "2026-10-09T22:00:00Z",  # validé à l'essai 15 (S25)
+          # prouvées à l'essai 24 (2014-2026, tous les contrôles)
+          ("noise_area", "nasdaq"): "2026-10-14T08:00:00Z",
+          ("noise_area_v2", "nasdaq"): "2026-10-14T08:00:00Z",
+          ("swing_w3", "bitcoin"): "2026-10-14T08:00:00Z"}
 # Envoyées en signaux réels sur Telegram (entrée, stop, sortie), en plus du suivi : (stratégie, actif) → date de début.
-# Choix de Yanisse le 08/10/2026 : validée en backtest (essai 8), pas encore prouvée sur le marché réel.
+# Le 14/10/2026, choix de Yanisse : les 4 stratégies prouvées à l'essai 24 (2014-2026, tous les contrôles, singes
+# compris). Le bot ne passe aucun ordre.
 LIVE = {("donchian_day", "gold"): "2026-10-08T07:30:00Z",
-        # choix de Yanisse le 13/10/2026 : seule stratégie du laboratoire qui passe les singes (essai 21) et les
-        # 5 contrôles de l'essai 22 (avec le filtre G40 de l'or, appliqué au bot : engine.MANUAL_FILTERS)
-        ("creux_repris_15m", "nasdaq"): "2026-10-13T20:00:00Z"}
-# Durée (secondes) entre deux relectures d'une stratégie en signaux réels : 1 h par défaut, 15 min pour le 15 min
-LIVE_SLOT = {"creux_repris_15m": 900}
+        ("creux_repris_15m", "nasdaq"): "2026-10-13T20:00:00Z",
+        ("donchian_1h", "bitcoin"): "2026-10-14T08:00:00Z",
+        ("noise_area", "nasdaq"): "2026-10-14T08:00:00Z",
+        ("noise_area_v2", "nasdaq"): "2026-10-14T08:00:00Z",
+        ("swing_w3", "bitcoin"): "2026-10-14T08:00:00Z"}
+# Durée (secondes) entre deux relectures d'une stratégie en signaux réels : 1 h par défaut
+LIVE_SLOT = {"creux_repris_15m": 900, "noise_area": 1800, "noise_area_v2": 1800, "swing_w3": 900}
 # Fin des signaux réels : plus aucune nouvelle entrée envoyée après cette date, la position déjà annoncée reçoit
 # encore son message de sortie ; le suivi en ombre continue. Donchian or : choix de Yanisse le 13/10/2026 après
-# l'essai 21 (il ne bat pas les entrées au hasard).
-LIVE_END = {("donchian_day", "gold"): "2026-10-13T19:30:00Z"}
+# l'essai 21. Creux repris Nasdaq (S25) : le 14/10/2026, il ne tient pas sur 2014-2026 (essais 23 et 24).
+LIVE_END = {("donchian_day", "gold"): "2026-10-13T19:30:00Z",
+            ("creux_repris_15m", "nasdaq"): "2026-10-14T08:00:00Z"}
+# Jours de bougies rechargés pour le suivi, quand il en faut plus que les 8 jours habituels
+LAB_DAYS = {"noise_area": 30, "noise_area_v2": 30, "swing_w3": 45}
+# Positions gardées la nuit (pas de sortie forcée en fin de séance) : durée maximale en secondes, None si aucune
+OVERNIGHT = {"donchian_1h": None, "swing_w3": 5 * 86400}
 MIN_TRADES = {"news_breakout": 20}
 
 
@@ -574,8 +587,15 @@ def creux_repris_15m(candles: list[Candle], asset: str) -> list[Trade]:
     return essai15.setup_trades("S25", asset, essai15.Ctx(candles))
 
 
+def swing_w3(candles: list[Candle], asset: str) -> list[Trade]:
+    """Essai 16, W3 : repli du RSI 15 min dans la tendance jour et 1 h, stop suiveur sous les creux 1 h."""
+    from . import essai16
+    return essai16.live_trades("W3", asset, essai16.Ctx(candles))
+
+
 RUNNERS_1H = {"donchian_1h": donchian_1h, "rsi2_1h": rsi2_1h, "pre_fomc": pre_fomc, "donchian_day": donchian_day,
-              "donchian_15m_day": donchian_15m_day, "donchian_30m_day": donchian_30m_day, "creux_repris_15m": creux_repris_15m}
+              "donchian_15m_day": donchian_15m_day, "donchian_30m_day": donchian_30m_day, "creux_repris_15m": creux_repris_15m,
+              "swing_w3": swing_w3}
 
 
 def run_all(asset: str, candles: list[Candle], only: list[str] | None = None) -> list[Trade]:
