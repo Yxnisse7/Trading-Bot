@@ -967,6 +967,32 @@ même durée, même sens, à battre au moins 950 fois (pour ne pas confondre l'i
 **Décidé d'avance** : une cellule prouvée → proposition de la suivre en ombre, puis sur le démo MT5. Rien ne
 change sans l'accord de Yanisse.
 
+## Essai 28 — d'autres stratégies courtes sur l'or (recherche large)
+
+Écrit le 14 octobre 2026, **avant** tout calcul, à la demande de Yanisse (« cherche d'autres stratégies sur l'or,
+des trades qui ne durent pas des jours »). Recherche web, forums, études ; les sources sans règle précise ni preuve
+sont écartées (SMC/ICT, robots vendus). Bougies 5 min de l'or 2014-2026, frais 0,30 $ l'once aller-retour, heures
+de New York sauf mention :
+- **A vente du matin** (mémoire CBS 2019, l'or baisse pendant Londres) : vente à 03:00, rachat à 10:00, lundi-vendredi ;
+- **B achat de l'après-midi** (même source) : achat à 11:00, vente à 16:55 ;
+- **C1 faux cassage du plus bas de la veille** (Unger Academy, contrats GC) : séance = 18:00 → 17:00 ; dans la
+  séance, avant 16:00, 1re bougie 5 min qui passe sous le plus bas de la séance d'avant et clôture au-dessus →
+  achat à l'ouverture suivante, stop 0,9 %, objectif 0,8 % (18 $ et 16 $ rapportés au prix moyen 2016-2024), sortie
+  au plus tard à 16:55, une fois par séance ;
+- **C2** : la même chose, en vente, au plus haut de la séance d'avant ;
+- **D suite de la Fed** (Awartani, Hussain et Virk 2024) : jours de décision FOMC, entrée à 14:05 dans le sens de la
+  bougie 14:00-14:05, sortie à 16:00 ;
+- **E avant les fixings de Londres** (mémoire CBS, Caminschi et Heaney 2014) : vente 10:00 → 10:30 et 14:30 →
+  15:00, **heure de Londres** ;
+- **F retournement après l'emploi (NFP)** (études FXStreet) : à 08:45, position contraire au mouvement 08:30-08:45,
+  sortie à 11:00.
+
+**Contrôles** de l'essai 27 (rendement net en % par trade, singes le même jour à une heure au hasard, même durée,
+même sens) plus **au moins 100 trades** ; « prouvé » : tout passe et z > seuil corrigé pour 7 cellules (2,69).
+
+**Décidé d'avance** : une cellule prouvée → proposition de la passer en signaux réels comme l'essai 27. Rien ne
+change sans l'accord de Yanisse.
+
 ## Journal des essais
 
 | Date | Essai | Résultat |
