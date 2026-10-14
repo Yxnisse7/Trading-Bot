@@ -1089,6 +1089,30 @@ trades), rapports avec prévisions consensus, carnet d'ordres, options.
 **Décidé d'avance** : une cellule prouvée → proposition de la passer en signaux réels (copie démo comprise) ; le
 pétrole et l'euro restent « à l'essai » sinon. Rien ne change sans l'accord de Yanisse.
 
+## Essai 32 — réajuster le stop pendant le trade
+
+Écrit le 14 octobre 2026, **avant** tout calcul, à la demande de Yanisse (« est-ce qu'on pourrait pas réajuster nos
+SL ? »). Aujourd'hui le stop de départ ne bouge jamais (sauf les sorties propres à chaque stratégie). Stratégies
+jugées, telles qu'elles tournent en réel, sur 2014-2026 (bougies longues de l'essai 23 + historique récent) :
+zone de bruit et zone de bruit v2 (Nasdaq), Donchian 1 h, W3 et cassure Williams (Bitcoin), nuit asiatique (or),
+bot classique or (sans le filtre du modèle) et bot classique Nasdaq (stop × 1,5, objectif 3, 24 h, essai 29).
+
+Même entrée, même sortie d'origine ; seul le stop est déplacé, à la clôture de chaque bougie 5 min, et seulement
+pour le resserrer (il n'agit qu'à partir de la bougie suivante) :
+- **A** stop au prix d'entrée dès +1 R atteint ;
+- **B** stop au prix d'entrée dès +0,5 R atteint ;
+- **C** stop suiveur à 1 R derrière le meilleur prix atteint ;
+- **D** stop verrouillé à +1 R dès +2 R atteint.
+R = distance du stop de départ ; frais du bot inchangés.
+
+Contrôles, sur l'écart trade par trade (variante − version actuelle, en R net) : écart moyen > 0 ; écart > 0 avant
+2020 et depuis 2020 ; > 0 sur les 2 dernières années (depuis le 14/10/2024) ; > 0 sur 60 % des années ; et la
+variante elle-même garde R > 0. « Prouvée » : tout passe et z de l'écart (test apparié) > seuil corrigé pour
+32 cellules (2,95). Les singes ne servent pas ici : on compare deux gestions des mêmes trades.
+
+**Décidé d'avance** : une variante prouvée → proposition de l'appliquer à cette stratégie (signaux Telegram, journal,
+simulation et copie démo). Rien ne change sans l'accord de Yanisse.
+
 ## Journal des essais
 
 | Date | Essai | Résultat |
