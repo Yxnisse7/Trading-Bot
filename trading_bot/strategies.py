@@ -54,7 +54,8 @@ SHADOW = {("donchian_1h", "bitcoin"): "2026-10-05T19:00:00Z",
           ("noise_area", "nasdaq"): "2026-10-14T08:00:00Z",
           ("noise_area_v2", "nasdaq"): "2026-10-14T08:00:00Z",
           ("swing_w3", "bitcoin"): "2026-10-14T08:00:00Z",
-          ("nuit_asie", "gold"): "2026-10-14T12:00:00Z"}      # prouvée à l'essai 27
+          ("nuit_asie", "gold"): "2026-10-14T12:00:00Z",      # prouvée à l'essai 27
+          ("cassure_williams", "bitcoin"): "2026-10-14T14:00:00Z"}  # prouvée à l'essai 30
 # Envoyées en signaux réels sur Telegram (entrée, stop, sortie), en plus du suivi : (stratégie, actif) → date de début.
 # Le 14/10/2026, choix de Yanisse : les 4 stratégies prouvées à l'essai 24 (2014-2026, tous les contrôles, singes
 # compris). Le bot ne passe aucun ordre.
@@ -64,9 +65,11 @@ LIVE = {("donchian_day", "gold"): "2026-10-08T07:30:00Z",
         ("noise_area", "nasdaq"): "2026-10-14T08:00:00Z",
         ("noise_area_v2", "nasdaq"): "2026-10-14T08:00:00Z",
         ("swing_w3", "bitcoin"): "2026-10-14T08:00:00Z",
-        ("nuit_asie", "gold"): "2026-10-14T12:00:00Z"}         # choix de Yanisse après l'essai 27
+        ("nuit_asie", "gold"): "2026-10-14T12:00:00Z",         # choix de Yanisse après l'essai 27
+        ("cassure_williams", "bitcoin"): "2026-10-14T14:00:00Z"}  # choix de Yanisse après l'essai 30
 # Durée (secondes) entre deux relectures d'une stratégie en signaux réels : 1 h par défaut
-LIVE_SLOT = {"creux_repris_15m": 900, "noise_area": 1800, "noise_area_v2": 1800, "swing_w3": 900, "nuit_asie": 900}
+LIVE_SLOT = {"creux_repris_15m": 900, "noise_area": 1800, "noise_area_v2": 1800, "swing_w3": 900, "nuit_asie": 900,
+             "cassure_williams": 900}
 # Fin des signaux réels : plus aucune nouvelle entrée envoyée après cette date, la position déjà annoncée reçoit
 # encore son message de sortie ; le suivi en ombre continue. Donchian or : choix de Yanisse le 13/10/2026 après
 # l'essai 21. Creux repris Nasdaq (S25) : le 14/10/2026, il ne tient pas sur 2014-2026 (essais 23 et 24).
@@ -75,7 +78,7 @@ LIVE_END = {("donchian_day", "gold"): "2026-10-13T19:30:00Z",
 # Jours de bougies rechargés pour le suivi, quand il en faut plus que les 8 jours habituels
 LAB_DAYS = {"noise_area": 30, "noise_area_v2": 30, "swing_w3": 45}
 # Positions gardées la nuit (pas de sortie forcée en fin de séance) : durée maximale en secondes, None si aucune
-OVERNIGHT = {"donchian_1h": None, "swing_w3": 5 * 86400, "nuit_asie": 9 * 3600}
+OVERNIGHT = {"donchian_1h": None, "swing_w3": 5 * 86400, "nuit_asie": 9 * 3600, "cassure_williams": 86400}
 MIN_TRADES = {"news_breakout": 20}
 
 
@@ -612,9 +615,42 @@ def nuit_asie(s: _Series, asset: str) -> list[Trade]:
     return out
 
 
+def cassure_williams(s: _Series, asset: str) -> list[Trade]:
+    """Essai 30, B10 (Larry Williams) : jour UTC, achat dès que le prix dépasse l'ouverture + 0,5 × l'amplitude de la
+    veille (au niveau, ou à l'ouverture de la bougie si elle est déjà au-dessus), vente à 00:00 UTC ; stop à
+    l'ouverture du jour (le test n'en avait pas : +0,32 % net au lieu de +0,31 % sur 2017-2026)."""
+    out = []
+    days = sorted({datetime.fromtimestamp(t, timezone.utc).date() for t in s.ts})
+    for d in days[1:]:
+        p0, t0, t1 = _utc_ts(d - timedelta(days=1), 0), _utc_ts(d, 0), _utc_ts(d + timedelta(days=1), 0)
+        i, a, z = bisect_left(s.ts, p0), bisect_left(s.ts, t0), bisect_left(s.ts, t1)
+        if a >= len(s.c) or s.ts[a] > t0 + 1800 or a - i < 200:
+            continue
+        prev = max(x.high for x in s.c[i:a]) - min(x.low for x in s.c[i:a])
+        day_open = s.c[a].open
+        level = day_open + 0.5 * prev
+        k = next((j for j in range(a, z) if s.c[j].high >= level), None)
+        if k is None or s.ts[k] >= t1 - 300:
+            continue
+        entry = max(level, s.c[k].open)
+        px, j, why = None, k, "fin des données"
+        for j in range(k + 1, len(s.c)):
+            if s.ts[j] >= t1:
+                px, why = s.c[j].open, "minuit"
+                break
+            if s.c[j].low <= day_open:
+                px, why = day_open, "stop"
+                break
+        if px is None:
+            j, px = len(s.c) - 1, s.c[-1].close
+        out.append(Trade("cassure_williams", asset, "long", s.ts[k], s.ts[j], entry, px, entry - day_open, why))
+    return out
+
+
 RUNNERS_5M = {"orb5": orb5, "orb30": orb30, "intraday_mom": intraday_mom, "noise_area": noise_area,
               "gap_fade": gap_fade, "london_breakout": london_breakout, "news_breakout": news_breakout,
-              "noise_area_v2": noise_area_v2, "comex_orb": comex_orb, "nuit_asie": nuit_asie}
+              "noise_area_v2": noise_area_v2, "comex_orb": comex_orb, "nuit_asie": nuit_asie,
+              "cassure_williams": cassure_williams}
 def creux_repris_15m(candles: list[Candle], asset: str) -> list[Trade]:
     """Essai 15, S25 : creux cassé puis repris en 2 bougies 15 min, dans la tendance 1 h (règle de essai15.py)."""
     from . import essai15
