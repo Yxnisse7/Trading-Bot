@@ -1,6 +1,6 @@
 # Trading-Bot — rapport
 
-_Mis à jour le 14/10/2026 à 18:11 (Europe/Paris)._
+_Mis à jour le 14/10/2026 à 18:16 (Europe/Paris)._
 
 ## Vue d'ensemble
 
@@ -8,7 +8,7 @@ _Mis à jour le 14/10/2026 à 18:11 (Europe/Paris)._
 - Taux de réussite cumulé (TP / (TP+SL)) : **43%** — hasard attendu 42%, avantage **+1%**
 - P&L théorique cumulé, net des coûts estimés (somme des % par trade, sans levier) : **-4.40 %** (brut -0.57 %)
 - Signaux ouverts : **2**
-- Signaux fantômes (suivis en silence pour l'apprentissage) : **399** clôturés, 23 ouverts, taux de réussite 38% (hasard attendu 41%)
+- Signaux fantômes (suivis en silence pour l'apprentissage) : **400** clôturés, 24 ouverts, taux de réussite 38% (hasard attendu 41%)
 
 ## Signaux ouverts
 
@@ -120,18 +120,18 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 
 | Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
 |---|---:|---:|---:|---:|---:|---:|
-| adx | 399 | 122 | 202 | 75 | 38% | -0.026 % |
+| adx | 400 | 123 | 202 | 75 | 38% | -0.025 % |
 | corr | 22 | 4 | 15 | 3 | 21% | -0.146 % |
 | level | 44 | 18 | 13 | 13 | 58% | -0.028 % |
 | macd | 95 | 22 | 55 | 18 | 29% | -0.067 % |
 | orb | 18 | 6 | 7 | 5 | 46% | -0.053 % |
 | pdhl | 53 | 13 | 30 | 10 | 30% | -0.033 % |
-| rsi | 273 | 90 | 145 | 38 | 38% | -0.020 % |
-| trend_15m | 399 | 122 | 202 | 75 | 38% | -0.026 % |
-| trend_1h | 391 | 119 | 200 | 72 | 37% | -0.026 % |
-| trend_5m | 319 | 108 | 167 | 44 | 39% | -0.018 % |
+| rsi | 274 | 91 | 145 | 38 | 39% | -0.018 % |
+| trend_15m | 400 | 123 | 202 | 75 | 38% | -0.025 % |
+| trend_1h | 392 | 120 | 200 | 72 | 38% | -0.025 % |
+| trend_5m | 320 | 109 | 167 | 44 | 39% | -0.016 % |
 | volume | 2 | 1 | 0 | 1 | 100% | -0.021 % |
-| vwap | 385 | 120 | 194 | 71 | 38% | -0.024 % |
+| vwap | 386 | 121 | 194 | 71 | 38% | -0.022 % |
 
 ### Fantômes par actif
 
@@ -141,7 +141,7 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 | ethereum | 15 | 2 | 10 | 3 | 17% | -0.231 % |
 | euro | 23 | 8 | 14 | 1 | 36% | -0.024 % |
 | gold | 92 | 24 | 50 | 18 | 32% | -0.039 % |
-| nasdaq | 111 | 46 | 49 | 16 | 48% | +0.033 % |
+| nasdaq | 112 | 47 | 49 | 16 | 49% | +0.037 % |
 | oil | 58 | 17 | 28 | 13 | 38% | -0.058 % |
 | sp500 | 78 | 18 | 48 | 12 | 27% | -0.045 % |
 
@@ -199,7 +199,8 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 
 Corrections par actif :
 
-- nasdaq : {'trend_5m': 1.053, 'trend_15m': 1.053, 'trend_1h': 1.053, 'adx': 1.053, 'vwap': 0.777, 'rsi': 1.009}
+- ethereum : {'rsi': 0.992}
+- nasdaq : {'trend_5m': 1.073, 'trend_15m': 1.073, 'trend_1h': 1.073, 'adx': 1.073, 'vwap': 0.792, 'rsi': 1.034}
 
 | Variante testée en fantôme | Trades | Gain net moyen | Statut |
 |---|---:|---:|---|
@@ -219,9 +220,10 @@ Notes :
 
 - trades réels : +0,04 R ± 0,18 R par trade avant frais sur 147 trades (0 R = hasard)
 - aucun critère ne s'écarte du hasard au-delà de la marge de sécurité : poids par défaut conservés
-- nasdaq, tendance (trend_5m, trend_15m, trend_1h, adx) : +0,21 R contre +0,02 R en global sur 203 trades éq. → poids ×1,05 sur cet actif
-- nasdaq, vwap : +0,22 R contre +0,02 R en global sur 195 trades éq. → poids ×1,04 sur cet actif
-- nasdaq, rsi : +0,24 R contre +0,04 R en global sur 159 trades éq. → poids ×1,01 sur cet actif
+- ethereum, rsi : -0,27 R contre +0,04 R en global sur 40 trades éq. → poids ×0,99 sur cet actif
+- nasdaq, tendance (trend_5m, trend_15m, trend_1h, adx) : +0,22 R contre +0,02 R en global sur 204 trades éq. → poids ×1,07 sur cet actif
+- nasdaq, vwap : +0,23 R contre +0,03 R en global sur 196 trades éq. → poids ×1,06 sur cet actif
+- nasdaq, rsi : +0,25 R contre +0,04 R en global sur 160 trades éq. → poids ×1,03 sur cet actif
 - variante « indices le matin européen » en test : 70 trades, -0,13 R net, encore 30 trades avant décision
 - variante « horizon ~3 h » en test : 70 trades, -0,34 R net, encore 30 trades avant décision
 - variante « confiance moyenne » en test : 56 trades, -0,11 R net, encore 44 trades avant décision

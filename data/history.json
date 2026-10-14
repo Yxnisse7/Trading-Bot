@@ -45429,5 +45429,113 @@
         "last_ts": 1791993120
       }
     }
+  },
+  {
+    "id": "1fc05be3d6",
+    "asset": "nasdaq",
+    "asset_label": "Nasdaq 100 (NQ)",
+    "direction": "short",
+    "entry": 30476.75,
+    "take_profit": 30305.75,
+    "stop_loss": 30533.75,
+    "risk_reward": 3.0,
+    "confidence": "fort",
+    "score": 5.75,
+    "criteria": [
+      "adx",
+      "rsi",
+      "trend_15m",
+      "trend_1h",
+      "trend_5m",
+      "vwap"
+    ],
+    "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 95.00 (0.31 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 99%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+    "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité calme sur les 2 dernières heures",
+    "created_at": "2026-10-14T14:40:49Z",
+    "expires_at": "2026-10-15T14:40:49Z",
+    "status": "tp",
+    "closed_at": "2026-10-14T16:02:00Z",
+    "close_price": 30305.75,
+    "pnl_pct": 0.5511,
+    "pnl_gross_pct": 0.5611,
+    "duration_minutes": 81,
+    "hourly_range": 95.0,
+    "source": "shadow",
+    "horizon": "24h",
+    "horizon_minutes": 1440,
+    "meta": {
+      "tick": 0.25,
+      "details": {
+        "trend_5m": "EMA20 30544.88 / EMA50 30628.92 (5 min)",
+        "trend_15m": "EMA20 30628.62 / EMA50 30712.38",
+        "trend_1h": "prix vs EMA20 1 h 30713.63",
+        "adx": "ADX15 35.3 (+DI 9.8 / -DI 23.8)",
+        "vwap": "VWAP jour 30633.18",
+        "rsi": "RSI14 5 min 35.9",
+        "macd": "histogramme MACD -1.2884",
+        "level": "support - / résistance 30682.75",
+        "volume": "z-score volume -1.33",
+        "orb": "range d'ouverture 30465.75 – 30660.75",
+        "pdhl": "veille : haut 30845.00 / bas 30591.25",
+        "activity": "activité de l'heure 1.80× la moyenne",
+        "corr": "VIX -0.5 % sur 15 min"
+      },
+      "support": null,
+      "resistance": 30682.75,
+      "atr_5m": 52.35511439173196,
+      "atr_ratio": 2.143887733585283,
+      "hourly_range_pct": 0.3117,
+      "adx_15m": 35.29587006005137,
+      "sigma_5m": 0.0013764610539772116,
+      "p_resolution": 0.9943333333333333,
+      "p_tp_neutral": 0.43766666666666665,
+      "activity_ratio": 1.798,
+      "base_minutes": 5,
+      "ctx": {
+        "adx": 35.3,
+        "rsi_dir": 64.11,
+        "vwap_ext": 1.6467,
+        "ema_ext": 0.7172,
+        "atr_ratio": 2.144,
+        "activity": 1.798,
+        "range_pct": 0.3117,
+        "cost_r": 0.0802,
+        "us_open_min": 70.8,
+        "weekday": 2
+      },
+      "exit_override": {
+        "stop_x": 1.5,
+        "target_x": 3.0,
+        "minutes": 1440,
+        "source": "essai 29"
+      },
+      "price_time": "2026-10-14T14:35:00Z",
+      "ctx_avoid": [
+        "jour de la semaine : mercredi"
+      ],
+      "model_r": -0.0367,
+      "filters": [
+        "sans_ouverture_us",
+        "filtre_contexte",
+        "modele_arbres"
+      ],
+      "filters_checked": true,
+      "variant": "modele_arbres",
+      "exc": {
+        "mfe": 3.0088,
+        "mae": 0.7719,
+        "armed": {
+          "0.5": true,
+          "0.8": true,
+          "1.0": true
+        },
+        "be": {
+          "0.5": true,
+          "0.8": true,
+          "1.0": true
+        },
+        "last_ts": 1791993720
+      }
+    }
   }
 ]
