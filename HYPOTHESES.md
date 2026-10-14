@@ -1045,7 +1045,7 @@ Binance BTCUSDT août 2017 → octobre 2026, frais du bot 0,06 % aller-retour. �
 deux moitiés (avant 2020 / depuis 2020) positives, 2 dernières années (depuis le 14/10/2024) positives, frais
 doublés > 0, **singes** (1 000 séries, même sens, même durée, à battre 950 fois) : pour les règles d'horaire (B1-B3,
 B7, B8, B12), le même jour à une heure au hasard ; pour les règles à signal (B4-B6, B9-B11), n'importe quel jour à
-la même heure. « Prouvé » : tout passe et z > seuil corrigé pour 12 cellules (2,87).
+la même heure. « Prouvé » : tout passe et z > seuil corrigé pour 12 cellules (2,64).
 
 **Décidé d'avance** : une cellule prouvée → proposition de la passer en signaux réels (copie démo comprise). Rien
 ne change sans l'accord de Yanisse.
