@@ -1013,6 +1013,43 @@ les 168 réglages (3,43).
 **Décidé d'avance** : un réglage prouvé → proposition de l'appliquer aux signaux du bot sur cet actif. Rien ne
 change sans l'accord de Yanisse.
 
+## Essai 30 — stratégies Bitcoin courtes (recherche large)
+
+Écrit le 14 octobre 2026, **avant** tout calcul, à la demande de Yanisse (« des trades de 20 jours c'est long, y a
+pas des stratégies Bitcoin en scalping ou plus courtes ? regarde internet »). Recherche web (études, Quantpedia,
+blogs, forums) ; écartées faute de règle précise ou de preuve : comblement du gap CME, « chute de 10 h », expiration
+Deribit, liquidations ; écartée faute de données assez fines : la bougie de :00/:15/:30/:45 (minutes). Bougies 5 min
+Binance BTCUSDT août 2017 → octobre 2026, frais du bot 0,06 % aller-retour. σ toujours calculé sur le passé seul.
+- **B1 heure du soir** (Padysak et Vojtko, Quantpedia) : achat 21:00 UTC, vente 23:00 UTC, tous les jours ;
+- **B2** : la même chose, le vendredi seulement ;
+- **B3** : la même chose, seulement les jours « agités » (volatilité horaire des 30 jours d'avant, mesurée à 00:00
+  UTC, au-dessus de sa médiane des 365 jours d'avant) ;
+- **B4 contre une grosse bougie 1 h** (De Nicola 2021) : bougie 1 h (heures UTC pleines) qui bouge de plus de 3 σ
+  (σ des 720 bougies 1 h d'avant) → position contraire à l'ouverture suivante, sortie 1 h après ;
+- **B5** : la même chose à 2 σ ;
+- **B6** : la même chose avec des bougies 2 h (heures paires UTC), 3 σ (σ des 360 bougies d'avant), sortie 2 h après ;
+- **B7 dernière demi-heure, à contre-sens** (Shen, Urquhart et Wang 2022) : position 16:30 → 17:00 New York,
+  contraire au mouvement 16:00 → 16:30 ;
+- **B8 dernière demi-heure, dans le sens de la journée** (même étude) : position 16:30 → 17:00 New York dans le sens
+  du mouvement 17:00 la veille → 10:00 ;
+- **B9 plus haut de 10 jours le soir** (Quantpedia 2024) : lundi, mardi et vendredi à 16:00 New York, si le prix
+  dépasse ses prix de 16:00 des 10 jours d'avant → achat, vente le lendemain 10:00 New York ;
+- **B10 cassure de volatilité (Larry Williams)** : jour UTC, achat dès que le prix dépasse l'ouverture du jour +
+  0,5 × l'amplitude (plus haut − plus bas) de la veille, au niveau ou à l'ouverture si elle est déjà au-dessus,
+  vente à 00:00 UTC ;
+- **B11** : la même chose, seulement si l'ouverture du jour est au-dessus de la moyenne des 5 clôtures journalières
+  d'avant ;
+- **B12 ouverture de Tokyo le lundi** (Concretum 2026) : achat dimanche 19:00 New York, vente lundi 19:00.
+
+**Contrôles** (rendement net en % par trade) : au moins 200 trades, net > 0, 60 % des années pleines positives,
+deux moitiés (avant 2020 / depuis 2020) positives, 2 dernières années (depuis le 14/10/2024) positives, frais
+doublés > 0, **singes** (1 000 séries, même sens, même durée, à battre 950 fois) : pour les règles d'horaire (B1-B3,
+B7, B8, B12), le même jour à une heure au hasard ; pour les règles à signal (B4-B6, B9-B11), n'importe quel jour à
+la même heure. « Prouvé » : tout passe et z > seuil corrigé pour 12 cellules (2,87).
+
+**Décidé d'avance** : une cellule prouvée → proposition de la passer en signaux réels (copie démo comprise). Rien
+ne change sans l'accord de Yanisse.
+
 ## Journal des essais
 
 | Date | Essai | Résultat |
