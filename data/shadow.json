@@ -85,7 +85,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1791976200
+        "last_ts": 1791976500
       }
     }
   },
@@ -181,7 +181,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1791976200
+        "last_ts": 1791976500
       }
     }
   },
@@ -272,7 +272,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1791976200
+        "last_ts": 1791976500
       }
     }
   },
@@ -368,7 +368,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": null
+        "last_ts": 1791976500
       }
     }
   },
@@ -449,7 +449,7 @@
       "variant": "hors_session",
       "exc": {
         "mfe": 0.0824,
-        "mae": 0.0,
+        "mae": 0.8471,
         "armed": {
           "0.5": false,
           "0.8": false,
@@ -547,7 +547,7 @@
       "variant": "modele_arbres",
       "exc": {
         "mfe": 0.0,
-        "mae": 0.1875,
+        "mae": 0.3125,
         "armed": {
           "0.5": false,
           "0.8": false,
@@ -639,6 +639,102 @@
       "model_r": -0.1633,
       "filters": [
         "sans_etirement_or",
+        "modele_arbres"
+      ],
+      "filters_checked": true,
+      "variant": "modele_arbres",
+      "exc": {
+        "mfe": 0.0,
+        "mae": 0.1458,
+        "armed": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "be": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "last_ts": null
+      }
+    }
+  },
+  {
+    "id": "f681e32061",
+    "asset": "gold",
+    "asset_label": "Or (XAU/USD)",
+    "direction": "short",
+    "entry": 4160.8,
+    "take_profit": 4153.6,
+    "stop_loss": 4165.6,
+    "risk_reward": 1.5,
+    "confidence": "fort",
+    "score": 5.75,
+    "criteria": [
+      "adx",
+      "rsi",
+      "trend_15m",
+      "trend_1h",
+      "trend_5m",
+      "vwap"
+    ],
+    "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 11.95 (0.29 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 44%.",
+    "news_context": "actualité à surveiller (score 1) : How Trump’s tariffs and Iran war are becoming liabilities in Michigan’s Senate race",
+    "created_at": "2026-10-14T11:25:39Z",
+    "expires_at": "2026-10-14T12:25:39Z",
+    "status": "open",
+    "closed_at": null,
+    "close_price": null,
+    "pnl_pct": null,
+    "pnl_gross_pct": null,
+    "duration_minutes": null,
+    "hourly_range": 11.949929,
+    "source": "shadow",
+    "horizon": "1h",
+    "horizon_minutes": 60,
+    "meta": {
+      "tick": 0.1,
+      "details": {
+        "trend_5m": "EMA20 4164.38 / EMA50 4167.80 (5 min)",
+        "trend_15m": "EMA20 4168.18 / EMA50 4174.96",
+        "trend_1h": "prix vs EMA20 1 h 4177.27",
+        "adx": "ADX15 22.9 (+DI 11.3 / -DI 23.5)",
+        "vwap": "VWAP jour 4175.57",
+        "rsi": "RSI14 5 min 37.7",
+        "macd": "histogramme MACD -0.3832",
+        "level": "support - / résistance 4168.80",
+        "volume": "z-score volume -1.59",
+        "pdhl": "veille : haut 4224.80 / bas 4169.70",
+        "activity": "activité de l'heure 0.91× la moyenne",
+        "corr": "DXY +0.01 % sur 1 h"
+      },
+      "support": null,
+      "resistance": 4168.7998046875,
+      "atr_5m": 2.9298368404999016,
+      "atr_ratio": 0.8531305799272801,
+      "hourly_range_pct": 0.2872,
+      "adx_15m": 22.87234332863395,
+      "sigma_5m": 0.00037656249197778354,
+      "p_resolution": 0.43966666666666665,
+      "p_tp_neutral": 0.14233333333333334,
+      "activity_ratio": 0.914,
+      "base_minutes": 5,
+      "ctx": {
+        "adx": 22.87,
+        "rsi_dir": 62.34,
+        "vwap_ext": 1.2358,
+        "ema_ext": 0.2993,
+        "atr_ratio": 0.853,
+        "activity": 0.914,
+        "range_pct": 0.2872,
+        "cost_r": 0.1734,
+        "us_open_min": -124.3,
+        "weekday": 2
+      },
+      "price_time": "2026-10-14T11:20:00Z",
+      "model_r": -0.1457,
+      "filters": [
         "modele_arbres"
       ],
       "filters_checked": true,
