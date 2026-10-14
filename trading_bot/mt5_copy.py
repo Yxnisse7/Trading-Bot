@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import json
 import logging
+import math
 import time
 import urllib.request
 from datetime import datetime, timezone
@@ -26,6 +27,11 @@ RISK_PCT = 0.01
 # Risque toléré au lot minimum du courtier (part du solde), par stratégie, quand il dépasse 2 fois RISK_PCT :
 # « heures asiatiques » or a un stop de sécurité à 1 % du prix (≈ 41 $ à 0,01 lot), choix de Yanisse le 14/10/2026.
 MIN_LOT_MAX_RISK = {"nuit_asie": 0.05}
+# Taille minimale en $ par point de prix (choix de Yanisse le 14/10/2026 : « au moins 0,50 à 1 $ par point ») ;
+# accepté tant que le risque au stop reste sous FLOOR_MAX_RISK du solde, sinon le trade n'est pas copié. Rien pour
+# les cryptos : 1 $ par point y voudrait dire 1 bitcoin entier.
+MIN_POINT_VALUE = {"NAS100": 0.5, "SP500": 1.0, "XAUUSD+": 1.0}
+FLOOR_MAX_RISK = 0.10
 MAX_AGE = 15 * 60
 EVERY = 30
 SYMBOLS = {"gold": "XAUUSD+", "nasdaq": "NAS100", "sp500": "SP500", "bitcoin": "BTCUSD", "ethereum": "ETHUSD",
@@ -96,6 +102,17 @@ def lot_for(balance: float, dist: float, info, min_lot_risk: float | None = None
         cap = max(2 * RISK_PCT, min_lot_risk or 0.0)
         return float(info.volume_min) if info.volume_min * dist * contract <= cap * balance else 0.0
     return round(min(lot, float(info.volume_max)), 2)
+
+
+def floor_lot(lot: float, balance: float, dist: float, info, point_value: float | None) -> float:
+    """Remonte le lot jusqu'à `point_value` $ par point, si le risque au stop reste sous FLOOR_MAX_RISK du solde."""
+    contract, step = float(info.trade_contract_size), float(info.volume_step)
+    if not point_value or contract <= 0 or step <= 0:
+        return lot
+    need = max(float(info.volume_min), math.ceil(point_value / contract / step - 1e-9) * step)
+    if lot >= need:
+        return lot
+    return round(min(need, float(info.volume_max)), 2) if need * dist * contract <= FLOOR_MAX_RISK * balance else 0.0
 
 
 class Copier:
@@ -194,6 +211,7 @@ class Copier:
             return {"status": "stop plus court que le minimum du courtier"}
         strat = s["key"].split(":")[1] if s["key"].startswith("lab:") else None
         lot = lot_for(balance, s["stop"], info, MIN_LOT_MAX_RISK.get(strat))
+        lot = floor_lot(lot, balance, s["stop"], info, MIN_POINT_VALUE.get(sym))
         if lot <= 0:
             return {"status": "taille minimale trop risquée"}
         res = self.mt5.order_send({

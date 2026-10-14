@@ -115,3 +115,12 @@ def test_zero_quote_is_retried_not_sent(tmp_path, monkeypatch):
     c.last = 0
     c.step()
     assert len(mt5.sent) == 1 and mt5.sent[0]["sl"] == 4208.0
+
+
+def test_floor_of_dollars_per_point():
+    """Choix de Yanisse le 14/10 : au moins 0,50 $ par point sur le NAS100, si le risque reste sous 10 %."""
+    nas = NS(trade_contract_size=1.0, volume_step=0.01, volume_min=0.01, volume_max=100.0)
+    assert mc.floor_lot(0.15, 1000, 64.0, nas, 0.5) == 0.5          # 32 $ au stop, 3,2 %
+    assert mc.floor_lot(0.15, 1000, 250.0, nas, 0.5) == 0.0         # 125 $ au stop : trop risqué, pas copié
+    assert mc.floor_lot(0.8, 1000, 10.0, nas, 0.5) == 0.8           # déjà au-dessus
+    assert mc.floor_lot(0.02, 1000, 500.0, nas, None) == 0.02       # pas de plancher (cryptos)
