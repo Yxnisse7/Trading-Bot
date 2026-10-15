@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-15T17:01:30.639939+02:00",
+  "updated_at": "2026-10-15T17:06:02.787462+02:00",
   "timezone": "Europe/Paris",
   "equity_curve": [
     {
@@ -7645,7 +7645,7 @@
     }
   },
   "state": {
-    "last_scan": "2026-10-15T15:01:14Z",
+    "last_scan": "2026-10-15T15:05:46Z",
     "last_scan_note": "0 signal(aux)",
     "last_summary": "2026-10-14T22:05:41Z",
     "last_track": "2026-10-15T14:55:35Z",
@@ -7658,21 +7658,21 @@
   },
   "portfolio": {
     "currency": "$",
-    "balance": 1355.12,
+    "balance": 1330.12,
     "balance_initial": 500.0,
     "risk_pct": 10.0,
     "started_at": "2026-09-18T13:50:15Z",
     "is_default": false,
-    "pnl": 855.12,
-    "pnl_pct": 171.02,
+    "pnl": 830.12,
+    "pnl_pct": 166.02,
     "peak": 1355.12,
-    "drawdown_pct": 0.0,
-    "trades": 141,
+    "drawdown_pct": 1.84,
+    "trades": 142,
     "wins": 63,
-    "losses": 78,
+    "losses": 79,
     "avg_win": 70.61,
-    "avg_loss": -46.07,
-    "open_positions": 1,
+    "avg_loss": -45.8,
+    "open_positions": 0,
     "skipped": 0,
     "risky": 107
   },
@@ -19484,21 +19484,22 @@
           "entry": 82643.9609375,
           "risk": 903.154838,
           "stop": 83547.115775,
-          "status": "open",
-          "reason": null,
-          "exit_ts": null,
-          "exit": null,
-          "last": 80423.59375,
-          "r_topstep": null,
-          "r_bot": null,
+          "status": "closed",
+          "reason": "canal",
+          "exit_ts": 1792076400,
+          "exit": 81808.3125,
+          "last": null,
+          "r_topstep": 0.8885,
+          "r_bot": 0.8704,
           "notified_entry": "2026-10-14T13:05:42Z",
           "micros": 2,
-          "close_at": null
+          "close_at": null,
+          "notified_exit": "2026-10-15T15:05:46Z"
         }
       ],
-      "checked_hour": "2026-10-15T14:00:00Z",
-      "n": 7,
-      "mean_r": -0.3228,
+      "checked_hour": "2026-10-15T15:00:00Z",
+      "n": 8,
+      "mean_r": -0.1714,
       "live": true
     },
     "donchian_1h:gold": {
@@ -19930,22 +19931,23 @@
           "entry": 81211.828125,
           "risk": 451.279711,
           "stop": 81663.107836,
-          "status": "open",
-          "reason": null,
-          "exit_ts": null,
-          "exit": null,
-          "last": 81663.10783631203,
-          "r_topstep": null,
-          "r_bot": null,
+          "status": "closed",
+          "reason": "stop",
+          "exit_ts": 1792076400,
+          "exit": 81663.10783631203,
+          "last": null,
+          "r_topstep": -1.0736,
+          "r_bot": -1.108,
           "notified_entry": "2026-10-15T08:20:46Z",
           "micros": 5,
-          "close_at": 1792484100
+          "close_at": 1792484100,
+          "notified_exit": "2026-10-15T15:05:46Z"
         }
       ],
       "live": true,
-      "checked_hour": "2026-10-15T14:45:00Z",
-      "n": 0,
-      "mean_r": null
+      "checked_hour": "2026-10-15T15:00:00Z",
+      "n": 1,
+      "mean_r": -1.0736
     },
     "nuit_asie:gold": {
       "strategy": "nuit_asie",
@@ -19983,28 +19985,28 @@
       "since": "2026-10-14T14:00:00Z",
       "trades": [],
       "live": true,
-      "checked_hour": "2026-10-15T14:45:00Z",
+      "checked_hour": "2026-10-15T15:00:00Z",
       "n": 0,
       "mean_r": null
     }
   },
   "drift": {
-    "updated_at": "2026-10-15T14:10:52Z",
+    "updated_at": "2026-10-15T15:05:46Z",
     "cells": {
       "donchian_1h:bitcoin": {
-        "n": 7,
-        "cum_r": -2.2599,
+        "n": 8,
+        "cum_r": -1.3714,
         "dd_r": 4.2151,
         "ref_n": 511,
         "ref_mean_r": 0.0728,
-        "cum_pct": 0.336,
-        "dd_pct": 0.787,
+        "cum_pct": 0.441,
+        "dd_pct": 0.7108,
         "status": "dans la norme",
         "band": {
-          "cum_p5": -5.448,
-          "cum_p50": -0.782,
-          "cum_p95": 10.724,
-          "dd_p95": 5.646
+          "cum_p5": -5.911,
+          "cum_p50": -0.705,
+          "cum_p95": 11.71,
+          "dd_p95": 6.196
         },
         "label": "Donchian 1 h · Bitcoin",
         "ref_period": [
