@@ -3,7 +3,8 @@
 Le pont lit, toutes les 30 s, les signaux ouverts publiés par le bot sur le site (docs/live/<actif>.json) et les
 signaux réels du laboratoire (data/lab_shadow.json : creux repris sur le Nasdaq). Les prix du bot sont ceux des
 contrats à terme (Yahoo), un peu différents de ceux du CFD : on garde donc les **distances** du stop et de l'objectif,
-appliquées au prix du CFD au moment de la copie. Taille : 1 % du solde démo au stop. Un signal publié il y a plus de
+appliquées au prix du CFD au moment de la copie. Taille : la même que la simulation du site (mêmes $ par point que
+ses micro-contrats, demandé par Yanisse le 15/10/2026) ; si la simulation est illisible, 1 % du solde démo au stop. Un signal publié il y a plus de
 15 min n'est plus copié. Sortie : stop et objectif chez le courtier, ou fermeture à l'expiration du signal, ou quand
 le bot le ferme. Compte démo seulement, magic 200001, règles d'arrêt de demo_rules.
 """
@@ -40,6 +41,10 @@ SYMBOLS = {"gold": "XAUUSD+", "nasdaq": "NAS100", "sp500": "SP500", "bitcoin": "
 SITE = "https://raw.githubusercontent.com/Yxnisse7/Trading-Bot/main/docs/live/{asset}.json"
 LAB = "https://raw.githubusercontent.com/Yxnisse7/Trading-Bot/main/data/lab_shadow.json"
 LAB_TARGET_R = {"creux_repris_15m": 3.0}
+PORTFOLIO = "https://raw.githubusercontent.com/Yxnisse7/Trading-Bot/main/docs/portfolio.json"
+# Contrat de la simulation par actif (config.py) : $ par point pour 1 lot, lot minimal, pas
+SIM_LOTS = {"gold": (10.0, 1.0, 1.0), "nasdaq": (2.0, 1.0, 1.0), "sp500": (5.0, 1.0, 1.0), "bitcoin": (1.0, 0.001, 0.001),
+            "ethereum": (1.0, 0.01, 0.01), "oil": (100.0, 1.0, 1.0), "euro": (12500.0, 1.0, 1.0)}
 
 
 def _ts(s: str | None) -> int | None:
@@ -87,7 +92,38 @@ def read_signals(get: Callable[[str], Any] = _get) -> tuple[list[dict[str, Any]]
                             "expires": t.get("close_at")})
     except Exception as exc:
         log.info("laboratoire illisible (%s)", exc)
+    sim_sizes(out, get)
     return out, ok
+
+
+def sim_sizes(signals: list[dict[str, Any]], get: Callable[[str], Any] = _get) -> None:
+    """Ajoute à chaque signal `point_value` : les $ par point que la simulation du site met sur ce trade."""
+    try:
+        pf = get(PORTFOLIO)
+        balance, risk_pct, opened = float(pf["balance"]), float(pf["risk_pct"]), pf.get("open") or {}
+    except Exception as exc:
+        log.info("simulation illisible (%s)", exc)
+        return
+    for s in signals:
+        if s["asset"] not in SIM_LOTS:
+            continue
+        mult, lot_min, step = SIM_LOTS[s["asset"]]
+        kind, rest = s["key"].split(":", 1)
+        sid = rest if kind == "bot" else "lab-" + rest.replace(":", "-")
+        if sid in opened and opened[sid].get("lots"):
+            lots = float(opened[sid]["lots"])             # la position de la simulation elle-même
+        else:                                             # pas encore ouverte : même calcul que portfolio.size_position
+            lots = max(lot_min, math.floor(balance * risk_pct / 100 / (s["stop"] * mult) / step + 1e-9) * step)
+        s["point_value"] = lots * mult
+
+
+def mirror_lot(point_value: float, info) -> float:
+    """Lot MT5 qui vaut `point_value` $ par point (au pas du courtier, au moins le minimum)."""
+    contract, step = float(info.trade_contract_size), float(info.volume_step)
+    if point_value <= 0 or contract <= 0 or step <= 0:
+        return 0.0
+    lot = max(float(info.volume_min), round(point_value / contract / step) * step)
+    return round(min(lot, float(info.volume_max)), 2)
 
 
 def lot_for(balance: float, dist: float, info, min_lot_risk: float | None = None) -> float:
@@ -210,8 +246,11 @@ class Copier:
         if s["stop"] < info.trade_stops_level * info.point:
             return {"status": "stop plus court que le minimum du courtier"}
         strat = s["key"].split(":")[1] if s["key"].startswith("lab:") else None
-        lot = lot_for(balance, s["stop"], info, MIN_LOT_MAX_RISK.get(strat))
-        lot = floor_lot(lot, balance, s["stop"], info, MIN_POINT_VALUE.get(sym))
+        if s.get("point_value"):
+            lot = mirror_lot(s["point_value"], info)
+        else:
+            lot = lot_for(balance, s["stop"], info, MIN_LOT_MAX_RISK.get(strat))
+            lot = floor_lot(lot, balance, s["stop"], info, MIN_POINT_VALUE.get(sym))
         if lot <= 0:
             return {"status": "taille minimale trop risquée"}
         res = self.mt5.order_send({

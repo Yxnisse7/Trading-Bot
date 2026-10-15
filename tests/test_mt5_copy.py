@@ -124,3 +124,19 @@ def test_floor_of_dollars_per_point():
     assert mc.floor_lot(0.15, 1000, 250.0, nas, 0.5) == 0.0         # 125 $ au stop : trop risqué, pas copié
     assert mc.floor_lot(0.8, 1000, 10.0, nas, 0.5) == 0.8           # déjà au-dessus
     assert mc.floor_lot(0.02, 1000, 500.0, nas, None) == 0.02       # pas de plancher (cryptos)
+
+
+def test_copy_uses_the_simulation_size(tmp_path):
+    created = mc._ts("2026-10-14T13:50:00Z")
+    base = site([sig()])
+
+    def get(url, opened=True):
+        if "portfolio" in url:
+            return {"balance": 1355.0, "risk_pct": 10.0, "open": {"abc": {"lots": 1}} if opened else {}}
+        return base(url)
+    mt5 = FakeMT5()
+    mc.Copier(mt5, tmp_path, lambda *a, **k: None, lambda: created + 60, get=get).step()
+    assert mt5.sent[0]["volume"] == 0.1                               # 1 MGC = 10 $/point = 0,10 lot de 100 onces
+    out, _ = mc.read_signals(lambda u: get(u, opened=False))
+    assert out[0]["point_value"] == 10.0                               # 135 $ / (8 × 10) = 1,7 → 1 MGC
+    assert mc.mirror_lot(2.0, NS(trade_contract_size=1.0, volume_step=0.01, volume_min=0.01, volume_max=100.0)) == 2.0
