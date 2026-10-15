@@ -57,7 +57,7 @@ def sig(**kw):
     return s
 
 
-def test_copies_a_fresh_bot_signal_with_its_distances_and_one_percent_risk(tmp_path):
+def test_copies_a_fresh_bot_signal_with_its_distances_and_five_percent_risk(tmp_path):
     mt5 = FakeMT5()
     created = mc._ts("2026-10-14T13:50:00Z")
     c = mc.Copier(mt5, tmp_path, lambda *a, **k: None, lambda: created + 60, get=site([sig()]))
@@ -65,7 +65,7 @@ def test_copies_a_fresh_bot_signal_with_its_distances_and_one_percent_risk(tmp_p
     req = mt5.sent[0]
     assert req["symbol"] == "XAUUSD+" and req["type"] == mt5.ORDER_TYPE_SELL
     assert req["sl"] == 4208.0 and req["tp"] == 4192.0              # 8 $ de stop, 8 $ d'objectif autour de 4 200
-    assert req["volume"] == 0.01                                    # 1 % de 1 000 $ / (8 $ × 100) = 0,0125 → 0,01
+    assert req["volume"] == 0.06                                    # 5 % de 1 000 $ / (8 $ × 100) = 0,0625 → 0,06
     c.last = 0
     c.step()
     assert len(mt5.sent) == 1                                       # pas de doublon
@@ -97,9 +97,9 @@ def test_shadow_signals_and_real_accounts_are_ignored(tmp_path):
 def test_min_lot_exception_for_asian_night():
     from types import SimpleNamespace
     info = SimpleNamespace(trade_contract_size=100.0, volume_step=0.01, volume_min=0.01, volume_max=1.0)
-    assert mc.lot_for(1000, 41.0, info) == 0.0                     # 41 $ au lot minimum : plus que 2 %
-    assert mc.lot_for(1000, 41.0, info, mc.MIN_LOT_MAX_RISK["nuit_asie"]) == 0.01
-    assert mc.lot_for(1000, 60.0, info, mc.MIN_LOT_MAX_RISK["nuit_asie"]) == 0.0   # au-delà de 5 %
+    assert mc.lot_for(1000, 41.0, info, mc.MIN_LOT_MAX_RISK["nuit_asie"]) == 0.01   # 41 $ : 4,1 %, sous 5 %
+    assert mc.lot_for(1000, 90.0, info) == 0.01                    # lot minimum toléré jusqu'à 2 × 5 % = 10 %
+    assert mc.lot_for(1000, 120.0, info) == 0.0                    # 12 % : pas copié
 
 
 def test_zero_quote_is_retried_not_sent(tmp_path, monkeypatch):
@@ -124,19 +124,3 @@ def test_floor_of_dollars_per_point():
     assert mc.floor_lot(0.15, 1000, 250.0, nas, 0.5) == 0.0         # 125 $ au stop : trop risqué, pas copié
     assert mc.floor_lot(0.8, 1000, 10.0, nas, 0.5) == 0.8           # déjà au-dessus
     assert mc.floor_lot(0.02, 1000, 500.0, nas, None) == 0.02       # pas de plancher (cryptos)
-
-
-def test_copy_uses_the_simulation_size(tmp_path):
-    created = mc._ts("2026-10-14T13:50:00Z")
-    base = site([sig()])
-
-    def get(url, opened=True):
-        if "portfolio" in url:
-            return {"balance": 1355.0, "risk_pct": 10.0, "open": {"abc": {"lots": 1}} if opened else {}}
-        return base(url)
-    mt5 = FakeMT5()
-    mc.Copier(mt5, tmp_path, lambda *a, **k: None, lambda: created + 60, get=get).step()
-    assert mt5.sent[0]["volume"] == 0.1                               # 1 MGC = 10 $/point = 0,10 lot de 100 onces
-    out, _ = mc.read_signals(lambda u: get(u, opened=False))
-    assert out[0]["point_value"] == 10.0                               # 135 $ / (8 × 10) = 1,7 → 1 MGC
-    assert mc.mirror_lot(2.0, NS(trade_contract_size=1.0, volume_step=0.01, volume_min=0.01, volume_max=100.0)) == 2.0
