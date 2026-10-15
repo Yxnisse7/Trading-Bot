@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-15T11:20:58.497305+02:00",
+  "updated_at": "2026-10-15T11:25:56.176639+02:00",
   "timezone": "Europe/Paris",
   "equity_curve": [
     {
@@ -1680,18 +1680,18 @@
       "avg_pnl_pct": -0.0225
     },
     "shadow": {
-      "n": 482,
+      "n": 484,
       "tp": 165,
-      "sl": 240,
+      "sl": 242,
       "expired": 77,
-      "win_rate": 0.4074074074074074,
-      "neutral_win_rate": 0.391,
-      "edge": 0.0164,
-      "pnl_pct": 8.292,
-      "avg_pnl_pct": 0.0172
+      "win_rate": 0.40540540540540543,
+      "neutral_win_rate": 0.3904,
+      "edge": 0.015,
+      "pnl_pct": 7.7413,
+      "avg_pnl_pct": 0.016
     },
     "open": 0,
-    "open_shadow": 5
+    "open_shadow": 3
   },
   "by_source": {
     "bot": {
@@ -1728,15 +1728,15 @@
       "avg_pnl_pct": 0.0
     },
     "shadow": {
-      "n": 482,
+      "n": 484,
       "tp": 165,
-      "sl": 240,
+      "sl": 242,
       "expired": 77,
-      "win_rate": 0.4074074074074074,
-      "neutral_win_rate": 0.391,
-      "edge": 0.0164,
-      "pnl_pct": 8.292,
-      "avg_pnl_pct": 0.0172
+      "win_rate": 0.40540540540540543,
+      "neutral_win_rate": 0.3904,
+      "edge": 0.015,
+      "pnl_pct": 7.7413,
+      "avg_pnl_pct": 0.016
     }
   },
   "by_horizon": {
@@ -1795,15 +1795,15 @@
         "avg_pnl_pct": 0.0317
       },
       "shadow": {
-        "n": 169,
+        "n": 171,
         "tp": 83,
-        "sl": 70,
+        "sl": 72,
         "expired": 16,
-        "win_rate": 0.5424836601307189,
-        "neutral_win_rate": 0.3492,
-        "edge": 0.1933,
-        "pnl_pct": 24.3162,
-        "avg_pnl_pct": 0.1439
+        "win_rate": 0.535483870967742,
+        "neutral_win_rate": 0.348,
+        "edge": 0.1875,
+        "pnl_pct": 23.7655,
+        "avg_pnl_pct": 0.139
       },
       "open": 0,
       "session_utc": [
@@ -2066,17 +2066,17 @@
     {
       "key": "trend_5m",
       "label": "Tendance 5 min",
-      "weight": 1.063,
+      "weight": 1.058,
       "stats": {
-        "n": 535,
+        "n": 537,
         "tp": 197,
-        "sl": 261,
+        "sl": 263,
         "expired": 77,
-        "win_rate": 0.43013100436681223,
-        "neutral_win_rate": 0.3922,
-        "edge": 0.0379,
-        "pnl_pct": 10.9598,
-        "avg_pnl_pct": 0.0205
+        "win_rate": 0.4282608695652174,
+        "neutral_win_rate": 0.3917,
+        "edge": 0.0366,
+        "pnl_pct": 10.4091,
+        "avg_pnl_pct": 0.0194
       },
       "by_source": {
         "bot": {
@@ -2113,15 +2113,15 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 402,
+          "n": 404,
           "tp": 151,
-          "sl": 205,
+          "sl": 207,
           "expired": 46,
-          "win_rate": 0.4241573033707865,
-          "neutral_win_rate": 0.3854,
-          "edge": 0.0388,
-          "pnl_pct": 12.8351,
-          "avg_pnl_pct": 0.0319
+          "win_rate": 0.42178770949720673,
+          "neutral_win_rate": 0.3847,
+          "edge": 0.0371,
+          "pnl_pct": 12.2844,
+          "avg_pnl_pct": 0.0304
         }
       },
       "last_trades": [
@@ -2161,6 +2161,41 @@
           "manual_exit": null
         },
         {
+          "id": "0652babc08",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "short",
+          "horizon": "24h",
+          "entry": 29820.5,
+          "take_profit": 29584.25,
+          "stop_loss": 29899.25,
+          "risk_reward": 3.0,
+          "confidence": "fort",
+          "score": 9.77,
+          "criteria": [
+            "adx",
+            "pdhl",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.2741,
+          "pnl_gross_pct": -0.2641,
+          "duration_minutes": 72,
+          "close_price": 29899.25,
+          "created_at": "2026-10-15T08:01:17Z",
+          "closed_at": "2026-10-15T09:14:00Z",
+          "created_local": "15/10 10:01",
+          "expires_at": "2026-10-16T08:01:17Z",
+          "rationale": "Vente : tendance forte (ADX), cassure des extrêmes de la veille, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 131.49 (0.44 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 63%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+          "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité à surveiller (score 2) : Tech stocks plunge as Fed rate hike fears, AI funding worries mount; ASML, SK Hynix slump",
+          "manual_exit": null
+        },
+        {
           "id": "137c469652",
           "asset": "nasdaq",
           "asset_label": "Nasdaq 100 (NQ)",
@@ -2192,6 +2227,41 @@
           "expires_at": "2026-10-16T07:31:07Z",
           "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 132.22 (0.44 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 59%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
           "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité à surveiller (score 2) : Tech stocks plunge as Fed rate hike fears, AI funding worries mount; ASML, SK Hynix slump",
+          "manual_exit": null
+        },
+        {
+          "id": "4a03b72577",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "short",
+          "horizon": "24h",
+          "entry": 29820.0,
+          "take_profit": 29581.5,
+          "stop_loss": 29899.5,
+          "risk_reward": 3.0,
+          "confidence": "fort",
+          "score": 9.79,
+          "criteria": [
+            "adx",
+            "pdhl",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.2766,
+          "pnl_gross_pct": -0.2666,
+          "duration_minutes": 108,
+          "close_price": 29899.5,
+          "created_at": "2026-10-15T07:25:42Z",
+          "closed_at": "2026-10-15T09:14:00Z",
+          "created_local": "15/10 09:25",
+          "expires_at": "2026-10-16T07:25:42Z",
+          "rationale": "Vente : tendance forte (ADX), cassure des extrêmes de la veille, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 132.22 (0.44 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 61%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+          "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité à surveiller (score 2) : Tech stocks plunge as Fed rate hike fears, AI funding worries mount",
           "manual_exit": null
         },
         {
@@ -2328,73 +2398,6 @@
           "created_local": "15/10 09:10",
           "expires_at": "2026-10-16T07:10:42Z",
           "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 128.40 (0.43 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 61%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
-          "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité à surveiller (score 2) : SK Hynix shares plunge 10% amid Asia tech rout as Fed rate hike fears, AI funding worries mount",
-          "manual_exit": null
-        },
-        {
-          "id": "a18af44050",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "long",
-          "horizon": "1h",
-          "entry": 4158.9,
-          "take_profit": 4167.8,
-          "stop_loss": 4152.2,
-          "risk_reward": 1.33,
-          "confidence": "moyen",
-          "score": 4.86,
-          "criteria": [
-            "adx",
-            "macd",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m"
-          ],
-          "source": "shadow",
-          "status": "expired",
-          "pnl_pct": 0.1748,
-          "pnl_gross_pct": 0.1948,
-          "duration_minutes": 60,
-          "close_price": 4167.0,
-          "created_at": "2026-10-15T07:10:42Z",
-          "closed_at": "2026-10-15T08:10:53Z",
-          "created_local": "15/10 09:10",
-          "expires_at": "2026-10-15T08:10:42Z",
-          "rationale": "Achat : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min. Range moyen sur 1 h ≈ 16.80 (0.40 %), TP = 53 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 46%.",
-          "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité à surveiller (score 2) : SK Hynix shares plunge 10% amid Asia tech rout as Fed rate hike fears, AI funding worries mount",
-          "manual_exit": null
-        },
-        {
-          "id": "234b1d1ce4",
-          "asset": "nasdaq",
-          "asset_label": "Nasdaq 100 (NQ)",
-          "direction": "short",
-          "horizon": "24h",
-          "entry": 29777.5,
-          "take_profit": 29548.0,
-          "stop_loss": 29854.0,
-          "risk_reward": 3.0,
-          "confidence": "fort",
-          "score": 8.24,
-          "criteria": [
-            "adx",
-            "macd",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.2669,
-          "pnl_gross_pct": -0.2569,
-          "duration_minutes": 37,
-          "close_price": 29854.0,
-          "created_at": "2026-10-15T07:05:40Z",
-          "closed_at": "2026-10-15T07:43:00Z",
-          "created_local": "15/10 09:05",
-          "expires_at": "2026-10-16T07:05:40Z",
-          "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 127.20 (0.43 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 62%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
           "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité à surveiller (score 2) : SK Hynix shares plunge 10% amid Asia tech rout as Fed rate hike fears, AI funding worries mount",
           "manual_exit": null
         }
@@ -2403,17 +2406,17 @@
     {
       "key": "trend_15m",
       "label": "Tendance 15 min",
-      "weight": 1.063,
+      "weight": 1.058,
       "stats": {
-        "n": 631,
+        "n": 633,
         "tp": 215,
-        "sl": 305,
+        "sl": 307,
         "expired": 111,
-        "win_rate": 0.41346153846153844,
-        "neutral_win_rate": 0.3962,
-        "edge": 0.0173,
-        "pnl_pct": 5.0796,
-        "avg_pnl_pct": 0.0081
+        "win_rate": 0.4118773946360153,
+        "neutral_win_rate": 0.3958,
+        "edge": 0.0161,
+        "pnl_pct": 4.5289,
+        "avg_pnl_pct": 0.0072
       },
       "by_source": {
         "bot": {
@@ -2450,15 +2453,15 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 482,
+          "n": 484,
           "tp": 165,
-          "sl": 240,
+          "sl": 242,
           "expired": 77,
-          "win_rate": 0.4074074074074074,
-          "neutral_win_rate": 0.391,
-          "edge": 0.0164,
-          "pnl_pct": 8.292,
-          "avg_pnl_pct": 0.0172
+          "win_rate": 0.40540540540540543,
+          "neutral_win_rate": 0.3904,
+          "edge": 0.015,
+          "pnl_pct": 7.7413,
+          "avg_pnl_pct": 0.016
         }
       },
       "last_trades": [
@@ -2498,6 +2501,41 @@
           "manual_exit": null
         },
         {
+          "id": "0652babc08",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "short",
+          "horizon": "24h",
+          "entry": 29820.5,
+          "take_profit": 29584.25,
+          "stop_loss": 29899.25,
+          "risk_reward": 3.0,
+          "confidence": "fort",
+          "score": 9.77,
+          "criteria": [
+            "adx",
+            "pdhl",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.2741,
+          "pnl_gross_pct": -0.2641,
+          "duration_minutes": 72,
+          "close_price": 29899.25,
+          "created_at": "2026-10-15T08:01:17Z",
+          "closed_at": "2026-10-15T09:14:00Z",
+          "created_local": "15/10 10:01",
+          "expires_at": "2026-10-16T08:01:17Z",
+          "rationale": "Vente : tendance forte (ADX), cassure des extrêmes de la veille, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 131.49 (0.44 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 63%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+          "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité à surveiller (score 2) : Tech stocks plunge as Fed rate hike fears, AI funding worries mount; ASML, SK Hynix slump",
+          "manual_exit": null
+        },
+        {
           "id": "137c469652",
           "asset": "nasdaq",
           "asset_label": "Nasdaq 100 (NQ)",
@@ -2529,6 +2567,41 @@
           "expires_at": "2026-10-16T07:31:07Z",
           "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 132.22 (0.44 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 59%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
           "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité à surveiller (score 2) : Tech stocks plunge as Fed rate hike fears, AI funding worries mount; ASML, SK Hynix slump",
+          "manual_exit": null
+        },
+        {
+          "id": "4a03b72577",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "short",
+          "horizon": "24h",
+          "entry": 29820.0,
+          "take_profit": 29581.5,
+          "stop_loss": 29899.5,
+          "risk_reward": 3.0,
+          "confidence": "fort",
+          "score": 9.79,
+          "criteria": [
+            "adx",
+            "pdhl",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.2766,
+          "pnl_gross_pct": -0.2666,
+          "duration_minutes": 108,
+          "close_price": 29899.5,
+          "created_at": "2026-10-15T07:25:42Z",
+          "closed_at": "2026-10-15T09:14:00Z",
+          "created_local": "15/10 09:25",
+          "expires_at": "2026-10-16T07:25:42Z",
+          "rationale": "Vente : tendance forte (ADX), cassure des extrêmes de la veille, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 132.22 (0.44 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 61%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+          "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité à surveiller (score 2) : Tech stocks plunge as Fed rate hike fears, AI funding worries mount",
           "manual_exit": null
         },
         {
@@ -2665,73 +2738,6 @@
           "created_local": "15/10 09:10",
           "expires_at": "2026-10-16T07:10:42Z",
           "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 128.40 (0.43 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 61%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
-          "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité à surveiller (score 2) : SK Hynix shares plunge 10% amid Asia tech rout as Fed rate hike fears, AI funding worries mount",
-          "manual_exit": null
-        },
-        {
-          "id": "a18af44050",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "long",
-          "horizon": "1h",
-          "entry": 4158.9,
-          "take_profit": 4167.8,
-          "stop_loss": 4152.2,
-          "risk_reward": 1.33,
-          "confidence": "moyen",
-          "score": 4.86,
-          "criteria": [
-            "adx",
-            "macd",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m"
-          ],
-          "source": "shadow",
-          "status": "expired",
-          "pnl_pct": 0.1748,
-          "pnl_gross_pct": 0.1948,
-          "duration_minutes": 60,
-          "close_price": 4167.0,
-          "created_at": "2026-10-15T07:10:42Z",
-          "closed_at": "2026-10-15T08:10:53Z",
-          "created_local": "15/10 09:10",
-          "expires_at": "2026-10-15T08:10:42Z",
-          "rationale": "Achat : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min. Range moyen sur 1 h ≈ 16.80 (0.40 %), TP = 53 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 46%.",
-          "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité à surveiller (score 2) : SK Hynix shares plunge 10% amid Asia tech rout as Fed rate hike fears, AI funding worries mount",
-          "manual_exit": null
-        },
-        {
-          "id": "234b1d1ce4",
-          "asset": "nasdaq",
-          "asset_label": "Nasdaq 100 (NQ)",
-          "direction": "short",
-          "horizon": "24h",
-          "entry": 29777.5,
-          "take_profit": 29548.0,
-          "stop_loss": 29854.0,
-          "risk_reward": 3.0,
-          "confidence": "fort",
-          "score": 8.24,
-          "criteria": [
-            "adx",
-            "macd",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.2669,
-          "pnl_gross_pct": -0.2569,
-          "duration_minutes": 37,
-          "close_price": 29854.0,
-          "created_at": "2026-10-15T07:05:40Z",
-          "closed_at": "2026-10-15T07:43:00Z",
-          "created_local": "15/10 09:05",
-          "expires_at": "2026-10-16T07:05:40Z",
-          "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 127.20 (0.43 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 62%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
           "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité à surveiller (score 2) : SK Hynix shares plunge 10% amid Asia tech rout as Fed rate hike fears, AI funding worries mount",
           "manual_exit": null
         }
@@ -2740,17 +2746,17 @@
     {
       "key": "trend_1h",
       "label": "Tendance 1 h",
-      "weight": 1.063,
+      "weight": 1.058,
       "stats": {
-        "n": 623,
+        "n": 625,
         "tp": 212,
-        "sl": 303,
+        "sl": 305,
         "expired": 108,
-        "win_rate": 0.4116504854368932,
-        "neutral_win_rate": 0.3961,
-        "edge": 0.0156,
-        "pnl_pct": 5.0648,
-        "avg_pnl_pct": 0.0081
+        "win_rate": 0.41005802707930367,
+        "neutral_win_rate": 0.3956,
+        "edge": 0.0145,
+        "pnl_pct": 4.5141,
+        "avg_pnl_pct": 0.0072
       },
       "by_source": {
         "bot": {
@@ -2787,15 +2793,15 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 474,
+          "n": 476,
           "tp": 162,
-          "sl": 238,
+          "sl": 240,
           "expired": 74,
-          "win_rate": 0.405,
-          "neutral_win_rate": 0.3908,
-          "edge": 0.0142,
-          "pnl_pct": 8.2772,
-          "avg_pnl_pct": 0.0175
+          "win_rate": 0.40298507462686567,
+          "neutral_win_rate": 0.3902,
+          "edge": 0.0128,
+          "pnl_pct": 7.7265,
+          "avg_pnl_pct": 0.0162
         }
       },
       "last_trades": [
@@ -2835,6 +2841,41 @@
           "manual_exit": null
         },
         {
+          "id": "0652babc08",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "short",
+          "horizon": "24h",
+          "entry": 29820.5,
+          "take_profit": 29584.25,
+          "stop_loss": 29899.25,
+          "risk_reward": 3.0,
+          "confidence": "fort",
+          "score": 9.77,
+          "criteria": [
+            "adx",
+            "pdhl",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.2741,
+          "pnl_gross_pct": -0.2641,
+          "duration_minutes": 72,
+          "close_price": 29899.25,
+          "created_at": "2026-10-15T08:01:17Z",
+          "closed_at": "2026-10-15T09:14:00Z",
+          "created_local": "15/10 10:01",
+          "expires_at": "2026-10-16T08:01:17Z",
+          "rationale": "Vente : tendance forte (ADX), cassure des extrêmes de la veille, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 131.49 (0.44 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 63%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+          "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité à surveiller (score 2) : Tech stocks plunge as Fed rate hike fears, AI funding worries mount; ASML, SK Hynix slump",
+          "manual_exit": null
+        },
+        {
           "id": "137c469652",
           "asset": "nasdaq",
           "asset_label": "Nasdaq 100 (NQ)",
@@ -2866,6 +2907,41 @@
           "expires_at": "2026-10-16T07:31:07Z",
           "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 132.22 (0.44 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 59%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
           "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité à surveiller (score 2) : Tech stocks plunge as Fed rate hike fears, AI funding worries mount; ASML, SK Hynix slump",
+          "manual_exit": null
+        },
+        {
+          "id": "4a03b72577",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "short",
+          "horizon": "24h",
+          "entry": 29820.0,
+          "take_profit": 29581.5,
+          "stop_loss": 29899.5,
+          "risk_reward": 3.0,
+          "confidence": "fort",
+          "score": 9.79,
+          "criteria": [
+            "adx",
+            "pdhl",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.2766,
+          "pnl_gross_pct": -0.2666,
+          "duration_minutes": 108,
+          "close_price": 29899.5,
+          "created_at": "2026-10-15T07:25:42Z",
+          "closed_at": "2026-10-15T09:14:00Z",
+          "created_local": "15/10 09:25",
+          "expires_at": "2026-10-16T07:25:42Z",
+          "rationale": "Vente : tendance forte (ADX), cassure des extrêmes de la veille, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 132.22 (0.44 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 61%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+          "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité à surveiller (score 2) : Tech stocks plunge as Fed rate hike fears, AI funding worries mount",
           "manual_exit": null
         },
         {
@@ -3002,73 +3078,6 @@
           "created_local": "15/10 09:10",
           "expires_at": "2026-10-16T07:10:42Z",
           "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 128.40 (0.43 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 61%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
-          "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité à surveiller (score 2) : SK Hynix shares plunge 10% amid Asia tech rout as Fed rate hike fears, AI funding worries mount",
-          "manual_exit": null
-        },
-        {
-          "id": "a18af44050",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "long",
-          "horizon": "1h",
-          "entry": 4158.9,
-          "take_profit": 4167.8,
-          "stop_loss": 4152.2,
-          "risk_reward": 1.33,
-          "confidence": "moyen",
-          "score": 4.86,
-          "criteria": [
-            "adx",
-            "macd",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m"
-          ],
-          "source": "shadow",
-          "status": "expired",
-          "pnl_pct": 0.1748,
-          "pnl_gross_pct": 0.1948,
-          "duration_minutes": 60,
-          "close_price": 4167.0,
-          "created_at": "2026-10-15T07:10:42Z",
-          "closed_at": "2026-10-15T08:10:53Z",
-          "created_local": "15/10 09:10",
-          "expires_at": "2026-10-15T08:10:42Z",
-          "rationale": "Achat : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min. Range moyen sur 1 h ≈ 16.80 (0.40 %), TP = 53 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 46%.",
-          "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité à surveiller (score 2) : SK Hynix shares plunge 10% amid Asia tech rout as Fed rate hike fears, AI funding worries mount",
-          "manual_exit": null
-        },
-        {
-          "id": "234b1d1ce4",
-          "asset": "nasdaq",
-          "asset_label": "Nasdaq 100 (NQ)",
-          "direction": "short",
-          "horizon": "24h",
-          "entry": 29777.5,
-          "take_profit": 29548.0,
-          "stop_loss": 29854.0,
-          "risk_reward": 3.0,
-          "confidence": "fort",
-          "score": 8.24,
-          "criteria": [
-            "adx",
-            "macd",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.2669,
-          "pnl_gross_pct": -0.2569,
-          "duration_minutes": 37,
-          "close_price": 29854.0,
-          "created_at": "2026-10-15T07:05:40Z",
-          "closed_at": "2026-10-15T07:43:00Z",
-          "created_local": "15/10 09:05",
-          "expires_at": "2026-10-16T07:05:40Z",
-          "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 127.20 (0.43 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 62%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
           "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité à surveiller (score 2) : SK Hynix shares plunge 10% amid Asia tech rout as Fed rate hike fears, AI funding worries mount",
           "manual_exit": null
         }
@@ -3077,17 +3086,17 @@
     {
       "key": "adx",
       "label": "Force de tendance (ADX)",
-      "weight": 1.063,
+      "weight": 1.058,
       "stats": {
-        "n": 631,
+        "n": 633,
         "tp": 215,
-        "sl": 305,
+        "sl": 307,
         "expired": 111,
-        "win_rate": 0.41346153846153844,
-        "neutral_win_rate": 0.3962,
-        "edge": 0.0173,
-        "pnl_pct": 5.0796,
-        "avg_pnl_pct": 0.0081
+        "win_rate": 0.4118773946360153,
+        "neutral_win_rate": 0.3958,
+        "edge": 0.0161,
+        "pnl_pct": 4.5289,
+        "avg_pnl_pct": 0.0072
       },
       "by_source": {
         "bot": {
@@ -3124,15 +3133,15 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 482,
+          "n": 484,
           "tp": 165,
-          "sl": 240,
+          "sl": 242,
           "expired": 77,
-          "win_rate": 0.4074074074074074,
-          "neutral_win_rate": 0.391,
-          "edge": 0.0164,
-          "pnl_pct": 8.292,
-          "avg_pnl_pct": 0.0172
+          "win_rate": 0.40540540540540543,
+          "neutral_win_rate": 0.3904,
+          "edge": 0.015,
+          "pnl_pct": 7.7413,
+          "avg_pnl_pct": 0.016
         }
       },
       "last_trades": [
@@ -3172,6 +3181,41 @@
           "manual_exit": null
         },
         {
+          "id": "0652babc08",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "short",
+          "horizon": "24h",
+          "entry": 29820.5,
+          "take_profit": 29584.25,
+          "stop_loss": 29899.25,
+          "risk_reward": 3.0,
+          "confidence": "fort",
+          "score": 9.77,
+          "criteria": [
+            "adx",
+            "pdhl",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.2741,
+          "pnl_gross_pct": -0.2641,
+          "duration_minutes": 72,
+          "close_price": 29899.25,
+          "created_at": "2026-10-15T08:01:17Z",
+          "closed_at": "2026-10-15T09:14:00Z",
+          "created_local": "15/10 10:01",
+          "expires_at": "2026-10-16T08:01:17Z",
+          "rationale": "Vente : tendance forte (ADX), cassure des extrêmes de la veille, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 131.49 (0.44 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 63%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+          "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité à surveiller (score 2) : Tech stocks plunge as Fed rate hike fears, AI funding worries mount; ASML, SK Hynix slump",
+          "manual_exit": null
+        },
+        {
           "id": "137c469652",
           "asset": "nasdaq",
           "asset_label": "Nasdaq 100 (NQ)",
@@ -3203,6 +3247,41 @@
           "expires_at": "2026-10-16T07:31:07Z",
           "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 132.22 (0.44 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 59%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
           "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité à surveiller (score 2) : Tech stocks plunge as Fed rate hike fears, AI funding worries mount; ASML, SK Hynix slump",
+          "manual_exit": null
+        },
+        {
+          "id": "4a03b72577",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "short",
+          "horizon": "24h",
+          "entry": 29820.0,
+          "take_profit": 29581.5,
+          "stop_loss": 29899.5,
+          "risk_reward": 3.0,
+          "confidence": "fort",
+          "score": 9.79,
+          "criteria": [
+            "adx",
+            "pdhl",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.2766,
+          "pnl_gross_pct": -0.2666,
+          "duration_minutes": 108,
+          "close_price": 29899.5,
+          "created_at": "2026-10-15T07:25:42Z",
+          "closed_at": "2026-10-15T09:14:00Z",
+          "created_local": "15/10 09:25",
+          "expires_at": "2026-10-16T07:25:42Z",
+          "rationale": "Vente : tendance forte (ADX), cassure des extrêmes de la veille, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 132.22 (0.44 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 61%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+          "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité à surveiller (score 2) : Tech stocks plunge as Fed rate hike fears, AI funding worries mount",
           "manual_exit": null
         },
         {
@@ -3341,90 +3420,23 @@
           "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 128.40 (0.43 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 61%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
           "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité à surveiller (score 2) : SK Hynix shares plunge 10% amid Asia tech rout as Fed rate hike fears, AI funding worries mount",
           "manual_exit": null
-        },
-        {
-          "id": "a18af44050",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "long",
-          "horizon": "1h",
-          "entry": 4158.9,
-          "take_profit": 4167.8,
-          "stop_loss": 4152.2,
-          "risk_reward": 1.33,
-          "confidence": "moyen",
-          "score": 4.86,
-          "criteria": [
-            "adx",
-            "macd",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m"
-          ],
-          "source": "shadow",
-          "status": "expired",
-          "pnl_pct": 0.1748,
-          "pnl_gross_pct": 0.1948,
-          "duration_minutes": 60,
-          "close_price": 4167.0,
-          "created_at": "2026-10-15T07:10:42Z",
-          "closed_at": "2026-10-15T08:10:53Z",
-          "created_local": "15/10 09:10",
-          "expires_at": "2026-10-15T08:10:42Z",
-          "rationale": "Achat : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min. Range moyen sur 1 h ≈ 16.80 (0.40 %), TP = 53 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 46%.",
-          "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité à surveiller (score 2) : SK Hynix shares plunge 10% amid Asia tech rout as Fed rate hike fears, AI funding worries mount",
-          "manual_exit": null
-        },
-        {
-          "id": "234b1d1ce4",
-          "asset": "nasdaq",
-          "asset_label": "Nasdaq 100 (NQ)",
-          "direction": "short",
-          "horizon": "24h",
-          "entry": 29777.5,
-          "take_profit": 29548.0,
-          "stop_loss": 29854.0,
-          "risk_reward": 3.0,
-          "confidence": "fort",
-          "score": 8.24,
-          "criteria": [
-            "adx",
-            "macd",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.2669,
-          "pnl_gross_pct": -0.2569,
-          "duration_minutes": 37,
-          "close_price": 29854.0,
-          "created_at": "2026-10-15T07:05:40Z",
-          "closed_at": "2026-10-15T07:43:00Z",
-          "created_local": "15/10 09:05",
-          "expires_at": "2026-10-16T07:05:40Z",
-          "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 127.20 (0.43 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 62%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
-          "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité à surveiller (score 2) : SK Hynix shares plunge 10% amid Asia tech rout as Fed rate hike fears, AI funding worries mount",
-          "manual_exit": null
         }
       ]
     },
     {
       "key": "vwap",
       "label": "VWAP",
-      "weight": 0.812,
+      "weight": 0.808,
       "stats": {
-        "n": 614,
+        "n": 616,
         "tp": 213,
-        "sl": 295,
+        "sl": 297,
         "expired": 106,
-        "win_rate": 0.41929133858267714,
-        "neutral_win_rate": 0.3958,
-        "edge": 0.0235,
-        "pnl_pct": 6.7056,
-        "avg_pnl_pct": 0.0109
+        "win_rate": 0.4176470588235294,
+        "neutral_win_rate": 0.3953,
+        "edge": 0.0223,
+        "pnl_pct": 6.1549,
+        "avg_pnl_pct": 0.01
       },
       "by_source": {
         "bot": {
@@ -3461,15 +3473,15 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 467,
+          "n": 469,
           "tp": 163,
-          "sl": 232,
+          "sl": 234,
           "expired": 72,
-          "win_rate": 0.41265822784810124,
-          "neutral_win_rate": 0.3903,
-          "edge": 0.0224,
-          "pnl_pct": 9.3016,
-          "avg_pnl_pct": 0.0199
+          "win_rate": 0.4105793450881612,
+          "neutral_win_rate": 0.3897,
+          "edge": 0.0209,
+          "pnl_pct": 8.7509,
+          "avg_pnl_pct": 0.0187
         }
       },
       "last_trades": [
@@ -3509,6 +3521,41 @@
           "manual_exit": null
         },
         {
+          "id": "0652babc08",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "short",
+          "horizon": "24h",
+          "entry": 29820.5,
+          "take_profit": 29584.25,
+          "stop_loss": 29899.25,
+          "risk_reward": 3.0,
+          "confidence": "fort",
+          "score": 9.77,
+          "criteria": [
+            "adx",
+            "pdhl",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.2741,
+          "pnl_gross_pct": -0.2641,
+          "duration_minutes": 72,
+          "close_price": 29899.25,
+          "created_at": "2026-10-15T08:01:17Z",
+          "closed_at": "2026-10-15T09:14:00Z",
+          "created_local": "15/10 10:01",
+          "expires_at": "2026-10-16T08:01:17Z",
+          "rationale": "Vente : tendance forte (ADX), cassure des extrêmes de la veille, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 131.49 (0.44 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 63%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+          "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité à surveiller (score 2) : Tech stocks plunge as Fed rate hike fears, AI funding worries mount; ASML, SK Hynix slump",
+          "manual_exit": null
+        },
+        {
           "id": "137c469652",
           "asset": "nasdaq",
           "asset_label": "Nasdaq 100 (NQ)",
@@ -3540,6 +3587,41 @@
           "expires_at": "2026-10-16T07:31:07Z",
           "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 132.22 (0.44 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 59%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
           "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité à surveiller (score 2) : Tech stocks plunge as Fed rate hike fears, AI funding worries mount; ASML, SK Hynix slump",
+          "manual_exit": null
+        },
+        {
+          "id": "4a03b72577",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "short",
+          "horizon": "24h",
+          "entry": 29820.0,
+          "take_profit": 29581.5,
+          "stop_loss": 29899.5,
+          "risk_reward": 3.0,
+          "confidence": "fort",
+          "score": 9.79,
+          "criteria": [
+            "adx",
+            "pdhl",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.2766,
+          "pnl_gross_pct": -0.2666,
+          "duration_minutes": 108,
+          "close_price": 29899.5,
+          "created_at": "2026-10-15T07:25:42Z",
+          "closed_at": "2026-10-15T09:14:00Z",
+          "created_local": "15/10 09:25",
+          "expires_at": "2026-10-16T07:25:42Z",
+          "rationale": "Vente : tendance forte (ADX), cassure des extrêmes de la veille, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 132.22 (0.44 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 61%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+          "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité à surveiller (score 2) : Tech stocks plunge as Fed rate hike fears, AI funding worries mount",
           "manual_exit": null
         },
         {
@@ -3678,91 +3760,23 @@
           "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 128.40 (0.43 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 61%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
           "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité à surveiller (score 2) : SK Hynix shares plunge 10% amid Asia tech rout as Fed rate hike fears, AI funding worries mount",
           "manual_exit": null
-        },
-        {
-          "id": "234b1d1ce4",
-          "asset": "nasdaq",
-          "asset_label": "Nasdaq 100 (NQ)",
-          "direction": "short",
-          "horizon": "24h",
-          "entry": 29777.5,
-          "take_profit": 29548.0,
-          "stop_loss": 29854.0,
-          "risk_reward": 3.0,
-          "confidence": "fort",
-          "score": 8.24,
-          "criteria": [
-            "adx",
-            "macd",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.2669,
-          "pnl_gross_pct": -0.2569,
-          "duration_minutes": 37,
-          "close_price": 29854.0,
-          "created_at": "2026-10-15T07:05:40Z",
-          "closed_at": "2026-10-15T07:43:00Z",
-          "created_local": "15/10 09:05",
-          "expires_at": "2026-10-16T07:05:40Z",
-          "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 127.20 (0.43 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 62%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
-          "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité à surveiller (score 2) : SK Hynix shares plunge 10% amid Asia tech rout as Fed rate hike fears, AI funding worries mount",
-          "manual_exit": null
-        },
-        {
-          "id": "30b69f71a9",
-          "asset": "nasdaq",
-          "asset_label": "Nasdaq 100 (NQ)",
-          "direction": "short",
-          "horizon": "24h",
-          "entry": 29771.0,
-          "take_profit": 29536.0,
-          "stop_loss": 29849.5,
-          "risk_reward": 2.99,
-          "confidence": "fort",
-          "score": 8.24,
-          "criteria": [
-            "adx",
-            "macd",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.2737,
-          "pnl_gross_pct": -0.2637,
-          "duration_minutes": 40,
-          "close_price": 29849.5,
-          "created_at": "2026-10-15T07:01:12Z",
-          "closed_at": "2026-10-15T07:42:00Z",
-          "created_local": "15/10 09:01",
-          "expires_at": "2026-10-16T07:01:12Z",
-          "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 130.63 (0.44 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 61%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
-          "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité à surveiller (score 2) : SK Hynix shares plunge 10% amid Asia tech rout as Fed rate hike fears, AI funding worries mount",
-          "manual_exit": null
         }
       ]
     },
     {
       "key": "rsi",
       "label": "RSI",
-      "weight": 1.143,
+      "weight": 1.136,
       "stats": {
-        "n": 472,
+        "n": 474,
         "tp": 176,
-        "sl": 226,
+        "sl": 228,
         "expired": 70,
-        "win_rate": 0.43781094527363185,
-        "neutral_win_rate": 0.393,
-        "edge": 0.0448,
-        "pnl_pct": 11.3281,
-        "avg_pnl_pct": 0.024
+        "win_rate": 0.43564356435643564,
+        "neutral_win_rate": 0.3924,
+        "edge": 0.0432,
+        "pnl_pct": 10.7774,
+        "avg_pnl_pct": 0.0227
       },
       "by_source": {
         "bot": {
@@ -3799,15 +3813,15 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 344,
+          "n": 346,
           "tp": 131,
-          "sl": 174,
+          "sl": 176,
           "expired": 39,
-          "win_rate": 0.42950819672131146,
-          "neutral_win_rate": 0.3855,
-          "edge": 0.044,
-          "pnl_pct": 12.5194,
-          "avg_pnl_pct": 0.0364
+          "win_rate": 0.42671009771986973,
+          "neutral_win_rate": 0.3847,
+          "edge": 0.042,
+          "pnl_pct": 11.9687,
+          "avg_pnl_pct": 0.0346
         }
       },
       "last_trades": [
@@ -3847,6 +3861,41 @@
           "manual_exit": null
         },
         {
+          "id": "0652babc08",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "short",
+          "horizon": "24h",
+          "entry": 29820.5,
+          "take_profit": 29584.25,
+          "stop_loss": 29899.25,
+          "risk_reward": 3.0,
+          "confidence": "fort",
+          "score": 9.77,
+          "criteria": [
+            "adx",
+            "pdhl",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.2741,
+          "pnl_gross_pct": -0.2641,
+          "duration_minutes": 72,
+          "close_price": 29899.25,
+          "created_at": "2026-10-15T08:01:17Z",
+          "closed_at": "2026-10-15T09:14:00Z",
+          "created_local": "15/10 10:01",
+          "expires_at": "2026-10-16T08:01:17Z",
+          "rationale": "Vente : tendance forte (ADX), cassure des extrêmes de la veille, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 131.49 (0.44 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 63%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+          "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité à surveiller (score 2) : Tech stocks plunge as Fed rate hike fears, AI funding worries mount; ASML, SK Hynix slump",
+          "manual_exit": null
+        },
+        {
           "id": "137c469652",
           "asset": "nasdaq",
           "asset_label": "Nasdaq 100 (NQ)",
@@ -3878,6 +3927,41 @@
           "expires_at": "2026-10-16T07:31:07Z",
           "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 132.22 (0.44 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 59%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
           "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité à surveiller (score 2) : Tech stocks plunge as Fed rate hike fears, AI funding worries mount; ASML, SK Hynix slump",
+          "manual_exit": null
+        },
+        {
+          "id": "4a03b72577",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "short",
+          "horizon": "24h",
+          "entry": 29820.0,
+          "take_profit": 29581.5,
+          "stop_loss": 29899.5,
+          "risk_reward": 3.0,
+          "confidence": "fort",
+          "score": 9.79,
+          "criteria": [
+            "adx",
+            "pdhl",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.2766,
+          "pnl_gross_pct": -0.2666,
+          "duration_minutes": 108,
+          "close_price": 29899.5,
+          "created_at": "2026-10-15T07:25:42Z",
+          "closed_at": "2026-10-15T09:14:00Z",
+          "created_local": "15/10 09:25",
+          "expires_at": "2026-10-16T07:25:42Z",
+          "rationale": "Vente : tendance forte (ADX), cassure des extrêmes de la veille, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 132.22 (0.44 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 61%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+          "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité à surveiller (score 2) : Tech stocks plunge as Fed rate hike fears, AI funding worries mount",
           "manual_exit": null
         },
         {
@@ -4015,78 +4099,6 @@
           "expires_at": "2026-10-16T07:10:42Z",
           "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 128.40 (0.43 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 61%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
           "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité à surveiller (score 2) : SK Hynix shares plunge 10% amid Asia tech rout as Fed rate hike fears, AI funding worries mount",
-          "manual_exit": null
-        },
-        {
-          "id": "1becef8c7f",
-          "asset": "ethereum",
-          "asset_label": "Ethereum (ETH/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 2347.8,
-          "take_profit": 2332.0,
-          "stop_loss": 2358.3,
-          "risk_reward": 1.5,
-          "confidence": "fort",
-          "score": 7.97,
-          "criteria": [
-            "adx",
-            "corr",
-            "macd",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "volume",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.5272,
-          "pnl_gross_pct": -0.4472,
-          "duration_minutes": 21,
-          "close_price": 2358.3,
-          "created_at": "2026-10-15T05:55:39Z",
-          "closed_at": "2026-10-15T06:17:00Z",
-          "created_local": "15/10 07:55",
-          "expires_at": "2026-10-15T06:55:39Z",
-          "rationale": "Vente : tendance forte (ADX), marché meneur favorable, MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, volume anormal, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 26.35 (1.12 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 99%.",
-          "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité à surveiller (score 2) : Bitcoin wilts as Fed rate uncertainty weighs. Kospi plunges 8% | SK Hynix shares plunge 10% amid Asia tech rout as Fed rate hike fears, AI funding worries mount",
-          "manual_exit": null
-        },
-        {
-          "id": "5cace29c32",
-          "asset": "ethereum",
-          "asset_label": "Ethereum (ETH/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 2368.9,
-          "take_profit": 2353.3,
-          "stop_loss": 2379.3,
-          "risk_reward": 1.5,
-          "confidence": "fort",
-          "score": 5.77,
-          "criteria": [
-            "adx",
-            "corr",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "tp",
-          "pnl_pct": 0.5785,
-          "pnl_gross_pct": 0.6585,
-          "duration_minutes": 37,
-          "close_price": 2353.3,
-          "created_at": "2026-10-15T05:10:49Z",
-          "closed_at": "2026-10-15T05:48:00Z",
-          "created_local": "15/10 07:10",
-          "expires_at": "2026-10-15T06:10:49Z",
-          "rationale": "Vente : tendance forte (ADX), marché meneur favorable, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 25.96 (1.10 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 99%.",
-          "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité à surveiller (score 1) : Bitcoin wilts as Fed rate uncertainty weighs. Kospi plunges 8%",
           "manual_exit": null
         }
       ]
@@ -5213,76 +5225,6 @@
       "expires_at": "2026-10-15T09:25:57Z",
       "rationale": "Vente : tendance forte (ADX), marché meneur favorable, MACD en expansion, tendance 15 min, tendance 1 h, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 27.73 (1.17 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 50%.",
       "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité à surveiller (score 1) : Ukraine to resume strikes on Russian refineries, shattering hopes of an 'energy ceasefire'",
-      "manual_exit": null
-    },
-    {
-      "id": "0652babc08",
-      "asset": "nasdaq",
-      "asset_label": "Nasdaq 100 (NQ)",
-      "direction": "short",
-      "horizon": "24h",
-      "entry": 29820.5,
-      "take_profit": 29584.25,
-      "stop_loss": 29899.25,
-      "risk_reward": 3.0,
-      "confidence": "fort",
-      "score": 9.77,
-      "criteria": [
-        "adx",
-        "pdhl",
-        "rsi",
-        "trend_15m",
-        "trend_1h",
-        "trend_5m",
-        "vwap"
-      ],
-      "source": "shadow",
-      "status": "open",
-      "pnl_pct": null,
-      "pnl_gross_pct": null,
-      "duration_minutes": null,
-      "close_price": null,
-      "created_at": "2026-10-15T08:01:17Z",
-      "closed_at": null,
-      "created_local": "15/10 10:01",
-      "expires_at": "2026-10-16T08:01:17Z",
-      "rationale": "Vente : tendance forte (ADX), cassure des extrêmes de la veille, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 131.49 (0.44 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 63%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
-      "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité à surveiller (score 2) : Tech stocks plunge as Fed rate hike fears, AI funding worries mount; ASML, SK Hynix slump",
-      "manual_exit": null
-    },
-    {
-      "id": "4a03b72577",
-      "asset": "nasdaq",
-      "asset_label": "Nasdaq 100 (NQ)",
-      "direction": "short",
-      "horizon": "24h",
-      "entry": 29820.0,
-      "take_profit": 29581.5,
-      "stop_loss": 29899.5,
-      "risk_reward": 3.0,
-      "confidence": "fort",
-      "score": 9.79,
-      "criteria": [
-        "adx",
-        "pdhl",
-        "rsi",
-        "trend_15m",
-        "trend_1h",
-        "trend_5m",
-        "vwap"
-      ],
-      "source": "shadow",
-      "status": "open",
-      "pnl_pct": null,
-      "pnl_gross_pct": null,
-      "duration_minutes": null,
-      "close_price": null,
-      "created_at": "2026-10-15T07:25:42Z",
-      "closed_at": null,
-      "created_local": "15/10 09:25",
-      "expires_at": "2026-10-16T07:25:42Z",
-      "rationale": "Vente : tendance forte (ADX), cassure des extrêmes de la veille, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 132.22 (0.44 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 61%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
-      "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité à surveiller (score 2) : Tech stocks plunge as Fed rate hike fears, AI funding worries mount",
       "manual_exit": null
     }
   ],
@@ -6881,42 +6823,42 @@
   "adjustments": {
     "notes": [
       "trades réels : +0,07 R ± 0,18 R par trade avant frais sur 150 trades (0 R = hasard)",
-      "tendance (trend_5m, trend_15m, trend_1h, adx) : +0,10 R ± 0,08 R sur 1025 trades éq. → poids ×1,06",
-      "vwap : +0,12 R ± 0,08 R sur 934 trades éq. → poids ×1,08",
-      "rsi : +0,15 R ± 0,09 R sur 816 trades éq. → poids ×1,14",
+      "tendance (trend_5m, trend_15m, trend_1h, adx) : +0,10 R ± 0,08 R sur 1027 trades éq. → poids ×1,06",
+      "vwap : +0,11 R ± 0,08 R sur 936 trades éq. → poids ×1,08",
+      "rsi : +0,14 R ± 0,09 R sur 818 trades éq. → poids ×1,14",
       "ethereum, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,20 R contre +0,10 R en global sur 63 trades éq. → poids ×0,88 sur cet actif",
-      "ethereum, rsi : -0,22 R contre +0,15 R en global sur 44 trades éq. → poids ×0,83 sur cet actif",
+      "ethereum, rsi : -0,22 R contre +0,14 R en global sur 44 trades éq. → poids ×0,84 sur cet actif",
       "gold, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,06 R contre +0,10 R en global sur 217 trades éq. → poids ×0,94 sur cet actif",
-      "gold, vwap : -0,07 R contre +0,12 R en global sur 215 trades éq. → poids ×0,90 sur cet actif",
-      "gold, rsi : -0,07 R contre +0,15 R en global sur 170 trades éq. → poids ×0,86 sur cet actif",
-      "nasdaq, tendance (trend_5m, trend_15m, trend_1h, adx) : +0,51 R contre +0,10 R en global sur 262 trades éq. → poids ×1,50 sur cet actif",
-      "nasdaq, vwap : +0,52 R contre +0,12 R en global sur 255 trades éq. → poids ×1,50 sur cet actif",
-      "nasdaq, rsi : +0,61 R contre +0,15 R en global sur 210 trades éq. → poids ×1,50 sur cet actif",
-      "nasdaq, pdhl : +0,68 R contre +0,13 R en global sur 33 trades éq. → poids ×1,05 sur cet actif",
+      "gold, vwap : -0,07 R contre +0,11 R en global sur 215 trades éq. → poids ×0,91 sur cet actif",
+      "gold, rsi : -0,07 R contre +0,14 R en global sur 170 trades éq. → poids ×0,87 sur cet actif",
+      "nasdaq, tendance (trend_5m, trend_15m, trend_1h, adx) : +0,50 R contre +0,10 R en global sur 264 trades éq. → poids ×1,50 sur cet actif",
+      "nasdaq, vwap : +0,51 R contre +0,11 R en global sur 257 trades éq. → poids ×1,50 sur cet actif",
+      "nasdaq, rsi : +0,60 R contre +0,14 R en global sur 212 trades éq. → poids ×1,50 sur cet actif",
       "sp500, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,13 R contre +0,10 R en global sur 176 trades éq. → poids ×0,83 sur cet actif",
-      "sp500, vwap : -0,13 R contre +0,12 R en global sur 171 trades éq. → poids ×0,82 sur cet actif",
-      "sp500, rsi : -0,11 R contre +0,15 R en global sur 149 trades éq. → poids ×0,83 sur cet actif",
-      "variante « indices le matin européen » en test : 76 trades, -0,20 R net, encore 24 trades avant décision",
+      "sp500, vwap : -0,13 R contre +0,11 R en global sur 171 trades éq. → poids ×0,83 sur cet actif",
+      "sp500, rsi : -0,11 R contre +0,14 R en global sur 149 trades éq. → poids ×0,83 sur cet actif",
+      "variante « indices le matin européen » en test : 78 trades, -0,22 R net, encore 22 trades avant décision",
       "variante « horizon ~3 h » en test : 70 trades, -0,34 R net, encore 30 trades avant décision",
       "variante « confiance moyenne » en test : 57 trades, -0,09 R net, encore 43 trades avant décision",
-      "variante « entrées dans l'heure avant l'ouverture américaine » en test : 10 trades, +1,40 R net, encore 90 trades avant décision"
+      "variante « entrées dans l'heure avant l'ouverture américaine » en test : 10 trades, +1,40 R net, encore 90 trades avant décision",
+      "variante « reprise juste après un stop » en test : 28 trades, -0,31 R net, encore 72 trades avant décision"
     ],
     "avoid_hours_utc": [],
-    "sample": 1329,
+    "sample": 1331,
     "sample_by_source": {
       "bot": 149,
-      "shadow": 482,
+      "shadow": 484,
       "manual": 1,
       "backtest": 697
     },
     "method": "v2 : recalcul complet, marge de sécurité, résultats en R, sources pondérées",
     "weights": {
-      "trend_5m": 1.063,
-      "trend_15m": 1.063,
-      "trend_1h": 1.063,
-      "adx": 1.063,
-      "vwap": 0.812,
-      "rsi": 1.143,
+      "trend_5m": 1.058,
+      "trend_15m": 1.058,
+      "trend_1h": 1.058,
+      "adx": 1.058,
+      "vwap": 0.808,
+      "rsi": 1.136,
       "macd": 1.0,
       "level": 1.0,
       "volume": 0.75,
@@ -6926,12 +6868,12 @@
     },
     "weights_by_asset": {
       "bitcoin": {
-        "trend_5m": 1.063,
-        "trend_15m": 1.063,
-        "trend_1h": 1.063,
-        "adx": 1.063,
-        "vwap": 0.812,
-        "rsi": 1.143,
+        "trend_5m": 1.058,
+        "trend_15m": 1.058,
+        "trend_1h": 1.058,
+        "adx": 1.058,
+        "vwap": 0.808,
+        "rsi": 1.136,
         "macd": 1.0,
         "level": 1.0,
         "volume": 0.75,
@@ -6940,12 +6882,12 @@
         "corr": 0.5
       },
       "ethereum": {
-        "trend_5m": 0.931,
-        "trend_15m": 0.931,
-        "trend_1h": 0.931,
-        "adx": 0.931,
-        "vwap": 0.812,
-        "rsi": 0.954,
+        "trend_5m": 0.932,
+        "trend_15m": 0.932,
+        "trend_1h": 0.932,
+        "adx": 0.932,
+        "vwap": 0.808,
+        "rsi": 0.957,
         "macd": 1.0,
         "level": 1.0,
         "volume": 0.75,
@@ -6954,12 +6896,12 @@
         "corr": 0.5
       },
       "euro": {
-        "trend_5m": 1.063,
-        "trend_15m": 1.063,
-        "trend_1h": 1.063,
-        "adx": 1.063,
-        "vwap": 0.812,
-        "rsi": 1.143,
+        "trend_5m": 1.058,
+        "trend_15m": 1.058,
+        "trend_1h": 1.058,
+        "adx": 1.058,
+        "vwap": 0.808,
+        "rsi": 1.136,
         "macd": 1.0,
         "level": 1.0,
         "volume": 0.75,
@@ -6968,12 +6910,12 @@
         "corr": 0.5
       },
       "gold": {
-        "trend_5m": 0.997,
-        "trend_15m": 0.997,
-        "trend_1h": 0.997,
-        "adx": 0.997,
-        "vwap": 0.734,
-        "rsi": 0.981,
+        "trend_5m": 0.998,
+        "trend_15m": 0.998,
+        "trend_1h": 0.998,
+        "adx": 0.998,
+        "vwap": 0.735,
+        "rsi": 0.983,
         "macd": 1.0,
         "level": 1.0,
         "volume": 0.75,
@@ -6986,22 +6928,22 @@
         "trend_15m": 1.5,
         "trend_1h": 1.5,
         "adx": 1.5,
-        "vwap": 1.218,
+        "vwap": 1.212,
         "rsi": 1.5,
         "macd": 1.0,
         "level": 1.0,
         "volume": 0.75,
         "orb": 1.0,
-        "pdhl": 1.049,
+        "pdhl": 1.0,
         "corr": 0.5
       },
       "oil": {
-        "trend_5m": 1.063,
-        "trend_15m": 1.063,
-        "trend_1h": 1.063,
-        "adx": 1.063,
-        "vwap": 0.812,
-        "rsi": 1.143,
+        "trend_5m": 1.058,
+        "trend_15m": 1.058,
+        "trend_1h": 1.058,
+        "adx": 1.058,
+        "vwap": 0.808,
+        "rsi": 1.136,
         "macd": 1.0,
         "level": 1.0,
         "volume": 0.75,
@@ -7010,12 +6952,12 @@
         "corr": 0.5
       },
       "sp500": {
-        "trend_5m": 0.882,
-        "trend_15m": 0.882,
-        "trend_1h": 0.882,
-        "adx": 0.882,
-        "vwap": 0.667,
-        "rsi": 0.945,
+        "trend_5m": 0.883,
+        "trend_15m": 0.883,
+        "trend_1h": 0.883,
+        "adx": 0.883,
+        "vwap": 0.669,
+        "rsi": 0.947,
         "macd": 1.0,
         "level": 1.0,
         "volume": 0.75,
@@ -7032,31 +6974,31 @@
           "trend_1h",
           "adx"
         ],
-        "n": 1328,
-        "n_eff": 1024.6,
-        "mean_r": 0.1025,
-        "margin_r": 0.0774,
-        "multiplier": 1.063
+        "n": 1330,
+        "n_eff": 1026.6,
+        "mean_r": 0.1004,
+        "margin_r": 0.0773,
+        "multiplier": 1.058
       },
       "vwap": {
         "members": [
           "vwap"
         ],
-        "n": 1197,
-        "n_eff": 933.8,
-        "mean_r": 0.1152,
-        "margin_r": 0.0819,
-        "multiplier": 1.083
+        "n": 1199,
+        "n_eff": 935.8,
+        "mean_r": 0.1129,
+        "margin_r": 0.0818,
+        "multiplier": 1.078
       },
       "rsi": {
         "members": [
           "rsi"
         ],
-        "n": 1079,
-        "n_eff": 815.6,
-        "mean_r": 0.1458,
-        "margin_r": 0.0887,
-        "multiplier": 1.143
+        "n": 1081,
+        "n_eff": 817.6,
+        "mean_r": 0.1429,
+        "margin_r": 0.0886,
+        "multiplier": 1.136
       },
       "macd": {
         "members": [
@@ -7102,10 +7044,10 @@
         "members": [
           "pdhl"
         ],
-        "n": 182,
-        "n_eff": 138.1,
-        "mean_r": 0.1263,
-        "margin_r": 0.2106,
+        "n": 184,
+        "n_eff": 140.1,
+        "mean_r": 0.1104,
+        "margin_r": 0.2088,
         "multiplier": 1.0
       },
       "corr": {
@@ -7126,9 +7068,9 @@
         "margin_r": 0.1848
       },
       "fantômes": {
-        "n": 482,
-        "mean_r": 0.1518,
-        "margin_r": 0.1259
+        "n": 484,
+        "mean_r": 0.1471,
+        "margin_r": 0.1255
       },
       "backtest": {
         "n": 697,
@@ -7139,11 +7081,11 @@
     "variants": {
       "hors_session": {
         "label": "indices le matin européen",
-        "n": 76,
-        "mean_net_r": -0.2009,
-        "lower_r": -0.5409,
+        "n": 78,
+        "mean_net_r": -0.2223,
+        "lower_r": -0.5561,
         "promoted": false,
-        "missing": 24
+        "missing": 22
       },
       "horizon_3h": {
         "label": "horizon ~3 h",
@@ -7232,9 +7174,9 @@
     },
     "variants_z": 2.73,
     "promoted_variants": [],
-    "updated_at": "2026-10-15T09:20:46.751333+00:00",
+    "updated_at": "2026-10-15T09:25:44.419251+00:00",
     "context": {
-      "n": 1097,
+      "n": 1099,
       "features": {
         "adx": {
           "label": "force de tendance (ADX 15 min)",
@@ -7242,31 +7184,31 @@
             {
               "label": "bas (< 27)",
               "lo": -1000000000.0,
-              "hi": 27.23,
-              "n": 365,
-              "n_eff": 279.5,
-              "mean_r": -0.0636,
-              "margin_r": 0.1567,
+              "hi": 27.3,
+              "n": 366,
+              "n_eff": 280.3,
+              "mean_r": -0.0641,
+              "margin_r": 0.1564,
               "avoid": false
             },
             {
               "label": "milieu (27 à 36)",
-              "lo": 27.23,
-              "hi": 36.42,
-              "n": 366,
-              "n_eff": 283.7,
-              "mean_r": 0.1576,
-              "margin_r": 0.1973,
+              "lo": 27.3,
+              "hi": 36.32,
+              "n": 365,
+              "n_eff": 283.3,
+              "mean_r": 0.1557,
+              "margin_r": 0.1976,
               "avoid": false
             },
             {
               "label": "haut (≥ 36)",
-              "lo": 36.42,
+              "lo": 36.32,
               "hi": 1000000000.0,
-              "n": 366,
-              "n_eff": 286.5,
-              "mean_r": 0.2944,
-              "margin_r": 0.2137,
+              "n": 368,
+              "n_eff": 288.2,
+              "mean_r": 0.287,
+              "margin_r": 0.2129,
               "avoid": false
             }
           ]
@@ -7277,31 +7219,31 @@
             {
               "label": "bas (< 59)",
               "lo": -1000000000.0,
-              "hi": 58.54,
-              "n": 365,
-              "n_eff": 283.1,
-              "mean_r": 0.0521,
-              "margin_r": 0.1662,
+              "hi": 58.53,
+              "n": 366,
+              "n_eff": 284.4,
+              "mean_r": 0.0419,
+              "margin_r": 0.1657,
               "avoid": false
             },
             {
               "label": "milieu (59 à 65)",
-              "lo": 58.54,
-              "hi": 65.46,
-              "n": 366,
-              "n_eff": 284.2,
-              "mean_r": 0.2193,
-              "margin_r": 0.2147,
+              "lo": 58.53,
+              "hi": 65.45,
+              "n": 365,
+              "n_eff": 283.3,
+              "mean_r": 0.2114,
+              "margin_r": 0.2138,
               "avoid": false
             },
             {
               "label": "haut (≥ 65)",
-              "lo": 65.46,
+              "lo": 65.45,
               "hi": 1000000000.0,
-              "n": 366,
-              "n_eff": 281.6,
-              "mean_r": 0.1392,
-              "margin_r": 0.1964,
+              "n": 368,
+              "n_eff": 283.3,
+              "mean_r": 0.149,
+              "margin_r": 0.1972,
               "avoid": false
             }
           ]
@@ -7312,31 +7254,31 @@
             {
               "label": "bas (< 0,84)",
               "lo": -1000000000.0,
-              "hi": 0.8426,
-              "n": 332,
-              "n_eff": 260.5,
-              "mean_r": -0.0026,
-              "margin_r": 0.1701,
-              "avoid": false
-            },
-            {
-              "label": "milieu (0,84 à 1,43)",
-              "lo": 0.8426,
-              "hi": 1.426,
+              "hi": 0.8422,
               "n": 333,
-              "n_eff": 253.5,
-              "mean_r": -0.0005,
-              "margin_r": 0.1827,
+              "n_eff": 261.5,
+              "mean_r": -0.0067,
+              "margin_r": 0.1697,
               "avoid": false
             },
             {
-              "label": "haut (≥ 1,43)",
-              "lo": 1.426,
+              "label": "milieu (0,84 à 1,42)",
+              "lo": 0.8422,
+              "hi": 1.4179,
+              "n": 333,
+              "n_eff": 253.8,
+              "mean_r": -0.0057,
+              "margin_r": 0.1826,
+              "avoid": false
+            },
+            {
+              "label": "haut (≥ 1,42)",
+              "lo": 1.4179,
               "hi": 1000000000.0,
-              "n": 333,
-              "n_eff": 263.6,
-              "mean_r": 0.4337,
-              "margin_r": 0.2423,
+              "n": 334,
+              "n_eff": 264.3,
+              "mean_r": 0.4335,
+              "margin_r": 0.2418,
               "avoid": false
             }
           ]
@@ -7347,31 +7289,31 @@
             {
               "label": "bas (< 0,22)",
               "lo": -1000000000.0,
-              "hi": 0.2217,
-              "n": 365,
-              "n_eff": 280.0,
-              "mean_r": 0.0091,
-              "margin_r": 0.1601,
+              "hi": 0.2216,
+              "n": 366,
+              "n_eff": 281.3,
+              "mean_r": 0.0028,
+              "margin_r": 0.1597,
               "avoid": false
             },
             {
               "label": "milieu (0,22 à 0,51)",
-              "lo": 0.2217,
-              "hi": 0.5116,
+              "lo": 0.2216,
+              "hi": 0.5104,
               "n": 366,
               "n_eff": 278.5,
-              "mean_r": 0.1351,
+              "mean_r": 0.1309,
               "margin_r": 0.1877,
               "avoid": false
             },
             {
               "label": "haut (≥ 0,51)",
-              "lo": 0.5116,
+              "lo": 0.5104,
               "hi": 1000000000.0,
-              "n": 366,
-              "n_eff": 290.3,
-              "mean_r": 0.2645,
-              "margin_r": 0.2242,
+              "n": 367,
+              "n_eff": 291.0,
+              "mean_r": 0.2664,
+              "margin_r": 0.2238,
               "avoid": false
             }
           ]
@@ -7380,22 +7322,22 @@
           "label": "volatilité du moment / moyenne 24 h",
           "buckets": [
             {
-              "label": "bas (< 1,12)",
+              "label": "bas (< 1,11)",
               "lo": -1000000000.0,
-              "hi": 1.116,
-              "n": 365,
-              "n_eff": 285.7,
-              "mean_r": -0.0263,
-              "margin_r": 0.1503,
+              "hi": 1.115,
+              "n": 366,
+              "n_eff": 286.7,
+              "mean_r": -0.0402,
+              "margin_r": 0.1495,
               "avoid": false
             },
             {
-              "label": "milieu (1,12 à 1,48)",
-              "lo": 1.116,
+              "label": "milieu (1,11 à 1,48)",
+              "lo": 1.115,
               "hi": 1.484,
-              "n": 365,
-              "n_eff": 277.2,
-              "mean_r": -0.0009,
+              "n": 366,
+              "n_eff": 278.1,
+              "mean_r": 0.0059,
               "margin_r": 0.1733,
               "avoid": false
             },
@@ -7417,21 +7359,21 @@
             {
               "label": "bas (< 1,05)",
               "lo": -1000000000.0,
-              "hi": 1.048,
-              "n": 348,
-              "n_eff": 270.4,
-              "mean_r": 0.062,
-              "margin_r": 0.1879,
+              "hi": 1.046,
+              "n": 349,
+              "n_eff": 271.6,
+              "mean_r": 0.0545,
+              "margin_r": 0.1873,
               "avoid": false
             },
             {
               "label": "milieu (1,05 à 1,35)",
-              "lo": 1.048,
+              "lo": 1.046,
               "hi": 1.352,
-              "n": 348,
-              "n_eff": 270.9,
-              "mean_r": 0.1495,
-              "margin_r": 0.1926,
+              "n": 349,
+              "n_eff": 271.7,
+              "mean_r": 0.1473,
+              "margin_r": 0.1923,
               "avoid": false
             },
             {
@@ -7452,31 +7394,31 @@
             {
               "label": "bas (< 0,33)",
               "lo": -1000000000.0,
-              "hi": 0.3291,
-              "n": 365,
-              "n_eff": 295.8,
-              "mean_r": 0.2148,
-              "margin_r": 0.2127,
+              "hi": 0.3313,
+              "n": 366,
+              "n_eff": 296.1,
+              "mean_r": 0.2074,
+              "margin_r": 0.2124,
               "avoid": false
             },
             {
               "label": "milieu (0,33 à 0,64)",
-              "lo": 0.3291,
-              "hi": 0.6417,
+              "lo": 0.3313,
+              "hi": 0.6402,
               "n": 366,
-              "n_eff": 278.3,
-              "mean_r": 0.1145,
-              "margin_r": 0.1808,
+              "n_eff": 279.2,
+              "mean_r": 0.1109,
+              "margin_r": 0.1804,
               "avoid": false
             },
             {
               "label": "haut (≥ 0,64)",
-              "lo": 0.6417,
+              "lo": 0.6402,
               "hi": 1000000000.0,
-              "n": 366,
-              "n_eff": 295.6,
-              "mean_r": 0.051,
-              "margin_r": 0.1695,
+              "n": 367,
+              "n_eff": 296.5,
+              "mean_r": 0.0541,
+              "margin_r": 0.1694,
               "avoid": false
             }
           ]
@@ -7488,10 +7430,10 @@
               "label": "bas (< 0,08)",
               "lo": -1000000000.0,
               "hi": 0.0824,
-              "n": 364,
-              "n_eff": 286.0,
-              "mean_r": 0.3339,
-              "margin_r": 0.2202,
+              "n": 366,
+              "n_eff": 288.0,
+              "mean_r": 0.3235,
+              "margin_r": 0.2193,
               "avoid": false
             },
             {
@@ -7523,10 +7465,10 @@
               "label": "plus de 30 min avant l'ouverture US",
               "lo": -1000000000.0,
               "hi": -30.0,
-              "n": 400,
-              "n_eff": 320.9,
-              "mean_r": -0.0174,
-              "margin_r": 0.1535,
+              "n": 402,
+              "n_eff": 322.8,
+              "mean_r": -0.0253,
+              "margin_r": 0.1529,
               "avoid": false
             },
             {
@@ -7588,10 +7530,10 @@
               "label": "jeudi",
               "lo": 3,
               "hi": 4,
-              "n": 276,
-              "n_eff": 213.8,
-              "mean_r": -0.0928,
-              "margin_r": 0.1957,
+              "n": 278,
+              "n_eff": 215.8,
+              "mean_r": -0.1029,
+              "margin_r": 0.1944,
               "avoid": false
             },
             {
@@ -7631,32 +7573,32 @@
     },
     "exits": {
       "réels et en ombre": {
-        "n": 401,
-        "current_net_r": 0.0921,
-        "mfe_median": 0.871,
+        "n": 403,
+        "current_net_r": 0.0865,
+        "mfe_median": 0.842,
         "sl_reached": {
-          "0.5": 67,
-          "0.8": 39,
+          "0.5": 69,
+          "0.8": 41,
           "1.0": 25
         },
-        "n_sl": 193,
+        "n_sl": 195,
         "rules": {
           "0.5": {
-            "net_r": 0.0186,
-            "diff_r": -0.0735,
-            "margin_r": 0.0874,
+            "net_r": 0.0183,
+            "diff_r": -0.0682,
+            "margin_r": 0.0873,
             "better": false
           },
           "0.8": {
-            "net_r": 0.0208,
-            "diff_r": -0.0713,
+            "net_r": 0.0205,
+            "diff_r": -0.066,
             "margin_r": 0.0705,
             "better": false
           },
           "1.0": {
-            "net_r": 0.0106,
-            "diff_r": -0.0816,
-            "margin_r": 0.0648,
+            "net_r": 0.0054,
+            "diff_r": -0.0812,
+            "margin_r": 0.0645,
             "better": false
           }
         }
@@ -7761,10 +7703,10 @@
     }
   },
   "state": {
-    "last_scan": "2026-10-15T09:20:44Z",
+    "last_scan": "2026-10-15T09:25:41Z",
     "last_scan_note": "0 signal(aux)",
     "last_summary": "2026-10-14T22:05:41Z",
-    "last_track": "2026-10-15T09:20:44Z",
+    "last_track": "2026-10-15T09:25:41Z",
     "last_summary_day": "2026-10-14"
   },
   "limits": {
@@ -20074,7 +20016,7 @@
         }
       ],
       "live": true,
-      "checked_hour": "2026-10-15T09:00:00Z",
+      "checked_hour": "2026-10-15T09:15:00Z",
       "n": 1,
       "mean_r": 0.7124
     },
