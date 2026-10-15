@@ -7,8 +7,8 @@
 <meta name="description" content="Graphique des actifs du bot avec la structure du marché : sommets, chasses aux stops, trous de prix, sessions, signaux et annonces.">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap">
-<link rel="stylesheet" href="yasuke.css?v=17d1620441">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap">
+<link rel="stylesheet" href="yasuke.css?v=d8d1a6fcb5">
 <script>/* Trading : sombre par défaut */ try { document.documentElement.dataset.theme = localStorage.getItem("tb-theme") || "dark"; } catch (e) { document.documentElement.dataset.theme = "dark"; }</script>
 <style>
   .gx-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin-bottom: 14px; }
@@ -18,7 +18,7 @@
   .gx-chart { position: relative; height: min(72vh, 680px); min-height: 380px; padding: 0; overflow: hidden; }
   .gx-chart .box { position: absolute; inset: 0; }
   .gx-chart canvas.ov { position: absolute; inset: 0; pointer-events: none; z-index: 3; }
-  .gx-chart .legend { position: absolute; top: 10px; left: 12px; z-index: 4; font: 500 12px "IBM Plex Mono", ui-monospace, monospace; color: var(--muted); pointer-events: none; }
+  .gx-chart .legend { position: absolute; top: 10px; left: 12px; z-index: 4; font: 500 12px "Inter", system-ui, sans-serif; color: var(--muted); pointer-events: none; }
   .gx-side { display: grid; gap: 16px; }
   .gx-side .card { padding: 16px; }
   .gx-side h3 { margin: 0 0 10px; font-size: 13px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 600; }
@@ -27,13 +27,13 @@
   .ly label:hover { background: var(--soft); }
   .ly label small { display: block; color: var(--muted); font-size: 11px; }
   .ly i { width: 12px; height: 12px; border-radius: 3px; display: block; }
-  .ly .n { font: 500 12px "IBM Plex Mono", ui-monospace, monospace; color: var(--muted); }
+  .ly .n { font: 500 12px "Inter", system-ui, sans-serif; color: var(--muted); }
   .ly-all { display: flex; gap: 8px; margin-top: 8px; }
   .ly-all button { font-size: 12px; padding: 4px 10px; }
   #insp { font-size: 13px; line-height: 1.5; }
   #insp .k { color: var(--muted); }
   #insp dl { display: grid; grid-template-columns: auto 1fr; gap: 2px 10px; margin: 8px 0 0; }
-  #insp dt { color: var(--muted); } #insp dd { margin: 0; font-family: "IBM Plex Mono", ui-monospace, monospace; }
+  #insp dt { color: var(--muted); } #insp dd { margin: 0; font-family: "Inter", system-ui, sans-serif; }
   #insp .it { padding: 8px 0; border-top: 1px solid var(--line); } #insp .it:first-of-type { border-top: 0; }
   @media (max-width: 960px) { .gx { grid-template-columns: 1fr; } .gx-chart { height: 62vh; } }
 </style>
@@ -67,8 +67,8 @@
 </div>
 
 <script src="vendor/lightweight-charts.standalone.production.js"></script>
-<script src="yasuke.js?v=3e70d66ea3"></script>
-<script src="live-chart.js?v=dd74f291b6"></script>
+<script src="yasuke.js?v=b4307eb44c"></script>
+<script src="live-chart.js?v=68ead20c94"></script>
 <script src="structures.js?v=0525d87a9f"></script>
 <script>
 (function () {
@@ -76,7 +76,7 @@
   const Y = window.YK, $ = Y.$, esc = Y.esc, S = window.Struct, L = window.LightweightCharts;
   const ASSETS = window.LiveChart.DEFAULT_ASSETS;
   const LAYERS = [
-    ["ma", "Moyennes 20 et 50", "tendance", "brand", true],
+    ["ma", "Moyennes 20 et 50", "tendance", "accent", true],
     ["liq", "Sommets et creux", "stops au-dessus / en dessous", "up", true],
     ["sweep", "Chasses aux stops", "mèche au-delà, clôture revenue", "dn", true],
     ["brk", "Cassures franches", "clôture au-delà d'un sommet ou creux", "neu", false],
@@ -84,7 +84,7 @@
     ["sess", "Sessions", "Asie, Londres, New York", "neu-soft", true],
     ["round", "Chiffres ronds", "niveaux psychologiques", "faint", false],
     ["range", "Plus haut / bas 24 h", "", "muted", false],
-    ["bot", "Signaux et trades du bot", "entrée, stop, objectif", "brand", true],
+    ["bot", "Signaux et trades du bot", "entrée, stop, objectif", "accent", true],
     ["news", "Annonces économiques", "agenda du bot", "dn", true],
   ];
   const DEF = Object.fromEntries(LAYERS.map((l) => [l[0], l[4]]));
@@ -131,7 +131,7 @@
   function ensureChart() {
     if (chart) return;
     chart = L.createChart($("#box"), { autoSize: true,
-      layout: { background: { color: "transparent" }, textColor: css("muted"), fontFamily: "IBM Plex Sans, system-ui, sans-serif" },
+      layout: { background: { color: "transparent" }, textColor: css("muted"), fontFamily: "Inter, system-ui, sans-serif" },
       grid: { vertLines: { color: css("grid") }, horzLines: { color: css("grid") } },
       rightPriceScale: { borderColor: css("line") },
       timeScale: { borderColor: css("line"), timeVisible: true, secondsVisible: false, rightOffset: 6,
@@ -139,7 +139,7 @@
       localization: { locale: "fr-FR", timeFormatter: when },
       crosshair: { mode: 0 } });
     candle = chart.addCandlestickSeries({ upColor: css("up"), downColor: css("dn"), wickUpColor: css("up"), wickDownColor: css("dn"), borderVisible: false });
-    ma20 = chart.addLineSeries({ color: css("brand"), lineWidth: 1.5, priceLineVisible: false, lastValueVisible: false, crosshairMarkerVisible: false });
+    ma20 = chart.addLineSeries({ color: css("accent"), lineWidth: 1.5, priceLineVisible: false, lastValueVisible: false, crosshairMarkerVisible: false });
     ma50 = chart.addLineSeries({ color: css("dn"), lineWidth: 1.5, lineStyle: 0, priceLineVisible: false, lastValueVisible: false, crosshairMarkerVisible: false });
     chart.timeScale().subscribeVisibleLogicalRangeChange(() => requestAnimationFrame(overlay));
     chart.subscribeCrosshairMove((p) => {
@@ -164,7 +164,7 @@
     const Xend = (t) => (t == null || t >= last ? plotW : X(t));
     const Yp = (p) => candle.priceToCoordinate(p);
     g.save(); g.beginPath(); g.rect(0, 0, plotW, h); g.clip();
-    const font = "500 10px "IBM Plex Sans", system-ui, sans-serif"; g.font = font; g.textBaseline = "bottom";
+    const font = '500 10px Inter, system-ui, sans-serif'; g.font = font; g.textBaseline = "bottom";
     if (on.sess) for (const s of A.sessions) {
       const x0 = X(s.first), x1 = X(s.last), y0 = Yp(s.hi), y1 = Yp(s.lo);
       if (x0 == null || x1 == null || y0 == null || y1 == null) continue;
@@ -192,7 +192,7 @@
     if (on.bot) for (const s of botItems()) {
       const t0 = Date.parse(s.created_at) / 1000, t1 = s.closed_at ? Date.parse(s.closed_at) / 1000 : null;
       const x0 = X(t0), x1 = Xend(t1);
-      seg(x0, x1, Yp(s.entry), css("brand"), [], "entrée");
+      seg(x0, x1, Yp(s.entry), css("accent"), [], "entrée");
       if (s.stop_loss) seg(x0, x1, Yp(s.stop_loss), css("dn"), [4, 3], "stop");
       if (s.take_profit) seg(x0, x1, Yp(s.take_profit), css("up"), [4, 3], "objectif");
     }
@@ -212,7 +212,7 @@
     if (on.brk) for (const s of A.swings) if (s.how === "break") m.push({ time: s.end, position: s.kind === "high" ? "aboveBar" : "belowBar", color: css("muted"), shape: "circle", text: "" });
     if (on.bot) for (const s of botItems()) {
       const t = Math.floor(Date.parse(s.created_at) / 1000 / tf) * tf, long = s.direction === "long";
-      m.push({ time: t, position: long ? "belowBar" : "aboveBar", color: css("brand"), shape: long ? "arrowUp" : "arrowDown", text: long ? "bot achat" : "bot vente" });
+      m.push({ time: t, position: long ? "belowBar" : "aboveBar", color: css("accent"), shape: long ? "arrowUp" : "arrowDown", text: long ? "bot achat" : "bot vente" });
       if (s.closed_at) m.push({ time: Math.floor(Date.parse(s.closed_at) / 1000 / tf) * tf, position: "inBar", color: s.pnl_pct > 0 ? css("up") : css("dn"), shape: "square",
         text: (s.status || "").toUpperCase() });
     }

@@ -7,8 +7,8 @@
 <meta name="description" content="Signaux de scalping simulés, suivis et mesurés face au hasard.">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap">
-<link rel="stylesheet" href="yasuke.css?v=17d1620441">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap">
+<link rel="stylesheet" href="yasuke.css?v=d8d1a6fcb5">
 <script>/* Trading : sombre par défaut */ try { document.documentElement.dataset.theme = localStorage.getItem("tb-theme") || "dark"; } catch (e) { document.documentElement.dataset.theme = "dark"; }</script>
 <style>
   .asset-rows { display: grid; gap: 12px; }
@@ -157,9 +157,9 @@
 
 <div id="tip" role="tooltip"></div>
 <script src="vendor/lightweight-charts.standalone.production.js"></script>
-<script src="yasuke.js?v=3e70d66ea3"></script>
+<script src="yasuke.js?v=b4307eb44c"></script>
 <script src="charts.js?v=232a285ab5"></script>
-<script src="live-chart.js?v=dd74f291b6"></script>
+<script src="live-chart.js?v=68ead20c94"></script>
 <script src="sections.js?v=0d56d6cb86"></script>
 <script>
 (function () {
@@ -499,8 +499,8 @@
   function levelsSvg(p, tp, sl, zone) {
     const vals = [p, tp, sl, zone ? zone.lo : p, zone ? zone.hi : p], mn = Math.min(...vals), mx = Math.max(...vals), pad = (mx - mn) * 0.12 || 1;
     const Yp = (v) => 8 + (mx + pad - v) / (mx - mn + 2 * pad) * 134;
-    const ln = (v, col, dash, lab) => `<line x1="0" x2="200" y1="${Yp(v)}" y2="${Yp(v)}" stroke="${col}" stroke-width="1.5" ${dash ? 'stroke-dasharray="5 3"' : ""}/><text x="4" y="${Yp(v) - 5}" style="font:600 11px IBM Plex Sans, sans-serif;fill:${col}">${lab}</text>`;
-    return `<svg viewBox="0 0 200 150" aria-hidden="true">${zone ? `<rect x="0" width="200" y="${Yp(zone.hi)}" height="${Math.max(2, Yp(zone.lo) - Yp(zone.hi))}" fill="var(--up)" fill-opacity=".16" rx="3"/><text x="196" y="${Yp(zone.lo) + 12}" text-anchor="end" style="font:500 10px "IBM Plex Sans", sans-serif;fill:var(--up-text)">zone d'entrée</text>` : ""}
+    const ln = (v, col, dash, lab) => `<line x1="0" x2="200" y1="${Yp(v)}" y2="${Yp(v)}" stroke="${col}" stroke-width="1.5" ${dash ? 'stroke-dasharray="5 3"' : ""}/><text x="4" y="${Yp(v) - 5}" style="font:600 11px Inter, sans-serif;fill:${col}">${lab}</text>`;
+    return `<svg viewBox="0 0 200 150" aria-hidden="true">${zone ? `<rect x="0" width="200" y="${Yp(zone.hi)}" height="${Math.max(2, Yp(zone.lo) - Yp(zone.hi))}" fill="var(--up)" fill-opacity=".16" rx="3"/><text x="196" y="${Yp(zone.lo) + 12}" text-anchor="end" style="font:500 10px "Inter", sans-serif;fill:var(--up-text)">zone d'entrée</text>` : ""}
       <rect x="150" width="10" y="${Math.min(Yp(tp), Yp(p))}" height="${Math.abs(Yp(tp) - Yp(p))}" fill="var(--up)" fill-opacity=".35" rx="2"/>
       <rect x="150" width="10" y="${Math.min(Yp(sl), Yp(p))}" height="${Math.abs(Yp(sl) - Yp(p))}" fill="var(--dn)" fill-opacity=".35" rx="2"/>
       ${ln(tp, "var(--up-text)", true, "TP")}${ln(p, "var(--text)", false, "Prix actuel")}${ln(sl, "var(--dn-text)", true, "SL")}</svg>`;

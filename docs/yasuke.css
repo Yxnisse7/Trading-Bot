@@ -1,6 +1,6 @@
 /* Charte Yasuke (3) : deux espaces bien distincts.
  *
- * Trading : sombre par défaut, dense, chiffres en IBM Plex Mono ; la marque est l'encre (texte), pas une couleur.
+ * Trading : sombre par défaut, dense, chiffres en Inter ; la marque est l'encre (texte), pas une couleur.
  * Investir : clair par défaut, bandeau vert pin, titres en Source Serif 4, plus d'air.
  * Règle des couleurs des données : bleu = gain / TP / hausse, orange = perte / SL / baisse, gris = neutre / expiré / hasard.
  */
@@ -11,7 +11,7 @@
   --dn: #e0612d; --dn-soft: #fcebe3; --dn-text: #b4461a;
   --neu: #8a8c88; --neu-soft: #eceeea;
   --grid: #e8eae6; --shadow: none; --shadow-pop: 0 12px 32px rgba(20,22,26,.16);
-  --radius: 10px;
+  --radius: 10px; --accent: #5b4ef0; --shell: var(--card); --on-shell: var(--text);
   --c-tp: var(--up); --c-sl: var(--dn); --c-exp: var(--neu); --c-grid: var(--grid); --c-axis: #c9ccc6; --c-wash: rgba(42,111,208,.10);
   color-scheme: light;
 }
@@ -22,24 +22,27 @@
   --dn: #e2672f; --dn-soft: #331d12; --dn-text: #f0956a;
   --neu: #7d838a; --neu-soft: #1f2328;
   --grid: #1f2328; --shadow-pop: 0 16px 40px rgba(0,0,0,.5);
-  --c-axis: #353b43; --c-wash: rgba(74,146,230,.12);
+  --c-axis: #353b43; --c-wash: rgba(74,146,230,.12); --accent: #9184ff;
   color-scheme: dark;
 }
 /* Espace Investir : papier blanc, vert pin, plus d'air */
 :root[data-space="invest"] {
   --bg: #f7f7f4; --card: #ffffff; --soft: #eff1ec; --line: #dfe3dc; --text: #17201c; --muted: #56625b; --faint: #8b958f;
   --brand: #1f5f4b; --brand-soft: #e2ede7; --brand-text: #1a5240; --on-brand: #ffffff; --grid: #e9ece6;
-  --radius: 8px;
+  --radius: 8px; --accent: #1f5f4b; --shell: #1f5f4b; --on-shell: #ffffff;
 }
 :root[data-space="invest"][data-theme="dark"] {
-  --bg: #141a17; --card: #1a221e; --soft: #212a25; --line: #2c3631; --text: #e4ebe7; --muted: #9aa8a0; --faint: #66736b;
-  --brand: #6cc3a0; --brand-soft: #1d3329; --brand-text: #8fd4b7; --on-brand: #10201a; --grid: #212a25;
+  --bg: #0f1513; --card: #18201c; --soft: #212b26; --line: #2f3b35; --text: #eef3f0; --muted: #b0bdb6; --faint: #7d8a83;
+  --brand: #5fc29b; --brand-soft: #16302a; --brand-text: #7fd6b3; --on-brand: #0d1a15; --grid: #232d28;
+  --up: #5aa2f0; --up-soft: #15263c; --up-text: #8dc0f5; --dn: #ec7a45; --dn-soft: #3a2216; --dn-text: #f6a47d;
+  --accent: #5fc29b; --shell: #14382d; --on-shell: #eaf5ef; --c-axis: #3a4741;
+  color-scheme: dark;
 }
 
 * { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; }
-body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.55 "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; -webkit-font-smoothing: antialiased; }
-.mono, .num, td.num, th.num { font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace; font-variant-numeric: tabular-nums; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.55 "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; -webkit-font-smoothing: antialiased; }
+.mono, .num, td.num, th.num { font-family: "Inter", system-ui, sans-serif; font-variant-numeric: tabular-nums; }
 a { color: var(--brand-text); text-decoration: none; }
 a:hover { text-decoration: underline; }
 h1 { font-size: 28px; line-height: 1.15; letter-spacing: -0.02em; margin: 0; font-weight: 600; }
@@ -252,7 +255,7 @@ dialog.yk-modal[open] { animation: yk-in .25s cubic-bezier(.2,.7,.2,1); }
 .note-box.err { background: var(--dn-soft); color: var(--dn-text); }
 .modal-foot { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
 .modal-foot .cmd { font-size: 12px; color: var(--faint); display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-.modal-foot code { background: var(--soft); color: var(--text); padding: 3px 8px; border-radius: 6px; font: 12px "IBM Plex Mono", ui-monospace, monospace; }
+.modal-foot code { background: var(--soft); color: var(--text); padding: 3px 8px; border-radius: 6px; font: 12px "Inter", system-ui, sans-serif; }
 .modal-foot .btns { display: flex; gap: 8px; flex-wrap: wrap; }
 .ghbox { border-top: 1px solid var(--line); padding-top: 14px; }
 .ghbox summary { color: var(--muted); font-size: 13px; }
@@ -264,10 +267,10 @@ dialog.yk-modal[open] { animation: yk-in .25s cubic-bezier(.2,.7,.2,1); }
 .chart { min-width: 0; }
 .chart h3 { margin: 0 0 2px; font-size: 16px; }
 .chart .how { font-size: 13px; color: var(--muted); margin-bottom: 12px; }
-.chart svg { display: block; width: 100%; height: auto; font: 12px "IBM Plex Sans", system-ui, sans-serif; }
+.chart svg { display: block; width: 100%; height: auto; font: 12px "Inter", system-ui, sans-serif; }
 .chart svg text { fill: var(--muted); }
 .chart svg text.v { fill: var(--text); font-weight: 600; }
-.chart svg text.mono { font-family: "IBM Plex Mono", ui-monospace, monospace; }
+.chart svg text.mono { font-family: "Inter", system-ui, sans-serif; }
 .chart .empty { padding: 18px 0; }
 .mark { transition: opacity .1s; } .mark:hover { opacity: .75; }
 .charts { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); }
@@ -354,14 +357,14 @@ input, select, textarea { border-radius: 8px; }
 [data-space="invest"] h1 { font-size: 34px; }
 [data-space="invest"] h2 { font-size: 23px; margin: 44px 0 14px; }
 [data-space="invest"] .card { padding: 28px; }
-[data-space="invest"] .yk-top { background: var(--brand); border-bottom: 0; color: var(--on-brand); }
-[data-space="invest"] .yk-top .yk-brand, [data-space="invest"] .yk-top .yk-tab.active { color: var(--on-brand); }
-[data-space="invest"] .yk-top .yk-brand small, [data-space="invest"] .yk-top .yk-tab { color: color-mix(in srgb, var(--on-brand) 72%, transparent); }
-[data-space="invest"] .yk-top .yk-tab.active { border-bottom-color: var(--on-brand); }
-[data-space="invest"] .yk-top .btn-icon { background: transparent; border-color: color-mix(in srgb, var(--on-brand) 30%, transparent); color: var(--on-brand); }
-[data-space="invest"] .yk-top .yk-space { background: color-mix(in srgb, var(--on-brand) 12%, transparent); border-color: transparent; }
-[data-space="invest"] .yk-top .yk-space a { color: color-mix(in srgb, var(--on-brand) 75%, transparent); }
-[data-space="invest"] .yk-top .yk-space a[aria-current] { background: var(--on-brand); color: var(--brand); box-shadow: none; }
+[data-space="invest"] .yk-top { background: var(--shell); border-bottom: 0; color: var(--on-shell); }
+[data-space="invest"] .yk-top .yk-brand, [data-space="invest"] .yk-top .yk-tab.active { color: var(--on-shell); }
+[data-space="invest"] .yk-top .yk-brand small, [data-space="invest"] .yk-top .yk-tab { color: color-mix(in srgb, var(--on-shell) 72%, transparent); }
+[data-space="invest"] .yk-top .yk-tab.active { border-bottom-color: var(--on-shell); }
+[data-space="invest"] .yk-top .btn-icon { background: transparent; border-color: color-mix(in srgb, var(--on-shell) 30%, transparent); color: var(--on-shell); }
+[data-space="invest"] .yk-top .yk-space { background: color-mix(in srgb, var(--on-shell) 12%, transparent); border-color: transparent; }
+[data-space="invest"] .yk-top .yk-space a { color: color-mix(in srgb, var(--on-shell) 75%, transparent); }
+[data-space="invest"] .yk-top .yk-space a[aria-current] { background: var(--on-shell); color: var(--shell); box-shadow: none; }
 
 /* sélecteur d'espace Trading / Investir */
 .yk-space { display: inline-flex; padding: 3px; border-radius: 999px; background: var(--soft); border: 1px solid var(--line); }

@@ -110,7 +110,7 @@
     host.innerHTML = `<div class="yk-top-in">
       <div class="yk-left">
         <a class="yk-brand" href="index.html" aria-label="Yasuke, tableau de bord">${I.logo(32)}<span><b>Yasuke</b><small>Trading</small></span></a>
-        <nav class="yk-tabs" aria-label="Pages">${[PAGES[0], ...EXTRA, ...PAGES.slice(1)].map(([k, href, l]) => `<a class="yk-tab${k === page ? " active" : ""}" href="${href}"${k === page ? ' aria-current="page"' : ""}>${l}</a>`).join("")}</nav>
+        <nav class="yk-tabs" aria-label="Pages">${[PAGES[0], PAGES[1], EXTRA[0], EXTRA[1], PAGES[3], PAGES[2], EXTRA[2]].map(([k, href, l]) => `<a class="yk-tab${k === page ? " active" : ""}" href="${href}"${k === page ? ' aria-current="page"' : ""}>${l}</a>`).join("")}</nav>
       </div>
       <div class="yk-right">
         ${spaceSwitch("trade")}
