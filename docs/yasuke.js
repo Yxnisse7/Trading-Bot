@@ -229,11 +229,11 @@
   }
 
   // ------------------------------------------------------------------ thème
-  function applyStoredTheme() { const t = store.get("tb-theme"); if (t) document.documentElement.dataset.theme = t; }
-  function isDark() {
-    const t = document.documentElement.dataset.theme;
-    return t ? t === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
-  }
+  // Trading et Investir gardent chacun leur thème : Trading sombre par défaut, Investir clair
+  const themeKey = () => document.documentElement.dataset.space === "invest" ? "tb-theme-invest" : "tb-theme";
+  const themeDefault = () => document.documentElement.dataset.space === "invest" ? "light" : "dark";
+  function applyStoredTheme() { document.documentElement.dataset.theme = store.get(themeKey()) || themeDefault(); }
+  function isDark() { return (document.documentElement.dataset.theme || themeDefault()) === "dark"; }
   function themeButton() {
     const b = document.getElementById("btn-theme"); if (!b) return;
     const paint = () => { b.innerHTML = isDark() ? I.sun : I.moon; };
@@ -242,11 +242,10 @@
       const root = document.documentElement;
       root.classList.add("theme-fade");
       const next = isDark() ? "light" : "dark";
-      root.dataset.theme = next; store.set("tb-theme", next); paint();
+      root.dataset.theme = next; store.set(themeKey(), next); paint();
       setTimeout(() => root.classList.remove("theme-fade"), 320);
       document.dispatchEvent(new CustomEvent("yk:theme"));
     });
-    try { matchMedia("(prefers-color-scheme: dark)").addEventListener("change", paint); } catch (e) { /* ancien navigateur */ }
   }
 
   // ------------------------------------------------------------------ état du bot

@@ -45,7 +45,7 @@
   .lc-box.lc-svgmode { height: auto; }
   .lc-ov { position: absolute; left: 8px; top: 6px; z-index: 3; pointer-events: none; display: grid; gap: 1px; }
   .lc-ov .n { font-weight: 600; font-size: 14px; } .lc-ov .n span { font-weight: 500; font-size: 12px; color: var(--muted); margin-left: 6px; }
-  .lc-ov .o { font: 11px "Geist Mono", ui-monospace, monospace; color: var(--muted); display: flex; gap: 10px; flex-wrap: wrap; }
+  .lc-ov .o { font: 11px "IBM Plex Mono", ui-monospace, monospace; color: var(--muted); display: flex; gap: 10px; flex-wrap: wrap; }
   .lc-ov .a { font-size: 11px; color: var(--faint); }
   .lc-zone { position: absolute; z-index: 2; pointer-events: none; background: color-mix(in srgb, var(--up) 12%, transparent);
              border-top: 1px solid color-mix(in srgb, var(--up) 35%, transparent); border-bottom: 1px solid color-mix(in srgb, var(--up) 35%, transparent); }
@@ -60,7 +60,7 @@
   .lc-hint { color: var(--faint); }
   .lc-how { margin-top: 6px; font-size: 12px; color: var(--muted); }
   .lc-empty { display: grid; place-items: center; height: 100%; color: var(--muted); font-size: 13px; text-align: center; padding: 20px; }
-  .lc-svg svg { display: block; width: 100%; height: auto; font: 11px "Geist Mono", ui-monospace, monospace; }
+  .lc-svg svg { display: block; width: 100%; height: auto; font: 11px "IBM Plex Mono", ui-monospace, monospace; }
   .lc-svg svg text { fill: var(--muted); }
   @media (max-width: 760px) { .lc-box { height: 320px; } .lc-hint { display: none; } .lc-ov .o { display: none; } }`;
 
@@ -171,7 +171,7 @@
     function chartOptions() {
       const c = colors();
       return {
-        layout: { background: { type: "solid", color: c.card }, textColor: c.muted, fontFamily: '"Geist Mono", ui-monospace, monospace', fontSize: 11, attributionLogo: true },
+        layout: { background: { type: "solid", color: c.card }, textColor: c.muted, fontFamily: '"IBM Plex Mono", ui-monospace, monospace', fontSize: 11, attributionLogo: true },
         grid: { vertLines: { color: c.grid }, horzLines: { color: c.grid } },
         rightPriceScale: { borderColor: c.line, scaleMargins: { top: 0.14, bottom: 0.1 } },
         timeScale: { borderColor: c.line, timeVisible: true, secondsVisible: false, rightOffset: 6, barSpacing: 9,

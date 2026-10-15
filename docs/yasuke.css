@@ -1,54 +1,45 @@
-/* Charte Yasuke : jetons de couleur, typographie et composants communs aux trois pages.
+/* Charte Yasuke (3) : deux espaces bien distincts.
  *
- * Règle des couleurs : bleu = gain / TP / hausse, orange = perte / SL / baisse, gris = neutre / expiré / hasard.
- * Le violet sert uniquement à la marque et aux boutons, jamais aux données.
+ * Trading : sombre par défaut, dense, chiffres en IBM Plex Mono ; la marque est l'encre (texte), pas une couleur.
+ * Investir : clair par défaut, bandeau vert pin, titres en Source Serif 4, plus d'air.
+ * Règle des couleurs des données : bleu = gain / TP / hausse, orange = perte / SL / baisse, gris = neutre / expiré / hasard.
  */
 :root {
-  --bg: #f4f5f7; --card: #ffffff; --soft: #f0f2f5; --line: #e3e6eb; --text: #0f1218; --muted: #5d6470; --faint: #9aa0aa;
-  --brand: #5b4ef0; --brand-soft: #eceafd; --brand-text: #4a3bdc; --on-brand: #ffffff;
-  --up: #2a78d6; --up-soft: #e6f0fb; --up-text: #1f66bd;
-  --dn: #eb6834; --dn-soft: #fdede6; --dn-text: #b9471a;
-  --neu: #898781; --neu-soft: #eef0f2;
-  --grid: #eceef1; --shadow: 0 1px 2px rgba(15,18,24,.04), 0 10px 30px rgba(15,18,24,.05);
-  --shadow-pop: 0 18px 48px rgba(15,18,24,.14);
-  --glass: rgba(255,255,255,.78); --glow: rgba(91,78,240,.07); --edge: rgba(255,255,255,.9);
-  /* alias gardés pour les graphiques existants */
-  --c-tp: var(--up); --c-sl: var(--dn); --c-exp: var(--neu); --c-grid: var(--grid); --c-axis: #cfd3da; --c-wash: rgba(42,120,214,.10);
+  --bg: #f3f4f2; --card: #ffffff; --soft: #eceeea; --line: #dcdfda; --text: #14161a; --muted: #565c63; --faint: #8d939a;
+  --brand: #1d2127; --brand-soft: #e6e8e4; --brand-text: #1d2127; --on-brand: #ffffff;
+  --up: #2a6fd0; --up-soft: #e4eefa; --up-text: #1f5fb8;
+  --dn: #e0612d; --dn-soft: #fcebe3; --dn-text: #b4461a;
+  --neu: #8a8c88; --neu-soft: #eceeea;
+  --grid: #e8eae6; --shadow: none; --shadow-pop: 0 12px 32px rgba(20,22,26,.16);
+  --radius: 10px;
+  --c-tp: var(--up); --c-sl: var(--dn); --c-exp: var(--neu); --c-grid: var(--grid); --c-axis: #c9ccc6; --c-wash: rgba(42,111,208,.10);
   color-scheme: light;
 }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg: #0a0c10; --card: #11141a; --soft: #181c24; --line: #222733; --text: #e9ebf0; --muted: #9aa1ad; --faint: #626a78;
-    --brand: #7b6cff; --brand-soft: #221f45; --brand-text: #a497ff; --on-brand: #ffffff;
-    --up: #3987e5; --up-soft: #13233a; --up-text: #6aa6ee;
-    --dn: #d95926; --dn-soft: #331b11; --dn-text: #ee8a5c;
-    --neu: #898781; --neu-soft: #1d2029;
-    --grid: #1c2029; --shadow: 0 1px 0 rgba(255,255,255,.03) inset, 0 12px 32px rgba(0,0,0,.25); --shadow-pop: 0 18px 48px rgba(0,0,0,.55);
-    --glass: rgba(10,12,16,.72); --glow: rgba(123,108,255,.10); --edge: rgba(255,255,255,.05);
-    --c-axis: #343a46; --c-wash: rgba(57,135,229,.12);
-    color-scheme: dark;
-  }
-}
 :root[data-theme="dark"] {
-    --bg: #0a0c10; --card: #11141a; --soft: #181c24; --line: #222733; --text: #e9ebf0; --muted: #9aa1ad; --faint: #626a78;
-    --brand: #7b6cff; --brand-soft: #221f45; --brand-text: #a497ff; --on-brand: #ffffff;
-    --up: #3987e5; --up-soft: #13233a; --up-text: #6aa6ee;
-    --dn: #d95926; --dn-soft: #331b11; --dn-text: #ee8a5c;
-    --neu: #898781; --neu-soft: #1d2029;
-    --grid: #1c2029; --shadow: 0 1px 0 rgba(255,255,255,.03) inset, 0 12px 32px rgba(0,0,0,.25); --shadow-pop: 0 18px 48px rgba(0,0,0,.55);
-    --glass: rgba(10,12,16,.72); --glow: rgba(123,108,255,.10); --edge: rgba(255,255,255,.05);
-    --c-axis: #343a46; --c-wash: rgba(57,135,229,.12);
-    color-scheme: dark;
+  --bg: #121417; --card: #181b1f; --soft: #1f2328; --line: #2a2f36; --text: #e6e8ea; --muted: #98a0a8; --faint: #646c75;
+  --brand: #e6e8ea; --brand-soft: #262b31; --brand-text: #e6e8ea; --on-brand: #121417;
+  --up: #4a92e6; --up-soft: #15243a; --up-text: #7db2f0;
+  --dn: #e2672f; --dn-soft: #331d12; --dn-text: #f0956a;
+  --neu: #7d838a; --neu-soft: #1f2328;
+  --grid: #1f2328; --shadow-pop: 0 16px 40px rgba(0,0,0,.5);
+  --c-axis: #353b43; --c-wash: rgba(74,146,230,.12);
+  color-scheme: dark;
 }
-/* Espace Investir : même charte, couleur de marque verte */
-:root[data-space="invest"] { --brand: #0f9d76; --brand-soft: #e3f5ef; --brand-text: #0b7f5f; --glow: rgba(15,157,118,.07); }
-@media (prefers-color-scheme: dark) { :root[data-space="invest"]:not([data-theme="light"]) { --brand: #2fc495; --brand-soft: #10291f; --brand-text: #5bd8ad; --glow: rgba(47,196,149,.09); } }
-:root[data-space="invest"][data-theme="dark"] { --brand: #2fc495; --brand-soft: #10291f; --brand-text: #5bd8ad; --glow: rgba(47,196,149,.09); }
+/* Espace Investir : papier blanc, vert pin, plus d'air */
+:root[data-space="invest"] {
+  --bg: #f7f7f4; --card: #ffffff; --soft: #eff1ec; --line: #dfe3dc; --text: #17201c; --muted: #56625b; --faint: #8b958f;
+  --brand: #1f5f4b; --brand-soft: #e2ede7; --brand-text: #1a5240; --on-brand: #ffffff; --grid: #e9ece6;
+  --radius: 8px;
+}
+:root[data-space="invest"][data-theme="dark"] {
+  --bg: #141a17; --card: #1a221e; --soft: #212a25; --line: #2c3631; --text: #e4ebe7; --muted: #9aa8a0; --faint: #66736b;
+  --brand: #6cc3a0; --brand-soft: #1d3329; --brand-text: #8fd4b7; --on-brand: #10201a; --grid: #212a25;
+}
 
 * { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; }
-body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.5 "Geist", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; -webkit-font-smoothing: antialiased; }
-.mono, .num, td.num, th.num { font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace; font-variant-numeric: tabular-nums; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.55 "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; -webkit-font-smoothing: antialiased; }
+.mono, .num, td.num, th.num { font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace; font-variant-numeric: tabular-nums; }
 a { color: var(--brand-text); text-decoration: none; }
 a:hover { text-decoration: underline; }
 h1 { font-size: 28px; line-height: 1.15; letter-spacing: -0.02em; margin: 0; font-weight: 600; }
@@ -261,7 +252,7 @@ dialog.yk-modal[open] { animation: yk-in .25s cubic-bezier(.2,.7,.2,1); }
 .note-box.err { background: var(--dn-soft); color: var(--dn-text); }
 .modal-foot { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
 .modal-foot .cmd { font-size: 12px; color: var(--faint); display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-.modal-foot code { background: var(--soft); color: var(--text); padding: 3px 8px; border-radius: 6px; font: 12px "Geist Mono", ui-monospace, monospace; }
+.modal-foot code { background: var(--soft); color: var(--text); padding: 3px 8px; border-radius: 6px; font: 12px "IBM Plex Mono", ui-monospace, monospace; }
 .modal-foot .btns { display: flex; gap: 8px; flex-wrap: wrap; }
 .ghbox { border-top: 1px solid var(--line); padding-top: 14px; }
 .ghbox summary { color: var(--muted); font-size: 13px; }
@@ -273,10 +264,10 @@ dialog.yk-modal[open] { animation: yk-in .25s cubic-bezier(.2,.7,.2,1); }
 .chart { min-width: 0; }
 .chart h3 { margin: 0 0 2px; font-size: 16px; }
 .chart .how { font-size: 13px; color: var(--muted); margin-bottom: 12px; }
-.chart svg { display: block; width: 100%; height: auto; font: 12px "Geist", system-ui, sans-serif; }
+.chart svg { display: block; width: 100%; height: auto; font: 12px "IBM Plex Sans", system-ui, sans-serif; }
 .chart svg text { fill: var(--muted); }
 .chart svg text.v { fill: var(--text); font-weight: 600; }
-.chart svg text.mono { font-family: "Geist Mono", ui-monospace, monospace; }
+.chart svg text.mono { font-family: "IBM Plex Mono", ui-monospace, monospace; }
 .chart .empty { padding: 18px 0; }
 .mark { transition: opacity .1s; } .mark:hover { opacity: .75; }
 .charts { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); }
@@ -344,15 +335,33 @@ html.theme-fade, html.theme-fade * { transition: background-color .25s ease, bor
   *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
 }
 
-/* ---------------------------------------------------------------- finitions « pro » (charte 2) */
-body { background: radial-gradient(1200px 500px at 10% -10%, var(--glow), transparent 60%), radial-gradient(900px 400px at 100% 0%, var(--glow), transparent 55%), var(--bg); background-attachment: fixed; }
-.yk-top { background: var(--glass); -webkit-backdrop-filter: saturate(160%) blur(14px); backdrop-filter: saturate(160%) blur(14px); }
-.card { border-radius: 16px; box-shadow: var(--shadow); background: linear-gradient(180deg, var(--edge), transparent 42px), var(--card); }
-@media (hover: hover) { .card.tile:hover, .card.live-s:hover { border-color: color-mix(in srgb, var(--brand) 35%, var(--line)); transition: border-color .2s; } }
-h1 { font-size: 30px; letter-spacing: -0.03em; }
-h2 { letter-spacing: -0.015em; scroll-margin-top: 140px; }
-.hero .big b { background: linear-gradient(180deg, var(--text), color-mix(in srgb, var(--text) 62%, var(--brand))); -webkit-background-clip: text; background-clip: text; color: transparent; }
+/* ---------------------------------------------------------------- charte 3 : sobre, sans halo ni dégradé */
+.card { border-radius: var(--radius); box-shadow: none; }
+h1 { font-size: 28px; letter-spacing: -0.02em; }
+h2 { letter-spacing: -0.01em; scroll-margin-top: 140px; }
 .tile .v, .hero .big b, td.num { font-feature-settings: "tnum" 1; }
+::selection { background: color-mix(in srgb, var(--up) 35%, transparent); }
+html { scrollbar-color: var(--line) var(--bg); }
+thead th { background: transparent; border-bottom: 1px solid var(--line); }
+thead th:first-child, thead th:last-child { border-radius: 0; }
+.pill { border-radius: 6px; }
+.btn, button { border-radius: 8px; }
+input, select, textarea { border-radius: 8px; }
+@media (hover: hover) { .card.tile:hover, .card.live-s:hover { border-color: var(--faint); } }
+
+/* Investir : titres en serif, bandeau vert, plus d'air */
+[data-space="invest"] h1, [data-space="invest"] h2, [data-space="invest"] h3 { font-family: "Source Serif 4", Georgia, serif; font-weight: 600; letter-spacing: -0.005em; }
+[data-space="invest"] h1 { font-size: 34px; }
+[data-space="invest"] h2 { font-size: 23px; margin: 44px 0 14px; }
+[data-space="invest"] .card { padding: 28px; }
+[data-space="invest"] .yk-top { background: var(--brand); border-bottom: 0; color: var(--on-brand); }
+[data-space="invest"] .yk-top .yk-brand, [data-space="invest"] .yk-top .yk-tab.active { color: var(--on-brand); }
+[data-space="invest"] .yk-top .yk-brand small, [data-space="invest"] .yk-top .yk-tab { color: color-mix(in srgb, var(--on-brand) 72%, transparent); }
+[data-space="invest"] .yk-top .yk-tab.active { border-bottom-color: var(--on-brand); }
+[data-space="invest"] .yk-top .btn-icon { background: transparent; border-color: color-mix(in srgb, var(--on-brand) 30%, transparent); color: var(--on-brand); }
+[data-space="invest"] .yk-top .yk-space { background: color-mix(in srgb, var(--on-brand) 12%, transparent); border-color: transparent; }
+[data-space="invest"] .yk-top .yk-space a { color: color-mix(in srgb, var(--on-brand) 75%, transparent); }
+[data-space="invest"] .yk-top .yk-space a[aria-current] { background: var(--on-brand); color: var(--brand); box-shadow: none; }
 
 /* sélecteur d'espace Trading / Investir */
 .yk-space { display: inline-flex; padding: 3px; border-radius: 999px; background: var(--soft); border: 1px solid var(--line); }
@@ -376,5 +385,6 @@ h2 { letter-spacing: -0.015em; scroll-margin-top: 140px; }
 .live-s .v { font-size: 24px; font-weight: 600; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
 .live-s .s { font-size: 12px; color: var(--muted); }
 .live-s .pos { font-size: 12px; padding: 8px 10px; border-radius: 10px; background: var(--soft); display: flex; justify-content: space-between; gap: 8px; }
-.live-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--up); box-shadow: 0 0 0 4px var(--up-soft); flex: none; margin-top: 6px; animation: yk-pulse 2.4s ease-in-out infinite; }
-.live-dot.idle { background: var(--faint); box-shadow: 0 0 0 4px var(--neu-soft); animation: none; }
+.live-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--up); flex: none; margin-top: 6px; animation: yk-pulse 2.4s ease-in-out infinite; }
+.live-dot.idle { background: var(--faint); animation: none; }
+[data-space="invest"] .note-box.ok { background: var(--brand-soft); color: var(--brand-text); }

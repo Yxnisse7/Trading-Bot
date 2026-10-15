@@ -7,9 +7,9 @@
 <meta name="description" content="Graphique des actifs du bot avec la structure du marché : sommets, chasses aux stops, trous de prix, sessions, signaux et annonces.">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
-<link rel="stylesheet" href="yasuke.css?v=341ca20728">
-<script>try { const t = localStorage.getItem("tb-theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}</script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap">
+<link rel="stylesheet" href="yasuke.css?v=17d1620441">
+<script>/* Trading : sombre par défaut */ try { document.documentElement.dataset.theme = localStorage.getItem("tb-theme") || "dark"; } catch (e) { document.documentElement.dataset.theme = "dark"; }</script>
 <style>
   .gx-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin-bottom: 14px; }
   .gx-bar select { width: auto; max-width: 100%; font: inherit; font-size: 14px; padding: 7px 10px; border-radius: 10px; border: 1px solid var(--line); background: var(--card); color: var(--text); }
@@ -18,7 +18,7 @@
   .gx-chart { position: relative; height: min(72vh, 680px); min-height: 380px; padding: 0; overflow: hidden; }
   .gx-chart .box { position: absolute; inset: 0; }
   .gx-chart canvas.ov { position: absolute; inset: 0; pointer-events: none; z-index: 3; }
-  .gx-chart .legend { position: absolute; top: 10px; left: 12px; z-index: 4; font: 500 12px "Geist Mono", ui-monospace, monospace; color: var(--muted); pointer-events: none; }
+  .gx-chart .legend { position: absolute; top: 10px; left: 12px; z-index: 4; font: 500 12px "IBM Plex Mono", ui-monospace, monospace; color: var(--muted); pointer-events: none; }
   .gx-side { display: grid; gap: 16px; }
   .gx-side .card { padding: 16px; }
   .gx-side h3 { margin: 0 0 10px; font-size: 13px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 600; }
@@ -27,13 +27,13 @@
   .ly label:hover { background: var(--soft); }
   .ly label small { display: block; color: var(--muted); font-size: 11px; }
   .ly i { width: 12px; height: 12px; border-radius: 3px; display: block; }
-  .ly .n { font: 500 12px "Geist Mono", ui-monospace, monospace; color: var(--muted); }
+  .ly .n { font: 500 12px "IBM Plex Mono", ui-monospace, monospace; color: var(--muted); }
   .ly-all { display: flex; gap: 8px; margin-top: 8px; }
   .ly-all button { font-size: 12px; padding: 4px 10px; }
   #insp { font-size: 13px; line-height: 1.5; }
   #insp .k { color: var(--muted); }
   #insp dl { display: grid; grid-template-columns: auto 1fr; gap: 2px 10px; margin: 8px 0 0; }
-  #insp dt { color: var(--muted); } #insp dd { margin: 0; font-family: "Geist Mono", ui-monospace, monospace; }
+  #insp dt { color: var(--muted); } #insp dd { margin: 0; font-family: "IBM Plex Mono", ui-monospace, monospace; }
   #insp .it { padding: 8px 0; border-top: 1px solid var(--line); } #insp .it:first-of-type { border-top: 0; }
   @media (max-width: 960px) { .gx { grid-template-columns: 1fr; } .gx-chart { height: 62vh; } }
 </style>
@@ -67,8 +67,8 @@
 </div>
 
 <script src="vendor/lightweight-charts.standalone.production.js"></script>
-<script src="yasuke.js?v=035df63a84"></script>
-<script src="live-chart.js?v=974fc956eb"></script>
+<script src="yasuke.js?v=3e70d66ea3"></script>
+<script src="live-chart.js?v=dd74f291b6"></script>
 <script src="structures.js?v=0525d87a9f"></script>
 <script>
 (function () {
@@ -131,7 +131,7 @@
   function ensureChart() {
     if (chart) return;
     chart = L.createChart($("#box"), { autoSize: true,
-      layout: { background: { color: "transparent" }, textColor: css("muted"), fontFamily: "Geist, system-ui, sans-serif" },
+      layout: { background: { color: "transparent" }, textColor: css("muted"), fontFamily: "IBM Plex Sans, system-ui, sans-serif" },
       grid: { vertLines: { color: css("grid") }, horzLines: { color: css("grid") } },
       rightPriceScale: { borderColor: css("line") },
       timeScale: { borderColor: css("line"), timeVisible: true, secondsVisible: false, rightOffset: 6,
@@ -164,7 +164,7 @@
     const Xend = (t) => (t == null || t >= last ? plotW : X(t));
     const Yp = (p) => candle.priceToCoordinate(p);
     g.save(); g.beginPath(); g.rect(0, 0, plotW, h); g.clip();
-    const font = "500 10px Geist, system-ui, sans-serif"; g.font = font; g.textBaseline = "bottom";
+    const font = "500 10px "IBM Plex Sans", system-ui, sans-serif"; g.font = font; g.textBaseline = "bottom";
     if (on.sess) for (const s of A.sessions) {
       const x0 = X(s.first), x1 = X(s.last), y0 = Yp(s.hi), y1 = Yp(s.lo);
       if (x0 == null || x1 == null || y0 == null || y1 == null) continue;
