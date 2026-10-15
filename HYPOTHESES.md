@@ -1113,6 +1113,85 @@ variante elle-même garde R > 0. « Prouvée » : tout passe et z de l'écart (t
 **Décidé d'avance** : une variante prouvée → proposition de l'appliquer à cette stratégie (signaux Telegram, journal,
 simulation et copie démo). Rien ne change sans l'accord de Yanisse.
 
+## Essais 33 à 37 — idées des vidéos @kara_tools
+
+Écrit le 15 octobre 2026, **avant** tout calcul, à la demande de Yanisse (« fais tous les tests sur ce qu'on a
+relevé de bon dans toutes les vidéos »). Analyse des 8 vidéos : `/mnt/project-files/videos/analyse-kara-tools.md`
+(hors dépôt). Données : or 1 min HistData 2014 → 10/2026 (regroupées en 5 min et 1 h, heures UTC), Bitcoin 5 min
+Binance 2017 → 10/2026 avec le volume. Frais : or 0,30 $ l'once aller-retour (Vantage RAW), Bitcoin 0,06 %.
+R = distance du stop. Si le stop et l'objectif sont touchés dans la même bougie, on compte le stop.
+
+**Contrôles communs** (cellules qui tradent) : au moins 200 trades ; R net > 0 et facteur de profit ≥ 1,1 ; 60 % des
+années pleines positives ; avant 2020 et depuis 2020 positifs ; 2 dernières années (depuis le 14/10/2024) positives ;
+frais doublés > 0 ; **1 000 singes** (n'importe quel jour, même heure UTC, même sens, même stop et objectif en % du
+prix, même durée maximale) à battre 950 fois. « Prouvée » : tout passe et z > seuil corrigé (Bonferroni à 5 %
+unilatéral) pour le nombre de cellules de l'essai.
+
+### Essai 35 — structure de marché sur l'or (vidéo « lire le prix »)
+
+Lecture de la structure sur bougies fermées. Tendance haussière : le sommet de structure H est le plus haut de la
+jambe en cours ; un creux n'est **confirmé** que quand une bougie casse H ; il vaut le plus bas entre H et la
+cassure. Tendance baissière : l'inverse. La tendance change quand le creux (ou sommet) confirmé est cassé en clôture.
+Repli = (H − creux) / (H − creux confirmé précédent). Vitesse = bougies pour remonter du creux à la cassure,
+comparées aux bougies de la descente de H au creux. Entrée à l'ouverture de la bougie qui suit la cassure, dans le
+sens de la tendance ; stop sous le nouveau creux confirmé (au-dessus du sommet en baisse) ; objectif = taille de la
+jambe précédente reportée depuis le creux (vidéo « 3 portes » : la nouvelle jambe vaut la précédente) ; sortie au
+plus tard après 48 bougies ; une seule position à la fois. Stop de moins de 0,05 % du prix : signal ignoré.
+- **S1** creux fort (repli ≥ 50 %), cassure en **clôture**, cassure rapide (montée en moins de bougies que la descente) ;
+- **S2** creux fort, cassure en clôture, sans condition de vitesse ;
+- **S3** creux faible (repli < 25 %), cassure en clôture (témoin : la vidéo le dit moins bon) ;
+- **S4** creux fort, cassure rapide, mais entrée dès qu'une **mèche** dépasse H (au prix H).
+Chacune en bougies 1 h et 5 min : **8 cellules**, seuil z > 2,50.
+
+### Essai 34 — stop selon l'heure (vidéo « les ondes »)
+
+Sur les entrées de S2 (1 h et 5 min), on remplace le stop de structure par un stop **proportionnel à l'agitation
+habituelle de l'heure d'entrée** : k × amplitude médiane de la bougie 1 h de cette heure UTC sur les 250 jours
+d'avant (k = 1, 2, 3), objectif à 2 fois le stop, même durée maximale. Témoin apparié : même entrée, stop constant
+en % du prix égal à k × amplitude médiane **toutes heures confondues** des 250 jours d'avant, objectif 2 fois le stop.
+Contrôle de l'essai 32 sur l'écart trade par trade (variante − témoin, en R net) : écart moyen > 0, > 0 avant et
+depuis 2020, > 0 sur les 2 dernières années, > 0 sur 60 % des années, variante R > 0 ; « prouvée » : z apparié >
+seuil pour **6 cellules** (2,64).
+
+### Essai 33 — les annonces (vidéo « ton stop à 100 sort à 97 »)
+
+Annonces : emploi, inflation, décisions de la Fed 2014-2024 (`data/macro_events_2010_2024.json`).
+- **33a mesure** (sans verdict) : amplitude moyenne de la bougie 1 min de l'or à l'heure de l'annonce, contre la même
+  minute les autres jours ; et, pour les stops de l'essai 35 touchés dans la minute d'une annonce, l'écart entre le
+  stop et le plus bas (haut) de cette minute = glissement dans le pire cas.
+- **33b filtre** : sur les 8 cellules de l'essai 35, aucune entrée de 30 min avant à 15 min après une annonce, et
+  sortie à l'ouverture de la bougie 30 min avant une annonce si la position est ouverte. Contrôle apparié de l'essai
+  34 (variante − version d'origine), **8 cellules** (2,50) ; les stops touchés dans la minute d'une annonce sont
+  comptés au pire prix de cette minute dans les deux versions.
+- **33c démo** : si le PC est joignable, comparer prix du stop et prix obtenu dans les journaux du démo MT5 (près
+  d'une annonce ou non). Mesure seulement.
+
+### Essai 36 — profil de volume du Bitcoin (vidéo « le volume »)
+
+Profil de la veille (jour UTC) : 40 tranches de prix égales entre le plus bas et le plus haut de la veille, volume
+de chaque bougie 5 min réparti sur sa tranche de clôture ; zone pleine = tranche ≥ 1,5 × la moyenne ; zone creuse =
+tranche ≤ 0,5 × la moyenne ; point de contrôle = tranche la plus pleine.
+- **36a mesure** : le jour même, temps moyen passé par tranche traversée en zone creuse contre zone pleine, comparé au
+  même calcul avec le profil d'un autre jour tiré au hasard (200 tirages) ; « le prix traverse vite les zones creuses »
+  est confirmé si le rapport réel est plus petit que 190 tirages sur 200.
+- **36b** : une bougie 5 min clôture dans une zone creuse en venant d'une tranche pleine ou normale voisine → position
+  dans le sens de la traversée, objectif = bord opposé de la zone creuse, stop = bord d'entrée moins la même distance
+  (1 pour 1), au plus 4 h, une position à la fois.
+- **36c** : la même chose, seulement entre le plus bas et le plus haut de la zone de valeur (70 % du volume autour du
+  point de contrôle).
+36b et 36c : contrôles communs, **2 cellules** (1,96).
+
+### Essai 37 — les anciens extrêmes sur l'or (vidéo « 3 portes » : « l'or s'installe au-delà 64 fois sur 100 »)
+
+- **37a mesure** : quand une bougie 5 min dépasse le plus haut (bas) de la séance d'avant (18:00 → 17:00 New York),
+  part des cas où le prix est encore au-delà 15 min et 1 h plus tard ; témoin : le même calcul avec un niveau
+  décalé de 0,25 % vers l'intérieur.
+- **37b** : à la 1re clôture 5 min au-delà de l'extrême de la veille, position dans le sens de la cassure, sortie
+  15 min après ; **37c** : sortie 1 h après. Stop de sécurité 0,5 %. Contrôles communs, **2 cellules** (1,96).
+
+**Décidé d'avance** : une cellule prouvée → proposition de la passer en ombre puis sur le démo MT5 (ou d'appliquer
+le filtre ou le stop à la stratégie concernée). Rien ne change sans l'accord de Yanisse.
+
 ## Journal des essais
 
 | Date | Essai | Résultat |
@@ -1189,3 +1268,4 @@ simulation et copie démo). Rien ne change sans l'accord de Yanisse.
 | 2026-10-14 | **Essai 32** : réajuster le stop pendant le trade (A entrée dès +1 R, B entrée dès +0,5 R, C suiveur à 1 R, D +1 R dès +2 R) sur les 8 stratégies en réel, 2014-2026 | **Aucune variante ne fait mieux** (32 cellules, seuil z 2,96 ; pré-enregistré 2,95). Le stop qui bouge coupe les gros gagnants : zone de bruit Nasdaq +0,21 R → +0,04 à +0,07 R (A, B, D), −0,04 R (C) ; W3 Bitcoin +0,39 R → +0,10 R (A) ; bot Nasdaq +0,15 R → +0,06 à +0,13 R ; Donchian 1 h et cassure Williams Bitcoin un peu moins bonnes. Nuit asiatique or et bot or : écart ≈ 0, pas mieux. Le stop de départ reste fixe partout. |
 | 2026-10-15 | Choix de Yanisse : copies démo à la taille de la simulation | Le trade « nuit asiatique » or du 14/10 a fait +288,75 $ sur la simulation (1 MGC = 10 $ par point, risque 412 $ soit 38,7 % : lot minimal imposé) et +32,05 $ sur le démo (0,01 lot = 1 $ par point). Désormais chaque copie prend les mêmes $ par point que la position de la simulation (`mt5_copy.sim_sizes`, `mirror_lot`, lu sur docs/portfolio.json) ; 1 % du solde seulement si la simulation est illisible. Arrêt de la copie (300 $, 8 pertes d'affilée) inchangé en attendant sa réponse. |
 | 2026-10-15 | Choix de Yanisse : risque des copies démo | Le trade « nuit asiatique » or du 14/10 a fait +288,75 $ sur la simulation (1 MGC = 10 $ par point, 10 % de risque visé, lot minimal imposé) contre +32,05 $ sur le démo (0,01 lot, 1 % de risque). Toutes les copies MT5 risquent désormais **5 % du solde démo** au stop (`mt5_copy.RISK_PCT`, 1 % avant) ; lot minimal toléré jusqu'à 10 %, planchers $/point inchangés. Un essai de copie à la taille exacte de la simulation (commit 0e25b3bf3) est annulé. |
+| 2026-10-15 | Pré-enregistrement des essais 33 à 37 (idées des vidéos @kara_tools) | — |
