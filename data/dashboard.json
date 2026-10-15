@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-15T06:15:53.392455+02:00",
+  "updated_at": "2026-10-15T06:20:58.053371+02:00",
   "timezone": "Europe/Paris",
   "equity_curve": [
     {
@@ -1680,18 +1680,18 @@
       "avg_pnl_pct": -0.0225
     },
     "shadow": {
-      "n": 469,
+      "n": 470,
       "tp": 163,
-      "sl": 230,
+      "sl": 231,
       "expired": 76,
-      "win_rate": 0.41475826972010177,
+      "win_rate": 0.4137055837563452,
       "neutral_win_rate": 0.3925,
-      "edge": 0.0223,
-      "pnl_pct": 10.4841,
-      "avg_pnl_pct": 0.0224
+      "edge": 0.0212,
+      "pnl_pct": 9.9929,
+      "avg_pnl_pct": 0.0213
     },
     "open": 0,
-    "open_shadow": 1
+    "open_shadow": 0
   },
   "by_source": {
     "bot": {
@@ -1728,15 +1728,15 @@
       "avg_pnl_pct": 0.0
     },
     "shadow": {
-      "n": 469,
+      "n": 470,
       "tp": 163,
-      "sl": 230,
+      "sl": 231,
       "expired": 76,
-      "win_rate": 0.41475826972010177,
+      "win_rate": 0.4137055837563452,
       "neutral_win_rate": 0.3925,
-      "edge": 0.0223,
-      "pnl_pct": 10.4841,
-      "avg_pnl_pct": 0.0224
+      "edge": 0.0212,
+      "pnl_pct": 9.9929,
+      "avg_pnl_pct": 0.0213
     }
   },
   "by_horizon": {
@@ -1915,15 +1915,15 @@
         "avg_pnl_pct": -0.1631
       },
       "shadow": {
-        "n": 16,
+        "n": 17,
         "tp": 3,
-        "sl": 10,
+        "sl": 11,
         "expired": 3,
-        "win_rate": 0.23076923076923078,
-        "neutral_win_rate": 0.4031,
-        "edge": -0.1723,
-        "pnl_pct": -2.9343,
-        "avg_pnl_pct": -0.1834
+        "win_rate": 0.21428571428571427,
+        "neutral_win_rate": 0.4028,
+        "edge": -0.1885,
+        "pnl_pct": -3.4255,
+        "avg_pnl_pct": -0.2015
       },
       "open": 0,
       "session_utc": null,
@@ -2066,17 +2066,17 @@
     {
       "key": "trend_5m",
       "label": "Tendance 5 min",
-      "weight": 1.08,
+      "weight": 1.077,
       "stats": {
-        "n": 522,
+        "n": 523,
         "tp": 195,
-        "sl": 251,
+        "sl": 252,
         "expired": 76,
-        "win_rate": 0.437219730941704,
+        "win_rate": 0.436241610738255,
         "neutral_win_rate": 0.3936,
-        "edge": 0.0436,
-        "pnl_pct": 13.1519,
-        "avg_pnl_pct": 0.0252
+        "edge": 0.0426,
+        "pnl_pct": 12.6607,
+        "avg_pnl_pct": 0.0242
       },
       "by_source": {
         "bot": {
@@ -2113,15 +2113,15 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 389,
+          "n": 390,
           "tp": 149,
-          "sl": 195,
+          "sl": 196,
           "expired": 45,
-          "win_rate": 0.4331395348837209,
-          "neutral_win_rate": 0.3869,
-          "edge": 0.0462,
-          "pnl_pct": 15.0272,
-          "avg_pnl_pct": 0.0386
+          "win_rate": 0.4318840579710145,
+          "neutral_win_rate": 0.387,
+          "edge": 0.0449,
+          "pnl_pct": 14.536,
+          "avg_pnl_pct": 0.0373
         }
       },
       "last_trades": [
@@ -2157,6 +2157,42 @@
           "created_local": "15/10 05:35",
           "expires_at": "2026-10-15T04:35:38Z",
           "rationale": "Vente : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 521.9 (0.65 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 98%.",
+          "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité calme sur les 2 dernières heures",
+          "manual_exit": null
+        },
+        {
+          "id": "ef709d8bdf",
+          "asset": "ethereum",
+          "asset_label": "Ethereum (ETH/USD)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 2358.9,
+          "take_profit": 2344.3,
+          "stop_loss": 2368.6,
+          "risk_reward": 1.51,
+          "confidence": "fort",
+          "score": 7.01,
+          "criteria": [
+            "adx",
+            "corr",
+            "macd",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.4912,
+          "pnl_gross_pct": -0.4112,
+          "duration_minutes": 43,
+          "close_price": 2368.6,
+          "created_at": "2026-10-15T03:35:38Z",
+          "closed_at": "2026-10-15T04:19:00Z",
+          "created_local": "15/10 05:35",
+          "expires_at": "2026-10-15T04:35:38Z",
+          "rationale": "Vente : tendance forte (ADX), marché meneur favorable, MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 24.29 (1.03 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 99%.",
           "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité calme sur les 2 dernières heures",
           "manual_exit": null
         },
@@ -2364,40 +2400,6 @@
           "expires_at": "2026-10-15T18:45:52Z",
           "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 98.22 (0.33 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 90%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
           "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité à surveiller (score 3) : AI infrastructure stocks tumble. Here's a few reasons for the sell-off | CoreWeave shares tumble as bond yields near 15% on concern about AI borrowing binge",
-          "manual_exit": null
-        },
-        {
-          "id": "01ad3a20ed",
-          "asset": "sp500",
-          "asset_label": "S&P 500 (ES)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 7751.25,
-          "take_profit": 7742.5,
-          "stop_loss": 7757.0,
-          "risk_reward": 1.52,
-          "confidence": "fort",
-          "score": 5.25,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.0842,
-          "pnl_gross_pct": -0.0742,
-          "duration_minutes": 9,
-          "close_price": 7757.0,
-          "created_at": "2026-10-14T18:40:51Z",
-          "closed_at": "2026-10-14T18:50:00Z",
-          "created_local": "14/10 20:40",
-          "expires_at": "2026-10-14T19:40:51Z",
-          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 14.60 (0.19 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 95%.",
-          "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité à surveiller (score 2) : CoreWeave shares tumble as bond yields near 15% on concern about AI borrowing binge",
           "manual_exit": null
         }
       ]
@@ -2405,17 +2407,17 @@
     {
       "key": "trend_15m",
       "label": "Tendance 15 min",
-      "weight": 1.08,
+      "weight": 1.077,
       "stats": {
-        "n": 618,
+        "n": 619,
         "tp": 213,
-        "sl": 295,
+        "sl": 296,
         "expired": 110,
-        "win_rate": 0.41929133858267714,
+        "win_rate": 0.41846758349705304,
         "neutral_win_rate": 0.3974,
-        "edge": 0.0219,
-        "pnl_pct": 7.2717,
-        "avg_pnl_pct": 0.0118
+        "edge": 0.0211,
+        "pnl_pct": 6.7805,
+        "avg_pnl_pct": 0.011
       },
       "by_source": {
         "bot": {
@@ -2452,15 +2454,15 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 469,
+          "n": 470,
           "tp": 163,
-          "sl": 230,
+          "sl": 231,
           "expired": 76,
-          "win_rate": 0.41475826972010177,
+          "win_rate": 0.4137055837563452,
           "neutral_win_rate": 0.3925,
-          "edge": 0.0223,
-          "pnl_pct": 10.4841,
-          "avg_pnl_pct": 0.0224
+          "edge": 0.0212,
+          "pnl_pct": 9.9929,
+          "avg_pnl_pct": 0.0213
         }
       },
       "last_trades": [
@@ -2496,6 +2498,42 @@
           "created_local": "15/10 05:35",
           "expires_at": "2026-10-15T04:35:38Z",
           "rationale": "Vente : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 521.9 (0.65 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 98%.",
+          "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité calme sur les 2 dernières heures",
+          "manual_exit": null
+        },
+        {
+          "id": "ef709d8bdf",
+          "asset": "ethereum",
+          "asset_label": "Ethereum (ETH/USD)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 2358.9,
+          "take_profit": 2344.3,
+          "stop_loss": 2368.6,
+          "risk_reward": 1.51,
+          "confidence": "fort",
+          "score": 7.01,
+          "criteria": [
+            "adx",
+            "corr",
+            "macd",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.4912,
+          "pnl_gross_pct": -0.4112,
+          "duration_minutes": 43,
+          "close_price": 2368.6,
+          "created_at": "2026-10-15T03:35:38Z",
+          "closed_at": "2026-10-15T04:19:00Z",
+          "created_local": "15/10 05:35",
+          "expires_at": "2026-10-15T04:35:38Z",
+          "rationale": "Vente : tendance forte (ADX), marché meneur favorable, MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 24.29 (1.03 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 99%.",
           "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité calme sur les 2 dernières heures",
           "manual_exit": null
         },
@@ -2703,40 +2741,6 @@
           "expires_at": "2026-10-15T18:45:52Z",
           "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 98.22 (0.33 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 90%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
           "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité à surveiller (score 3) : AI infrastructure stocks tumble. Here's a few reasons for the sell-off | CoreWeave shares tumble as bond yields near 15% on concern about AI borrowing binge",
-          "manual_exit": null
-        },
-        {
-          "id": "01ad3a20ed",
-          "asset": "sp500",
-          "asset_label": "S&P 500 (ES)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 7751.25,
-          "take_profit": 7742.5,
-          "stop_loss": 7757.0,
-          "risk_reward": 1.52,
-          "confidence": "fort",
-          "score": 5.25,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.0842,
-          "pnl_gross_pct": -0.0742,
-          "duration_minutes": 9,
-          "close_price": 7757.0,
-          "created_at": "2026-10-14T18:40:51Z",
-          "closed_at": "2026-10-14T18:50:00Z",
-          "created_local": "14/10 20:40",
-          "expires_at": "2026-10-14T19:40:51Z",
-          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 14.60 (0.19 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 95%.",
-          "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité à surveiller (score 2) : CoreWeave shares tumble as bond yields near 15% on concern about AI borrowing binge",
           "manual_exit": null
         }
       ]
@@ -2744,17 +2748,17 @@
     {
       "key": "trend_1h",
       "label": "Tendance 1 h",
-      "weight": 1.08,
+      "weight": 1.077,
       "stats": {
-        "n": 610,
+        "n": 611,
         "tp": 210,
-        "sl": 293,
+        "sl": 294,
         "expired": 107,
-        "win_rate": 0.41749502982107356,
+        "win_rate": 0.4166666666666667,
         "neutral_win_rate": 0.3973,
-        "edge": 0.0202,
-        "pnl_pct": 7.2569,
-        "avg_pnl_pct": 0.0119
+        "edge": 0.0194,
+        "pnl_pct": 6.7657,
+        "avg_pnl_pct": 0.0111
       },
       "by_source": {
         "bot": {
@@ -2791,15 +2795,15 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 461,
+          "n": 462,
           "tp": 160,
-          "sl": 228,
+          "sl": 229,
           "expired": 73,
-          "win_rate": 0.41237113402061853,
+          "win_rate": 0.41131105398457585,
           "neutral_win_rate": 0.3923,
-          "edge": 0.0201,
-          "pnl_pct": 10.4693,
-          "avg_pnl_pct": 0.0227
+          "edge": 0.019,
+          "pnl_pct": 9.9781,
+          "avg_pnl_pct": 0.0216
         }
       },
       "last_trades": [
@@ -2835,6 +2839,42 @@
           "created_local": "15/10 05:35",
           "expires_at": "2026-10-15T04:35:38Z",
           "rationale": "Vente : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 521.9 (0.65 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 98%.",
+          "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité calme sur les 2 dernières heures",
+          "manual_exit": null
+        },
+        {
+          "id": "ef709d8bdf",
+          "asset": "ethereum",
+          "asset_label": "Ethereum (ETH/USD)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 2358.9,
+          "take_profit": 2344.3,
+          "stop_loss": 2368.6,
+          "risk_reward": 1.51,
+          "confidence": "fort",
+          "score": 7.01,
+          "criteria": [
+            "adx",
+            "corr",
+            "macd",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.4912,
+          "pnl_gross_pct": -0.4112,
+          "duration_minutes": 43,
+          "close_price": 2368.6,
+          "created_at": "2026-10-15T03:35:38Z",
+          "closed_at": "2026-10-15T04:19:00Z",
+          "created_local": "15/10 05:35",
+          "expires_at": "2026-10-15T04:35:38Z",
+          "rationale": "Vente : tendance forte (ADX), marché meneur favorable, MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 24.29 (1.03 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 99%.",
           "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité calme sur les 2 dernières heures",
           "manual_exit": null
         },
@@ -3042,40 +3082,6 @@
           "expires_at": "2026-10-15T18:45:52Z",
           "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 98.22 (0.33 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 90%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
           "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité à surveiller (score 3) : AI infrastructure stocks tumble. Here's a few reasons for the sell-off | CoreWeave shares tumble as bond yields near 15% on concern about AI borrowing binge",
-          "manual_exit": null
-        },
-        {
-          "id": "01ad3a20ed",
-          "asset": "sp500",
-          "asset_label": "S&P 500 (ES)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 7751.25,
-          "take_profit": 7742.5,
-          "stop_loss": 7757.0,
-          "risk_reward": 1.52,
-          "confidence": "fort",
-          "score": 5.25,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.0842,
-          "pnl_gross_pct": -0.0742,
-          "duration_minutes": 9,
-          "close_price": 7757.0,
-          "created_at": "2026-10-14T18:40:51Z",
-          "closed_at": "2026-10-14T18:50:00Z",
-          "created_local": "14/10 20:40",
-          "expires_at": "2026-10-14T19:40:51Z",
-          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 14.60 (0.19 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 95%.",
-          "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité à surveiller (score 2) : CoreWeave shares tumble as bond yields near 15% on concern about AI borrowing binge",
           "manual_exit": null
         }
       ]
@@ -3083,17 +3089,17 @@
     {
       "key": "adx",
       "label": "Force de tendance (ADX)",
-      "weight": 1.08,
+      "weight": 1.077,
       "stats": {
-        "n": 618,
+        "n": 619,
         "tp": 213,
-        "sl": 295,
+        "sl": 296,
         "expired": 110,
-        "win_rate": 0.41929133858267714,
+        "win_rate": 0.41846758349705304,
         "neutral_win_rate": 0.3974,
-        "edge": 0.0219,
-        "pnl_pct": 7.2717,
-        "avg_pnl_pct": 0.0118
+        "edge": 0.0211,
+        "pnl_pct": 6.7805,
+        "avg_pnl_pct": 0.011
       },
       "by_source": {
         "bot": {
@@ -3130,15 +3136,15 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 469,
+          "n": 470,
           "tp": 163,
-          "sl": 230,
+          "sl": 231,
           "expired": 76,
-          "win_rate": 0.41475826972010177,
+          "win_rate": 0.4137055837563452,
           "neutral_win_rate": 0.3925,
-          "edge": 0.0223,
-          "pnl_pct": 10.4841,
-          "avg_pnl_pct": 0.0224
+          "edge": 0.0212,
+          "pnl_pct": 9.9929,
+          "avg_pnl_pct": 0.0213
         }
       },
       "last_trades": [
@@ -3174,6 +3180,42 @@
           "created_local": "15/10 05:35",
           "expires_at": "2026-10-15T04:35:38Z",
           "rationale": "Vente : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 521.9 (0.65 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 98%.",
+          "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité calme sur les 2 dernières heures",
+          "manual_exit": null
+        },
+        {
+          "id": "ef709d8bdf",
+          "asset": "ethereum",
+          "asset_label": "Ethereum (ETH/USD)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 2358.9,
+          "take_profit": 2344.3,
+          "stop_loss": 2368.6,
+          "risk_reward": 1.51,
+          "confidence": "fort",
+          "score": 7.01,
+          "criteria": [
+            "adx",
+            "corr",
+            "macd",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.4912,
+          "pnl_gross_pct": -0.4112,
+          "duration_minutes": 43,
+          "close_price": 2368.6,
+          "created_at": "2026-10-15T03:35:38Z",
+          "closed_at": "2026-10-15T04:19:00Z",
+          "created_local": "15/10 05:35",
+          "expires_at": "2026-10-15T04:35:38Z",
+          "rationale": "Vente : tendance forte (ADX), marché meneur favorable, MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 24.29 (1.03 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 99%.",
           "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité calme sur les 2 dernières heures",
           "manual_exit": null
         },
@@ -3382,57 +3424,23 @@
           "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 98.22 (0.33 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 90%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
           "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité à surveiller (score 3) : AI infrastructure stocks tumble. Here's a few reasons for the sell-off | CoreWeave shares tumble as bond yields near 15% on concern about AI borrowing binge",
           "manual_exit": null
-        },
-        {
-          "id": "01ad3a20ed",
-          "asset": "sp500",
-          "asset_label": "S&P 500 (ES)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 7751.25,
-          "take_profit": 7742.5,
-          "stop_loss": 7757.0,
-          "risk_reward": 1.52,
-          "confidence": "fort",
-          "score": 5.25,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.0842,
-          "pnl_gross_pct": -0.0742,
-          "duration_minutes": 9,
-          "close_price": 7757.0,
-          "created_at": "2026-10-14T18:40:51Z",
-          "closed_at": "2026-10-14T18:50:00Z",
-          "created_local": "14/10 20:40",
-          "expires_at": "2026-10-14T19:40:51Z",
-          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 14.60 (0.19 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 95%.",
-          "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité à surveiller (score 2) : CoreWeave shares tumble as bond yields near 15% on concern about AI borrowing binge",
-          "manual_exit": null
         }
       ]
     },
     {
       "key": "vwap",
       "label": "VWAP",
-      "weight": 0.828,
+      "weight": 0.826,
       "stats": {
-        "n": 602,
+        "n": 603,
         "tp": 211,
-        "sl": 285,
+        "sl": 286,
         "expired": 106,
-        "win_rate": 0.4254032258064516,
+        "win_rate": 0.4245472837022133,
         "neutral_win_rate": 0.3971,
-        "edge": 0.0283,
-        "pnl_pct": 9.0725,
-        "avg_pnl_pct": 0.0151
+        "edge": 0.0274,
+        "pnl_pct": 8.5813,
+        "avg_pnl_pct": 0.0142
       },
       "by_source": {
         "bot": {
@@ -3469,15 +3477,15 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 455,
+          "n": 456,
           "tp": 161,
-          "sl": 222,
+          "sl": 223,
           "expired": 72,
-          "win_rate": 0.42036553524804177,
+          "win_rate": 0.4192708333333333,
           "neutral_win_rate": 0.3919,
-          "edge": 0.0285,
-          "pnl_pct": 11.6685,
-          "avg_pnl_pct": 0.0256
+          "edge": 0.0274,
+          "pnl_pct": 11.1773,
+          "avg_pnl_pct": 0.0245
         }
       },
       "last_trades": [
@@ -3513,6 +3521,42 @@
           "created_local": "15/10 05:35",
           "expires_at": "2026-10-15T04:35:38Z",
           "rationale": "Vente : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 521.9 (0.65 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 98%.",
+          "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité calme sur les 2 dernières heures",
+          "manual_exit": null
+        },
+        {
+          "id": "ef709d8bdf",
+          "asset": "ethereum",
+          "asset_label": "Ethereum (ETH/USD)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 2358.9,
+          "take_profit": 2344.3,
+          "stop_loss": 2368.6,
+          "risk_reward": 1.51,
+          "confidence": "fort",
+          "score": 7.01,
+          "criteria": [
+            "adx",
+            "corr",
+            "macd",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.4912,
+          "pnl_gross_pct": -0.4112,
+          "duration_minutes": 43,
+          "close_price": 2368.6,
+          "created_at": "2026-10-15T03:35:38Z",
+          "closed_at": "2026-10-15T04:19:00Z",
+          "created_local": "15/10 05:35",
+          "expires_at": "2026-10-15T04:35:38Z",
+          "rationale": "Vente : tendance forte (ADX), marché meneur favorable, MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 24.29 (1.03 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 99%.",
           "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité calme sur les 2 dernières heures",
           "manual_exit": null
         },
@@ -3721,57 +3765,23 @@
           "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 98.22 (0.33 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 90%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
           "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité à surveiller (score 3) : AI infrastructure stocks tumble. Here's a few reasons for the sell-off | CoreWeave shares tumble as bond yields near 15% on concern about AI borrowing binge",
           "manual_exit": null
-        },
-        {
-          "id": "01ad3a20ed",
-          "asset": "sp500",
-          "asset_label": "S&P 500 (ES)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 7751.25,
-          "take_profit": 7742.5,
-          "stop_loss": 7757.0,
-          "risk_reward": 1.52,
-          "confidence": "fort",
-          "score": 5.25,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.0842,
-          "pnl_gross_pct": -0.0742,
-          "duration_minutes": 9,
-          "close_price": 7757.0,
-          "created_at": "2026-10-14T18:40:51Z",
-          "closed_at": "2026-10-14T18:50:00Z",
-          "created_local": "14/10 20:40",
-          "expires_at": "2026-10-14T19:40:51Z",
-          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 14.60 (0.19 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 95%.",
-          "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité à surveiller (score 2) : CoreWeave shares tumble as bond yields near 15% on concern about AI borrowing binge",
-          "manual_exit": null
         }
       ]
     },
     {
       "key": "rsi",
       "label": "RSI",
-      "weight": 1.159,
+      "weight": 1.155,
       "stats": {
-        "n": 463,
+        "n": 464,
         "tp": 174,
-        "sl": 219,
+        "sl": 220,
         "expired": 70,
-        "win_rate": 0.44274809160305345,
+        "win_rate": 0.4416243654822335,
         "neutral_win_rate": 0.394,
-        "edge": 0.0487,
-        "pnl_pct": 12.8024,
-        "avg_pnl_pct": 0.0277
+        "edge": 0.0476,
+        "pnl_pct": 12.3112,
+        "avg_pnl_pct": 0.0265
       },
       "by_source": {
         "bot": {
@@ -3808,15 +3818,15 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 335,
+          "n": 336,
           "tp": 129,
-          "sl": 167,
+          "sl": 168,
           "expired": 39,
-          "win_rate": 0.4358108108108108,
+          "win_rate": 0.43434343434343436,
           "neutral_win_rate": 0.3867,
-          "edge": 0.0491,
-          "pnl_pct": 13.9937,
-          "avg_pnl_pct": 0.0418
+          "edge": 0.0476,
+          "pnl_pct": 13.5025,
+          "avg_pnl_pct": 0.0402
         }
       },
       "last_trades": [
@@ -3852,6 +3862,42 @@
           "created_local": "15/10 05:35",
           "expires_at": "2026-10-15T04:35:38Z",
           "rationale": "Vente : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 521.9 (0.65 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 98%.",
+          "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité calme sur les 2 dernières heures",
+          "manual_exit": null
+        },
+        {
+          "id": "ef709d8bdf",
+          "asset": "ethereum",
+          "asset_label": "Ethereum (ETH/USD)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 2358.9,
+          "take_profit": 2344.3,
+          "stop_loss": 2368.6,
+          "risk_reward": 1.51,
+          "confidence": "fort",
+          "score": 7.01,
+          "criteria": [
+            "adx",
+            "corr",
+            "macd",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.4912,
+          "pnl_gross_pct": -0.4112,
+          "duration_minutes": 43,
+          "close_price": 2368.6,
+          "created_at": "2026-10-15T03:35:38Z",
+          "closed_at": "2026-10-15T04:19:00Z",
+          "created_local": "15/10 05:35",
+          "expires_at": "2026-10-15T04:35:38Z",
+          "rationale": "Vente : tendance forte (ADX), marché meneur favorable, MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 24.29 (1.03 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 99%.",
           "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité calme sur les 2 dernières heures",
           "manual_exit": null
         },
@@ -4060,40 +4106,6 @@
           "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 98.22 (0.33 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 90%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
           "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité à surveiller (score 3) : AI infrastructure stocks tumble. Here's a few reasons for the sell-off | CoreWeave shares tumble as bond yields near 15% on concern about AI borrowing binge",
           "manual_exit": null
-        },
-        {
-          "id": "01ad3a20ed",
-          "asset": "sp500",
-          "asset_label": "S&P 500 (ES)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 7751.25,
-          "take_profit": 7742.5,
-          "stop_loss": 7757.0,
-          "risk_reward": 1.52,
-          "confidence": "fort",
-          "score": 5.25,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.0842,
-          "pnl_gross_pct": -0.0742,
-          "duration_minutes": 9,
-          "close_price": 7757.0,
-          "created_at": "2026-10-14T18:40:51Z",
-          "closed_at": "2026-10-14T18:50:00Z",
-          "created_local": "14/10 20:40",
-          "expires_at": "2026-10-14T19:40:51Z",
-          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 14.60 (0.19 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 95%.",
-          "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité à surveiller (score 2) : CoreWeave shares tumble as bond yields near 15% on concern about AI borrowing binge",
-          "manual_exit": null
         }
       ]
     },
@@ -4102,15 +4114,15 @@
       "label": "MACD",
       "weight": 1.0,
       "stats": {
-        "n": 156,
+        "n": 157,
         "tp": 38,
-        "sl": 89,
+        "sl": 90,
         "expired": 29,
-        "win_rate": 0.2992125984251969,
-        "neutral_win_rate": 0.4011,
-        "edge": -0.1019,
-        "pnl_pct": -9.3756,
-        "avg_pnl_pct": -0.0601
+        "win_rate": 0.296875,
+        "neutral_win_rate": 0.401,
+        "edge": -0.1041,
+        "pnl_pct": -9.8668,
+        "avg_pnl_pct": -0.0628
       },
       "by_source": {
         "bot": {
@@ -4147,15 +4159,15 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 110,
+          "n": 111,
           "tp": 27,
-          "sl": 65,
+          "sl": 66,
           "expired": 18,
-          "win_rate": 0.29347826086956524,
+          "win_rate": 0.2903225806451613,
           "neutral_win_rate": 0.3975,
-          "edge": -0.104,
-          "pnl_pct": -6.0344,
-          "avg_pnl_pct": -0.0549
+          "edge": -0.1072,
+          "pnl_pct": -6.5256,
+          "avg_pnl_pct": -0.0588
         }
       },
       "last_trades": [
@@ -4191,6 +4203,42 @@
           "created_local": "15/10 05:35",
           "expires_at": "2026-10-15T04:35:38Z",
           "rationale": "Vente : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 521.9 (0.65 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 98%.",
+          "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité calme sur les 2 dernières heures",
+          "manual_exit": null
+        },
+        {
+          "id": "ef709d8bdf",
+          "asset": "ethereum",
+          "asset_label": "Ethereum (ETH/USD)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 2358.9,
+          "take_profit": 2344.3,
+          "stop_loss": 2368.6,
+          "risk_reward": 1.51,
+          "confidence": "fort",
+          "score": 7.01,
+          "criteria": [
+            "adx",
+            "corr",
+            "macd",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.4912,
+          "pnl_gross_pct": -0.4112,
+          "duration_minutes": 43,
+          "close_price": 2368.6,
+          "created_at": "2026-10-15T03:35:38Z",
+          "closed_at": "2026-10-15T04:19:00Z",
+          "created_local": "15/10 05:35",
+          "expires_at": "2026-10-15T04:35:38Z",
+          "rationale": "Vente : tendance forte (ADX), marché meneur favorable, MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 24.29 (1.03 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 99%.",
           "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité calme sur les 2 dernières heures",
           "manual_exit": null
         },
@@ -4398,41 +4446,6 @@
           "created_local": "14/10 19:50",
           "expires_at": "2026-10-15T17:50:43Z",
           "rationale": "Vente : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 95.43 (0.32 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 97%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
-          "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité à surveiller (score 2) : CoreWeave shares tumble as bond yields near 15% on concern about AI borrowing binge",
-          "manual_exit": null
-        },
-        {
-          "id": "e5be5f5064",
-          "asset": "sp500",
-          "asset_label": "S&P 500 (ES)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 7759.25,
-          "take_profit": 7751.0,
-          "stop_loss": 7764.75,
-          "risk_reward": 1.5,
-          "confidence": "fort",
-          "score": 6.33,
-          "criteria": [
-            "adx",
-            "macd",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "tp",
-          "pnl_pct": 0.0963,
-          "pnl_gross_pct": 0.1063,
-          "duration_minutes": 9,
-          "close_price": 7751.0,
-          "created_at": "2026-10-14T17:40:50Z",
-          "closed_at": "2026-10-14T17:50:00Z",
-          "created_local": "14/10 19:40",
-          "expires_at": "2026-10-14T18:40:50Z",
-          "rationale": "Vente : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 13.95 (0.18 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 98%.",
           "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité à surveiller (score 2) : CoreWeave shares tumble as bond yields near 15% on concern about AI borrowing binge",
           "manual_exit": null
         }
@@ -5116,44 +5129,7 @@
       ]
     }
   ],
-  "open_signals": [
-    {
-      "id": "ef709d8bdf",
-      "asset": "ethereum",
-      "asset_label": "Ethereum (ETH/USD)",
-      "direction": "short",
-      "horizon": "1h",
-      "entry": 2358.9,
-      "take_profit": 2344.3,
-      "stop_loss": 2368.6,
-      "risk_reward": 1.51,
-      "confidence": "fort",
-      "score": 7.01,
-      "criteria": [
-        "adx",
-        "corr",
-        "macd",
-        "rsi",
-        "trend_15m",
-        "trend_1h",
-        "trend_5m",
-        "vwap"
-      ],
-      "source": "shadow",
-      "status": "open",
-      "pnl_pct": null,
-      "pnl_gross_pct": null,
-      "duration_minutes": null,
-      "close_price": null,
-      "created_at": "2026-10-15T03:35:38Z",
-      "closed_at": null,
-      "created_local": "15/10 05:35",
-      "expires_at": "2026-10-15T04:35:38Z",
-      "rationale": "Vente : tendance forte (ADX), marché meneur favorable, MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 24.29 (1.03 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 99%.",
-      "news_context": "prudence post-CPI US (données sept. 2026) : critères renforcés · actualité calme sur les 2 dernières heures",
-      "manual_exit": null
-    }
-  ],
+  "open_signals": [],
   "recent_trades": [
     {
       "id": "963bb033a8",
@@ -6749,14 +6725,14 @@
   "adjustments": {
     "notes": [
       "trades réels : +0,07 R ± 0,18 R par trade avant frais sur 150 trades (0 R = hasard)",
-      "tendance (trend_5m, trend_15m, trend_1h, adx) : +0,11 R ± 0,08 R sur 1012 trades éq. → poids ×1,08",
-      "vwap : +0,12 R ± 0,08 R sur 922 trades éq. → poids ×1,10",
-      "rsi : +0,15 R ± 0,09 R sur 807 trades éq. → poids ×1,16",
-      "ethereum, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,20 R contre +0,11 R en global sur 60 trades éq. → poids ×0,86 sur cet actif",
-      "ethereum, rsi : -0,22 R contre +0,15 R en global sur 41 trades éq. → poids ×0,82 sur cet actif",
+      "tendance (trend_5m, trend_15m, trend_1h, adx) : +0,11 R ± 0,08 R sur 1013 trades éq. → poids ×1,08",
+      "vwap : +0,12 R ± 0,08 R sur 923 trades éq. → poids ×1,10",
+      "rsi : +0,15 R ± 0,09 R sur 808 trades éq. → poids ×1,16",
+      "ethereum, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,21 R contre +0,11 R en global sur 61 trades éq. → poids ×0,82 sur cet actif",
+      "ethereum, rsi : -0,24 R contre +0,15 R en global sur 42 trades éq. → poids ×0,77 sur cet actif",
       "gold, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,08 R contre +0,11 R en global sur 215 trades éq. → poids ×0,89 sur cet actif",
       "gold, vwap : -0,07 R contre +0,12 R en global sur 214 trades éq. → poids ×0,87 sur cet actif",
-      "gold, rsi : -0,08 R contre +0,15 R en global sur 169 trades éq. → poids ×0,82 sur cet actif",
+      "gold, rsi : -0,08 R contre +0,15 R en global sur 169 trades éq. → poids ×0,83 sur cet actif",
       "nasdaq, tendance (trend_5m, trend_15m, trend_1h, adx) : +0,54 R contre +0,11 R en global sur 256 trades éq. → poids ×1,50 sur cet actif",
       "nasdaq, vwap : +0,55 R contre +0,12 R en global sur 249 trades éq. → poids ×1,50 sur cet actif",
       "nasdaq, rsi : +0,64 R contre +0,15 R en global sur 206 trades éq. → poids ×1,50 sur cet actif",
@@ -6770,21 +6746,21 @@
       "variante « entrées dans l'heure avant l'ouverture américaine » en test : 10 trades, +1,40 R net, encore 90 trades avant décision"
     ],
     "avoid_hours_utc": [],
-    "sample": 1316,
+    "sample": 1317,
     "sample_by_source": {
       "bot": 149,
-      "shadow": 469,
+      "shadow": 470,
       "manual": 1,
       "backtest": 697
     },
     "method": "v2 : recalcul complet, marge de sécurité, résultats en R, sources pondérées",
     "weights": {
-      "trend_5m": 1.08,
-      "trend_15m": 1.08,
-      "trend_1h": 1.08,
-      "adx": 1.08,
-      "vwap": 0.828,
-      "rsi": 1.159,
+      "trend_5m": 1.077,
+      "trend_15m": 1.077,
+      "trend_1h": 1.077,
+      "adx": 1.077,
+      "vwap": 0.826,
+      "rsi": 1.155,
       "macd": 1.0,
       "level": 1.0,
       "volume": 0.75,
@@ -6794,12 +6770,12 @@
     },
     "weights_by_asset": {
       "bitcoin": {
-        "trend_5m": 1.08,
-        "trend_15m": 1.08,
-        "trend_1h": 1.08,
-        "adx": 1.08,
-        "vwap": 0.828,
-        "rsi": 1.159,
+        "trend_5m": 1.077,
+        "trend_15m": 1.077,
+        "trend_1h": 1.077,
+        "adx": 1.077,
+        "vwap": 0.826,
+        "rsi": 1.155,
         "macd": 1.0,
         "level": 1.0,
         "volume": 0.75,
@@ -6808,12 +6784,12 @@
         "corr": 0.5
       },
       "ethereum": {
-        "trend_5m": 0.932,
-        "trend_15m": 0.932,
-        "trend_1h": 0.932,
-        "adx": 0.932,
-        "vwap": 0.828,
-        "rsi": 0.956,
+        "trend_5m": 0.888,
+        "trend_15m": 0.888,
+        "trend_1h": 0.888,
+        "adx": 0.888,
+        "vwap": 0.826,
+        "rsi": 0.889,
         "macd": 1.0,
         "level": 1.0,
         "volume": 0.75,
@@ -6822,12 +6798,12 @@
         "corr": 0.5
       },
       "euro": {
-        "trend_5m": 1.08,
-        "trend_15m": 1.08,
-        "trend_1h": 1.08,
-        "adx": 1.08,
-        "vwap": 0.828,
-        "rsi": 1.159,
+        "trend_5m": 1.077,
+        "trend_15m": 1.077,
+        "trend_1h": 1.077,
+        "adx": 1.077,
+        "vwap": 0.826,
+        "rsi": 1.155,
         "macd": 1.0,
         "level": 1.0,
         "volume": 0.75,
@@ -6836,12 +6812,12 @@
         "corr": 0.5
       },
       "gold": {
-        "trend_5m": 0.963,
-        "trend_15m": 0.963,
-        "trend_1h": 0.963,
-        "adx": 0.963,
-        "vwap": 0.718,
-        "rsi": 0.954,
+        "trend_5m": 0.964,
+        "trend_15m": 0.964,
+        "trend_1h": 0.964,
+        "adx": 0.964,
+        "vwap": 0.719,
+        "rsi": 0.955,
         "macd": 1.0,
         "level": 1.0,
         "volume": 0.75,
@@ -6854,7 +6830,7 @@
         "trend_15m": 1.5,
         "trend_1h": 1.5,
         "adx": 1.5,
-        "vwap": 1.242,
+        "vwap": 1.239,
         "rsi": 1.5,
         "macd": 1.0,
         "level": 1.0,
@@ -6864,12 +6840,12 @@
         "corr": 0.5
       },
       "oil": {
-        "trend_5m": 1.08,
-        "trend_15m": 1.08,
-        "trend_1h": 1.08,
-        "adx": 1.08,
-        "vwap": 0.828,
-        "rsi": 1.159,
+        "trend_5m": 1.077,
+        "trend_15m": 1.077,
+        "trend_1h": 1.077,
+        "adx": 1.077,
+        "vwap": 0.826,
+        "rsi": 1.155,
         "macd": 1.0,
         "level": 1.0,
         "volume": 0.75,
@@ -6883,7 +6859,7 @@
         "trend_1h": 0.876,
         "adx": 0.876,
         "vwap": 0.662,
-        "rsi": 0.938,
+        "rsi": 0.939,
         "macd": 1.0,
         "level": 1.0,
         "volume": 0.75,
@@ -6900,40 +6876,40 @@
           "trend_1h",
           "adx"
         ],
-        "n": 1315,
-        "n_eff": 1011.6,
-        "mean_r": 0.1099,
+        "n": 1316,
+        "n_eff": 1012.6,
+        "mean_r": 0.1088,
         "margin_r": 0.078,
-        "multiplier": 1.08
+        "multiplier": 1.077
       },
       "vwap": {
         "members": [
           "vwap"
         ],
-        "n": 1185,
-        "n_eff": 921.8,
-        "mean_r": 0.1244,
-        "margin_r": 0.0826,
-        "multiplier": 1.105
+        "n": 1186,
+        "n_eff": 922.8,
+        "mean_r": 0.1232,
+        "margin_r": 0.0825,
+        "multiplier": 1.102
       },
       "rsi": {
         "members": [
           "rsi"
         ],
-        "n": 1070,
-        "n_eff": 806.6,
-        "mean_r": 0.1528,
-        "margin_r": 0.0893,
-        "multiplier": 1.159
+        "n": 1071,
+        "n_eff": 807.6,
+        "mean_r": 0.1513,
+        "margin_r": 0.0892,
+        "multiplier": 1.155
       },
       "macd": {
         "members": [
           "macd"
         ],
-        "n": 343,
-        "n_eff": 259.0,
-        "mean_r": -0.0981,
-        "margin_r": 0.1441,
+        "n": 344,
+        "n_eff": 260.0,
+        "mean_r": -0.1015,
+        "margin_r": 0.1437,
         "multiplier": 1.0
       },
       "level": {
@@ -6980,10 +6956,10 @@
         "members": [
           "corr"
         ],
-        "n": 38,
-        "n_eff": 35.6,
-        "mean_r": -0.2065,
-        "margin_r": 0.3677,
+        "n": 39,
+        "n_eff": 36.6,
+        "mean_r": -0.2231,
+        "margin_r": 0.3609,
         "multiplier": 1.0
       }
     },
@@ -6994,9 +6970,9 @@
         "margin_r": 0.1848
       },
       "fantômes": {
-        "n": 469,
-        "mean_r": 0.169,
-        "margin_r": 0.1282
+        "n": 470,
+        "mean_r": 0.1665,
+        "margin_r": 0.128
       },
       "backtest": {
         "n": 697,
@@ -7063,11 +7039,11 @@
       },
       "essai_ethereum": {
         "label": "nouvel actif : Ethereum (ETH/USD)",
-        "n": 10,
-        "mean_net_r": -0.3896,
-        "lower_r": -1.4173,
+        "n": 11,
+        "mean_net_r": -0.4628,
+        "lower_r": -1.4137,
         "promoted": false,
-        "missing": 90
+        "missing": 89
       },
       "horizon_3h_gold": {
         "label": "horizon ~3 h sur Or (XAU/USD)",
@@ -7100,9 +7076,9 @@
     },
     "variants_z": 2.73,
     "promoted_variants": [],
-    "updated_at": "2026-10-15T04:05:43.773551+00:00",
+    "updated_at": "2026-10-15T04:20:48.125697+00:00",
     "context": {
-      "n": 1084,
+      "n": 1085,
       "features": {
         "adx": {
           "label": "force de tendance (ADX 15 min)",
@@ -7118,23 +7094,23 @@
               "avoid": false
             },
             {
-              "label": "milieu (27 à 36)",
+              "label": "milieu (27 à 37)",
               "lo": 27.14,
-              "hi": 36.42,
-              "n": 360,
-              "n_eff": 277.3,
-              "mean_r": 0.178,
-              "margin_r": 0.2004,
+              "hi": 36.55,
+              "n": 362,
+              "n_eff": 279.2,
+              "mean_r": 0.1864,
+              "margin_r": 0.1994,
               "avoid": false
             },
             {
-              "label": "haut (≥ 36)",
-              "lo": 36.42,
+              "label": "haut (≥ 37)",
+              "lo": 36.55,
               "hi": 1000000000.0,
-              "n": 363,
-              "n_eff": 283.6,
-              "mean_r": 0.3,
-              "margin_r": 0.2151,
+              "n": 362,
+              "n_eff": 282.6,
+              "mean_r": 0.287,
+              "margin_r": 0.2158,
               "avoid": false
             }
           ]
@@ -7156,10 +7132,10 @@
               "label": "milieu (59 à 65)",
               "lo": 58.53,
               "hi": 65.45,
-              "n": 361,
-              "n_eff": 279.4,
-              "mean_r": 0.2324,
-              "margin_r": 0.2158,
+              "n": 362,
+              "n_eff": 280.4,
+              "mean_r": 0.227,
+              "margin_r": 0.2153,
               "avoid": false
             },
             {
@@ -7180,21 +7156,21 @@
             {
               "label": "bas (< 0,84)",
               "lo": -1000000000.0,
-              "hi": 0.8434,
+              "hi": 0.8429,
               "n": 328,
-              "n_eff": 255.9,
-              "mean_r": -0.0036,
-              "margin_r": 0.1709,
+              "n_eff": 256.2,
+              "mean_r": -0.006,
+              "margin_r": 0.1708,
               "avoid": false
             },
             {
               "label": "milieu (0,84 à 1,44)",
-              "lo": 0.8434,
+              "lo": 0.8429,
               "hi": 1.4419,
-              "n": 328,
-              "n_eff": 248.7,
-              "mean_r": 0.0187,
-              "margin_r": 0.1853,
+              "n": 329,
+              "n_eff": 249.4,
+              "mean_r": 0.0167,
+              "margin_r": 0.1849,
               "avoid": false
             },
             {
@@ -7225,21 +7201,21 @@
             {
               "label": "milieu (0,22 à 0,51)",
               "lo": 0.2216,
-              "hi": 0.5103,
-              "n": 361,
-              "n_eff": 273.7,
-              "mean_r": 0.1444,
-              "margin_r": 0.1895,
+              "hi": 0.5104,
+              "n": 362,
+              "n_eff": 274.6,
+              "mean_r": 0.1501,
+              "margin_r": 0.1893,
               "avoid": false
             },
             {
               "label": "haut (≥ 0,51)",
-              "lo": 0.5103,
+              "lo": 0.5104,
               "hi": 1000000000.0,
               "n": 362,
               "n_eff": 286.2,
-              "mean_r": 0.3035,
-              "margin_r": 0.2263,
+              "mean_r": 0.293,
+              "margin_r": 0.2264,
               "avoid": false
             }
           ]
@@ -7260,21 +7236,21 @@
             {
               "label": "milieu (1,12 à 1,49)",
               "lo": 1.121,
-              "hi": 1.489,
-              "n": 361,
-              "n_eff": 275.2,
-              "mean_r": 0.0193,
+              "hi": 1.49,
+              "n": 362,
+              "n_eff": 276.1,
+              "mean_r": 0.026,
               "margin_r": 0.1788,
               "avoid": false
             },
             {
               "label": "haut (≥ 1,49)",
-              "lo": 1.489,
+              "lo": 1.49,
               "hi": 1000000000.0,
               "n": 362,
               "n_eff": 282.3,
-              "mean_r": 0.3995,
-              "margin_r": 0.2352,
+              "mean_r": 0.3896,
+              "margin_r": 0.2353,
               "avoid": false
             }
           ]
@@ -7286,30 +7262,30 @@
               "label": "bas (< 1,05)",
               "lo": -1000000000.0,
               "hi": 1.052,
-              "n": 343,
-              "n_eff": 265.2,
-              "mean_r": 0.0617,
-              "margin_r": 0.1905,
+              "n": 344,
+              "n_eff": 266.2,
+              "mean_r": 0.0569,
+              "margin_r": 0.19,
               "avoid": false
             },
             {
               "label": "milieu (1,05 à 1,36)",
               "lo": 1.052,
-              "hi": 1.358,
-              "n": 345,
-              "n_eff": 267.6,
-              "mean_r": 0.191,
-              "margin_r": 0.1936,
+              "hi": 1.357,
+              "n": 344,
+              "n_eff": 266.8,
+              "mean_r": 0.1905,
+              "margin_r": 0.1941,
               "avoid": false
             },
             {
               "label": "haut (≥ 1,36)",
-              "lo": 1.358,
+              "lo": 1.357,
               "hi": 1000000000.0,
-              "n": 344,
-              "n_eff": 255.2,
-              "mean_r": 0.2926,
-              "margin_r": 0.2215,
+              "n": 345,
+              "n_eff": 255.9,
+              "mean_r": 0.2928,
+              "margin_r": 0.221,
               "avoid": false
             }
           ]
@@ -7330,20 +7306,20 @@
             {
               "label": "milieu (0,33 à 0,64)",
               "lo": 0.3287,
-              "hi": 0.6417,
-              "n": 361,
-              "n_eff": 272.4,
-              "mean_r": 0.1342,
-              "margin_r": 0.1832,
+              "hi": 0.6427,
+              "n": 362,
+              "n_eff": 273.1,
+              "mean_r": 0.1324,
+              "margin_r": 0.1829,
               "avoid": false
             },
             {
               "label": "haut (≥ 0,64)",
-              "lo": 0.6417,
+              "lo": 0.6427,
               "hi": 1000000000.0,
               "n": 362,
-              "n_eff": 292.7,
-              "mean_r": 0.0599,
+              "n_eff": 292.6,
+              "mean_r": 0.0567,
               "margin_r": 0.1704,
               "avoid": false
             }
@@ -7376,10 +7352,10 @@
               "label": "haut (≥ 0,13)",
               "lo": 0.1348,
               "hi": 1000000000.0,
-              "n": 365,
-              "n_eff": 281.4,
-              "mean_r": -0.0063,
-              "margin_r": 0.1704,
+              "n": 366,
+              "n_eff": 282.3,
+              "mean_r": -0.0104,
+              "margin_r": 0.1701,
               "avoid": false
             }
           ]
@@ -7391,10 +7367,10 @@
               "label": "plus de 30 min avant l'ouverture US",
               "lo": -1000000000.0,
               "hi": -30.0,
-              "n": 387,
-              "n_eff": 309.3,
-              "mean_r": 0.0078,
-              "margin_r": 0.1565,
+              "n": 388,
+              "n_eff": 310.2,
+              "mean_r": 0.0035,
+              "margin_r": 0.1562,
               "avoid": false
             },
             {
@@ -7456,10 +7432,10 @@
               "label": "jeudi",
               "lo": 3,
               "hi": 4,
-              "n": 263,
-              "n_eff": 201.4,
-              "mean_r": -0.0631,
-              "margin_r": 0.2029,
+              "n": 264,
+              "n_eff": 202.4,
+              "mean_r": -0.0688,
+              "margin_r": 0.2022,
               "avoid": false
             },
             {
@@ -7499,32 +7475,32 @@
     },
     "exits": {
       "réels et en ombre": {
-        "n": 388,
-        "current_net_r": 0.1146,
-        "mfe_median": 0.902,
+        "n": 389,
+        "current_net_r": 0.1113,
+        "mfe_median": 0.898,
         "sl_reached": {
-          "0.5": 63,
-          "0.8": 37,
+          "0.5": 64,
+          "0.8": 38,
           "1.0": 24
         },
-        "n_sl": 183,
+        "n_sl": 184,
         "rules": {
           "0.5": {
-            "net_r": 0.0315,
-            "diff_r": -0.0832,
+            "net_r": 0.0309,
+            "diff_r": -0.0804,
             "margin_r": 0.0895,
             "better": false
           },
           "0.8": {
-            "net_r": 0.0389,
-            "diff_r": -0.0757,
-            "margin_r": 0.0722,
+            "net_r": 0.0383,
+            "diff_r": -0.073,
+            "margin_r": 0.0723,
             "better": false
           },
           "1.0": {
-            "net_r": 0.0278,
-            "diff_r": -0.0869,
-            "margin_r": 0.0667,
+            "net_r": 0.0246,
+            "diff_r": -0.0866,
+            "margin_r": 0.0666,
             "better": false
           }
         }
@@ -7629,10 +7605,10 @@
     }
   },
   "state": {
-    "last_scan": "2026-10-15T04:15:40Z",
+    "last_scan": "2026-10-15T04:20:46Z",
     "last_scan_note": "0 signal(aux)",
     "last_summary": "2026-10-14T22:05:41Z",
-    "last_track": "2026-10-15T04:15:40Z",
+    "last_track": "2026-10-15T04:20:46Z",
     "last_summary_day": "2026-10-14"
   },
   "limits": {
@@ -19808,7 +19784,7 @@
         }
       ],
       "live": false,
-      "checked_hour": "2026-10-15T03:00:00Z",
+      "checked_hour": "2026-10-15T04:00:00Z",
       "n": 5,
       "mean_r": 0.4323
     },
@@ -19838,7 +19814,7 @@
         }
       ],
       "live": true,
-      "checked_hour": "2026-10-15T03:30:00Z",
+      "checked_hour": "2026-10-15T04:00:00Z",
       "n": 1,
       "mean_r": -0.0063
     },
@@ -19868,7 +19844,7 @@
         }
       ],
       "live": true,
-      "checked_hour": "2026-10-15T03:30:00Z",
+      "checked_hour": "2026-10-15T04:00:00Z",
       "n": 1,
       "mean_r": -0.0047
     },
@@ -19878,7 +19854,7 @@
       "since": "2026-10-14T08:00:00Z",
       "trades": [],
       "live": true,
-      "checked_hour": "2026-10-15T04:00:00Z",
+      "checked_hour": "2026-10-15T04:15:00Z",
       "n": 0,
       "mean_r": null
     },
@@ -19917,7 +19893,7 @@
       "since": "2026-10-14T14:00:00Z",
       "trades": [],
       "live": true,
-      "checked_hour": "2026-10-15T04:00:00Z",
+      "checked_hour": "2026-10-15T04:15:00Z",
       "n": 0,
       "mean_r": null
     }
