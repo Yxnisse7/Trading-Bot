@@ -19,7 +19,7 @@ from pathlib import Path
 from typing import Any, Callable
 
 from . import demo_rules
-from .mt5_local import LocalEngine, same_signal
+from .mt5_local import LocalEngine, same_signal, server_offset
 
 log = logging.getLogger("mt5_copy")
 
@@ -37,6 +37,7 @@ MIN_LOT = {"nuit_asie": 0.05}
 MIN_POINT_VALUE = {"NAS100": 0.5, "SP500": 1.0, "XAUUSD+": 1.0}
 FLOOR_MAX_RISK = 0.10
 MAX_AGE = 15 * 60
+CHASE_MAX = 0.5      # part de la distance du stop déjà parcourue depuis l'annonce au-delà de laquelle on ne copie plus
 EVERY = 30
 SYMBOLS = {"gold": "XAUUSD+", "nasdaq": "NAS100", "sp500": "SP500", "bitcoin": "BTCUSD", "ethereum": "ETHUSD",
            "oil": "CL-OIL", "euro": "EURUSD"}
@@ -174,6 +175,7 @@ class Copier:
                 k = LAB_TARGET_R.get(s["key"].split(":")[1])
                 s["target"] = k * s["stop"] if k else None
             local_keys = {s["key"] for s in local}
+        github_keys = {s["key"] for s in signals}
         live: dict[str, dict[str, Any]] = {}
         for s in local + signals:                    # le calcul local passe en premier
             live.setdefault(s["key"], s)
@@ -188,7 +190,9 @@ class Copier:
             if rec.get("source") == "local":
                 source, known = f"local:{key.split(':')[1]}", local_keys
             else:
-                source, known = ("lab" if key.startswith("lab:") else rec["asset"]), set(live) - local_keys
+                # 16/10 : comparé à tous les signaux moins ceux du PC, un trade GitHub que le PC voyait aussi
+                # était fermé au redémarrage du pont ; seuls comptent les signaux de GitHub
+                source, known = ("lab" if key.startswith("lab:") else rec["asset"]), github_keys
             if rec.get("expires") and now >= rec["expires"]:
                 self._close(p, "expiration")
             elif source in ok and key not in known:
@@ -219,6 +223,25 @@ class Copier:
         self._save()
         return f"copie : {sum(1 for r in self.state.values() if r.get('status') == 'ouvert')} position(s)"
 
+    def _already_gone(self, s: dict[str, Any], sym: str, px: float, sg: int) -> str:
+        """Signal de GitHub copié en retard : si le prix du CFD a déjà fait plus de CHASE_MAX fois la distance du
+        stop dans le sens du trade depuis l'annonce, on passe notre tour, comme la « zone d'entrée » de Telegram
+        (16/10 : vente Nasdaq copiée 8 min après, 195 points plus bas, stop touché alors que le signal a gagné)."""
+        created = s.get("created")
+        now = self.clock()
+        if s.get("source") == "local" or not created or now - created < 60:
+            return ""
+        try:
+            off = server_offset(self.mt5, sym, now)
+            rates = self.mt5.copy_rates_from(sym, self.mt5.TIMEFRAME_M1, int(created) + (off or 0), 1)
+            ref = float(rates[-1]["close"]) if rates is not None and len(rates) else 0.0
+        except Exception:                          # pas d'historique : on copie comme avant
+            return ""
+        moved = sg * (px - ref) if ref > 0 else 0.0
+        if moved > CHASE_MAX * s["stop"]:
+            return f"prix déjà parti ({moved:.2f} depuis l'annonce)"
+        return ""
+
     def _open(self, s: dict[str, Any], balance: float) -> dict[str, Any]:
         sym = SYMBOLS[s["asset"]]
         if not self.mt5.symbol_select(sym, True):
@@ -240,6 +263,9 @@ class Copier:
         s = dict(s, stop=max(s["stop"], (info.trade_stops_level + 5) * info.point + spread))
         sl = round(px - sg * s["stop"], info.digits)
         tp = round(px + sg * s["target"], info.digits) if s["target"] else 0.0
+        late = self._already_gone(s, sym, px, sg)
+        if late:
+            return {"status": late}
         strat = s["key"].split(":")[1] if s["key"].startswith("lab:") else None
         lot = lot_for(balance, s["stop"], info, MIN_LOT_MAX_RISK.get(strat))
         lot = floor_lot(lot, balance, s["stop"], info, MIN_POINT_VALUE.get(sym))

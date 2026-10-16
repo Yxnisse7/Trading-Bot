@@ -216,3 +216,31 @@ def test_local_engine_falls_back_to_github_when_mt5_has_no_bars(tmp_path):
     c = mc.Copier(mt5, tmp_path, lambda *a, **k: None, lambda: now, get=get, local=True)
     c.step()
     assert len(mt5.sent) == 1 and c.state[f"lab:nuit_asie:{t22}"]["source"] == "github"
+
+
+def test_restart_does_not_close_a_github_copy_that_the_pc_also_sees(tmp_path):
+    """16/10 : au redémarrage du pont, la copie de la zone de bruit v2 (vue par GitHub et par le PC) a été fermée."""
+    from datetime import datetime, timezone
+    now = datetime(2026, 10, 14, 22, 6, tzinfo=timezone.utc).timestamp()
+    t22 = int(datetime(2026, 10, 14, 22, 0, tzinfo=timezone.utc).timestamp())
+    mt5 = LocalMT5(now)
+    mt5.pos.append(NS(ticket=777, magic=mc.MAGIC, symbol="XAUUSD+", type=0, volume=0.05))
+    (tmp_path / "journal").mkdir()
+    (tmp_path / "journal" / "copies.json").write_text(
+        '{"lab:nuit_asie:%d": {"asset": "gold", "status": "ouvert", "ticket": 777, "expires": %d}}' % (t22, t22 + 9 * 3600))
+    lab = {"nuit_asie:gold": {"strategy": "nuit_asie", "asset": "gold", "trades": [
+        {"status": "open", "notified_entry": "2026-10-14T22:05:00Z", "direction": "long", "entry": 4200.0,
+         "risk": 42.0, "entry_ts": t22, "close_at": t22 + 9 * 3600}]}}
+    get = lambda url: lab if "lab_shadow" in url else {"open_signals": []}
+    mc.Copier(mt5, tmp_path, lambda *a, **k: None, lambda: now, get=get, local=True).step()
+    assert mt5.sent == []                                            # ni fermée, ni rouverte
+
+
+def test_late_github_copy_is_skipped_when_the_price_already_ran(tmp_path):
+    created = mc._ts("2026-10-14T13:50:00Z")
+    mt5 = FakeMT5()
+    mt5.TIMEFRAME_M1 = 1
+    mt5.copy_rates_from = lambda sym, tf, t, n: [{"close": 4215.0}]   # 15 $ plus haut à l'annonce (vente)
+    c = mc.Copier(mt5, tmp_path, lambda *a, **k: None, lambda: created + 300, get=site([sig()]))
+    c.step()
+    assert mt5.sent == [] and c.state["bot:abc"]["status"].startswith("prix déjà parti")

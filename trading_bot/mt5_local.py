@@ -42,7 +42,7 @@ def active(now: float) -> list[tuple[str, str]]:
 def server_offset(mt5, sym: str, now: float) -> int | None:
     """Décalage de l'heure du serveur (arrondi à la demi-heure) ; None sans cotation récente."""
     tick = mt5.symbol_info_tick(sym)
-    if tick is None or not tick.time:
+    if tick is None or not getattr(tick, "time", 0):
         return None
     off = round((tick.time - now) / 1800) * 1800
     return off if abs(tick.time - off - now) <= 180 else None
