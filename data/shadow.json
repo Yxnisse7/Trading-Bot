@@ -98,7 +98,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1792171500
+        "last_ts": 1792171800
       }
     }
   },
@@ -202,7 +202,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1792171500
+        "last_ts": 1792171800
       }
     }
   },
@@ -305,7 +305,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1792171500
+        "last_ts": 1792171800
       }
     }
   },
@@ -397,99 +397,9 @@
       "variant": "modele_arbres",
       "exc": {
         "mfe": 0.0,
-        "mae": 0.1174,
+        "mae": 0.5909,
         "armed": {
           "0.5": false,
-          "0.8": false,
-          "1.0": false
-        },
-        "be": {
-          "0.5": false,
-          "0.8": false,
-          "1.0": false
-        },
-        "last_ts": null
-      }
-    }
-  },
-  {
-    "id": "55ce0ce981",
-    "asset": "oil",
-    "asset_label": "Pétrole WTI (CL)",
-    "direction": "long",
-    "entry": 98.41,
-    "take_profit": 98.77,
-    "stop_loss": 98.17,
-    "risk_reward": 1.5,
-    "confidence": "fort",
-    "score": 6.45,
-    "criteria": [
-      "adx",
-      "rsi",
-      "trend_15m",
-      "trend_1h",
-      "trend_5m",
-      "vwap"
-    ],
-    "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 0.61 (0.62 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 98%.",
-    "news_context": "prudence post-USD Fed Chairman Warsh Speaks : critères renforcés · actualité calme sur les 2 dernières heures",
-    "created_at": "2026-10-16T17:31:05Z",
-    "expires_at": "2026-10-16T18:31:05Z",
-    "status": "open",
-    "closed_at": null,
-    "close_price": null,
-    "pnl_pct": null,
-    "pnl_gross_pct": null,
-    "duration_minutes": null,
-    "hourly_range": 0.607498,
-    "source": "shadow",
-    "horizon": "1h",
-    "horizon_minutes": 60,
-    "meta": {
-      "tick": 0.01,
-      "details": {
-        "trend_5m": "EMA20 97.87 / EMA50 97.02 (5 min)",
-        "trend_15m": "EMA20 96.92 / EMA50 96.33",
-        "trend_1h": "prix vs EMA20 1 h 96.30",
-        "adx": "ADX15 29.0 (+DI 36.5 / -DI 9.4)",
-        "vwap": "VWAP jour 96.38",
-        "rsi": "RSI14 5 min 66.3",
-        "macd": "histogramme MACD 0.0015",
-        "level": "support - / résistance -",
-        "volume": "z-score volume -3.08",
-        "pdhl": "veille : haut 96.74 / bas 93.31",
-        "activity": "activité de l'heure 1.02× la moyenne"
-      },
-      "support": null,
-      "resistance": null,
-      "atr_5m": 0.33464864489914564,
-      "atr_ratio": 2.0367986141534966,
-      "hourly_range_pct": 0.6173,
-      "adx_15m": 28.99290049351586,
-      "sigma_5m": 0.002423928790435668,
-      "p_resolution": 0.9846666666666667,
-      "p_tp_neutral": 0.42,
-      "activity_ratio": 1.02,
-      "base_minutes": 5,
-      "ctx": {
-        "adx": 28.99,
-        "rsi_dir": 66.31,
-        "vwap_ext": 3.3361,
-        "ema_ext": 0.8853,
-        "atr_ratio": 2.037,
-        "activity": 1.02,
-        "range_pct": 0.6173,
-        "cost_r": 0.123,
-        "us_open_min": 241.1,
-        "weekday": 4
-      },
-      "price_time": "2026-10-16T17:25:00Z",
-      "variant": "essai_oil",
-      "exc": {
-        "mfe": 0.7917,
-        "mae": 0.0,
-        "armed": {
-          "0.5": true,
           "0.8": false,
           "1.0": false
         },
@@ -586,83 +496,110 @@
         "modele_arbres"
       ],
       "filters_checked": true,
-      "variant": "modele_arbres"
+      "variant": "modele_arbres",
+      "exc": {
+        "mfe": 0.0,
+        "mae": 0.7179,
+        "armed": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "be": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "last_ts": null
+      }
     }
   },
   {
-    "id": "fd000dd7bf",
-    "asset": "sp500",
-    "asset_label": "S&P 500 (ES)",
+    "id": "906350ceed",
+    "asset": "nasdaq",
+    "asset_label": "Nasdaq 100 (NQ)",
     "direction": "short",
-    "entry": 7703.25,
-    "take_profit": 7692.5,
-    "stop_loss": 7710.5,
-    "risk_reward": 1.48,
+    "entry": 29503.5,
+    "take_profit": 29298.75,
+    "stop_loss": 29571.75,
+    "risk_reward": 3.0,
     "confidence": "fort",
-    "score": 5.08,
+    "score": 9.27,
     "criteria": [
       "adx",
       "corr",
+      "rsi",
       "trend_15m",
       "trend_1h",
       "trend_5m",
       "vwap"
     ],
-    "rationale": "Vente : tendance forte (ADX), marché meneur favorable, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 18.00 (0.23 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 94%.",
+    "rationale": "Vente : tendance forte (ADX), marché meneur favorable, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 113.51 (0.38 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 96%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
     "news_context": "prudence post-USD Fed Chairman Warsh Speaks : critères renforcés · actualité calme sur les 2 dernières heures",
-    "created_at": "2026-10-16T17:35:40Z",
-    "expires_at": "2026-10-16T18:35:40Z",
+    "created_at": "2026-10-16T17:40:50Z",
+    "expires_at": "2026-10-17T17:40:50Z",
     "status": "open",
     "closed_at": null,
     "close_price": null,
     "pnl_pct": null,
     "pnl_gross_pct": null,
     "duration_minutes": null,
-    "hourly_range": 18.0,
+    "hourly_range": 113.510417,
     "source": "shadow",
-    "horizon": "1h",
-    "horizon_minutes": 60,
+    "horizon": "24h",
+    "horizon_minutes": 1440,
     "meta": {
       "tick": 0.25,
       "details": {
-        "trend_5m": "EMA20 7728.45 / EMA50 7752.44 (5 min)",
-        "trend_15m": "EMA20 7756.65 / EMA50 7776.10",
-        "trend_1h": "prix vs EMA20 1 h 7773.65",
-        "adx": "ADX15 39.6 (+DI 7.4 / -DI 47.6)",
-        "vwap": "VWAP jour 7765.60",
-        "rsi": "RSI14 5 min 23.5",
-        "macd": "histogramme MACD -2.2240",
-        "level": "support - / résistance 7748.50",
-        "volume": "z-score volume -3.15",
-        "pdhl": "veille : haut 7801.75 / bas 7717.25",
-        "activity": "activité de l'heure 1.24× la moyenne",
-        "corr": "VIX +11.7 % sur 15 min"
+        "trend_5m": "EMA20 29584.22 / EMA50 29716.92 (5 min)",
+        "trend_15m": "EMA20 29734.09 / EMA50 29899.11",
+        "trend_1h": "prix vs EMA20 1 h 29926.37",
+        "adx": "ADX15 53.2 (+DI 5.9 / -DI 42.1)",
+        "vwap": "VWAP jour 29842.45",
+        "rsi": "RSI14 5 min 32.3",
+        "macd": "histogramme MACD -5.1117",
+        "level": "support - / résistance -",
+        "volume": "z-score volume -2.75",
+        "pdhl": "veille : haut 30196.75 / bas 29622.50",
+        "activity": "activité de l'heure 1.03× la moyenne",
+        "corr": "VIX +3.1 % sur 15 min"
       },
       "support": null,
-      "resistance": 7748.5,
-      "atr_5m": 8.281999888239165,
-      "atr_ratio": 1.9183250096207882,
-      "hourly_range_pct": 0.2337,
-      "adx_15m": 39.60272830170929,
-      "sigma_5m": 0.0007068638310253825,
-      "p_resolution": 0.944,
-      "p_tp_neutral": 0.401,
-      "activity_ratio": 1.237,
+      "resistance": null,
+      "atr_5m": 47.81075045060936,
+      "atr_ratio": 1.5611246264502583,
+      "hourly_range_pct": 0.3847,
+      "adx_15m": 53.18694851622755,
+      "sigma_5m": 0.0012375002437801715,
+      "p_resolution": 0.9573333333333334,
+      "p_tp_neutral": 0.409,
+      "activity_ratio": 1.03,
       "base_minutes": 5,
       "ctx": {
-        "adx": 39.6,
-        "rsi_dir": 76.54,
-        "vwap_ext": 3.4641,
-        "ema_ext": 1.4,
-        "atr_ratio": 1.918,
-        "activity": 1.237,
-        "range_pct": 0.2337,
-        "cost_r": 0.1063,
-        "us_open_min": 245.7,
+        "adx": 53.19,
+        "rsi_dir": 67.75,
+        "vwap_ext": 2.986,
+        "ema_ext": 0.7111,
+        "atr_ratio": 1.561,
+        "activity": 1.03,
+        "range_pct": 0.3847,
+        "cost_r": 0.0648,
+        "us_open_min": 250.8,
         "weekday": 4
       },
-      "price_time": "2026-10-16T17:30:00Z",
-      "variant": "essai_sp500"
+      "exit_override": {
+        "stop_x": 1.5,
+        "target_x": 3.0,
+        "minutes": 1440,
+        "source": "essai 29"
+      },
+      "price_time": "2026-10-16T17:35:00Z",
+      "model_r": -0.0074,
+      "filters": [
+        "modele_arbres"
+      ],
+      "filters_checked": true,
+      "variant": "modele_arbres"
     }
   }
 ]
