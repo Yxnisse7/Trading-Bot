@@ -98,7 +98,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1792165860
+        "last_ts": 1792166100
       }
     }
   },
@@ -202,7 +202,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1792165860
+        "last_ts": 1792166100
       }
     }
   },
@@ -293,10 +293,10 @@
       "filters_checked": true,
       "variant": "modele_arbres",
       "exc": {
-        "mfe": 0.3401,
+        "mfe": 0.5591,
         "mae": 0.3343,
         "armed": {
-          "0.5": false,
+          "0.5": true,
           "0.8": false,
           "1.0": false
         },
@@ -305,7 +305,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1792165860
+        "last_ts": 1792166100
       }
     }
   },
@@ -397,112 +397,19 @@
       "filters_checked": true,
       "variant": "modele_arbres",
       "exc": {
-        "mfe": 0.2804,
+        "mfe": 0.5171,
         "mae": 0.4486,
         "armed": {
-          "0.5": false,
-          "0.8": false,
-          "1.0": false
-        },
-        "be": {
-          "0.5": false,
-          "0.8": false,
-          "1.0": false
-        },
-        "last_ts": 1792165860
-      }
-    }
-  },
-  {
-    "id": "2ddd287da8",
-    "asset": "sp500",
-    "asset_label": "S&P 500 (ES)",
-    "direction": "short",
-    "entry": 7761.0,
-    "take_profit": 7750.25,
-    "stop_loss": 7768.0,
-    "risk_reward": 1.54,
-    "confidence": "fort",
-    "score": 5.86,
-    "criteria": [
-      "adx",
-      "corr",
-      "rsi",
-      "trend_15m",
-      "trend_1h",
-      "trend_5m",
-      "vwap"
-    ],
-    "rationale": "Vente : tendance forte (ADX), marché meneur favorable, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 17.81 (0.23 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 86%.",
-    "news_context": "prudence post-USD Fed Chairman Warsh Speaks : critères renforcés · actualité à surveiller (score 2) : The stock market has already crashed: Why a Wall Street veteran says Nike is the ultimate turnaround trade.",
-    "created_at": "2026-10-16T15:45:48Z",
-    "expires_at": "2026-10-16T16:45:48Z",
-    "status": "open",
-    "closed_at": null,
-    "close_price": null,
-    "pnl_pct": null,
-    "pnl_gross_pct": null,
-    "duration_minutes": null,
-    "hourly_range": 17.8125,
-    "source": "shadow",
-    "horizon": "1h",
-    "horizon_minutes": 60,
-    "meta": {
-      "tick": 0.25,
-      "details": {
-        "trend_5m": "EMA20 7775.04 / EMA50 7785.67 (5 min)",
-        "trend_15m": "EMA20 7785.70 / EMA50 7791.05",
-        "trend_1h": "prix vs EMA20 1 h 7787.72",
-        "adx": "ADX15 24.1 (+DI 11.9 / -DI 31.9)",
-        "vwap": "VWAP jour 7786.26",
-        "rsi": "RSI14 5 min 33.1",
-        "macd": "histogramme MACD -1.8584",
-        "level": "support 7741.75 / résistance 7772.75",
-        "volume": "z-score volume -4.32",
-        "orb": "range d'ouverture 7779.75 – 7803.25",
-        "pdhl": "veille : haut 7801.75 / bas 7717.25",
-        "activity": "activité de l'heure 1.54× la moyenne",
-        "corr": "VIX +2.2 % sur 15 min"
-      },
-      "support": 7741.75,
-      "resistance": 7772.75,
-      "atr_5m": 7.779702071910284,
-      "atr_ratio": 1.7714155899991308,
-      "hourly_range_pct": 0.2295,
-      "adx_15m": 24.06180925663185,
-      "sigma_5m": 0.0005598382281790094,
-      "p_resolution": 0.864,
-      "p_tp_neutral": 0.3473333333333333,
-      "activity_ratio": 1.537,
-      "base_minutes": 5,
-      "ctx": {
-        "adx": 24.06,
-        "rsi_dir": 66.94,
-        "vwap_ext": 1.418,
-        "ema_ext": 0.7881,
-        "atr_ratio": 1.771,
-        "activity": 1.537,
-        "range_pct": 0.2295,
-        "cost_r": 0.1109,
-        "us_open_min": 135.8,
-        "weekday": 4
-      },
-      "price_time": "2026-10-16T15:40:00Z",
-      "variant": "essai_sp500",
-      "exc": {
-        "mfe": 1.0,
-        "mae": 0.3929,
-        "armed": {
           "0.5": true,
-          "0.8": true,
-          "1.0": true
+          "0.8": false,
+          "1.0": false
         },
         "be": {
           "0.5": false,
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1792165860
+        "last_ts": 1792166100
       }
     }
   },
@@ -591,7 +498,22 @@
         "modele_arbres"
       ],
       "filters_checked": true,
-      "variant": "modele_arbres"
+      "variant": "modele_arbres",
+      "exc": {
+        "mfe": 0.2159,
+        "mae": 0.0,
+        "armed": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "be": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "last_ts": null
+      }
     }
   }
 ]
