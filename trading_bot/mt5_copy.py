@@ -27,6 +27,9 @@ RISK_PCT = 0.05
 # Risque toléré au lot minimum du courtier (part du solde), par stratégie, quand il dépasse 2 fois RISK_PCT :
 # « heures asiatiques » or a un stop de sécurité à 1 % du prix (≈ 41 $ à 0,01 lot), choix de Yanisse le 14/10/2026.
 MIN_LOT_MAX_RISK = {"nuit_asie": 0.05}
+# Lot minimum imposé par stratégie, quel que soit le risque au stop (choix de Yanisse le 16/10/2026 : nuit asiatique
+# au moins 0,05 lot, soit ≈ 5 $ par point et ≈ 210 $ si le stop de sécurité à 1 % est touché).
+MIN_LOT = {"nuit_asie": 0.05}
 # Taille minimale en $ par point de prix (choix de Yanisse le 14/10/2026 : « au moins 0,50 à 1 $ par point ») ;
 # accepté tant que le risque au stop reste sous FLOOR_MAX_RISK du solde, sinon le trade n'est pas copié. Rien pour
 # les cryptos : 1 $ par point y voudrait dire 1 bitcoin entier.
@@ -212,6 +215,8 @@ class Copier:
         strat = s["key"].split(":")[1] if s["key"].startswith("lab:") else None
         lot = lot_for(balance, s["stop"], info, MIN_LOT_MAX_RISK.get(strat))
         lot = floor_lot(lot, balance, s["stop"], info, MIN_POINT_VALUE.get(sym))
+        if strat in MIN_LOT:
+            lot = round(min(max(lot, MIN_LOT[strat]), float(info.volume_max)), 2)
         if lot <= 0:
             return {"status": "taille minimale trop risquée"}
         res = self.mt5.order_send({

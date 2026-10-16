@@ -124,3 +124,15 @@ def test_floor_of_dollars_per_point():
     assert mc.floor_lot(0.15, 1000, 250.0, nas, 0.5) == 0.0         # 125 $ au stop : trop risqué, pas copié
     assert mc.floor_lot(0.8, 1000, 10.0, nas, 0.5) == 0.8           # déjà au-dessus
     assert mc.floor_lot(0.02, 1000, 500.0, nas, None) == 0.02       # pas de plancher (cryptos)
+
+
+def test_asian_night_is_copied_at_least_at_005_lot(tmp_path):
+    """Choix de Yanisse le 16/10 : nuit asiatique au moins 0,05 lot, même si le stop de sécurité (1 %) dépasse 5 %."""
+    mt5 = FakeMT5()
+    created = mc._ts("2026-10-14T22:00:00Z")
+    lab = {"nuit_asie|gold": {"strategy": "nuit_asie", "asset": "gold", "trades": [
+        {"status": "open", "notified_entry": True, "direction": "long", "entry": 4200.0, "risk": 42.0,
+         "entry_ts": created, "close_at": created + 9 * 3600}]}}
+    get = lambda url: lab if "lab_shadow" in url else {"open_signals": []}
+    mc.Copier(mt5, tmp_path, lambda *a, **k: None, lambda: created + 60, get=get).step()
+    assert mt5.sent[0]["volume"] == 0.05

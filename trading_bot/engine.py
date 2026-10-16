@@ -40,7 +40,8 @@ log = logging.getLogger(__name__)
 MANUAL_FILTERS: set[str] = {"modele_arbres", "bot_en_ombre"}
 # Bot classique mis en ombre (choix de Yanisse le 14/10/2026) : perdant sur 2014-2026 (essais 23 et 24) et aucun
 # filtre ne le sauve. Ses signaux sont suivis en silence ; les stratégies prouvées de ces marchés continuent.
-SHADOW_ASSETS: set[str] = {"sp500", "bitcoin", "ethereum"}
+# Or ajouté le 16/10/2026 (choix de Yanisse) : seule la nuit asiatique reste en réel sur l'or.
+SHADOW_ASSETS: set[str] = {"sp500", "bitcoin", "ethereum", "gold"}
 # Début court des messages de signaux réels (choix de Yanisse le 14/10/2026 : « que le début soit clair ») :
 # stratégie → (nom affiché, comment la position se ferme quand il n'y a pas d'objectif)
 LIVE_SUMMARY = {

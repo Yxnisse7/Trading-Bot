@@ -37,7 +37,6 @@ LIVE = [("noise_area", "nasdaq", "prouvée à l'essai 24, en réel depuis le 14/
         ("swing_w3", "bitcoin", "prouvée à l'essai 24, en réel depuis le 14/10"),
         ("cassure_williams", "bitcoin", "prouvée à l'essai 30, en réel depuis le 14/10"),
         ("nuit_asie", "gold", "prouvée à l'essai 27, en réel depuis le 14/10"),
-        ("bot", "gold", "en réel, filtré par le modèle de l'essai 25 (non appliqué ici)"),
         ("bot", "nasdaq", "en réel avec les sorties de l'essai 29 (stop × 1,5, objectif 3, 24 h)")]
 
 
