@@ -98,7 +98,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1792179300
+        "last_ts": 1792179600
       }
     }
   },
@@ -201,7 +201,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1792179300
+        "last_ts": 1792179600
       }
     }
   },
@@ -305,7 +305,7 @@
           "0.8": true,
           "1.0": true
         },
-        "last_ts": 1792179300
+        "last_ts": 1792179600
       }
     }
   },
@@ -408,7 +408,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1792179300
+        "last_ts": 1792179600
       }
     }
   },
@@ -511,7 +511,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1792179300
+        "last_ts": 1792179600
       }
     }
   },
@@ -613,7 +613,7 @@
           "0.8": true,
           "1.0": true
         },
-        "last_ts": 1792179300
+        "last_ts": 1792179600
       }
     }
   },
@@ -715,7 +715,7 @@
           "0.8": true,
           "1.0": true
         },
-        "last_ts": 1792179300
+        "last_ts": 1792179600
       }
     }
   },
@@ -817,7 +817,7 @@
           "0.8": true,
           "1.0": true
         },
-        "last_ts": 1792179300
+        "last_ts": 1792179600
       }
     }
   },
@@ -919,7 +919,7 @@
           "0.8": true,
           "1.0": true
         },
-        "last_ts": 1792179300
+        "last_ts": 1792179600
       }
     }
   },
@@ -1021,7 +1021,7 @@
           "0.8": true,
           "1.0": true
         },
-        "last_ts": 1792179300
+        "last_ts": 1792179600
       }
     }
   },
@@ -1111,7 +1111,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1792179300
+        "last_ts": 1792179600
       }
     }
   },
@@ -1202,19 +1202,19 @@
       "filters_checked": true,
       "variant": "modele_arbres",
       "exc": {
-        "mfe": 0.8339,
+        "mfe": 1.0332,
         "mae": 0.4649,
         "armed": {
           "0.5": true,
           "0.8": true,
-          "1.0": false
+          "1.0": true
         },
         "be": {
           "0.5": false,
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1792179300
+        "last_ts": 1792179600
       }
     }
   },
@@ -1304,11 +1304,11 @@
       "filters_checked": true,
       "variant": "modele_arbres",
       "exc": {
-        "mfe": 0.679,
+        "mfe": 0.8782,
         "mae": 0.2694,
         "armed": {
           "0.5": true,
-          "0.8": false,
+          "0.8": true,
           "1.0": false
         },
         "be": {
@@ -1316,7 +1316,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1792179300
+        "last_ts": 1792179600
       }
     }
   },
@@ -1406,19 +1406,19 @@
       "filters_checked": true,
       "variant": "modele_arbres",
       "exc": {
-        "mfe": 0.6909,
+        "mfe": 1.12,
         "mae": 0.0,
         "armed": {
           "0.5": true,
-          "0.8": false,
-          "1.0": false
+          "0.8": true,
+          "1.0": true
         },
         "be": {
           "0.5": false,
           "0.8": false,
           "1.0": false
         },
-        "last_ts": null
+        "last_ts": 1792179600
       }
     }
   },
@@ -1506,7 +1506,22 @@
         "modele_arbres"
       ],
       "filters_checked": true,
-      "variant": "modele_arbres"
+      "variant": "modele_arbres",
+      "exc": {
+        "mfe": 0.0109,
+        "mae": 0.0,
+        "armed": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "be": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "last_ts": null
+      }
     }
   },
   {
@@ -1582,7 +1597,109 @@
         "weekday": 4
       },
       "price_time": "2026-10-16T19:40:00Z",
-      "variant": "essai_sp500"
+      "variant": "essai_sp500",
+      "exc": {
+        "mfe": 0.2963,
+        "mae": 0.0,
+        "armed": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "be": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "last_ts": null
+      }
+    }
+  },
+  {
+    "id": "90deea19f8",
+    "asset": "nasdaq",
+    "asset_label": "Nasdaq 100 (NQ)",
+    "direction": "short",
+    "entry": 29355.25,
+    "take_profit": 29148.25,
+    "stop_loss": 29424.25,
+    "risk_reward": 3.0,
+    "confidence": "fort",
+    "score": 8.79,
+    "criteria": [
+      "adx",
+      "rsi",
+      "trend_15m",
+      "trend_1h",
+      "trend_5m",
+      "vwap"
+    ],
+    "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 114.99 (0.39 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 91%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+    "news_context": "prudence post-USD Fed Chairman Warsh Speaks : critères renforcés · actualité calme sur les 2 dernières heures",
+    "created_at": "2026-10-16T19:50:42Z",
+    "expires_at": "2026-10-17T19:50:42Z",
+    "status": "open",
+    "closed_at": null,
+    "close_price": null,
+    "pnl_pct": null,
+    "pnl_gross_pct": null,
+    "duration_minutes": null,
+    "hourly_range": 114.989583,
+    "source": "shadow",
+    "horizon": "24h",
+    "horizon_minutes": 1440,
+    "meta": {
+      "tick": 0.25,
+      "details": {
+        "trend_5m": "EMA20 29395.48 / EMA50 29508.02 (5 min)",
+        "trend_15m": "EMA20 29550.47 / EMA50 29763.70",
+        "trend_1h": "prix vs EMA20 1 h 29819.13",
+        "adx": "ADX15 58.0 (+DI 7.8 / -DI 33.6)",
+        "vwap": "VWAP jour 29734.72",
+        "rsi": "RSI14 5 min 41.0",
+        "macd": "histogramme MACD 8.2140",
+        "level": "support - / résistance -",
+        "volume": "z-score volume -4.13",
+        "pdhl": "veille : haut 30196.75 / bas 29622.50",
+        "activity": "activité de l'heure 1.22× la moyenne",
+        "corr": "VIX -1.9 % sur 15 min"
+      },
+      "support": null,
+      "resistance": null,
+      "atr_5m": 53.11222900026606,
+      "atr_ratio": 1.6761433660493137,
+      "hourly_range_pct": 0.3917,
+      "adx_15m": 58.03048963111572,
+      "sigma_5m": 0.0010663712948189425,
+      "p_resolution": 0.9106666666666666,
+      "p_tp_neutral": 0.379,
+      "activity_ratio": 1.22,
+      "base_minutes": 5,
+      "ctx": {
+        "adx": 58.03,
+        "rsi_dir": 59.05,
+        "vwap_ext": 3.3,
+        "ema_ext": 0.3498,
+        "atr_ratio": 1.676,
+        "activity": 1.22,
+        "range_pct": 0.3917,
+        "cost_r": 0.0638,
+        "us_open_min": 380.7,
+        "weekday": 4
+      },
+      "exit_override": {
+        "stop_x": 1.5,
+        "target_x": 3.0,
+        "minutes": 1440,
+        "source": "essai 29"
+      },
+      "price_time": "2026-10-16T19:45:00Z",
+      "model_r": -0.0157,
+      "filters": [
+        "modele_arbres"
+      ],
+      "filters_checked": true,
+      "variant": "modele_arbres"
     }
   }
 ]
