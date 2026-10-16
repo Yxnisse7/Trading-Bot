@@ -151,14 +151,15 @@ class TopstepAccount:
         return row
 
     def add_journal(self, asset: str, direction: str, entry: float, exit_: float, contracts: int,
-                    opened_at: datetime, closed_at: datetime | None = None, note: str = "") -> dict[str, Any]:
+                    opened_at: datetime, closed_at: datetime | None = None, note: str = "",
+                    tag: str = "") -> dict[str, Any]:
         if asset not in PRODUCTS:
             raise ValueError(f"actif inconnu pour Topstep : {asset} ({', '.join(PRODUCTS)})")
         if direction not in ("long", "short"):
             raise ValueError("sens attendu : long ou short")
         if not 1 <= contracts <= RULES["max_micros"]:
             raise ValueError(f"nombre de micros entre 1 et {RULES['max_micros']}")
-        row = {"id": "j" + opened_at.strftime("%m%d%H%M") + asset[:3], "asset": asset, "direction": direction,
+        row = {"id": "j" + opened_at.strftime("%m%d%H%M") + asset[:3] + tag, "asset": asset, "direction": direction,
                "entry": float(entry), "exit": float(exit_), "contracts": int(contracts),
                "opened_at": iso(opened_at), "closed_at": iso(closed_at or opened_at), "note": note[:120]}
         self.state.setdefault("journal", []).append(row)

@@ -136,3 +136,27 @@ def test_asian_night_is_copied_at_least_at_005_lot(tmp_path):
     get = lambda url: lab if "lab_shadow" in url else {"open_signals": []}
     mc.Copier(mt5, tmp_path, lambda *a, **k: None, lambda: created + 60, get=get).step()
     assert mt5.sent[0]["volume"] == 0.05
+
+
+def test_lab_signal_age_counts_from_the_telegram_announcement(tmp_path):
+    """16/10 : annoncé 10 min après la bougie, puis lu sur GitHub quelques minutes plus tard, le signal était
+    déjà « trop ancien » si l'âge partait de la bougie d'entrée."""
+    mt5 = FakeMT5()
+    bar = mc._ts("2026-10-16T14:00:00Z")
+    lab = {"noise_area:nasdaq": {"strategy": "noise_area", "asset": "gold", "trades": [
+        {"status": "open", "notified_entry": "2026-10-16T14:10:47Z", "direction": "short", "entry": 4200.0,
+         "risk": 8.0, "entry_ts": bar, "close_at": bar + 8 * 3600}]}}
+    get = lambda url: lab if "lab_shadow" in url else {"open_signals": []}
+    mc.Copier(mt5, tmp_path, lambda *a, **k: None, lambda: bar + 17 * 60, get=get).step()
+    assert len(mt5.sent) == 1
+
+
+def test_too_short_stop_is_widened_to_the_broker_minimum(tmp_path):
+    """Un SL plus court que le minimum du courtier (écart compris) est élargi au lieu d'être rejeté (code 10016)."""
+    mt5 = FakeMT5()
+    created = mc._ts("2026-10-14T13:50:00Z")
+    c = mc.Copier(mt5, tmp_path, lambda *a, **k: None, lambda: created + 60,
+                  get=site([sig(stop_loss=4210.1, take_profit=4202.0)]))
+    c.step()
+    req = mt5.sent[0]
+    assert req["sl"] - 4200.0 >= 0.2 + 0.20 - 1e-9                  # écart 0,20 + 20 points de 0,01

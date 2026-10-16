@@ -343,6 +343,7 @@ class Engine:
                                 initial=float(self.portfolio.data.get("balance_initial") or 0) or None)
         if self.TOPSTEP:
             text += self._topstep_line(sig)
+        text += "\nMT5 démo : résultat dans l'onglet Démo MT5"
         notify(text, html=True, reply_to=sig.id)
 
     def _topstep_line(self, sig: Signal) -> str:
@@ -1420,13 +1421,12 @@ class Engine:
         """Stratégie passée en signaux réels (strategies.LIVE) : message Telegram à l'entrée (avec les micros
         Topstep) et à la sortie ; la sortie est aussi inscrite au journal du compte Topstep simulé."""
         from . import strategies as sl
-        from .topstep import PRODUCTS
+        from .topstep import FEES as TOPSTEP_FEES, PRODUCTS
         tz = ZoneInfo(self.cfg.timezone)
         acct = self.topstep()
         mult = PRODUCTS[asset.key][1] if asset.key in PRODUCTS else 1.0
         symbol = PRODUCTS[asset.key][0] if asset.key in PRODUCTS else asset.label
         digits = self._digits(asset.key)
-        fmt = lambda x: f"{x:,.{digits}f}".replace(",", " ").replace(".", ",")  # noqa: E731
         money = lambda x: f"{x:,.0f}".replace(",", " ")  # noqa: E731
         for t in sorted(trades, key=lambda x: x["entry_ts"]):
             opened = datetime.fromtimestamp(t["entry_ts"], timezone.utc)
@@ -1448,120 +1448,113 @@ class Engine:
                 t["micros"], t["close_at"] = micros, close_at
                 fmt_end = "%d/%m %H:%M" if close_at and close_at - t["entry_ts"] > 86400 else "%H:%M"
                 end = datetime.fromtimestamp(close_at, timezone.utc).astimezone(tz).strftime(fmt_end) if close_at else "?"
-                head = f"{'🟢' if long else '🔴'} SIGNAL RÉEL · {asset.label} ({symbol}) · {'ACHAT' if long else 'VENTE'}"
-                size = (f"Topstep : {micros} micro{'s' if micros > 1 else ''} {symbol} ≈ {money(micros * per_micro)} $ "
-                        f"de risque ({format(acct.risk_pct(), 'g').replace('.', ',')} % de la balance)")
-                if name.startswith("creux_repris_15m"):
-                    # bougie 15 min close à l'heure d'entrée : son début est 15 min plus tôt
-                    bar = (opened - timedelta(minutes=15)).astimezone(tz).strftime("%H:%M")
-                    target = t["entry"] + (3 if long else -3) * t["risk"]
-                    lines = [head,
-                             f"Entrée : {fmt(t['entry'])} (clôture de la bougie 15 min de {bar})",
-                             f"Stop : {fmt(t['stop'])} (sous le creux repris, à placer tout de suite)",
-                             f"Objectif : {fmt(target)} (3 fois le risque)",
-                             f"Sortie : objectif, stop, au bout de 4 h, ou au plus tard à {end} "
-                             f"(heure de Paris, 15:00 à Chicago) — je préviens.",
-                             size,
-                             "Creux repris Nasdaq (essai 15) : bat les entrées au hasard (essai 21) et tient les 5 "
-                             "contrôles de l'essai 22, pas encore prouvé en réel. Le bot ne passe aucun ordre."]
-                elif name.startswith("noise_area"):
-                    v2 = name.startswith("noise_area_v2")
-                    bar = (opened - timedelta(minutes=5)).astimezone(tz).strftime("%H:%M")
-                    lines = [head,
-                             f"Entrée : {fmt(t['entry'])} (clôture de la bougie 5 min de {bar} : le prix sort de sa "
-                             f"zone de bruit autour de l'ouverture)",
-                             f"Stop : {fmt(t['stop'])} ({'au moins 1 ATR 15 min, ' if v2 else ''}à placer tout de suite)",
-                             f"Sortie : à une demi-heure où le prix repasse dans la zone (ou de l'autre côté du VWAP), "
-                             f"au stop, ou au plus tard à {end} (heure de Paris, 16:00 à New York) — je préviens.",
-                             size,
-                             f"Zone de bruit{' v2' if v2 else ''} Nasdaq : prouvée sur 2014-2026 (essai 24, tous les "
-                             "contrôles). Elle vit de quelques gros gagnants : beaucoup de petites pertes entre deux. "
-                             "Le bot ne passe aucun ordre."]
-                elif name.startswith("swing_w3"):
-                    bar = (opened - timedelta(minutes=15)).astimezone(tz).strftime("%H:%M")
-                    lines = [head,
-                             f"Entrée : {fmt(t['entry'])} (clôture de la bougie 15 min de {bar})",
-                             f"Stop de départ : {fmt(t['stop'])} (sous le 2e creux, à placer tout de suite)",
-                             f"Sortie : stop suiveur remonté sous les creux 1 h, ou au bout de 5 jours au plus "
-                             f"({end}) — je préviens à la sortie.",
-                             "Position gardée la nuit et le week-end : interdit chez Topstep, à suivre sur un "
-                             "compte CFD (démo MT5).",
-                             "Swing W3 Bitcoin : prouvé sur 2017-2026 (essai 24, tous les contrôles). "
-                             "Le bot ne passe aucun ordre."]
-                elif name.startswith("nuit_asie"):
-                    lines = [head,
-                             f"Entrée : {fmt(t['entry'])} (ouverture de la bougie de "
-                             f"{opened.astimezone(tz).strftime('%H:%M')}, 18:00 à New York)",
-                             f"Stop de sécurité : {fmt(t['stop'])} (1 % sous l'entrée, à placer tout de suite)",
-                             f"Sortie : vente à {end} (heure de Paris, 03:00 à New York, ouverture de Londres), "
-                             f"ou au stop — je préviens.",
-                             "Position gardée la nuit : interdit chez Topstep, à suivre sur un compte CFD (démo MT5). "
-                             "L'écart du courtier est souvent large juste à la réouverture.",
-                             "Or heures asiatiques : prouvée sur 2014-2026 (essai 27), petit gain par trade, surtout "
-                             "depuis 2020. Le bot ne passe aucun ordre."]
-                elif name.startswith("cassure_williams"):
-                    midnight = datetime.combine(opened.date() + timedelta(days=1), datetime.min.time(), timezone.utc)
-                    lines = [head,
-                             f"Entrée : {fmt(t['entry'])} (le prix vient de dépasser l'ouverture du jour + la moitié "
-                             f"de l'amplitude d'hier, bougie de {opened.astimezone(tz).strftime('%H:%M')})",
-                             f"Stop : {fmt(t['stop'])} (ouverture du jour à 00:00 UTC, à placer tout de suite)",
-                             f"Sortie : vente à {midnight.astimezone(tz).strftime('%H:%M')} (heure de Paris, 00:00 UTC), "
-                             f"ou au stop — je préviens.",
-                             "Position gardée la nuit : interdit chez Topstep, à suivre sur un compte CFD (démo MT5).",
-                             "Cassure Larry Williams Bitcoin : prouvée sur 2017-2026 (essai 30), mais 2022 et 2025 "
-                             "étaient négatives. Le bot ne passe aucun ordre."]
-                elif name.startswith("donchian_1h"):
-                    lines = [head,
-                             f"Entrée : {fmt(t['entry'])} (clôture de la bougie 1 h de {opened.astimezone(tz).strftime('%H:%M')})",
-                             f"Stop : {fmt(t['stop'])} (2 ATR, à placer tout de suite)",
-                             "Sortie : clôture d'une bougie 1 h qui casse le canal des 10 dernières heures, ou le "
-                             "stop — je préviens.",
-                             "Position gardée la nuit : interdit chez Topstep, à suivre sur un compte CFD (démo MT5).",
-                             "Donchian 1 h Bitcoin : prouvé sur 2017-2026 (essai 24, tous les contrôles). "
-                             "Le bot ne passe aucun ordre."]
-                else:
-                    lines = [head,
-                             f"Entrée : {fmt(t['entry'])} (clôture de la bougie 1 h de {opened.astimezone(tz).strftime('%H:%M')})",
-                             f"Stop : {fmt(t['stop'])} (2 ATR, à placer tout de suite)",
-                             f"Sortie : clôture d'une bougie 1 h qui casse le canal des 10 dernières heures, "
-                             f"ou au plus tard à {end} (heure de Paris, 15:00 à Chicago) — je préviens.",
-                             size,
-                             "Donchian or fermé chaque soir (essai 8) : validé en backtest, pas encore prouvé en réel. "
-                             "Le bot ne passe aucun ordre."]
                 strat = name.split(":")[0]
-                label, exit_rule = LIVE_SUMMARY.get(strat, (strat, "à la clôture de la règle"))
-                tp = fmt(t["entry"] + (3 if long else -3) * t["risk"]) if strat == "creux_repris_15m" else "aucun"
-                top = [f"{'🟢' if long else '🔴'} SIGNAL RÉEL · {'ACHAT' if long else 'VENTE'} · {asset.label.split(' (')[0]} · {label}",
-                       f"Entrée {fmt(t['entry'])} · SL {fmt(t['stop'])} · TP {tp}",
-                       f"Sortie : {exit_rule}" + (f", au plus tard {end} (Paris)" if close_at else ""),
-                       f"Risque : {money(micros * per_micro)} $ ({micros} micro{'s' if micros > 1 else ''} {symbol})",
-                       "", "Détails :"]
-                notify("\n".join(top + lines[1:]), buttons=msg.site_buttons(self.cfg.site_url, asset.key))
+                label = LIVE_SUMMARY.get(strat, (strat, ""))[0]
+                hh = opened.astimezone(tz).strftime("%H:%M")
+                bar15 = (opened - timedelta(minutes=15)).astimezone(tz).strftime("%H:%M")
+                bar5 = (opened - timedelta(minutes=5)).astimezone(tz).strftime("%H:%M")
+                target = None
+                if strat == "creux_repris_15m":
+                    target = t["entry"] + (3 if long else -3) * t["risk"]
+                    why = f"creux repris sur la bougie 15 min de {bar15}"
+                    exit_txt = f"objectif, SL, au bout de 4 h, ou au plus tard à {end}"
+                    note = "Creux repris Nasdaq (essai 15) : pas encore prouvé en réel."
+                elif strat.startswith("noise_area"):
+                    why = f"le prix sort de sa zone de bruit (bougie 5 min de {bar5})"
+                    exit_txt = (f"quand le prix revient dans la zone (contrôlé chaque demi-heure), au SL, "
+                                f"ou au plus tard à {end}")
+                    note = ("Zone de bruit Nasdaq, prouvée sur 2014-2026 (essai 24) : beaucoup de petites pertes, "
+                            "quelques gros gains." + (" SL d'au moins 1 ATR 15 min." if strat == "noise_area_v2" else ""))
+                elif strat == "swing_w3":
+                    why = f"reprise de la tendance (bougie 15 min de {bar15})"
+                    exit_txt = f"SL suiveur remonté sous les creux 1 h, au plus tard le {end}"
+                    note = "Swing W3 Bitcoin, prouvé sur 2017-2026 (essai 24)."
+                elif strat == "nuit_asie":
+                    why = f"achat à l'ouverture de la nuit asiatique ({hh}, 18:00 à New York)"
+                    exit_txt = f"vente à {end} (03:00 à New York), ou au SL de sécurité (1 % sous l'entrée)"
+                    note = ("Nuit asiatique or, prouvée sur 2014-2026 (essai 27). L'écart du courtier est souvent "
+                            "large juste à la réouverture.")
+                elif strat == "cassure_williams":
+                    midnight = datetime.combine(opened.date() + timedelta(days=1), datetime.min.time(), timezone.utc)
+                    why = f"le prix dépasse l'ouverture du jour + la moitié de l'amplitude d'hier (bougie de {hh})"
+                    exit_txt = (f"vente à {midnight.astimezone(tz).strftime('%H:%M')} (00:00 UTC), "
+                                "ou au SL (ouverture du jour)")
+                    note = "Cassure Larry Williams Bitcoin, prouvée sur 2017-2026 (essai 30), mais 2022 et 2025 négatives."
+                elif strat == "donchian_1h":
+                    why = f"cassure du canal des 10 dernières heures (bougie 1 h de {hh})"
+                    exit_txt = "cassure du canal dans l'autre sens, ou au SL"
+                    note = "Donchian 1 h Bitcoin, prouvé sur 2017-2026 (essai 24)."
+                else:
+                    why = f"cassure du canal des 10 dernières heures (bougie 1 h de {hh})"
+                    exit_txt = f"cassure du canal dans l'autre sens, ou au plus tard à {end}"
+                    note = "Donchian or (essai 8) : validé en backtest, pas prouvé en réel."
+                chg = lambda v, e=t["entry"]: msg.pct((v / e - 1) * 100.0)  # noqa: E731
+                lines = [f"<b>{'↗️ ACHAT' if long else '↘️ VENTE'} · {msg.esc(asset.label)}</b> · {msg.esc(label)}",
+                         f"Entrée {msg.code_price(t['entry'], digits)}",
+                         f"SL     {msg.code_price(t['stop'], digits)}  {chg(t['stop'])}",
+                         (f"TP     {msg.code_price(target, digits)}  {chg(target)}" if target is not None
+                          else "TP     aucun"),
+                         f"Sortie : {exit_txt} (heure de Paris).",
+                         "",
+                         f"Pourquoi : {why}"]
+                topstep = f"Topstep : {micros} {symbol} · risque {money(micros * per_micro)} $"
+                if strat in sl.OVERNIGHT:
+                    topstep += " <i>(gardé la nuit : interdit sur un vrai compte Topstep)</i>"
+                lines.append(topstep)
+                sizing = self._lab_portfolio(name, asset, t, opened, open_=True)
+                cur = self.portfolio.data.get("currency", self.cfg.portfolio_currency)
+                if sizing:
+                    lines.append(msg.sizing_line(sizing, cur))
+                lines.append("MT5 démo : copié tout seul par le pont du PC"
+                             + (" (au moins 0,05 lot)" if strat == "nuit_asie" else " (5 % du solde au SL)"))
+                lines.append(f"<i>{msg.esc(note)} Le bot ne passe aucun ordre réel.</i>")
+                notify("\n".join(lines), html=True, key=f"lab-{strat}-{t['entry_ts']}",
+                       buttons=msg.site_buttons(self.cfg.site_url, asset.key))
                 t["notified_entry"] = iso(now)
-                self._lab_portfolio(name, asset, t, opened, open_=True)
             if t["status"] == "closed" and not t.get("notified_exit"):
+                strat = name.split(":")[0]
+                label = LIVE_SUMMARY.get(strat, (strat, ""))[0]
                 micros = int(t.get("micros") or 1)
-                why = {"heure": "fin de séance (15:00 à Chicago)", "canal": "cassure du canal 10 h", "stop": "stop touché",
+                why = {"heure": "fin de séance (15:00 à Chicago)", "canal": "cassure du canal 10 h", "stop": "SL touché",
                        "durée": "durée maximale (4 h)" if name.startswith("creux_repris_15m") else
                        "durée maximale (5 jours)" if name.startswith("swing_w3") else "durée maximale",
-                       "objectif": "objectif touché", "trou": "trou dans les données",
+                       "objectif": "TP touché", "trou": "trou dans les données",
                        "bornes": "retour dans la zone de bruit", "vendredi": "fin de semaine",
                        "matin": "fin de la nuit (03:00 à New York)",
                        "minuit": "fin du jour (00:00 UTC)"}.get(t.get("reason"), t.get("reason") or "")
-                usd = (t["exit"] - t["entry"]) * (1 if long else -1) * mult * micros
-                notify(f"⚪ SORTIE · {asset.label} ({symbol}) · {why}\n"
-                       f"Sortie : {fmt(t['exit'])} · {t['r_topstep']:+.2f} R frais compris · ".replace(".", ",") +
-                       f"≈ {'+' if usd >= 0 else '−'}{money(abs(usd))} $ avec {micros} micro{'s' if micros > 1 else ''} (avant frais)",
+                sign = 1 if long else -1
+                fee, tick = TOPSTEP_FEES.get(asset.key, (0.0, 0.0))
+                usd = (t["exit"] - t["entry"]) * sign * mult * micros - (fee + tick) * micros
+                row = self._lab_portfolio(name, asset, t, opened, open_=False)
+                gain = (t.get("r_topstep") or 0) > 0
+                head = "✅ GAIN" if gain else "❌ PERTE"
+                minutes = int((t["exit_ts"] - t["entry_ts"]) // 60)
+                lines = [f"<b>{head} · {msg.esc(asset.label)} {'Achat' if long else 'Vente'}</b> · {msg.esc(label)}",
+                         f"{msg.price(t['entry'], digits)} → {msg.price(t['exit'], digits)} · "
+                         f"{msg.pct((t['exit'] / t['entry'] - 1) * 100.0 * sign)} · {msg.duration_text(minutes)}",
+                         f"Raison : {why}",
+                         "",
+                         f"Topstep : <b>{msg.money(usd, sign=True)}</b> ({micros} {symbol}, frais compris)"]
+                cur = self.portfolio.data.get("currency", self.cfg.portfolio_currency)
+                if row:
+                    lines.append(f"Simulation : <b>{msg.money(row['pnl'], cur, sign=True)}</b> · "
+                                 f"balance {msg.money(row['balance_after'], cur)}")
+                else:
+                    lines.append("Simulation : trade non pris")
+                lines.append("MT5 démo : résultat dans l'onglet Démo MT5 (le pont ferme la copie tout seul)")
+                notify("\n".join(lines), html=True, reply_to=f"lab-{strat}-{t['entry_ts']}",
                        buttons=msg.site_buttons(self.cfg.site_url, asset.key))
                 t["notified_exit"] = iso(now)
-                self._lab_portfolio(name, asset, t, opened, open_=False)
                 try:
                     acct.add_journal(asset.key, t["direction"], t["entry"], t["exit"], micros, opened,
-                                     datetime.fromtimestamp(t["exit_ts"], timezone.utc), note=f"signal réel {name}")
+                                     datetime.fromtimestamp(t["exit_ts"], timezone.utc), note=f"signal réel {name}",
+                                     tag="v2" if strat == "noise_area_v2" else "")
                 except ValueError as exc:
                     log.info("journal Topstep : %s", exc)
 
-    def _lab_portfolio(self, name: str, asset, t: dict[str, Any], opened: datetime, open_: bool) -> None:
+
+    def _lab_portfolio(self, name: str, asset, t: dict[str, Any], opened: datetime,
+                       open_: bool) -> dict[str, Any] | None:
         """Les signaux réels des stratégies prouvées passent aussi par la simulation de compte (onglet Simulation),
         comme ceux du bot : taille au même % de risque à l'entrée, résultat appliqué à la sortie."""
         stop = t.get("stop") or t["entry"]
@@ -1574,13 +1567,13 @@ class Engine:
             self.portfolio = Portfolio(self.store, self.cfg)
         try:
             if open_:
-                self.portfolio.on_open(sig, asset)
-            else:
-                sig.status, sig.close_price = t.get("reason") or "closed", t["exit"]
-                sig.closed_at = iso(datetime.fromtimestamp(t["exit_ts"], timezone.utc))
-                self.portfolio.on_close(sig, asset)
+                return self.portfolio.on_open(sig, asset)
+            sig.status, sig.close_price = t.get("reason") or "closed", t["exit"]
+            sig.closed_at = iso(datetime.fromtimestamp(t["exit_ts"], timezone.utc))
+            return self.portfolio.on_close(sig, asset)
         except (KeyError, TypeError, ValueError) as exc:
             log.info("simulation (%s) : %s", name, exc)
+            return None
 
     # ------------------------------------------------------------- live
     LIVE_CANDLES = 288         # 24 h de bougies 5 min (le site en tire aussi les vues 15 min et 1 h)

@@ -84,9 +84,12 @@ def read_signals(get: Callable[[str], Any] = _get) -> tuple[list[dict[str, Any]]
                 if t.get("status") != "open" or not t.get("notified_entry"):
                     continue
                 k = LAB_TARGET_R.get(rec.get("strategy"))
+                # âge compté depuis l'annonce Telegram (≈ 10 min après la bougie d'entrée, plus le délai de
+                # GitHub) : compté depuis la bougie, les signaux arrivaient déjà « trop anciens » (16/10/2026)
                 out.append({"key": f"lab:{rec['strategy']}:{t['entry_ts']}", "asset": rec["asset"],
                             "direction": t["direction"], "entry": t["entry"], "stop": t["risk"],
-                            "target": k * t["risk"] if k else None, "created": t["entry_ts"],
+                            "target": k * t["risk"] if k else None,
+                            "created": _ts(t["notified_entry"]) if isinstance(t["notified_entry"], str) else t["entry_ts"],
                             "expires": t.get("close_at")})
     except Exception as exc:
         log.info("laboratoire illisible (%s)", exc)
@@ -208,10 +211,12 @@ class Copier:
         if info is None or px <= 0:
             return {"status": "pas de prix"}
         sg = 1 if long else -1
+        # le SL se mesure depuis le prix de sortie (l'autre côté de l'écart) : trop court, il est élargi au minimum
+        # du courtier plutôt que refusé (code 10016), et la taille suit la distance élargie
+        spread = abs(tick.ask - tick.bid) if tick is not None else 0.0
+        s = dict(s, stop=max(s["stop"], (info.trade_stops_level + 5) * info.point + spread))
         sl = round(px - sg * s["stop"], info.digits)
         tp = round(px + sg * s["target"], info.digits) if s["target"] else 0.0
-        if s["stop"] < info.trade_stops_level * info.point:
-            return {"status": "stop plus court que le minimum du courtier"}
         strat = s["key"].split(":")[1] if s["key"].startswith("lab:") else None
         lot = lot_for(balance, s["stop"], info, MIN_LOT_MAX_RISK.get(strat))
         lot = floor_lot(lot, balance, s["stop"], info, MIN_POINT_VALUE.get(sym))
