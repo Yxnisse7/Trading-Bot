@@ -98,7 +98,7 @@
         ]
       },
       "exc": {
-        "mfe": 1.8113,
+        "mfe": 1.9088,
         "mae": 0.0,
         "armed": {
           "0.5": true,
@@ -110,7 +110,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1792169700
+        "last_ts": 1792170000
       }
     }
   },
@@ -213,7 +213,7 @@
         ]
       },
       "exc": {
-        "mfe": 1.7949,
+        "mfe": 1.8942,
         "mae": 0.0,
         "armed": {
           "0.5": true,
@@ -225,7 +225,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1792169700
+        "last_ts": 1792170000
       }
     }
   },
@@ -328,7 +328,7 @@
         ]
       },
       "exc": {
-        "mfe": 1.3797,
+        "mfe": 1.4962,
         "mae": 0.094,
         "armed": {
           "0.5": true,
@@ -340,7 +340,108 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1792169700
+        "last_ts": 1792170000
+      }
+    }
+  },
+  {
+    "id": "9d5e3daa0a",
+    "asset": "nasdaq",
+    "asset_label": "Nasdaq 100 (NQ)",
+    "direction": "short",
+    "entry": 29599.5,
+    "take_profit": 29401.5,
+    "stop_loss": 29665.5,
+    "risk_reward": 3.0,
+    "confidence": "fort",
+    "score": 9.99,
+    "criteria": [
+      "adx",
+      "corr",
+      "pdhl",
+      "rsi",
+      "trend_15m",
+      "trend_1h",
+      "trend_5m",
+      "vwap"
+    ],
+    "rationale": "Vente : tendance forte (ADX), marché meneur favorable, cassure des extrêmes de la veille, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 110.14 (0.37 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 95%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+    "news_context": "prudence post-USD Fed Chairman Warsh Speaks : critères renforcés · actualité calme sur les 2 dernières heures",
+    "created_at": "2026-10-16T17:10:46Z",
+    "expires_at": "2026-10-17T17:10:46Z",
+    "status": "open",
+    "closed_at": null,
+    "close_price": null,
+    "pnl_pct": null,
+    "pnl_gross_pct": null,
+    "duration_minutes": null,
+    "hourly_range": 110.141304,
+    "source": "bot",
+    "horizon": "24h",
+    "horizon_minutes": 1440,
+    "meta": {
+      "tick": 0.25,
+      "details": {
+        "trend_5m": "EMA20 29670.75 / EMA50 29781.93 (5 min)",
+        "trend_15m": "EMA20 29795.26 / EMA50 29936.18",
+        "trend_1h": "prix vs EMA20 1 h 29935.51",
+        "adx": "ADX15 49.2 (+DI 7.2 / -DI 35.7)",
+        "vwap": "VWAP jour 29881.94",
+        "rsi": "RSI14 5 min 31.7",
+        "macd": "histogramme MACD 2.4664",
+        "level": "support - / résistance 29885.00",
+        "volume": "z-score volume -3.16",
+        "pdhl": "veille : haut 30196.75 / bas 29622.50",
+        "activity": "activité de l'heure 0.89× la moyenne",
+        "corr": "VIX +3.9 % sur 15 min"
+      },
+      "support": null,
+      "resistance": 29885.0,
+      "atr_5m": 42.80914183630149,
+      "atr_ratio": 1.3937184241038125,
+      "hourly_range_pct": 0.3721,
+      "adx_15m": 49.197397569850004,
+      "sigma_5m": 0.0011623157949308554,
+      "p_resolution": 0.9506666666666667,
+      "p_tp_neutral": 0.4043333333333333,
+      "activity_ratio": 0.893,
+      "base_minutes": 5,
+      "ctx": {
+        "adx": 49.2,
+        "rsi_dir": 68.31,
+        "vwap_ext": 2.5643,
+        "ema_ext": 0.6469,
+        "atr_ratio": 1.394,
+        "activity": 0.893,
+        "range_pct": 0.3721,
+        "cost_r": 0.0673,
+        "us_open_min": 220.8,
+        "weekday": 4
+      },
+      "exit_override": {
+        "stop_x": 1.5,
+        "target_x": 3.0,
+        "minutes": 1440,
+        "source": "essai 29"
+      },
+      "price_time": "2026-10-16T17:05:00Z",
+      "model_r": 0.004,
+      "filters": [],
+      "filters_checked": true,
+      "sim": {
+        "lots": 1,
+        "lot_label": "MNQ",
+        "risk_amount": 132.0,
+        "risk_pct_effective": 11.326,
+        "notional": 59199.0,
+        "leverage": 50.8,
+        "capped_by_leverage": false,
+        "balance_at_open": 1165.43,
+        "risky": true,
+        "warnings": [
+          "lot minimal 1 MNQ imposé : risque au stop 132.00 au lieu de 116.54 visé",
+          "levier ×50.8 au-delà du plafond ×20"
+        ]
       }
     }
   }
