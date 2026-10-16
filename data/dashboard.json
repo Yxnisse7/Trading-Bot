@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-16T17:50:58.114779+02:00",
+  "updated_at": "2026-10-16T17:55:51.133995+02:00",
   "timezone": "Europe/Paris",
   "equity_curve": [
     {
@@ -1690,7 +1690,7 @@
       "pnl_pct": 1.9245,
       "avg_pnl_pct": 0.0037
     },
-    "open": 1,
+    "open": 2,
     "open_shadow": 5
   },
   "by_source": {
@@ -1805,7 +1805,7 @@
         "pnl_pct": 20.5041,
         "avg_pnl_pct": 0.112
       },
-      "open": 1,
+      "open": 2,
       "session_utc": [
         13,
         20
@@ -5139,6 +5139,40 @@
   ],
   "open_signals": [
     {
+      "id": "fd8402251e",
+      "asset": "nasdaq",
+      "asset_label": "Nasdaq 100 (NQ)",
+      "direction": "short",
+      "horizon": "24h",
+      "entry": 29730.75,
+      "take_profit": 29496.75,
+      "stop_loss": 29808.75,
+      "risk_reward": 3.0,
+      "confidence": "fort",
+      "score": 8.48,
+      "criteria": [
+        "adx",
+        "rsi",
+        "trend_15m",
+        "trend_1h",
+        "trend_5m",
+        "vwap"
+      ],
+      "source": "bot",
+      "status": "open",
+      "pnl_pct": null,
+      "pnl_gross_pct": null,
+      "duration_minutes": null,
+      "close_price": null,
+      "created_at": "2026-10-16T15:55:40Z",
+      "closed_at": null,
+      "created_local": "16/10 17:55",
+      "expires_at": "2026-10-17T15:55:40Z",
+      "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 129.81 (0.44 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 89%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+      "news_context": "prudence post-USD Fed Chairman Warsh Speaks : critères renforcés · actualité à surveiller (score 2) : The stock market has already crashed: Why a Wall Street veteran says Nike is the ultimate turnaround trade.",
+      "manual_exit": null
+    },
+    {
       "id": "4538b1bde2",
       "asset": "nasdaq",
       "asset_label": "Nasdaq 100 (NQ)",
@@ -7823,10 +7857,10 @@
     }
   },
   "state": {
-    "last_scan": "2026-10-16T15:50:45Z",
+    "last_scan": "2026-10-16T15:55:40Z",
     "last_scan_note": "1 signal(aux)",
     "last_summary": "2026-10-15T22:05:45Z",
-    "last_track": "2026-10-16T15:50:45Z",
+    "last_track": "2026-10-16T15:55:40Z",
     "last_summary_day": "2026-10-15"
   },
   "limits": {
@@ -7850,9 +7884,9 @@
     "losses": 80,
     "avg_win": 70.33,
     "avg_loss": -47.26,
-    "open_positions": 5,
+    "open_positions": 6,
     "skipped": 0,
-    "risky": 112
+    "risky": 113
   },
   "stress": {
     "n_trades": 697,
@@ -20308,7 +20342,7 @@
         }
       ],
       "live": true,
-      "checked_hour": "2026-10-16T15:30:00Z",
+      "checked_hour": "2026-10-16T15:45:00Z",
       "n": 2,
       "mean_r": 0.4254
     },
