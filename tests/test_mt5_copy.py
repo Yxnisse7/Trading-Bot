@@ -160,3 +160,59 @@ def test_too_short_stop_is_widened_to_the_broker_minimum(tmp_path):
     c.step()
     req = mt5.sent[0]
     assert req["sl"] - 4200.0 >= 0.2 + 0.20 - 1e-9                  # écart 0,20 + 20 points de 0,01
+
+
+class LocalMT5(FakeMT5):
+    """Terminal avec des bougies 5 min d'or, serveur à UTC+3."""
+    TIMEFRAME_M5 = 5
+    OFF = 3 * 3600
+
+    def __init__(self, now):
+        super().__init__()
+        self.now = now
+
+    def symbol_info_tick(self, sym):
+        return NS(bid=4200.0, ask=4200.2, time=int(self.now) + self.OFF)
+
+    def copy_rates_from_pos(self, sym, tf, start, n):
+        if sym != "XAUUSD+":
+            return None
+        t0 = int(self.now) // 300 * 300 - 300 * 1000
+        return [{"time": t + self.OFF, "open": 4200.0, "high": 4201.0, "low": 4199.0, "close": 4200.0,
+                 "tick_volume": 10} for t in range(t0, int(self.now) // 300 * 300 + 300, 300)]
+
+
+def test_local_engine_opens_the_asian_night_at_once_and_skips_the_github_twin(tmp_path):
+    """16/10 : le PC calcule la nuit asiatique sur les prix MT5 et copie dès 22:05 ; le signal de GitHub qui
+    arrive ensuite pour la même nuit n'ouvre pas une 2e position."""
+    from datetime import datetime, timezone
+    now = datetime(2026, 10, 14, 22, 6, tzinfo=timezone.utc).timestamp()     # 18:06 à New York
+    mt5 = LocalMT5(now)
+    lab = {}
+    get = lambda url: lab if "lab_shadow" in url else {"open_signals": []}
+    c = mc.Copier(mt5, tmp_path, lambda *a, **k: None, lambda: now, get=get, local=True)
+    c.step()
+    t22 = int(datetime(2026, 10, 14, 22, 0, tzinfo=timezone.utc).timestamp())
+    assert len(mt5.sent) == 1 and mt5.sent[0]["type"] == mt5.ORDER_TYPE_BUY
+    assert c.state[f"lab:nuit_asie:{t22}"]["source"] == "local"
+    lab["nuit_asie:gold"] = {"strategy": "nuit_asie", "asset": "gold", "trades": [
+        {"status": "open", "notified_entry": "2026-10-14T22:10:00Z", "direction": "long", "entry": 4200.0,
+         "risk": 42.0, "entry_ts": t22 + 300, "close_at": t22 + 9 * 3600}]}
+    c.last = 0
+    c.step()
+    assert len(mt5.sent) == 1 and c.state[f"lab:nuit_asie:{t22 + 300}"]["status"].startswith("même signal")
+
+
+def test_local_engine_falls_back_to_github_when_mt5_has_no_bars(tmp_path):
+    from datetime import datetime, timezone
+    now = datetime(2026, 10, 14, 22, 6, tzinfo=timezone.utc).timestamp()
+    mt5 = LocalMT5(now)
+    mt5.copy_rates_from_pos = lambda *a: None
+    t22 = int(datetime(2026, 10, 14, 22, 0, tzinfo=timezone.utc).timestamp())
+    lab = {"nuit_asie:gold": {"strategy": "nuit_asie", "asset": "gold", "trades": [
+        {"status": "open", "notified_entry": "2026-10-14T22:05:00Z", "direction": "long", "entry": 4200.0,
+         "risk": 42.0, "entry_ts": t22, "close_at": t22 + 9 * 3600}]}}
+    get = lambda url: lab if "lab_shadow" in url else {"open_signals": []}
+    c = mc.Copier(mt5, tmp_path, lambda *a, **k: None, lambda: now, get=get, local=True)
+    c.step()
+    assert len(mt5.sent) == 1 and c.state[f"lab:nuit_asie:{t22}"]["source"] == "github"

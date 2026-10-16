@@ -19,6 +19,7 @@ from pathlib import Path
 from typing import Any, Callable
 
 from . import demo_rules
+from .mt5_local import LocalEngine, same_signal
 
 log = logging.getLogger("mt5_copy")
 
@@ -123,8 +124,10 @@ def floor_lot(lot: float, balance: float, dist: float, info, point_value: float 
 
 class Copier:
     def __init__(self, mt5, root: Path, journal: Callable[..., None], clock: Callable[[], float],
-                 get: Callable[[str], Any] = _get):
+                 get: Callable[[str], Any] = _get, local: bool = False):
         self.mt5, self.root, self.journal, self.clock, self.get = mt5, root, journal, clock, get
+        # stratégies recalculées sur le PC avec les prix MT5 (16/10/2026) ; GitHub reste la source de secours
+        self.local = LocalEngine(mt5, SYMBOLS, clock) if local else None
         self.state_file = root / "journal" / "copies.json"
         self.last = 0.0
         try:
@@ -163,7 +166,17 @@ class Copier:
         if acc is None or acc.trade_mode != self.mt5.ACCOUNT_TRADE_MODE_DEMO:
             return "copie : compte réel refusé"
         signals, ok = read_signals(self.get)
-        live = {s["key"]: s for s in signals}
+        local, local_keys = [], set()
+        if self.local is not None:
+            local, lok = self.local.signals()
+            ok |= lok
+            for s in local:
+                k = LAB_TARGET_R.get(s["key"].split(":")[1])
+                s["target"] = k * s["stop"] if k else None
+            local_keys = {s["key"] for s in local}
+        live: dict[str, dict[str, Any]] = {}
+        for s in local + signals:                    # le calcul local passe en premier
+            live.setdefault(s["key"], s)
         pos = self._positions()
         # sorties : signal expiré, ou fermé par le bot (seulement si sa source a bien été lue)
         for key, rec in list(self.state.items()):
@@ -172,17 +185,27 @@ class Copier:
                 if rec.get("ticket") and rec.get("status") == "ouvert":
                     rec["status"] = "fermé"
                 continue
-            source = "lab" if key.startswith("lab:") else rec["asset"]
+            if rec.get("source") == "local":
+                source, known = f"local:{key.split(':')[1]}", local_keys
+            else:
+                source, known = ("lab" if key.startswith("lab:") else rec["asset"]), set(live) - local_keys
             if rec.get("expires") and now >= rec["expires"]:
                 self._close(p, "expiration")
-            elif source in ok and key not in live:
-                self._close(p, "fermé par le bot")
+            elif source in ok and key not in known:
+                self._close(p, "fermé par la règle" if rec.get("source") == "local" else "fermé par le bot")
         # entrées
         why = demo_rules.check(self.mt5, MAGIC)
         for key, s in live.items():
             if key in self.state:
                 continue
-            self.state[key] = {"asset": s["asset"], "status": "vu", "expires": s["expires"]}
+            twin = next((k for k, r in self.state.items()
+                         if r.get("source", "github") != s.get("source", "github")
+                         and same_signal(key, s["direction"], k, r.get("direction"))), None)
+            self.state[key] = {"asset": s["asset"], "status": "vu", "expires": s["expires"],
+                               "direction": s["direction"], "source": s.get("source", "github")}
+            if twin:
+                self.state[key]["status"] = f"même signal que {twin}"
+                continue
             if why:
                 self.state[key]["status"] = f"refusé : {why}"
                 self.journal("copie refusée", note=f"{key} règle d'arrêt : {why}")

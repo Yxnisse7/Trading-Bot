@@ -62,7 +62,7 @@ class Bridge:
         self.copier = None
         if cfg.get("copy_bot") and cfg["mode"] == "demo":
             from .mt5_copy import Copier
-            self.copier = Copier(mt5, root, self.journal, clock)
+            self.copier = Copier(mt5, root, self.journal, clock, local=bool(cfg.get("local_strategies", True)))
         self.tick_from: int | None = None
         if cfg["exit"] != "X1":
             raise ValueError("seule la sortie X1 est branchée en direct pour l'instant")
