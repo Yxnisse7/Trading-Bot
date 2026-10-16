@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-16T21:25:51.896622+02:00",
+  "updated_at": "2026-10-16T21:31:21.736571+02:00",
   "timezone": "Europe/Paris",
   "equity_curve": [
     {
@@ -1727,7 +1727,7 @@
       "avg_pnl_pct": 0.0157
     },
     "open": 0,
-    "open_shadow": 12
+    "open_shadow": 13
   },
   "by_source": {
     "bot": {
@@ -5154,6 +5154,40 @@
   ],
   "open_signals": [
     {
+      "id": "b5c827f96c",
+      "asset": "nasdaq",
+      "asset_label": "Nasdaq 100 (NQ)",
+      "direction": "short",
+      "horizon": "24h",
+      "entry": 29388.75,
+      "take_profit": 29185.0,
+      "stop_loss": 29456.5,
+      "risk_reward": 3.01,
+      "confidence": "fort",
+      "score": 8.79,
+      "criteria": [
+        "adx",
+        "rsi",
+        "trend_15m",
+        "trend_1h",
+        "trend_5m",
+        "vwap"
+      ],
+      "source": "shadow",
+      "status": "open",
+      "pnl_pct": null,
+      "pnl_gross_pct": null,
+      "duration_minutes": null,
+      "close_price": null,
+      "created_at": "2026-10-16T19:31:08Z",
+      "closed_at": null,
+      "created_local": "16/10 21:31",
+      "expires_at": "2026-10-17T19:31:08Z",
+      "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 113.17 (0.39 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 91%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+      "news_context": "prudence post-USD Fed Chairman Warsh Speaks : critères renforcés · actualité calme sur les 2 dernières heures",
+      "manual_exit": null
+    },
+    {
       "id": "559f62dac4",
       "asset": "nasdaq",
       "asset_label": "Nasdaq 100 (NQ)",
@@ -8047,10 +8081,10 @@
     }
   },
   "state": {
-    "last_scan": "2026-10-16T19:25:38Z",
+    "last_scan": "2026-10-16T19:31:08Z",
     "last_scan_note": "0 signal(aux)",
     "last_summary": "2026-10-15T22:05:45Z",
-    "last_track": "2026-10-16T19:25:38Z",
+    "last_track": "2026-10-16T19:31:08Z",
     "last_summary_day": "2026-10-15"
   },
   "limits": {
