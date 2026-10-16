@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-16T19:55:50.661708+02:00",
+  "updated_at": "2026-10-16T20:01:39.165263+02:00",
   "timezone": "Europe/Paris",
   "equity_curve": [
     {
@@ -1718,7 +1718,7 @@
       "avg_pnl_pct": 0.0129
     },
     "open": 1,
-    "open_shadow": 3
+    "open_shadow": 5
   },
   "by_source": {
     "bot": {
@@ -5144,6 +5144,74 @@
   ],
   "open_signals": [
     {
+      "id": "0969c406df",
+      "asset": "nasdaq",
+      "asset_label": "Nasdaq 100 (NQ)",
+      "direction": "short",
+      "horizon": "24h",
+      "entry": 29478.5,
+      "take_profit": 29273.75,
+      "stop_loss": 29546.75,
+      "risk_reward": 3.0,
+      "confidence": "fort",
+      "score": 8.76,
+      "criteria": [
+        "adx",
+        "rsi",
+        "trend_15m",
+        "trend_1h",
+        "trend_5m",
+        "vwap"
+      ],
+      "source": "shadow",
+      "status": "open",
+      "pnl_pct": null,
+      "pnl_gross_pct": null,
+      "duration_minutes": null,
+      "close_price": null,
+      "created_at": "2026-10-16T18:01:19Z",
+      "closed_at": null,
+      "created_local": "16/10 20:01",
+      "expires_at": "2026-10-17T18:01:19Z",
+      "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 113.73 (0.39 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 95%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+      "news_context": "prudence post-USD Fed Chairman Warsh Speaks : critères renforcés · actualité calme sur les 2 dernières heures",
+      "manual_exit": null
+    },
+    {
+      "id": "9430daa5e3",
+      "asset": "oil",
+      "asset_label": "Pétrole WTI (CL)",
+      "direction": "long",
+      "horizon": "1h",
+      "entry": 98.69,
+      "take_profit": 99.08,
+      "stop_loss": 98.43,
+      "risk_reward": 1.5,
+      "confidence": "fort",
+      "score": 6.42,
+      "criteria": [
+        "adx",
+        "rsi",
+        "trend_15m",
+        "trend_1h",
+        "trend_5m",
+        "vwap"
+      ],
+      "source": "shadow",
+      "status": "open",
+      "pnl_pct": null,
+      "pnl_gross_pct": null,
+      "duration_minutes": null,
+      "close_price": null,
+      "created_at": "2026-10-16T18:01:19Z",
+      "closed_at": null,
+      "created_local": "16/10 20:01",
+      "expires_at": "2026-10-16T19:01:19Z",
+      "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 0.64 (0.65 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 98%.",
+      "news_context": "prudence post-USD Fed Chairman Warsh Speaks : critères renforcés · actualité calme sur les 2 dernières heures",
+      "manual_exit": null
+    },
+    {
       "id": "88fdf96fd5",
       "asset": "nasdaq",
       "asset_label": "Nasdaq 100 (NQ)",
@@ -7764,10 +7832,10 @@
     }
   },
   "state": {
-    "last_scan": "2026-10-16T17:55:37Z",
+    "last_scan": "2026-10-16T18:01:19Z",
     "last_scan_note": "0 signal(aux)",
     "last_summary": "2026-10-15T22:05:45Z",
-    "last_track": "2026-10-16T17:55:37Z",
+    "last_track": "2026-10-16T18:01:19Z",
     "last_summary_day": "2026-10-15"
   },
   "limits": {
@@ -19755,18 +19823,18 @@
           "entry_at": "2026-10-15T20:00:00Z",
           "direction": "long",
           "entry": 4195.7001953125,
-          "risk": 29.280988,
-          "stop": 4166.419207,
+          "risk": 29.240055,
+          "stop": 4166.460141,
           "status": "open",
           "reason": null,
           "exit_ts": null,
           "exit": null,
-          "last": 4180.10009765625,
+          "last": 4183.5,
           "r_topstep": null,
           "r_bot": null
         }
       ],
-      "checked_hour": "2026-10-16T17:00:00Z",
+      "checked_hour": "2026-10-16T18:00:00Z",
       "n": 7,
       "mean_r": -0.4422,
       "live": false
