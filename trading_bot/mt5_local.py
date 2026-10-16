@@ -12,7 +12,7 @@ toujours du bot de GitHub, que le PC soit allumé ou non.
 from __future__ import annotations
 
 import logging
-from datetime import datetime, timezone
+from datetime import datetime
 from typing import Any, Callable
 
 from . import strategies as sl
