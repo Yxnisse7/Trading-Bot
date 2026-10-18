@@ -1192,6 +1192,40 @@ tranche ≤ 0,5 × la moyenne ; point de contrôle = tranche la plus pleine.
 **Décidé d'avance** : une cellule prouvée → proposition de la passer en ombre puis sur le démo MT5 (ou d'appliquer
 le filtre ou le stop à la stratégie concernée). Rien ne change sans l'accord de Yanisse.
 
+## Essai 38 — memecoins pump.fun : entrer après la montée, sortir à la chute
+
+Écrit le 18 octobre 2026, **avant** tout calcul, à la demande de Yanisse (« un bot qui trade les memecoins : grosse
+montée au début, puis la chute ; entrer tôt et ressortir avec la chute »). Étude seulement : aucun bot, aucun ordre.
+Données : corpus public « PumpFun Launch-to-Graduation Corpus » (Hugging Face, Slinky21, licence CC BY 4.0),
+**tous** les coins lancés sur pump.fun (Solana) du 5 juin au 14 juillet 2026, morts et arnaques compris, chaque
+échange sur la courbe de lancement (« bonding curve »). Hors dépôt (≈ 6 Go), non vérifié par nous sur la chaîne.
+Exclus : coins sans prix (toutes leurs lignes `price_sol` vides), coins lancés pendant la panne du 3 juillet
+(2 juillet 23:00 → 4 juillet 00:00 UTC) ou moins de 70 min avant la fin du corpus.
+
+**Exécution** : mise 0,5 SOL par trade. Le prix est celui de la courbe ; on achète et vend au **premier échange au
+moins 2 s après** le déclencheur (délai d'un bot correct, les « snipers » sont plus rapides). Glissement de notre
+propre ordre calculé sur la courbe (produit constant : achat × (1 + 0,5 / SOL virtuel), vente ÷ (1 + jetons vendus /
+jetons virtuels)). Frais : 1,25 % par côté (plateforme 0,95 % + créateur 0,30 %) et 0,001 SOL de réseau par
+transaction. La courbe rachète toujours : un coin mort se vend au dernier prix. Si le coin quitte la courbe
+(« graduation ») pendant le trade, sortie au dernier prix de la courbe. Une seule entrée par coin et par cellule.
+Résultat en % de la mise, net.
+
+**Entrées** : **K1** dès le lancement (premier échange ≥ 2 s après le premier échange, le « sniping » d'un bot
+lent) ; **K2 / K3 / K5** quand le prix atteint 2 / 3 / 5 fois le prix du premier échange dans les 10 premières
+minutes (la « grosse montée du début »). **Sorties** : **T20** suiveur, vente dès que le prix tombe 20 % sous le plus
+haut depuis l'entrée ; **T40** suiveur à 40 % ; **M5** vente 5 minutes après l'entrée. Toutes : vente au plus tard
+60 min après l'entrée. **12 cellules** (seuil z 2,64).
+
+**Contrôles** : au moins 200 trades ; moyenne nette > 0 et facteur de profit ≥ 1,1 ; positive sur chaque moitié
+(lancements avant / depuis le 25 juin) et sur les 7 derniers jours ; frais doublés > 0 ; **1 000 singes** : pour
+chaque trade, un coin pris au hasard parmi ceux lancés le même jour qui ont encore un échange au même âge (± 60 s),
+même sortie ; à battre 950 fois. « Prouvée » : tout passe et z > 2,64. Pour information : la moyenne sans les 5 %
+meilleurs trades, et la part de trades perdants.
+
+**Décidé d'avance** : une cellule prouvée → proposition d'un suivi en direct sans argent (papier) pendant au moins
+2 semaines, puis d'en discuter ; rien de plus sans l'accord de Yanisse. Réserve halal écrite d'avance : les
+memecoins sont jugés par beaucoup de savants comme de la pure spéculation, à trancher par Yanisse.
+
 ## Journal des essais
 
 | Date | Essai | Résultat |
@@ -1280,3 +1314,4 @@ le filtre ou le stop à la stratégie concernée). Rien ne change sans l'accord 
 | 2026-10-16 | Demande de Yanisse : messages Telegram lisibles et signaux pris partout | Messages des stratégies refaits au format du bot (↗️ ACHAT / ↘️ VENTE en gras, prix en code, SL/TP alignés, Topstep + Simulation + MT5 à l'entrée) ; la sortie répond au message d'entrée (✅ GAIN / ❌ PERTE, raison, résultat Topstep frais compris et Simulation). Copie MT5 : 3 signaux manqués (nuit asiatique 15/10, zone de bruit et v2 16/10 14:00) car l'âge partait de la bougie d'entrée et non de l'annonce : corrigé ; SL trop court élargi au minimum du courtier au lieu d'un rejet 10016. Journal Topstep : zone de bruit et v2 au même instant avaient le même identifiant (suffixe v2). |
 | 2026-10-16 | Demande de Yanisse : stratégies calculées sur le PC avec les prix live MT5 | Le pont rejoue les stratégies en signaux réels (strategies.LIVE) sur les bougies 5 min du courtier dès qu'une bougie se ferme (trading_bot/mt5_local.py) et copie tout de suite sur le démo. Bascule : si le calcul local échoue (pas de bougies, marché fermé), la copie reprend les signaux de GitHub comme avant ; un signal GitHub de la même stratégie, même sens, à moins de 3 h d'un signal local, n'ouvre pas une 2e position. Telegram, Topstep et Simulation restent sur GitHub. Écarts possibles : prix CFD ≠ contrats à terme, une cassure peut tomber une bougie plus tôt ou plus tard. |
 | 2026-10-16 | Relevé du soir : copies MT5 contre Telegram | 2 défauts trouvés et corrigés. (1) Au redémarrage du pont (15:45 UTC), les copies GitHub que le PC voyait aussi (zone de bruit v2 0,8 lot, W3 Bitcoin 0,06) ont été fermées à tort : la zone de bruit v2 a ensuite fini à +1,62 % sur Telegram. (2) La vente Nasdaq du bot de 17:10 UTC a été copiée 8 min plus tard, ≈ 195 points plus bas : stop touché sur MT5 (−66 $) alors que le signal a touché son TP. Désormais un signal GitHub n'est plus copié si le prix a déjà fait plus de la moitié de la distance du stop depuis l'annonce. |
+| 2026-10-18 | Pré-enregistrement de l'essai 38 (memecoins pump.fun) | — |
