@@ -55,6 +55,22 @@ for attempt in 1 2 3 4; do
     save_message_ids
     exit 0
   fi
+  # Travail long (backtest du dimanche, ~5 min) : le bot du quart d'heure pousse pendant ce temps, un rejeu
+  # complet perdrait la course à chaque fois. On fusionne plutôt l'état distant (en cas de conflit sur un même
+  # fichier, la version distante, plus fraîche, l'emporte) et on repousse sans rejouer.
+  if [ "${MERGE_ON_REJECT:-0}" = "1" ]; then
+    for n in 1 2 3 4 5; do
+      echo "Push refusé : fusion de l'état distant ($n/5)."
+      git_retry git fetch -q origin "$BRANCH"
+      git merge -q -X theirs --no-edit "origin/$BRANCH"
+      if git push -q origin "HEAD:$BRANCH"; then
+        python run.py flush-outbox
+        save_message_ids
+        exit 0
+      fi
+      sleep $((n * 2))
+    done
+  fi
   echo "Push refusé (état distant modifié entre-temps) : rejeu depuis l'état frais."
   sleep $((attempt * 2))
 done

@@ -36,4 +36,5 @@ jobs:
       - name: Historique des bougies et backtest sur 180 jours
         env:
           GH_TOKEN: ${{ github.token }}
+          MERGE_ON_REJECT: "1"
         run: bash scripts/run_and_push.sh bash scripts/weekly_backtest.sh
