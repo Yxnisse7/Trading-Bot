@@ -1226,6 +1226,23 @@ meilleurs trades, et la part de trades perdants.
 2 semaines, puis d'en discuter ; rien de plus sans l'accord de Yanisse. Réserve halal écrite d'avance : les
 memecoins sont jugés par beaucoup de savants comme de la pure spéculation, à trancher par Yanisse.
 
+## Essai 39 — memecoins pump.fun : ne garder que les « bons » coins
+
+Écrit le 18 octobre 2026, **avant** tout calcul, à la demande de Yanisse (« ça dépend du coin, il faut choisir des
+bons coins avec un minimum de market cap ; cherche ce qui différencie un bon coin d'un rug »). Mêmes données,
+exécution, frais, contrôles et singes que l'essai 38. Critères trouvés sur le web (guides anti-arnaque Solana,
+seuils de fournisseurs d'outils, non vérifiés) et présents dans le corpus, tous connus **au lancement** :
+10 plus gros porteurs ≤ 25 % des jetons, plus gros porteur ≤ 10 %, achat du créateur ≤ 5 %, aucun ancien coin du
+créateur marqué arnaque (`creator_past_rugs` = 0). Valeur absente = coin refusé. Coins marqués `top10_pct_suspect`
+exclus. Market cap = prix × nombre de jetons (2 milliards en « mayhem », 1 milliard sinon), au moment de l'entrée.
+(Les droits de création et de gel de jetons sont retirés d'office sur pump.fun : critère sans objet.)
+
+**Filtres** : **F1** coin « propre » (les 4 critères) ; **F2** market cap à l'entrée ≥ 100 SOL ; **F3** F1 et F2.
+**Entrées** K2, K3, K5 de l'essai 38 ; **sorties** T20 et T40. **18 cellules** (seuil z 2,77).
+Pour information : la même cellule sans filtre (essai 38) à côté.
+
+**Décidé d'avance** : comme l'essai 38 (une cellule prouvée → proposition d'un suivi papier, rien de plus).
+
 ## Journal des essais
 
 | Date | Essai | Résultat |
@@ -1316,3 +1333,4 @@ memecoins sont jugés par beaucoup de savants comme de la pure spéculation, à 
 | 2026-10-16 | Relevé du soir : copies MT5 contre Telegram | 2 défauts trouvés et corrigés. (1) Au redémarrage du pont (15:45 UTC), les copies GitHub que le PC voyait aussi (zone de bruit v2 0,8 lot, W3 Bitcoin 0,06) ont été fermées à tort : la zone de bruit v2 a ensuite fini à +1,62 % sur Telegram. (2) La vente Nasdaq du bot de 17:10 UTC a été copiée 8 min plus tard, ≈ 195 points plus bas : stop touché sur MT5 (−66 $) alors que le signal a touché son TP. Désormais un signal GitHub n'est plus copié si le prix a déjà fait plus de la moitié de la distance du stop depuis l'annonce. |
 | 2026-10-18 | Pré-enregistrement de l'essai 38 (memecoins pump.fun) | — |
 | 2026-10-18 | **Essai 38** : memecoins pump.fun (5 juin → 14 juillet 2026, 505 782 coins utilisables, morts compris), mise 0,5 SOL, frais 1,25 % par côté + 0,001 SOL, délai 2 s, 12 cellules (seuil z 2,64) | **Rien ne passe : les 12 cellules perdent.** Entrer dès le lancement (K1) : −9 à −13 % par trade, 82 à 86 % de trades perdants. Entrer après la montée : K2 (prix ×2) −8 à −15 % (61 025 trades), K3 (×3) −7 à −14 % (19 956), K5 (×5) **−5 à −12 %** (5 812). Meilleure : K5 suiveur 20 % −5,1 % par trade, PF 0,78, 69 % de perdants, −15 % sans les 5 % meilleurs. Négatif sur les deux moitiés, les 7 derniers jours et avant les frais doublés. Plusieurs cellules battent les singes (K5 T20 z 9,3) : entrer après une montée perd **moins** qu'un coin au hasard, mais perd quand même. Réserve : corpus tiers non vérifié sur la chaîne. Pas de suivi papier. |
+| 2026-10-18 | Pré-enregistrement de l'essai 39 (memecoins, filtre des bons coins) | — |
