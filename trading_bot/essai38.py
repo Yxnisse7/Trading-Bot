@@ -2,6 +2,7 @@
 
     python -m trading_bot.essai38 --prep DOSSIER   → data/history/pumpfun/early.npz (depuis le corpus Hugging Face)
     python -m trading_bot.essai38                  → data/essai38.json
+    python -m trading_bot.essai38 --essai39        → data/essai39.json (filtres des « bons » coins)
 
 Données hors dépôt : corpus « PumpFun Launch-to-Graduation Corpus » (Slinky21, CC BY 4.0), fichiers tokens.parquet
 et trades/*.parquet. --prep garde les 75 premières minutes de chaque coin (duckdb nécessaire pour cette étape).
@@ -43,7 +44,12 @@ def prep(src: Path) -> None:
     con = duckdb.connect()
     con.sql("SET memory_limit='10GB'; SET preserve_insertion_order=false")
     con.sql(f"""create table tok as select row_number() over () - 1 id, mint, epoch(detected_at) launch,
-                coalesce(epoch(graduated_at), 1e12) grad from '{src}/tokens.parquet' where detected_at is not null""")
+                coalesce(epoch(graduated_at), 1e12) grad,
+                coalesce(initial_top10_pct_corrected <= 25 and initial_top1_pct_corrected <= 10
+                         and dev_buy_pct_corrected <= 5 and creator_past_rugs = 0
+                         and not coalesce(top10_pct_suspect, false), false) clean,
+                case when is_mayhem_mode then 2e9 else 1e9 end supply
+                from '{src}/tokens.parquet' where detected_at is not null""")
     tr = con.sql(f"""
         select k.id, epoch(t.event_time) ts, t.price_sol p, t.v_sol_bonding_curve / 1e9 vs,
                t.v_tokens_bonding_curve / 1e6 vt
@@ -51,14 +57,15 @@ def prep(src: Path) -> None:
         where t.price_sol > 0 and t.v_sol_bonding_curve > 0 and t.v_tokens_bonding_curve > 0
           and t.seconds_since_launch <= 4500
         order by k.id, ts""").fetchnumpy()
-    tok = con.sql("select id, launch, grad from tok order by id").fetchnumpy()
+    tok = con.sql("select id, launch, grad, clean, supply from tok order by id").fetchnumpy()
     ids = tr["id"].astype(np.int64)
     present = np.unique(ids)
     start = np.searchsorted(ids, present)
     PF_DIR.mkdir(parents=True, exist_ok=True)
     np.savez(PF_DIR / "early.npz", ts=tr["ts"], p=tr["p"], vs=tr["vs"], vt=tr["vt"],
              start=np.append(start, len(ids)), keep=np.ones(len(present), bool),
-             launch=tok["launch"][present], grad=tok["grad"][present])
+             launch=tok["launch"][present], grad=tok["grad"][present],
+             clean=tok["clean"][present], supply=tok["supply"][present])
 
 
 def buy_tokens(p: float, vs: float) -> float:
@@ -113,6 +120,7 @@ def stats(r: np.ndarray) -> dict:
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--prep", type=Path)
+    ap.add_argument("--essai39", action="store_true", help="filtres des bons coins (essai 39)")
     a = ap.parse_args()
     if a.prep:
         prep(a.prep)
@@ -171,8 +179,22 @@ def main() -> None:
         return pool_res[(key[0], key[1], xname)]
 
     cells = {}
-    for ename, lst in real.items():
-        for xname, rule in EXITS.items():
+    if a.essai39:
+        clean, supply = d["clean"], d["supply"]
+        filters = {
+            "F1": lambda t, j: bool(clean[t]),
+            "F2": lambda t, j: P[start[t] + j] * supply[t] >= 100,
+            "F3": lambda t, j: bool(clean[t]) and P[start[t] + j] * supply[t] >= 100,
+        }
+        plan = [(f"{fn}_{en}_{xn}", [x for x in real[en] if fx(x[0], x[1])], xn)
+                for fn, fx in filters.items() for en in ("K2", "K3", "K5") for xn in ("T20", "T40")]
+        z_min = NormalDist().inv_cdf(1 - 0.05 / len(plan))
+    else:
+        plan = [(f"{en}_{xn}", lst, xn) for en, lst in real.items() for xn in EXITS]
+        z_min = Z_MIN
+    for cname, lst, xname in plan:
+        rule = EXITS[xname]
+        if True:
             r, r2, halves, keys = [], [], [], []
             for t, j, age in lst:
                 arr = arrays(t)
@@ -204,17 +226,18 @@ def main() -> None:
                 "frais_x2": bool(len(r2) and r2.mean() > 0),
                 "singes": beaten >= 950,
             }
-            cells[f"{ename}_{xname}"] = {
+            cells[cname] = {
                 **st, "frais_x2": round(float(r2.mean()), 3) if len(r2) else None,
                 "moitie_1": round(float(r[lt < HALF].mean()), 3) if (lt < HALF).any() else None,
                 "moitie_2": round(float(r[lt >= HALF].mean()), 3) if (lt >= HALF).any() else None,
                 "7_derniers_jours": round(float(r[last7].mean()), 3) if last7.any() else None,
                 "singes_battus": beaten, "singes_moy": round(float(monkeys.mean()), 3), "z": round(z, 2),
-                "controles": checks, "prouvee": all(checks.values()) and z > Z_MIN,
+                "controles": checks, "prouvee": all(checks.values()) and z > z_min,
             }
-            print(ename, xname, cells[f"{ename}_{xname}"], flush=True)
-    out = {"essai": 38, "seuil_z": round(Z_MIN, 2), "coins": int(len(tokens)), "cellules": cells}
-    Path(DATA_DIR, "essai38.json").write_text(json.dumps(out, indent=1, ensure_ascii=False))
+            print(cname, cells[cname], flush=True)
+    num = 39 if a.essai39 else 38
+    out = {"essai": num, "seuil_z": round(z_min, 2), "coins": int(len(tokens)), "cellules": cells}
+    Path(DATA_DIR, f"essai{num}.json").write_text(json.dumps(out, indent=1, ensure_ascii=False))
 
 
 if __name__ == "__main__":
