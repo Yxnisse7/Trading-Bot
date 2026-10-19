@@ -38,6 +38,9 @@ MIN_POINT_VALUE = {"NAS100": 0.5, "SP500": 1.0, "XAUUSD+": 1.0}
 FLOOR_MAX_RISK = 0.10
 MAX_AGE = 15 * 60
 CHASE_MAX = 0.5      # part de la distance du stop déjà parcourue depuis l'annonce au-delà de laquelle on ne copie plus
+# Vantage refuse un commentaire d'ordre de 30 caractères ou plus (order_send renvoie None, « Invalid comment ») :
+# « lab:cassure_williams:<horodatage> » (31) a fait rater la copie du 19/10. 26 passe.
+COMMENT_MAX = 26
 EVERY = 30
 SYMBOLS = {"gold": "XAUUSD+", "nasdaq": "NAS100", "sp500": "SP500", "bitcoin": "BTCUSD", "ethereum": "ETHUSD",
            "oil": "CL-OIL", "euro": "EURUSD"}
@@ -153,7 +156,7 @@ class Copier:
         res = self.mt5.order_send({
             "action": self.mt5.TRADE_ACTION_DEAL, "symbol": p.symbol, "volume": p.volume, "position": p.ticket,
             "type": self.mt5.ORDER_TYPE_SELL if long else self.mt5.ORDER_TYPE_BUY,
-            "price": tick.bid if long else tick.ask, "deviation": 50, "magic": MAGIC, "comment": f"copie {why}"[:31],
+            "price": tick.bid if long else tick.ask, "deviation": 50, "magic": MAGIC, "comment": f"copie {why}"[:COMMENT_MAX],
             "type_time": self.mt5.ORDER_TIME_GTC, "type_filling": self._filling(p.symbol)})
         self.journal("copie sortie", sens="achat" if long else "vente", prix=tick.bid if long else tick.ask,
                      lot=p.volume, note=f"{p.symbol} {why} (code {getattr(res, 'retcode', None)})")
@@ -276,7 +279,7 @@ class Copier:
         res = self.mt5.order_send({
             "action": self.mt5.TRADE_ACTION_DEAL, "symbol": sym, "volume": lot,
             "type": self.mt5.ORDER_TYPE_BUY if long else self.mt5.ORDER_TYPE_SELL, "price": px, "sl": sl, "tp": tp,
-            "deviation": 50, "magic": MAGIC, "comment": s["key"][:31], "type_time": self.mt5.ORDER_TIME_GTC,
+            "deviation": 50, "magic": MAGIC, "comment": s["key"][:COMMENT_MAX], "type_time": self.mt5.ORDER_TIME_GTC,
             "type_filling": self._filling(sym)})
         code = getattr(res, "retcode", None)
         ok = code == self.mt5.TRADE_RETCODE_DONE

@@ -55,3 +55,19 @@ def test_sunday_summary_reports_the_lab_in_shadow():
     sunday = daily_summary([], cfg, date(2026, 10, 11), None, lab)
     assert "Laboratoire en ombre" in sunday and "donchian_1h · Or" in sunday and "+0,42 R" in sunday
     assert "Laboratoire en ombre" not in daily_summary([], cfg, date(2026, 10, 12), None, lab)
+
+
+def test_announced_trade_kept_when_recompute_loses_it():
+    """19/10 : la cassure Williams annoncée à 05:05 a disparu au recalcul de 05:35, puis est revenue à 06:51 (2e message)."""
+    from trading_bot.engine import Engine
+    old = {"entry_ts": 1000, "direction": "long", "entry": 100.0, "risk": 2.0, "status": "open", "last": 101.0,
+           "notified_entry": "x", "close_at": 5000}
+    kept = {2000: {"entry_ts": 2000, "status": "open"}}
+    Engine._keep_announced({1000: old}, kept, now=3000)
+    assert kept[1000]["status"] == "open" and 2000 not in kept
+    kept = {}
+    Engine._keep_announced({1000: old}, kept, now=6000)
+    assert kept[1000]["status"] == "closed" and kept[1000]["r_topstep"] == 0.5 and kept[1000]["exit"] == 101.0
+    kept = {}
+    Engine._keep_announced({1000: dict(old, notified_entry=None)}, kept, now=3000)
+    assert kept == {}

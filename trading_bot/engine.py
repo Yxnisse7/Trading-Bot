@@ -1397,6 +1397,7 @@ class Engine:
                 for flag in ("notified_entry", "notified_exit", "micros", "close_at"):
                     if flag in before.get(t.entry_ts, {}):
                         kept[t.entry_ts][flag] = before[t.entry_ts][flag]
+            self._keep_announced(before, kept, int(now.timestamp()))
             if live_since:
                 self._live_signals(name, asset, list(kept.values()), parse_iso(live_since), now, live_end)
             rec["trades"] = sorted(kept.values(), key=lambda t: t["entry_ts"])
@@ -1415,6 +1416,28 @@ class Engine:
             return float(_json.loads((self.store.dir / "topstep" / "dashboard.json").read_text(encoding="utf-8"))["balance"])
         except (OSError, ValueError, KeyError, TypeError):
             return 50_000.0
+
+    KEEP_MAX = 3 * 86400
+
+    @staticmethod
+    def _keep_announced(before: dict[int, dict[str, Any]], kept: dict[int, dict[str, Any]], now: int) -> None:
+        """Un trade déjà annoncé sur Telegram que le recalcul ne retrouve plus (bougies Yahoo revues entre deux
+        passages) reste ouvert tel quel. Avant le 19/10, il disparaissait sans message de sortie (et la copie MT5
+        était fermée), puis revenait plus tard comme un nouveau signal : message envoyé deux fois."""
+        for ts, old in before.items():
+            if ts in kept or old.get("status") != "open" or not old.get("notified_entry"):
+                continue
+            old = dict(old)
+            end = old.get("close_at") or ts + Engine.KEEP_MAX
+            if now >= end and old.get("last"):
+                sg = 1 if old["direction"] == "long" else -1
+                r = round(sg * (old["last"] - old["entry"]) / old["risk"], 4) if old["risk"] else 0.0
+                old.update(status="closed", reason="sortie à l'heure prévue", exit_ts=end, exit=old["last"],
+                           last=None, r_topstep=r, r_bot=r)
+            kept[ts] = old
+            if old["status"] == "open":                  # une position à la fois : pas de nouveau signal par-dessus
+                for k in [k for k, t in kept.items() if k > ts and not t.get("notified_entry")]:
+                    del kept[k]
 
     def _live_signals(self, name: str, asset, trades: list[dict[str, Any]], since: datetime, now: datetime,
                       until: datetime | None = None) -> None:
