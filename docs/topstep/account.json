@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-19T16:35:58Z",
+  "updated_at": "2026-10-19T16:41:02Z",
   "rules": {
     "account": "50K",
     "start_balance": 50000.0,
@@ -43,21 +43,23 @@
       "trades": 63
     }
   ],
-  "balance": 52683.12,
-  "profit": 2683.12,
+  "balance": 51863.69,
+  "profit": 1863.69,
   "mll": 50000.0,
-  "room_to_mll": 2683.12,
+  "room_to_mll": 1863.69,
   "peak_eod": 53858.29,
   "target_balance": 56790.22,
   "needed_profit": 6790.22,
   "best_day": 3395.11,
   "consistency_ok": false,
   "today": "2026-10-19",
-  "today_pnl": -546.62,
-  "room_today": 453.38,
+  "today_pnl": -1366.05,
+  "room_today": -366.05,
   "status": "en cours",
   "failed": null,
-  "violations": [],
+  "violations": [
+    "journée du 19/10 : -1366 $, limite journalière de 1000 $ atteinte"
+  ],
   "days": [
     {
       "day": "2026-10-09",
@@ -89,7 +91,7 @@
     },
     {
       "day": "2026-10-19",
-      "pnl": -546.62
+      "pnl": -1366.05
     }
   ],
   "trades": [
@@ -1170,12 +1172,56 @@
       "pnl": -61.94,
       "past_flat_time": false,
       "balance_after": 52683.12
+    },
+    {
+      "id": "j10191530nasv2",
+      "asset": "nasdaq",
+      "asset_label": "Nasdaq 100 (NQ)",
+      "symbol": "MNQ",
+      "direction": "long",
+      "entry": 29950.25,
+      "exit": 29889.291892025936,
+      "contracts": 2,
+      "status": "journal",
+      "origin": "journal",
+      "opened_at": "2026-10-19T15:30:00Z",
+      "closed_at": "2026-10-19T16:05:00Z",
+      "day": "2026-10-19",
+      "pnl_gross": -243.83,
+      "fees": 2.44,
+      "slippage": 1.0,
+      "cost": 3.44,
+      "pnl": -247.27,
+      "past_flat_time": false,
+      "balance_after": 52435.85
+    },
+    {
+      "id": "j10191530nas",
+      "asset": "nasdaq",
+      "asset_label": "Nasdaq 100 (NQ)",
+      "symbol": "MNQ",
+      "direction": "long",
+      "entry": 29950.25,
+      "exit": 29855.75,
+      "contracts": 3,
+      "status": "journal",
+      "origin": "journal",
+      "opened_at": "2026-10-19T15:30:00Z",
+      "closed_at": "2026-10-19T16:30:00Z",
+      "day": "2026-10-19",
+      "pnl_gross": -567.0,
+      "fees": 3.66,
+      "slippage": 1.5,
+      "cost": 5.16,
+      "pnl": -572.16,
+      "past_flat_time": false,
+      "balance_after": 51863.69
     }
   ],
   "open": [],
-  "journal_count": 23,
+  "journal_count": 25,
   "daily_target": 1200.0,
   "skipped": [],
-  "day_closed": null,
+  "day_closed": "limite journalière atteinte (-1366 $) : Topstep bloque le compte jusqu'au lendemain",
   "candidates": []
 }
