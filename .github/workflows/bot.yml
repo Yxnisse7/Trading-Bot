@@ -65,6 +65,8 @@ jobs:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          # écrit chaque minute par le pont MT5 du PC (trading_bot/pc_link.py) : PC allumé, il annonce lui-même
+          PC_ALIVE: ${{ vars.PC_ALIVE }}
           CMD: ${{ github.event.inputs.command || 'tick' }}
           ASSET: ${{ github.event.inputs.asset }}
           DIRECTION: ${{ github.event.inputs.direction }}

@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import copy
+import os
 import re
 from dataclasses import replace
 import logging
@@ -28,6 +29,7 @@ from .providers.http import ProviderError
 from .report import build_dashboard, build_report
 from .signals import build_signal, round_to_tick
 from . import bot_model
+from . import pc_link
 from .storage import Store
 from .summary import daily_summary
 from .tracker import update_signal
@@ -1460,6 +1462,11 @@ class Engine:
             long = t["direction"] == "long"
             if not t.get("notified_entry"):
                 strat = name.split(":")[0]
+                # PC allumé : c'est le pont MT5 qui annonce (pc_link) ; GitHub tient quand même Topstep et la Simulation
+                owner = pc_link.entry_owner(os.environ.get(pc_link.VAR), strat, t["entry_ts"], t["direction"],
+                                            now.timestamp())
+                if owner == "wait":
+                    continue
                 if strat in sl.OVERNIGHT:
                     hold = sl.OVERNIGHT[strat]
                     close_at = t["entry_ts"] + hold if hold else None
@@ -1531,8 +1538,11 @@ class Engine:
                 lines.append("MT5 démo : copié tout seul par le pont du PC"
                              + (" (au moins 0,05 lot)" if strat == "nuit_asie" else " (5 % du solde au SL)"))
                 lines.append(f"<i>{msg.esc(note)} Le bot ne passe aucun ordre réel.</i>")
-                notify("\n".join(lines), html=True, key=f"lab-{strat}-{t['entry_ts']}",
-                       buttons=msg.site_buttons(self.cfg.site_url, asset.key))
+                if owner == "pc":
+                    t["pc"] = True
+                else:
+                    notify("\n".join(lines), html=True, key=f"lab-{strat}-{t['entry_ts']}",
+                           buttons=msg.site_buttons(self.cfg.site_url, asset.key))
                 t["notified_entry"] = iso(now)
             if t["status"] == "closed" and not t.get("notified_exit"):
                 strat = name.split(":")[0]
@@ -1565,8 +1575,9 @@ class Engine:
                 else:
                     lines.append("Simulation : trade non pris")
                 lines.append("MT5 démo : résultat dans l'onglet Démo MT5 (le pont ferme la copie tout seul)")
-                notify("\n".join(lines), html=True, reply_to=f"lab-{strat}-{t['entry_ts']}",
-                       buttons=msg.site_buttons(self.cfg.site_url, asset.key))
+                if not (t.get("pc") and pc_link.alive(os.environ.get(pc_link.VAR), now.timestamp())):
+                    notify("\n".join(lines), html=True, reply_to=f"lab-{strat}-{t['entry_ts']}",
+                           buttons=msg.site_buttons(self.cfg.site_url, asset.key))
                 t["notified_exit"] = iso(now)
                 try:
                     acct.add_journal(asset.key, t["direction"], t["entry"], t["exit"], micros, opened,

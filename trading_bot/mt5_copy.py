@@ -128,8 +128,10 @@ def floor_lot(lot: float, balance: float, dist: float, info, point_value: float 
 
 class Copier:
     def __init__(self, mt5, root: Path, journal: Callable[..., None], clock: Callable[[], float],
-                 get: Callable[[str], Any] = _get, local: bool = False):
+                 get: Callable[[str], Any] = _get, local: bool = False, relay=None):
         self.mt5, self.root, self.journal, self.clock, self.get = mt5, root, journal, clock, get
+        # annonces Telegram et avis de l'agent depuis le PC (pc_relay, 19/10/2026)
+        self.relay = relay
         # stratégies recalculées sur le PC avec les prix MT5 (16/10/2026) ; GitHub reste la source de secours
         self.local = LocalEngine(mt5, SYMBOLS, clock) if local else None
         self.state_file = root / "journal" / "copies.json"
@@ -169,6 +171,8 @@ class Copier:
         acc = self.mt5.account_info()
         if acc is None or acc.trade_mode != self.mt5.ACCOUNT_TRADE_MODE_DEMO:
             return "copie : compte réel refusé"
+        if self.relay is not None:
+            self.relay.beat()
         signals, ok = read_signals(self.get)
         local, local_keys = [], set()
         if self.local is not None:
@@ -216,6 +220,9 @@ class Copier:
             if why:
                 self.state[key]["status"] = f"refusé : {why}"
                 self.journal("copie refusée", note=f"{key} règle d'arrêt : {why}")
+                if self.relay is not None and s.get("source") == "local" and s["created"] \
+                        and now - s["created"] <= MAX_AGE:
+                    self.relay.entry(key, s, self.state[key])     # pas copié, mais c'est un signal réel
                 continue
             if not s["created"] or now - s["created"] > MAX_AGE:
                 self.state[key]["status"] = "trop ancien"
@@ -223,7 +230,11 @@ class Copier:
             self.state[key].update(self._open(s, acc.balance))
             if self.state[key]["status"] == "pas de prix":
                 del self.state[key]                 # pas encore de cotation : on réessaie au passage suivant
+            elif self.relay is not None and s.get("source") == "local":
+                self.relay.entry(key, s, self.state[key])
         self._save()
+        if self.relay is not None and self.mt5.positions_get() is not None:   # terminal muet : on ne conclut rien
+            self.relay.step(self._positions(), local_keys, ok)
         return f"copie : {sum(1 for r in self.state.values() if r.get('status') == 'ouvert')} position(s)"
 
     def _already_gone(self, s: dict[str, Any], sym: str, px: float, sg: int) -> str:

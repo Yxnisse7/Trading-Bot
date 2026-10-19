@@ -37,6 +37,10 @@ DEFAULTS: dict[str, Any] = {
     "record_ticks": True,
     "copy_bot": True,             # copie aussi les signaux Telegram du bot sur le démo (mt5_copy.py)         # enregistre chaque prix (achat/vente) du courtier dans ticks/AAAA-MM-JJ.csv
     "agent": {"enabled": False, "model": "", "library": ""},
+    # avis de l'agent IA après chaque entrée annoncée par le PC (pc_relay.py), lancé en arrière-plan ;
+    # rien ne se passe tant que le dossier de l'agent n'existe pas
+    "avis": {"command": r"E:\TradingBot\venv\Scripts\python.exe E:\TradingBot\agent\agent\avis_direct.py",
+             "dir": r"E:\TradingBot\agent", "timeout": 90},
 }
 
 
@@ -45,8 +49,9 @@ def load_config(root: Path) -> dict[str, Any]:
     cfg = json.loads(json.dumps(DEFAULTS))
     if f.exists():
         user = json.loads(f.read_text(encoding="utf-8-sig"))     # Bloc-notes ajoute parfois une marque BOM
-        cfg.update({k: v for k, v in user.items() if k != "agent"})
+        cfg.update({k: v for k, v in user.items() if k not in ("agent", "avis")})
         cfg["agent"].update(user.get("agent", {}))
+        cfg["avis"].update(user.get("avis", {}))
     else:
         f.write_text(json.dumps(cfg, indent=2, ensure_ascii=False), encoding="utf-8")
     return cfg
@@ -62,7 +67,9 @@ class Bridge:
         self.copier = None
         if cfg.get("copy_bot") and cfg["mode"] == "demo":
             from .mt5_copy import Copier
-            self.copier = Copier(mt5, root, self.journal, clock, local=bool(cfg.get("local_strategies", True)))
+            from .pc_relay import Relay
+            self.copier = Copier(mt5, root, self.journal, clock, local=bool(cfg.get("local_strategies", True)),
+                                 relay=Relay(mt5, root, clock, agent=cfg["avis"]))
         self.tick_from: int | None = None
         if cfg["exit"] != "X1":
             raise ValueError("seule la sortie X1 est branchée en direct pour l'instant")
