@@ -56,7 +56,7 @@ def plain(text: str) -> str:
 
 def notify(text: str, *, title: str | None = None, chat_id: str | None = None, html: bool = False,
            buttons: list | None = None, silent: bool = False, key: str | None = None,
-           reply_to: str | None = None) -> None:
+           reply_to: str | None = None, avis: dict | None = None) -> None:
     """Envoie un message. `chat_id` : cible un seul chat Telegram (réponse à une commande) ;
     sinon tous les chats configurés + Discord.
 
@@ -70,6 +70,8 @@ def notify(text: str, *, title: str | None = None, chat_id: str | None = None, h
     _append_log(readable)
     item = {"text": body, "chat_id": chat_id, "html": html, "buttons": buttons or [], "silent": silent,
             "key": key, "reply_to": reply_to}
+    if avis:
+        item["avis"] = avis
     outbox = os.environ.get("TRADING_BOT_OUTBOX")
     if outbox:
         try:
@@ -96,10 +98,34 @@ def _send(item: dict) -> None:
         if item.get("key") and sent_ids:
             ids.setdefault(item["key"], {}).update(sent_ids)
             _save_ids(ids)
+        if item.get("avis") and sent_ids:
+            _wake_agent(item["avis"], {cid: sent_ids[chat_key(cid)] for cid in telegram_chat_ids()
+                                       if chat_key(cid) in sent_ids})
     if chat_id is None:
         webhook = os.environ.get("DISCORD_WEBHOOK_URL")
         if webhook:
             _discord(webhook, plain(body) if html else body)
+
+
+AGENT_REPO = "Yxnisse7/trading-agent"
+
+
+def _wake_agent(avis: dict, message_ids: dict) -> None:
+    """Signal réel annoncé par GitHub (PC éteint) : réveille l'agent IA du dépôt privé, qui répond sous le message
+    (19/10/2026). Jamais bloquant ; sans jeton AGENT_DISPATCH_TOKEN, rien n'est fait."""
+    token = os.environ.get("AGENT_DISPATCH_TOKEN")
+    if not token:
+        return
+    data = dict(avis, telegram_message_ids=message_ids)
+    try:
+        r = requests.post(f"https://api.github.com/repos/{AGENT_REPO}/dispatches", timeout=10,
+                          headers={"Authorization": f"Bearer {token}", "Accept": "application/vnd.github+json"},
+                          json={"event_type": "avis",
+                                "client_payload": {"data": json.dumps(data, separators=(",", ":"))}})
+        if r.status_code >= 300:
+            log.warning("agent IA : réveil refusé (%s)", r.status_code)
+    except requests.RequestException as exc:
+        log.warning("agent IA : réveil impossible (%s)", exc)
 
 
 def flush_outbox(path: str | None = None) -> int:

@@ -297,7 +297,7 @@ class Engine:
                     sizing = self.portfolio.on_open(sig, asset)
                     sig.meta["sim"] = sizing
                     self.store.add_signal(sig)
-                self._notify_signal(sig, sizing, now=now)
+                self._notify_signal(sig, sizing, now=now, avis=not dry_run)
                 log.info("%s [%s] : signal %s %s émis (id %s)", asset.label, hkey, sig.direction, sig.entry, sig.id)
         self._touch_state(now, note=f"{len(produced)} signal(aux)")
         if not dry_run:
@@ -326,12 +326,28 @@ class Engine:
                                sim=msg.sizing_line(sizing, cur))
 
     def _notify_signal(self, sig: Signal, sizing: dict[str, Any] | None, header: str | None = None,
-                       footer: str | None = None, now: datetime | None = None) -> str:
+                       footer: str | None = None, now: datetime | None = None, avis: bool = False) -> str:
         text = self._signal_text(sig, sizing, header=header, now=now)
         if footer:
             text += "\n\n" + footer
-        notify(text, html=True, key=sig.id, buttons=msg.site_buttons(self.cfg.site_url, sig.asset))
+        data = None
+        if avis:
+            data = self._avis(sig.id, "bot", sig.asset, sig.direction, sig.entry, sig.stop_loss, sig.take_profit,
+                              "TP, SL ou expiration du signal", parse_iso(sig.created_at))
+        notify(text, html=True, key=sig.id, buttons=msg.site_buttons(self.cfg.site_url, sig.asset), avis=data)
         return text
+
+    def _avis(self, sid: str, strat: str, asset_key: str, direction: str, entry: float, stop: float,
+              target: float | None, exit_txt: str, created: datetime) -> dict[str, Any] | None:
+        """Signal réel pour l'agent IA (dépôt privé), envoyé avec le message Telegram ; rien sans jeton."""
+        if not os.environ.get("AGENT_DISPATCH_TOKEN"):
+            return None
+        until = created.timestamp()
+        rows = [[c.ts, c.open, c.high, c.low, c.close] for c in self.store.load_candles(asset_key) if c.ts < until]
+        asset = self.cfg.assets.get(asset_key)
+        return {"id": sid, "strategie": strat, "asset": asset_key, "asset_label": asset.label if asset else asset_key,
+                "direction": direction, "entry": entry, "stop_loss": stop, "take_profit": target, "sortie": exit_txt,
+                "created_at": iso(created), "candles_5m": rows[-288:]}
 
     def _notify_outcome(self, sig: Signal, row: dict[str, Any] | None) -> None:
         if (sig.meta or {}).get("manual_exit"):
@@ -1541,8 +1557,10 @@ class Engine:
                 if owner == "pc":
                     t["pc"] = True
                 else:
+                    avis = self._avis(f"lab-{strat}-{t['entry_ts']}", strat, asset.key, t["direction"], t["entry"],
+                                      t["stop"], target, exit_txt, opened)
                     notify("\n".join(lines), html=True, key=f"lab-{strat}-{t['entry_ts']}",
-                           buttons=msg.site_buttons(self.cfg.site_url, asset.key))
+                           buttons=msg.site_buttons(self.cfg.site_url, asset.key), avis=avis)
                 t["notified_entry"] = iso(now)
             if t["status"] == "closed" and not t.get("notified_exit"):
                 strat = name.split(":")[0]

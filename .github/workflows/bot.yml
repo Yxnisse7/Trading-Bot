@@ -67,6 +67,8 @@ jobs:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
           # écrit chaque minute par le pont MT5 du PC (trading_bot/pc_link.py) : PC allumé, il annonce lui-même
           PC_ALIVE: ${{ vars.PC_ALIVE }}
+          # réveille l'agent IA (dépôt privé) à chaque signal réel annoncé d'ici ; vide = rien
+          AGENT_DISPATCH_TOKEN: ${{ secrets.AGENT_DISPATCH_TOKEN }}
           CMD: ${{ github.event.inputs.command || 'tick' }}
           ASSET: ${{ github.event.inputs.asset }}
           DIRECTION: ${{ github.event.inputs.direction }}

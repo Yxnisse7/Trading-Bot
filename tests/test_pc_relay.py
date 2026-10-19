@@ -148,3 +148,20 @@ def test_github_is_silent_on_signals_the_pc_announced(tmp_path, monkeypatch):
     t2 = trade()
     eng._live_signals("donchian_day:gold", asset, [t2], since, now)
     assert len(sent) == 1 and "↗️ ACHAT" in sent[0]
+
+
+def test_github_wakes_the_agent_after_sending_a_real_signal(tmp_path, monkeypatch):
+    from trading_bot import notify as nt
+    calls = []
+    monkeypatch.setenv("TELEGRAM_BOT_TOKEN", "t")
+    monkeypatch.setenv("TELEGRAM_CHAT_ID", "7")
+    monkeypatch.setenv("TRADING_BOT_NOTIFY_DIR", str(tmp_path))
+    monkeypatch.setattr(nt, "_telegram", lambda *a, **k: 42)
+    monkeypatch.setattr(nt.requests, "post", lambda url, **k: calls.append((url, k["json"])) or NS(status_code=204))
+    nt.notify("x", key="lab-nuit_asie-1", avis={"id": "lab-nuit_asie-1", "candles_5m": []})
+    assert calls == []                                            # pas de jeton : rien
+    monkeypatch.setenv("AGENT_DISPATCH_TOKEN", "d")
+    nt.notify("x", key="lab-nuit_asie-1", avis={"id": "lab-nuit_asie-1", "candles_5m": []})
+    url, body = calls[0]
+    assert url.endswith("/trading-agent/dispatches") and body["event_type"] == "avis"
+    assert json.loads(body["client_payload"]["data"])["telegram_message_ids"] == {"7": 42}

@@ -148,7 +148,7 @@ class HalalEngine(Engine):
 
     # ------------------------------------------------------------ messages
     def _notify_signal(self, sig: Signal, sizing: dict[str, Any] | None, header: str | None = None,
-                       footer: str | None = None, now: datetime | None = None) -> str:
+                       footer: str | None = None, now: datetime | None = None, avis: bool = False) -> str:
         head = f"{TAG} <b>HALAL</b> · au comptant, sans levier" + (f"\n{header}" if header else "")
         text = self._signal_text(sig, sizing, header=head, now=now)
         text += "\n<i>Achat réel uniquement, payé comptant ; sortie au TP, au SL ou à l'expiration.</i>"
