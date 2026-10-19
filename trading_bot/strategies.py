@@ -73,8 +73,11 @@ LIVE_SLOT = {"creux_repris_15m": 900, "noise_area": 1800, "noise_area_v2": 1800,
 # Fin des signaux réels : plus aucune nouvelle entrée envoyée après cette date, la position déjà annoncée reçoit
 # encore son message de sortie ; le suivi en ombre continue. Donchian or : choix de Yanisse le 13/10/2026 après
 # l'essai 21. Creux repris Nasdaq (S25) : le 14/10/2026, il ne tient pas sur 2014-2026 (essais 23 et 24).
+# Zone de bruit v1 : choix de Yanisse le 19/10/2026, sans stop dur 30 % des trades perdent plus de 1,5 R
+# (pire mois −53 R sur 2014-2026) ; la v2 reste en réel.
 LIVE_END = {("donchian_day", "gold"): "2026-10-13T19:30:00Z",
-            ("creux_repris_15m", "nasdaq"): "2026-10-14T08:00:00Z"}
+            ("creux_repris_15m", "nasdaq"): "2026-10-14T08:00:00Z",
+            ("noise_area", "nasdaq"): "2026-10-19T20:20:00Z"}
 # Jours de bougies rechargés pour le suivi, quand il en faut plus que les 8 jours habituels
 LAB_DAYS = {"noise_area": 30, "noise_area_v2": 30, "swing_w3": 45}
 # Positions gardées la nuit (pas de sortie forcée en fin de séance) : durée maximale en secondes, None si aucune
