@@ -128,12 +128,14 @@ def floor_lot(lot: float, balance: float, dist: float, info, point_value: float 
 
 class Copier:
     def __init__(self, mt5, root: Path, journal: Callable[..., None], clock: Callable[[], float],
-                 get: Callable[[str], Any] = _get, local: bool = False, relay=None):
+                 get: Callable[[str], Any] = _get, local: bool = False, relay=None, bot=None):
         self.mt5, self.root, self.journal, self.clock, self.get = mt5, root, journal, clock, get
         # annonces Telegram et avis de l'agent depuis le PC (pc_relay, 19/10/2026)
         self.relay = relay
         # stratégies recalculées sur le PC avec les prix MT5 (16/10/2026) ; GitHub reste la source de secours
         self.local = LocalEngine(mt5, SYMBOLS, clock) if local else None
+        # bot classique du Nasdaq recalculé sur le PC (mt5_bot, 20/10/2026) ; GitHub reste la source de secours
+        self.bot = bot
         self.state_file = root / "journal" / "copies.json"
         self.last = 0.0
         try:
@@ -177,10 +179,13 @@ class Copier:
         local, local_keys = [], set()
         if self.local is not None:
             local, lok = self.local.signals()
-            ok |= lok
             for s in local:
                 k = LAB_TARGET_R.get(s["key"].split(":")[1])
                 s["target"] = k * s["stop"] if k else None
+            if self.bot is not None:
+                found, bok = self.bot.signals()       # objectif du bot gardé tel quel
+                local, lok = local + found, lok | bok
+            ok |= lok
             local_keys = {s["key"] for s in local}
             if self.relay is not None:
                 self.relay.local_ok = {k.split(":", 1)[1] for k in lok}
@@ -219,7 +224,8 @@ class Copier:
             if twin:
                 self.state[key]["status"] = f"même signal que {twin}"
                 continue
-            if s.get("source", "github") == "github" and key.startswith("lab:") and f"local:{key.split(':')[1]}" in ok:
+            pc_strat = key.split(":")[1] if key.startswith("lab:") else "bot" if s["asset"] == "nasdaq" else ""
+            if s.get("source", "github") == "github" and f"local:{pc_strat}" in ok:
                 # 20/10 : le PC calcule cette stratégie sur les prix MT5 et n'y voit pas ce signal : on ne le copie pas
                 self.state[key]["status"] = "pas de signal sur les prix MT5"
                 continue

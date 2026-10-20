@@ -290,6 +290,15 @@ class Engine:
                             self._record_shadow(sig, applied[0], all_sigs)
                         log.info("%s [%s] : écarté par le filtre « %s » (suivi en silence)", asset.label, hkey, applied[0])
                         continue
+                # PC allumé qui calcule le bot (mt5_bot) : ce sont les prix MT5 qui décident (20/10/2026)
+                owner = "github" if dry_run else pc_link.entry_owner(
+                    os.environ.get(pc_link.VAR), "bot", int(parse_iso(sig.created_at).timestamp()), sig.direction,
+                    now.timestamp(), window=1800)          # bot : même idée à une demi-heure près
+                if owner == "absent":
+                    log.info("%s [%s] : pas de signal sur les prix MT5 du PC → rien d'annoncé", asset.label, hkey)
+                    continue
+                if owner == "pc":
+                    sig.meta["pc"] = True
                 produced.append(sig)
                 all_sigs.append(sig)
                 sizing = None
@@ -297,7 +306,8 @@ class Engine:
                     sizing = self.portfolio.on_open(sig, asset)
                     sig.meta["sim"] = sizing
                     self.store.add_signal(sig)
-                self._notify_signal(sig, sizing, now=now, avis=not dry_run)
+                if owner != "pc":                     # « wait » : le PC ne calcule pas le bot, on n'attend pas
+                    self._notify_signal(sig, sizing, now=now, avis=not dry_run)
                 log.info("%s [%s] : signal %s %s émis (id %s)", asset.label, hkey, sig.direction, sig.entry, sig.id)
         self._touch_state(now, note=f"{len(produced)} signal(aux)")
         if not dry_run:
@@ -350,6 +360,8 @@ class Engine:
                 "created_at": iso(created), "candles_5m": rows[-288:]}
 
     def _notify_outcome(self, sig: Signal, row: dict[str, Any] | None) -> None:
+        if (sig.meta or {}).get("pc") and pc_link.alive(os.environ.get(pc_link.VAR), utcnow().timestamp()):
+            return                                     # annoncé par le PC : c'est lui qui donne la sortie MT5
         if (sig.meta or {}).get("manual_exit"):
             # déjà arrêté à la main : la fin réelle est donnée pour information, sans son
             notify(msg.after_manual_text(sig, digits=self._digits(sig.asset)), html=True, silent=True, reply_to=sig.id)

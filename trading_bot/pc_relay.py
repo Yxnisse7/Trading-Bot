@@ -40,7 +40,8 @@ EXITS = {"noise_area": "quand le prix revient dans la zone (contrôlé chaque de
          "swing_w3": "SL suiveur remonté sous les creux 1 h, au plus tard au bout de 5 jours",
          "nuit_asie": "vente à 03:00 New York, ou au SL de sécurité (1 % sous l'entrée)",
          "cassure_williams": "vente à 02:00 Paris (00:00 UTC), ou au SL (ouverture du jour)",
-         "creux_repris_15m": "objectif, SL, ou au bout de 4 h"}
+         "creux_repris_15m": "objectif, SL, ou au bout de 4 h",
+         "bot": "au TP, au SL, ou au bout de 24 h"}
 
 
 def _github(method: str, url: str, token: str, body: dict | None = None) -> int:

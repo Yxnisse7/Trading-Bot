@@ -108,12 +108,12 @@ class LocalEngine:
         return out, ok
 
 
-def same_signal(a_key: str, a_dir: str | None, b_key: str, b_dir: str | None) -> bool:
+def same_signal(a_key: str, a_dir: str | None, b_key: str, b_dir: str | None, window: int = SAME_SIGNAL) -> bool:
     """Deux clés « lab:stratégie:horodatage » désignent-elles le même signal (local et GitHub) ?"""
     pa, pb = a_key.split(":"), b_key.split(":")
     if len(pa) != 3 or len(pb) != 3 or pa[0] != "lab" or pb[0] != "lab" or pa[1] != pb[1]:
         return False
     if a_dir and b_dir and a_dir != b_dir:
         return False
-    return abs(int(pa[2]) - int(pb[2])) <= SAME_SIGNAL
+    return abs(int(pa[2]) - int(pb[2])) <= window
 

@@ -16,7 +16,7 @@ from __future__ import annotations
 import json
 from typing import Any
 
-from .mt5_local import same_signal
+from .mt5_local import SAME_SIGNAL, same_signal
 
 VAR = "PC_ALIVE"
 FRESH = 600          # s : au-delà, le PC est considéré éteint (la variable est lue au début du passage GitHub,
@@ -26,7 +26,7 @@ KEEP = 2 * 86400     # s : durée de vie des clés annoncées dans la variable
 
 LABELS = {"creux_repris_15m": "Creux repris", "noise_area": "Zone de bruit", "noise_area_v2": "Zone de bruit v2",
           "swing_w3": "Swing W3", "nuit_asie": "Nuit asiatique", "donchian_1h": "Donchian 1 h",
-          "cassure_williams": "Cassure Williams", "donchian_day": "Donchian or"}
+          "cassure_williams": "Cassure Williams", "donchian_day": "Donchian or", "bot": "Bot classique"}
 
 
 def encode(ts: float, sent: list[dict[str, Any]], ok: Any = ()) -> str:
@@ -55,12 +55,13 @@ def alive(raw: str | None, now: float) -> bool:
     return 0 <= now - ts <= FRESH
 
 
-def entry_owner(raw: str | None, strat: str, entry_ts: int, direction: str, now: float) -> str:
+def entry_owner(raw: str | None, strat: str, entry_ts: int, direction: str, now: float,
+                window: int | None = None) -> str:
     """« pc » (déjà annoncé par le PC), « absent » (le PC calcule cette stratégie et ne voit pas ce signal),
     « wait » (PC vivant, on lui laisse le temps) ou « github »."""
     ts, sent = decode(raw)
     key = f"lab:{strat}:{int(entry_ts)}"
-    if any(same_signal(key, direction, s["k"], s.get("d")) for s in sent):
+    if any(same_signal(key, direction, s["k"], s.get("d"), window or SAME_SIGNAL) for s in sent):
         return "pc"
     if 0 <= now - ts <= FRESH and strat in local_strats(raw):
         return "absent"

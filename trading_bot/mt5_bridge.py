@@ -68,8 +68,13 @@ class Bridge:
         if cfg.get("copy_bot") and cfg["mode"] == "demo":
             from .mt5_copy import Copier
             from .pc_relay import Relay
+            bot = None
+            if cfg.get("local_bot", True):
+                from .mt5_bot import LocalBot
+                from .mt5_copy import SYMBOLS
+                bot = LocalBot(mt5, SYMBOLS, clock, root)
             self.copier = Copier(mt5, root, self.journal, clock, local=bool(cfg.get("local_strategies", True)),
-                                 relay=Relay(mt5, root, clock, agent=cfg["avis"]))
+                                 relay=Relay(mt5, root, clock, agent=cfg["avis"]), bot=bot)
         self.tick_from: int | None = None
         if cfg["exit"] != "X1":
             raise ValueError("seule la sortie X1 est branchée en direct pour l'instant")
