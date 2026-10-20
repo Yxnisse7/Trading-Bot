@@ -92,7 +92,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1792499400
+        "last_ts": 1792499700
       }
     }
   },
@@ -189,7 +189,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1792499400
+        "last_ts": 1792499700
       }
     }
   },
@@ -286,7 +286,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1792499400
+        "last_ts": 1792499700
       }
     }
   },
@@ -383,7 +383,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1792499400
+        "last_ts": 1792499700
       }
     }
   },
@@ -480,7 +480,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1792499400
+        "last_ts": 1792499700
       }
     }
   },
@@ -565,7 +565,7 @@
       "price_time": "2026-10-20T12:25:00Z",
       "variant": "hors_session",
       "exc": {
-        "mfe": 0.3876,
+        "mfe": 0.3953,
         "mae": 0.1008,
         "armed": {
           "0.5": false,
@@ -577,7 +577,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": null
+        "last_ts": 1792499700
       }
     }
   },
@@ -751,10 +751,10 @@
       "price_time": "2026-10-20T12:30:00Z",
       "variant": "essai_oil",
       "exc": {
-        "mfe": 0.1111,
+        "mfe": 0.5833,
         "mae": 0.0,
         "armed": {
-          "0.5": false,
+          "0.5": true,
           "0.8": false,
           "1.0": false
         },
@@ -847,6 +847,103 @@
         "source": "essai 29"
       },
       "price_time": "2026-10-20T12:35:00Z",
+      "variant": "hors_session",
+      "exc": {
+        "mfe": 0.0,
+        "mae": 0.1066,
+        "armed": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "be": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "last_ts": null
+      }
+    }
+  },
+  {
+    "id": "4fcceef5d0",
+    "asset": "nasdaq",
+    "asset_label": "Nasdaq 100 (NQ)",
+    "direction": "short",
+    "entry": 29511.5,
+    "take_profit": 29229.0,
+    "stop_loss": 29605.5,
+    "risk_reward": 3.01,
+    "confidence": "fort",
+    "score": 8.76,
+    "criteria": [
+      "adx",
+      "rsi",
+      "trend_15m",
+      "trend_1h",
+      "trend_5m",
+      "vwap"
+    ],
+    "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 156.58 (0.53 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 40%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+    "news_context": "actualité à surveiller (score 2) : What happens to Wall Street if CoreWeave defaults? JPMorgan checked the math.",
+    "created_at": "2026-10-20T12:45:53Z",
+    "expires_at": "2026-10-21T12:45:53Z",
+    "status": "open",
+    "closed_at": null,
+    "close_price": null,
+    "pnl_pct": null,
+    "pnl_gross_pct": null,
+    "duration_minutes": null,
+    "hourly_range": 156.583333,
+    "source": "shadow",
+    "horizon": "24h",
+    "horizon_minutes": 1440,
+    "meta": {
+      "tick": 0.25,
+      "details": {
+        "trend_5m": "EMA20 29531.51 / EMA50 29567.18 (5 min)",
+        "trend_15m": "EMA20 29571.35 / EMA50 29629.10",
+        "trend_1h": "prix vs EMA20 1 h 29655.40",
+        "adx": "ADX15 25.5 (+DI 10.0 / -DI 24.7)",
+        "vwap": "VWAP jour 29636.86",
+        "rsi": "RSI14 5 min 42.7",
+        "macd": "histogramme MACD -0.3381",
+        "level": "support 29268.75 / résistance 29694.00",
+        "volume": "z-score volume -2.88",
+        "pdhl": "veille : haut 29983.50 / bas 29611.75",
+        "activity": "activité de l'heure 1.06× la moyenne",
+        "corr": "VIX +1.1 % sur 15 min"
+      },
+      "support": 29268.75,
+      "resistance": 29694.0,
+      "atr_5m": 30.8276227459396,
+      "atr_ratio": 1.042158966648988,
+      "hourly_range_pct": 0.5306,
+      "adx_15m": 25.500334646367673,
+      "sigma_5m": 0.0006645631336930535,
+      "p_resolution": 0.405,
+      "p_tp_neutral": 0.128,
+      "activity_ratio": 1.058,
+      "base_minutes": 5,
+      "ctx": {
+        "adx": 25.5,
+        "rsi_dir": 57.26,
+        "vwap_ext": 0.8006,
+        "ema_ext": 0.1278,
+        "atr_ratio": 1.042,
+        "activity": 1.058,
+        "range_pct": 0.5306,
+        "cost_r": 0.047,
+        "us_open_min": -44.1,
+        "weekday": 1
+      },
+      "exit_override": {
+        "stop_x": 1.5,
+        "target_x": 3.0,
+        "minutes": 1440,
+        "source": "essai 29"
+      },
+      "price_time": "2026-10-20T12:40:00Z",
       "variant": "hors_session"
     }
   }
