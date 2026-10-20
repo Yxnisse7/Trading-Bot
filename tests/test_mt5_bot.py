@@ -79,3 +79,10 @@ def test_github_bot_stays_silent_when_the_pc_computes_it():
     assert pc_link.entry_owner(raw, "bot", int(NOW), "long", NOW + 60, window=1800) == "pc"
     assert pc_link.entry_owner(raw, "bot", int(NOW) + 3600, "long", NOW + 60, window=1800) == "absent"
     assert pc_link.entry_owner(raw, "bot", int(NOW), "short", NOW + 60, window=1800) == "absent"
+
+
+def test_pc_bot_hands_over_to_github_without_the_learned_model(tmp_path, monkeypatch):
+    monkeypatch.setattr(mb.bot_model, "load", lambda path: None)
+    now = [NOW]
+    bot = _bot(tmp_path, NasMT5(now[0]), now, [[_signal(NOW - 60)]])
+    assert bot.signals() == ([], set())

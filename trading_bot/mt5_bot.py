@@ -21,6 +21,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Callable
 
+from . import bot_model
 from . import engine as engmod
 from .config import load_config
 from .models import Candle, Signal, iso, parse_iso
@@ -119,6 +120,8 @@ class LocalBot:
     def signals(self) -> tuple[list[dict[str, Any]], set[str]]:
         """Signaux du bot ouverts sur le PC (format mt5_local) et {« local:bot »} si le calcul a marché."""
         now = self.clock()
+        if bot_model.load(bot_model.MODELS[ASSET][0]) is None:
+            return [], set()                           # bot appris illisible (scikit-learn ?) : GitHub garde la main
         try:
             bars = self._candles(now)
             if not bars or now - (bars[-1].ts + BAR) > 600:
