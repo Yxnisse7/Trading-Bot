@@ -65,6 +65,7 @@ class Bridge:
         self.limit_day: str | None = None
         self.stop_rule: str | None = None
         self.copier = None
+        self.hunter = None
         if cfg.get("copy_bot") and cfg["mode"] == "demo":
             from .mt5_copy import Copier
             from .pc_relay import Relay
@@ -73,8 +74,12 @@ class Bridge:
                 from .mt5_bot import LocalBot
                 from .mt5_copy import SYMBOLS
                 bot = LocalBot(mt5, SYMBOLS, clock, root)
+            relay = Relay(mt5, root, clock, agent=cfg["avis"])
             self.copier = Copier(mt5, root, self.journal, clock, local=bool(cfg.get("local_strategies", True)),
-                                 relay=Relay(mt5, root, clock, agent=cfg["avis"]), bot=bot)
+                                 relay=relay, bot=bot)
+            if cfg.get("hunt", True):            # l'agent IA cherche des trades sur l'or à heures fixes (mt5_hunt.py)
+                from .mt5_hunt import Hunter
+                self.hunter = Hunter(mt5, root, clock, relay=relay, cfg=cfg.get("chasse"))
         self.tick_from: int | None = None
         if cfg["exit"] != "X1":
             raise ValueError("seule la sortie X1 est branchée en direct pour l'instant")
@@ -114,7 +119,7 @@ class Bridge:
                    if d.magic == self.magic and d.time - offset >= day0)
 
     # ------------------------------------------------------------ état en direct pour l'interface locale
-    ORIGINS = {200001: "Copie du bot", 777001: "Claude", 0: "Manuel"}
+    ORIGINS = {200001: "Copie du bot", 777001: "Claude", 777002: "Agent IA", 0: "Manuel"}
 
     def snapshot(self) -> dict[str, Any] | None:
         """Compte, positions ouvertes et trades fermés des dernières 36 h (heures en UTC), pour l'onglet « Démo MT5 »
@@ -234,6 +239,13 @@ class Bridge:
                     self._copy_state = state
             except Exception:                      # la copie ne doit jamais bloquer le scalping
                 log.exception("copie des signaux du bot")
+        if self.hunter is not None:
+            try:
+                state = self.hunter.step()
+                if state:
+                    log.info("%s", state)
+            except Exception:                      # la chasse de l'agent ne doit jamais bloquer le reste
+                log.exception("chasse de l'agent IA")
         off = self.offset()
         if off is None:
             return "flux arrêté"
