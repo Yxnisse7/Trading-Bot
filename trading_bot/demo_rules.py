@@ -14,7 +14,7 @@ R1_ONE_R_PER_LOT = 371.0          # 1 R ≈ 3,71 $ à 0,01 lot (stop moyen de R1
 RULES: dict[int, dict[str, Any]] = {
     180018: {"name": "pont R1", "max_loss": 25.0, "max_streak": 8, "check_after": 40, "min_mean_r": -0.30},
     777001: {"name": "poste de l'assistant", "max_loss": 100.0, "max_streak": 6},
-    200001: {"name": "copie des signaux du bot", "max_loss": 300.0, "max_streak": 8},   # 300 $ : choix de Yanisse le 14/10 (0,50 $ par point)
+    200001: {"name": "copie des signaux du bot", "max_loss": 300.0, "max_streak": None},   # 300 $ : choix de Yanisse le 14/10 ; plus de limite de pertes d'affilée (choix du 20/10)
 }
 
 
@@ -45,7 +45,7 @@ def breach(trades: list[tuple[int, float]], magic: int, lot: float = 0.01) -> st
         if x >= 0:
             break
         streak += 1
-    if streak >= rule["max_streak"]:
+    if rule.get("max_streak") and streak >= rule["max_streak"]:
         return f"{streak} pertes d'affilée (limite {rule['max_streak']})"
     if rule.get("check_after") and len(pnl) >= rule["check_after"]:
         mean_r = total / len(pnl) / (R1_ONE_R_PER_LOT * lot)
