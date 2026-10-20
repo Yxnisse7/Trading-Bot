@@ -80,8 +80,8 @@
       "price_time": "2026-10-20T11:55:00Z",
       "variant": "hors_session",
       "exc": {
-        "mfe": 0.0,
-        "mae": 0.1751,
+        "mfe": 0.1518,
+        "mae": 0.2412,
         "armed": {
           "0.5": false,
           "0.8": false,
@@ -92,7 +92,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": null
+        "last_ts": 1792497900
       }
     }
   },
@@ -191,6 +191,88 @@
         },
         "last_ts": null
       }
+    }
+  },
+  {
+    "id": "a87f1a2c20",
+    "asset": "nasdaq",
+    "asset_label": "Nasdaq 100 (NQ)",
+    "direction": "short",
+    "entry": 29521.0,
+    "take_profit": 29327.5,
+    "stop_loss": 29585.5,
+    "risk_reward": 3.0,
+    "confidence": "fort",
+    "score": 8.77,
+    "criteria": [
+      "adx",
+      "rsi",
+      "trend_15m",
+      "trend_1h",
+      "trend_5m",
+      "vwap"
+    ],
+    "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 107.63 (0.36 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 63%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+    "news_context": "actualité à surveiller (score 2) : What happens to Wall Street if CoreWeave defaults? JPMorgan checked the math.",
+    "created_at": "2026-10-20T12:15:54Z",
+    "expires_at": "2026-10-21T12:15:54Z",
+    "status": "open",
+    "closed_at": null,
+    "close_price": null,
+    "pnl_pct": null,
+    "pnl_gross_pct": null,
+    "duration_minutes": null,
+    "hourly_range": 107.630435,
+    "source": "shadow",
+    "horizon": "24h",
+    "horizon_minutes": 1440,
+    "meta": {
+      "tick": 0.25,
+      "details": {
+        "trend_5m": "EMA20 29550.86 / EMA50 29583.23 (5 min)",
+        "trend_15m": "EMA20 29588.41 / EMA50 29640.40",
+        "trend_1h": "prix vs EMA20 1 h 29656.30",
+        "adx": "ADX15 22.5 (+DI 11.8 / -DI 24.4)",
+        "vwap": "VWAP jour 29645.50",
+        "rsi": "RSI14 5 min 38.6",
+        "macd": "histogramme MACD -1.8436",
+        "level": "support 29268.75 / résistance 29694.00",
+        "volume": "z-score volume -2.21",
+        "pdhl": "veille : haut 29983.50 / bas 29611.75",
+        "activity": "activité de l'heure 1.03× la moyenne",
+        "corr": "VIX +1.0 % sur 15 min"
+      },
+      "support": 29268.75,
+      "resistance": 29694.0,
+      "atr_5m": 27.121521872341315,
+      "atr_ratio": 0.9201451255937405,
+      "hourly_range_pct": 0.3646,
+      "adx_15m": 22.545034905083327,
+      "sigma_5m": 0.0006243164434808337,
+      "p_resolution": 0.632,
+      "p_tp_neutral": 0.23933333333333334,
+      "activity_ratio": 1.03,
+      "base_minutes": 5,
+      "ctx": {
+        "adx": 22.55,
+        "rsi_dir": 61.39,
+        "vwap_ext": 1.1567,
+        "ema_ext": 0.2775,
+        "atr_ratio": 0.92,
+        "activity": 1.03,
+        "range_pct": 0.3646,
+        "cost_r": 0.0687,
+        "us_open_min": -74.1,
+        "weekday": 1
+      },
+      "exit_override": {
+        "stop_x": 1.5,
+        "target_x": 3.0,
+        "minutes": 1440,
+        "source": "essai 29"
+      },
+      "price_time": "2026-10-20T12:10:00Z",
+      "variant": "hors_session"
     }
   }
 ]
