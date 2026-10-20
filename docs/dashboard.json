@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-20T13:55:46.880582+02:00",
+  "updated_at": "2026-10-20T14:01:31.440383+02:00",
   "timezone": "Europe/Paris",
   "equity_curve": [
     {
@@ -1727,7 +1727,7 @@
       "avg_pnl_pct": 0.0116
     },
     "open": 0,
-    "open_shadow": 0
+    "open_shadow": 1
   },
   "by_source": {
     "bot": {
@@ -5158,7 +5158,42 @@
       ]
     }
   ],
-  "open_signals": [],
+  "open_signals": [
+    {
+      "id": "bc68bf2eee",
+      "asset": "nasdaq",
+      "asset_label": "Nasdaq 100 (NQ)",
+      "direction": "short",
+      "horizon": "24h",
+      "entry": 29521.75,
+      "take_profit": 29329.5,
+      "stop_loss": 29586.0,
+      "risk_reward": 2.99,
+      "confidence": "fort",
+      "score": 8.77,
+      "criteria": [
+        "adx",
+        "rsi",
+        "trend_15m",
+        "trend_1h",
+        "trend_5m",
+        "vwap"
+      ],
+      "source": "shadow",
+      "status": "open",
+      "pnl_pct": null,
+      "pnl_gross_pct": null,
+      "duration_minutes": null,
+      "close_price": null,
+      "created_at": "2026-10-20T12:01:14Z",
+      "closed_at": null,
+      "created_local": "20/10 14:01",
+      "expires_at": "2026-10-21T12:01:14Z",
+      "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 107.00 (0.36 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 67%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+      "news_context": "actualité calme sur les 2 dernières heures",
+      "manual_exit": null
+    }
+  ],
   "recent_trades": [
     {
       "id": "9d5e3daa0a",
@@ -7637,8 +7672,8 @@
     }
   },
   "state": {
-    "last_scan": "2026-10-20T11:55:36Z",
-    "last_scan_note": "tranche évitée",
+    "last_scan": "2026-10-20T12:01:14Z",
+    "last_scan_note": "0 signal(aux)",
     "last_summary": "2026-10-19T22:05:45Z",
     "last_track": "2026-10-20T11:10:53Z",
     "last_summary_day": "2026-10-19"
@@ -19736,19 +19771,19 @@
           "entry_ts": 1792418400,
           "entry_at": "2026-10-19T14:00:00Z",
           "direction": "short",
-          "entry": 4174.2001953125,
-          "risk": 29.453102,
-          "stop": 4203.653298,
+          "entry": 4174.5,
+          "risk": 29.187765,
+          "stop": 4203.687765,
           "status": "open",
           "reason": null,
           "exit_ts": null,
           "exit": null,
-          "last": 4140.39990234375,
+          "last": 4139.39990234375,
           "r_topstep": null,
           "r_bot": null
         }
       ],
-      "checked_hour": "2026-10-20T11:00:00Z",
+      "checked_hour": "2026-10-20T12:00:00Z",
       "n": 8,
       "mean_r": -0.4317,
       "live": false
