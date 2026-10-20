@@ -221,7 +221,7 @@ class Copier:
             twin = next((k for k, r in self.state.items()
                          if r.get("source", "github") != s.get("source", "github")
                          and same_signal(key, s["direction"], k, r.get("direction"))), None)
-            self.state[key] = {"asset": s["asset"], "status": "vu", "expires": s["expires"],
+            self.state[key] = {"asset": s["asset"], "status": "vu", "expires": s["expires"], "symbol": SYMBOLS.get(s["asset"], ""),
                                "direction": s["direction"], "source": s.get("source", "github")}
             if twin:
                 self.state[key]["status"] = f"même signal que {twin}"
