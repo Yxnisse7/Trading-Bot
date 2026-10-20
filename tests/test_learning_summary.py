@@ -132,7 +132,7 @@ def test_daily_summary_content(cfg):
     hist = [_closed(0, "tp", ["rsi"]), _closed(1, "sl", ["rsi"]), _closed(2, "expired", ["rsi"])]
     text = daily_summary(hist, cfg, T0.date(), {"notes": ["rsi: test"], "avoid_hours_utc": []})
     assert "Signaux proposés : 3" in text
-    assert "Jour : 1 TP, 1 SL, 1 expirés" in text
+    assert "Bot classique : 1 TP, 1 SL, 1 expirés" in text
     assert "Réussite du jour : 50\u00a0%" in text
     assert "paper trading" not in text   # l'avertissement complet n'est plus répété à chaque message, il est dans le guide
     assert "rsi: test" in text
@@ -155,3 +155,23 @@ def test_variant_baseline_excludes_trial_assets(cfg):
     bad_eth = [_trade(100 + i, "sl", ["rsi"], asset="ethereum") for i in range(30)]
     adj = learn(good + bad_eth, cfg)
     assert adj["baseline"]["n"] == 30 and adj["baseline"]["mean_net_r"] > 1     # seuls les trades Nasdaq
+
+
+def test_daily_summary_counts_the_strategies_in_real():
+    """20/10 : le résumé du 19/10 affichait 0 trade alors que 5 stratégies en réel avaient perdu."""
+    from datetime import date, datetime, timezone
+    from trading_bot.config import load_config
+    from trading_bot.summary import daily_summary
+    t = lambda h: int(datetime(2026, 10, 19, h, 0, tzinfo=timezone.utc).timestamp())  # noqa: E731
+    lab = {"donchian_1h:bitcoin": {"strategy": "donchian_1h", "asset": "bitcoin", "trades": [
+        {"entry_ts": t(1), "exit_ts": t(5), "status": "closed", "direction": "long", "entry": 82000.0,
+         "exit": 81800.0, "r_topstep": -0.3, "notified_entry": "x"},
+        {"entry_ts": t(8), "exit_ts": t(9), "status": "closed", "direction": "short", "entry": 82000.0,
+         "exit": 81000.0, "r_topstep": 1.2, "notified_entry": "x"},
+        {"entry_ts": t(10), "exit_ts": t(11), "status": "closed", "direction": "long", "entry": 82000.0,
+         "exit": 81000.0, "r_topstep": -1.0, "notified_entry": "x", "pc_absent": True},
+        {"entry_ts": t(12), "exit_ts": t(13), "status": "closed", "direction": "long", "entry": 82000.0,
+         "exit": 81000.0, "r_topstep": -1.0}]}}
+    text = daily_summary([], load_config(), date(2026, 10, 19), {}, lab)
+    assert "Stratégies : 2 trades clôturés · 1 gagnant, 1 perdant · +0,90 R" in text
+    assert "Donchian 1 h · ❌ −0,30 R" in text and "Donchian 1 h · ✅ +1,20 R" in text
