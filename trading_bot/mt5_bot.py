@@ -35,7 +35,7 @@ log = logging.getLogger("mt5_bot")
 ASSET = "nasdaq"
 STRAT = "bot"
 RAW = "https://raw.githubusercontent.com/Yxnisse7/Trading-Bot/main/data/{name}"
-SHARED = ("adjustments.json", "drift.json", "macro_calendar.json")    # réglages appris sur GitHub
+SHARED = ("adjustments.json", "drift.json", "macro_calendar.json", "calendar_cache.json")  # relus sur GitHub
 REFRESH = 3600                                                         # s entre deux relectures de ces réglages
 
 
