@@ -1180,6 +1180,7 @@ class Engine:
         "/long <actif> [objectif] [stop] [commentaire] — signal manuel à l'achat\n"
         "/short <actif> [objectif] [stop] [commentaire] — signal manuel à la vente\n"
         "/stop [actif] — arrêter un trade ouvert au prix du moment (le bot le suit ensuite en silence pour apprendre)\n"
+        "/hugo — l'agent IA du PC analyse le nq avec la méthode Hugo (BPR) et dit s'il y a un trade ou quoi surveiller (PC allumé)\n"
         "\n"
         "▶️ COMPTE TOPSTEP 50K (les trades de la simulation, en micros Topstep)\n"
         "/topstep — état du compte : balance, perte maximale, objectif · /topstep risque 0,5 (% de la balance) · /topstep objectif 1200 (0 = sans) · /topstep reset\n"

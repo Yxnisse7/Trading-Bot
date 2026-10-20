@@ -47,14 +47,15 @@ DEFAULTS = {"command": r"E:\TradingBot\venv\Scripts\python.exe E:\TradingBot\age
             "dir": r"E:\TradingBot\agent"}
 
 
-def slots(day: datetime, events: list[dict[str, Any]], asset: str = "gold") -> list[tuple[int, str]]:
+def slots(day: datetime, events: list[dict[str, Any]], asset: str = "gold", table: dict | None = None,
+          news: bool = True) -> list[tuple[int, str]]:
     """Réveils du jour (heure UTC en s, moment) : heures fixes en semaine + 20 min après les annonces USD fortes."""
     d = day.astimezone(PARIS).date()
     if d.weekday() >= 5:
         return []
     out = [(int(datetime.combine(d, datetime.strptime(hm, "%H:%M").time(), PARIS).timestamp()), name)
-           for hm, name in ASSETS[asset][1]]
-    for e in events:
+           for hm, name in (table or ASSETS)[asset][1]]
+    for e in events if news else ():
         if e.get("impact") != "high" or not str(e.get("name", "")).startswith("USD"):
             continue
         at = datetime.fromisoformat(e["at"])
@@ -70,12 +71,15 @@ def slots(day: datetime, events: list[dict[str, Any]], asset: str = "gold") -> l
 
 
 class Hunter:
+    MAGIC, ASSETS, NAME, MAX_HOLD, FRAMES, DEFAULTS = MAGIC, ASSETS, "chasse", MAX_HOLD, FRAMES, DEFAULTS
+    TAG, COMMENT, NEWS = "Trade de l'agent IA", "agent IA", True
+
     def __init__(self, mt5, root: Path, clock: Callable[[], float], relay=None, cfg: dict[str, Any] | None = None,
                  spawn: Callable[..., Any] = subprocess.Popen):
         self.mt5, self.root, self.clock, self.relay, self.spawn = mt5, Path(root), clock, relay, spawn
-        self.cfg = {**DEFAULTS, **(cfg or {})}
-        self.file = self.root / "journal" / "chasse.json"
-        self.folder = self.root / "journal" / "chasse"
+        self.cfg = {**self.DEFAULTS, **(cfg or {})}
+        self.file = self.root / "journal" / f"{self.NAME}.json"
+        self.folder = self.root / "journal" / self.NAME
         self.state: dict[str, Any] = {"done": [], "trades": {}}
         if self.file.exists():
             try:
@@ -91,6 +95,18 @@ class Hunter:
         self.file.parent.mkdir(parents=True, exist_ok=True)
         self.state["done"] = self.state["done"][-50:]
         self.file.write_text(json.dumps(self.state, indent=1, ensure_ascii=False), encoding="utf-8")
+
+    def extra(self, asset: str, now: float) -> dict[str, Any]:
+        """Champs en plus pour l'agent (aucun ici)."""
+        return {}
+
+    def may_trade(self, asset: str, now: float) -> bool:
+        """Règle de journée propre à une méthode (aucune ici)."""
+        return True
+
+    def closed(self, asset: str, t: dict[str, Any], profit: float, r: float) -> list[str]:
+        """Appelé à la sortie d'un trade : lignes en plus pour le message de sortie (aucune ici)."""
+        return []
 
     def ready(self) -> bool:
         """Le fichier de l'agent est sur le PC (sinon le pont ne fait rien)."""
@@ -117,10 +133,10 @@ class Hunter:
         if acc is None or acc.trade_mode != self.mt5.ACCOUNT_TRADE_MODE_DEMO:
             return ""
         evs = self.events()
-        for asset in ASSETS:
-            if self.state["trades"].get(asset):
+        for asset in self.ASSETS:
+            if self.state["trades"].get(asset) or not self.may_trade(asset, now):
                 continue
-            for ts, name in slots(datetime.fromtimestamp(now, timezone.utc), evs, asset):
+            for ts, name in slots(datetime.fromtimestamp(now, timezone.utc), evs, asset, self.ASSETS, self.NEWS):
                 key = f"{asset}:{ts}"
                 if key in self.state["done"] or not ts <= now <= ts + LATE:
                     continue
@@ -142,18 +158,19 @@ class Hunter:
         tick = self.mt5.symbol_info_tick(sym)
         if off is None or tick is None:
             return f"chasse : marché fermé ({asset})"
-        why = demo_rules.check(self.mt5, MAGIC)
+        why = demo_rules.check(self.mt5, self.MAGIC)
         if why:
             return f"chasse : règle d'arrêt ({why})"
-        data = {"id": f"chasse-{asset}-{int(now)}", "asset": asset, "asset_label": ASSETS[asset][0],
+        data = {"id": f"{self.NAME}-{asset}-{int(now)}", "asset": asset, "asset_label": self.ASSETS[asset][0],
                 "now": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(now)), "moment": moment,
                 "bid": tick.bid, "ask": tick.ask, "spread": round(tick.ask - tick.bid, 2), "solde": acc.balance,
                 "annonces": [{"heure": e["at"], "titre": e["name"], "impact": e.get("impact")} for e in evs
                              if str(e.get("name", "")).startswith("USD")
                              and -7200 <= datetime.fromisoformat(e["at"]).timestamp() - now <= 6 * 3600],
                 "position_agent": None}
-        for k, tf, n in FRAMES:
+        for k, tf, n in self.FRAMES:
             data[k] = self._candles(sym, tf, n, off)
+        data.update(self.extra(asset, now))
         self.folder.mkdir(parents=True, exist_ok=True)
         path = self.folder / f"{data['id']}.json"
         path.write_text(json.dumps(data, separators=(",", ":")), encoding="utf-8")
@@ -233,10 +250,10 @@ class Hunter:
         px = tick.ask if buy else tick.bid
         digits = int(getattr(info, "digits", 2) or 2)
         stop, target = round(float(a["stop"]), digits), round(float(a["objectif"]), digits)
-        lot = self.lot(acc.balance, abs(px - stop), info, ASSETS[asset][2])
+        lot = self.lot(acc.balance, abs(px - stop), info, self.ASSETS[asset][2])
         res = self.mt5.order_send({"action": self.mt5.TRADE_ACTION_DEAL, "symbol": sym, "volume": lot,
                                    "type": self.mt5.ORDER_TYPE_BUY if buy else self.mt5.ORDER_TYPE_SELL, "price": px,
-                                   "sl": stop, "tp": target, "deviation": 30, "magic": MAGIC, "comment": "agent IA",
+                                   "sl": stop, "tp": target, "deviation": 30, "magic": self.MAGIC, "comment": self.COMMENT,
                                    "type_time": self.mt5.ORDER_TIME_GTC, "type_filling": self._filling(info)})
         if getattr(res, "retcode", None) != self.mt5.TRADE_RETCODE_DONE:
             log.warning("chasse : ordre rejeté (code %s)", getattr(res, "retcode", None))
@@ -262,7 +279,7 @@ class Hunter:
             return {}
         chg = lambda v: msg.pct((v / t["entry"] - 1) * 100.0)  # noqa: E731
         conf = int(a.get("confiance") or 0)
-        lines = [f"<b>🤖 {'↗️ ACHAT' if t['buy'] else '↘️ VENTE'} · {msg.esc(t['label'])}</b> · Trade de l'agent IA",
+        lines = [f"<b>🤖 {'↗️ ACHAT' if t['buy'] else '↘️ VENTE'} · {msg.esc(t['label'])}</b> · {self.TAG}",
                  f"Entrée {msg.code_price(t['entry'], digits)}",
                  f"SL     {msg.code_price(t['stop'], digits)}  {chg(t['stop'])}",
                  f"TP     {msg.code_price(t['target'], digits)}  {chg(t['target'])}",
@@ -270,7 +287,7 @@ class Hunter:
                  "",
                  msg.esc(str(a.get("raison", ""))),
                  "",
-                 f"MT5 démo : {msg.num(t['lot'], 2)} lot (1 % du solde au SL), sortie au SL, au TP ou au bout de 4 h.",
+                 f"MT5 démo : {msg.num(t['lot'], 2)} lot (1 % du solde au SL), sortie au SL, au TP ou au bout de {self.MAX_HOLD // 3600} h.",
                  "<i>Décidé par l'agent IA sur ton PC. Démo seulement, aucun ordre réel.</i>"]
         return self.relay._post("\n".join(lines))
 
@@ -280,8 +297,8 @@ class Hunter:
         long = p.type == self.mt5.POSITION_TYPE_BUY
         self.mt5.order_send({"action": self.mt5.TRADE_ACTION_DEAL, "symbol": sym, "volume": p.volume,
                              "position": p.ticket, "type": self.mt5.ORDER_TYPE_SELL if long else self.mt5.ORDER_TYPE_BUY,
-                             "price": tick.bid if long else tick.ask, "deviation": 30, "magic": MAGIC,
-                             "comment": "agent IA 4 h", "type_time": self.mt5.ORDER_TIME_GTC,
+                             "price": tick.bid if long else tick.ask, "deviation": 30, "magic": self.MAGIC,
+                             "comment": f"{self.COMMENT} fin", "type_time": self.mt5.ORDER_TIME_GTC,
                              "type_filling": self._filling(self.mt5.symbol_info(sym))})
 
     def _follow(self, asset: str) -> None:
@@ -289,9 +306,9 @@ class Hunter:
         if not t:
             return
         sym = SYMBOLS[asset]
-        open_ = [p for p in (self.mt5.positions_get(symbol=sym) or []) if p.magic == MAGIC]
+        open_ = [p for p in (self.mt5.positions_get(symbol=sym) or []) if p.magic == self.MAGIC]
         if open_:
-            if self.clock() - t["opened"] >= MAX_HOLD:
+            if self.clock() - t["opened"] >= self.MAX_HOLD:
                 for p in open_:
                     self._close(sym, p)
             return
@@ -302,13 +319,14 @@ class Hunter:
                      for d in deals)
         exit_px = float(deals[-1].price) if deals else None
         risk = t.get("risk_usd") or abs(t["entry"] - t["stop"]) * t["lot"] * 100.0
+        r = profit / risk if risk else 0.0
+        extra = self.closed(asset, t, profit, r)
         if self.relay is not None and self.relay.enabled() and t.get("msg"):
-            r = profit / risk if risk else 0.0
-            lines = [f"<b>{'✅' if profit >= 0 else '❌'} Sortie · {msg.esc(t.get('label', asset))} · Trade de l'agent IA</b>",
+            lines = [f"<b>{'✅' if profit >= 0 else '❌'} Sortie · {msg.esc(t.get('label', asset))} · {self.TAG}</b>",
                      f"Sortie {msg.code_price(exit_px, t.get('digits', 2))}" if exit_px else "Sortie",
-                     f"Résultat MT5 démo : {profit:+.2f} $ ({r:+.2f} R)".replace(".", ",")]
+                     f"Résultat MT5 démo : {profit:+.2f} $ ({r:+.2f} R)".replace(".", ","), *extra]
             self.relay._post("\n".join(lines), reply=t["msg"])
-        desk._journal({"action": f"agent {asset} : sortie", "prix": exit_px or "", "stop": "", "objectif": "",
+        desk._journal({"action": f"{self.COMMENT} {asset} : sortie", "prix": exit_px or "", "stop": "", "objectif": "",
                        "resultat": round(profit, 2), "raison": t["moment"]})
         self.state["trades"].pop(asset, None)
         self._save()
