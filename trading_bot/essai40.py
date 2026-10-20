@@ -1,6 +1,7 @@
 """Essai 40 (HYPOTHESES.md) : méthode ICT « BPR / IFVG » d'un trader TikTok, codée sur le Nasdaq 2014-2026.
 
     python -m trading_bot.essai40          → data/essai40.json
+    python -m trading_bot.essai40 --topstep → data/essai40b.json (comptes Topstep neufs)
 """
 from __future__ import annotations
 
@@ -297,5 +298,79 @@ def main() -> None:
     eng.store._write(eng.store.dir / "essai40.json", out)
 
 
+
+
+def topstep(b: Bars, tr: list[dict[str, Any]], since: int = 0, risk_usd: float = 300.0) -> dict[str, Any]:
+    """Un compte Topstep 50K neuf ouvert chaque jour de bourse, qui prend les trades de `tr` à partir de ce jour."""
+    from .topstep import FEES, PRODUCTS, RULES
+    per_pt = PRODUCTS["nasdaq"][1]
+    fee = FEES["nasdaq"][0] + FEES["nasdaq"][1]
+    rows = []
+    for t in tr:
+        e = float(b.op[t["i"]])
+        risk_pts = t["stop_pct"] * e
+        n = min(int(risk_usd // (risk_pts * per_pt)), RULES["max_micros"])
+        if n < 1:
+            continue
+        rows.append((int(b.day[t["i"]]), n * per_pt * t["gross"] * risk_pts - n * fee))
+    days = sorted({int(d) for d in b.day[b.ts >= since]})
+    out = {"passed": 0, "failed": 0, "open": 0, "days_to_pass": [], "days_to_fail": []}
+    k0 = 0
+    for d0 in days:
+        while k0 < len(rows) and rows[k0][0] < d0:
+            k0 += 1
+        start = RULES["start_balance"]
+        bal, mll, peak, cur, day_pnl, best, traded = start, start - RULES["max_loss"], start, None, 0.0, 0.0, 0
+        verdict = None
+        for d, pnl in rows[k0:]:
+            if d != cur:
+                if cur is not None:
+                    peak = max(peak, bal)
+                    mll = min(start, max(mll, peak - RULES["max_loss"]))
+                    best = max(best, day_pnl)
+                cur, day_pnl = d, 0.0
+                traded += 1
+            bal += pnl
+            day_pnl += pnl
+            if bal <= mll or day_pnl <= -RULES["daily_loss"]:
+                verdict = "failed"
+                break
+            profit = bal - start
+            if profit >= max(RULES["profit_target"], max(best, day_pnl) / RULES["consistency"]):
+                verdict = "passed"
+                break
+        if verdict is None:
+            out["open"] += 1
+        else:
+            out[verdict] += 1
+            out[f"days_to_{'pass' if verdict == 'passed' else 'fail'}"].append(traded)
+    tot = out["passed"] + out["failed"]
+    return {"accounts": len(days), "passed_pct": round(100 * out["passed"] / tot, 1) if tot else None,
+            "failed_pct": round(100 * out["failed"] / tot, 1) if tot else None, "still_open": out["open"],
+            "median_days_to_pass": float(np.median(out["days_to_pass"])) if out["days_to_pass"] else None,
+            "median_days_to_fail": float(np.median(out["days_to_fail"])) if out["days_to_fail"] else None,
+            "trades_with_size": len(rows)}
+
+
+def main_topstep() -> None:
+    from .config import load_config
+    from .engine import Engine
+    from .essai23 import load
+    from .models import iso, utcnow
+    cfg = load_config()
+    eng = Engine(cfg)
+    new = eng.store.load_history("nasdaq")
+    candles = [c for c in load(eng.store.dir / "history" / "long" / "nasdaq_5m.json") if not new or c.ts < new[0].ts] + new
+    b = Bars(candles)
+    cache: dict = {}
+    out: dict[str, Any] = {"essai": "40b", "updated_at": iso(utcnow()), "cells": {}}
+    for name in ("C1 IFVG + FVG H1 + Fibo, 2 R", "C2 BPR strict + FVG H1 + Fibo"):
+        tr = trades(b, CELLS[name], cfg.assets["nasdaq"].cost_pct, cache)
+        out["cells"][name] = {"2014-2026": topstep(b, tr), "depuis 2020": topstep(b, tr, HALF)}
+        print(name, out["cells"][name], flush=True)
+    eng.store._write(eng.store.dir / "essai40b.json", out)
+
+
 if __name__ == "__main__":
-    main()
+    import sys
+    main_topstep() if "--topstep" in sys.argv else main()
