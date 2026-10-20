@@ -185,6 +185,8 @@ class Copier:
             if self.bot is not None:
                 found, bok = self.bot.signals()       # objectif du bot gardé tel quel
                 local, lok = local + found, lok | bok
+                if self.relay is not None:
+                    self.relay.pc_trades = self.bot.recent()
             ok |= lok
             local_keys = {s["key"] for s in local}
             if self.relay is not None:

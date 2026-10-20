@@ -945,6 +945,9 @@ class Engine:
         except Exception:  # noqa: BLE001 — l'agenda ne doit jamais bloquer le rapport
             log.exception("agenda")
         self.store.save_dashboard(dash)
+        pc = pc_link.trades(os.environ.get(pc_link.TRADES))
+        if pc is not None:                             # trades du bot classique calculés sur le PC (prix MT5)
+            self.store.save_live("bot_pc", {"updated_at": iso(utcnow()), "trades": pc})
         if self.TOPSTEP:
             try:
                 self.topstep_update(all_sigs)

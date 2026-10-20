@@ -63,6 +63,8 @@ class Relay:
         self.file = root / "journal" / "telegram_pc.json"
         self.last_beat = 0.0
         self.local_ok: set[str] = set()               # stratégies calculées sur le PC au dernier passage
+        self.pc_trades: list[dict[str, Any]] | None = None   # trades du bot classique sur le PC (mt5_bot)
+        self.sent_trades = ""
         self.running: list[tuple[Any, float, str]] = []
         try:
             self.state: dict[str, Any] = json.loads(self.file.read_text(encoding="utf-8"))
@@ -99,16 +101,24 @@ class Relay:
         self.last_beat = now
         sent = [{"k": k, "d": r.get("direction")} for k, r in self.state.items()
                 if now - r.get("ts", 0) <= pc_link.KEEP]
-        value = pc_link.encode(now, sent, self.local_ok)
+        self._put(tok, pc_link.VAR, pc_link.encode(now, sent, self.local_ok))
+        if self.pc_trades is not None:
+            trades = json.dumps(self.pc_trades, separators=(",", ":"), ensure_ascii=False)
+            if trades != self.sent_trades and self._put(tok, pc_link.TRADES, trades):
+                self.sent_trades = trades
+
+    def _put(self, tok: str, name: str, value: str) -> bool:
         base = f"https://api.github.com/repos/{REPO}/actions/variables"
         try:
-            code = self.github("PATCH", f"{base}/{pc_link.VAR}", tok, {"name": pc_link.VAR, "value": value})
+            code = self.github("PATCH", f"{base}/{name}", tok, {"name": name, "value": value})
             if code == 404:
-                code = self.github("POST", base, tok, {"name": pc_link.VAR, "value": value})
+                code = self.github("POST", base, tok, {"name": name, "value": value})
             if code not in (200, 201, 204):
-                log.warning("variable %s : réponse %s (jeton GitHub ?)", pc_link.VAR, code)
+                log.warning("variable %s : réponse %s (jeton GitHub ?)", name, code)
+            return code in (200, 201, 204)
         except Exception as exc:                      # GitHub injoignable : il reprendra la main tout seul
-            log.warning("variable %s : %s", pc_link.VAR, exc)
+            log.warning("variable %s : %s", name, exc)
+            return False
 
     # ------------------------------------------------------------------ entrée
     def entry(self, key: str, s: dict[str, Any], rec: dict[str, Any]) -> None:

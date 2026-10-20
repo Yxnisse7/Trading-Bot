@@ -86,3 +86,31 @@ def test_pc_bot_hands_over_to_github_without_the_learned_model(tmp_path, monkeyp
     now = [NOW]
     bot = _bot(tmp_path, NasMT5(now[0]), now, [[_signal(NOW - 60)]])
     assert bot.signals() == ([], set())
+
+
+def test_pc_bot_trades_are_published_for_github(tmp_path, monkeypatch):
+    from test_pc_relay import _relay
+    now = [NOW]
+    mt5 = NasMT5(now[0])
+    bot = _bot(tmp_path, mt5, now, [[_signal(NOW - 60)]])
+    relay, sent, beats, _ = _relay(tmp_path, mt5, now)
+    get = lambda url: {} if "lab_shadow" in url else {"open_signals": []}
+    c = mc.Copier(mt5, tmp_path, lambda *a, **k: None, lambda: now[0], get=get, local=True, relay=relay, bot=bot)
+    c.step()
+    now[0] += 61
+    mt5.now = now[0]
+    c.last = 0
+    c.step()
+    pub = [b for b in beats if b[1]["name"] == pc_link.TRADES]
+    trades = pc_link.trades(pub[-1][1]["value"])
+    assert len(pub) == 1 and trades[0]["id"].startswith("lab-bot-") and trades[0]["status"] == "open"
+    assert trades[0]["meta"] == {"pc": True} and trades[0]["take_profit"] == 21090.0
+    # GitHub les recopie dans docs/live/bot_pc.json (lu par le résumé du soir de l'agent)
+    from trading_bot import engine as engmod
+    from trading_bot.storage import Store
+    monkeypatch.setenv(pc_link.TRADES, pub[-1][1]["value"])
+    eng = engmod.Engine(store=Store(tmp_path / "data"))
+    eng.TOPSTEP = False
+    eng.write_report()
+    import json
+    assert json.loads((tmp_path / "data" / "live" / "bot_pc.json").read_text())["trades"][0]["id"] == trades[0]["id"]

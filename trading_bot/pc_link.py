@@ -19,6 +19,7 @@ from typing import Any
 from .mt5_local import SAME_SIGNAL, same_signal
 
 VAR = "PC_ALIVE"
+TRADES = "PC_TRADES"  # trades du bot classique calculés sur le PC (3 derniers jours), publiés dans docs/live/bot_pc.json
 FRESH = 600          # s : au-delà, le PC est considéré éteint (la variable est lue au début du passage GitHub,
                      # qui peut durer quelques minutes : 3 min de marge feraient des doublons)
 WAIT = 15 * 60       # s après la bougie d'entrée : délai laissé au PC avant que GitHub annonce lui-même
@@ -68,3 +69,11 @@ def entry_owner(raw: str | None, strat: str, entry_ts: int, direction: str, now:
     if 0 <= now - ts <= FRESH and now - entry_ts < WAIT:
         return "wait"
     return "github"
+
+
+def trades(raw: str | None) -> list[dict[str, Any]] | None:
+    try:
+        d = json.loads(raw or "")
+    except (ValueError, TypeError):
+        return None
+    return d if isinstance(d, list) else None

@@ -37,6 +37,9 @@ STRAT = "bot"
 RAW = "https://raw.githubusercontent.com/Yxnisse7/Trading-Bot/main/data/{name}"
 SHARED = ("adjustments.json", "drift.json", "macro_calendar.json", "calendar_cache.json")  # relus sur GitHub
 REFRESH = 3600                                                         # s entre deux relectures de ces réglages
+KEEP = 3 * 86400                     # s : trades du PC publiés pour GitHub (variable PC_TRADES, résumé du soir)
+FIELDS = ("asset", "direction", "entry", "take_profit", "stop_loss", "status", "pnl_pct", "created_at", "closed_at",
+          "close_price")
 
 
 def _download(name: str) -> bytes:
@@ -115,6 +118,17 @@ class LocalBot:
         return {"key": f"lab:{STRAT}:{ts}", "asset": ASSET, "direction": sig.direction, "entry": sig.entry,
                 "stop": abs(sig.entry - sig.stop_loss), "target": abs(sig.take_profit - sig.entry),
                 "created": ts, "expires": int(parse_iso(sig.expires_at).timestamp()), "source": "local"}
+
+    def recent(self) -> list[dict[str, Any]]:
+        """Trades du bot sur le PC des 3 derniers jours, au format Signal (id = celui donné à l'agent IA)."""
+        now = self.clock()
+        out = []
+        for sig in self.store.history() + self.store.open_signals():
+            ts = int(parse_iso(sig.created_at).timestamp())
+            if now - ts <= KEEP:
+                out.append({"id": f"lab-{STRAT}-{ts}", "source": "bot", **{f: getattr(sig, f) for f in FIELDS},
+                            "meta": {"pc": True}})
+        return sorted(out, key=lambda t: t["created_at"])
 
     # ------------------------------------------------------------------ passage
     def signals(self) -> tuple[list[dict[str, Any]], set[str]]:
