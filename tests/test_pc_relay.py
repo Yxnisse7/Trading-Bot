@@ -143,8 +143,17 @@ def test_github_is_silent_on_signals_the_pc_announced(tmp_path, monkeypatch):
     monkeypatch.setenv("PC_ALIVE", pc_link.encode(later.timestamp() - 30, []))
     eng._live_signals("donchian_day:gold", asset, [t], since, later)
     assert sent == [] and t["notified_exit"] and len(eng.topstep().state["journal"]) == 1
-    # PC éteint : GitHub annonce tout, comme avant
+    # le PC calcule la stratégie et ne voit pas ce signal sur les prix MT5 : rien, ni à l'entrée ni à la sortie
+    monkeypatch.setenv("PC_ALIVE", pc_link.encode(now.timestamp() - 30, [], ok={"donchian_day"}))
+    t3 = trade()
+    eng._live_signals("donchian_day:gold", asset, [t3], since, now)
+    assert sent == [] and t3["pc_absent"]
     monkeypatch.delenv("PC_ALIVE")
+    t3.update(status="closed", reason="heure", exit_ts=t0 + 3600, exit=4012.5, r_topstep=1.21)
+    n = len(eng.topstep().state["journal"])
+    eng._live_signals("donchian_day:gold", asset, [t3], since, later)
+    assert sent == [] and t3["notified_exit"] and len(eng.topstep().state["journal"]) == n
+    # PC éteint : GitHub annonce tout, comme avant
     t2 = trade()
     eng._live_signals("donchian_day:gold", asset, [t2], since, now)
     assert len(sent) == 1 and "↗️ ACHAT" in sent[0]
@@ -165,3 +174,36 @@ def test_github_wakes_the_agent_after_sending_a_real_signal(tmp_path, monkeypatc
     url, body = calls[0]
     assert url.endswith("/trading-agent/dispatches") and body["event_type"] == "avis"
     assert json.loads(body["client_payload"]["data"])["telegram_message_ids"] == {"7": 42}
+
+
+def test_pc_prices_decide_for_strategies_the_pc_computes():
+    # 20/10 : Donchian 1 h Bitcoin vu par GitHub mais pas sur les prix MT5 : GitHub se tait
+    raw = pc_link.encode(T22 + 2 * 3600 - 30, [], ok={"donchian_1h"})
+    assert pc_link.entry_owner(raw, "donchian_1h", T22, "short", T22 + 2 * 3600) == "absent"
+    assert pc_link.entry_owner(raw, "swing_w3", T22 + 7000, "long", T22 + 7200) == "wait"  # pas calculée sur le PC
+    assert pc_link.entry_owner(raw, "donchian_1h", T22, "short", T22 + 2 * 3600 + pc_link.FRESH) == "github"
+    assert pc_link.local_strats(pc_link.encode(T22, [])) == set() and pc_link.local_strats(None) == set()
+
+
+def test_copier_skips_github_signals_the_pc_does_not_see(tmp_path):
+    now = [datetime(2026, 10, 14, 22, 6, tzinfo=timezone.utc).timestamp()]
+    mt5 = DealsMT5(now[0])
+    relay, sent, beats, _ = _relay(tmp_path, mt5, now)
+    old = T22 - 5 * 3600                                          # signal GitHub que les prix MT5 ne donnent pas
+    trade = {"status": "open", "notified_entry": "2026-10-14T22:04:00Z", "entry_ts": old, "direction": "short",
+             "entry": 4200.0, "risk": 10.0}
+    lab = {"nuit_asie:gold": {"strategy": "nuit_asie", "asset": "gold", "trades": [trade]}}
+    get = lambda url: lab if "lab_shadow" in url else {"open_signals": []}
+    c = mc.Copier(mt5, tmp_path, lambda *a, **k: None, lambda: now[0], get=get, local=True, relay=relay)
+    c.step()
+    assert c.state[f"lab:nuit_asie:{old}"]["status"] == "pas de signal sur les prix MT5"
+    assert len(mt5.sent) == 1                                     # seule la copie du signal calculé sur le PC
+    assert relay.local_ok == {"nuit_asie"}
+    now[0] += 61                                                  # battement suivant : GitHub apprend la liste
+    mt5.now = now[0]
+    c.last = 0
+    c.step()
+    assert pc_link.local_strats(beats[-1][1]["value"]) == {"nuit_asie"}
+    # GitHub l'a marqué « absent » : il n'est même plus lu
+    trade["pc_absent"] = True
+    assert all(s["key"] != f"lab:nuit_asie:{old}" for s in mc.read_signals(get)[0])

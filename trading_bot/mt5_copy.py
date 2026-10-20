@@ -86,8 +86,8 @@ def read_signals(get: Callable[[str], Any] = _get) -> tuple[list[dict[str, Any]]
             if rec.get("asset") not in SYMBOLS:         # seuls les signaux réels sont annoncés (notified_entry)
                 continue
             for t in rec.get("trades") or []:
-                if t.get("status") != "open" or not t.get("notified_entry"):
-                    continue
+                if t.get("status") != "open" or not t.get("notified_entry") or t.get("pc_absent"):
+                    continue                                 # pc_absent : pas de signal sur les prix MT5
                 k = LAB_TARGET_R.get(rec.get("strategy"))
                 # âge compté depuis l'annonce Telegram (≈ 10 min après la bougie d'entrée, plus le délai de
                 # GitHub) : compté depuis la bougie, les signaux arrivaient déjà « trop anciens » (16/10/2026)
@@ -182,6 +182,8 @@ class Copier:
                 k = LAB_TARGET_R.get(s["key"].split(":")[1])
                 s["target"] = k * s["stop"] if k else None
             local_keys = {s["key"] for s in local}
+            if self.relay is not None:
+                self.relay.local_ok = {k.split(":", 1)[1] for k in lok}
         github_keys = {s["key"] for s in signals}
         live: dict[str, dict[str, Any]] = {}
         for s in local + signals:                    # le calcul local passe en premier
@@ -216,6 +218,10 @@ class Copier:
                                "direction": s["direction"], "source": s.get("source", "github")}
             if twin:
                 self.state[key]["status"] = f"même signal que {twin}"
+                continue
+            if s.get("source", "github") == "github" and key.startswith("lab:") and f"local:{key.split(':')[1]}" in ok:
+                # 20/10 : le PC calcule cette stratégie sur les prix MT5 et n'y voit pas ce signal : on ne le copie pas
+                self.state[key]["status"] = "pas de signal sur les prix MT5"
                 continue
             if why:
                 self.state[key]["status"] = f"refusé : {why}"

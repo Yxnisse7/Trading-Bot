@@ -1412,7 +1412,7 @@ class Engine:
                                     "last": t.exit if still_open else None,
                                     "r_topstep": None if still_open else round(rs.get("net_topstep", rs["net_bot"]), 4),
                                     "r_bot": None if still_open else round(rs["net_bot"], 4)}
-                for flag in ("notified_entry", "notified_exit", "micros", "close_at"):
+                for flag in ("notified_entry", "notified_exit", "micros", "close_at", "pc", "pc_absent"):
                     if flag in before.get(t.entry_ts, {}):
                         kept[t.entry_ts][flag] = before[t.entry_ts][flag]
             self._keep_announced(before, kept, int(now.timestamp()))
@@ -1482,6 +1482,10 @@ class Engine:
                 owner = pc_link.entry_owner(os.environ.get(pc_link.VAR), strat, t["entry_ts"], t["direction"],
                                             now.timestamp())
                 if owner == "wait":
+                    continue
+                if owner == "absent":
+                    # PC allumé, pas de signal sur les prix MT5 : ni Telegram, ni copie, ni Topstep, ni Simulation
+                    t.update(notified_entry=iso(now), pc=True, pc_absent=True)
                     continue
                 if strat in sl.OVERNIGHT:
                     hold = sl.OVERNIGHT[strat]
@@ -1562,6 +1566,8 @@ class Engine:
                     notify("\n".join(lines), html=True, key=f"lab-{strat}-{t['entry_ts']}",
                            buttons=msg.site_buttons(self.cfg.site_url, asset.key), avis=avis)
                 t["notified_entry"] = iso(now)
+            if t["status"] == "closed" and not t.get("notified_exit") and t.get("pc_absent"):
+                t["notified_exit"] = iso(now)
             if t["status"] == "closed" and not t.get("notified_exit"):
                 strat = name.split(":")[0]
                 label = LIVE_SUMMARY.get(strat, (strat, ""))[0]

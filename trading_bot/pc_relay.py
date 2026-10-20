@@ -61,6 +61,7 @@ class Relay:
         self.agent = agent or {}
         self.file = root / "journal" / "telegram_pc.json"
         self.last_beat = 0.0
+        self.local_ok: set[str] = set()               # stratégies calculées sur le PC au dernier passage
         self.running: list[tuple[Any, float, str]] = []
         try:
             self.state: dict[str, Any] = json.loads(self.file.read_text(encoding="utf-8"))
@@ -97,7 +98,7 @@ class Relay:
         self.last_beat = now
         sent = [{"k": k, "d": r.get("direction")} for k, r in self.state.items()
                 if now - r.get("ts", 0) <= pc_link.KEEP]
-        value = pc_link.encode(now, sent)
+        value = pc_link.encode(now, sent, self.local_ok)
         base = f"https://api.github.com/repos/{REPO}/actions/variables"
         try:
             code = self.github("PATCH", f"{base}/{pc_link.VAR}", tok, {"name": pc_link.VAR, "value": value})
