@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-20T14:55:55.445705+02:00",
+  "updated_at": "2026-10-20T15:01:30.399955+02:00",
   "timezone": "Europe/Paris",
   "equity_curve": [
     {
@@ -1716,18 +1716,18 @@
       "avg_pnl_pct": -0.0031
     },
     "shadow": {
-      "n": 610,
+      "n": 611,
       "tp": 202,
-      "sl": 309,
+      "sl": 310,
       "expired": 99,
-      "win_rate": 0.3953033268101761,
-      "neutral_win_rate": 0.3797,
-      "edge": 0.0156,
-      "pnl_pct": 4.4742,
-      "avg_pnl_pct": 0.0073
+      "win_rate": 0.39453125,
+      "neutral_win_rate": 0.3795,
+      "edge": 0.015,
+      "pnl_pct": 4.1457,
+      "avg_pnl_pct": 0.0068
     },
     "open": 0,
-    "open_shadow": 1
+    "open_shadow": 0
   },
   "by_source": {
     "bot": {
@@ -1764,15 +1764,15 @@
       "avg_pnl_pct": 0.0
     },
     "shadow": {
-      "n": 610,
+      "n": 611,
       "tp": 202,
-      "sl": 309,
+      "sl": 310,
       "expired": 99,
-      "win_rate": 0.3953033268101761,
-      "neutral_win_rate": 0.3797,
-      "edge": 0.0156,
-      "pnl_pct": 4.4742,
-      "avg_pnl_pct": 0.0073
+      "win_rate": 0.39453125,
+      "neutral_win_rate": 0.3795,
+      "edge": 0.015,
+      "pnl_pct": 4.1457,
+      "avg_pnl_pct": 0.0068
     }
   },
   "by_horizon": {
@@ -1831,15 +1831,15 @@
         "avg_pnl_pct": 0.0859
       },
       "shadow": {
-        "n": 228,
+        "n": 229,
         "tp": 95,
-        "sl": 102,
+        "sl": 103,
         "expired": 31,
-        "win_rate": 0.48223350253807107,
-        "neutral_win_rate": 0.3235,
-        "edge": 0.1587,
-        "pnl_pct": 23.9888,
-        "avg_pnl_pct": 0.1052
+        "win_rate": 0.4797979797979798,
+        "neutral_win_rate": 0.3232,
+        "edge": 0.1566,
+        "pnl_pct": 23.6603,
+        "avg_pnl_pct": 0.1033
       },
       "open": 0,
       "session_utc": [
@@ -2102,17 +2102,17 @@
     {
       "key": "trend_5m",
       "label": "Tendance 5 min",
-      "weight": 1.08,
+      "weight": 1.078,
       "stats": {
-        "n": 657,
+        "n": 658,
         "tp": 236,
-        "sl": 324,
+        "sl": 325,
         "expired": 97,
-        "win_rate": 0.42142857142857143,
-        "neutral_win_rate": 0.3811,
-        "edge": 0.0403,
-        "pnl_pct": 11.6695,
-        "avg_pnl_pct": 0.0178
+        "win_rate": 0.4206773618538324,
+        "neutral_win_rate": 0.3809,
+        "edge": 0.0398,
+        "pnl_pct": 11.341,
+        "avg_pnl_pct": 0.0172
       },
       "by_source": {
         "bot": {
@@ -2149,18 +2149,52 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 520,
+          "n": 521,
           "tp": 186,
-          "sl": 268,
+          "sl": 269,
           "expired": 66,
-          "win_rate": 0.40969162995594716,
-          "neutral_win_rate": 0.3739,
-          "edge": 0.0358,
-          "pnl_pct": 10.6563,
-          "avg_pnl_pct": 0.0205
+          "win_rate": 0.4087912087912088,
+          "neutral_win_rate": 0.3737,
+          "edge": 0.0351,
+          "pnl_pct": 10.3278,
+          "avg_pnl_pct": 0.0198
         }
       },
       "last_trades": [
+        {
+          "id": "4fcceef5d0",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "short",
+          "horizon": "24h",
+          "entry": 29511.5,
+          "take_profit": 29229.0,
+          "stop_loss": 29605.5,
+          "risk_reward": 3.01,
+          "confidence": "fort",
+          "score": 8.76,
+          "criteria": [
+            "adx",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.3285,
+          "pnl_gross_pct": -0.3185,
+          "duration_minutes": 1,
+          "close_price": 29605.5,
+          "created_at": "2026-10-20T12:45:53Z",
+          "closed_at": "2026-10-20T12:47:00Z",
+          "created_local": "20/10 14:45",
+          "expires_at": "2026-10-21T12:45:53Z",
+          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 156.58 (0.53 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 40%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+          "news_context": "actualité à surveiller (score 2) : What happens to Wall Street if CoreWeave defaults? JPMorgan checked the math.",
+          "manual_exit": null
+        },
         {
           "id": "9e67851f18",
           "asset": "nasdaq",
@@ -2399,57 +2433,23 @@
           "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 107.63 (0.36 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 63%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
           "news_context": "actualité à surveiller (score 2) : What happens to Wall Street if CoreWeave defaults? JPMorgan checked the math.",
           "manual_exit": null
-        },
-        {
-          "id": "89488a43b4",
-          "asset": "nasdaq",
-          "asset_label": "Nasdaq 100 (NQ)",
-          "direction": "short",
-          "horizon": "24h",
-          "entry": 29517.5,
-          "take_profit": 29324.0,
-          "stop_loss": 29582.0,
-          "risk_reward": 3.0,
-          "confidence": "fort",
-          "score": 8.77,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.2285,
-          "pnl_gross_pct": -0.2185,
-          "duration_minutes": 36,
-          "close_price": 29582.0,
-          "created_at": "2026-10-20T12:05:43Z",
-          "closed_at": "2026-10-20T12:42:00Z",
-          "created_local": "20/10 14:05",
-          "expires_at": "2026-10-21T12:05:43Z",
-          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 107.50 (0.36 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 64%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
-          "news_context": "actualité calme sur les 2 dernières heures",
-          "manual_exit": null
         }
       ]
     },
     {
       "key": "trend_15m",
       "label": "Tendance 15 min",
-      "weight": 1.08,
+      "weight": 1.078,
       "stats": {
-        "n": 763,
+        "n": 764,
         "tp": 256,
-        "sl": 374,
+        "sl": 375,
         "expired": 133,
-        "win_rate": 0.40634920634920635,
-        "neutral_win_rate": 0.3856,
-        "edge": 0.0207,
-        "pnl_pct": 4.1503,
-        "avg_pnl_pct": 0.0054
+        "win_rate": 0.40570522979397783,
+        "neutral_win_rate": 0.3854,
+        "edge": 0.0203,
+        "pnl_pct": 3.8218,
+        "avg_pnl_pct": 0.005
       },
       "by_source": {
         "bot": {
@@ -2486,18 +2486,52 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 610,
+          "n": 611,
           "tp": 202,
-          "sl": 309,
+          "sl": 310,
           "expired": 99,
-          "win_rate": 0.3953033268101761,
-          "neutral_win_rate": 0.3797,
-          "edge": 0.0156,
-          "pnl_pct": 4.4742,
-          "avg_pnl_pct": 0.0073
+          "win_rate": 0.39453125,
+          "neutral_win_rate": 0.3795,
+          "edge": 0.015,
+          "pnl_pct": 4.1457,
+          "avg_pnl_pct": 0.0068
         }
       },
       "last_trades": [
+        {
+          "id": "4fcceef5d0",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "short",
+          "horizon": "24h",
+          "entry": 29511.5,
+          "take_profit": 29229.0,
+          "stop_loss": 29605.5,
+          "risk_reward": 3.01,
+          "confidence": "fort",
+          "score": 8.76,
+          "criteria": [
+            "adx",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.3285,
+          "pnl_gross_pct": -0.3185,
+          "duration_minutes": 1,
+          "close_price": 29605.5,
+          "created_at": "2026-10-20T12:45:53Z",
+          "closed_at": "2026-10-20T12:47:00Z",
+          "created_local": "20/10 14:45",
+          "expires_at": "2026-10-21T12:45:53Z",
+          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 156.58 (0.53 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 40%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+          "news_context": "actualité à surveiller (score 2) : What happens to Wall Street if CoreWeave defaults? JPMorgan checked the math.",
+          "manual_exit": null
+        },
         {
           "id": "9e67851f18",
           "asset": "nasdaq",
@@ -2733,40 +2767,6 @@
           "created_local": "20/10 14:21",
           "expires_at": "2026-10-21T12:21:00Z",
           "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 107.63 (0.36 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 67%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
-          "news_context": "actualité à surveiller (score 2) : What happens to Wall Street if CoreWeave defaults? JPMorgan checked the math.",
-          "manual_exit": null
-        },
-        {
-          "id": "a87f1a2c20",
-          "asset": "nasdaq",
-          "asset_label": "Nasdaq 100 (NQ)",
-          "direction": "short",
-          "horizon": "24h",
-          "entry": 29521.0,
-          "take_profit": 29327.5,
-          "stop_loss": 29585.5,
-          "risk_reward": 3.0,
-          "confidence": "fort",
-          "score": 8.77,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.2285,
-          "pnl_gross_pct": -0.2185,
-          "duration_minutes": 26,
-          "close_price": 29585.5,
-          "created_at": "2026-10-20T12:15:54Z",
-          "closed_at": "2026-10-20T12:42:00Z",
-          "created_local": "20/10 14:15",
-          "expires_at": "2026-10-21T12:15:54Z",
-          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 107.63 (0.36 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 63%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
           "news_context": "actualité à surveiller (score 2) : What happens to Wall Street if CoreWeave defaults? JPMorgan checked the math.",
           "manual_exit": null
         }
@@ -2775,17 +2775,17 @@
     {
       "key": "trend_1h",
       "label": "Tendance 1 h",
-      "weight": 1.08,
+      "weight": 1.078,
       "stats": {
-        "n": 754,
+        "n": 755,
         "tp": 253,
-        "sl": 371,
+        "sl": 372,
         "expired": 130,
-        "win_rate": 0.40544871794871795,
-        "neutral_win_rate": 0.3855,
-        "edge": 0.0199,
-        "pnl_pct": 4.3287,
-        "avg_pnl_pct": 0.0057
+        "win_rate": 0.4048,
+        "neutral_win_rate": 0.3854,
+        "edge": 0.0194,
+        "pnl_pct": 4.0002,
+        "avg_pnl_pct": 0.0053
       },
       "by_source": {
         "bot": {
@@ -2822,18 +2822,52 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 601,
+          "n": 602,
           "tp": 199,
-          "sl": 306,
+          "sl": 307,
           "expired": 96,
-          "win_rate": 0.3940594059405941,
-          "neutral_win_rate": 0.3796,
-          "edge": 0.0145,
-          "pnl_pct": 4.6526,
-          "avg_pnl_pct": 0.0077
+          "win_rate": 0.3932806324110672,
+          "neutral_win_rate": 0.3794,
+          "edge": 0.0139,
+          "pnl_pct": 4.3241,
+          "avg_pnl_pct": 0.0072
         }
       },
       "last_trades": [
+        {
+          "id": "4fcceef5d0",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "short",
+          "horizon": "24h",
+          "entry": 29511.5,
+          "take_profit": 29229.0,
+          "stop_loss": 29605.5,
+          "risk_reward": 3.01,
+          "confidence": "fort",
+          "score": 8.76,
+          "criteria": [
+            "adx",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.3285,
+          "pnl_gross_pct": -0.3185,
+          "duration_minutes": 1,
+          "close_price": 29605.5,
+          "created_at": "2026-10-20T12:45:53Z",
+          "closed_at": "2026-10-20T12:47:00Z",
+          "created_local": "20/10 14:45",
+          "expires_at": "2026-10-21T12:45:53Z",
+          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 156.58 (0.53 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 40%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+          "news_context": "actualité à surveiller (score 2) : What happens to Wall Street if CoreWeave defaults? JPMorgan checked the math.",
+          "manual_exit": null
+        },
         {
           "id": "9e67851f18",
           "asset": "nasdaq",
@@ -3069,40 +3103,6 @@
           "created_local": "20/10 14:21",
           "expires_at": "2026-10-21T12:21:00Z",
           "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 107.63 (0.36 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 67%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
-          "news_context": "actualité à surveiller (score 2) : What happens to Wall Street if CoreWeave defaults? JPMorgan checked the math.",
-          "manual_exit": null
-        },
-        {
-          "id": "a87f1a2c20",
-          "asset": "nasdaq",
-          "asset_label": "Nasdaq 100 (NQ)",
-          "direction": "short",
-          "horizon": "24h",
-          "entry": 29521.0,
-          "take_profit": 29327.5,
-          "stop_loss": 29585.5,
-          "risk_reward": 3.0,
-          "confidence": "fort",
-          "score": 8.77,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.2285,
-          "pnl_gross_pct": -0.2185,
-          "duration_minutes": 26,
-          "close_price": 29585.5,
-          "created_at": "2026-10-20T12:15:54Z",
-          "closed_at": "2026-10-20T12:42:00Z",
-          "created_local": "20/10 14:15",
-          "expires_at": "2026-10-21T12:15:54Z",
-          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 107.63 (0.36 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 63%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
           "news_context": "actualité à surveiller (score 2) : What happens to Wall Street if CoreWeave defaults? JPMorgan checked the math.",
           "manual_exit": null
         }
@@ -3111,17 +3111,17 @@
     {
       "key": "adx",
       "label": "Force de tendance (ADX)",
-      "weight": 1.08,
+      "weight": 1.078,
       "stats": {
-        "n": 763,
+        "n": 764,
         "tp": 256,
-        "sl": 374,
+        "sl": 375,
         "expired": 133,
-        "win_rate": 0.40634920634920635,
-        "neutral_win_rate": 0.3856,
-        "edge": 0.0207,
-        "pnl_pct": 4.1503,
-        "avg_pnl_pct": 0.0054
+        "win_rate": 0.40570522979397783,
+        "neutral_win_rate": 0.3854,
+        "edge": 0.0203,
+        "pnl_pct": 3.8218,
+        "avg_pnl_pct": 0.005
       },
       "by_source": {
         "bot": {
@@ -3158,18 +3158,52 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 610,
+          "n": 611,
           "tp": 202,
-          "sl": 309,
+          "sl": 310,
           "expired": 99,
-          "win_rate": 0.3953033268101761,
-          "neutral_win_rate": 0.3797,
-          "edge": 0.0156,
-          "pnl_pct": 4.4742,
-          "avg_pnl_pct": 0.0073
+          "win_rate": 0.39453125,
+          "neutral_win_rate": 0.3795,
+          "edge": 0.015,
+          "pnl_pct": 4.1457,
+          "avg_pnl_pct": 0.0068
         }
       },
       "last_trades": [
+        {
+          "id": "4fcceef5d0",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "short",
+          "horizon": "24h",
+          "entry": 29511.5,
+          "take_profit": 29229.0,
+          "stop_loss": 29605.5,
+          "risk_reward": 3.01,
+          "confidence": "fort",
+          "score": 8.76,
+          "criteria": [
+            "adx",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.3285,
+          "pnl_gross_pct": -0.3185,
+          "duration_minutes": 1,
+          "close_price": 29605.5,
+          "created_at": "2026-10-20T12:45:53Z",
+          "closed_at": "2026-10-20T12:47:00Z",
+          "created_local": "20/10 14:45",
+          "expires_at": "2026-10-21T12:45:53Z",
+          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 156.58 (0.53 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 40%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+          "news_context": "actualité à surveiller (score 2) : What happens to Wall Street if CoreWeave defaults? JPMorgan checked the math.",
+          "manual_exit": null
+        },
         {
           "id": "9e67851f18",
           "asset": "nasdaq",
@@ -3407,57 +3441,23 @@
           "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 107.63 (0.36 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 67%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
           "news_context": "actualité à surveiller (score 2) : What happens to Wall Street if CoreWeave defaults? JPMorgan checked the math.",
           "manual_exit": null
-        },
-        {
-          "id": "a87f1a2c20",
-          "asset": "nasdaq",
-          "asset_label": "Nasdaq 100 (NQ)",
-          "direction": "short",
-          "horizon": "24h",
-          "entry": 29521.0,
-          "take_profit": 29327.5,
-          "stop_loss": 29585.5,
-          "risk_reward": 3.0,
-          "confidence": "fort",
-          "score": 8.77,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.2285,
-          "pnl_gross_pct": -0.2185,
-          "duration_minutes": 26,
-          "close_price": 29585.5,
-          "created_at": "2026-10-20T12:15:54Z",
-          "closed_at": "2026-10-20T12:42:00Z",
-          "created_local": "20/10 14:15",
-          "expires_at": "2026-10-21T12:15:54Z",
-          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 107.63 (0.36 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 63%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
-          "news_context": "actualité à surveiller (score 2) : What happens to Wall Street if CoreWeave defaults? JPMorgan checked the math.",
-          "manual_exit": null
         }
       ]
     },
     {
       "key": "vwap",
       "label": "VWAP",
-      "weight": 0.825,
+      "weight": 0.824,
       "stats": {
-        "n": 746,
+        "n": 747,
         "tp": 254,
-        "sl": 364,
+        "sl": 365,
         "expired": 128,
-        "win_rate": 0.4110032362459547,
-        "neutral_win_rate": 0.385,
-        "edge": 0.026,
-        "pnl_pct": 5.7763,
-        "avg_pnl_pct": 0.0077
+        "win_rate": 0.41033925686591277,
+        "neutral_win_rate": 0.3848,
+        "edge": 0.0255,
+        "pnl_pct": 5.4478,
+        "avg_pnl_pct": 0.0073
       },
       "by_source": {
         "bot": {
@@ -3494,18 +3494,52 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 595,
+          "n": 596,
           "tp": 200,
-          "sl": 301,
+          "sl": 302,
           "expired": 94,
-          "win_rate": 0.3992015968063872,
-          "neutral_win_rate": 0.3789,
-          "edge": 0.0203,
-          "pnl_pct": 5.4838,
-          "avg_pnl_pct": 0.0092
+          "win_rate": 0.398406374501992,
+          "neutral_win_rate": 0.3787,
+          "edge": 0.0197,
+          "pnl_pct": 5.1553,
+          "avg_pnl_pct": 0.0086
         }
       },
       "last_trades": [
+        {
+          "id": "4fcceef5d0",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "short",
+          "horizon": "24h",
+          "entry": 29511.5,
+          "take_profit": 29229.0,
+          "stop_loss": 29605.5,
+          "risk_reward": 3.01,
+          "confidence": "fort",
+          "score": 8.76,
+          "criteria": [
+            "adx",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.3285,
+          "pnl_gross_pct": -0.3185,
+          "duration_minutes": 1,
+          "close_price": 29605.5,
+          "created_at": "2026-10-20T12:45:53Z",
+          "closed_at": "2026-10-20T12:47:00Z",
+          "created_local": "20/10 14:45",
+          "expires_at": "2026-10-21T12:45:53Z",
+          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 156.58 (0.53 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 40%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+          "news_context": "actualité à surveiller (score 2) : What happens to Wall Street if CoreWeave defaults? JPMorgan checked the math.",
+          "manual_exit": null
+        },
         {
           "id": "9e67851f18",
           "asset": "nasdaq",
@@ -3743,57 +3777,23 @@
           "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 107.63 (0.36 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 67%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
           "news_context": "actualité à surveiller (score 2) : What happens to Wall Street if CoreWeave defaults? JPMorgan checked the math.",
           "manual_exit": null
-        },
-        {
-          "id": "a87f1a2c20",
-          "asset": "nasdaq",
-          "asset_label": "Nasdaq 100 (NQ)",
-          "direction": "short",
-          "horizon": "24h",
-          "entry": 29521.0,
-          "take_profit": 29327.5,
-          "stop_loss": 29585.5,
-          "risk_reward": 3.0,
-          "confidence": "fort",
-          "score": 8.77,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.2285,
-          "pnl_gross_pct": -0.2185,
-          "duration_minutes": 26,
-          "close_price": 29585.5,
-          "created_at": "2026-10-20T12:15:54Z",
-          "closed_at": "2026-10-20T12:42:00Z",
-          "created_local": "20/10 14:15",
-          "expires_at": "2026-10-21T12:15:54Z",
-          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 107.63 (0.36 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 63%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
-          "news_context": "actualité à surveiller (score 2) : What happens to Wall Street if CoreWeave defaults? JPMorgan checked the math.",
-          "manual_exit": null
         }
       ]
     },
     {
       "key": "rsi",
       "label": "RSI",
-      "weight": 1.176,
+      "weight": 1.173,
       "stats": {
-        "n": 580,
+        "n": 581,
         "tp": 211,
-        "sl": 279,
+        "sl": 280,
         "expired": 90,
-        "win_rate": 0.4306122448979592,
-        "neutral_win_rate": 0.3814,
-        "edge": 0.0492,
-        "pnl_pct": 11.727,
-        "avg_pnl_pct": 0.0202
+        "win_rate": 0.42973523421588594,
+        "neutral_win_rate": 0.3811,
+        "edge": 0.0486,
+        "pnl_pct": 11.3985,
+        "avg_pnl_pct": 0.0196
       },
       "by_source": {
         "bot": {
@@ -3830,18 +3830,52 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 448,
+          "n": 449,
           "tp": 162,
-          "sl": 227,
+          "sl": 228,
           "expired": 59,
-          "win_rate": 0.41645244215938304,
-          "neutral_win_rate": 0.3735,
-          "edge": 0.043,
-          "pnl_pct": 10.0298,
-          "avg_pnl_pct": 0.0224
+          "win_rate": 0.4153846153846154,
+          "neutral_win_rate": 0.3732,
+          "edge": 0.0422,
+          "pnl_pct": 9.7013,
+          "avg_pnl_pct": 0.0216
         }
       },
       "last_trades": [
+        {
+          "id": "4fcceef5d0",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "short",
+          "horizon": "24h",
+          "entry": 29511.5,
+          "take_profit": 29229.0,
+          "stop_loss": 29605.5,
+          "risk_reward": 3.01,
+          "confidence": "fort",
+          "score": 8.76,
+          "criteria": [
+            "adx",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.3285,
+          "pnl_gross_pct": -0.3185,
+          "duration_minutes": 1,
+          "close_price": 29605.5,
+          "created_at": "2026-10-20T12:45:53Z",
+          "closed_at": "2026-10-20T12:47:00Z",
+          "created_local": "20/10 14:45",
+          "expires_at": "2026-10-21T12:45:53Z",
+          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 156.58 (0.53 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 40%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+          "news_context": "actualité à surveiller (score 2) : What happens to Wall Street if CoreWeave defaults? JPMorgan checked the math.",
+          "manual_exit": null
+        },
         {
           "id": "9e67851f18",
           "asset": "nasdaq",
@@ -4079,40 +4113,6 @@
           "expires_at": "2026-10-21T12:15:54Z",
           "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 107.63 (0.36 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 63%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
           "news_context": "actualité à surveiller (score 2) : What happens to Wall Street if CoreWeave defaults? JPMorgan checked the math.",
-          "manual_exit": null
-        },
-        {
-          "id": "89488a43b4",
-          "asset": "nasdaq",
-          "asset_label": "Nasdaq 100 (NQ)",
-          "direction": "short",
-          "horizon": "24h",
-          "entry": 29517.5,
-          "take_profit": 29324.0,
-          "stop_loss": 29582.0,
-          "risk_reward": 3.0,
-          "confidence": "fort",
-          "score": 8.77,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.2285,
-          "pnl_gross_pct": -0.2185,
-          "duration_minutes": 36,
-          "close_price": 29582.0,
-          "created_at": "2026-10-20T12:05:43Z",
-          "closed_at": "2026-10-20T12:42:00Z",
-          "created_local": "20/10 14:05",
-          "expires_at": "2026-10-21T12:05:43Z",
-          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 107.50 (0.36 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 64%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
-          "news_context": "actualité calme sur les 2 dernières heures",
           "manual_exit": null
         }
       ]
@@ -5143,42 +5143,7 @@
       ]
     }
   ],
-  "open_signals": [
-    {
-      "id": "4fcceef5d0",
-      "asset": "nasdaq",
-      "asset_label": "Nasdaq 100 (NQ)",
-      "direction": "short",
-      "horizon": "24h",
-      "entry": 29511.5,
-      "take_profit": 29229.0,
-      "stop_loss": 29605.5,
-      "risk_reward": 3.01,
-      "confidence": "fort",
-      "score": 8.76,
-      "criteria": [
-        "adx",
-        "rsi",
-        "trend_15m",
-        "trend_1h",
-        "trend_5m",
-        "vwap"
-      ],
-      "source": "shadow",
-      "status": "open",
-      "pnl_pct": null,
-      "pnl_gross_pct": null,
-      "duration_minutes": null,
-      "close_price": null,
-      "created_at": "2026-10-20T12:45:53Z",
-      "closed_at": null,
-      "created_local": "20/10 14:45",
-      "expires_at": "2026-10-21T12:45:53Z",
-      "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 156.58 (0.53 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 40%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
-      "news_context": "actualité à surveiller (score 2) : What happens to Wall Street if CoreWeave defaults? JPMorgan checked the math.",
-      "manual_exit": null
-    }
-  ],
+  "open_signals": [],
   "recent_trades": [
     {
       "id": "9d5e3daa0a",
@@ -6775,9 +6740,9 @@
   "adjustments": {
     "notes": [
       "trades réels : +0,15 R ± 0,19 R par trade avant frais sur 154 trades (0 R = hasard)",
-      "tendance (trend_5m, trend_15m, trend_1h, adx) : +0,10 R ± 0,07 R sur 1200 trades éq. → poids ×1,08",
-      "vwap : +0,12 R ± 0,08 R sur 1099 trades éq. → poids ×1,10",
-      "rsi : +0,15 R ± 0,08 R sur 962 trades éq. → poids ×1,18",
+      "tendance (trend_5m, trend_15m, trend_1h, adx) : +0,10 R ± 0,07 R sur 1201 trades éq. → poids ×1,08",
+      "vwap : +0,12 R ± 0,08 R sur 1100 trades éq. → poids ×1,10",
+      "rsi : +0,15 R ± 0,08 R sur 963 trades éq. → poids ×1,17",
       "tranche 11h UTC : -0,29 R sur 80 trades éq. → évitée",
       "ethereum, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,24 R contre +0,10 R en global sur 78 trades éq. → poids ×0,68 sur cet actif",
       "ethereum, vwap : -0,23 R contre +0,12 R en global sur 35 trades éq. → poids ×0,97 sur cet actif",
@@ -6785,34 +6750,34 @@
       "euro, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,24 R contre +0,10 R en global sur 63 trades éq. → poids ×0,90 sur cet actif",
       "euro, vwap : -0,22 R contre +0,12 R en global sur 60 trades éq. → poids ×0,95 sur cet actif",
       "gold, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,05 R contre +0,10 R en global sur 240 trades éq. → poids ×0,95 sur cet actif",
-      "gold, vwap : -0,05 R contre +0,12 R en global sur 238 trades éq. → poids ×0,91 sur cet actif",
+      "gold, vwap : -0,05 R contre +0,12 R en global sur 238 trades éq. → poids ×0,92 sur cet actif",
       "gold, rsi : -0,06 R contre +0,15 R en global sur 192 trades éq. → poids ×0,84 sur cet actif",
-      "nasdaq, tendance (trend_5m, trend_15m, trend_1h, adx) : +0,48 R contre +0,10 R en global sur 333 trades éq. → poids ×1,50 sur cet actif",
-      "nasdaq, vwap : +0,49 R contre +0,12 R en global sur 326 trades éq. → poids ×1,50 sur cet actif",
+      "nasdaq, tendance (trend_5m, trend_15m, trend_1h, adx) : +0,48 R contre +0,10 R en global sur 334 trades éq. → poids ×1,50 sur cet actif",
+      "nasdaq, vwap : +0,49 R contre +0,12 R en global sur 327 trades éq. → poids ×1,50 sur cet actif",
       "nasdaq, rsi : +0,57 R contre +0,15 R en global sur 272 trades éq. → poids ×1,50 sur cet actif",
       "nasdaq, pdhl : +0,70 R contre +0,19 R en global sur 44 trades éq. → poids ×1,08 sur cet actif",
       "sp500, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,11 R contre +0,10 R en global sur 190 trades éq. → poids ×0,88 sur cet actif",
       "sp500, vwap : -0,10 R contre +0,12 R en global sur 185 trades éq. → poids ×0,87 sur cet actif",
-      "sp500, rsi : -0,06 R contre +0,15 R en global sur 161 trades éq. → poids ×0,90 sur cet actif"
+      "sp500, rsi : -0,06 R contre +0,15 R en global sur 161 trades éq. → poids ×0,91 sur cet actif"
     ],
     "avoid_hours_utc": [
       11
     ],
-    "sample": 1529,
+    "sample": 1530,
     "sample_by_source": {
       "bot": 153,
-      "shadow": 610,
+      "shadow": 611,
       "manual": 1,
       "backtest": 765
     },
     "method": "v2 : recalcul complet, marge de sécurité, résultats en R, sources pondérées",
     "weights": {
-      "trend_5m": 1.08,
-      "trend_15m": 1.08,
-      "trend_1h": 1.08,
-      "adx": 1.08,
-      "vwap": 0.825,
-      "rsi": 1.176,
+      "trend_5m": 1.078,
+      "trend_15m": 1.078,
+      "trend_1h": 1.078,
+      "adx": 1.078,
+      "vwap": 0.824,
+      "rsi": 1.173,
       "macd": 1.0,
       "level": 1.0,
       "volume": 0.75,
@@ -6822,12 +6787,12 @@
     },
     "weights_by_asset": {
       "bitcoin": {
-        "trend_5m": 1.08,
-        "trend_15m": 1.08,
-        "trend_1h": 1.08,
-        "adx": 1.08,
-        "vwap": 0.825,
-        "rsi": 1.176,
+        "trend_5m": 1.078,
+        "trend_15m": 1.078,
+        "trend_1h": 1.078,
+        "adx": 1.078,
+        "vwap": 0.824,
+        "rsi": 1.173,
         "macd": 1.0,
         "level": 1.0,
         "volume": 0.75,
@@ -6836,12 +6801,12 @@
         "corr": 0.5
       },
       "ethereum": {
-        "trend_5m": 0.73,
-        "trend_15m": 0.73,
-        "trend_1h": 0.73,
-        "adx": 0.73,
-        "vwap": 0.798,
-        "rsi": 0.634,
+        "trend_5m": 0.731,
+        "trend_15m": 0.731,
+        "trend_1h": 0.731,
+        "adx": 0.731,
+        "vwap": 0.799,
+        "rsi": 0.636,
         "macd": 1.0,
         "level": 1.0,
         "volume": 0.75,
@@ -6850,12 +6815,12 @@
         "corr": 0.5
       },
       "euro": {
-        "trend_5m": 0.97,
-        "trend_15m": 0.97,
-        "trend_1h": 0.97,
-        "adx": 0.97,
-        "vwap": 0.781,
-        "rsi": 1.176,
+        "trend_5m": 0.971,
+        "trend_15m": 0.971,
+        "trend_1h": 0.971,
+        "adx": 0.971,
+        "vwap": 0.783,
+        "rsi": 1.173,
         "macd": 1.0,
         "level": 1.0,
         "volume": 0.75,
@@ -6868,8 +6833,8 @@
         "trend_15m": 1.022,
         "trend_1h": 1.022,
         "adx": 1.022,
-        "vwap": 0.754,
-        "rsi": 0.988,
+        "vwap": 0.755,
+        "rsi": 0.989,
         "macd": 1.0,
         "level": 1.0,
         "volume": 0.75,
@@ -6882,7 +6847,7 @@
         "trend_15m": 1.5,
         "trend_1h": 1.5,
         "adx": 1.5,
-        "vwap": 1.237,
+        "vwap": 1.236,
         "rsi": 1.5,
         "macd": 1.0,
         "level": 1.0,
@@ -6892,12 +6857,12 @@
         "corr": 0.5
       },
       "oil": {
-        "trend_5m": 1.08,
-        "trend_15m": 1.08,
-        "trend_1h": 1.08,
-        "adx": 1.08,
-        "vwap": 0.825,
-        "rsi": 1.176,
+        "trend_5m": 1.078,
+        "trend_15m": 1.078,
+        "trend_1h": 1.078,
+        "adx": 1.078,
+        "vwap": 0.824,
+        "rsi": 1.173,
         "macd": 1.0,
         "level": 1.0,
         "volume": 0.75,
@@ -6906,12 +6871,12 @@
         "corr": 0.5
       },
       "sp500": {
-        "trend_5m": 0.951,
-        "trend_15m": 0.951,
-        "trend_1h": 0.951,
-        "adx": 0.951,
-        "vwap": 0.714,
-        "rsi": 1.063,
+        "trend_5m": 0.952,
+        "trend_15m": 0.952,
+        "trend_1h": 0.952,
+        "adx": 0.952,
+        "vwap": 0.715,
+        "rsi": 1.064,
         "macd": 1.0,
         "level": 1.0,
         "volume": 0.75,
@@ -6928,31 +6893,31 @@
           "trend_1h",
           "adx"
         ],
-        "n": 1528,
-        "n_eff": 1199.9,
-        "mean_r": 0.1048,
-        "margin_r": 0.0728,
-        "multiplier": 1.08
+        "n": 1529,
+        "n_eff": 1200.9,
+        "mean_r": 0.1039,
+        "margin_r": 0.0727,
+        "multiplier": 1.078
       },
       "vwap": {
         "members": [
           "vwap"
         ],
-        "n": 1383,
-        "n_eff": 1099.3,
-        "mean_r": 0.117,
-        "margin_r": 0.0768,
-        "multiplier": 1.101
+        "n": 1384,
+        "n_eff": 1100.3,
+        "mean_r": 0.116,
+        "margin_r": 0.0767,
+        "multiplier": 1.098
       },
       "rsi": {
         "members": [
           "rsi"
         ],
-        "n": 1247,
-        "n_eff": 961.6,
-        "mean_r": 0.1532,
-        "margin_r": 0.0829,
-        "multiplier": 1.176
+        "n": 1248,
+        "n_eff": 962.6,
+        "mean_r": 0.152,
+        "margin_r": 0.0828,
+        "multiplier": 1.173
       },
       "macd": {
         "members": [
@@ -7022,9 +6987,9 @@
         "margin_r": 0.1945
       },
       "fantômes": {
-        "n": 610,
-        "mean_r": 0.1223,
-        "margin_r": 0.1114
+        "n": 611,
+        "mean_r": 0.1205,
+        "margin_r": 0.1113
       },
       "backtest": {
         "n": 765,
@@ -7035,11 +7000,11 @@
     "variants": {
       "hors_session": {
         "label": "indices le matin européen",
-        "n": 92,
-        "mean_net_r": -0.3476,
-        "lower_r": -0.6427,
+        "n": 93,
+        "mean_net_r": -0.355,
+        "lower_r": -0.6476,
         "promoted": false,
-        "missing": 8
+        "missing": 7
       },
       "horizon_3h": {
         "label": "horizon ~3 h",
@@ -7128,9 +7093,9 @@
     },
     "variants_z": 2.73,
     "promoted_variants": [],
-    "updated_at": "2026-10-20T12:55:49.641471+00:00",
+    "updated_at": "2026-10-20T13:01:20.825925+00:00",
     "context": {
-      "n": 1297,
+      "n": 1298,
       "features": {
         "adx": {
           "label": "force de tendance (ADX 15 min)",
@@ -7139,10 +7104,10 @@
               "label": "bas (< 27)",
               "lo": -1000000000.0,
               "hi": 27.3,
-              "n": 431,
-              "n_eff": 340.2,
-              "mean_r": -0.1126,
-              "margin_r": 0.1448,
+              "n": 432,
+              "n_eff": 341.2,
+              "mean_r": -0.1157,
+              "margin_r": 0.1445,
               "avoid": false
             },
             {
@@ -7174,10 +7139,10 @@
               "label": "bas (< 59)",
               "lo": -1000000000.0,
               "hi": 58.91,
-              "n": 431,
-              "n_eff": 341.4,
-              "mean_r": 0.0289,
-              "margin_r": 0.1511,
+              "n": 432,
+              "n_eff": 342.4,
+              "mean_r": 0.0255,
+              "margin_r": 0.1508,
               "avoid": false
             },
             {
@@ -7209,10 +7174,10 @@
               "label": "bas (< 0,87)",
               "lo": -1000000000.0,
               "hi": 0.8734,
-              "n": 394,
-              "n_eff": 316.4,
-              "mean_r": -0.0045,
-              "margin_r": 0.1584,
+              "n": 395,
+              "n_eff": 317.4,
+              "mean_r": -0.0078,
+              "margin_r": 0.1581,
               "avoid": false
             },
             {
@@ -7243,21 +7208,21 @@
             {
               "label": "bas (< 0,23)",
               "lo": -1000000000.0,
-              "hi": 0.2298,
-              "n": 432,
-              "n_eff": 338.8,
-              "mean_r": 0.0194,
-              "margin_r": 0.145,
+              "hi": 0.2297,
+              "n": 431,
+              "n_eff": 338.1,
+              "mean_r": 0.0125,
+              "margin_r": 0.1449,
               "avoid": false
             },
             {
               "label": "milieu (0,23 à 0,53)",
-              "lo": 0.2298,
+              "lo": 0.2297,
               "hi": 0.5313,
-              "n": 432,
-              "n_eff": 334.4,
-              "mean_r": 0.1109,
-              "margin_r": 0.1805,
+              "n": 434,
+              "n_eff": 336.1,
+              "mean_r": 0.114,
+              "margin_r": 0.18,
               "avoid": false
             },
             {
@@ -7278,21 +7243,21 @@
             {
               "label": "bas (< 1,11)",
               "lo": -1000000000.0,
-              "hi": 1.111,
-              "n": 432,
-              "n_eff": 346.8,
-              "mean_r": -0.109,
-              "margin_r": 0.1366,
+              "hi": 1.11,
+              "n": 430,
+              "n_eff": 345.4,
+              "mean_r": -0.1109,
+              "margin_r": 0.1369,
               "avoid": false
             },
             {
               "label": "milieu (1,11 à 1,51)",
-              "lo": 1.111,
+              "lo": 1.11,
               "hi": 1.512,
-              "n": 432,
-              "n_eff": 333.1,
-              "mean_r": 0.0576,
-              "margin_r": 0.1669,
+              "n": 435,
+              "n_eff": 335.5,
+              "mean_r": 0.0553,
+              "margin_r": 0.1661,
               "avoid": false
             },
             {
@@ -7323,21 +7288,21 @@
             {
               "label": "milieu (1,04 à 1,34)",
               "lo": 1.043,
-              "hi": 1.338,
-              "n": 412,
-              "n_eff": 327.9,
-              "mean_r": 0.1297,
-              "margin_r": 0.1778,
+              "hi": 1.337,
+              "n": 408,
+              "n_eff": 325.3,
+              "mean_r": 0.1166,
+              "margin_r": 0.1768,
               "avoid": false
             },
             {
               "label": "haut (≥ 1,34)",
-              "lo": 1.338,
+              "lo": 1.337,
               "hi": 1000000000.0,
-              "n": 411,
-              "n_eff": 307.6,
-              "mean_r": 0.3546,
-              "margin_r": 0.2088,
+              "n": 416,
+              "n_eff": 311.5,
+              "mean_r": 0.3589,
+              "margin_r": 0.2084,
               "avoid": false
             }
           ]
@@ -7359,10 +7324,10 @@
               "label": "milieu (0,34 à 0,64)",
               "lo": 0.3435,
               "hi": 0.6356,
-              "n": 432,
-              "n_eff": 341.6,
-              "mean_r": 0.1344,
-              "margin_r": 0.1771,
+              "n": 433,
+              "n_eff": 342.6,
+              "mean_r": 0.1309,
+              "margin_r": 0.1768,
               "avoid": false
             },
             {
@@ -7384,10 +7349,10 @@
               "label": "bas (< 0,08)",
               "lo": -1000000000.0,
               "hi": 0.0812,
-              "n": 428,
-              "n_eff": 344.3,
-              "mean_r": 0.2998,
-              "margin_r": 0.2044,
+              "n": 429,
+              "n_eff": 345.3,
+              "mean_r": 0.2957,
+              "margin_r": 0.204,
               "avoid": false
             },
             {
@@ -7419,10 +7384,10 @@
               "label": "plus de 30 min avant l'ouverture US",
               "lo": -1000000000.0,
               "hi": -30.0,
-              "n": 484,
-              "n_eff": 394.3,
-              "mean_r": -0.1027,
-              "margin_r": 0.1371,
+              "n": 485,
+              "n_eff": 395.2,
+              "mean_r": -0.1055,
+              "margin_r": 0.1369,
               "avoid": false
             },
             {
@@ -7464,10 +7429,10 @@
               "label": "mardi",
               "lo": 1,
               "hi": 2,
-              "n": 213,
-              "n_eff": 169.8,
-              "mean_r": -0.0906,
-              "margin_r": 0.2019,
+              "n": 214,
+              "n_eff": 170.8,
+              "mean_r": -0.097,
+              "margin_r": 0.2011,
               "avoid": false
             },
             {
@@ -7527,32 +7492,32 @@
     },
     "exits": {
       "réels et en ombre": {
-        "n": 533,
-        "current_net_r": 0.07,
+        "n": 534,
+        "current_net_r": 0.0679,
         "mfe_median": 0.792,
         "sl_reached": {
           "0.5": 87,
           "0.8": 44,
           "1.0": 27
         },
-        "n_sl": 262,
+        "n_sl": 263,
         "rules": {
           "0.5": {
-            "net_r": 0.015,
-            "diff_r": -0.055,
-            "margin_r": 0.0724,
+            "net_r": 0.0131,
+            "diff_r": -0.0549,
+            "margin_r": 0.0723,
             "better": false
           },
           "0.8": {
-            "net_r": 0.0046,
-            "diff_r": -0.0653,
-            "margin_r": 0.0572,
+            "net_r": 0.0027,
+            "diff_r": -0.0652,
+            "margin_r": 0.0571,
             "better": false
           },
           "1.0": {
-            "net_r": -0.0061,
-            "diff_r": -0.0761,
-            "margin_r": 0.0526,
+            "net_r": -0.0081,
+            "diff_r": -0.076,
+            "margin_r": 0.0525,
             "better": false
           }
         }
@@ -7657,10 +7622,10 @@
     }
   },
   "state": {
-    "last_scan": "2026-10-20T12:55:48Z",
+    "last_scan": "2026-10-20T13:01:20Z",
     "last_scan_note": "0 signal(aux)",
     "last_summary": "2026-10-19T22:05:45Z",
-    "last_track": "2026-10-20T12:55:48Z",
+    "last_track": "2026-10-20T13:01:20Z",
     "last_summary_day": "2026-10-19"
   },
   "limits": {
@@ -19756,19 +19721,19 @@
           "entry_ts": 1792418400,
           "entry_at": "2026-10-19T14:00:00Z",
           "direction": "short",
-          "entry": 4174.5,
-          "risk": 29.187765,
-          "stop": 4203.687765,
+          "entry": 4174.2001953125,
+          "risk": 29.453102,
+          "stop": 4203.653298,
           "status": "open",
           "reason": null,
           "exit_ts": null,
           "exit": null,
-          "last": 4139.39990234375,
+          "last": 4137.39990234375,
           "r_topstep": null,
           "r_bot": null
         }
       ],
-      "checked_hour": "2026-10-20T12:00:00Z",
+      "checked_hour": "2026-10-20T13:00:00Z",
       "n": 8,
       "mean_r": -0.4317,
       "live": false
