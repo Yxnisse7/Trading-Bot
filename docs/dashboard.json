@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-21T11:31:18.070594+02:00",
+  "updated_at": "2026-10-21T11:35:56.061035+02:00",
   "timezone": "Europe/Paris",
   "equity_curve": [
     {
@@ -1727,7 +1727,7 @@
       "avg_pnl_pct": 0.0055
     },
     "open": 0,
-    "open_shadow": 0
+    "open_shadow": 1
   },
   "by_source": {
     "bot": {
@@ -5167,7 +5167,42 @@
       ]
     }
   ],
-  "open_signals": [],
+  "open_signals": [
+    {
+      "id": "427cd305ce",
+      "asset": "nasdaq",
+      "asset_label": "Nasdaq 100 (NQ)",
+      "direction": "short",
+      "horizon": "24h",
+      "entry": 29805.0,
+      "take_profit": 29626.0,
+      "stop_loss": 29864.5,
+      "risk_reward": 3.01,
+      "confidence": "fort",
+      "score": 8.73,
+      "criteria": [
+        "adx",
+        "rsi",
+        "trend_15m",
+        "trend_1h",
+        "trend_5m",
+        "vwap"
+      ],
+      "source": "shadow",
+      "status": "open",
+      "pnl_pct": null,
+      "pnl_gross_pct": null,
+      "duration_minutes": null,
+      "close_price": null,
+      "created_at": "2026-10-21T09:35:43Z",
+      "closed_at": null,
+      "created_local": "21/10 11:35",
+      "expires_at": "2026-10-22T09:35:43Z",
+      "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 118.48 (0.40 %), TP = 40 % du range, SL = 34 % du range, probabilité de résolution sous 1 h ≈ 82%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+      "news_context": "actualité à surveiller (score 2) : UK inflation jumps to 3.5% — cementing rate hike expectations",
+      "manual_exit": null
+    }
+  ],
   "recent_trades": [
     {
       "id": "9d5e3daa0a",
@@ -7646,7 +7681,7 @@
     }
   },
   "state": {
-    "last_scan": "2026-10-21T09:31:04Z",
+    "last_scan": "2026-10-21T09:35:43Z",
     "last_scan_note": "0 signal(aux)",
     "last_summary": "2026-10-20T22:05:45Z",
     "last_track": "2026-10-20T19:46:00Z",
@@ -20364,7 +20399,7 @@
         }
       ],
       "live": true,
-      "checked_hour": "2026-10-21T09:15:00Z",
+      "checked_hour": "2026-10-21T09:30:00Z",
       "n": 2,
       "mean_r": -0.4036
     },
@@ -20521,7 +20556,7 @@
         }
       ],
       "live": true,
-      "checked_hour": "2026-10-21T09:15:00Z",
+      "checked_hour": "2026-10-21T09:30:00Z",
       "n": 3,
       "mean_r": -0.5574
     }
