@@ -1,0 +1,238 @@
+{
+  "essai": 42,
+  "asset": "nasdaq",
+  "n_old": 4458,
+  "n_new": 2309,
+  "cells": {
+    "N0 ancien rejeu (sortie 1 h), brut": {
+      "n": 4458,
+      "mean_r": 0.0094,
+      "profit_factor": 1.02,
+      "positive_years": "4/8",
+      "years": {
+        "2017": -0.0225,
+        "2018": 0.0105,
+        "2019": -0.0127,
+        "2020": 0.0425,
+        "2021": -0.0073,
+        "2022": -0.0103,
+        "2023": 0.0261,
+        "2024": 0.031,
+        "2025": -0.0022,
+        "2026": 0.0512
+      },
+      "before_2020": 0.0017,
+      "since_2020": 0.0171,
+      "last_2_years": 0.0216,
+      "fees_x2": -0.0521,
+      "regimes": {
+        "hausse": {
+          "n": 2197,
+          "mean_r": 0.0207
+        },
+        "baisse": {
+          "n": 800,
+          "mean_r": -0.0233
+        },
+        "plat": {
+          "n": 1461,
+          "mean_r": 0.0105
+        }
+      },
+      "checks": {
+        "200 trades": true,
+        "R > 0 et PF ≥ 1,1": false,
+        "60 % des années": false,
+        "deux moitiés": true,
+        "2 dernières années": true,
+        "frais doublés": false,
+        "2 régimes sur 3": true,
+        "singes": true
+      },
+      "monkeys": {
+        "beaten": 1000,
+        "z": 8.32
+      },
+      "mean_minutes": 37.4,
+      "robust": false,
+      "status": "pas robuste"
+    },
+    "N1 nouveau rejeu (comme en réel), brut": {
+      "n": 2309,
+      "mean_r": 0.1178,
+      "profit_factor": 1.17,
+      "positive_years": "8/8",
+      "years": {
+        "2017": 0.1765,
+        "2018": 0.317,
+        "2019": 0.0393,
+        "2020": 0.1107,
+        "2021": 0.1018,
+        "2022": 0.0533,
+        "2023": 0.1015,
+        "2024": 0.0714,
+        "2025": 0.0686,
+        "2026": 0.1286
+      },
+      "before_2020": 0.153,
+      "since_2020": 0.0826,
+      "last_2_years": 0.0974,
+      "fees_x2": 0.0776,
+      "regimes": {
+        "hausse": {
+          "n": 1148,
+          "mean_r": 0.1471
+        },
+        "baisse": {
+          "n": 422,
+          "mean_r": 0.063
+        },
+        "plat": {
+          "n": 739,
+          "mean_r": 0.1035
+        }
+      },
+      "checks": {
+        "200 trades": true,
+        "R > 0 et PF ≥ 1,1": true,
+        "60 % des années": true,
+        "deux moitiés": true,
+        "2 dernières années": true,
+        "frais doublés": true,
+        "2 régimes sur 3": true,
+        "singes": true
+      },
+      "monkeys": {
+        "beaten": 1000,
+        "z": 6.75
+      },
+      "mean_minutes": 230.3,
+      "robust": true,
+      "status": "prouvé"
+    },
+    "N2 nouveau rejeu + filtre actuel (appris sur l'ancien)": {
+      "n": 672,
+      "mean_r": 0.2249,
+      "profit_factor": 1.34,
+      "positive_years": "7/8",
+      "years": {
+        "2017": 0.4211,
+        "2018": 0.2936,
+        "2019": 0.1851,
+        "2020": 0.1261,
+        "2021": 0.3959,
+        "2022": 0.2805,
+        "2023": -0.009,
+        "2024": 0.1607,
+        "2025": 0.0854,
+        "2026": 0.324
+      },
+      "before_2020": 0.2706,
+      "since_2020": 0.1773,
+      "last_2_years": 0.2143,
+      "fees_x2": 0.193,
+      "regimes": {
+        "hausse": {
+          "n": 302,
+          "mean_r": 0.1965
+        },
+        "baisse": {
+          "n": 122,
+          "mean_r": 0.368
+        },
+        "plat": {
+          "n": 248,
+          "mean_r": 0.1891
+        }
+      },
+      "checks": {
+        "200 trades": true,
+        "R > 0 et PF ≥ 1,1": true,
+        "60 % des années": true,
+        "deux moitiés": true,
+        "2 dernières années": true,
+        "frais doublés": true,
+        "2 régimes sur 3": true,
+        "singes": true,
+        "filtres au hasard": true
+      },
+      "monkeys": {
+        "beaten": 1000,
+        "z": 5.68
+      },
+      "filter_monkeys": {
+        "real_r": 0.2249,
+        "monkeys_r": 0.1123,
+        "beaten": 972,
+        "z": 1.97
+      },
+      "kept_share": 0.291,
+      "mean_minutes": 285.0,
+      "robust": true,
+      "status": "robuste"
+    },
+    "N3 nouveau rejeu + filtre réappris sur le nouveau": {
+      "n": 1346,
+      "mean_r": 0.154,
+      "profit_factor": 1.23,
+      "positive_years": "8/8",
+      "years": {
+        "2017": 0.3545,
+        "2018": 0.1672,
+        "2019": 0.0847,
+        "2020": 0.1588,
+        "2021": 0.1927,
+        "2022": 0.1419,
+        "2023": 0.1005,
+        "2024": 0.0895,
+        "2025": 0.1909,
+        "2026": 0.1575
+      },
+      "before_2020": 0.1797,
+      "since_2020": 0.1305,
+      "last_2_years": 0.1355,
+      "fees_x2": 0.1169,
+      "regimes": {
+        "hausse": {
+          "n": 658,
+          "mean_r": 0.167
+        },
+        "baisse": {
+          "n": 242,
+          "mean_r": 0.1674
+        },
+        "plat": {
+          "n": 446,
+          "mean_r": 0.1275
+        }
+      },
+      "checks": {
+        "200 trades": true,
+        "R > 0 et PF ≥ 1,1": true,
+        "60 % des années": true,
+        "deux moitiés": true,
+        "2 dernières années": true,
+        "frais doublés": true,
+        "2 régimes sur 3": true,
+        "singes": true,
+        "filtres au hasard": false
+      },
+      "monkeys": {
+        "beaten": 1000,
+        "z": 6.17
+      },
+      "filter_monkeys": {
+        "real_r": 0.154,
+        "monkeys_r": 0.1115,
+        "beaten": 924,
+        "z": 1.45
+      },
+      "kept_share": 0.583,
+      "mean_minutes": 239.6,
+      "robust": false,
+      "status": "pas robuste"
+    }
+  },
+  "z_threshold": 2.24,
+  "updated_at": "2026-10-21T13:59:36Z"
+}
