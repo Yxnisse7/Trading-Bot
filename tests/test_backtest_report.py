@@ -91,3 +91,15 @@ def test_backtest_follows_real_exit_and_never_overlaps(monkeypatch):
     assert all(t["duration_minutes"] <= 1440 for t in trades)
     for a, b in zip(trades, trades[1:]):
         assert parse_iso(b["created_at"]) >= parse_iso(a["closed_at"])
+
+
+def test_stop_jumped_by_a_gap_fills_at_the_open():
+    from trading_bot.models import Candle, Signal
+    from trading_bot.tracker import resolve_with_candles
+    from trading_bot.models import parse_iso
+    sig = Signal(id="x", asset="nasdaq", asset_label="Nasdaq", direction="long", entry=100.0, take_profit=102.0,
+                 stop_loss=99.0, risk_reward=2.0, confidence="moyen", score=0.0, criteria=[], rationale="",
+                 news_context="", created_at="2026-10-21T13:00:00Z", expires_at="2026-10-22T13:00:00Z")
+    ts = int(parse_iso("2026-10-22T07:00:00Z").timestamp())
+    out = resolve_with_candles(sig, [Candle(ts=ts, open=97.0, high=97.5, low=96.5, close=97.2)])
+    assert out[0] == "sl" and out[1] == 97.0

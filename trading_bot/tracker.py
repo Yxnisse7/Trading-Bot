@@ -14,7 +14,8 @@ log = logging.getLogger(__name__)
 def resolve_with_candles(sig: Signal, candles: list[Candle]) -> tuple[str, float, datetime] | None:
     """Parcourt les bougies postérieures au signal ; renvoie (statut, prix, heure) si résolu.
 
-    Convention prudente : si TP et SL sont touchés dans la même bougie, on compte le SL.
+    Convention prudente : si TP et SL sont touchés dans la même bougie, on compte le SL. Un niveau sauté par un trou
+    de prix est exécuté à l'ouverture de la bougie (comme strategies.simulate).
     """
     start = int(parse_iso(sig.created_at).timestamp())
     expiry = parse_iso(sig.expires_at)
@@ -30,10 +31,12 @@ def resolve_with_candles(sig: Signal, candles: list[Candle]) -> tuple[str, float
         else:
             hit_sl = c.high >= sig.stop_loss
             hit_tp = c.low <= sig.take_profit
+        # le prix peut sauter par-dessus un niveau (réouverture, annonce) : on sort au prix d'ouverture
+        long = sig.direction == "long"
         if hit_sl:
-            return "sl", sig.stop_loss, cdt
+            return "sl", (min(sig.stop_loss, c.open) if long else max(sig.stop_loss, c.open)), cdt
         if hit_tp:
-            return "tp", sig.take_profit, cdt
+            return "tp", (max(sig.take_profit, c.open) if long else min(sig.take_profit, c.open)), cdt
     return None
 
 

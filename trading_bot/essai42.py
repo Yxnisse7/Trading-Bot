@@ -6,6 +6,7 @@ corrigé ; on rejoue le Nasdaq 2014-2026 et on regarde si le filtre de l'essai 2
 anciennes lignes) tient encore sur les trades réellement joués.
 
     python -m trading_bot.essai42          → data/essai42.json
+    python -m trading_bot.essai42 b        → data/essai42b.json (42 b : stop sauté par un trou compté au vrai prix)
 """
 from __future__ import annotations
 
@@ -24,12 +25,13 @@ from . import essai26 as e26
 from .essai21 import Bars, judge
 
 KEY = "nasdaq"
+SUFFIX = ""
 GROUP = e26.MODES["groupe indices"][0]
 
 
 def new_rows(store, cfg, root: Path, candles, log: Callable[[str], None]) -> list[dict[str, Any]]:
     from .backtest import run_backtest
-    cache = root / "history" / "long" / "essai42_bot_nasdaq.json"
+    cache = root / "history" / "long" / f"essai42{SUFFIX}_bot_nasdaq.json"
     if cache.exists():
         return json.loads(cache.read_text(encoding="utf-8"))
     log("bot Nasdaq rejoué 2014-2026 avec le backtest corrigé…")
@@ -88,7 +90,7 @@ def run(store, cfg, root: Path, log: Callable[[str], None] = print) -> dict[str,
         closes[datetime.fromtimestamp(c.ts, e24.sl.NY).date()] = c.close
     keys = sorted(closes)
     last_year = datetime.fromtimestamp(candles[-1].ts, timezone.utc).year
-    out: dict[str, Any] = {"essai": 42, "asset": KEY, "n_old": int(len(o_oos)), "n_new": int(len(n_oos)), "cells": {}}
+    out: dict[str, Any] = {"essai": f"42{SUFFIX}", "asset": KEY, "n_old": int(len(o_oos)), "n_new": int(len(n_oos)), "cells": {}}
     old_half = e24.HALF
     e24.HALF = e25.HALF
     try:
@@ -126,6 +128,9 @@ def run(store, cfg, root: Path, log: Callable[[str], None] = print) -> dict[str,
 
 
 def main() -> None:
+    import sys
+    global SUFFIX
+    SUFFIX = "".join(sys.argv[1:2])
     from .config import load_config
     from .engine import Engine
     from .models import iso, utcnow
@@ -134,7 +139,7 @@ def main() -> None:
     out["updated_at"] = iso(utcnow())
     for k, v in out["cells"].items():
         print(f"{k:55s} {v['status']}", flush=True)
-    eng.store._write(eng.store.dir / "essai42.json", out)
+    eng.store._write(eng.store.dir / f"essai42{SUFFIX}.json", out)
 
 
 if __name__ == "__main__":
