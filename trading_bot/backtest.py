@@ -1,9 +1,11 @@
 """Backtest : rejoue la logique de signal sur l'historique 5 min (jusqu'à 60 jours sur Yahoo).
 
 Sans biais de futur : à chaque pas, seules les bougies déjà clôturées sont utilisées
-pour l'analyse ; l'issue est déterminée sur les 12 bougies suivantes (1 h), SL prioritaire
-si TP et SL sont touchés dans la même bougie. Les règles de la politique (maximum
-quotidien, refroidissement, arrêt après pertes) sont appliquées comme en production.
+pour l'analyse ; l'issue est déterminée sur les bougies suivantes jusqu'à l'expiration du signal
+(1 h, 3 h, ou 24 h sur le Nasdaq avec EXIT_OVERRIDE), SL prioritaire si TP et SL sont touchés dans
+la même bougie. Les règles de la politique (maximum quotidien, un seul signal ouvert, refroidissement,
+arrêt après pertes, pas de retour dans le sens d'un stop) sont appliquées comme en production
+(engine._policy_block) : un signal n'a de statut qu'une fois clos (essai 42).
 L'actualité n'est pas rejouée (non disponible historiquement) : les résultats sont donc
 légèrement optimistes sur ce point.
 """
@@ -24,20 +26,32 @@ from .tracker import resolve_with_candles, close_signal
 log = logging.getLogger(__name__)
 
 
-def _policy_allows(asset: AssetConfig, sigs: list[Signal], now: datetime, cfg: Config, base_minutes: int = 5) -> bool:
+KEEP = 3 * 86400        # signaux plus vieux que 3 jours : sans effet sur la politique
+
+
+def _policy_allows(asset: AssetConfig, past: list[tuple[int, int, str, str]], now: datetime, cfg: Config,
+                   base_minutes: int = 5, direction: str | None = None) -> bool:
+    """`past` : (émis, clos, statut, sens) des signaux déjà émis, en secondes ; seul ce qui est clos à `now` est connu."""
+    t = int(now.timestamp())
     tz = ZoneInfo(cfg.timezone)
     today = now.astimezone(tz).date()
-    todays = [s for s in sigs if parse_iso(s.created_at).astimezone(tz).date() == today]
+    recent = [p for p in past[-200:] if p[0] >= t - KEEP]
+    if any(p[1] > t for p in recent):
+        return False                                    # un signal est encore ouvert
+    todays = [p for p in recent if datetime.fromtimestamp(p[0], tz).date() == today]
     cap = cfg.max_signals_per_asset_per_day if base_minutes == 5 else cfg.max_long_signals_per_asset_per_day
     if len(todays) >= cap:
         return False
-    if sum(1 for s in todays if s.status == "sl") >= cfg.max_losses_per_asset_per_day:
+    if sum(1 for p in todays if p[2] == "sl") >= cfg.max_losses_per_asset_per_day:
         return False
-    if sigs:
-        last = sigs[-1]
-        cooldown = cfg.cooldown_after_loss_minutes if last.status == "sl" else cfg.cooldown_minutes
-        if now - parse_iso(last.created_at) < timedelta(minutes=cooldown):
-            return False
+    if recent and t - recent[-1][0] < cfg.cooldown_minutes * 60:
+        return False
+    stops = [p for p in recent if p[2] == "sl"]
+    if stops and t - max(p[1] for p in stops) < cfg.cooldown_after_loss_minutes * 60:
+        return False
+    if direction and cfg.same_direction_after_loss_minutes > 0 and any(
+            p[3] == direction and t - p[1] < cfg.same_direction_after_loss_minutes * 60 for p in stops):
+        return False
     if asset.session_utc and not (asset.session_utc[0] <= now.hour < asset.session_utc[1]):
         return False
     return True
@@ -53,23 +67,30 @@ def run_backtest(asset: AssetConfig, candles: list[Candle], cfg: Config, *, step
     """
     horizon = max(1, 12 * base_minutes // 5)
     sigs: list[Signal] = []
+    past: list[tuple[int, int, str, str]] = []
     rejected: dict[str, int] = {}
     i = warmup
     while i < len(candles) - horizon:
         window = candles[max(0, i + 1 - lookback): i + 1]
         now = datetime.fromtimestamp(candles[i].ts + 300, tz=timezone.utc)  # clôture de la bougie i
-        if _policy_allows(asset, sigs, now, cfg, base_minutes):
+        if _policy_allows(asset, past, now, cfg, base_minutes):
             a = assess(asset, window, cfg, weights, base_minutes=base_minutes)
             if cfg.long_only and a.direction == "short":
                 a.reasons_rejected.append("achat seulement : tendance baissière ignorée")
                 a.direction = None
             sig, why = build_signal(asset, a, cfg, "backtest (actualité non rejouée)", now, simulate=simulate)
+            if sig is not None and not _policy_allows(asset, past, now, cfg, base_minutes, sig.direction):
+                sig, why = None, ["stop récent dans ce sens"]
             if sig is None:
                 key = why[-1].split(" (")[0] if why else "inconnu"
                 rejected[key] = rejected.get(key, 0) + 1
             else:
-                # entrée = clôture de la bougie i ; issue sur les bougies i+1 .. i+horizon
-                future = candles[i + 1: i + 1 + horizon]
+                # entrée = clôture de la bougie i ; issue sur les bougies i+1 .. expiration du signal
+                exp = int(parse_iso(sig.expires_at).timestamp())
+                j = i + 1
+                while j < len(candles) and candles[j].ts < exp:
+                    j += 1
+                future = candles[i + 1: max(j, i + 2)]
                 outcome = resolve_with_candles(sig, future)
                 walk_excursion(sig, future, outcome[2] if outcome else None)
                 if outcome is None:
@@ -79,6 +100,7 @@ def run_backtest(asset: AssetConfig, candles: list[Candle], cfg: Config, *, step
                     status, px, when = outcome
                     close_signal(sig, status, px, when, asset.cost_pct)
                 sigs.append(sig)
+                past.append((int(now.timestamp()), int(parse_iso(sig.closed_at).timestamp()), sig.status, sig.direction))
         i += step
     res = summarize(asset, candles, sigs, rejected)
     res["horizon"] = "1h" if base_minutes == 5 else f"{12 * base_minutes // 60}h"

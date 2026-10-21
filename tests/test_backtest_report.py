@@ -77,3 +77,17 @@ def test_closed_candles_and_vwap():
     lo, hi = min(c.low for c in candles), max(c.high for c in candles)
     assert lo <= v <= hi
     assert ind.vwap([candles[0]._replace(volume=0) if hasattr(candles[0], "_replace") else candles[0]], candles[0].ts + 1) is None
+
+
+def test_backtest_follows_real_exit_and_never_overlaps(monkeypatch):
+    """Essai 42 : sortie suivie jusqu'à la vraie expiration, jamais deux signaux ouverts en même temps."""
+    from trading_bot import signals
+    from trading_bot.models import parse_iso
+    monkeypatch.setattr(signals, "EXIT_OVERRIDE", {"nasdaq": (1.5, 3.0, 1440)})
+    cfg = _cfg()
+    res = run_backtest(cfg.asset("nasdaq"), make_candles(n=2000, drift=0.0002, noise=0.0012, seed=5), cfg, step=3)
+    trades = res["trades"]
+    assert trades and max(t["duration_minutes"] for t in trades) > 60
+    assert all(t["duration_minutes"] <= 1440 for t in trades)
+    for a, b in zip(trades, trades[1:]):
+        assert parse_iso(b["created_at"]) >= parse_iso(a["closed_at"])
