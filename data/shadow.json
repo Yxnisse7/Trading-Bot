@@ -98,7 +98,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1792604100
+        "last_ts": 1792604400
       }
     }
   },
@@ -189,7 +189,7 @@
       "variant": "modele_arbres",
       "exc": {
         "mfe": 0.0,
-        "mae": 0.4372,
+        "mae": 0.6147,
         "armed": {
           "0.5": false,
           "0.8": false,
@@ -200,7 +200,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": null
+        "last_ts": 1792604400
       }
     }
   },
@@ -291,7 +291,7 @@
       "filters_checked": true,
       "variant": "modele_arbres",
       "exc": {
-        "mfe": 0.0,
+        "mfe": 0.0142,
         "mae": 0.0498,
         "armed": {
           "0.5": false,
@@ -386,6 +386,108 @@
         "source": "essai 29"
       },
       "price_time": "2026-10-21T17:40:00Z",
+      "model_r": -0.0046,
+      "filters": [
+        "modele_arbres"
+      ],
+      "filters_checked": true,
+      "variant": "modele_arbres",
+      "exc": {
+        "mfe": 0.0132,
+        "mae": 0.0,
+        "armed": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "be": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "last_ts": null
+      }
+    }
+  },
+  {
+    "id": "f65bb0f2b7",
+    "asset": "nasdaq",
+    "asset_label": "Nasdaq 100 (NQ)",
+    "direction": "long",
+    "entry": 30066.0,
+    "take_profit": 30296.5,
+    "stop_loss": 29989.0,
+    "risk_reward": 2.99,
+    "confidence": "fort",
+    "score": 8.71,
+    "criteria": [
+      "adx",
+      "rsi",
+      "trend_15m",
+      "trend_1h",
+      "trend_5m",
+      "vwap"
+    ],
+    "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 127.92 (0.43 %), TP = 51 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 88%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+    "news_context": "actualité à surveiller (score 1) : How Ukraine’s drone strikes on Russia crippled the world’s second-largest diesel supplier",
+    "created_at": "2026-10-21T17:50:50Z",
+    "expires_at": "2026-10-22T17:50:50Z",
+    "status": "open",
+    "closed_at": null,
+    "close_price": null,
+    "pnl_pct": null,
+    "pnl_gross_pct": null,
+    "duration_minutes": null,
+    "hourly_range": 127.916667,
+    "source": "shadow",
+    "horizon": "24h",
+    "horizon_minutes": 1440,
+    "meta": {
+      "tick": 0.25,
+      "details": {
+        "trend_5m": "EMA20 30053.35 / EMA50 29996.55 (5 min)",
+        "trend_15m": "EMA20 29985.36 / EMA50 29919.71",
+        "trend_1h": "prix vs EMA20 1 h 29899.38",
+        "adx": "ADX15 25.5 (+DI 27.1 / -DI 14.5)",
+        "vwap": "VWAP jour 29914.64",
+        "rsi": "RSI14 5 min 56.3",
+        "macd": "histogramme MACD -6.4912",
+        "level": "support 30063.00 / résistance 30138.50",
+        "volume": "z-score volume -2.54",
+        "pdhl": "veille : haut 29978.00 / bas 29391.75",
+        "activity": "activité de l'heure 1.14× la moyenne",
+        "corr": "VIX -0.5 % sur 15 min"
+      },
+      "support": 30063.0,
+      "resistance": 30138.5,
+      "atr_5m": 29.969836347978177,
+      "atr_ratio": 0.9695346522948595,
+      "hourly_range_pct": 0.4255,
+      "adx_15m": 25.522098396929,
+      "sigma_5m": 0.0010051145224345493,
+      "p_resolution": 0.8786666666666667,
+      "p_tp_neutral": 0.3973333333333333,
+      "activity_ratio": 1.143,
+      "base_minutes": 5,
+      "ctx": {
+        "adx": 25.52,
+        "rsi_dir": 56.34,
+        "vwap_ext": 1.1833,
+        "ema_ext": 0.0989,
+        "atr_ratio": 0.97,
+        "activity": 1.143,
+        "range_pct": 0.4255,
+        "cost_r": 0.0587,
+        "us_open_min": 260.8,
+        "weekday": 2
+      },
+      "exit_override": {
+        "stop_x": 1.5,
+        "target_x": 3.0,
+        "minutes": 1440,
+        "source": "essai 29"
+      },
+      "price_time": "2026-10-21T17:45:00Z",
       "model_r": -0.0046,
       "filters": [
         "modele_arbres"
