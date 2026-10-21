@@ -50,8 +50,8 @@
     macd: "MACD", rsi: "RSI", vwap: "VWAP", orb: "Cassure d'ouverture", pdhl: "Niveaux de la veille",
     level: "Niveau clé", corr: "Corrélation", volume: "Volume anormal",
   };
-  const SRC = { bot: "Bot", manual: "Manuel", request: "Proposition", shadow: "Ombre", backtest: "Backtest" };
-  const RES = { tp: "TP", sl: "SL", expired: "Expiré", open: "En cours" };
+  const SRC = { bot: "Bot", manual: "Manuel", request: "Proposition", shadow: "Ombre", backtest: "Backtest", strategy: "Stratégie" };
+  const RES = { tp: "TP", sl: "SL", expired: "Expiré", open: "En cours", win: "Gain", loss: "Perte" };
   const shortLabel = (l) => String(l || "").replace(/ \(.*\)$/, "");
   function critTags(list, max = 2) {
     const c = list || [];

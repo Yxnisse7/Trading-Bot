@@ -80,7 +80,7 @@
       <div class="sub" id="trades-sub" style="margin:0">Du plus récent au plus ancien</div>
       <div class="filters">
         <select id="f-asset" aria-label="Filtrer par actif"><option value="">Tous les actifs</option></select>
-        <select id="f-source" aria-label="Filtrer par source"><option value="">Toutes les sources</option><option value="bot">Bot</option><option value="manual">Manuel</option><option value="request">Proposition</option></select>
+        <select id="f-source" aria-label="Filtrer par source"><option value="">Toutes les sources</option><option value="bot">Bot</option><option value="manual">Manuel</option><option value="request">Proposition</option><option value="strategy">Stratégies</option></select>
         <div class="seg" role="group" aria-label="Filtrer par résultat" id="f-status"><button type="button" data-v="" aria-pressed="true">Tous</button><button type="button" data-v="tp">TP</button><button type="button" data-v="sl">SL</button><button type="button" data-v="expired">Expirés</button></div>
       </div>
     </div>
@@ -367,21 +367,42 @@
     const fa = $("#f-asset"), cur = fa.value; fa.innerHTML = `<option value="">Tous les actifs</option>` + opts; fa.value = cur;
     const ma = $("#m-asset"), cm = ma.value; ma.innerHTML = data.assets.map((a) => `<option value="${esc(a.key)}">${esc(a.label)}</option>`).join(""); if (cm) ma.value = cm;
   }
+  // trades réels des stratégies (annoncés sur Telegram), mis au format des trades du bot
+  function strategyTrades() {
+    const out = [];
+    for (const v of Object.values(data.lab_shadow || {})) {
+      const a = (data.assets || []).find((x) => x.key === v.asset) || {};
+      for (const t of v.trades || []) {
+        if (!t.notified_entry || t.pc_absent || t.status !== "closed" || t.exit == null) continue;
+        const sg = t.direction === "long" ? 1 : -1;
+        const pnl = sg * (t.exit / t.entry - 1) * 100 - (a.cost_pct || 0);
+        const ts = new Date(t.entry_at || t.entry_ts * 1000);
+        out.push({ id: `lab-${v.strategy}-${t.entry_ts}`, asset: v.asset, asset_label: a.label || v.asset, direction: t.direction,
+          entry: +t.entry.toFixed(2), take_profit: null, stop_loss: +(+t.stop).toFixed(2), source: "strategy", strategy: LIVE_NAMES[v.strategy] || v.strategy,
+          status: t.reason === "stop" && pnl < 0 ? "sl" : pnl >= 0 ? "win" : "loss", pnl_pct: pnl,
+          duration_minutes: t.exit_ts ? Math.round((t.exit_ts - t.entry_ts) / 60) : null, created_at: ts.toISOString(),
+          created_local: ts.toLocaleString("fr-FR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit", timeZone: "Europe/Paris" }).replace(",", "") });
+      }
+    }
+    return out;
+  }
   function renderTrades() {
-    const all = data.recent_trades || [];
+    const strat = strategyTrades();
+    const all = [...(data.recent_trades || []), ...strat].sort((x, y) => (y.created_at > x.created_at ? 1 : -1));
     const list = all.filter((t) => (!filt.asset || t.asset === filt.asset) && (!filt.source || t.source === filt.source) && (!filt.status || t.status === filt.status));
     const shown = list.slice(0, tradeLimit);
-    const lv = (t) => `${Y.price(t.take_profit)} · ${Y.price(t.stop_loss)}`;
+    const lv = (t) => `${t.take_profit == null ? "—" : Y.price(t.take_profit)} · ${Y.price(t.stop_loss)}`;
+    const why = (t) => t.source === "strategy" ? `<span class="tags"><span class="tag">Stratégie · ${esc(t.strategy)}</span></span>` : Y.critTags(t.criteria, 2);
     const dur = (m) => m === null || m === undefined ? "" : m >= 60 ? `${Math.floor(m / 60)} h${m % 60 ? " " + String(m % 60).padStart(2, "0") : ""}` : `${m} min`;
     $("#trades-table tbody").innerHTML = shown.length ? shown.map((t) => `<tr>
       <td class="mono nowrap faint" style="font-size:12px">${esc(t.created_local)}</td><td class="nowrap"><b style="font-weight:500">${esc(Y.shortLabel(t.asset_label))}</b></td><td>${Y.dirHtml(t.direction)}</td>
       <td class="num">${Y.price(t.entry)}</td><td class="num muted nowrap">${lv(t)}</td><td class="nowrap">${Y.resultPill(t.status, t.pnl_pct)}</td>
-      <td class="muted nowrap">${dur(t.duration_minutes)}</td><td>${Y.critTags(t.criteria, 2)}</td></tr>`).join("")
+      <td class="muted nowrap">${dur(t.duration_minutes)}</td><td>${why(t)}</td></tr>`).join("")
       : `<tr><td colspan="8" class="empty">Aucun trade ne correspond à ces filtres.</td></tr>`;
     $("#trades-cards").innerHTML = shown.map((t) => `<div class="tcard"><div class="l1"><span>${t.direction === "long" ? '<b class="up">↗</b>' : '<b class="dn">↘</b>'} <b>${esc(Y.shortLabel(t.asset_label))}</b> <span class="muted">${t.direction === "long" ? "Achat" : "Vente"}</span></span>${Y.resultPill(t.status, t.pnl_pct)}</div>
-      <div class="mono faint" style="font-size:11px">Entrée ${Y.price(t.entry)} · TP ${Y.price(t.take_profit)} · SL ${Y.price(t.stop_loss)}</div>
-      <div class="l3"><span>${Y.critTags(t.criteria, 2)}</span><span class="nowrap">${esc(t.created_local.slice(6))} · ${dur(t.duration_minutes)}</span></div></div>`).join("") || `<div class="empty">Aucun trade ne correspond à ces filtres.</div>`;
-    const total = data.overview.visible.n;
+      <div class="mono faint" style="font-size:11px">Entrée ${Y.price(t.entry)} · TP ${t.take_profit == null ? "—" : Y.price(t.take_profit)} · SL ${Y.price(t.stop_loss)}</div>
+      <div class="l3"><span>${why(t)}</span><span class="nowrap">${esc(t.created_local.slice(6))} · ${dur(t.duration_minutes)}</span></div></div>`).join("") || `<div class="empty">Aucun trade ne correspond à ces filtres.</div>`;
+    const total = data.overview.visible.n + strat.length;
     const filtered = filt.asset || filt.source || filt.status;
     $("#trades-count").textContent = filtered ? `${shown.length} affichés sur ${list.length} (parmi les ${all.length} plus récents)` : `${shown.length} affichés sur ${total}${all.length < total ? ` · les ${all.length} plus récents sont consultables ici` : ""}`;
     $("#trades-sub").textContent = `${total} trades clôturés, du plus récent au plus ancien`;
