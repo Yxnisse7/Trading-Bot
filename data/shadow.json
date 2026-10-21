@@ -75,7 +75,7 @@
       "variant": "essai_oil",
       "exc": {
         "mfe": 0.7667,
-        "mae": 0.3,
+        "mae": 0.7667,
         "armed": {
           "0.5": true,
           "0.8": false,
@@ -86,7 +86,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1792602900
+        "last_ts": 1792603260
       }
     }
   },
@@ -177,7 +177,7 @@
       "filters_checked": true,
       "variant": "modele_arbres",
       "exc": {
-        "mfe": 0.0149,
+        "mfe": 0.3861,
         "mae": 0.0,
         "armed": {
           "0.5": false,
@@ -189,8 +189,84 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": null
+        "last_ts": 1792603260
       }
+    }
+  },
+  {
+    "id": "cdce6530ee",
+    "asset": "sp500",
+    "asset_label": "S&P 500 (ES)",
+    "direction": "long",
+    "entry": 7809.75,
+    "take_profit": 7821.75,
+    "stop_loss": 7801.75,
+    "risk_reward": 1.5,
+    "confidence": "fort",
+    "score": 5.44,
+    "criteria": [
+      "adx",
+      "macd",
+      "trend_15m",
+      "trend_1h",
+      "trend_5m",
+      "vwap"
+    ],
+    "rationale": "Achat : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 20.08 (0.26 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 86%.",
+    "news_context": "actualité à surveiller (score 1) : How Ukraine’s drone strikes on Russia crippled the world’s second-largest diesel supplier",
+    "created_at": "2026-10-21T17:31:08Z",
+    "expires_at": "2026-10-21T18:31:08Z",
+    "status": "open",
+    "closed_at": null,
+    "close_price": null,
+    "pnl_pct": null,
+    "pnl_gross_pct": null,
+    "duration_minutes": null,
+    "hourly_range": 20.083333,
+    "source": "shadow",
+    "horizon": "1h",
+    "horizon_minutes": 60,
+    "meta": {
+      "tick": 0.25,
+      "details": {
+        "trend_5m": "EMA20 7798.27 / EMA50 7788.53 (5 min)",
+        "trend_15m": "EMA20 7788.01 / EMA50 7779.49",
+        "trend_1h": "prix vs EMA20 1 h 7778.09",
+        "adx": "ADX15 21.1 (+DI 32.0 / -DI 14.6)",
+        "vwap": "VWAP jour 7778.24",
+        "rsi": "RSI14 5 min 70.5",
+        "macd": "histogramme MACD 0.6628",
+        "level": "support 7795.50 / résistance -",
+        "volume": "z-score volume -1.65",
+        "pdhl": "veille : haut 7793.00 / bas 7704.50",
+        "activity": "activité de l'heure 1.56× la moyenne",
+        "corr": "VIX +0.1 % sur 15 min"
+      },
+      "support": 7795.5,
+      "resistance": null,
+      "atr_5m": 5.144912364390672,
+      "atr_ratio": 1.2191683133253737,
+      "hourly_range_pct": 0.2572,
+      "adx_15m": 21.104047757997716,
+      "sigma_5m": 0.0006327414372584447,
+      "p_resolution": 0.8626666666666667,
+      "p_tp_neutral": 0.356,
+      "activity_ratio": 1.556,
+      "base_minutes": 5,
+      "ctx": {
+        "adx": 21.1,
+        "rsi_dir": 70.54,
+        "vwap_ext": 1.5691,
+        "ema_ext": 0.5717,
+        "atr_ratio": 1.219,
+        "activity": 1.556,
+        "range_pct": 0.2572,
+        "cost_r": 0.0976,
+        "us_open_min": 241.1,
+        "weekday": 2
+      },
+      "price_time": "2026-10-21T17:25:00Z",
+      "variant": "essai_sp500"
     }
   }
 ]
