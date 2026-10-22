@@ -91,7 +91,7 @@
           "0.8": true,
           "1.0": true
         },
-        "last_ts": 1792670100
+        "last_ts": 1792670400
       }
     }
   },
@@ -187,7 +187,7 @@
           "0.8": true,
           "1.0": true
         },
-        "last_ts": 1792670100
+        "last_ts": 1792670400
       }
     }
   },
@@ -283,7 +283,7 @@
           "0.8": true,
           "1.0": true
         },
-        "last_ts": 1792670100
+        "last_ts": 1792670400
       }
     }
   },
@@ -379,7 +379,7 @@
           "0.8": true,
           "1.0": true
         },
-        "last_ts": 1792670100
+        "last_ts": 1792670400
       }
     }
   },
@@ -477,7 +477,7 @@
           "0.8": true,
           "1.0": true
         },
-        "last_ts": 1792670100
+        "last_ts": 1792670400
       }
     }
   },
@@ -575,7 +575,7 @@
           "0.8": true,
           "1.0": true
         },
-        "last_ts": 1792670100
+        "last_ts": 1792670400
       }
     }
   },
@@ -673,7 +673,7 @@
           "0.8": true,
           "1.0": true
         },
-        "last_ts": 1792670100
+        "last_ts": 1792670400
       }
     }
   },
@@ -771,7 +771,7 @@
           "0.8": true,
           "1.0": true
         },
-        "last_ts": 1792670100
+        "last_ts": 1792670400
       }
     }
   },
@@ -868,7 +868,7 @@
           "0.8": true,
           "1.0": true
         },
-        "last_ts": 1792670100
+        "last_ts": 1792670400
       }
     }
   },
@@ -965,7 +965,7 @@
           "0.8": true,
           "1.0": true
         },
-        "last_ts": 1792670100
+        "last_ts": 1792670400
       }
     }
   },
@@ -1062,7 +1062,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1792670100
+        "last_ts": 1792670400
       }
     }
   },
@@ -1159,7 +1159,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1792670100
+        "last_ts": 1792670400
       }
     }
   },
@@ -1256,7 +1256,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1792670100
+        "last_ts": 1792670400
       }
     }
   },
@@ -1352,7 +1352,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1792670100
+        "last_ts": 1792670400
       }
     }
   },
@@ -1448,7 +1448,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1792670100
+        "last_ts": 1792670400
       }
     }
   },
@@ -1544,7 +1544,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1792670100
+        "last_ts": 1792670400
       }
     }
   },
@@ -1629,7 +1629,7 @@
       "variant": "hors_session",
       "exc": {
         "mfe": 0.061,
-        "mae": 0.0,
+        "mae": 0.1016,
         "armed": {
           "0.5": false,
           "0.8": false,
@@ -1731,7 +1731,7 @@
       "filters_checked": true,
       "variant": "modele_arbres",
       "exc": {
-        "mfe": 0.0,
+        "mfe": 0.0312,
         "mae": 0.1094,
         "armed": {
           "0.5": false,
@@ -1822,7 +1822,7 @@
       "price_time": "2026-10-22T11:55:00Z",
       "variant": "horizon_3h_gold",
       "exc": {
-        "mfe": 0.0,
+        "mfe": 0.0198,
         "mae": 0.0693,
         "armed": {
           "0.5": false,
@@ -1916,7 +1916,22 @@
         "source": "essai 29"
       },
       "price_time": "2026-10-22T12:00:00Z",
-      "variant": "hors_session"
+      "variant": "hors_session",
+      "exc": {
+        "mfe": 0.0,
+        "mae": 0.1382,
+        "armed": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "be": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "last_ts": null
+      }
     }
   },
   {
@@ -2005,7 +2020,266 @@
         "bot_en_ombre"
       ],
       "filters_checked": true,
+      "variant": "modele_arbres",
+      "exc": {
+        "mfe": 0.0,
+        "mae": 0.0,
+        "armed": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "be": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "last_ts": null
+      }
+    }
+  },
+  {
+    "id": "e7b6ceb245",
+    "asset": "nasdaq",
+    "asset_label": "Nasdaq 100 (NQ)",
+    "direction": "short",
+    "entry": 29519.5,
+    "take_profit": 29334.0,
+    "stop_loss": 29581.5,
+    "risk_reward": 2.99,
+    "confidence": "fort",
+    "score": 6.13,
+    "criteria": [
+      "adx",
+      "level",
+      "trend_15m",
+      "trend_1h",
+      "vwap"
+    ],
+    "rationale": "Vente : tendance forte (ADX), niveau clé favorable, tendance 15 min, tendance 1 h, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 103.32 (0.35 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 67%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+    "news_context": "actualité calme sur les 2 dernières heures",
+    "created_at": "2026-10-22T12:10:54Z",
+    "expires_at": "2026-10-23T12:10:54Z",
+    "status": "open",
+    "closed_at": null,
+    "close_price": null,
+    "pnl_pct": null,
+    "pnl_gross_pct": null,
+    "duration_minutes": null,
+    "hourly_range": 103.315217,
+    "source": "shadow",
+    "horizon": "24h",
+    "horizon_minutes": 1440,
+    "meta": {
+      "tick": 0.25,
+      "details": {
+        "trend_5m": "EMA20 29496.17 / EMA50 29496.54 (5 min)",
+        "trend_15m": "EMA20 29503.54 / EMA50 29588.54",
+        "trend_1h": "prix vs EMA20 1 h 29642.30",
+        "adx": "ADX15 34.7 (+DI 15.1 / -DI 18.6)",
+        "vwap": "VWAP jour 29587.26",
+        "rsi": "RSI14 5 min 57.6",
+        "macd": "histogramme MACD 2.0082",
+        "level": "support 29417.00 / résistance 29545.75",
+        "volume": "z-score volume -1.98",
+        "pdhl": "veille : haut 30113.00 / bas 29727.50",
+        "activity": "activité de l'heure 1.00× la moyenne",
+        "corr": "VIX +0.1 % sur 15 min"
+      },
+      "support": 29417.0,
+      "resistance": 29545.75,
+      "atr_5m": 24.349616493869714,
+      "atr_ratio": 0.7956905327339769,
+      "hourly_range_pct": 0.35,
+      "adx_15m": 34.69806446192003,
+      "sigma_5m": 0.0006294240462533721,
+      "p_resolution": 0.6653333333333333,
+      "p_tp_neutral": 0.25833333333333336,
+      "activity_ratio": 0.997,
+      "base_minutes": 5,
+      "ctx": {
+        "adx": 34.7,
+        "rsi_dir": 42.42,
+        "vwap_ext": 0.6558,
+        "ema_ext": -0.2258,
+        "atr_ratio": 0.796,
+        "activity": 0.997,
+        "range_pct": 0.35,
+        "cost_r": 0.0716,
+        "us_open_min": -79.1,
+        "weekday": 3
+      },
+      "exit_override": {
+        "stop_x": 1.5,
+        "target_x": 3.0,
+        "minutes": 1440,
+        "source": "essai 29"
+      },
+      "price_time": "2026-10-22T12:05:00Z",
+      "variant": "hors_session"
+    }
+  },
+  {
+    "id": "3be9ac3d08",
+    "asset": "gold",
+    "asset_label": "Or (XAU/USD)",
+    "direction": "short",
+    "entry": 4076.2,
+    "take_profit": 4066.5,
+    "stop_loss": 4082.6,
+    "risk_reward": 1.52,
+    "confidence": "fort",
+    "score": 5.63,
+    "criteria": [
+      "adx",
+      "rsi",
+      "trend_15m",
+      "trend_1h",
+      "trend_5m",
+      "vwap"
+    ],
+    "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 16.12 (0.40 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 77%.",
+    "news_context": "actualité calme sur les 2 dernières heures",
+    "created_at": "2026-10-22T12:10:54Z",
+    "expires_at": "2026-10-22T13:10:54Z",
+    "status": "open",
+    "closed_at": null,
+    "close_price": null,
+    "pnl_pct": null,
+    "pnl_gross_pct": null,
+    "duration_minutes": null,
+    "hourly_range": 16.121741,
+    "source": "shadow",
+    "horizon": "1h",
+    "horizon_minutes": 60,
+    "meta": {
+      "tick": 0.1,
+      "details": {
+        "trend_5m": "EMA20 4085.83 / EMA50 4094.70 (5 min)",
+        "trend_15m": "EMA20 4095.08 / EMA50 4108.94",
+        "trend_1h": "prix vs EMA20 1 h 4112.63",
+        "adx": "ADX15 42.4 (+DI 9.2 / -DI 30.1)",
+        "vwap": "VWAP jour 4107.39",
+        "rsi": "RSI14 5 min 32.3",
+        "macd": "histogramme MACD -1.0109",
+        "level": "support - / résistance 4108.80",
+        "volume": "z-score volume -0.81",
+        "pdhl": "veille : haut 4164.30 / bas 4122.30",
+        "activity": "activité de l'heure 1.34× la moyenne",
+        "corr": "DXY +0.11 % sur 1 h"
+      },
+      "support": null,
+      "resistance": 4108.7998046875,
+      "atr_5m": 5.097704660973219,
+      "atr_ratio": 1.2132607299211111,
+      "hourly_range_pct": 0.3955,
+      "adx_15m": 42.43344800308349,
+      "sigma_5m": 0.0008157547434005511,
+      "p_resolution": 0.771,
+      "p_tp_neutral": 0.30733333333333335,
+      "activity_ratio": 1.343,
+      "base_minutes": 5,
+      "ctx": {
+        "adx": 42.43,
+        "rsi_dir": 67.68,
+        "vwap_ext": 1.9347,
+        "ema_ext": 0.5976,
+        "atr_ratio": 1.213,
+        "activity": 1.343,
+        "range_pct": 0.3955,
+        "cost_r": 0.1274,
+        "us_open_min": -79.1,
+        "weekday": 3
+      },
+      "price_time": "2026-10-22T12:05:00Z",
+      "ctx_avoid": [
+        "minutes depuis l'ouverture américaine : plus de 30 min avant l'ouverture US",
+        "jour de la semaine : jeudi"
+      ],
+      "model_r": -0.1275,
+      "filters": [
+        "filtre_contexte",
+        "sans_etirement_or",
+        "modele_arbres",
+        "bot_en_ombre"
+      ],
+      "filters_checked": true,
       "variant": "modele_arbres"
+    }
+  },
+  {
+    "id": "3448826d93",
+    "asset": "euro",
+    "asset_label": "Euro / dollar (6E)",
+    "direction": "short",
+    "entry": 1.12235,
+    "take_profit": 1.12165,
+    "stop_loss": 1.12285,
+    "risk_reward": 1.4,
+    "confidence": "fort",
+    "score": 5.76,
+    "criteria": [
+      "adx",
+      "rsi",
+      "trend_15m",
+      "trend_1h",
+      "trend_5m",
+      "vwap"
+    ],
+    "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 0.00120 (0.11 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 85%.",
+    "news_context": "actualité calme sur les 2 dernières heures",
+    "created_at": "2026-10-22T12:10:54Z",
+    "expires_at": "2026-10-22T13:10:54Z",
+    "status": "open",
+    "closed_at": null,
+    "close_price": null,
+    "pnl_pct": null,
+    "pnl_gross_pct": null,
+    "duration_minutes": null,
+    "hourly_range": 0.0012,
+    "source": "shadow",
+    "horizon": "1h",
+    "horizon_minutes": 60,
+    "meta": {
+      "tick": 5e-05,
+      "details": {
+        "trend_5m": "EMA20 1.12 / EMA50 1.12 (5 min)",
+        "trend_15m": "EMA20 1.12 / EMA50 1.13",
+        "trend_1h": "prix vs EMA20 1 h 1.13",
+        "adx": "ADX15 41.5 (+DI 6.3 / -DI 38.0)",
+        "vwap": "VWAP jour 1.12",
+        "rsi": "RSI14 5 min 32.6",
+        "macd": "histogramme MACD 0.0000",
+        "level": "support 1.12130 / résistance 1.12410",
+        "volume": "z-score volume -1.29",
+        "pdhl": "veille : haut 1.12660 / bas 1.12395",
+        "activity": "activité de l'heure 1.32× la moyenne"
+      },
+      "support": 1.1212999820709229,
+      "resistance": 1.1240999698638916,
+      "atr_5m": 0.0004443240385348415,
+      "atr_ratio": 1.5383055382715083,
+      "hourly_range_pct": 0.1069,
+      "adx_15m": 41.536968832886394,
+      "sigma_5m": 0.0002554862616512941,
+      "p_resolution": 0.847,
+      "p_tp_neutral": 0.35733333333333334,
+      "activity_ratio": 1.319,
+      "base_minutes": 5,
+      "ctx": {
+        "adx": 41.54,
+        "rsi_dir": 67.4,
+        "vwap_ext": 2.2064,
+        "ema_ext": 0.528,
+        "atr_ratio": 1.538,
+        "activity": 1.319,
+        "range_pct": 0.1069,
+        "cost_r": 0.2245,
+        "us_open_min": -79.1,
+        "weekday": 3
+      },
+      "price_time": "2026-10-22T12:05:00Z",
+      "variant": "essai_euro"
     }
   }
 ]
