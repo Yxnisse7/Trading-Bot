@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-22T19:05:56.139087+02:00",
+  "updated_at": "2026-10-22T19:11:06.390949+02:00",
   "timezone": "Europe/Paris",
   "equity_curve": [
     {
@@ -1716,18 +1716,18 @@
       "avg_pnl_pct": -0.0031
     },
     "shadow": {
-      "n": 744,
+      "n": 745,
       "tp": 227,
-      "sl": 409,
+      "sl": 410,
       "expired": 108,
-      "win_rate": 0.35691823899371067,
-      "neutral_win_rate": 0.3718,
-      "edge": -0.0149,
-      "pnl_pct": -9.7529,
-      "avg_pnl_pct": -0.0131
+      "win_rate": 0.3563579277864992,
+      "neutral_win_rate": 0.3716,
+      "edge": -0.0152,
+      "pnl_pct": -10.0493,
+      "avg_pnl_pct": -0.0135
     },
     "open": 0,
-    "open_shadow": 36
+    "open_shadow": 37
   },
   "by_source": {
     "bot": {
@@ -1764,15 +1764,15 @@
       "avg_pnl_pct": 0.0
     },
     "shadow": {
-      "n": 744,
+      "n": 745,
       "tp": 227,
-      "sl": 409,
+      "sl": 410,
       "expired": 108,
-      "win_rate": 0.35691823899371067,
-      "neutral_win_rate": 0.3718,
-      "edge": -0.0149,
-      "pnl_pct": -9.7529,
-      "avg_pnl_pct": -0.0131
+      "win_rate": 0.3563579277864992,
+      "neutral_win_rate": 0.3716,
+      "edge": -0.0152,
+      "pnl_pct": -10.0493,
+      "avg_pnl_pct": -0.0135
     }
   },
   "by_horizon": {
@@ -1831,15 +1831,15 @@
         "avg_pnl_pct": 0.0859
       },
       "shadow": {
-        "n": 290,
+        "n": 291,
         "tp": 99,
-        "sl": 160,
+        "sl": 161,
         "expired": 31,
-        "win_rate": 0.38223938223938225,
-        "neutral_win_rate": 0.3078,
-        "edge": 0.0744,
-        "pnl_pct": 12.7747,
-        "avg_pnl_pct": 0.0441
+        "win_rate": 0.38076923076923075,
+        "neutral_win_rate": 0.3076,
+        "edge": 0.0732,
+        "pnl_pct": 12.4783,
+        "avg_pnl_pct": 0.0429
       },
       "open": 0,
       "session_utc": [
@@ -2104,15 +2104,15 @@
       "label": "Tendance 5 min",
       "weight": 1.0,
       "stats": {
-        "n": 776,
+        "n": 777,
         "tp": 256,
-        "sl": 415,
+        "sl": 416,
         "expired": 105,
-        "win_rate": 0.38152011922503726,
-        "neutral_win_rate": 0.3748,
-        "edge": 0.0067,
-        "pnl_pct": -3.3822,
-        "avg_pnl_pct": -0.0044
+        "win_rate": 0.38095238095238093,
+        "neutral_win_rate": 0.3746,
+        "edge": 0.0064,
+        "pnl_pct": -3.6786,
+        "avg_pnl_pct": -0.0047
       },
       "by_source": {
         "bot": {
@@ -2149,18 +2149,53 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 639,
+          "n": 640,
           "tp": 206,
-          "sl": 359,
+          "sl": 360,
           "expired": 74,
-          "win_rate": 0.36460176991150445,
-          "neutral_win_rate": 0.3676,
-          "edge": -0.003,
-          "pnl_pct": -4.3954,
-          "avg_pnl_pct": -0.0069
+          "win_rate": 0.36395759717314485,
+          "neutral_win_rate": 0.3674,
+          "edge": -0.0034,
+          "pnl_pct": -4.6918,
+          "avg_pnl_pct": -0.0073
         }
       },
       "last_trades": [
+        {
+          "id": "103b57d623",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "short",
+          "horizon": "24h",
+          "entry": 29155.25,
+          "take_profit": 28947.0,
+          "stop_loss": 29224.5,
+          "risk_reward": 3.01,
+          "confidence": "fort",
+          "score": 7.33,
+          "criteria": [
+            "adx",
+            "corr",
+            "macd",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.2964,
+          "pnl_gross_pct": -0.2864,
+          "duration_minutes": 9,
+          "close_price": 29238.75,
+          "created_at": "2026-10-22T17:01:28Z",
+          "closed_at": "2026-10-22T17:10:53Z",
+          "created_local": "22/10 19:01",
+          "expires_at": "2026-10-23T17:01:28Z",
+          "rationale": "Vente : tendance forte (ADX), marché meneur favorable, MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 115.94 (0.40 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 87%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+          "news_context": "actualité à surveiller (score 2) : AI stocks tumble as the defensives rise. What it says about this uneasy market | If a Stock Market Crash Is Coming, History Says Investors Who Do This 1 Thing Always Win Out",
+          "manual_exit": null
+        },
         {
           "id": "e71753b0a8",
           "asset": "gold",
@@ -2400,40 +2435,6 @@
           "created_local": "22/10 17:45",
           "expires_at": "2026-10-22T16:45:47Z",
           "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 20.58 (0.27 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 86%.",
-          "news_context": "actualité à surveiller (score 2) : If a Stock Market Crash Is Coming, History Says Investors Who Do This 1 Thing Always Win Out | Trump’s tariffs loom over Maine Senate race between Collins and Jackson",
-          "manual_exit": null
-        },
-        {
-          "id": "7a32098bf4",
-          "asset": "nasdaq",
-          "asset_label": "Nasdaq 100 (NQ)",
-          "direction": "short",
-          "horizon": "24h",
-          "entry": 29294.25,
-          "take_profit": 29078.25,
-          "stop_loss": 29366.25,
-          "risk_reward": 3.0,
-          "confidence": "fort",
-          "score": 7.32,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.2558,
-          "pnl_gross_pct": -0.2458,
-          "duration_minutes": 14,
-          "close_price": 29366.25,
-          "created_at": "2026-10-22T15:45:47Z",
-          "closed_at": "2026-10-22T16:00:00Z",
-          "created_local": "22/10 17:45",
-          "expires_at": "2026-10-23T15:45:47Z",
-          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 120.00 (0.41 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 78%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
           "news_context": "actualité à surveiller (score 2) : If a Stock Market Crash Is Coming, History Says Investors Who Do This 1 Thing Always Win Out | Trump’s tariffs loom over Maine Senate race between Collins and Jackson",
           "manual_exit": null
         }
@@ -2444,15 +2445,15 @@
       "label": "Tendance 15 min",
       "weight": 1.0,
       "stats": {
-        "n": 897,
+        "n": 898,
         "tp": 281,
-        "sl": 474,
+        "sl": 475,
         "expired": 142,
-        "win_rate": 0.37218543046357616,
-        "neutral_win_rate": 0.3781,
-        "edge": -0.0059,
-        "pnl_pct": -10.0768,
-        "avg_pnl_pct": -0.0112
+        "win_rate": 0.3716931216931217,
+        "neutral_win_rate": 0.378,
+        "edge": -0.0063,
+        "pnl_pct": -10.3732,
+        "avg_pnl_pct": -0.0116
       },
       "by_source": {
         "bot": {
@@ -2489,18 +2490,53 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 744,
+          "n": 745,
           "tp": 227,
-          "sl": 409,
+          "sl": 410,
           "expired": 108,
-          "win_rate": 0.35691823899371067,
-          "neutral_win_rate": 0.3718,
-          "edge": -0.0149,
-          "pnl_pct": -9.7529,
-          "avg_pnl_pct": -0.0131
+          "win_rate": 0.3563579277864992,
+          "neutral_win_rate": 0.3716,
+          "edge": -0.0152,
+          "pnl_pct": -10.0493,
+          "avg_pnl_pct": -0.0135
         }
       },
       "last_trades": [
+        {
+          "id": "103b57d623",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "short",
+          "horizon": "24h",
+          "entry": 29155.25,
+          "take_profit": 28947.0,
+          "stop_loss": 29224.5,
+          "risk_reward": 3.01,
+          "confidence": "fort",
+          "score": 7.33,
+          "criteria": [
+            "adx",
+            "corr",
+            "macd",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.2964,
+          "pnl_gross_pct": -0.2864,
+          "duration_minutes": 9,
+          "close_price": 29238.75,
+          "created_at": "2026-10-22T17:01:28Z",
+          "closed_at": "2026-10-22T17:10:53Z",
+          "created_local": "22/10 19:01",
+          "expires_at": "2026-10-23T17:01:28Z",
+          "rationale": "Vente : tendance forte (ADX), marché meneur favorable, MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 115.94 (0.40 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 87%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+          "news_context": "actualité à surveiller (score 2) : AI stocks tumble as the defensives rise. What it says about this uneasy market | If a Stock Market Crash Is Coming, History Says Investors Who Do This 1 Thing Always Win Out",
+          "manual_exit": null
+        },
         {
           "id": "e71753b0a8",
           "asset": "gold",
@@ -2740,40 +2776,6 @@
           "created_local": "22/10 17:45",
           "expires_at": "2026-10-22T16:45:47Z",
           "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 20.58 (0.27 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 86%.",
-          "news_context": "actualité à surveiller (score 2) : If a Stock Market Crash Is Coming, History Says Investors Who Do This 1 Thing Always Win Out | Trump’s tariffs loom over Maine Senate race between Collins and Jackson",
-          "manual_exit": null
-        },
-        {
-          "id": "7a32098bf4",
-          "asset": "nasdaq",
-          "asset_label": "Nasdaq 100 (NQ)",
-          "direction": "short",
-          "horizon": "24h",
-          "entry": 29294.25,
-          "take_profit": 29078.25,
-          "stop_loss": 29366.25,
-          "risk_reward": 3.0,
-          "confidence": "fort",
-          "score": 7.32,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.2558,
-          "pnl_gross_pct": -0.2458,
-          "duration_minutes": 14,
-          "close_price": 29366.25,
-          "created_at": "2026-10-22T15:45:47Z",
-          "closed_at": "2026-10-22T16:00:00Z",
-          "created_local": "22/10 17:45",
-          "expires_at": "2026-10-23T15:45:47Z",
-          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 120.00 (0.41 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 78%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
           "news_context": "actualité à surveiller (score 2) : If a Stock Market Crash Is Coming, History Says Investors Who Do This 1 Thing Always Win Out | Trump’s tariffs loom over Maine Senate race between Collins and Jackson",
           "manual_exit": null
         }
@@ -2784,15 +2786,15 @@
       "label": "Tendance 1 h",
       "weight": 1.0,
       "stats": {
-        "n": 888,
+        "n": 889,
         "tp": 278,
-        "sl": 471,
+        "sl": 472,
         "expired": 139,
-        "win_rate": 0.3711615487316422,
-        "neutral_win_rate": 0.378,
-        "edge": -0.0068,
-        "pnl_pct": -9.8984,
-        "avg_pnl_pct": -0.0111
+        "win_rate": 0.37066666666666664,
+        "neutral_win_rate": 0.3779,
+        "edge": -0.0072,
+        "pnl_pct": -10.1948,
+        "avg_pnl_pct": -0.0115
       },
       "by_source": {
         "bot": {
@@ -2829,18 +2831,53 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 735,
+          "n": 736,
           "tp": 224,
-          "sl": 406,
+          "sl": 407,
           "expired": 105,
-          "win_rate": 0.35555555555555557,
-          "neutral_win_rate": 0.3716,
-          "edge": -0.016,
-          "pnl_pct": -9.5745,
-          "avg_pnl_pct": -0.013
+          "win_rate": 0.3549920760697306,
+          "neutral_win_rate": 0.3714,
+          "edge": -0.0164,
+          "pnl_pct": -9.8709,
+          "avg_pnl_pct": -0.0134
         }
       },
       "last_trades": [
+        {
+          "id": "103b57d623",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "short",
+          "horizon": "24h",
+          "entry": 29155.25,
+          "take_profit": 28947.0,
+          "stop_loss": 29224.5,
+          "risk_reward": 3.01,
+          "confidence": "fort",
+          "score": 7.33,
+          "criteria": [
+            "adx",
+            "corr",
+            "macd",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.2964,
+          "pnl_gross_pct": -0.2864,
+          "duration_minutes": 9,
+          "close_price": 29238.75,
+          "created_at": "2026-10-22T17:01:28Z",
+          "closed_at": "2026-10-22T17:10:53Z",
+          "created_local": "22/10 19:01",
+          "expires_at": "2026-10-23T17:01:28Z",
+          "rationale": "Vente : tendance forte (ADX), marché meneur favorable, MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 115.94 (0.40 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 87%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+          "news_context": "actualité à surveiller (score 2) : AI stocks tumble as the defensives rise. What it says about this uneasy market | If a Stock Market Crash Is Coming, History Says Investors Who Do This 1 Thing Always Win Out",
+          "manual_exit": null
+        },
         {
           "id": "e71753b0a8",
           "asset": "gold",
@@ -3080,40 +3117,6 @@
           "created_local": "22/10 17:45",
           "expires_at": "2026-10-22T16:45:47Z",
           "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 20.58 (0.27 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 86%.",
-          "news_context": "actualité à surveiller (score 2) : If a Stock Market Crash Is Coming, History Says Investors Who Do This 1 Thing Always Win Out | Trump’s tariffs loom over Maine Senate race between Collins and Jackson",
-          "manual_exit": null
-        },
-        {
-          "id": "7a32098bf4",
-          "asset": "nasdaq",
-          "asset_label": "Nasdaq 100 (NQ)",
-          "direction": "short",
-          "horizon": "24h",
-          "entry": 29294.25,
-          "take_profit": 29078.25,
-          "stop_loss": 29366.25,
-          "risk_reward": 3.0,
-          "confidence": "fort",
-          "score": 7.32,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.2558,
-          "pnl_gross_pct": -0.2458,
-          "duration_minutes": 14,
-          "close_price": 29366.25,
-          "created_at": "2026-10-22T15:45:47Z",
-          "closed_at": "2026-10-22T16:00:00Z",
-          "created_local": "22/10 17:45",
-          "expires_at": "2026-10-23T15:45:47Z",
-          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 120.00 (0.41 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 78%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
           "news_context": "actualité à surveiller (score 2) : If a Stock Market Crash Is Coming, History Says Investors Who Do This 1 Thing Always Win Out | Trump’s tariffs loom over Maine Senate race between Collins and Jackson",
           "manual_exit": null
         }
@@ -3124,15 +3127,15 @@
       "label": "Force de tendance (ADX)",
       "weight": 1.0,
       "stats": {
-        "n": 897,
+        "n": 898,
         "tp": 281,
-        "sl": 474,
+        "sl": 475,
         "expired": 142,
-        "win_rate": 0.37218543046357616,
-        "neutral_win_rate": 0.3781,
-        "edge": -0.0059,
-        "pnl_pct": -10.0768,
-        "avg_pnl_pct": -0.0112
+        "win_rate": 0.3716931216931217,
+        "neutral_win_rate": 0.378,
+        "edge": -0.0063,
+        "pnl_pct": -10.3732,
+        "avg_pnl_pct": -0.0116
       },
       "by_source": {
         "bot": {
@@ -3169,18 +3172,53 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 744,
+          "n": 745,
           "tp": 227,
-          "sl": 409,
+          "sl": 410,
           "expired": 108,
-          "win_rate": 0.35691823899371067,
-          "neutral_win_rate": 0.3718,
-          "edge": -0.0149,
-          "pnl_pct": -9.7529,
-          "avg_pnl_pct": -0.0131
+          "win_rate": 0.3563579277864992,
+          "neutral_win_rate": 0.3716,
+          "edge": -0.0152,
+          "pnl_pct": -10.0493,
+          "avg_pnl_pct": -0.0135
         }
       },
       "last_trades": [
+        {
+          "id": "103b57d623",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "short",
+          "horizon": "24h",
+          "entry": 29155.25,
+          "take_profit": 28947.0,
+          "stop_loss": 29224.5,
+          "risk_reward": 3.01,
+          "confidence": "fort",
+          "score": 7.33,
+          "criteria": [
+            "adx",
+            "corr",
+            "macd",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.2964,
+          "pnl_gross_pct": -0.2864,
+          "duration_minutes": 9,
+          "close_price": 29238.75,
+          "created_at": "2026-10-22T17:01:28Z",
+          "closed_at": "2026-10-22T17:10:53Z",
+          "created_local": "22/10 19:01",
+          "expires_at": "2026-10-23T17:01:28Z",
+          "rationale": "Vente : tendance forte (ADX), marché meneur favorable, MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 115.94 (0.40 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 87%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+          "news_context": "actualité à surveiller (score 2) : AI stocks tumble as the defensives rise. What it says about this uneasy market | If a Stock Market Crash Is Coming, History Says Investors Who Do This 1 Thing Always Win Out",
+          "manual_exit": null
+        },
         {
           "id": "e71753b0a8",
           "asset": "gold",
@@ -3422,40 +3460,6 @@
           "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 20.58 (0.27 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 86%.",
           "news_context": "actualité à surveiller (score 2) : If a Stock Market Crash Is Coming, History Says Investors Who Do This 1 Thing Always Win Out | Trump’s tariffs loom over Maine Senate race between Collins and Jackson",
           "manual_exit": null
-        },
-        {
-          "id": "7a32098bf4",
-          "asset": "nasdaq",
-          "asset_label": "Nasdaq 100 (NQ)",
-          "direction": "short",
-          "horizon": "24h",
-          "entry": 29294.25,
-          "take_profit": 29078.25,
-          "stop_loss": 29366.25,
-          "risk_reward": 3.0,
-          "confidence": "fort",
-          "score": 7.32,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.2558,
-          "pnl_gross_pct": -0.2458,
-          "duration_minutes": 14,
-          "close_price": 29366.25,
-          "created_at": "2026-10-22T15:45:47Z",
-          "closed_at": "2026-10-22T16:00:00Z",
-          "created_local": "22/10 17:45",
-          "expires_at": "2026-10-23T15:45:47Z",
-          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 120.00 (0.41 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 78%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
-          "news_context": "actualité à surveiller (score 2) : If a Stock Market Crash Is Coming, History Says Investors Who Do This 1 Thing Always Win Out | Trump’s tariffs loom over Maine Senate race between Collins and Jackson",
-          "manual_exit": null
         }
       ]
     },
@@ -3464,15 +3468,15 @@
       "label": "VWAP",
       "weight": 0.75,
       "stats": {
-        "n": 879,
+        "n": 880,
         "tp": 278,
-        "sl": 464,
+        "sl": 465,
         "expired": 137,
-        "win_rate": 0.3746630727762803,
-        "neutral_win_rate": 0.3774,
-        "edge": -0.0027,
-        "pnl_pct": -8.6568,
-        "avg_pnl_pct": -0.0098
+        "win_rate": 0.37415881561238223,
+        "neutral_win_rate": 0.3773,
+        "edge": -0.0031,
+        "pnl_pct": -8.9532,
+        "avg_pnl_pct": -0.0102
       },
       "by_source": {
         "bot": {
@@ -3509,18 +3513,53 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 728,
+          "n": 729,
           "tp": 224,
-          "sl": 401,
+          "sl": 402,
           "expired": 103,
-          "win_rate": 0.3584,
-          "neutral_win_rate": 0.3709,
-          "edge": -0.0125,
-          "pnl_pct": -8.9493,
-          "avg_pnl_pct": -0.0123
+          "win_rate": 0.35782747603833864,
+          "neutral_win_rate": 0.3707,
+          "edge": -0.0129,
+          "pnl_pct": -9.2457,
+          "avg_pnl_pct": -0.0127
         }
       },
       "last_trades": [
+        {
+          "id": "103b57d623",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "short",
+          "horizon": "24h",
+          "entry": 29155.25,
+          "take_profit": 28947.0,
+          "stop_loss": 29224.5,
+          "risk_reward": 3.01,
+          "confidence": "fort",
+          "score": 7.33,
+          "criteria": [
+            "adx",
+            "corr",
+            "macd",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.2964,
+          "pnl_gross_pct": -0.2864,
+          "duration_minutes": 9,
+          "close_price": 29238.75,
+          "created_at": "2026-10-22T17:01:28Z",
+          "closed_at": "2026-10-22T17:10:53Z",
+          "created_local": "22/10 19:01",
+          "expires_at": "2026-10-23T17:01:28Z",
+          "rationale": "Vente : tendance forte (ADX), marché meneur favorable, MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 115.94 (0.40 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 87%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+          "news_context": "actualité à surveiller (score 2) : AI stocks tumble as the defensives rise. What it says about this uneasy market | If a Stock Market Crash Is Coming, History Says Investors Who Do This 1 Thing Always Win Out",
+          "manual_exit": null
+        },
         {
           "id": "e71753b0a8",
           "asset": "gold",
@@ -3760,40 +3799,6 @@
           "created_local": "22/10 17:45",
           "expires_at": "2026-10-22T16:45:47Z",
           "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 20.58 (0.27 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 86%.",
-          "news_context": "actualité à surveiller (score 2) : If a Stock Market Crash Is Coming, History Says Investors Who Do This 1 Thing Always Win Out | Trump’s tariffs loom over Maine Senate race between Collins and Jackson",
-          "manual_exit": null
-        },
-        {
-          "id": "7a32098bf4",
-          "asset": "nasdaq",
-          "asset_label": "Nasdaq 100 (NQ)",
-          "direction": "short",
-          "horizon": "24h",
-          "entry": 29294.25,
-          "take_profit": 29078.25,
-          "stop_loss": 29366.25,
-          "risk_reward": 3.0,
-          "confidence": "fort",
-          "score": 7.32,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.2558,
-          "pnl_gross_pct": -0.2458,
-          "duration_minutes": 14,
-          "close_price": 29366.25,
-          "created_at": "2026-10-22T15:45:47Z",
-          "closed_at": "2026-10-22T16:00:00Z",
-          "created_local": "22/10 17:45",
-          "expires_at": "2026-10-23T15:45:47Z",
-          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 120.00 (0.41 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 78%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
           "news_context": "actualité à surveiller (score 2) : If a Stock Market Crash Is Coming, History Says Investors Who Do This 1 Thing Always Win Out | Trump’s tariffs loom over Maine Senate race between Collins and Jackson",
           "manual_exit": null
         }
@@ -4142,17 +4147,17 @@
     {
       "key": "macd",
       "label": "MACD",
-      "weight": 0.943,
+      "weight": 0.935,
       "stats": {
-        "n": 231,
+        "n": 232,
         "tp": 52,
-        "sl": 140,
+        "sl": 141,
         "expired": 39,
-        "win_rate": 0.2708333333333333,
-        "neutral_win_rate": 0.3851,
-        "edge": -0.1143,
-        "pnl_pct": -17.4278,
-        "avg_pnl_pct": -0.0754
+        "win_rate": 0.2694300518134715,
+        "neutral_win_rate": 0.3845,
+        "edge": -0.1151,
+        "pnl_pct": -17.7242,
+        "avg_pnl_pct": -0.0764
       },
       "by_source": {
         "bot": {
@@ -4189,18 +4194,53 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 185,
+          "n": 186,
           "tp": 41,
-          "sl": 116,
+          "sl": 117,
           "expired": 28,
-          "win_rate": 0.2611464968152866,
-          "neutral_win_rate": 0.3789,
-          "edge": -0.1178,
-          "pnl_pct": -14.0866,
-          "avg_pnl_pct": -0.0761
+          "win_rate": 0.25949367088607594,
+          "neutral_win_rate": 0.3783,
+          "edge": -0.1188,
+          "pnl_pct": -14.383,
+          "avg_pnl_pct": -0.0773
         }
       },
       "last_trades": [
+        {
+          "id": "103b57d623",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "short",
+          "horizon": "24h",
+          "entry": 29155.25,
+          "take_profit": 28947.0,
+          "stop_loss": 29224.5,
+          "risk_reward": 3.01,
+          "confidence": "fort",
+          "score": 7.33,
+          "criteria": [
+            "adx",
+            "corr",
+            "macd",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.2964,
+          "pnl_gross_pct": -0.2864,
+          "duration_minutes": 9,
+          "close_price": 29238.75,
+          "created_at": "2026-10-22T17:01:28Z",
+          "closed_at": "2026-10-22T17:10:53Z",
+          "created_local": "22/10 19:01",
+          "expires_at": "2026-10-23T17:01:28Z",
+          "rationale": "Vente : tendance forte (ADX), marché meneur favorable, MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 115.94 (0.40 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 87%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+          "news_context": "actualité à surveiller (score 2) : AI stocks tumble as the defensives rise. What it says about this uneasy market | If a Stock Market Crash Is Coming, History Says Investors Who Do This 1 Thing Always Win Out",
+          "manual_exit": null
+        },
         {
           "id": "804ed91c54",
           "asset": "gold",
@@ -4442,42 +4482,6 @@
           "created_local": "22/10 16:20",
           "expires_at": "2026-10-22T17:20:48Z",
           "rationale": "Vente : tendance forte (ADX), MACD en expansion, cassure du range d'ouverture, RSI en momentum, tendance 45 min, tendance 3 h, tendance 15 min, volume anormal, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 25.54 (0.63 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 88%.",
-          "news_context": "actualité à surveiller (score 1) : Trump’s tariffs loom over Maine Senate race between Collins and Jackson",
-          "manual_exit": null
-        },
-        {
-          "id": "df9c0f4c48",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 4065.5,
-          "take_profit": 4054.8,
-          "stop_loss": 4072.6,
-          "risk_reward": 1.51,
-          "confidence": "fort",
-          "score": 7.63,
-          "criteria": [
-            "adx",
-            "macd",
-            "orb",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.1946,
-          "pnl_gross_pct": -0.1746,
-          "duration_minutes": 23,
-          "close_price": 4072.6,
-          "created_at": "2026-10-22T14:15:51Z",
-          "closed_at": "2026-10-22T14:39:00Z",
-          "created_local": "22/10 16:15",
-          "expires_at": "2026-10-22T15:15:51Z",
-          "rationale": "Vente : tendance forte (ADX), MACD en expansion, cassure du range d'ouverture, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 17.78 (0.44 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 80%.",
           "news_context": "actualité à surveiller (score 1) : Trump’s tariffs loom over Maine Senate race between Collins and Jackson",
           "manual_exit": null
         }
@@ -5163,6 +5167,74 @@
   ],
   "open_signals": [
     {
+      "id": "ff23662f4b",
+      "asset": "nasdaq",
+      "asset_label": "Nasdaq 100 (NQ)",
+      "direction": "short",
+      "horizon": "24h",
+      "entry": 29238.0,
+      "take_profit": 28889.25,
+      "stop_loss": 29354.25,
+      "risk_reward": 3.0,
+      "confidence": "fort",
+      "score": 7.17,
+      "criteria": [
+        "adx",
+        "rsi",
+        "trend_15m",
+        "trend_1h",
+        "trend_5m",
+        "vwap"
+      ],
+      "source": "shadow",
+      "status": "open",
+      "pnl_pct": null,
+      "pnl_gross_pct": null,
+      "duration_minutes": null,
+      "close_price": null,
+      "created_at": "2026-10-22T17:10:53Z",
+      "closed_at": null,
+      "created_local": "22/10 19:10",
+      "expires_at": "2026-10-23T17:10:53Z",
+      "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 193.88 (0.66 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 77%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+      "news_context": "actualité à surveiller (score 1) : AI stocks tumble as the defensives rise. What it says about this uneasy market",
+      "manual_exit": null
+    },
+    {
+      "id": "3190b2bdf1",
+      "asset": "gold",
+      "asset_label": "Or (XAU/USD)",
+      "direction": "short",
+      "horizon": "1h",
+      "entry": 4052.7,
+      "take_profit": 4041.7,
+      "stop_loss": 4060.1,
+      "risk_reward": 1.49,
+      "confidence": "fort",
+      "score": 5.71,
+      "criteria": [
+        "adx",
+        "rsi",
+        "trend_15m",
+        "trend_1h",
+        "trend_5m",
+        "vwap"
+      ],
+      "source": "shadow",
+      "status": "open",
+      "pnl_pct": null,
+      "pnl_gross_pct": null,
+      "duration_minutes": null,
+      "close_price": null,
+      "created_at": "2026-10-22T17:10:53Z",
+      "closed_at": null,
+      "created_local": "22/10 19:10",
+      "expires_at": "2026-10-22T18:10:53Z",
+      "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 18.39 (0.45 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 63%.",
+      "news_context": "actualité à surveiller (score 1) : AI stocks tumble as the defensives rise. What it says about this uneasy market",
+      "manual_exit": null
+    },
+    {
       "id": "0febe3e797",
       "asset": "nasdaq",
       "asset_label": "Nasdaq 100 (NQ)",
@@ -5264,41 +5336,6 @@
       "created_local": "22/10 19:05",
       "expires_at": "2026-10-22T18:05:38Z",
       "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 18.14 (0.45 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 67%.",
-      "news_context": "actualité à surveiller (score 2) : AI stocks tumble as the defensives rise. What it says about this uneasy market | If a Stock Market Crash Is Coming, History Says Investors Who Do This 1 Thing Always Win Out",
-      "manual_exit": null
-    },
-    {
-      "id": "103b57d623",
-      "asset": "nasdaq",
-      "asset_label": "Nasdaq 100 (NQ)",
-      "direction": "short",
-      "horizon": "24h",
-      "entry": 29155.25,
-      "take_profit": 28947.0,
-      "stop_loss": 29224.5,
-      "risk_reward": 3.01,
-      "confidence": "fort",
-      "score": 7.33,
-      "criteria": [
-        "adx",
-        "corr",
-        "macd",
-        "trend_15m",
-        "trend_1h",
-        "trend_5m",
-        "vwap"
-      ],
-      "source": "shadow",
-      "status": "open",
-      "pnl_pct": null,
-      "pnl_gross_pct": null,
-      "duration_minutes": null,
-      "close_price": null,
-      "created_at": "2026-10-22T17:01:28Z",
-      "closed_at": null,
-      "created_local": "22/10 19:01",
-      "expires_at": "2026-10-23T17:01:28Z",
-      "rationale": "Vente : tendance forte (ADX), marché meneur favorable, MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 115.94 (0.40 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 87%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
       "news_context": "actualité à surveiller (score 2) : AI stocks tumble as the defensives rise. What it says about this uneasy market | If a Stock Market Crash Is Coming, History Says Investors Who Do This 1 Thing Always Win Out",
       "manual_exit": null
     },
@@ -8004,15 +8041,15 @@
     "notes": [
       "trades réels : +0,15 R ± 0,19 R par trade avant frais sur 154 trades (0 R = hasard)",
       "rsi : +0,09 R ± 0,08 R sur 1069 trades éq. → poids ×1,02",
-      "macd : -0,15 R ± 0,12 R sur 346 trades éq. → poids ×0,94",
+      "macd : -0,15 R ± 0,12 R sur 348 trades éq. → poids ×0,93",
       "tranche 10h UTC : -0,29 R sur 86 trades éq. → évitée",
       "tranche 11h UTC : -0,29 R sur 80 trades éq. → évitée",
       "tranche 12h UTC : -0,45 R sur 69 trades éq. → évitée",
       "ethereum, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,24 R contre +0,05 R en global sur 78 trades éq. → poids ×0,81 sur cet actif",
       "ethereum, rsi : -0,29 R contre +0,09 R en global sur 56 trades éq. → poids ×0,71 sur cet actif",
       "gold, rsi : -0,07 R contre +0,09 R en global sur 245 trades éq. → poids ×0,94 sur cet actif",
-      "nasdaq, tendance (trend_5m, trend_15m, trend_1h, adx) : +0,30 R contre +0,05 R en global sur 395 trades éq. → poids ×1,24 sur cet actif",
-      "nasdaq, vwap : +0,31 R contre +0,06 R en global sur 388 trades éq. → poids ×1,23 sur cet actif",
+      "nasdaq, tendance (trend_5m, trend_15m, trend_1h, adx) : +0,30 R contre +0,05 R en global sur 396 trades éq. → poids ×1,24 sur cet actif",
+      "nasdaq, vwap : +0,30 R contre +0,06 R en global sur 388 trades éq. → poids ×1,23 sur cet actif",
       "nasdaq, rsi : +0,38 R contre +0,09 R en global sur 316 trades éq. → poids ×1,29 sur cet actif",
       "sp500, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,13 R contre +0,05 R en global sur 195 trades éq. → poids ×0,95 sur cet actif",
       "sp500, vwap : -0,13 R contre +0,06 R en global sur 190 trades éq. → poids ×0,94 sur cet actif",
@@ -8028,10 +8065,10 @@
       11,
       12
     ],
-    "sample": 1663,
+    "sample": 1664,
     "sample_by_source": {
       "bot": 153,
-      "shadow": 744,
+      "shadow": 745,
       "manual": 1,
       "backtest": 765
     },
@@ -8043,7 +8080,7 @@
       "adx": 1.0,
       "vwap": 0.75,
       "rsi": 1.02,
-      "macd": 0.943,
+      "macd": 0.935,
       "level": 1.0,
       "volume": 0.75,
       "orb": 1.0,
@@ -8058,7 +8095,7 @@
         "adx": 1.0,
         "vwap": 0.75,
         "rsi": 1.02,
-        "macd": 0.943,
+        "macd": 0.935,
         "level": 1.0,
         "volume": 0.75,
         "orb": 1.0,
@@ -8066,13 +8103,13 @@
         "corr": 0.5
       },
       "ethereum": {
-        "trend_5m": 0.811,
-        "trend_15m": 0.811,
-        "trend_1h": 0.811,
-        "adx": 0.811,
+        "trend_5m": 0.813,
+        "trend_15m": 0.813,
+        "trend_1h": 0.813,
+        "adx": 0.813,
         "vwap": 0.75,
         "rsi": 0.722,
-        "macd": 0.943,
+        "macd": 0.935,
         "level": 1.0,
         "volume": 0.75,
         "orb": 1.0,
@@ -8086,7 +8123,7 @@
         "adx": 1.0,
         "vwap": 0.75,
         "rsi": 1.02,
-        "macd": 0.943,
+        "macd": 0.935,
         "level": 1.0,
         "volume": 0.75,
         "orb": 1.0,
@@ -8100,7 +8137,7 @@
         "adx": 1.0,
         "vwap": 0.75,
         "rsi": 0.961,
-        "macd": 0.943,
+        "macd": 0.935,
         "level": 1.0,
         "volume": 0.75,
         "orb": 1.0,
@@ -8108,13 +8145,13 @@
         "corr": 0.5
       },
       "nasdaq": {
-        "trend_5m": 1.241,
-        "trend_15m": 1.241,
-        "trend_1h": 1.241,
-        "adx": 1.241,
-        "vwap": 0.924,
+        "trend_5m": 1.235,
+        "trend_15m": 1.235,
+        "trend_1h": 1.235,
+        "adx": 1.235,
+        "vwap": 0.919,
         "rsi": 1.314,
-        "macd": 0.943,
+        "macd": 0.935,
         "level": 1.0,
         "volume": 0.75,
         "orb": 1.0,
@@ -8128,7 +8165,7 @@
         "adx": 1.0,
         "vwap": 0.75,
         "rsi": 1.02,
-        "macd": 0.943,
+        "macd": 0.935,
         "level": 1.0,
         "volume": 0.75,
         "orb": 1.0,
@@ -8136,13 +8173,13 @@
         "corr": 0.5
       },
       "sp500": {
-        "trend_5m": 0.946,
-        "trend_15m": 0.946,
-        "trend_1h": 0.946,
-        "adx": 0.946,
-        "vwap": 0.707,
+        "trend_5m": 0.948,
+        "trend_15m": 0.948,
+        "trend_1h": 0.948,
+        "adx": 0.948,
+        "vwap": 0.708,
         "rsi": 1.02,
-        "macd": 0.943,
+        "macd": 0.935,
         "level": 1.0,
         "volume": 0.75,
         "orb": 1.0,
@@ -8158,9 +8195,9 @@
           "trend_1h",
           "adx"
         ],
-        "n": 1662,
-        "n_eff": 1333.9,
-        "mean_r": 0.0508,
+        "n": 1663,
+        "n_eff": 1334.9,
+        "mean_r": 0.0499,
         "margin_r": 0.0686,
         "multiplier": 1.0
       },
@@ -8168,10 +8205,10 @@
         "members": [
           "vwap"
         ],
-        "n": 1516,
-        "n_eff": 1232.3,
-        "mean_r": 0.0575,
-        "margin_r": 0.0721,
+        "n": 1517,
+        "n_eff": 1233.3,
+        "mean_r": 0.0565,
+        "margin_r": 0.072,
         "multiplier": 1.0
       },
       "rsi": {
@@ -8188,11 +8225,11 @@
         "members": [
           "macd"
         ],
-        "n": 437,
-        "n_eff": 346.5,
-        "mean_r": -0.1477,
-        "margin_r": 0.125,
-        "multiplier": 0.943
+        "n": 438,
+        "n_eff": 347.5,
+        "mean_r": -0.1508,
+        "margin_r": 0.1248,
+        "multiplier": 0.935
       },
       "level": {
         "members": [
@@ -8238,10 +8275,10 @@
         "members": [
           "corr"
         ],
-        "n": 79,
-        "n_eff": 75.0,
-        "mean_r": -0.0252,
-        "margin_r": 0.309,
+        "n": 80,
+        "n_eff": 75.9,
+        "mean_r": -0.0383,
+        "margin_r": 0.3066,
         "multiplier": 1.0
       }
     },
@@ -8252,9 +8289,9 @@
         "margin_r": 0.1945
       },
       "fantômes": {
-        "n": 744,
-        "mean_r": 0.0236,
-        "margin_r": 0.0986
+        "n": 745,
+        "mean_r": 0.0219,
+        "margin_r": 0.0985
       },
       "backtest": {
         "n": 765,
@@ -8358,9 +8395,9 @@
     },
     "variants_z": 2.73,
     "promoted_variants": [],
-    "updated_at": "2026-10-22T17:01:29.851109+00:00",
+    "updated_at": "2026-10-22T17:10:54.869174+00:00",
     "context": {
-      "n": 1431,
+      "n": 1432,
       "features": {
         "adx": {
           "label": "force de tendance (ADX 15 min)",
@@ -8368,31 +8405,31 @@
             {
               "label": "bas (< 28)",
               "lo": -1000000000.0,
-              "hi": 27.74,
+              "hi": 27.69,
               "n": 477,
-              "n_eff": 380.7,
-              "mean_r": -0.1644,
-              "margin_r": 0.1361,
+              "n_eff": 380.9,
+              "mean_r": -0.1696,
+              "margin_r": 0.1359,
               "avoid": true
             },
             {
               "label": "milieu (28 à 38)",
-              "lo": 27.74,
-              "hi": 37.81,
+              "lo": 27.69,
+              "hi": 37.78,
               "n": 477,
               "n_eff": 382.2,
-              "mean_r": 0.1704,
+              "mean_r": 0.1734,
               "margin_r": 0.1687,
               "avoid": false
             },
             {
               "label": "haut (≥ 38)",
-              "lo": 37.81,
+              "lo": 37.78,
               "hi": 1000000000.0,
-              "n": 477,
-              "n_eff": 392.7,
-              "mean_r": 0.1608,
-              "margin_r": 0.1855,
+              "n": 478,
+              "n_eff": 393.4,
+              "mean_r": 0.1595,
+              "margin_r": 0.1853,
               "avoid": false
             }
           ]
@@ -8424,10 +8461,10 @@
               "label": "haut (≥ 65)",
               "lo": 65.49,
               "hi": 1000000000.0,
-              "n": 477,
-              "n_eff": 381.4,
-              "mean_r": 0.0369,
-              "margin_r": 0.1699,
+              "n": 478,
+              "n_eff": 382.4,
+              "mean_r": 0.0333,
+              "margin_r": 0.1697,
               "avoid": false
             }
           ]
@@ -8448,20 +8485,20 @@
             {
               "label": "milieu (0,88 à 1,50)",
               "lo": 0.8768,
-              "hi": 1.501,
-              "n": 439,
-              "n_eff": 352.4,
-              "mean_r": -0.1324,
-              "margin_r": 0.1564,
+              "hi": 1.5027,
+              "n": 440,
+              "n_eff": 353.1,
+              "mean_r": -0.1301,
+              "margin_r": 0.1563,
               "avoid": false
             },
             {
               "label": "haut (≥ 1,50)",
-              "lo": 1.501,
+              "lo": 1.5027,
               "hi": 1000000000.0,
               "n": 440,
-              "n_eff": 362.7,
-              "mean_r": 0.326,
+              "n_eff": 363.0,
+              "mean_r": 0.3199,
               "margin_r": 0.2033,
               "avoid": false
             }
@@ -8494,10 +8531,10 @@
               "label": "haut (≥ 0,52)",
               "lo": 0.5199,
               "hi": 1000000000.0,
-              "n": 477,
-              "n_eff": 391.8,
-              "mean_r": 0.17,
-              "margin_r": 0.1908,
+              "n": 478,
+              "n_eff": 392.8,
+              "mean_r": 0.1659,
+              "margin_r": 0.1905,
               "avoid": false
             }
           ]
@@ -8529,10 +8566,10 @@
               "label": "haut (≥ 1,49)",
               "lo": 1.488,
               "hi": 1000000000.0,
-              "n": 477,
-              "n_eff": 385.0,
-              "mean_r": 0.3408,
-              "margin_r": 0.2004,
+              "n": 478,
+              "n_eff": 386.0,
+              "mean_r": 0.3364,
+              "margin_r": 0.2001,
               "avoid": false
             }
           ]
@@ -8554,10 +8591,10 @@
               "label": "milieu (1,03 à 1,33)",
               "lo": 1.033,
               "hi": 1.33,
-              "n": 450,
-              "n_eff": 364.7,
-              "mean_r": 0.0817,
-              "margin_r": 0.1649,
+              "n": 451,
+              "n_eff": 365.7,
+              "mean_r": 0.0775,
+              "margin_r": 0.1647,
               "avoid": false
             },
             {
@@ -8588,21 +8625,21 @@
             {
               "label": "milieu (0,36 à 0,62)",
               "lo": 0.3583,
-              "hi": 0.6177,
+              "hi": 0.6176,
               "n": 477,
-              "n_eff": 398.4,
-              "mean_r": -0.031,
-              "margin_r": 0.1581,
+              "n_eff": 398.7,
+              "mean_r": -0.0331,
+              "margin_r": 0.158,
               "avoid": false
             },
             {
               "label": "haut (≥ 0,62)",
-              "lo": 0.6177,
+              "lo": 0.6176,
               "hi": 1000000000.0,
-              "n": 477,
-              "n_eff": 378.8,
-              "mean_r": 0.0141,
-              "margin_r": 0.1486,
+              "n": 478,
+              "n_eff": 379.6,
+              "mean_r": 0.0126,
+              "margin_r": 0.1484,
               "avoid": false
             }
           ]
@@ -8613,21 +8650,21 @@
             {
               "label": "bas (< 0,08)",
               "lo": -1000000000.0,
-              "hi": 0.0807,
-              "n": 477,
-              "n_eff": 394.5,
-              "mean_r": 0.0937,
-              "margin_r": 0.1845,
+              "hi": 0.0806,
+              "n": 475,
+              "n_eff": 392.5,
+              "mean_r": 0.0931,
+              "margin_r": 0.1853,
               "avoid": false
             },
             {
               "label": "milieu (0,08 à 0,13)",
-              "lo": 0.0807,
+              "lo": 0.0806,
               "hi": 0.1322,
-              "n": 476,
-              "n_eff": 380.7,
-              "mean_r": 0.1208,
-              "margin_r": 0.1654,
+              "n": 479,
+              "n_eff": 383.6,
+              "mean_r": 0.1174,
+              "margin_r": 0.1646,
               "avoid": false
             },
             {
@@ -8669,10 +8706,10 @@
               "label": "plus de 1 h 30 après l'ouverture US",
               "lo": 90.0,
               "hi": 1000000000.0,
-              "n": 654,
-              "n_eff": 516.9,
-              "mean_r": 0.2444,
-              "margin_r": 0.151,
+              "n": 655,
+              "n_eff": 517.9,
+              "mean_r": 0.2414,
+              "margin_r": 0.1509,
               "avoid": false
             }
           ]
@@ -8714,10 +8751,10 @@
               "label": "jeudi",
               "lo": 3,
               "hi": 4,
-              "n": 428,
-              "n_eff": 359.1,
-              "mean_r": -0.2298,
-              "margin_r": 0.1504,
+              "n": 429,
+              "n_eff": 360.1,
+              "mean_r": -0.2328,
+              "margin_r": 0.1501,
               "avoid": true
             },
             {
@@ -8757,9 +8794,9 @@
         {
           "feature": "adx",
           "lo": -1000000000.0,
-          "hi": 27.74,
+          "hi": 27.69,
           "label": "force de tendance (ADX 15 min) : bas (< 28)",
-          "mean_r": -0.1644,
+          "mean_r": -0.1696,
           "n": 477
         },
         {
@@ -8783,39 +8820,39 @@
           "lo": 3,
           "hi": 4,
           "label": "jour de la semaine : jeudi",
-          "mean_r": -0.2298,
-          "n": 428
+          "mean_r": -0.2328,
+          "n": 429
         }
       ]
     },
     "exits": {
       "réels et en ombre": {
-        "n": 667,
-        "current_net_r": -0.0463,
+        "n": 668,
+        "current_net_r": -0.0481,
         "mfe_median": 0.758,
         "sl_reached": {
           "0.5": 128,
           "0.8": 64,
           "1.0": 43
         },
-        "n_sl": 362,
+        "n_sl": 363,
         "rules": {
           "0.5": {
-            "net_r": -0.0654,
+            "net_r": -0.0671,
             "diff_r": -0.019,
-            "margin_r": 0.0642,
+            "margin_r": 0.0641,
             "better": false
           },
           "0.8": {
-            "net_r": -0.0884,
-            "diff_r": -0.0421,
-            "margin_r": 0.0495,
+            "net_r": -0.0901,
+            "diff_r": -0.042,
+            "margin_r": 0.0494,
             "better": false
           },
           "1.0": {
-            "net_r": -0.1003,
-            "diff_r": -0.054,
-            "margin_r": 0.0456,
+            "net_r": -0.102,
+            "diff_r": -0.0539,
+            "margin_r": 0.0455,
             "better": false
           }
         }
@@ -8920,10 +8957,10 @@
     }
   },
   "state": {
-    "last_scan": "2026-10-22T17:05:38Z",
+    "last_scan": "2026-10-22T17:10:53Z",
     "last_scan_note": "0 signal(aux)",
     "last_summary": "2026-10-21T22:05:44Z",
-    "last_track": "2026-10-22T17:05:38Z",
+    "last_track": "2026-10-22T17:10:53Z",
     "last_summary_day": "2026-10-21"
   },
   "limits": {
@@ -21275,18 +21312,18 @@
           "entry_at": "2026-10-22T04:00:00Z",
           "direction": "short",
           "entry": 4107.2998046875,
-          "risk": 30.510983,
-          "stop": 4137.810788,
+          "risk": 30.524534,
+          "stop": 4137.824338,
           "status": "open",
           "reason": null,
           "exit_ts": null,
           "exit": null,
-          "last": 4065.5,
+          "last": 4052.699951171875,
           "r_topstep": null,
           "r_bot": null
         }
       ],
-      "checked_hour": "2026-10-22T16:00:00Z",
+      "checked_hour": "2026-10-22T17:00:00Z",
       "n": 9,
       "mean_r": -0.2236,
       "live": false
@@ -21497,7 +21534,7 @@
         }
       ],
       "live": false,
-      "checked_hour": "2026-10-22T16:00:00Z",
+      "checked_hour": "2026-10-22T17:00:00Z",
       "n": 13,
       "mean_r": 0.1017
     },
@@ -21628,19 +21665,19 @@
           "entry_at": "2026-10-22T14:30:00Z",
           "direction": "short",
           "entry": 29359.0,
-          "risk": 49.669987,
-          "stop": 29408.669987,
+          "risk": 49.56743,
+          "stop": 29408.56743,
           "status": "open",
           "reason": null,
           "exit_ts": null,
           "exit": null,
-          "last": 29353.0,
+          "last": 29238.0,
           "r_topstep": null,
           "r_bot": null
         }
       ],
       "live": false,
-      "checked_hour": "2026-10-22T16:00:00Z",
+      "checked_hour": "2026-10-22T17:00:00Z",
       "n": 7,
       "mean_r": -0.8853
     },
@@ -21816,7 +21853,7 @@
           "reason": null,
           "exit_ts": null,
           "exit": null,
-          "last": 29323.75,
+          "last": 29238.0,
           "r_topstep": null,
           "r_bot": null,
           "notified_entry": "2026-10-22T14:40:52Z",
@@ -21826,7 +21863,7 @@
         }
       ],
       "live": true,
-      "checked_hour": "2026-10-22T16:30:00Z",
+      "checked_hour": "2026-10-22T17:00:00Z",
       "n": 8,
       "mean_r": 0.1932
     },
@@ -21983,7 +22020,7 @@
         }
       ],
       "live": true,
-      "checked_hour": "2026-10-22T16:45:00Z",
+      "checked_hour": "2026-10-22T17:00:00Z",
       "n": 5,
       "mean_r": -0.1487
     },
