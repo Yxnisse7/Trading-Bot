@@ -111,9 +111,9 @@ VARIANT_LABELS = {
 def trade_r(s: Signal, net: bool = False) -> float | None:
     """Résultat d'un trade clôturé en multiples du risque pris (R). Brut de frais par défaut.
 
-    Trade arrêté à la main : le bot l'a suivi jusqu'au bout (TP, SL ou expiration) et c'est ce résultat
-    qui compte, sauf si l'arrêt s'est fait en gain et vaut mieux que la fin réelle : le signal offrait
-    alors une vraie fenêtre de gain, et c'est ce petit gain qui est appris (un TP reste un TP).
+    Trade arrêté à la main : le bot l'a suivi jusqu'au bout (TP, SL ou expiration) et c'est ce résultat seul
+    qui compte. Avant le 22/10/2026, un arrêt en gain meilleur que la fin réelle était appris à la place : ce
+    bonus rendait le bot plus beau que ce qu'il fait seul (relecture Perplexity, point 4), il est retiré.
     """
     if s.status not in ("tp", "sl", "expired") or not s.entry:
         return None
@@ -121,12 +121,7 @@ def trade_r(s: Signal, net: bool = False) -> float | None:
     pnl = s.pnl_pct if net else (s.pnl_gross_pct if s.pnl_gross_pct is not None else s.pnl_pct)
     if not risk_pct or pnl is None:
         return None
-    r = pnl / risk_pct
-    me = (s.meta or {}).get("manual_exit") or {}
-    manual = me.get("pnl_pct") if net else me.get("pnl_gross_pct", me.get("pnl_pct"))
-    if manual is not None and manual > 0:
-        r = max(r, manual / risk_pct)
-    return r
+    return pnl / risk_pct
 
 
 def weighted_stats(pairs: list[tuple[float, float]]) -> dict[str, float] | None:

@@ -66,9 +66,9 @@ def test_real_outcome_after_manual_stop_is_silent_and_does_not_touch_the_balance
 
 def test_learning_rule_for_manual_stops():
     risk = 1.0  # entrée 100, SL 99 → 1 % de risque
-    # arrêté en gain (+1 %), puis SL : le petit gain est appris
+    # arrêté en gain (+1 %), puis SL : seul ce que le bot a fait seul compte (plus de bonus depuis le 22/10/2026)
     s = _sig(status="sl", pnl_pct=-1.0, pnl_gross_pct=-1.0, meta={"manual_exit": {"pnl_pct": 0.95, "pnl_gross_pct": 1.0}})
-    assert trade_r(s) == pytest.approx(1.0 / risk)
+    assert trade_r(s) == pytest.approx(-1.0 / risk)
     # arrêté en gain, puis TP : le TP reste un TP
     s = _sig(status="tp", pnl_pct=2.0, pnl_gross_pct=2.0, meta={"manual_exit": {"pnl_pct": 0.5, "pnl_gross_pct": 0.5}})
     assert trade_r(s) == pytest.approx(2.0)
