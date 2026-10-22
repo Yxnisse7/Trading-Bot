@@ -1,6 +1,6 @@
 # Trading-Bot — rapport
 
-_Mis à jour le 22/10/2026 à 11:41 (Europe/Paris)._
+_Mis à jour le 22/10/2026 à 11:46 (Europe/Paris)._
 
 ## Vue d'ensemble
 
@@ -8,7 +8,7 @@ _Mis à jour le 22/10/2026 à 11:41 (Europe/Paris)._
 - Taux de réussite cumulé (TP / (TP+SL)) : **45%** — hasard attendu 41%, avantage **+4%**
 - P&L théorique cumulé, net des coûts estimés (somme des % par trade, sans levier) : **-0.48 %** (brut +3.42 %)
 - Signaux ouverts : **0**
-- Signaux fantômes (suivis en silence pour l'apprentissage) : **652** clôturés, 31 ouverts, taux de réussite 38% (hasard attendu 38%)
+- Signaux fantômes (suivis en silence pour l'apprentissage) : **654** clôturés, 31 ouverts, taux de réussite 38% (hasard attendu 38%)
 
 ## Statistiques
 
@@ -114,18 +114,18 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 
 | Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
 |---|---:|---:|---:|---:|---:|---:|
-| adx | 652 | 209 | 339 | 104 | 38% | -0.001 % |
+| adx | 654 | 209 | 339 | 106 | 38% | -0.000 % |
 | corr | 54 | 11 | 31 | 12 | 26% | -0.087 % |
 | level | 51 | 20 | 17 | 14 | 54% | -0.035 % |
-| macd | 170 | 40 | 104 | 26 | 28% | -0.063 % |
+| macd | 171 | 40 | 104 | 27 | 28% | -0.062 % |
 | orb | 21 | 9 | 7 | 5 | 56% | +0.030 % |
 | pdhl | 85 | 31 | 43 | 11 | 42% | +0.084 % |
-| rsi | 481 | 165 | 254 | 62 | 39% | +0.009 % |
-| trend_15m | 652 | 209 | 339 | 104 | 38% | -0.001 % |
-| trend_1h | 643 | 206 | 336 | 101 | 38% | -0.000 % |
-| trend_5m | 555 | 190 | 295 | 70 | 39% | +0.010 % |
+| rsi | 483 | 165 | 254 | 64 | 39% | +0.009 % |
+| trend_15m | 654 | 209 | 339 | 106 | 38% | -0.000 % |
+| trend_1h | 645 | 206 | 336 | 103 | 38% | -0.000 % |
+| trend_5m | 557 | 190 | 295 | 72 | 39% | +0.011 % |
 | volume | 8 | 1 | 5 | 2 | 17% | -0.236 % |
-| vwap | 636 | 206 | 331 | 99 | 38% | +0.001 % |
+| vwap | 638 | 206 | 331 | 101 | 38% | +0.001 % |
 
 ### Fantômes par actif
 
@@ -134,7 +134,7 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 | bitcoin | 29 | 9 | 8 | 12 | 53% | -0.015 % |
 | ethereum | 27 | 4 | 16 | 7 | 20% | -0.211 % |
 | euro | 34 | 11 | 22 | 1 | 33% | -0.026 % |
-| gold | 139 | 40 | 75 | 24 | 35% | -0.031 % |
+| gold | 141 | 40 | 75 | 26 | 35% | -0.029 % |
 | nasdaq | 243 | 95 | 117 | 31 | 45% | +0.083 % |
 | oil | 84 | 24 | 43 | 17 | 36% | -0.065 % |
 | sp500 | 96 | 26 | 58 | 12 | 31% | -0.040 % |
@@ -178,12 +178,12 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 
 | Critère | Poids actuel |
 |---|---:|
-| trend_5m | 1.037 |
-| trend_15m | 1.037 |
-| trend_1h | 1.037 |
-| adx | 1.037 |
-| vwap | 0.788 |
-| rsi | 1.111 |
+| trend_5m | 1.04 |
+| trend_15m | 1.04 |
+| trend_1h | 1.04 |
+| adx | 1.04 |
+| vwap | 0.791 |
+| rsi | 1.114 |
 | macd | 1.0 |
 | level | 1.0 |
 | volume | 0.75 |
@@ -195,10 +195,10 @@ Tranches horaires évitées (UTC) : [11]
 
 Corrections par actif :
 
-- ethereum : {'trend_5m': 0.749, 'trend_15m': 0.749, 'trend_1h': 0.749, 'adx': 0.749, 'rsi': 0.676}
-- euro : {'trend_5m': 0.98, 'trend_15m': 0.98, 'trend_1h': 0.98, 'adx': 0.98}
-- gold : {'vwap': 0.767, 'rsi': 0.992}
-- nasdaq : {'trend_5m': 1.481, 'trend_15m': 1.481, 'trend_1h': 1.481, 'adx': 1.481, 'vwap': 1.118, 'rsi': 1.5}
+- ethereum : {'trend_5m': 0.749, 'trend_15m': 0.749, 'trend_1h': 0.749, 'adx': 0.749, 'rsi': 0.674}
+- euro : {'trend_5m': 0.98, 'trend_15m': 0.98, 'trend_1h': 0.98, 'adx': 0.98, 'vwap': 0.79}
+- gold : {'vwap': 0.777, 'rsi': 1.008}
+- nasdaq : {'trend_5m': 1.483, 'trend_15m': 1.483, 'trend_1h': 1.483, 'adx': 1.483, 'vwap': 1.12, 'rsi': 1.5}
 - sp500 : {'trend_5m': 0.915, 'trend_15m': 0.915, 'trend_1h': 0.915, 'adx': 0.915, 'vwap': 0.688, 'rsi': 1.037}
 
 | Variante testée en fantôme | Trades | Gain net moyen | Statut |
@@ -218,15 +218,16 @@ Corrections par actif :
 Notes :
 
 - trades réels : +0,15 R ± 0,19 R par trade avant frais sur 154 trades (0 R = hasard)
-- tendance (trend_5m, trend_15m, trend_1h, adx) : +0,09 R ± 0,07 R sur 1242 trades éq. → poids ×1,04
-- vwap : +0,10 R ± 0,08 R sur 1140 trades éq. → poids ×1,05
-- rsi : +0,13 R ± 0,08 R sur 995 trades éq. → poids ×1,11
+- tendance (trend_5m, trend_15m, trend_1h, adx) : +0,09 R ± 0,07 R sur 1244 trades éq. → poids ×1,04
+- vwap : +0,10 R ± 0,07 R sur 1142 trades éq. → poids ×1,05
+- rsi : +0,13 R ± 0,08 R sur 997 trades éq. → poids ×1,11
 - tranche 11h UTC : -0,29 R sur 80 trades éq. → évitée
 - ethereum, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,24 R contre +0,09 R en global sur 78 trades éq. → poids ×0,72 sur cet actif
 - ethereum, rsi : -0,29 R contre +0,13 R en global sur 56 trades éq. → poids ×0,61 sur cet actif
 - euro, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,24 R contre +0,09 R en global sur 63 trades éq. → poids ×0,94 sur cet actif
-- gold, vwap : -0,05 R contre +0,10 R en global sur 254 trades éq. → poids ×0,97 sur cet actif
-- gold, rsi : -0,06 R contre +0,13 R en global sur 205 trades éq. → poids ×0,89 sur cet actif
+- euro, vwap : -0,22 R contre +0,10 R en global sur 60 trades éq. → poids ×1,00 sur cet actif
+- gold, vwap : -0,04 R contre +0,10 R en global sur 256 trades éq. → poids ×0,98 sur cet actif
+- gold, rsi : -0,06 R contre +0,13 R en global sur 207 trades éq. → poids ×0,90 sur cet actif
 - nasdaq, tendance (trend_5m, trend_15m, trend_1h, adx) : +0,42 R contre +0,09 R en global sur 348 trades éq. → poids ×1,43 sur cet actif
 - nasdaq, vwap : +0,43 R contre +0,10 R en global sur 341 trades éq. → poids ×1,42 sur cet actif
 - nasdaq, rsi : +0,50 R contre +0,13 R en global sur 285 trades éq. → poids ×1,47 sur cet actif
@@ -236,7 +237,6 @@ Notes :
 - variante « indices le matin européen » en test : 95 trades, -0,37 R net, encore 5 trades avant décision
 - variante « horizon ~3 h » en test : 77 trades, -0,42 R net, encore 23 trades avant décision
 - variante « confiance moyenne » en test : 61 trades, -0,04 R net, encore 39 trades avant décision
-- variante « entrées dans l'heure avant l'ouverture américaine » en test : 11 trades, +1,54 R net, encore 89 trades avant décision
 
 ## Backtests (données historiques 5 min)
 
