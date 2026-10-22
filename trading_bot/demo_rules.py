@@ -16,7 +16,9 @@ RULES: dict[int, dict[str, Any]] = {
     777001: {"name": "poste de l'assistant", "max_loss": 100.0, "max_streak": 6},
     777002: {"name": "agent IA (chasse)", "max_loss": 100.0, "max_streak": None},   # 20/10, démo seulement
     777003: {"name": "agent IA (méthode Hugo)", "max_loss": 100.0, "max_streak": None},   # 20/10, démo seulement
-    200001: {"name": "copie des signaux du bot", "max_loss": 300.0, "max_streak": None},   # 300 $ : choix de Yanisse le 14/10 ; plus de limite de pertes d'affilée (choix du 20/10)
+    # plus de limite : la copie démo tourne comme le futur compte réel (choix de Yanisse le 22/10, après −389 $ ;
+    # 300 $ choisis le 14/10, plus de pertes d'affilée depuis le 20/10)
+    200001: {"name": "copie des signaux du bot", "max_loss": None, "max_streak": None},
 }
 
 
@@ -40,7 +42,7 @@ def breach(trades: list[tuple[int, float]], magic: int, lot: float = 0.01) -> st
         return None
     pnl = [x for _, x in trades]
     total = sum(pnl)
-    if total <= -rule["max_loss"]:
+    if rule.get("max_loss") is not None and total <= -rule["max_loss"]:
         return f"perte cumulée {total:.2f} $ (limite {rule['max_loss']:.0f} $)"
     streak = 0
     for x in reversed(pnl):
