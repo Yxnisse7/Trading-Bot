@@ -18,7 +18,9 @@ FEEDS: dict[str, list[str]] = {
         "https://feeds.content.dowjones.io/public/rss/mw_topstories",     # MarketWatch
         "https://www.cnbc.com/id/100003114/device/rss/rss.html",            # CNBC Top News
         "https://www.cnbc.com/id/20910258/device/rss/rss.html",             # CNBC Economy
-        "https://finance.yahoo.com/news/rssindex",                          # Yahoo Finance
+        # Yahoo a fermé /news/rssindex (404 depuis octobre 2026) : remplacé le 22/10/2026
+        "https://feeds.finance.yahoo.com/rss/2.0/headline?s=%5EIXIC,%5EGSPC&region=US&lang=en-US",  # Yahoo Nasdaq + S&P
+        "https://www.investing.com/rss/news_14.rss",                        # Investing.com, économie
     ],
     "crypto": [
         "https://www.coindesk.com/arc/outboundfeeds/rss/",                  # CoinDesk
