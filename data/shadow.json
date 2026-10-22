@@ -91,7 +91,7 @@
           "0.8": true,
           "1.0": false
         },
-        "last_ts": 1792653900
+        "last_ts": 1792654200
       }
     }
   },
@@ -180,7 +180,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1792653900
+        "last_ts": 1792654200
       }
     }
   },
@@ -268,7 +268,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1792653900
+        "last_ts": 1792654200
       }
     }
   },
@@ -364,7 +364,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1792653900
+        "last_ts": 1792654200
       }
     }
   },
@@ -448,7 +448,7 @@
       "price_time": "2026-10-22T07:15:00Z",
       "variant": "hors_session",
       "exc": {
-        "mfe": 0.0909,
+        "mfe": 0.1402,
         "mae": 0.5492,
         "armed": {
           "0.5": false,
@@ -460,7 +460,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1792653900
+        "last_ts": 1792654200
       }
     }
   },
@@ -536,7 +536,7 @@
       },
       "variant": "confiance_moyenne",
       "exc": {
-        "mfe": 0.0,
+        "mfe": 0.2,
         "mae": 0.6154,
         "armed": {
           "0.5": false,
@@ -548,7 +548,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1792653900
+        "last_ts": 1792654200
       }
     }
   },
@@ -632,7 +632,7 @@
       "price_time": "2026-10-22T07:20:00Z",
       "variant": "hors_session",
       "exc": {
-        "mfe": 0.1311,
+        "mfe": 0.2135,
         "mae": 0.4232,
         "armed": {
           "0.5": false,
@@ -644,7 +644,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": null
+        "last_ts": 1792654200
       }
     }
   },
@@ -728,11 +728,11 @@
       "filters_checked": true,
       "variant": "modele_arbres",
       "exc": {
-        "mfe": 0.371,
+        "mfe": 0.9839,
         "mae": 0.0,
         "armed": {
-          "0.5": false,
-          "0.8": false,
+          "0.5": true,
+          "0.8": true,
           "1.0": false
         },
         "be": {
@@ -740,7 +740,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": null
+        "last_ts": 1792654200
       }
     }
   },
@@ -826,7 +826,7 @@
       "price_time": "2026-10-22T07:25:00Z",
       "variant": "hors_session",
       "exc": {
-        "mfe": 0.0,
+        "mfe": 0.1236,
         "mae": 0.382,
         "armed": {
           "0.5": false,
@@ -922,6 +922,104 @@
         "source": "essai 29"
       },
       "price_time": "2026-10-22T07:30:00Z",
+      "variant": "hors_session",
+      "exc": {
+        "mfe": 0.318,
+        "mae": 0.0,
+        "armed": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "be": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "last_ts": null
+      }
+    }
+  },
+  {
+    "id": "864edce56c",
+    "asset": "nasdaq",
+    "asset_label": "Nasdaq 100 (NQ)",
+    "direction": "short",
+    "entry": 29497.0,
+    "take_profit": 29301.25,
+    "stop_loss": 29562.25,
+    "risk_reward": 3.0,
+    "confidence": "fort",
+    "score": 9.04,
+    "criteria": [
+      "adx",
+      "corr",
+      "rsi",
+      "trend_15m",
+      "trend_1h",
+      "trend_5m",
+      "vwap"
+    ],
+    "rationale": "Vente : tendance forte (ADX), marché meneur favorable, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 108.78 (0.37 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 55%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+    "news_context": "actualité calme sur les 2 dernières heures",
+    "created_at": "2026-10-22T07:40:52Z",
+    "expires_at": "2026-10-23T07:40:52Z",
+    "status": "open",
+    "closed_at": null,
+    "close_price": null,
+    "pnl_pct": null,
+    "pnl_gross_pct": null,
+    "duration_minutes": null,
+    "hourly_range": 108.78125,
+    "source": "shadow",
+    "horizon": "24h",
+    "horizon_minutes": 1440,
+    "meta": {
+      "tick": 0.25,
+      "details": {
+        "trend_5m": "EMA20 29523.36 / EMA50 29583.89 (5 min)",
+        "trend_15m": "EMA20 29592.80 / EMA50 29716.38",
+        "trend_1h": "prix vs EMA20 1 h 29756.03",
+        "adx": "ADX15 48.7 (+DI 7.0 / -DI 30.0)",
+        "vwap": "VWAP jour 29652.61",
+        "rsi": "RSI14 5 min 38.7",
+        "macd": "histogramme MACD 2.1609",
+        "level": "support 29391.75 / résistance 29694.00",
+        "volume": "z-score volume -2.36",
+        "pdhl": "veille : haut 30113.00 / bas 29727.50",
+        "activity": "activité de l'heure 0.87× la moyenne",
+        "corr": "VIX +9.2 % sur 15 min"
+      },
+      "support": 29391.75,
+      "resistance": 29694.0,
+      "atr_5m": 28.13215660353036,
+      "atr_ratio": 0.9129857056979489,
+      "hourly_range_pct": 0.3688,
+      "adx_15m": 48.73913925856107,
+      "sigma_5m": 0.0005556366516695947,
+      "p_resolution": 0.5483333333333333,
+      "p_tp_neutral": 0.198,
+      "activity_ratio": 0.874,
+      "base_minutes": 5,
+      "ctx": {
+        "adx": 48.74,
+        "rsi_dir": 61.32,
+        "vwap_ext": 1.4305,
+        "ema_ext": 0.2423,
+        "atr_ratio": 0.913,
+        "activity": 0.874,
+        "range_pct": 0.3688,
+        "cost_r": 0.0678,
+        "us_open_min": -349.1,
+        "weekday": 3
+      },
+      "exit_override": {
+        "stop_x": 1.5,
+        "target_x": 3.0,
+        "minutes": 1440,
+        "source": "essai 29"
+      },
+      "price_time": "2026-10-22T07:35:00Z",
       "variant": "hors_session"
     }
   }
