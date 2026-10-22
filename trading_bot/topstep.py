@@ -29,7 +29,7 @@ import math
 import re
 from datetime import datetime, time, timedelta, timezone
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable
 from zoneinfo import ZoneInfo
 
 from .config import DATA_DIR, ROOT_DIR, Config
@@ -213,8 +213,13 @@ class TopstepAccount:
         return out
 
     def compute(self, signals: list[Signal], cfg: Config, now: datetime | None = None,
-                mirror_ids: set[str] | None = None) -> dict[str, Any]:
-        """Rejoue le compte dans l'ordre d'ouverture : chaque trade est dimensionné sur la balance du moment."""
+                mirror_ids: set[str] | None = None,
+                price_at: Callable[[str, datetime], float | None] | None = None) -> dict[str, Any]:
+        """Rejoue le compte dans l'ordre d'ouverture : chaque trade est dimensionné sur la balance du moment.
+
+        `price_at(actif, heure)` : prix à une heure donnée. Avec lui, un signal encore ouvert à 15:10 heure de Chicago
+        est fermé comme Topstep le ferait (15:08, statut « flat »), même s'il continue ailleurs (Simulation, MT5) :
+        essai 43, le Nasdaq du bot est tenu jusqu'à 24 h, ce que Topstep interdit."""
         now = now or utcnow()
         start = RULES["start_balance"]
         mirror_ids = self._remember(mirror_ids)
@@ -249,8 +254,16 @@ class TopstepAccount:
                 continue
             n = fixed or self.contracts_for(s, balance_at(s.created_at))
             me = self.state.get("exits", {}).get(s.id) or (s.meta or {}).get("manual_exit")
+            flat = _flat_limit(parse_iso(s.created_at))
+            forced = None
+            if price_at is not None and not me and parse_iso(s.created_at) < flat and (
+                    (s.status == "open" and now >= flat)
+                    or (s.status != "open" and s.closed_at and parse_iso(s.closed_at) > flat)):
+                forced = price_at(s.asset, flat)
             if me:
                 exit_price, closed_at, status = me["price"], me["at"], "manual"
+            elif forced is not None:
+                exit_price, closed_at, status = forced, iso(flat - timedelta(minutes=2)), "flat"
             elif s.status != "open" and s.close_price is not None:
                 exit_price, closed_at, status = s.close_price, s.closed_at, s.status
             else:

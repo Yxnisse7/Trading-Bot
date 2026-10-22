@@ -199,7 +199,7 @@
   const PRODUCTS = { nasdaq: ["MNQ", 2, "Nasdaq 100"], sp500: ["MES", 5, "S&P 500"], gold: ["MGC", 10, "Or"], oil: ["MCL", 100, "Pétrole WTI"],
                      euro: ["M6E", 12500, "Euro / dollar"], bitcoin: ["MBT", 0.1, "Bitcoin"], ethereum: ["MET", 0.1, "Ethereum"] };
   const ORIGIN = { bot: "Bot", pris: "Ajouté", manuel: "Manuel", journal: "Journal" };
-  const STATUS = { tp: "TP", sl: "SL", expired: "Expiré", manual: "Sortie", journal: "Journal", open: "En cours" };
+  const STATUS = { tp: "TP", sl: "SL", expired: "Expiré", manual: "Sortie", flat: "Fermé 15:08", journal: "Journal", open: "En cours" };
   const live = window.LiveChart ? window.LiveChart.mount($("#live"), { assets: Object.keys(PRODUCTS).map((k) => [k, `${PRODUCTS[k][2]} (${PRODUCTS[k][0]})`]),
     how: "Prix des contrats du bot (données gratuites, légèrement différées). Vos positions Topstep suivent le même prix." }) : null;
   let acct = null, dash = null, histLimit = 10;

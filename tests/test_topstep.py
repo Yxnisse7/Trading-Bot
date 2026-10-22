@@ -219,3 +219,25 @@ def test_real_topstep_fees_and_one_tick_are_deducted_per_micro(tmp_path):
     assert (t["contracts"], t["fees"], t["slippage"], t["cost"]) == (12, 14.64, 6.0, 20.64)
     assert t["pnl"] == round(480.0 - 20.64, 2)
     assert set(ts.FEES) == set(ts.PRODUCTS)               # un tarif pour chaque contrat proposé
+
+
+def test_bot_trade_still_open_at_15h10_chicago_is_closed_like_topstep(tmp_path):
+    """Essai 43 : le Nasdaq du bot tient jusqu'à 24 h ailleurs, mais Topstep ferme tout à 15:08 heure de Chicago."""
+    cfg = Config(assets=default_assets())
+    acct = _acct(tmp_path)
+    late = _sig("n", when=datetime(2026, 9, 22, 19, 0, tzinfo=timezone.utc), duration=600, close=20100.0)
+    still = _sig("o", when=datetime(2026, 9, 23, 19, 0, tzinfo=timezone.utc), status="open")
+    seen = []
+
+    def price(asset, when):
+        seen.append(when)
+        return 20010.0
+
+    d = acct.compute([late, still], cfg, now=datetime(2026, 9, 24, 2, 0, tzinfo=timezone.utc),
+                     mirror_ids={"n", "o"}, price_at=price)
+    assert [(t["status"], t["exit"], t["past_flat_time"]) for t in d["trades"]] == [("flat", 20010.0, False)] * 2
+    assert not d["open"] and not d["violations"] and len(seen) == 2
+    assert d["trades"][0]["closed_at"] == "2026-09-22T20:08:00Z"
+    # sans prix (ou trade fini avant 15:10), rien ne change
+    early = _sig("e", when=T0)
+    assert acct.compute([early], cfg, mirror_ids={"e"}, price_at=price)["trades"][0]["status"] == "tp"

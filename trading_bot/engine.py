@@ -968,10 +968,24 @@ class Engine:
         d = self.portfolio.data
         return {h["id"] for h in d.get("history", [])} | set(d.get("open", {}))
 
+    def _price_at(self):
+        """Prix de clôture de la dernière bougie 5 min finie avant une heure donnée (bougies récentes, puis historique)."""
+        cache: dict[str, list] = {}
+
+        def price(asset: str, when: datetime) -> float | None:
+            if asset not in cache:
+                recent = self.store.load_candles(asset)
+                old = self.store.load_history(asset)
+                cache[asset] = sorted({c.ts: c for c in old + recent}.values(), key=lambda c: c.ts)
+            t = int(when.timestamp())
+            done = [c for c in cache[asset] if c.ts + 300 <= t]
+            return done[-1].close if done and t - (done[-1].ts + 300) <= 3600 else None
+        return price
+
     def topstep_update(self, all_sigs: list[Signal] | None = None) -> dict[str, Any]:
         acct = self.topstep()
         data = acct.compute(all_sigs if all_sigs is not None else self.store.all_signals(), self.cfg,
-                            mirror_ids=self.topstep_mirror())
+                            mirror_ids=self.topstep_mirror(), price_at=self._price_at())
         acct.publish(data)
         return data
 
@@ -1028,7 +1042,8 @@ class Engine:
 
     def _find_topstep_open(self, ref: str | None, acct) -> Signal:
         """Trade encore ouvert dans le compte Topstep (par identifiant ou actif ; le seul ouvert sinon)."""
-        data = acct.compute(self.store.all_signals(), self.cfg, mirror_ids=self.topstep_mirror())
+        data = acct.compute(self.store.all_signals(), self.cfg, mirror_ids=self.topstep_mirror(),
+                            price_at=self._price_at())
         open_ids = [o["id"] for o in data["open"]]
         if not open_ids:
             raise ValueError("aucun trade ouvert dans le compte Topstep")
