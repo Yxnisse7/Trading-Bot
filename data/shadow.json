@@ -77,7 +77,7 @@
       "price_time": "2026-10-22T13:35:00Z",
       "variant": "horizon_3h",
       "exc": {
-        "mfe": 0.6949,
+        "mfe": 0.7897,
         "mae": 0.9333,
         "armed": {
           "0.5": true,
@@ -89,7 +89,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1792678200
+        "last_ts": 1792678500
       }
     }
   },
@@ -171,11 +171,11 @@
       "price_time": "2026-10-22T13:40:00Z",
       "variant": "horizon_3h",
       "exc": {
-        "mfe": 0.7571,
+        "mfe": 0.8452,
         "mae": 0.7548,
         "armed": {
           "0.5": true,
-          "0.8": false,
+          "0.8": true,
           "1.0": false
         },
         "be": {
@@ -183,7 +183,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1792678200
+        "last_ts": 1792678500
       }
     }
   },
@@ -266,11 +266,11 @@
       "price_time": "2026-10-22T14:00:00Z",
       "variant": "horizon_3h",
       "exc": {
-        "mfe": 0.435,
+        "mfe": 0.9196,
         "mae": 0.3853,
         "armed": {
-          "0.5": false,
-          "0.8": false,
+          "0.5": true,
+          "0.8": true,
           "1.0": false
         },
         "be": {
@@ -278,7 +278,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1792678200
+        "last_ts": 1792678500
       }
     }
   },
@@ -383,7 +383,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1792678200
+        "last_ts": 1792678500
       }
     }
   },
@@ -476,10 +476,10 @@
       "filters_checked": true,
       "variant": "modele_arbres",
       "exc": {
-        "mfe": 0.3506,
+        "mfe": 0.6364,
         "mae": 0.0,
         "armed": {
-          "0.5": false,
+          "0.5": true,
           "0.8": false,
           "1.0": false
         },
@@ -488,7 +488,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": null
+        "last_ts": 1792678500
       }
     }
   },
@@ -582,7 +582,7 @@
       "filters_checked": true,
       "variant": "modele_arbres",
       "exc": {
-        "mfe": 0.0,
+        "mfe": 0.0845,
         "mae": 0.1549,
         "armed": {
           "0.5": false,
@@ -685,7 +685,22 @@
         "bot_en_ombre"
       ],
       "filters_checked": true,
-      "variant": "modele_arbres"
+      "variant": "modele_arbres",
+      "exc": {
+        "mfe": 0.1972,
+        "mae": 0.0,
+        "armed": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "be": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "last_ts": null
+      }
     }
   },
   {
@@ -763,7 +778,112 @@
         "weekday": 3
       },
       "price_time": "2026-10-22T14:15:00Z",
-      "variant": "horizon_3h_gold"
+      "variant": "horizon_3h_gold",
+      "exc": {
+        "mfe": 0.1373,
+        "mae": 0.0,
+        "armed": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "be": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "last_ts": null
+      }
+    }
+  },
+  {
+    "id": "daad90ff8c",
+    "asset": "gold",
+    "asset_label": "Or (XAU/USD)",
+    "direction": "short",
+    "entry": 4065.4,
+    "take_profit": 4054.7,
+    "stop_loss": 4072.5,
+    "risk_reward": 1.51,
+    "confidence": "fort",
+    "score": 6.63,
+    "criteria": [
+      "adx",
+      "orb",
+      "rsi",
+      "trend_15m",
+      "trend_1h",
+      "trend_5m",
+      "vwap"
+    ],
+    "rationale": "Vente : tendance forte (ADX), cassure du range d'ouverture, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 17.78 (0.44 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 80%.",
+    "news_context": "actualité à surveiller (score 1) : Trump’s tariffs loom over Maine Senate race between Collins and Jackson",
+    "created_at": "2026-10-22T14:25:48Z",
+    "expires_at": "2026-10-22T15:25:48Z",
+    "status": "open",
+    "closed_at": null,
+    "close_price": null,
+    "pnl_pct": null,
+    "pnl_gross_pct": null,
+    "duration_minutes": null,
+    "hourly_range": 17.782587,
+    "source": "shadow",
+    "horizon": "1h",
+    "horizon_minutes": 60,
+    "meta": {
+      "tick": 0.1,
+      "details": {
+        "trend_5m": "EMA20 4079.14 / EMA50 4086.91 (5 min)",
+        "trend_15m": "EMA20 4086.84 / EMA50 4101.18",
+        "trend_1h": "prix vs EMA20 1 h 4106.78",
+        "adx": "ADX15 32.5 (+DI 13.4 / -DI 32.2)",
+        "vwap": "VWAP jour 4099.91",
+        "rsi": "RSI14 5 min 30.8",
+        "macd": "histogramme MACD -2.3957",
+        "level": "support - / résistance 4107.20",
+        "volume": "z-score volume -1.79",
+        "orb": "range d'ouverture 4068.80 – 4096.50",
+        "pdhl": "veille : haut 4164.30 / bas 4122.30",
+        "activity": "activité de l'heure 1.57× la moyenne",
+        "corr": "DXY +0.09 % sur 1 h, taux 10 ans -0.1 % sur 1 h"
+      },
+      "support": null,
+      "resistance": 4107.2001953125,
+      "atr_5m": 7.407895305104697,
+      "atr_ratio": 1.6423170967321685,
+      "hourly_range_pct": 0.4374,
+      "adx_15m": 32.488861872254915,
+      "sigma_5m": 0.0009674430849017497,
+      "p_resolution": 0.8,
+      "p_tp_neutral": 0.31866666666666665,
+      "activity_ratio": 1.574,
+      "base_minutes": 5,
+      "ctx": {
+        "adx": 32.49,
+        "rsi_dir": 69.16,
+        "vwap_ext": 1.9409,
+        "ema_ext": 0.7725,
+        "atr_ratio": 1.642,
+        "activity": 1.574,
+        "range_pct": 0.4374,
+        "cost_r": 0.1145,
+        "us_open_min": 55.8,
+        "weekday": 3
+      },
+      "price_time": "2026-10-22T14:20:00Z",
+      "ctx_avoid": [
+        "jour de la semaine : jeudi"
+      ],
+      "model_r": -0.057,
+      "filters": [
+        "sans_ouverture_us",
+        "filtre_contexte",
+        "sans_etirement_or",
+        "modele_arbres",
+        "bot_en_ombre"
+      ],
+      "filters_checked": true,
+      "variant": "modele_arbres"
     }
   }
 ]
