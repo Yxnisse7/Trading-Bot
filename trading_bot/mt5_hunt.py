@@ -36,6 +36,10 @@ MAGIC = 777002
 ASSETS = {"gold": ("Or (XAU/USD)", (("09:05", "ouverture de Londres"), ("14:35", "stats américaines"),
                                     ("15:35", "ouverture de New York")), 0.10),
           "nasdaq": ("Nasdaq 100", (("15:50", "ouverture de Wall Street"),), 2.0)}
+# veille régulière (demande de Yanisse le 22/10/2026 : 2 à 3 recherches par heure) : plages de Paris, réveil toutes
+# les `every_minutes` (config du pont, 20 par défaut) en plus des heures fixes
+WATCH = {"gold": (("09:00", "12:00"), ("14:30", "18:00")), "nasdaq": (("15:40", "21:00"),)}
+EVERY = 20
 AFTER_NEWS = 20 * 60                      # s après une annonce USD à fort impact
 LATE = 10 * 60                            # un réveil manqué de plus de 10 min est sauté
 MAX_HOLD = 4 * 3600
@@ -48,13 +52,19 @@ DEFAULTS = {"command": r"E:\TradingBot\venv\Scripts\python.exe E:\TradingBot\age
 
 
 def slots(day: datetime, events: list[dict[str, Any]], asset: str = "gold", table: dict | None = None,
-          news: bool = True) -> list[tuple[int, str]]:
-    """Réveils du jour (heure UTC en s, moment) : heures fixes en semaine + 20 min après les annonces USD fortes."""
+          news: bool = True, watch: tuple = (), every: int = EVERY) -> list[tuple[int, str]]:
+    """Réveils du jour (heure UTC en s, moment) : heures fixes en semaine, veille toutes les `every` min dans les
+    plages `watch`, + 20 min après les annonces USD fortes."""
     d = day.astimezone(PARIS).date()
     if d.weekday() >= 5:
         return []
-    out = [(int(datetime.combine(d, datetime.strptime(hm, "%H:%M").time(), PARIS).timestamp()), name)
-           for hm, name in (table or ASSETS)[asset][1]]
+
+    def at(hm: str) -> int:
+        return int(datetime.combine(d, datetime.strptime(hm, "%H:%M").time(), PARIS).timestamp())
+
+    out = [(at(hm), name) for hm, name in (table or ASSETS)[asset][1]]
+    for a, b in watch if every > 0 else ():
+        out += [(t, "veille") for t in range(at(a), at(b) + 1, every * 60)]
     for e in events if news else ():
         if e.get("impact") != "high" or not str(e.get("name", "")).startswith("USD"):
             continue
@@ -63,8 +73,10 @@ def slots(day: datetime, events: list[dict[str, Any]], asset: str = "gold", tabl
             out.append((int(at.timestamp()) + AFTER_NEWS, f"après annonce : {e['name'][4:]}"))
     out.sort()
     keep: list[tuple[int, str]] = []
-    for ts, name in out:                  # deux réveils à moins de 15 min : un seul
-        if keep and ts - keep[-1][0] < 900:
+    for ts, name in out:                  # deux réveils trop proches : un seul (une heure fixe passe avant la veille)
+        if keep and ts - keep[-1][0] < min(900, every * 60 - 60 if every > 0 else 900):
+            if name != "veille" and keep[-1][1] == "veille":
+                keep[-1] = (ts, name)
             continue
         keep.append((ts, name))
     return keep
@@ -72,7 +84,7 @@ def slots(day: datetime, events: list[dict[str, Any]], asset: str = "gold", tabl
 
 class Hunter:
     MAGIC, ASSETS, NAME, MAX_HOLD, FRAMES, DEFAULTS = MAGIC, ASSETS, "chasse", MAX_HOLD, FRAMES, DEFAULTS
-    TAG, COMMENT, NEWS = "Trade de l'agent IA", "agent IA", True
+    TAG, COMMENT, NEWS, WATCH = "Trade de l'agent IA", "agent IA", True, WATCH
 
     def __init__(self, mt5, root: Path, clock: Callable[[], float], relay=None, cfg: dict[str, Any] | None = None,
                  spawn: Callable[..., Any] = subprocess.Popen):
@@ -93,7 +105,7 @@ class Hunter:
 
     def _save(self) -> None:
         self.file.parent.mkdir(parents=True, exist_ok=True)
-        self.state["done"] = self.state["done"][-50:]
+        self.state["done"] = self.state["done"][-200:]
         self.file.write_text(json.dumps(self.state, indent=1, ensure_ascii=False), encoding="utf-8")
 
     def extra(self, asset: str, now: float) -> dict[str, Any]:
@@ -136,7 +148,8 @@ class Hunter:
         for asset in self.ASSETS:
             if self.state["trades"].get(asset) or not self.may_trade(asset, now):
                 continue
-            for ts, name in slots(datetime.fromtimestamp(now, timezone.utc), evs, asset, self.ASSETS, self.NEWS):
+            for ts, name in slots(datetime.fromtimestamp(now, timezone.utc), evs, asset, self.ASSETS, self.NEWS,
+                                  self.WATCH.get(asset, ()), int(self.cfg.get("every_minutes", EVERY))):
                 key = f"{asset}:{ts}"
                 if key in self.state["done"] or not ts <= now <= ts + LATE:
                     continue

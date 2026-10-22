@@ -132,3 +132,15 @@ def test_nothing_without_agent_file(tmp_path):
     h = mh.Hunter(FakeMT5(now), tmp_path, lambda: now[0], cfg={"command": "python absent.py", "dir": str(tmp_path)},
                   spawn=lambda *a, **k: 1 / 0)
     assert h.step() == ""
+
+
+def test_watch_wakes_every_20_minutes_and_fixed_hours_win():
+    from datetime import datetime, timezone
+    from trading_bot import mt5_hunt as h
+    day = datetime(2026, 10, 22, 8, 0, tzinfo=timezone.utc)                 # jeudi
+    got = h.slots(day, [], "gold", h.ASSETS, False, h.WATCH["gold"], 20)
+    paris = [datetime.fromtimestamp(t, h.PARIS).strftime("%H:%M") + " " + n for t, n in got]
+    assert paris[:3] == ["09:05 ouverture de Londres", "09:20 veille", "09:40 veille"]   # l'heure fixe remplace 9h00
+    assert "14:35 stats américaines" in paris and "14:30 veille" not in paris and "15:35 ouverture de New York" in paris
+    assert len(got) == 21
+    assert h.slots(day, [], "gold", h.ASSETS, False, h.WATCH["gold"], 0) == h.slots(day, [], "gold")

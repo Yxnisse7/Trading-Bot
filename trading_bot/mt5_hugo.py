@@ -49,6 +49,7 @@ class HugoHunter(Hunter):
     ASSETS = {"nasdaq": ("Nasdaq 100", (("09:00", "matin"), ("10:00", "matin"), ("14:30", "stats américaines"),
                                         ("15:45", "après l'ouverture de Wall Street"), ("16:30", "après-midi")), 2.0)}
     NEWS = False
+    WATCH: dict = {}                         # heures fixes de la vidéo seulement
     TAG = "Méthode Hugo (agent IA)"
     COMMENT = "hugo IA"
     FRAMES = (("candles_5m", "TIMEFRAME_M5", 288), ("candles_15m", "TIMEFRAME_M15", 96),
