@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-22T11:51:07.334020+02:00",
+  "updated_at": "2026-10-22T11:56:00.561976+02:00",
   "timezone": "Europe/Paris",
   "equity_curve": [
     {
@@ -1727,7 +1727,7 @@
       "avg_pnl_pct": -0.0004
     },
     "open": 0,
-    "open_shadow": 32
+    "open_shadow": 34
   },
   "by_source": {
     "bot": {
@@ -5181,6 +5181,74 @@
     }
   ],
   "open_signals": [
+    {
+      "id": "0ac4254737",
+      "asset": "nasdaq",
+      "asset_label": "Nasdaq 100 (NQ)",
+      "direction": "short",
+      "horizon": "24h",
+      "entry": 29437.5,
+      "take_profit": 29283.5,
+      "stop_loss": 29489.0,
+      "risk_reward": 2.99,
+      "confidence": "fort",
+      "score": 8.55,
+      "criteria": [
+        "adx",
+        "rsi",
+        "trend_15m",
+        "trend_1h",
+        "trend_5m",
+        "vwap"
+      ],
+      "source": "shadow",
+      "status": "open",
+      "pnl_pct": null,
+      "pnl_gross_pct": null,
+      "duration_minutes": null,
+      "close_price": null,
+      "created_at": "2026-10-22T09:55:47Z",
+      "closed_at": null,
+      "created_local": "22/10 11:55",
+      "expires_at": "2026-10-23T09:55:47Z",
+      "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 104.67 (0.36 %), TP = 39 % du range, SL = 33 % du range, probabilité de résolution sous 1 h ≈ 86%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+      "news_context": "actualité calme sur les 2 dernières heures",
+      "manual_exit": null
+    },
+    {
+      "id": "21c646cf8d",
+      "asset": "gold",
+      "asset_label": "Or (XAU/USD)",
+      "direction": "short",
+      "horizon": "1h",
+      "entry": 4101.8,
+      "take_profit": 4092.4,
+      "stop_loss": 4108.1,
+      "risk_reward": 1.49,
+      "confidence": "fort",
+      "score": 5.95,
+      "criteria": [
+        "adx",
+        "rsi",
+        "trend_15m",
+        "trend_1h",
+        "trend_5m",
+        "vwap"
+      ],
+      "source": "shadow",
+      "status": "open",
+      "pnl_pct": null,
+      "pnl_gross_pct": null,
+      "duration_minutes": null,
+      "close_price": null,
+      "created_at": "2026-10-22T09:55:47Z",
+      "closed_at": null,
+      "created_local": "22/10 11:55",
+      "expires_at": "2026-10-22T10:55:47Z",
+      "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 15.67 (0.38 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 87%.",
+      "news_context": "actualité calme sur les 2 dernières heures",
+      "manual_exit": null
+    },
     {
       "id": "165fec5333",
       "asset": "gold",
@@ -8772,10 +8840,10 @@
     }
   },
   "state": {
-    "last_scan": "2026-10-22T09:50:51Z",
+    "last_scan": "2026-10-22T09:55:47Z",
     "last_scan_note": "0 signal(aux)",
     "last_summary": "2026-10-21T22:05:44Z",
-    "last_track": "2026-10-22T09:50:51Z",
+    "last_track": "2026-10-22T09:55:47Z",
     "last_summary_day": "2026-10-21"
   },
   "limits": {
@@ -21786,7 +21854,7 @@
         }
       ],
       "live": true,
-      "checked_hour": "2026-10-22T09:30:00Z",
+      "checked_hour": "2026-10-22T09:45:00Z",
       "n": 5,
       "mean_r": -0.1487
     },
