@@ -1,6 +1,6 @@
 # Trading-Bot — rapport
 
-_Mis à jour le 22/10/2026 à 19:51 (Europe/Paris)._
+_Mis à jour le 22/10/2026 à 19:55 (Europe/Paris)._
 
 ## Vue d'ensemble
 
@@ -8,7 +8,7 @@ _Mis à jour le 22/10/2026 à 19:51 (Europe/Paris)._
 - Taux de réussite cumulé (TP / (TP+SL)) : **45%** — hasard attendu 41%, avantage **+4%**
 - P&L théorique cumulé, net des coûts estimés (somme des % par trade, sans levier) : **-0.48 %** (brut +3.42 %)
 - Signaux ouverts : **0**
-- Signaux fantômes (suivis en silence pour l'apprentissage) : **752** clôturés, 52 ouverts, taux de réussite 35% (hasard attendu 37%)
+- Signaux fantômes (suivis en silence pour l'apprentissage) : **754** clôturés, 52 ouverts, taux de réussite 35% (hasard attendu 37%)
 
 ## Statistiques
 
@@ -114,18 +114,18 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 
 | Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
 |---|---:|---:|---:|---:|---:|---:|
-| adx | 752 | 228 | 416 | 108 | 35% | -0.015 % |
+| adx | 754 | 228 | 417 | 109 | 35% | -0.015 % |
 | corr | 65 | 13 | 40 | 12 | 25% | -0.082 % |
 | level | 57 | 20 | 23 | 14 | 47% | -0.055 % |
-| macd | 190 | 42 | 120 | 28 | 26% | -0.078 % |
+| macd | 191 | 42 | 120 | 29 | 26% | -0.079 % |
 | orb | 31 | 13 | 13 | 5 | 50% | -0.000 % |
 | pdhl | 85 | 31 | 43 | 11 | 42% | +0.084 % |
-| rsi | 561 | 181 | 314 | 66 | 37% | -0.008 % |
-| trend_15m | 752 | 228 | 416 | 108 | 35% | -0.015 % |
-| trend_1h | 743 | 225 | 413 | 105 | 35% | -0.015 % |
-| trend_5m | 647 | 207 | 366 | 74 | 36% | -0.009 % |
+| rsi | 563 | 181 | 315 | 67 | 36% | -0.009 % |
+| trend_15m | 754 | 228 | 417 | 109 | 35% | -0.015 % |
+| trend_1h | 745 | 225 | 414 | 106 | 35% | -0.015 % |
+| trend_5m | 649 | 207 | 367 | 75 | 36% | -0.009 % |
 | volume | 11 | 2 | 7 | 2 | 22% | -0.128 % |
-| vwap | 736 | 225 | 408 | 103 | 36% | -0.014 % |
+| vwap | 738 | 225 | 409 | 104 | 35% | -0.014 % |
 
 ### Fantômes par actif
 
@@ -134,7 +134,7 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 | bitcoin | 29 | 9 | 8 | 12 | 53% | -0.015 % |
 | ethereum | 27 | 4 | 16 | 7 | 20% | -0.211 % |
 | euro | 36 | 12 | 23 | 1 | 34% | -0.025 % |
-| gold | 185 | 53 | 104 | 28 | 34% | -0.038 % |
+| gold | 187 | 53 | 105 | 29 | 34% | -0.039 % |
 | nasdaq | 291 | 99 | 161 | 31 | 38% | +0.043 % |
 | oil | 84 | 24 | 43 | 17 | 36% | -0.065 % |
 | sp500 | 100 | 27 | 61 | 12 | 31% | -0.041 % |
@@ -183,8 +183,8 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 | trend_1h | 1.0 |
 | adx | 1.0 |
 | vwap | 0.75 |
-| rsi | 1.011 |
-| macd | 0.926 |
+| rsi | 1.007 |
+| macd | 0.921 |
 | level | 1.0 |
 | volume | 0.75 |
 | orb | 1.0 |
@@ -195,10 +195,10 @@ Tranches horaires évitées (UTC) : [10, 11, 12]
 
 Corrections par actif :
 
-- ethereum : {'trend_5m': 0.823, 'trend_15m': 0.823, 'trend_1h': 0.823, 'adx': 0.823, 'rsi': 0.725}
-- gold : {'vwap': 0.74, 'rsi': 0.923}
-- nasdaq : {'trend_5m': 1.244, 'trend_15m': 1.244, 'trend_1h': 1.244, 'adx': 1.244, 'vwap': 0.927, 'rsi': 1.312}
-- sp500 : {'trend_5m': 0.965, 'trend_15m': 0.965, 'trend_1h': 0.965, 'adx': 0.965, 'vwap': 0.722}
+- ethereum : {'trend_5m': 0.826, 'trend_15m': 0.826, 'trend_1h': 0.826, 'adx': 0.826, 'rsi': 0.726}
+- gold : {'vwap': 0.732, 'rsi': 0.906}
+- nasdaq : {'trend_5m': 1.248, 'trend_15m': 1.248, 'trend_1h': 1.248, 'adx': 1.248, 'vwap': 0.929, 'rsi': 1.311}
+- sp500 : {'trend_5m': 0.968, 'trend_15m': 0.968, 'trend_1h': 0.968, 'adx': 0.968, 'vwap': 0.725}
 
 | Variante testée en fantôme | Trades | Gain net moyen | Statut |
 |---|---:|---:|---|
@@ -217,20 +217,20 @@ Corrections par actif :
 Notes :
 
 - trades réels : +0,15 R ± 0,19 R par trade avant frais sur 154 trades (0 R = hasard)
-- rsi : +0,08 R ± 0,08 R sur 1075 trades éq. → poids ×1,01
-- macd : -0,15 R ± 0,12 R sur 352 trades éq. → poids ×0,93
+- rsi : +0,08 R ± 0,08 R sur 1077 trades éq. → poids ×1,01
+- macd : -0,16 R ± 0,12 R sur 352 trades éq. → poids ×0,92
 - tranche 10h UTC : -0,29 R sur 86 trades éq. → évitée
 - tranche 11h UTC : -0,29 R sur 80 trades éq. → évitée
 - tranche 12h UTC : -0,45 R sur 69 trades éq. → évitée
-- ethereum, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,24 R contre +0,05 R en global sur 78 trades éq. → poids ×0,82 sur cet actif
+- ethereum, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,24 R contre +0,04 R en global sur 78 trades éq. → poids ×0,83 sur cet actif
 - ethereum, rsi : -0,29 R contre +0,08 R en global sur 56 trades éq. → poids ×0,72 sur cet actif
-- gold, vwap : -0,08 R contre +0,05 R en global sur 300 trades éq. → poids ×0,99 sur cet actif
-- gold, rsi : -0,09 R contre +0,08 R en global sur 249 trades éq. → poids ×0,91 sur cet actif
-- nasdaq, tendance (trend_5m, trend_15m, trend_1h, adx) : +0,30 R contre +0,05 R en global sur 396 trades éq. → poids ×1,24 sur cet actif
+- gold, vwap : -0,08 R contre +0,05 R en global sur 302 trades éq. → poids ×0,98 sur cet actif
+- gold, rsi : -0,09 R contre +0,08 R en global sur 251 trades éq. → poids ×0,90 sur cet actif
+- nasdaq, tendance (trend_5m, trend_15m, trend_1h, adx) : +0,30 R contre +0,04 R en global sur 396 trades éq. → poids ×1,25 sur cet actif
 - nasdaq, vwap : +0,30 R contre +0,05 R en global sur 388 trades éq. → poids ×1,24 sur cet actif
 - nasdaq, rsi : +0,38 R contre +0,08 R en global sur 316 trades éq. → poids ×1,30 sur cet actif
-- sp500, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,13 R contre +0,05 R en global sur 197 trades éq. → poids ×0,96 sur cet actif
-- sp500, vwap : -0,13 R contre +0,05 R en global sur 192 trades éq. → poids ×0,96 sur cet actif
+- sp500, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,13 R contre +0,04 R en global sur 197 trades éq. → poids ×0,97 sur cet actif
+- sp500, vwap : -0,13 R contre +0,05 R en global sur 192 trades éq. → poids ×0,97 sur cet actif
 - variante « indices le matin européen » en test : 126 trades, -0,54 R net, pas meilleure que les signaux réels
 - variante « horizon ~3 h » en test : 85 trades, -0,33 R net, encore 15 trades avant décision
 - variante « confiance moyenne » en test : 61 trades, -0,04 R net, encore 39 trades avant décision
