@@ -81,7 +81,7 @@ def run_one(px_path: np.ndarray, t_path: np.ndarray, lot0: float, mult: float) -
             hit_limit = int(t_path[k] - t0)
         if eq <= 0 or eq / margin < STOP_OUT:
             return {"blown_after_days": round((t_path[k] - t0) / 86400, 1), "limit_after_days":
-                    round(hit_limit / 86400, 1), "result": round(max(eq, 0.0) - BALANCE, 2), "baskets_closed": closes,
+                    round((hit_limit if hit_limit is not None else t_path[k] - t0) / 86400, 1), "result": round(max(eq, 0.0) - BALANCE, 2), "baskets_closed": closes,
                     "max_lots": round(max(b.lots() for b in baskets), 2)}
     eq = bal + sum(b.floating(px_path[-1]) for b in baskets)
     return {"blown_after_days": None, "limit_after_days": None if hit_limit is None else round(hit_limit / 86400, 1),
