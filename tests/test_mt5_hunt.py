@@ -49,10 +49,11 @@ class FakeMT5:
     ACCOUNT_TRADE_MODE_DEMO, TRADE_ACTION_DEAL, ORDER_TYPE_BUY, ORDER_TYPE_SELL = 0, 1, 0, 1
     ORDER_TIME_GTC, TRADE_RETCODE_DONE, POSITION_TYPE_BUY = 0, 10009, 0
     ORDER_FILLING_FOK, ORDER_FILLING_IOC, ORDER_FILLING_RETURN = 0, 1, 2
+    TRADE_ACTION_PENDING, TRADE_ACTION_REMOVE, ORDER_TYPE_BUY_LIMIT, ORDER_TYPE_SELL_LIMIT = 5, 8, 2, 3
     TIMEFRAME_M5, TIMEFRAME_M15, TIMEFRAME_H1, TIMEFRAME_D1 = 5, 15, 16385, 16408
 
     def __init__(self, now):
-        self.now, self.orders, self.positions, self.deals = now, [], [], []
+        self.now, self.orders, self.positions, self.deals, self.pending = now, [], [], [], []
 
     def account_info(self):
         return NS(trade_mode=0, balance=1000.0)
@@ -78,9 +79,16 @@ class FakeMT5:
     def positions_get(self, symbol=None):
         return self.positions
 
+    def orders_get(self, symbol=None):
+        return self.pending
+
     def order_send(self, req):
         self.orders.append(req)
-        return NS(retcode=10009, price=req["price"], order=555)
+        if req["action"] == self.TRADE_ACTION_PENDING:
+            self.pending = [NS(ticket=555)]
+        if req["action"] == self.TRADE_ACTION_REMOVE:
+            self.pending = []
+        return NS(retcode=10009, price=req.get("price"), order=555)
 
 
 def test_wake_order_and_exit(tmp_path):
@@ -125,6 +133,79 @@ def test_wake_order_and_exit(tmp_path):
     mt5.deals = [NS(profit=0.0, commission=-0.3, swap=0.0, price=4110.1), NS(profit=19.9, commission=-0.3, swap=0.0, price=4130.0)]
     h.step()
     assert "Sortie" in sent[-1][0] and sent[-1][1] == {"1": 10} and h.state["trades"] == {}
+
+
+def test_check_limit_orders():
+    h = mh.Hunter.__new__(mh.Hunter)
+    ok = {"action": "achat_limite", "entree": 4100, "stop": 4092, "objectif": 4116, "confiance": 4}
+    assert h.check(ok, 4110.1, 4110, 2.0) is None
+    assert "attente manquant" in h.check({**ok, "entree": None}, 4110.1, 4110, 2.0)
+    assert "mauvais côté" in h.check({**ok, "entree": 4115}, 4110.1, 4110, 2.0)        # achat limite au-dessus du prix
+    assert h.check({"action": "vente_limite", "entree": 4120, "stop": 4128, "objectif": 4104, "confiance": 3},
+                   4110.1, 4110, 2.0) is None
+
+
+def _limit_hunter(tmp_path, mt5, now, sent):
+    agent = tmp_path / "agent"
+    (agent / "agent").mkdir(parents=True)
+    (agent / "agent" / "chasse.py").write_text("")
+    ids = iter(range(10, 99))
+
+    class Relay:
+        def enabled(self):
+            return True
+
+        def _post(self, body, reply=None):
+            sent.append((body, reply))
+            return {"1": next(ids)}
+
+    answer = {"action": "achat_limite", "entree": 4100.0, "stop": 4092.0, "objectif": 4116.0, "confiance": 4,
+              "raison": "Achat au retour sur le support."}
+
+    def spawn(args, cwd, stdout, **k):
+        stdout.write(json.dumps(answer) + "\n")
+        stdout.close()
+        return NS(poll=lambda: 0)
+
+    return mh.Hunter(mt5, tmp_path, lambda: now[0], relay=Relay(),
+                     cfg={"command": f"python {agent / 'agent' / 'chasse.py'}", "dir": str(agent)}, spawn=spawn)
+
+
+def test_limit_order_filled_then_exit(tmp_path):
+    now, sent = [T0 + 30], []
+    mt5 = FakeMT5(now)
+    h = _limit_hunter(tmp_path, mt5, now, sent)
+    h.step()
+    h.step()
+    o = mt5.orders[-1]
+    assert o["action"] == mt5.TRADE_ACTION_PENDING and o["type"] == mt5.ORDER_TYPE_BUY_LIMIT and o["price"] == 4100.0
+    assert o["type_filling"] == mt5.ORDER_FILLING_RETURN and "LIMITE" in sent[0][0] and "en attente" in sent[0][0]
+    now[0] += 600
+    assert h.step() == "" and h.state["trades"]["gold"]["pending"]          # attend, pas de nouveau réveil
+    mt5.pending, mt5.positions = [], [NS(magic=mh.MAGIC, ticket=555, type=0, volume=0.01, price_open=4100.0)]
+    now[0] += 600
+    h.step()
+    t = h.state["trades"]["gold"]
+    assert not t["pending"] and t["opened"] == now[0] and "exécuté" in sent[-1][0] and sent[-1][1] == {"1": 10}
+    mt5.positions = []
+    mt5.deals = [NS(profit=0.0, commission=-0.3, swap=0.0, price=4100.0), NS(profit=16.0, commission=-0.3, swap=0.0, price=4116.0)]
+    h.step()
+    assert "Sortie" in sent[-1][0] and h.state["trades"] == {}
+
+
+def test_limit_order_cancelled_after_2_hours(tmp_path):
+    now, sent = [T0 + 30], []
+    mt5 = FakeMT5(now)
+    h = _limit_hunter(tmp_path, mt5, now, sent)
+    h.step()
+    h.step()
+    now[0] += mh.PENDING_MAX - 60
+    h.step()
+    assert mt5.orders[-1]["action"] == mt5.TRADE_ACTION_PENDING
+    now[0] += 120
+    h.step()
+    assert mt5.orders[-1] == {"action": mt5.TRADE_ACTION_REMOVE, "order": 555}
+    assert "Annulé" in sent[-1][0] and sent[-1][1] == {"1": 10} and h.state["trades"] == {}
 
 
 def test_nothing_without_agent_file(tmp_path):

@@ -10,6 +10,10 @@ Le jugement est dans le dépôt privé de l'agent (agent/chasse.py, copié sur l
 garde-fous et les ordres. Garde-fous : compte démo uniquement, confiance ≥ 3/5, stop du bon côté et objectif ≥ 1 R,
 1 % du solde risqué, une seule position de l'agent à la fois (numéro magique à part), sortie au SL/TP ou au bout de
 4 h, règle d'arrêt dans demo_rules (une position par marché). Le trade est annoncé sur Telegram avec la raison de l'agent, la sortie en réponse.
+
+Ordres limites (demandé par Yanisse le 23/10/2026) : l'agent peut aussi répondre « achat_limite » ou « vente_limite » avec
+un prix d'attente (« entree ») ; le pont pose l'ordre limite sur le démo et l'annule s'il n'est pas touché en 2 h.
+Pendant l'attente, l'agent n'est pas réveillé sur ce marché ; les 4 h comptent depuis l'exécution.
 """
 from __future__ import annotations
 
@@ -43,6 +47,8 @@ EVERY = 20
 AFTER_NEWS = 20 * 60                      # s après une annonce USD à fort impact
 LATE = 10 * 60                            # un réveil manqué de plus de 10 min est sauté
 MAX_HOLD = 4 * 3600
+PENDING_MAX = 2 * 3600                    # un ordre limite non touché est annulé au bout de 2 h
+ACTIONS = ("achat", "vente", "achat_limite", "vente_limite")
 MIN_CONF = 3
 TIMEOUT = 80
 FRAMES = (("candles_5m", "TIMEFRAME_M5", 288), ("candles_15m", "TIMEFRAME_M15", 96),
@@ -216,7 +222,7 @@ class Hunter:
     # ------------------------------------------------------------------ décision
     def check(self, a: dict[str, Any], px_buy: float, px_sell: float, stops_level: float) -> str | None:
         """Raison de refuser la réponse de l'agent, ou None si l'ordre peut partir."""
-        if a.get("action") not in ("achat", "vente"):
+        if a.get("action") not in ACTIONS:
             return "rien à faire"
         if int(a.get("confiance") or 0) < MIN_CONF:
             return f"confiance {a.get('confiance')}/5 < {MIN_CONF}"
@@ -224,8 +230,16 @@ class Hunter:
             stop, target = float(a["stop"]), float(a["objectif"])
         except (KeyError, TypeError, ValueError):
             return "stop ou objectif manquant"
-        buy = a["action"] == "achat"
+        buy = a["action"].startswith("achat")
         px = px_buy if buy else px_sell
+        if a["action"].endswith("_limite"):
+            try:
+                entry = float(a["entree"])
+            except (KeyError, TypeError, ValueError):
+                return "prix d'attente manquant"
+            if (px - entry if buy else entry - px) <= max(stops_level, 0.0):
+                return f"prix d'attente {entry} du mauvais côté du prix {px}"
+            px = entry
         risk, gain = (px - stop, target - px) if buy else (stop - px, px - target)
         if risk <= max(stops_level, 0.0) or gain <= 0:
             return f"stop {stop} ou objectif {target} du mauvais côté du prix {px}"
@@ -259,25 +273,38 @@ class Hunter:
         acc = self.mt5.account_info()
         if acc is None or acc.trade_mode != self.mt5.ACCOUNT_TRADE_MODE_DEMO:
             return
-        buy = a["action"] == "achat"
-        px = tick.ask if buy else tick.bid
+        buy = a["action"].startswith("achat")
+        limit = a["action"].endswith("_limite")
         digits = int(getattr(info, "digits", 2) or 2)
+        px = round(float(a["entree"]), digits) if limit else tick.ask if buy else tick.bid
         stop, target = round(float(a["stop"]), digits), round(float(a["objectif"]), digits)
         lot = self.lot(acc.balance, abs(px - stop), info, self.ASSETS[asset][2])
-        res = self.mt5.order_send({"action": self.mt5.TRADE_ACTION_DEAL, "symbol": sym, "volume": lot,
-                                   "type": self.mt5.ORDER_TYPE_BUY if buy else self.mt5.ORDER_TYPE_SELL, "price": px,
-                                   "sl": stop, "tp": target, "deviation": 30, "magic": self.MAGIC, "comment": self.COMMENT,
-                                   "type_time": self.mt5.ORDER_TIME_GTC, "type_filling": self._filling(info)})
+        m = self.mt5
+        req = {"action": m.TRADE_ACTION_DEAL, "symbol": sym, "volume": lot,
+               "type": m.ORDER_TYPE_BUY if buy else m.ORDER_TYPE_SELL, "price": px,
+               "sl": stop, "tp": target, "deviation": 30, "magic": self.MAGIC, "comment": self.COMMENT,
+               "type_time": m.ORDER_TIME_GTC, "type_filling": self._filling(info)}
+        if limit:
+            req.update(action=m.TRADE_ACTION_PENDING, type=m.ORDER_TYPE_BUY_LIMIT if buy else m.ORDER_TYPE_SELL_LIMIT)
+            req.pop("deviation")
+            for fill in (m.ORDER_FILLING_RETURN, req["type_filling"]):      # les ordres en attente veulent souvent RETURN
+                res = m.order_send({**req, "type_filling": fill})
+                if getattr(res, "retcode", None) == m.TRADE_RETCODE_DONE:
+                    break
+        else:
+            res = m.order_send(req)
         if getattr(res, "retcode", None) != self.mt5.TRADE_RETCODE_DONE:
             log.warning("chasse : ordre rejeté (code %s)", getattr(res, "retcode", None))
             return
-        entry = float(getattr(res, "price", px) or px)
+        entry = px if limit else float(getattr(res, "price", px) or px)
         ticket = int(getattr(res, "order", 0) or 0)
         size, value = getattr(info, "trade_tick_size", 0) or 0, getattr(info, "trade_tick_value", 0) or 0
         risk_usd = (abs(entry - stop) / size * value if size and value else abs(entry - stop) * 100.0) * lot
         trade = {"ticket": ticket, "buy": buy, "entry": entry, "stop": stop, "target": target, "lot": lot,
                  "risk_usd": round(risk_usd, 2), "digits": digits, "opened": self.clock(), "moment": data["moment"],
                  "label": data["asset_label"], "msg": {}}
+        if limit:
+            trade.update(pending=True, placed=self.clock())
         trade["msg"] = self._announce(trade, a, digits)
         self.state["trades"][asset] = trade
         self._save()
@@ -292,8 +319,10 @@ class Hunter:
             return {}
         chg = lambda v: msg.pct((v / t["entry"] - 1) * 100.0)  # noqa: E731
         conf = int(a.get("confiance") or 0)
-        lines = [f"<b>🤖 {'↗️ ACHAT' if t['buy'] else '↘️ VENTE'} · {msg.esc(t['label'])}</b> · {self.TAG}",
-                 f"Entrée {msg.code_price(t['entry'], digits)}",
+        kind = ("↗️ ACHAT" if t["buy"] else "↘️ VENTE") + (" LIMITE" if t.get("pending") else "")
+        wait = datetime.fromtimestamp(t["placed"] + PENDING_MAX, PARIS).strftime("%H:%M") if t.get("pending") else ""
+        lines = [f"<b>🤖 {kind} · {msg.esc(t['label'])}</b> · {self.TAG}",
+                 f"Entrée {msg.code_price(t['entry'], digits)}" + (f"  (en attente jusqu'à {wait})" if wait else ""),
                  f"SL     {msg.code_price(t['stop'], digits)}  {chg(t['stop'])}",
                  f"TP     {msg.code_price(t['target'], digits)}  {chg(t['target'])}",
                  f"Moment : {msg.esc(t['moment'])} · confiance {conf}/5",
@@ -314,12 +343,47 @@ class Hunter:
                              "comment": f"{self.COMMENT} fin", "type_time": self.mt5.ORDER_TIME_GTC,
                              "type_filling": self._filling(self.mt5.symbol_info(sym))})
 
+    def _pending(self, asset: str, sym: str, t: dict[str, Any], open_: list) -> bool:
+        """Ordre limite : False tant qu'il attend (ou s'il vient d'être annulé), True une fois exécuté."""
+        waiting = any(o.ticket == t["ticket"] for o in (self.mt5.orders_get(symbol=sym) or []))
+        if waiting:
+            if self.clock() - t["placed"] < PENDING_MAX:
+                return False
+            res = self.mt5.order_send({"action": self.mt5.TRADE_ACTION_REMOVE, "order": t["ticket"]})
+            if getattr(res, "retcode", None) != self.mt5.TRADE_RETCODE_DONE:
+                return False                   # peut-être exécuté entre-temps : on regarde au passage suivant
+            self._drop(asset, t, f"⌛ Annulé · {msg.esc(t.get('label', asset))} · prix d'attente pas touché en "
+                                 f"{PENDING_MAX // 3600} h", "annulé (pas touché)")
+            return False
+        if not open_ and not (self.mt5.history_deals_get(position=t["ticket"]) or []):
+            self._drop(asset, t, f"⌛ Annulé · {msg.esc(t.get('label', asset))} · ordre en attente retiré", "retiré")
+            return False
+        t["pending"] = False
+        t["opened"] = self.clock()
+        if open_:
+            t["entry"] = float(getattr(open_[0], "price_open", t["entry"]) or t["entry"])
+        if self.relay is not None and self.relay.enabled() and t.get("msg"):
+            self.relay._post(f"▶️ Ordre exécuté à {msg.code_price(t['entry'], t.get('digits', 2))} · sortie au SL, au TP "
+                             f"ou au bout de {self.MAX_HOLD // 3600} h", reply=t["msg"])
+        self._save()
+        return True
+
+    def _drop(self, asset: str, t: dict[str, Any], text: str, result: str) -> None:
+        if self.relay is not None and self.relay.enabled() and t.get("msg"):
+            self.relay._post(f"<b>{text}</b>", reply=t["msg"])
+        desk._journal({"action": f"{self.COMMENT} {asset} : ordre limite", "prix": t["entry"], "stop": t["stop"],
+                       "objectif": t["target"], "resultat": result, "raison": t["moment"]})
+        self.state["trades"].pop(asset, None)
+        self._save()
+
     def _follow(self, asset: str) -> None:
         t = self.state["trades"].get(asset)
         if not t:
             return
         sym = SYMBOLS[asset]
         open_ = [p for p in (self.mt5.positions_get(symbol=sym) or []) if p.magic == self.MAGIC]
+        if t.get("pending") and not self._pending(asset, sym, t, open_):
+            return
         if open_:
             if self.clock() - t["opened"] >= self.MAX_HOLD:
                 for p in open_:
