@@ -128,13 +128,25 @@ class TopstepAccount:
 
     def reset(self, data: dict[str, Any] | None = None, when: datetime | None = None) -> str:
         """Nouveau compte à 50 000 $ : seuls les trades ouverts à partir de maintenant compteront.
-        L'ancien compte est résumé dans `archives` ; le risque par trade est conservé."""
+        L'ancien compte est résumé dans `archives` et gardé en entier dans history/<n>.json ; le risque par trade est
+        conservé."""
         now = iso(when or utcnow())
         if data:
-            self.state.setdefault("archives", []).append({
-                "started_at": self.state.get("started_at") or self.state.get("created_at"), "ended_at": now,
-                "balance": data.get("balance"), "profit": data.get("profit"), "status": data.get("status"),
-                "trades": len(data.get("trades", []))})
+            archives = self.state.setdefault("archives", [])
+            n = len(archives) + 1
+            entry = {"n": n, "started_at": self.state.get("started_at") or self.state.get("created_at"), "ended_at": now,
+                     "balance": data.get("balance"), "profit": data.get("profit"), "status": data.get("status"),
+                     "trades": len(data.get("trades", [])), "best_day": data.get("best_day"),
+                     "violations": data.get("violations", []), "file": f"history/{n}.json"}
+            # le compte entier (trades, journées, trades encore ouverts) est gardé pour l'historique (23/10/2026)
+            full = {**entry, "rules": data.get("rules"), "risk_pct": data.get("risk_pct"), "mll": data.get("mll"),
+                    "days": data.get("days", []), "trades_list": data.get("trades", []), "open": data.get("open", [])}
+            text = json.dumps(full, indent=2, ensure_ascii=False)
+            for base in (self.dir, self.docs):
+                if base is not None:
+                    (base / "history").mkdir(parents=True, exist_ok=True)
+                    (base / "history" / f"{n}.json").write_text(text, encoding="utf-8")
+            archives.append(entry)
         self.state.update({"started_at": now, "taken": {}, "removed": [], "exits": {}, "journal": []})
         self.save()
         return now

@@ -99,6 +99,12 @@
   <h2 id="jours" data-hint="résultat de chaque journée de trading">Par journée</h2>
   <div class="card"><div class="days" id="days"></div></div>
 
+  <h2 id="anciens" data-closed data-hint="comptes archivés avec leurs trades">Comptes précédents</h2>
+  <div class="card">
+    <div class="tbl"><table id="arch"><thead><tr><th>Compte</th><th>Du</th><th>Au</th><th>Statut</th><th class="num">Trades</th><th class="num">Profit</th><th class="num">Balance finale</th><th></th></tr></thead><tbody></tbody></table></div>
+    <div id="arch-detail"></div>
+  </div>
+
   <h2 id="journal" data-closed data-hint="trade fait sans le bot · risque par trade">Journal et réglages</h2>
   <div class="card">
     <form class="jform" id="jform" autocomplete="off">
@@ -112,7 +118,7 @@
       <div class="wide muted" style="font-size:12px;align-self:center">Sur Telegram : <span class="mono">/journal nasdaq short 30950 30910 3 2026-09-23T15:01</span></div>
       <div class="wide riskf"><label for="risk" style="margin:0">Risque par trade (% de la balance)</label><input id="risk" inputmode="decimal"><button type="button" class="secondary" id="risk-send">Enregistrer</button></div>
       <div class="wide riskf"><label for="target" style="margin:0">Objectif du jour en $ (0 = sans)</label><input id="target" inputmode="decimal"><button type="button" class="secondary" id="target-send">Enregistrer</button></div>
-      <div class="wide riskf"><button type="button" class="secondary" id="reset-send">Nouveau compte à 50 000 $</button><span class="muted" id="archives"></span></div>
+      <div class="wide riskf"><button type="button" class="secondary" id="reset-send">Archiver et repartir à 50 000 $</button><span class="muted" id="archives"></span></div>
     </form>
   </div>
 
@@ -314,7 +320,7 @@
     const d = acct, R = d.rules, start = R.start_balance;
     const since = d.started_at ? ` · compte démarré le ${new Date(d.started_at).toLocaleString("fr-FR", { day: "numeric", month: "long", hour: "2-digit", minute: "2-digit" })}` : "";
     $("#updated").textContent = `Mise à jour à ${Y.hhmm(d.updated_at)} · journée de trading du ${new Date(d.today + "T12:00:00").toLocaleDateString("fr-FR", { day: "numeric", month: "long" })}${since}`;
-    $("#archives").textContent = (d.archives || []).length ? "Comptes précédents : " + d.archives.map((a) => `${a.trades} trades, ${Y.smoney(a.profit, CUR, 0)} (${a.status})`).join(" · ") : "";
+    $("#archives").textContent = (d.archives || []).length ? `${d.archives.length} compte(s) archivé(s) : voir « Comptes précédents »` : "";
     $("#risk-now").textContent = `${Y.num(d.risk_pct, d.risk_pct % 1 ? 1 : 0)}${Y.NB}% (${Y.money(d.balance * d.risk_pct / 100, CUR, 0)})`;
     if (!$("#risk").value) $("#risk").value = String(d.risk_pct).replace(".", ",");
     if (!$("#target").value) $("#target").value = String(d.daily_target ?? 0);
@@ -349,7 +355,7 @@
     const tiles = $("#tiles"), dots = $("#tile-dots");
     tiles.onscroll = () => { const i = Math.round(tiles.scrollLeft / Math.max(1, tiles.scrollWidth - tiles.clientWidth) * 2); dots.querySelectorAll("i").forEach((x, k) => x.classList.toggle("on", k === i)); };
     if (live && d.open.length && !live.hasSavedChoice()) live.select(d.open[0].asset);
-    renderOpen(); renderCand(); drawEquity(); renderHist(); renderDays(); renderSkip();
+    renderOpen(); renderCand(); drawEquity(); renderHist(); renderDays(); renderSkip(); renderArch();
   }
 
   function dg(key) { const a = ((dash && dash.assets) || []).find((x) => x.key === key); const t = a && a.tick_size;
@@ -390,6 +396,31 @@
     $("#hist-more").hidden = hist.length <= histLimit;
   }
   $("#hist-more").addEventListener("click", () => { histLimit += 10; renderHist(); });
+  const day = (iso) => iso ? new Date(iso).toLocaleDateString("fr-FR", { day: "numeric", month: "short", year: "2-digit" }) : "—";
+  function renderArch() {
+    const list = (acct.archives || []).map((a, i) => ({ n: i + 1, ...a })).reverse();
+    $("#arch tbody").innerHTML = list.length ? list.map((a) => `<tr><td>n°${a.n}</td><td class="nowrap">${day(a.started_at)}</td><td class="nowrap">${day(a.ended_at)}</td>
+      <td><span class="pill ${a.status === "réussi" ? "up" : a.status === "échoué" ? "dn" : "neu"}"><b>${esc(a.status || "—")}</b></span></td><td class="num">${a.trades ?? "—"}</td>
+      <td class="num ${Y.tone(a.profit)}"><b>${a.profit != null ? Y.smoney(a.profit, CUR, 0) : "—"}</b></td><td class="num">${a.balance != null ? Y.money(a.balance, CUR, 0) : "—"}</td>
+      <td>${a.file ? `<button type="button" class="secondary" style="padding:6px 10px;font-size:12px" data-arch="${esc(a.file)}">Voir les trades</button>` : `<span class="faint" title="Archivé avant le 23/10 : seul le résumé a été gardé">résumé seul</span>`}</td></tr>`).join("")
+      : `<tr><td colspan="8" class="empty">Aucun compte archivé : le bouton « Archiver et repartir » (Journal et réglages) garde le compte actuel ici.</td></tr>`;
+  }
+  $("#arch").addEventListener("click", async (ev) => {
+    const b = ev.target.closest("[data-arch]");
+    if (!b) return;
+    const box = $("#arch-detail");
+    box.innerHTML = `<p class="muted">Chargement…</p>`;
+    const a = await Y.getJson("topstep/" + b.dataset.arch);
+    if (!a) { box.innerHTML = `<p class="muted">Fichier introuvable pour l'instant (publié au prochain passage du bot).</p>`; return; }
+    const rows = (a.trades_list || []).slice().reverse();
+    box.innerHTML = `<h3 style="margin:18px 0 8px">Compte n°${a.n} : ${rows.length} trades${a.violations && a.violations.length ? ` · ${esc(a.violations.join(" · "))}` : ""}</h3>
+      <div class="tbl"><table><thead><tr><th>Clôturé</th><th>Contrat</th><th>Origine</th><th>Résultat</th><th class="num">Entrée</th><th class="num">Sortie</th><th class="num">Micros</th><th class="num">Net</th><th class="num">Balance après</th></tr></thead><tbody>
+      ${rows.map((t) => `<tr><td class="mono nowrap" style="font-size:12px">${esc(when(t.closed_at))}</td><td class="nowrap">${contract(t)}</td><td class="muted nowrap">${ORIGIN[t.origin] || esc(t.origin)}</td>
+        <td><span class="pill ${["tp", "sl", "expired"].includes(t.status) ? t.status : Y.tone(t.pnl) || "neu"}"><b>${STATUS[t.status] || esc(t.status)}</b></span></td>
+        <td class="num">${Y.price(t.entry, dg(t.asset))}</td><td class="num">${Y.price(t.exit, dg(t.asset))}</td><td class="num">${t.contracts}</td>
+        <td class="num ${Y.tone(t.pnl)}"><b>${Y.smoney(t.pnl, CUR)}</b></td><td class="num">${Y.money(t.balance_after, CUR)}</td></tr>`).join("") || `<tr><td colspan="9" class="empty">Aucun trade.</td></tr>`}
+      </tbody></table></div>`;
+  });
   function renderSkip() {
     const rows = (acct.skipped || []).slice().reverse();
     const det = document.getElementById("nonpris"); if (det && det.setHint) det.setHint(rows.length ? `${rows.length} trade${rows.length > 1 ? "s" : ""} laissé${rows.length > 1 ? "s" : ""} de côté` : "aucun pour l'instant");
@@ -463,7 +494,7 @@
       .then((ok) => { if (ok) { $("#j-entry").value = ""; $("#j-exit").value = ""; } });
   });
   $("#reset-send").addEventListener("click", (ev) => {
-    if (!confirm("Repartir d'un compte neuf à 50 000 $ ?\n\nSeuls les trades ouverts à partir de maintenant compteront. L'ancien compte est gardé en résumé.")) return;
+    if (!confirm("Archiver ce compte et repartir d'un compte neuf à 50 000 $ ?\n\nL'ancien compte et tous ses trades sont gardés dans « Comptes précédents ». Seuls les trades ouverts à partir de maintenant compteront sur le nouveau.")) return;
     send("reset", "Nouveau compte à 50 000 $ dans 1 à 2 minutes.", ev.currentTarget);
   });
   $("#target-send").addEventListener("click", (ev) => {

@@ -1,4 +1,5 @@
 """Compte Topstep 50K simulé : vos seuls trades, règles Topstep, séparé du reste."""
+import json
 from datetime import datetime, timedelta, timezone
 
 import pytest
@@ -183,6 +184,8 @@ def test_reset_starts_a_fresh_account_from_now(tmp_path, monkeypatch):
     assert "Nouveau compte Topstep" in reply.text
     d = eng.topstep_update()
     assert d["trades"] == [] and d["balance"] == 50_000.0 and d["archives"][0]["trades"] == 1
+    old = json.loads((eng.topstep().dir / d["archives"][0]["file"]).read_text(encoding="utf-8"))
+    assert old["n"] == 1 and [t["id"] for t in old["trades_list"]] == ["old"]
     eng.store.append_history(_sig("new", source="manual", when=T0 + timedelta(hours=3)))
     d = eng.topstep_update()
     assert [t["id"] for t in d["trades"]] == ["new"] and d["risk_pct"] == 0.5
