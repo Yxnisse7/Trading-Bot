@@ -19,6 +19,7 @@ RULES: dict[int, dict[str, Any]] = {
     # plus de limite : la copie démo tourne comme le futur compte réel (choix de Yanisse le 22/10, après −389 $ ;
     # 300 $ choisis le 14/10, plus de pertes d'affilée depuis le 20/10)
     200001: {"name": "copie des signaux du bot", "max_loss": None, "max_streak": None},
+    300001: {"name": "copie des canaux Telegram", "max_loss": None, "max_streak": None},   # 23/10, démo seulement
 }
 
 

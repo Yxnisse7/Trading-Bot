@@ -67,6 +67,7 @@ class Bridge:
         self.copier = None
         self.hunter = None
         self.hugo = None
+        self.tgcopy = None
         if cfg.get("copy_bot") and cfg["mode"] == "demo":
             from .mt5_copy import Copier
             from .pc_relay import Relay
@@ -84,6 +85,9 @@ class Bridge:
             if cfg.get("hugo", True):            # méthode Hugo sur le Nasdaq + commande /hugo (mt5_hugo.py)
                 from .mt5_hugo import HugoHunter
                 self.hugo = HugoHunter(mt5, root, clock, relay=relay, cfg=cfg.get("hugo_cfg"))
+            if (cfg.get("tg_copy") or {}).get("channels"):   # copie des canaux Telegram de signaleurs (mt5_tgcopy.py)
+                from .mt5_tgcopy import TgCopier
+                self.tgcopy = TgCopier(mt5, root, clock, relay=relay, cfg=cfg["tg_copy"])
         self.tick_from: int | None = None
         if cfg["exit"] != "X1":
             raise ValueError("seule la sortie X1 est branchée en direct pour l'instant")
@@ -123,7 +127,8 @@ class Bridge:
                    if d.magic == self.magic and d.time - offset >= day0)
 
     # ------------------------------------------------------------ état en direct pour l'interface locale
-    ORIGINS = {200001: "Copie du bot", 777001: "Claude", 777002: "Agent IA", 777003: "Méthode Hugo", 0: "Manuel"}
+    ORIGINS = {200001: "Copie du bot", 777001: "Claude", 777002: "Agent IA", 777003: "Méthode Hugo", 300001: "Copie Telegram",
+               0: "Manuel"}
 
     def snapshot(self) -> dict[str, Any] | None:
         """Compte, positions ouvertes et trades fermés des dernières 36 h (heures en UTC), pour l'onglet « Démo MT5 »
@@ -257,6 +262,13 @@ class Bridge:
                     log.info("%s", state)
             except Exception:                      # idem pour la méthode Hugo
                 log.exception("méthode Hugo de l'agent IA")
+        if self.tgcopy is not None:
+            try:
+                state = self.tgcopy.step()
+                if state:
+                    log.info("%s", state)
+            except Exception:                      # idem pour la copie des canaux Telegram
+                log.exception("copie des canaux Telegram")
         off = self.offset()
         if off is None:
             return "flux arrêté"
