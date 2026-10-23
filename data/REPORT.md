@@ -1,6 +1,6 @@
 # Trading-Bot — rapport
 
-_Mis à jour le 23/10/2026 à 10:26 (Europe/Paris)._
+_Mis à jour le 23/10/2026 à 10:31 (Europe/Paris)._
 
 ## Vue d'ensemble
 
@@ -8,7 +8,7 @@ _Mis à jour le 23/10/2026 à 10:26 (Europe/Paris)._
 - Taux de réussite cumulé (TP / (TP+SL)) : **44%** — hasard attendu 41%, avantage **+3%**
 - P&L théorique cumulé, net des coûts estimés (somme des % par trade, sans levier) : **-1.54 %** (brut +2.40 %)
 - Signaux ouverts : **0**
-- Signaux fantômes (suivis en silence pour l'apprentissage) : **801** clôturés, 46 ouverts, taux de réussite 35% (hasard attendu 37%)
+- Signaux fantômes (suivis en silence pour l'apprentissage) : **804** clôturés, 43 ouverts, taux de réussite 35% (hasard attendu 37%)
 
 ## Statistiques
 
@@ -114,18 +114,18 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 
 | Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
 |---|---:|---:|---:|---:|---:|---:|
-| adx | 801 | 238 | 447 | 116 | 35% | -0.018 % |
-| corr | 68 | 13 | 43 | 12 | 23% | -0.094 % |
+| adx | 804 | 238 | 450 | 116 | 35% | -0.019 % |
+| corr | 70 | 13 | 45 | 12 | 22% | -0.103 % |
 | level | 58 | 21 | 23 | 14 | 48% | -0.047 % |
-| macd | 203 | 42 | 130 | 31 | 24% | -0.088 % |
+| macd | 205 | 42 | 132 | 31 | 24% | -0.091 % |
 | orb | 31 | 13 | 13 | 5 | 50% | -0.000 % |
 | pdhl | 91 | 32 | 47 | 12 | 41% | +0.073 % |
-| rsi | 596 | 189 | 334 | 73 | 36% | -0.008 % |
-| trend_15m | 801 | 238 | 447 | 116 | 35% | -0.018 % |
-| trend_1h | 792 | 235 | 444 | 113 | 35% | -0.018 % |
-| trend_5m | 694 | 216 | 397 | 81 | 35% | -0.013 % |
+| rsi | 598 | 189 | 336 | 73 | 36% | -0.009 % |
+| trend_15m | 804 | 238 | 450 | 116 | 35% | -0.019 % |
+| trend_1h | 795 | 235 | 447 | 113 | 34% | -0.019 % |
+| trend_5m | 697 | 216 | 400 | 81 | 35% | -0.015 % |
 | volume | 11 | 2 | 7 | 2 | 22% | -0.128 % |
-| vwap | 780 | 235 | 435 | 110 | 35% | -0.016 % |
+| vwap | 783 | 235 | 438 | 110 | 35% | -0.018 % |
 
 ### Fantômes par actif
 
@@ -135,7 +135,7 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 | ethereum | 27 | 4 | 16 | 7 | 20% | -0.211 % |
 | euro | 36 | 12 | 23 | 1 | 34% | -0.025 % |
 | gold | 200 | 55 | 109 | 36 | 34% | -0.033 % |
-| nasdaq | 322 | 106 | 185 | 31 | 36% | +0.028 % |
+| nasdaq | 325 | 106 | 188 | 31 | 36% | +0.024 % |
 | oil | 85 | 25 | 43 | 17 | 37% | -0.059 % |
 | sp500 | 102 | 27 | 63 | 12 | 30% | -0.043 % |
 
@@ -184,7 +184,7 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 | adx | 1.0 |
 | vwap | 0.75 |
 | rsi | 1.0 |
-| macd | 0.863 |
+| macd | 0.851 |
 | level | 1.0 |
 | volume | 0.75 |
 | orb | 1.0 |
@@ -195,15 +195,15 @@ Tranches horaires évitées (UTC) : [10, 11, 12, 19]
 
 Corrections par actif :
 
-- ethereum : {'trend_5m': 0.843, 'trend_15m': 0.843, 'trend_1h': 0.843, 'adx': 0.843, 'rsi': 0.73}
-- gold : {'rsi': 0.949}
-- nasdaq : {'trend_5m': 1.165, 'trend_15m': 1.165, 'trend_1h': 1.165, 'adx': 1.165, 'vwap': 0.861, 'rsi': 1.245, 'pdhl': 1.005}
-- sp500 : {'trend_5m': 0.95, 'trend_15m': 0.95, 'trend_1h': 0.95, 'adx': 0.95, 'vwap': 0.706}
+- ethereum : {'trend_5m': 0.848, 'trend_15m': 0.848, 'trend_1h': 0.848, 'adx': 0.848, 'rsi': 0.735}
+- gold : {'rsi': 0.953}
+- nasdaq : {'trend_5m': 1.152, 'trend_15m': 1.152, 'trend_1h': 1.152, 'adx': 1.152, 'vwap': 0.851, 'rsi': 1.233, 'pdhl': 1.005}
+- sp500 : {'trend_5m': 0.956, 'trend_15m': 0.956, 'trend_1h': 0.956, 'adx': 0.956, 'vwap': 0.71}
 
 | Variante testée en fantôme | Trades | Gain net moyen | Statut |
 |---|---:|---:|---|
 | indices le matin européen | 126 | -0.54 R | en test |
-| horizon ~3 h | 104 | -0.42 R | en test |
+| horizon ~3 h | 107 | -0.44 R | en test |
 | confiance moyenne | 62 | -0.04 R | en test |
 | entrées dans l'heure avant l'ouverture américaine | 11 | +1.54 R | en test |
 | reprise juste après un stop | 28 | -0.31 R | en test |
@@ -217,25 +217,25 @@ Corrections par actif :
 Notes :
 
 - trades réels : +0,12 R ± 0,19 R par trade avant frais sur 158 trades (0 R = hasard)
-- rsi : +0,08 R ± 0,08 R sur 1112 trades éq. → poids ×1,00
-- macd : -0,18 R ± 0,12 R sur 365 trades éq. → poids ×0,86
+- macd : -0,18 R ± 0,12 R sur 367 trades éq. → poids ×0,85
 - tranche 10h UTC : -0,29 R sur 86 trades éq. → évitée
 - tranche 11h UTC : -0,29 R sur 80 trades éq. → évitée
 - tranche 12h UTC : -0,45 R sur 69 trades éq. → évitée
 - tranche 19h UTC : -0,29 R sur 81 trades éq. → évitée
-- ethereum, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,24 R contre +0,04 R en global sur 78 trades éq. → poids ×0,84 sur cet actif
-- ethereum, rsi : -0,29 R contre +0,08 R en global sur 56 trades éq. → poids ×0,73 sur cet actif
-- gold, rsi : -0,07 R contre +0,08 R en global sur 263 trades éq. → poids ×0,95 sur cet actif
-- nasdaq, tendance (trend_5m, trend_15m, trend_1h, adx) : +0,25 R contre +0,04 R en global sur 429 trades éq. → poids ×1,16 sur cet actif
-- nasdaq, vwap : +0,26 R contre +0,05 R en global sur 422 trades éq. → poids ×1,15 sur cet actif
-- nasdaq, rsi : +0,35 R contre +0,08 R en global sur 338 trades éq. → poids ×1,24 sur cet actif
+- ethereum, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,24 R contre +0,04 R en global sur 78 trades éq. → poids ×0,85 sur cet actif
+- ethereum, rsi : -0,29 R contre +0,07 R en global sur 56 trades éq. → poids ×0,73 sur cet actif
+- gold, rsi : -0,07 R contre +0,07 R en global sur 263 trades éq. → poids ×0,95 sur cet actif
+- nasdaq, tendance (trend_5m, trend_15m, trend_1h, adx) : +0,24 R contre +0,04 R en global sur 432 trades éq. → poids ×1,15 sur cet actif
+- nasdaq, vwap : +0,25 R contre +0,04 R en global sur 425 trades éq. → poids ×1,13 sur cet actif
+- nasdaq, rsi : +0,34 R contre +0,07 R en global sur 340 trades éq. → poids ×1,23 sur cet actif
 - nasdaq, pdhl : +0,63 R contre +0,15 R en global sur 46 trades éq. → poids ×1,01 sur cet actif
-- sp500, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,14 R contre +0,04 R en global sur 199 trades éq. → poids ×0,95 sur cet actif
-- sp500, vwap : -0,14 R contre +0,05 R en global sur 194 trades éq. → poids ×0,94 sur cet actif
+- sp500, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,14 R contre +0,04 R en global sur 199 trades éq. → poids ×0,96 sur cet actif
+- sp500, vwap : -0,14 R contre +0,04 R en global sur 194 trades éq. → poids ×0,95 sur cet actif
 - variante « indices le matin européen » en test : 126 trades, -0,54 R net, pas meilleure que les signaux réels
-- variante « horizon ~3 h » en test : 104 trades, -0,42 R net, pas meilleure que les signaux réels
+- variante « horizon ~3 h » en test : 107 trades, -0,44 R net, pas meilleure que les signaux réels
 - variante « confiance moyenne » en test : 62 trades, -0,04 R net, encore 38 trades avant décision
 - variante « entrées dans l'heure avant l'ouverture américaine » en test : 11 trades, +1,54 R net, encore 89 trades avant décision
+- variante « reprise juste après un stop » en test : 28 trades, -0,31 R net, encore 72 trades avant décision
 
 ## Backtests (données historiques 5 min)
 
