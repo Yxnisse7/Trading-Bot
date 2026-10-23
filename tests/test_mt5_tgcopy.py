@@ -62,6 +62,7 @@ def make(tmp_path, answers, now, claude=True):
     sess.mkdir()
     (sess / "yanisse.session").write_text("")
     sent, ids = [], iter(range(10, 99))
+    reviews = []
 
     class Relay:
         def enabled(self):
@@ -70,6 +71,9 @@ def make(tmp_path, answers, now, claude=True):
         def _post(self, body, reply=None):
             sent.append((body, reply))
             return {"1": next(ids)}
+
+        def _agent(self, key, s, sym, stop, target, ids, sortie=None, ticket=None):
+            reviews.append((key, s, stop, target, ids, sortie))
 
     def spawn(args, cwd, stdout, **k):
         if "--message" in args:
@@ -80,6 +84,7 @@ def make(tmp_path, answers, now, claude=True):
     mt5 = FakeMT5()
     c = tc.TgCopier(mt5, tmp_path, lambda: now[0], relay=Relay(), spawn=spawn,
                     cfg={"channels": ["Gold VIP"], "claude": claude, "dir": str(bot), "agent_dir": str(agent), "session_dir": str(sess)})
+    c.reviews = reviews
     return c, mt5, sent
 
 
@@ -102,6 +107,9 @@ def test_open_split_be_and_exit(tmp_path):
     assert [r["tp"] for r in deals] == [4115.0, 4120.0, 4130.0] and all(r["sl"] == 4101.0 for r in deals)
     assert sum(r["volume"] for r in deals) == 0.03 and all(r["magic"] == tc.MAGIC for r in deals)
     assert "ACHAT" in sent[0][0] and "Gold VIP" in sent[0][0] and "TP3" in sent[0][0]
+    key, s0, stop, target, ids_, sortie = c.reviews[0]                # avis de l'agent IA sous l'annonce
+    assert key == "tg:copie_telegram:100123-7" and s0["direction"] == "long" and stop == 4101.0 and target == 4115.0
+    assert ids_ == {"1": 10} and "Gold VIP" in sortie
     tickets = c.state["signals"]["100123-7"]["tickets"]
     mt5.positions = [NS(magic=tc.MAGIC, ticket=t, type=0, volume=0.01, tp=0.0) for t in tickets]
     c.step()                                                          # « bonne journée » : pas envoyé à Claude

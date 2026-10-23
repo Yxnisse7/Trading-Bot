@@ -226,7 +226,7 @@ class Relay:
 
     # ------------------------------------------------------------------ agent IA
     def _agent(self, key: str, s: dict[str, Any], sym: str, stop: float, target: float | None,
-               ids: dict[str, int]) -> None:
+               ids: dict[str, int], sortie: str | None = None, ticket: int | None = None) -> None:
         cmd, cwd = self.agent.get("command"), self.agent.get("dir")
         if not cmd or not cwd or not Path(cwd).exists():
             return
@@ -234,9 +234,9 @@ class Relay:
             data = {"id": key.replace(":", "-"), "strategie": key.split(":")[1], "asset": s["asset"],
                     "asset_label": ASSETS.get(s["asset"], s["asset"]), "direction": s["direction"],
                     "entry": s["entry"], "stop_loss": stop, "take_profit": target,
-                    "sortie": EXITS.get(key.split(":")[1], ""),
+                    "sortie": sortie if sortie is not None else EXITS.get(key.split(":")[1], ""),
                     "created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(s.get("created") or self.clock())),
-                    "telegram_message_ids": self._chat_ids(ids), "ticket_mt5": self.state[key].get("ticket"),
+                    "telegram_message_ids": self._chat_ids(ids), "ticket_mt5": ticket or self.state.get(key, {}).get("ticket"),
                     "candles_5m": self._candles(sym, "TIMEFRAME_M5", 288, s.get("created")),
                     "candles_1h": self._candles(sym, "TIMEFRAME_H1", 48, s.get("created")),
                     "candles_1d": self._candles(sym, "TIMEFRAME_D1", 20, s.get("created"))}

@@ -348,6 +348,20 @@ class TgCopier:
         sig["msg"] = self._announce(sig, d)
         self.state["signals"][sid] = sig
         self._save()
+        self._review(sid, sig)
+
+    def _review(self, sid: str, s: dict[str, Any]) -> None:
+        """Avis de l'agent IA sous l'annonce, comme pour les signaux du bot (demandé par Yanisse le 23/10/2026)."""
+        if self.relay is None or not s["msg"]:
+            return
+        tps = " / ".join(f"{t:g}" for t in s["targets"])
+        self.relay._agent(f"tg:copie_telegram:{sid}",
+                          {"asset": s["market"], "direction": "long" if s["buy"] else "short", "entry": s["entry"],
+                           "created": int(s["placed"])},
+                          s["sym"], s["stop"], s["targets"][0] if s["targets"] else None, s["msg"],
+                          sortie=f"signal du canal {s['chat']} : un ordre par objectif ({tps or 'aucun'}), "
+                                 f"« sécurisez » = stop au prix d'entrée, fermé au bout de {MAX_HOLD // 3600} h au plus",
+                          ticket=s["tickets"][0] if s["tickets"] else None)
 
     def _refuse(self, data: dict[str, Any], d: dict[str, Any], why: str) -> None:
         log.info("copie Telegram : pas copié (%s)", why)
