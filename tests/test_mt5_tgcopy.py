@@ -219,3 +219,13 @@ def test_benagold_zone_already_left_gives_limit(tmp_path):
     c.step()
     o = mt5.sent[-1]
     assert o["action"] == mt5.TRADE_ACTION_PENDING and o["type"] == mt5.ORDER_TYPE_SELL_LIMIT and o["price"] == 4028.0
+
+
+def test_fixed_lot_per_target(tmp_path):
+    now = [T0]
+    c, mt5, sent = make(tmp_path, [], now, claude=False)
+    c.cfg["lot"] = 0.2
+    mt5.bid = 4030.0
+    post(tmp_path, 60, BENA, now[0])
+    c.step()
+    assert [r["volume"] for r in mt5.sent] == [0.2, 0.2, 0.2] and "3 × 0,20 lot" in sent[-1][0]
