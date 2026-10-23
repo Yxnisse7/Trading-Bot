@@ -83,7 +83,7 @@ def test_hugo_command_answers_even_without_trade(tmp_path, monkeypatch):
     upd = [{"update_id": 7, "message": {"text": "/hugo", "chat": {"id": 42}, "date": MON9 - 3600 * 2}},   # 9h passé : 7h Paris
            {"update_id": 8, "message": {"text": "/help", "chat": {"id": 42}, "date": MON9}}]
     h, mt5, now, sent, data = _setup(tmp_path, monkeypatch, [rien], upd)
-    now[0] = MON9 + 3600 * 3                     # midi : pas de réveil prévu ; /hugo trop ancien → ignoré
+    now[0] = MON9 + 3600 * 9                     # 18h : pas de réveil prévu ; /hugo trop ancien → ignoré
     assert h.step() == "" and h.state["tg_seen"] == 8
     upd.append({"update_id": 9, "message": {"text": "/hugo@MonBot", "chat": {"id": 42}, "date": now[0] - 5}})
     h.last_poll = 0

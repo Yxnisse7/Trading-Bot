@@ -2,7 +2,8 @@
 
 Même mécanique que la chasse de l'agent (mt5_hunt.py) avec un numéro magique à part, mais le jugement suit la
 méthode BPR d'un trader TikTok (trading_bot/hugo.py) :
-- réveils à heures fixes (9h, 10h, 14h30, 15h45, 16h30 Paris, en semaine), pas après les annonces ;
+- réveils à heures fixes (9h, 10h, 14h30, 15h45, 16h30 Paris, en semaine), et veille toutes les 20 min de 9h à 17h
+  (demandé par Yanisse le 23/10/2026), pas après les annonces ;
 - commande Telegram /hugo, quand le PC est allumé : analyse tout de suite, réponse même sans trade (avec la zone à
   surveiller) ;
 - règles de journée de la vidéo : arrêt après un gain ou deux pertes ;
@@ -49,7 +50,7 @@ class HugoHunter(Hunter):
     ASSETS = {"nasdaq": ("Nasdaq 100", (("09:00", "matin"), ("10:00", "matin"), ("14:30", "stats américaines"),
                                         ("15:45", "après l'ouverture de Wall Street"), ("16:30", "après-midi")), 2.0)}
     NEWS = False
-    WATCH: dict = {}                         # heures fixes de la vidéo seulement
+    WATCH = {"nasdaq": (("09:00", "17:00"),)}  # + veille toutes les `every_minutes` (23/10)
     TAG = "Méthode Hugo (agent IA)"
     COMMENT = "hugo IA"
     FRAMES = (("candles_5m", "TIMEFRAME_M5", 288), ("candles_15m", "TIMEFRAME_M15", 96),
