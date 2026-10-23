@@ -28,6 +28,7 @@ from zoneinfo import ZoneInfo
 
 from . import claude_desk as desk
 from . import demo_rules
+from . import hit_table
 from . import messages as msg
 from .mt5_copy import SYMBOLS
 from .mt5_local import server_offset
@@ -305,9 +306,21 @@ class Hunter:
                  "label": data["asset_label"], "msg": {}}
         if limit:
             trade.update(pending=True, placed=self.clock())
+        trade["passe"] = self._past(asset, buy, entry, stop, target, data)
         trade["msg"] = self._announce(trade, a, digits)
         self.state["trades"][asset] = trade
         self._save()
+
+    def _past(self, asset: str, buy: bool, entry: float, stop: float, target: float, data: dict[str, Any]):
+        """Ce que le passé dit de ce trade (hit_table.py) : lu dans un tableau déjà calculé, aucun retard."""
+        if not hasattr(Hunter, "_table"):
+            Hunter._table = hit_table.load_table()
+        bars = data.get("candles_5m") or []
+        try:
+            return hit_table.lookup(Hunter._table, asset, self.clock(), buy, entry, stop, target,
+                                    hit_table.atr([b[2] for b in bars], [b[3] for b in bars]))
+        except (TypeError, ValueError, IndexError):
+            return None
 
     def _filling(self, info) -> int:
         mode = getattr(info, "filling_mode", 1)
@@ -328,6 +341,7 @@ class Hunter:
                  f"Moment : {msg.esc(t['moment'])} · confiance {conf}/5",
                  "",
                  msg.esc(str(a.get("raison", ""))),
+                 *(["", "📊 " + msg.esc(hit_table.text(t["passe"]))] if t.get("passe") else []),
                  "",
                  f"MT5 démo : {msg.num(t['lot'], 2)} lot (1 % du solde au SL), sortie au SL, au TP ou au bout de {self.MAX_HOLD // 3600} h.",
                  "<i>Décidé par l'agent IA sur ton PC. Démo seulement, aucun ordre réel.</i>"]
@@ -404,6 +418,7 @@ class Hunter:
                      f"Résultat MT5 démo : {profit:+.2f} $ ({r:+.2f} R)".replace(".", ","), *extra]
             self.relay._post("\n".join(lines), reply=t["msg"])
         desk._journal({"action": f"{self.COMMENT} {asset} : sortie", "prix": exit_px or "", "stop": "", "objectif": "",
-                       "resultat": round(profit, 2), "raison": t["moment"]})
+                       "resultat": round(profit, 2),
+                       "raison": t["moment"] + (f" · passé : TP d'abord {t['passe']['tp']:.0%}" if t.get("passe") else "")})
         self.state["trades"].pop(asset, None)
         self._save()

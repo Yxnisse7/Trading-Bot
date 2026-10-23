@@ -225,3 +225,16 @@ def test_watch_wakes_every_20_minutes_and_fixed_hours_win():
     assert "14:35 stats américaines" in paris and "14:30 veille" not in paris and "15:35 ouverture de New York" in paris
     assert len(got) == 21
     assert h.slots(day, [], "gold", h.ASSETS, False, h.WATCH["gold"], 0) == h.slots(day, [], "gold")
+
+
+def test_past_of_a_trade_from_the_table():
+    from trading_bot import hit_table as ht
+    table = {"gold": {"15:30": {"achat": {"2.0": {"2.0": [0.25, 0.55, 3000]}}}}}
+    t = datetime(2026, 10, 22, 13, 40, tzinfo=timezone.utc).timestamp()          # 15h40 Paris
+    h = ht.lookup(table, "gold", t, True, 4100.0, 4092.0, 4116.0, 4.1)          # stop ≈ 2 ATR, objectif 2 R
+    assert h == {"tp": 0.25, "sl": 0.55, "n": 3000, "seuil": 0.333, "stop_atr": 2.0, "rr": 2.0}
+    assert "TP d'abord 25 %" in ht.text(h) and "en dessous" in ht.text(h)       # 25/80 = 31 % < 33 %
+    assert ht.lookup(table, "gold", t, False, 4100.0, 4108.0, 4084.0, 4.1) is None
+    assert ht.atr([2, 3], [1, 1]) == 1.5
+    real = ht.load_table()
+    assert set(real) >= {"gold", "nasdaq"} and len(real["gold"]) == 48
