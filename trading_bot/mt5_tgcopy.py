@@ -13,8 +13,8 @@ par objectif, 3 au plus), au plus 5 signaux ouverts, numéro magique à part (30
 Prix d'entrée donné et déjà dépassé de plus d'un quart du stop : ordre limite au prix du signaleur, annulé au bout de
 2 h. Un trade est fermé au bout de 24 h. Un message vieux de plus de 10 min (PC éteint) n'est pas copié.
 
-Réglages (config.json du PC) : "tg_copy": {"channels": ["nom ou numéro du canal", …], "risk_pct": 0.01, "lot": 0.2}.
-"lot" : taille fixe de CHAQUE ordre (choix de Yanisse le 23/10/2026 : 3 trades de 0,2 lot quand il y a 3 TP), à la
+Réglages (config.json du PC) : "tg_copy": {"channels": ["nom ou numéro du canal", …], "risk_pct": 0.01, "lot": 0.02}.
+"lot" : taille fixe de CHAQUE ordre (choix de Yanisse le 23/10/2026 : 3 trades de 0,02 lot quand il y a 3 TP), à la
 place du calcul au risque.
 """
 from __future__ import annotations
