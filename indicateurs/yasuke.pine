@@ -1,0 +1,316 @@
+// Indicateur TradingView des stratégies du bot (Pine Script v5).
+// Reprend les règles de trading_bot/strategies.py et essai16.py, pour lire les graphiques à la main.
+// Ce n'est pas un signal du bot : les vrais signaux restent ceux de Telegram.
+//
+// Graphiques conseillés :
+//   Nasdaq (NAS100, NQ1!, US100…) en 5 min  → zone de bruit v2
+//   Bitcoin (BTCUSD…) en 15 min            → cassure Williams, Donchian 1 h, W3
+//   Or (XAUUSD, GC1!…) en 5 à 60 min        → nuit asiatique
+//@version=5
+indicator("Yasuke · stratégies", shorttitle="Yasuke", overlay=true, max_labels_count=500, max_lines_count=500, max_bars_back=2000)
+
+mode = input.string("Auto", "Stratégie", options=["Auto", "Zone de bruit (Nasdaq)", "Bitcoin", "Nuit asiatique (or)"])
+showW = input.bool(true, "Bitcoin : cassure Williams")
+showD = input.bool(true, "Bitcoin : Donchian 1 h")
+showW3 = input.bool(true, "Bitcoin : W3 (repli du RSI, graphique 15 min)")
+
+NY = "America/New_York"
+t = str.upper(syminfo.ticker)
+isBtc = str.contains(t, "BTC")
+isGold = str.contains(t, "XAU") or str.contains(t, "GOLD") or str.startswith(t, "GC") or str.startswith(t, "MGC")
+isNq = str.contains(t, "NAS") or str.contains(t, "NQ") or str.contains(t, "US100") or str.contains(t, "NDX") or str.contains(t, "USTEC")
+mod = mode == "Auto" ? (isBtc ? "btc" : isGold ? "gold" : isNq ? "nq" : "none") : mode == "Zone de bruit (Nasdaq)" ? "nq" : mode == "Bitcoin" ? "btc" : "gold"
+
+buyLbl(txt) =>
+    label.new(bar_index, low, txt, style=label.style_label_up, color=color.new(color.green, 0), textcolor=color.white, size=size.small)
+sellLbl(txt) =>
+    label.new(bar_index, high, txt, style=label.style_label_down, color=color.new(color.red, 0), textcolor=color.white, size=size.small)
+exitLbl(txt, isLong) =>
+    label.new(bar_index, isLong ? high : low, txt, style=isLong ? label.style_label_down : label.style_label_up, color=color.new(color.gray, 0), textcolor=color.white, size=size.tiny)
+
+nyH = hour(time, NY)
+nyM = minute(time, NY)
+cH = hour(time_close, NY)
+cM = minute(time_close, NY)
+cMin = cH * 60 + cM
+
+// ───────────────────────── Zone de bruit v2 (Nasdaq, 5 min) ─────────────────────────
+// Bornes = max/min(ouverture 9:30, clôture de la veille) ± moyenne sur 14 jours du mouvement depuis l'ouverture
+// à la même heure. Décision aux demi-heures de 10:00 à 15:30 : clôture au-dessus de la borne haute = achat,
+// sous la borne basse = vente. Sortie à une demi-heure si le prix repasse sous max(borne, VWAP) (achat),
+// stop dur à 1 ATR 15 min au moins, tout est fermé à 16:00.
+LOOK = 14
+SLOTS = 78
+nqOn = mod == "nq" and timeframe.period == "5"
+inRTH = not na(time(timeframe.period, "0930-1600", NY))
+[a15now, a15prev] = request.security(syminfo.tickerid, "15", [ta.atr(14), ta.atr(14)[1]], lookahead=barmerge.lookahead_on)
+a15 = cM % 15 == 0 ? a15now : a15prev
+
+var float dOpen = na
+var int dOpenT = na
+var float pClose = na
+var float lastRth = na
+var float[] today = array.new_float(SLOTS, na)
+var float[] hist = array.new_float(0)
+var float pv = 0.0
+var float vv = 0.0
+var int npos = 0
+var float nEntry = na
+var float nRisk = na
+var int nEntryBar = na
+
+if nqOn and inRTH and nyH == 9 and nyM == 30
+    if not na(dOpen)
+        array.concat(hist, today)
+        while array.size(hist) > SLOTS * LOOK
+            array.shift(hist)
+    pClose := lastRth
+    dOpen := open
+    dOpenT := time
+    today := array.new_float(SLOTS, na)
+    pv := 0.0
+    vv := 0.0
+
+float ub = na
+float lb = na
+float vw = na
+if nqOn and inRTH and not na(dOpen)
+    pv += hlc3 * math.max(nz(volume), 1.0)
+    vv += math.max(nz(volume), 1.0)
+    vw := pv / vv
+    slot = int((time_close - dOpenT) / 300000) - 1
+    if slot >= 0 and slot < SLOTS
+        array.set(today, slot, math.abs(close / dOpen - 1))
+        nd = int(array.size(hist) / SLOTS)
+        if nd >= LOOK and not na(pClose)
+            s = 0.0
+            n = 0
+            for d = 0 to nd - 1
+                v = array.get(hist, d * SLOTS + slot)
+                if not na(v)
+                    s += v
+                    n += 1
+            if n >= LOOK / 2
+                sig = s / n
+                ub := math.max(dOpen, pClose) * (1 + sig)
+                lb := math.min(dOpen, pClose) * (1 - sig)
+    lastRth := close
+
+if nqOn and npos != 0 and bar_index > nEntryBar
+    hard = npos == 1 ? nEntry - nRisk : nEntry + nRisk
+    if (npos == 1 and low <= hard) or (npos == -1 and high >= hard)
+        exitLbl("Stop", npos == 1)
+        npos := 0
+isMark = nqOn and inRTH and (cM == 0 or cM == 30) and cMin >= 600 and cMin <= 930
+if isMark and not na(ub)
+    if npos == 0
+        if (close > ub or close < lb) and not na(a15)
+            lg = close > ub
+            st = lg ? math.max(ub, vw) : math.min(lb, vw)
+            nRisk := math.max(math.abs(close - st), a15)
+            nEntry := close
+            nEntryBar := bar_index
+            npos := lg ? 1 : -1
+            if lg
+                buyLbl("Achat zone de bruit")
+            else
+                sellLbl("Vente zone de bruit")
+    else
+        st = npos == 1 ? math.max(ub, vw) : math.min(lb, vw)
+        if (npos == 1 and close < st) or (npos == -1 and close > st)
+            exitLbl("Sortie", npos == 1)
+            npos := 0
+if nqOn and npos != 0 and inRTH and cMin == 960
+    exitLbl("Fin 16 h", npos == 1)
+    npos := 0
+
+pUb = plot(nqOn ? ub : na, "Zone de bruit haute", color.new(color.teal, 0), 1, plot.style_linebr)
+pLb = plot(nqOn ? lb : na, "Zone de bruit basse", color.new(color.teal, 0), 1, plot.style_linebr)
+fill(pUb, pLb, color.new(color.teal, 92), "Zone de bruit")
+plot(nqOn and inRTH ? vw : na, "VWAP du jour", color.new(color.orange, 0), 1, plot.style_linebr)
+plot(nqOn and npos != 0 ? (npos == 1 ? nEntry - nRisk : nEntry + nRisk) : na, "Stop dur", color.new(color.red, 0), 1, plot.style_linebr)
+
+// ───────────────────────── Bitcoin ─────────────────────────
+btcOn = mod == "btc" and timeframe.isintraday and timeframe.in_seconds() <= 3600
+
+// Cassure Williams : jour UTC, achat quand le prix dépasse l'ouverture + 0,5 × l'amplitude de la veille,
+// stop à l'ouverture du jour, vente à minuit UTC.
+newUtcDay = dayofmonth(time, "UTC") != dayofmonth(time[1], "UTC")
+var float wHi = na
+var float wLo = na
+var float wPrev = na
+var float wOpen = na
+var bool wDone = false
+var bool wIn = false
+var int wBar = na
+if newUtcDay
+    if wIn and btcOn and showW
+        exitLbl("Minuit UTC", true)
+    wIn := false
+    wPrev := wHi - wLo
+    wHi := high
+    wLo := low
+    wOpen := open
+    wDone := false
+else
+    wHi := math.max(nz(wHi, high), high)
+    wLo := math.min(nz(wLo, low), low)
+wLevel = wOpen + 0.5 * wPrev
+if btcOn and showW and wIn and bar_index > wBar and low <= wOpen
+    exitLbl("Stop Williams", true)
+    wIn := false
+if btcOn and showW and not wDone and not wIn and not na(wLevel) and high >= wLevel
+    wIn := true
+    wDone := true
+    wBar := bar_index
+    buyLbl("Achat Williams")
+plot(btcOn and showW ? wLevel : na, "Williams : niveau d'achat", color.new(color.green, 0), 2, plot.style_stepline)
+plot(btcOn and showW ? wOpen : na, "Williams : stop (ouverture UTC)", color.new(color.red, 40), 1, plot.style_stepline)
+
+// Donchian 1 h : clôture 1 h au-dessus du plus haut des 20 bougies 1 h d'avant = achat (en dessous du plus bas = vente),
+// stop 2 ATR 1 h, sortie quand une clôture 1 h passe sous le plus bas des 10 dernières (au-dessus du plus haut en vente).
+[chHi, chLo, ex10Lo, ex10Hi, hAtr, hC, hT, lvlHi, lvlLo, curLo10, curHi10] = request.security(syminfo.tickerid, "60", [ta.highest(high, 20)[2], ta.lowest(low, 20)[2], ta.lowest(low, 10)[2], ta.highest(high, 10)[2], ta.atr(14)[1], close[1], time[1], ta.highest(high, 20)[1], ta.lowest(low, 20)[1], ta.lowest(low, 10)[1], ta.highest(high, 10)[1]], lookahead=barmerge.lookahead_on)
+newH = hT != hT[1]
+var int dpos = 0
+var float dStop = na
+var int dBars = 0
+if btcOn and showD
+    if dpos != 0 and ((dpos == 1 and low <= dStop) or (dpos == -1 and high >= dStop))
+        exitLbl("Stop Donchian", dpos == 1)
+        dpos := 0
+    else if newH and not na(hAtr)
+        if dpos == 0
+            if hC > chHi or hC < chLo
+                lg = hC > chHi
+                dpos := lg ? 1 : -1
+                dStop := lg ? hC - 2 * hAtr : hC + 2 * hAtr
+                dBars := 0
+                if lg
+                    buyLbl("Achat Donchian 1 h")
+                else
+                    sellLbl("Vente Donchian 1 h")
+        else
+            dBars += 1
+            if (dpos == 1 and hC < ex10Lo) or (dpos == -1 and hC > ex10Hi) or dBars >= 120
+                exitLbl("Sortie Donchian", dpos == 1)
+                dpos := 0
+plot(btcOn and showD ? lvlHi : na, "Donchian 1 h : haut 20", color.new(color.blue, 30), 1, plot.style_stepline)
+plot(btcOn and showD ? lvlLo : na, "Donchian 1 h : bas 20", color.new(color.blue, 30), 1, plot.style_stepline)
+plot(btcOn and showD and dpos != 0 ? (dpos == 1 ? curLo10 : curHi10) : na, "Donchian 1 h : sortie (10)", color.new(color.gray, 0), 1, plot.style_stepline)
+plot(btcOn and showD and dpos != 0 ? dStop : na, "Donchian 1 h : stop", color.new(color.red, 0), 1, plot.style_linebr)
+
+// W3 (15 min) : tendance du jour et de l'heure dans le même sens, le RSI 21 revient de la zone 40-50 au-dessus de 50
+// (achat ; miroir en vente), stop sous les 2 derniers creux 15 min, puis stop suiveur sous les creux 1 h, 5 jours max.
+w3On = btcOn and showW3 and timeframe.period == "15"
+rsi21 = ta.rsi(close, 21)
+atrC = ta.atr(14)
+lo10 = ta.lowest(low, 10)
+hi10 = ta.highest(high, 10)
+[dC, dM, dM5] = request.security(syminfo.tickerid, "D", [close[1], ta.sma(close, 20)[1], ta.sma(close, 20)[6]], lookahead=barmerge.lookahead_on)
+[h0c, h0m, h0m3, h0a, h1c, h1m, h1m3, h1a] = request.security(syminfo.tickerid, "60", [close, ta.sma(close, 20), ta.sma(close, 20)[3], ta.atr(14), close[1], ta.sma(close, 20)[1], ta.sma(close, 20)[4], ta.atr(14)[1]], lookahead=barmerge.lookahead_on)
+[hpl, hph, hpT, hpA] = request.security(syminfo.tickerid, "60", [ta.pivotlow(low, 2, 2)[1], ta.pivothigh(high, 2, 2)[1], time[3], ta.atr(14)[1]], lookahead=barmerge.lookahead_on)
+endsHour = minute(time_close) == 0
+hc = endsHour ? h0c : h1c
+hm = endsHour ? h0m : h1m
+hm3 = endsHour ? h0m3 : h1m3
+ha = endsHour ? h0a : h1a
+dTrend = dC > dM and dM > dM5 ? 1 : dC < dM and dM < dM5 ? -1 : 0
+hTrend = hc > hm and hm > hm3 ? 1 : hc < hm and hm < hm3 ? -1 : 0
+pHour = hour(time_close, "Europe/Paris")
+
+pl = ta.pivotlow(low, 2, 2)
+ph = ta.pivothigh(high, 2, 2)
+var float[] plV = array.new_float(0)
+var int[] plB = array.new_int(0)
+var float[] phV = array.new_float(0)
+var int[] phB = array.new_int(0)
+if not na(pl)
+    array.push(plV, pl)
+    array.push(plB, bar_index - 2)
+    if array.size(plV) > 6
+        array.shift(plV)
+        array.shift(plB)
+if not na(ph)
+    array.push(phV, ph)
+    array.push(phB, bar_index - 2)
+    if array.size(phV) > 6
+        array.shift(phV)
+        array.shift(phB)
+
+ext2(vals, bars, isLow) =>
+    float e = na
+    int cnt = 0
+    n = array.size(vals)
+    if n > 0
+        for i = n - 1 to 0
+            if cnt < 2 and array.get(bars, i) >= bar_index - 40
+                v = array.get(vals, i)
+                e := na(e) ? v : isLow ? math.min(e, v) : math.max(e, v)
+                cnt += 1
+    [e, cnt]
+
+[eLo, nLo] = ext2(plV, plB, true)
+[eHi, nHi] = ext2(phV, phB, false)
+longRsi = rsi21[1] >= 40 and rsi21[1] <= 50 and rsi21 > 50 and ta.lowest(rsi21, 7) >= 40 and ta.highest(rsi21[1], 12) > 55
+shortRsi = rsi21[1] >= 50 and rsi21[1] <= 60 and rsi21 < 50 and ta.highest(rsi21, 7) <= 60 and ta.lowest(rsi21[1], 12) < 45
+
+var int wpos = 0
+var float wStop = na
+var int wT = na
+var int wEntryBar = na
+if w3On and wpos != 0 and bar_index > wEntryBar
+    if (wpos == 1 and low <= wStop) or (wpos == -1 and high >= wStop)
+        exitLbl("Stop W3", wpos == 1)
+        wpos := 0
+    else
+        if not na(hpA) and hpT >= wT
+            if wpos == 1 and not na(hpl)
+                wStop := math.max(wStop, hpl - 0.1 * hpA)
+            if wpos == -1 and not na(hph)
+                wStop := math.min(wStop, hph + 0.1 * hpA)
+        if time_close - wT >= 5 * 86400000
+            exitLbl("W3 : 5 jours", wpos == 1)
+            wpos := 0
+if w3On and wpos == 0 and pHour >= 8 and pHour < 22 and dTrend != 0 and hTrend == dTrend and not na(ha) and math.abs(hc - hm) <= 2 * ha and not na(atrC)
+    lg = dTrend == 1
+    if (lg and longRsi) or (not lg and shortRsi)
+        st = lg ? (nLo == 2 ? eLo - 0.1 * atrC : lo10) : (nHi == 2 ? eHi + 0.1 * atrC : hi10)
+        risk = lg ? close - st : st - close
+        if risk >= 0.3 * ha and risk <= 3 * ha
+            wpos := lg ? 1 : -1
+            wStop := st
+            wT := time_close
+            wEntryBar := bar_index
+            if lg
+                buyLbl("Achat W3")
+            else
+                sellLbl("Vente W3")
+plot(w3On and wpos != 0 ? wStop : na, "W3 : stop suiveur", color.new(color.purple, 0), 1, plot.style_linebr)
+
+// ───────────────────────── Nuit asiatique (or) ─────────────────────────
+// Du lundi au jeudi : achat à l'ouverture de 18:00 New York, vente à l'ouverture de 03:00, stop 1 % sous l'entrée.
+goldOn = mod == "gold" and timeframe.isintraday and timeframe.in_seconds() <= 3600
+dow = dayofweek(time, NY)
+var bool gIn = false
+var float gStop = na
+if goldOn
+    if gIn and nyH == 3 and nyH[1] != 3
+        exitLbl("Vente 03:00", true)
+        gIn := false
+    if not gIn and nyH == 18 and nyH[1] != 18 and dow >= dayofweek.monday and dow <= dayofweek.thursday
+        gIn := true
+        gStop := open * 0.99
+        buyLbl("Achat nuit asiatique")
+    if gIn and low <= gStop
+        exitLbl("Stop 1 %", true)
+        gIn := false
+bgcolor(goldOn and gIn ? color.new(color.yellow, 90) : na, title="Nuit asiatique")
+plot(goldOn and gIn ? gStop : na, "Nuit asiatique : stop", color.new(color.red, 0), 1, plot.style_linebr)
+
+// Rappel quand le graphique ne convient pas
+var label hint = na
+if barstate.islast
+    label.delete(hint)
+    msg = mod == "none" ? "Yasuke : choisis la stratégie dans les réglages" : mod == "nq" and not nqOn ? "Zone de bruit : passe en 5 min" : mod == "btc" and showW3 and timeframe.period != "15" ? "W3 : passe en 15 min" : ""
+    if msg != ""
+        hint := label.new(bar_index, high, msg, style=label.style_label_left, color=color.new(color.gray, 20), textcolor=color.white, size=size.small)
