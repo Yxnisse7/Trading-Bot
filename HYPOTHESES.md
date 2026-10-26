@@ -1243,6 +1243,30 @@ Pour information : la même cellule sans filtre (essai 38) à côté.
 
 **Décidé d'avance** : comme l'essai 38 (une cellule prouvée → proposition d'un suivi papier, rien de plus).
 
+## Essai 40 — memecoins pump.fun : copier les meilleurs portefeuilles, sortir en 3 lots
+
+Écrit le 26 octobre 2026, **avant** tout calcul, à la demande de Yanisse (plateforme Axiom : suivre les plus gros
+traders de memecoins, sniper les bons coins, ressortir petit à petit). Mêmes données, exécution et singes que
+l'essai 38. Twitter et l'actualité ne sont pas testables (pas d'historique gratuit des tweets).
+
+**Partie A — copier les portefeuilles.** Apprentissage : coins lancés du 5 au 30 juin ; test : coins lancés du
+1er au 14 juillet (panne du 3 juillet exclue). Gain réalisé de chaque portefeuille en apprentissage = SOL des ventes
+− SOL des achats (lignes `sol_amount` vides ou incohérentes exclues, adresse du System Program exclue), au moins
+20 coins achetés. **W100** = les 100 meilleurs, **W1000** = les 1 000 meilleurs. Copie : au premier achat d'un de ces
+portefeuilles dans un coin de test, dans les 10 premières minutes du coin, on achète au premier échange au moins
+2 s après (une seule copie par coin). Sorties : **X1** on revend quand ce portefeuille fait sa première vente dans le
+coin (+ 2 s) ; **T20** suiveur 20 % ; **L3** en 3 lots (définis en partie B). Toutes : au plus 60 min.
+Frais Axiom : **1 % par côté en plus** de pump.fun (2,25 % par côté au total), non vérifié sur leur site.
+Contrôles : ceux de l'essai 38, sauf les moitiés et 7 derniers jours remplacés par **chaque semaine de test
+positive** (1-7 et 8-14 juillet). **6 cellules.**
+
+**Partie B — sortir en 3 lots** sur les entrées K2, K3, K5 de l'essai 38 (tout le corpus, frais de l'essai 38 pour
+comparer avec T20) : un tiers vendu quand le prix atteint 2 fois l'entrée, un tiers à 3 fois, le reste au suiveur
+20 % ; le suiveur 20 % s'applique à tout ce qui reste à tout moment ; au plus 60 min. Chaque vente paie ses frais et
+0,001 SOL de réseau. Contrôles de l'essai 38. **3 cellules.** Pour information : les mêmes avec les frais Axiom.
+
+**9 cellules en tout** (seuil z 2,54). **Décidé d'avance** : comme l'essai 38.
+
 ## Journal des essais
 
 | Date | Essai | Résultat |
@@ -1382,3 +1406,4 @@ Pour information : la même cellule sans filtre (essai 38) à côté.
 | 2026-10-26 | **Essai 56** (pré-enregistré, demande de Yanisse, idée de l'étude d'origine de la zone de bruit : taille adaptée à l'agitation) : zone de bruit v2 Nasdaq et Double 7 Nasdaq, 2014-2026, mêmes trades et frais que les essais 55 et 52. Agitation = amplitude moyenne des 14 jours d'avant (% du prix) ; repère = sa médiane des 250 jours d'avant. **T0** risque fixe 1 % par trade (référence). **T1** risque 1 % × repère / agitation (plus petit quand ça bouge), borné entre 0,5 % et 2 %. **T2** l'inverse : 1 % × agitation / repère, mêmes bornes (l'essai 55 Z1 voit la zone de bruit meilleure les jours agités). Mesures en % du compte, sans intérêts composés : gain total, baisse maximale, rapport gain/baisse, par an. Retenue si le rapport gain/baisse est meilleur que T0 sur 2014-2019 ET 2020+, et meilleur que 950 sur 1000 tailles tirées au hasard (mêmes tailles mélangées entre les trades). Rien en réel sans l'accord de Yanisse. `trading_bot/essai56.py` | **Une cellule passe : T2 sur la zone de bruit v2** (`data/essai56.json`, 2 717 trades). Gain total +414 % du compte (sans composés) contre +305 % en taille fixe, baisse maximale 58,7 % contre 70,2 %, rapport gain/baisse 7,06 contre 4,35 ; 2014-2019 2,26 contre 1,05, 2020+ 10,73 contre 9,71 ; bat 985 tailles au hasard sur 1000. Réserve : 2018 pèse lourd (+154 %). T1 (plus petit quand ça bouge) est pire partout (2,03, bat 0). Double 7 : T2 meilleur rapport (7,63 contre 5,82) mais bat seulement 935 tailles au hasard sur 1000, T1 pire : rien. Carte posée à Yanisse pour appliquer T2 à la copie démo de la zone de bruit v2. |
 | 2026-10-26 | **Essai 57** (pré-enregistré, demande de Yanisse : méthodes de day trading que les traders utilisent tous les jours, comme celles de BENAGOLD et Hugo ; règles prises dans le script public « ICT Silver Bullet Backtest » de TradingView et le guide TradeAlgo) : bougies 5 min 2014-2026, frais et singes de l'essai 21. **J1 « Silver Bullet » ICT** : dans la fenêtre, premier creux de prix (FVG) sur 3 bougies (haussier : plus bas de la 3e > plus haut de la 1re ; baissier en miroir) ; ordre limite au milieu du creux, valable jusqu'à la fin de la fenêtre ; stop au plus bas de la 1re bougie (plus haut pour une vente) ; objectif 2 R ; fermeture 16:00 New York ; un trade par jour. **J1a** Nasdaq 10:00-11:00 New York, **J1b** or 10:00-11:00, **J1c** or 3:00-4:00 (Londres). **J3 « Red to Green »** : si la séance ouvre (9:30) sous la clôture de la veille, achat à la 1re clôture 5 min au-dessus de la clôture de la veille entre 9:35 et 11:00, stop au plus bas de la séance, objectif le plus haut de la veille (au moins 1 R), fermeture 16:00 ; « Green to Red » en miroir ; un trade par jour. **J3a** Nasdaq, **J3b** S&P 500. Retenue si ≥ 200 trades, > 0 R sur 2014-2019 ET 2020+, > 0 avec frais doublés, bat 95 % des singes, z au-dessus du seuil corrigé sur 5 cellules. Rien en réel sans l'accord de Yanisse. `trading_bot/essai57.py` | **Rien ne passe** (`data/essai57.json`). J1a Silver Bullet Nasdaq −0,04 R (1 836 trades, 35 % gagnants, 2014-2019 −0,12, 2020+ +0,03, singes 887) ; J1b or 10-11 −0,22 R et J1c or Londres −0,36 R (0/13 années : stops de quelques dollars, les frais mangent tout) ; J3a Red to Green Nasdaq −0,05 R (1 202, singes 275), J3b S&P −0,14 R. Ces méthodes très suivies ne battent pas le hasard une fois codées. Rien changé. |
 | 2026-10-26 | Choix de Yanisse (carte après l'essai 56, « ombre d'abord ») : chaque entrée de la zone de bruit v2 affiche dans Telegram la taille conseillée par l'essai 56 (×0,5 à ×2 selon l'agitation, soit 2,5 % à 10 % au lieu de 5 %), notée dans le trade (`taille_x`). Information seulement : la copie démo reste à 5 %. GitHub calcule sur les bougies 1 h Yahoo regroupées par jour, le PC sur les bougies jour MT5. `trading_bot/taille.py` | Fait |
+| 2026-10-26 | Pré-enregistrement de l'essai 40 (memecoins, copie des portefeuilles, sortie en 3 lots) | — |
