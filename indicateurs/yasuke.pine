@@ -4,6 +4,7 @@
 //
 // Graphiques conseillés :
 //   Nasdaq (NAS100, NQ1!, US100…) en 5 min  → zone de bruit v2
+//   Nasdaq en graphique jour                → Double 7
 //   Bitcoin (BTCUSD…) en 15 min            → cassure Williams, Donchian 1 h, W3
 //   Or (XAUUSD, GC1!…) en 5 à 60 min        → nuit asiatique
 //@version=5
@@ -129,6 +130,37 @@ pLb = plot(nqOn ? lb : na, "Zone de bruit basse", color.new(color.teal, 0), 1, p
 fill(pUb, pLb, color.new(color.teal, 92), "Zone de bruit")
 plot(nqOn and inRTH ? vw : na, "VWAP du jour", color.new(color.orange, 0), 1, plot.style_linebr)
 plot(nqOn and npos != 0 ? (npos == 1 ? nEntry - nRisk : nEntry + nRisk) : na, "Stop dur", color.new(color.red, 0), 1, plot.style_linebr)
+
+// ───────────────────────── Double 7 (Nasdaq, graphique jour) ─────────────────────────
+// Au-dessus de la moyenne 200 jours, clôture au plus bas des 7 derniers jours = achat à la clôture. Sortie à la
+// première clôture au plus haut des 7 jours, stop 2 ATR jour, 10 jours au plus. Le bot prend la clôture de 16:00
+// New York : sur un CFD, la bougie jour finit à une autre heure, les signaux peuvent donc différer un peu.
+d7On = mod == "nq" and timeframe.isdaily
+s200 = ta.sma(close, 200)
+atrD = ta.sma(ta.tr(true), 14)
+lo7 = ta.lowest(close, 7)
+hi7 = ta.highest(close, 7)
+var int d7pos = 0
+var float d7stop = na
+var int d7bars = 0
+if d7On
+    if d7pos == 1
+        d7bars += 1
+        if low <= d7stop
+            exitLbl("Stop Double 7", true)
+            d7pos := 0
+        else if close >= hi7 or d7bars >= 10
+            exitLbl(d7bars >= 10 and close < hi7 ? "Double 7 : 10 jours" : "Sortie Double 7", true)
+            d7pos := 0
+    else if close > s200 and close <= lo7 and not na(atrD)
+        d7pos := 1
+        d7stop := close - 2 * atrD
+        d7bars := 0
+        buyLbl("Achat Double 7")
+plot(d7On ? s200 : na, "Double 7 : moyenne 200 jours", color.new(color.gray, 0), 2)
+plot(d7On ? lo7 : na, "Double 7 : plus basse clôture 7 j", color.new(color.green, 40), 1, plot.style_stepline)
+plot(d7On ? hi7 : na, "Double 7 : plus haute clôture 7 j", color.new(color.orange, 40), 1, plot.style_stepline)
+plot(d7On and d7pos == 1 ? d7stop : na, "Double 7 : stop", color.new(color.red, 0), 1, plot.style_linebr)
 
 // ───────────────────────── Bitcoin ─────────────────────────
 btcOn = mod == "btc" and timeframe.isintraday and timeframe.in_seconds() <= 3600
@@ -311,6 +343,6 @@ plot(goldOn and gIn ? gStop : na, "Nuit asiatique : stop", color.new(color.red, 
 var label hint = na
 if barstate.islast
     label.delete(hint)
-    msg = mod == "none" ? "Yasuke : choisis la stratégie dans les réglages" : mod == "nq" and not nqOn ? "Zone de bruit : passe en 5 min" : mod == "btc" and showW3 and timeframe.period != "15" ? "W3 : passe en 15 min" : ""
+    msg = mod == "none" ? "Yasuke : choisis la stratégie dans les réglages" : mod == "nq" and not nqOn and not d7On ? "Nasdaq : 5 min (zone de bruit) ou jour (Double 7)" : mod == "btc" and showW3 and timeframe.period != "15" ? "W3 : passe en 15 min" : ""
     if msg != ""
         hint := label.new(bar_index, high, msg, style=label.style_label_left, color=color.new(color.gray, 20), textcolor=color.white, size=size.small)
