@@ -57,7 +57,7 @@ def sig(**kw):
     return s
 
 
-def test_copies_a_fresh_bot_signal_with_its_distances_and_five_percent_risk(tmp_path):
+def test_copies_a_fresh_bot_signal_with_its_distances_and_two_percent_risk(tmp_path):
     mt5 = FakeMT5()
     created = mc._ts("2026-10-14T13:50:00Z")
     c = mc.Copier(mt5, tmp_path, lambda *a, **k: None, lambda: created + 60, get=site([sig()]))
@@ -65,7 +65,7 @@ def test_copies_a_fresh_bot_signal_with_its_distances_and_five_percent_risk(tmp_
     req = mt5.sent[0]
     assert req["symbol"] == "XAUUSD+" and req["type"] == mt5.ORDER_TYPE_SELL
     assert req["sl"] == 4208.0 and req["tp"] == 4192.0              # 8 $ de stop, 8 $ d'objectif autour de 4 200
-    assert req["volume"] == 0.06                                    # 5 % de 1 000 $ / (8 $ × 100) = 0,0625 → 0,06
+    assert req["volume"] == 0.02                                    # 2 % de 1 000 $ / (8 $ × 100) = 0,025 → 0,02
     c.last = 0
     c.step()
     assert len(mt5.sent) == 1                                       # pas de doublon
@@ -94,12 +94,12 @@ def test_shadow_signals_and_real_accounts_are_ignored(tmp_path):
     assert "réel" in c.step() and mt5.sent == []
 
 
-def test_min_lot_exception_for_asian_night():
+def test_min_lot_is_taken_up_to_the_cap():
     from types import SimpleNamespace
     info = SimpleNamespace(trade_contract_size=100.0, volume_step=0.01, volume_min=0.01, volume_max=1.0)
-    assert mc.lot_for(1000, 41.0, info, mc.MIN_LOT_MAX_RISK["nuit_asie"]) == 0.01   # 41 $ : 4,1 %, sous 5 %
-    assert mc.lot_for(1000, 90.0, info) == 0.01                    # lot minimum toléré jusqu'à 2 × 5 % = 10 %
-    assert mc.lot_for(1000, 120.0, info) == 0.0                    # 12 % : pas copié
+    assert mc.lot_for(1000, 90.0, info) == 0.01                    # 9 % du solde : lot minimum toléré (plafond 15 %)
+    assert mc.lot_for(1000, 150.0, info) == 0.01                   # 15 % pile
+    assert mc.lot_for(1000, 200.0, info) == 0.0                    # 20 % : pas copié
 
 
 def test_zero_quote_is_retried_not_sent(tmp_path, monkeypatch):
@@ -126,8 +126,8 @@ def test_floor_of_dollars_per_point():
     assert mc.floor_lot(0.02, 1000, 500.0, nas, None) == 0.02       # pas de plancher (cryptos)
 
 
-def test_asian_night_is_copied_at_least_at_005_lot(tmp_path):
-    """Choix de Yanisse le 16/10 : nuit asiatique au moins 0,05 lot, même si le stop de sécurité (1 %) dépasse 5 %."""
+def test_asian_night_follows_the_same_cap_as_the_others(tmp_path):
+    """26/10 : plus de lot minimum imposé par stratégie ; stop de sécurité 42 $ = 4,2 % de 1 000 $ → 0,01 lot."""
     mt5 = FakeMT5()
     created = mc._ts("2026-10-14T22:00:00Z")
     lab = {"nuit_asie|gold": {"strategy": "nuit_asie", "asset": "gold", "trades": [
@@ -135,7 +135,7 @@ def test_asian_night_is_copied_at_least_at_005_lot(tmp_path):
          "entry_ts": created, "close_at": created + 9 * 3600}]}}
     get = lambda url: lab if "lab_shadow" in url else {"open_signals": []}
     mc.Copier(mt5, tmp_path, lambda *a, **k: None, lambda: created + 60, get=get).step()
-    assert mt5.sent[0]["volume"] == 0.05
+    assert mt5.sent[0]["volume"] == 0.01
 
 
 def test_lab_signal_age_counts_from_the_telegram_announcement(tmp_path):

@@ -24,17 +24,15 @@ from .mt5_local import LocalEngine, same_signal, server_offset
 log = logging.getLogger("mt5_copy")
 
 MAGIC = 200001
-RISK_PCT = 0.05
-# Risque toléré au lot minimum du courtier (part du solde), par stratégie, quand il dépasse 2 fois RISK_PCT :
-# « heures asiatiques » or a un stop de sécurité à 1 % du prix (≈ 41 $ à 0,01 lot), choix de Yanisse le 14/10/2026.
-MIN_LOT_MAX_RISK = {"nuit_asie": 0.05}
-# Lot minimum imposé par stratégie, quel que soit le risque au stop (choix de Yanisse le 16/10/2026 : nuit asiatique
-# au moins 0,05 lot, soit ≈ 5 $ par point et ≈ 210 $ si le stop de sécurité à 1 % est touché).
-MIN_LOT = {"nuit_asie": 0.05}
-# Taille minimale en $ par point de prix (choix de Yanisse le 14/10/2026 : « au moins 0,50 à 1 $ par point ») ;
-# accepté tant que le risque au stop reste sous FLOOR_MAX_RISK du solde, sinon le trade n'est pas copié. Rien pour
-# les cryptos : 1 $ par point y voudrait dire 1 bitcoin entier.
-MIN_POINT_VALUE = {"NAS100": 0.5, "SP500": 1.0, "XAUUSD+": 1.0}
+# 26/10/2026 (choix de Yanisse) : la copie démo répète le futur compte réel de 300 € → 2 % visé par trade ; si le lot
+# minimum du courtier risque plus, il est pris quand même jusqu'à MIN_LOT_CAP du solde (simulation 2016-2025 : 25 trades
+# ratés par an au lieu de 258, pire année 411 $ au lieu de 212 $). Plus de taille minimale par stratégie ni de plancher
+# en $ par point (avant : 5 % de risque, nuit asiatique à 0,05 lot, 0,5-1 $ par point).
+RISK_PCT = 0.02
+MIN_LOT_CAP = 0.15
+MIN_LOT_MAX_RISK: dict[str, float] = {}
+MIN_LOT: dict[str, float] = {}
+MIN_POINT_VALUE: dict[str, float] = {}
 FLOOR_MAX_RISK = 0.10
 MAX_AGE = 15 * 60
 CHASE_MAX = 0.5      # part de la distance du stop déjà parcourue depuis l'annonce au-delà de laquelle on ne copie plus
@@ -109,8 +107,8 @@ def lot_for(balance: float, dist: float, info, min_lot_risk: float | None = None
     raw = balance * RISK_PCT / (dist * contract)
     lot = int(raw / step + 1e-9) * step
     if lot < info.volume_min:
-        # le minimum du courtier risque plus que prévu : toléré jusqu'à 2 fois le risque voulu (ou l'exception)
-        cap = max(2 * RISK_PCT, min_lot_risk or 0.0)
+        # le minimum du courtier risque plus que prévu : toléré jusqu'à MIN_LOT_CAP du solde (ou l'exception)
+        cap = max(MIN_LOT_CAP, min_lot_risk or 0.0)
         return float(info.volume_min) if info.volume_min * dist * contract <= cap * balance else 0.0
     return round(min(lot, float(info.volume_max)), 2)
 

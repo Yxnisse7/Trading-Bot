@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta, timezone
 from types import SimpleNamespace as NS
 
 from trading_bot import demo_rules as dr
@@ -21,3 +22,17 @@ def test_rules_cumulative_loss_streak_and_gap_with_backtest():
     worse = [(i, 1.0 if i % 2 else -4.0) for i in range(40)]          # −1,5 $ par trade ≈ −0,40 R
     assert dr.breach(worse, 180018)                                    # la perte cumulée arrive avant l'écart
     assert "pertes d'affilée" in dr.breach([(i, -5.0) for i in range(6)], 777001)
+
+
+def test_balance_rules_for_the_demo_copy():
+    """26/10 : arrêt du jour à −6 % du solde du matin et arrêt total sous 90 $ (copie démo 200001)."""
+    from types import SimpleNamespace as NS
+    now = datetime(2026, 10, 26, 12, 0, tzinfo=timezone.utc) + timedelta(days=1)
+    today = int(datetime(2026, 10, 26, 10, 0, tzinfo=timezone.utc).timestamp())
+    mt5 = NS(account_info=lambda: NS(balance=190.0))
+    assert dr.balance_breach(mt5, 200001, [(today, -5.0)], now) is None             # −2,6 % : continue
+    assert "perte du jour" in dr.balance_breach(mt5, 200001, [(today, -13.0)], now)   # −6,4 % du solde du matin (203 $)
+    old = int(datetime(2026, 10, 24, 10, 0, tzinfo=timezone.utc).timestamp())
+    assert dr.balance_breach(mt5, 200001, [(old, -50.0)], now) is None              # une perte d'un autre jour ne compte pas
+    assert "solde" in dr.balance_breach(NS(account_info=lambda: NS(balance=85.0)), 200001, [], now)
+    assert dr.balance_breach(mt5, 777002, [(today, -90.0)], now) is None            # règle propre à la copie

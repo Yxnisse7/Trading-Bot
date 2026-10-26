@@ -18,7 +18,10 @@ RULES: dict[int, dict[str, Any]] = {
     777003: {"name": "agent IA (méthode Hugo)", "max_loss": 100.0, "max_streak": None},   # 20/10, démo seulement
     # plus de limite : la copie démo tourne comme le futur compte réel (choix de Yanisse le 22/10, après −389 $ ;
     # 300 $ choisis le 14/10, plus de pertes d'affilée depuis le 20/10)
-    200001: {"name": "copie des signaux du bot", "max_loss": None, "max_streak": None},
+    # 26/10 (choix de Yanisse) : répétition du futur compte réel de 300 € → arrêt du jour à −6 % du solde du matin,
+    # arrêt total sous 90 $ de solde ; pas de limite de trades
+    200001: {"name": "copie des signaux du bot", "max_loss": None, "max_streak": None,
+             "day_loss_pct": 6.0, "min_balance": 90.0},
     300001: {"name": "copie des canaux Telegram", "max_loss": None, "max_streak": None},   # 23/10, démo seulement
 }
 
@@ -63,4 +66,25 @@ def check(mt5, magic: int, lot: float = 0.01, now: datetime | None = None) -> st
     """Lit l'historique du terminal depuis SINCE et renvoie la règle franchie, ou None."""
     now = now or datetime.now(timezone.utc) + timedelta(days=1)    # l'heure du serveur est en avance sur UTC
     deals = mt5.history_deals_get(SINCE, now) or []
-    return breach(closed_trades(deals, magic, getattr(mt5, "DEAL_ENTRY_OUT", 1)), magic, lot)
+    trades = closed_trades(deals, magic, getattr(mt5, "DEAL_ENTRY_OUT", 1))
+    return breach(trades, magic, lot) or balance_breach(mt5, magic, trades, now)
+
+
+def balance_breach(mt5, magic: int, trades: list[tuple[int, float]], now: datetime) -> str | None:
+    """Règles en % du solde : arrêt du jour (jour du serveur Vantage, solde du matin) et solde minimum du compte."""
+    rule = RULES.get(magic) or {}
+    if not rule.get("day_loss_pct") and not rule.get("min_balance"):
+        return None
+    acc = mt5.account_info()
+    if acc is None:
+        return None
+    if rule.get("min_balance") and acc.balance <= rule["min_balance"]:
+        return f"solde {acc.balance:.2f} $ (arrêt sous {rule['min_balance']:.0f} $)"
+    if rule.get("day_loss_pct"):
+        # les heures des deals sont celles du serveur (UTC+3 l'été, +2 l'hiver) ; `now` est déjà décalé d'un jour
+        today = (now - timedelta(days=1) + timedelta(hours=3)).date()
+        pnl = sum(x for t, x in trades if datetime.fromtimestamp(t, timezone.utc).date() == today)
+        start = acc.balance - pnl
+        if start > 0 and pnl <= -rule["day_loss_pct"] / 100 * start:
+            return f"perte du jour {pnl:.2f} $ ({-100 * pnl / start:.1f} % du solde du matin, limite {rule['day_loss_pct']:.0f} %)"
+    return None
