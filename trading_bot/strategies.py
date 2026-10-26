@@ -55,7 +55,8 @@ SHADOW = {("donchian_1h", "bitcoin"): "2026-10-05T19:00:00Z",
           ("noise_area_v2", "nasdaq"): "2026-10-14T08:00:00Z",
           ("swing_w3", "bitcoin"): "2026-10-14T08:00:00Z",
           ("nuit_asie", "gold"): "2026-10-14T12:00:00Z",      # prouvée à l'essai 27
-          ("cassure_williams", "bitcoin"): "2026-10-14T14:00:00Z"}  # prouvée à l'essai 30
+          ("cassure_williams", "bitcoin"): "2026-10-14T14:00:00Z",  # prouvée à l'essai 30
+          ("double7", "nasdaq"): "2026-10-26T12:00:00Z"}      # essai 52 (seule cellule qui passe, de justesse)
 # Envoyées en signaux réels sur Telegram (entrée, stop, sortie), en plus du suivi : (stratégie, actif) → date de début.
 # Le 14/10/2026, choix de Yanisse : les 4 stratégies prouvées à l'essai 24 (2014-2026, tous les contrôles, singes
 # compris). Le bot ne passe aucun ordre.
@@ -66,10 +67,11 @@ LIVE = {("donchian_day", "gold"): "2026-10-08T07:30:00Z",
         ("noise_area_v2", "nasdaq"): "2026-10-14T08:00:00Z",
         ("swing_w3", "bitcoin"): "2026-10-14T08:00:00Z",
         ("nuit_asie", "gold"): "2026-10-14T12:00:00Z",         # choix de Yanisse après l'essai 27
-        ("cassure_williams", "bitcoin"): "2026-10-14T14:00:00Z"}  # choix de Yanisse après l'essai 30
+        ("cassure_williams", "bitcoin"): "2026-10-14T14:00:00Z",  # choix de Yanisse après l'essai 30
+        ("double7", "nasdaq"): "2026-10-26T12:00:00Z"}         # choix de Yanisse après l'essai 52
 # Durée (secondes) entre deux relectures d'une stratégie en signaux réels : 1 h par défaut
 LIVE_SLOT = {"creux_repris_15m": 900, "noise_area": 1800, "noise_area_v2": 1800, "swing_w3": 900, "nuit_asie": 900,
-             "cassure_williams": 900}
+             "cassure_williams": 900, "double7": 900}
 # Fin des signaux réels : plus aucune nouvelle entrée envoyée après cette date, la position déjà annoncée reçoit
 # encore son message de sortie ; le suivi en ombre continue. Donchian or : choix de Yanisse le 13/10/2026 après
 # l'essai 21. Creux repris Nasdaq (S25) : le 14/10/2026, il ne tient pas sur 2014-2026 (essais 23 et 24).
@@ -79,9 +81,12 @@ LIVE_END = {("donchian_day", "gold"): "2026-10-13T19:30:00Z",
             ("creux_repris_15m", "nasdaq"): "2026-10-14T08:00:00Z",
             ("noise_area", "nasdaq"): "2026-10-19T20:20:00Z"}
 # Jours de bougies rechargés pour le suivi, quand il en faut plus que les 8 jours habituels
-LAB_DAYS = {"noise_area": 30, "noise_area_v2": 30, "swing_w3": 45}
+LAB_DAYS = {"noise_area": 30, "noise_area_v2": 30, "swing_w3": 45, "double7": 300}
+# Stratégies jour (moyenne 200 jours) : sur GitHub, bougies 1 h Yahoo sur 2 ans au lieu des bougies 5 min (60 jours max)
+DAILY_1H = {"double7"}
 # Positions gardées la nuit (pas de sortie forcée en fin de séance) : durée maximale en secondes, None si aucune
-OVERNIGHT = {"donchian_1h": None, "swing_w3": 5 * 86400, "nuit_asie": 9 * 3600, "cassure_williams": 86400}
+OVERNIGHT = {"donchian_1h": None, "swing_w3": 5 * 86400, "nuit_asie": 9 * 3600, "cassure_williams": 86400,
+             "double7": 15 * 86400}
 MIN_TRADES = {"news_breakout": 20}
 
 
@@ -661,6 +666,13 @@ def creux_repris_15m(candles: list[Candle], asset: str) -> list[Trade]:
     return essai15.setup_trades("S25", asset, essai15.Ctx(candles))
 
 
+def double7(candles: list[Candle], asset: str) -> list[Trade]:
+    """Essai 52, R3 « Double 7 » : au-dessus de la moyenne 200 jours, plus basse clôture de 7 jours → achat à la
+    clôture (16:00 New York), sortie à la plus haute clôture de 7 jours, stop 2 ATR jour, 10 jours au plus."""
+    from . import essai52
+    return essai52.double7(candles, asset)
+
+
 def swing_w3(candles: list[Candle], asset: str) -> list[Trade]:
     """Essai 16, W3 : repli du RSI 15 min dans la tendance jour et 1 h, stop suiveur sous les creux 1 h."""
     from . import essai16
@@ -669,7 +681,7 @@ def swing_w3(candles: list[Candle], asset: str) -> list[Trade]:
 
 RUNNERS_1H = {"donchian_1h": donchian_1h, "rsi2_1h": rsi2_1h, "pre_fomc": pre_fomc, "donchian_day": donchian_day,
               "donchian_15m_day": donchian_15m_day, "donchian_30m_day": donchian_30m_day, "creux_repris_15m": creux_repris_15m,
-              "swing_w3": swing_w3}
+              "swing_w3": swing_w3, "double7": double7}
 
 
 def run_all(asset: str, candles: list[Candle], only: list[str] | None = None) -> list[Trade]:

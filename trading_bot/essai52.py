@@ -16,6 +16,7 @@ bougies 5 min, nuit comprise), 10 jours au plus.
 from __future__ import annotations
 
 import json
+from dataclasses import replace
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
@@ -39,8 +40,12 @@ def day_key(ts: int, asset: str):
     return d.date() if 570 <= m < 960 else None
 
 
-def daily(c, asset):
+def daily(c, asset, min_bars: int = 30, complete: bool = False):
+    """Bougies du jour ; complete=True (signaux réels) : seulement les jours dont la dernière bougie finit à 16:00
+    New York (indices), pour ne jamais décider sur une clôture du jour pas encore arrivée."""
     out = []
+    sec = c[1].ts - c[0].ts if len(c) > 1 else 300
+    sec = min(sec, 3600)
     for k, x in enumerate(c):
         key = day_key(x.ts, asset)
         if key is None:
@@ -50,7 +55,10 @@ def daily(c, asset):
             r[2], r[3], r[4], r[6] = max(r[2], x.high), min(r[3], x.low), x.close, k
         else:
             out.append([key, x.open, x.high, x.low, x.close, k, k])
-    return [r for r in out if r[6] - r[5] >= 30]
+    out = [r for r in out if r[6] - r[5] + 1 >= min_bars]
+    if complete and asset in ("nasdaq", "sp500"):
+        out = [r for r in out if datetime.fromtimestamp(c[r[6]].ts + sec, sl.NY).strftime("%H:%M") == "16:00"]
+    return out
 
 
 def rsi2(cl):
@@ -68,8 +76,11 @@ def rsi2(cl):
     return out
 
 
-def daily_trades(c, asset, rule):
-    D = daily(c, asset)
+def daily_trades(c, asset, rule, live: bool = False):
+    sec = 300
+    if live:
+        sec = min(int(np.median([b.ts - a.ts for a, b in zip(c[-50:], c[-49:])])), 3600) if len(c) > 50 else 300
+    D = daily(c, asset, 30 if sec == 300 else 5, complete=live)
     cl = np.array([r[4] for r in D])
     hi, lo = np.array([r[2] for r in D]), np.array([r[3] for r in D])
     n = len(D)
@@ -107,10 +118,23 @@ def daily_trades(c, asset, rule):
                 px, why, j_end, kx = cl[j], "règle" if done else "durée", j, D[j][6]
                 break
         if px is None:
+            if live:                                     # position encore ouverte : stop vérifié jusqu'à maintenant
+                hit = next((k for k in range(D[-1][6] + 1, len(c)) if c[k].low <= stop), None)
+                if hit is not None:
+                    out.append(sl.Trade(rule, asset, "long", c[k0].ts + sec, c[hit].ts + sec, entry,
+                                        min(stop, c[hit].open), risk, "stop"))
+                else:
+                    out.append(sl.Trade(rule, asset, "long", c[k0].ts + sec, c[-1].ts + sec, entry, c[-1].close,
+                                        risk, "fin des données"))
             break
-        out.append(sl.Trade(rule, asset, "long", c[k0].ts + 300, c[kx].ts + 300, entry, px, risk, why))
+        out.append(sl.Trade(rule, asset, "long", c[k0].ts + sec, c[kx].ts + sec, entry, px, risk, why))
         i = j_end + 1
     return out
+
+
+def double7(candles, asset):
+    """R3 « Double 7 » en signaux réels (choix de Yanisse le 26/10/2026), sur bougies 5 min (PC) ou 1 h (GitHub)."""
+    return [replace(t, strategy="double7") for t in daily_trades(candles, asset, "R3", live=True)]
 
 
 def vwap_fade(c, asset):

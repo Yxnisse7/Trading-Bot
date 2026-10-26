@@ -41,6 +41,7 @@ EXITS = {"noise_area": "quand le prix revient dans la zone (contrôlé chaque de
          "nuit_asie": "vente à 03:00 New York, ou au SL de sécurité (1 % sous l'entrée)",
          "cassure_williams": "vente à 02:00 Paris (00:00 UTC), ou au SL (ouverture du jour)",
          "creux_repris_15m": "objectif, SL, ou au bout de 4 h",
+         "double7": "vente à la 1re clôture au plus haut des 7 jours, au SL, ou au bout de 10 jours",
          "bot": "au TP, au SL, ou au bout de 24 h"}
 
 

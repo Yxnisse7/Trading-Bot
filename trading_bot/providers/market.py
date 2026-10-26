@@ -48,6 +48,11 @@ def fetch_candles_5m(asset: AssetConfig, days: int = 5) -> list[Candle]:
     raise ProviderError(f"{asset.key}: " + " | ".join(errors))
 
 
+def fetch_candles_1h_long(asset: AssetConfig) -> list[Candle]:
+    """Bougies 1 heure sur 2 ans (stratégies jour avec moyenne 200 jours, essai 52)."""
+    return yahoo.fetch_candles(asset.yahoo_symbol, "1h", "2y")
+
+
 def fetch_candles_1m(asset: AssetConfig) -> list[Candle]:
     """Bougies 1 minute récentes (pour vérifier finement les touches TP/SL)."""
     errors = []

@@ -299,7 +299,7 @@
 
   // stratégies du labo passées en signaux réels (essais 24 à 30) : résultat depuis leur départ et position ouverte
   const LIVE_NAMES = { noise_area: "Zone de bruit", noise_area_v2: "Zone de bruit v2", donchian_1h: "Donchian 1 h", swing_w3: "Repli W3",
-    nuit_asie: "Nuit asiatique", cassure_williams: "Cassure Williams", creux_repris_15m: "Creux repris", donchian_day: "Donchian jour" };
+    nuit_asie: "Nuit asiatique", cassure_williams: "Cassure Williams", creux_repris_15m: "Creux repris", donchian_day: "Donchian jour", double7: "Double 7" };
   function renderLive() {
     const lab = (k) => (data.assets.find((a) => a.key === k) || {}).label || k;
     const rows = Object.values(data.lab_shadow || {}).filter((v) => v.live);

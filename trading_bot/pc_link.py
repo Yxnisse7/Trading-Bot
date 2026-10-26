@@ -27,7 +27,8 @@ KEEP = 2 * 86400     # s : durée de vie des clés annoncées dans la variable
 
 LABELS = {"creux_repris_15m": "Creux repris", "noise_area": "Zone de bruit", "noise_area_v2": "Zone de bruit v2",
           "swing_w3": "Swing W3", "nuit_asie": "Nuit asiatique", "donchian_1h": "Donchian 1 h",
-          "cassure_williams": "Cassure Williams", "donchian_day": "Donchian or", "bot": "Bot classique"}
+          "cassure_williams": "Cassure Williams", "donchian_day": "Donchian or", "bot": "Bot classique",
+          "double7": "Double 7"}
 
 
 def encode(ts: float, sent: list[dict[str, Any]], ok: Any = ()) -> str:

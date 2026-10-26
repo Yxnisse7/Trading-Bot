@@ -28,7 +28,7 @@ N_SPARK = 40
 N_MONKEYS = 500         # singes pour l'éventail (essai 21 : 1 000 pour le verdict)
 NAMES = {"bot": "Bot classique", "noise_area": "Zone de bruit", "noise_area_v2": "Zone de bruit v2", "donchian_1h": "Donchian 1 h",
          "swing_w3": "Repli W3", "cassure_williams": "Cassure Williams", "nuit_asie": "Nuit asiatique", "creux_repris_15m": "Creux repris",
-         "donchian_day": "Donchian jour"}
+         "donchian_day": "Donchian jour", "double7": "Double 7"}
 ASSET_NAMES = {"gold": "Or", "nasdaq": "Nasdaq 100", "sp500": "S&P 500", "bitcoin": "Bitcoin", "ethereum": "Ethereum",
                "oil": "Pétrole", "euro": "Euro / dollar", "dax": "DAX"}
 LIVE = [("noise_area", "nasdaq", "prouvée à l'essai 24, en réel depuis le 14/10"),

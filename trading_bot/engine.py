@@ -55,6 +55,7 @@ LIVE_SUMMARY = {
     "donchian_1h": ("Donchian 1 h", "cassure du canal des 10 dernières heures ou SL"),
     "cassure_williams": ("Cassure Williams", "vente à 00:00 UTC ou au SL"),
     "donchian_day": ("Donchian or", "cassure du canal ou fin de séance"),
+    "double7": ("Double 7", "plus haute clôture de 7 jours, au SL, ou au bout de 10 jours"),
 }
 
 
@@ -1410,14 +1411,17 @@ class Engine:
                 continue
             asset = self.cfg.assets[key]
             try:
-                raw = market.fetch_candles_5m(asset, days=sl.LAB_DAYS.get(strat, self.LAB_DAYS))
+                if strat in sl.DAILY_1H:
+                    raw = market.fetch_candles_1h_long(asset)
+                else:
+                    raw = market.fetch_candles_5m(asset, days=sl.LAB_DAYS.get(strat, self.LAB_DAYS))
             except ProviderError as exc:
                 log.info("laboratoire en ombre %s : données indisponibles (%s)", name, exc)
                 continue
-            candles = ind.closed_candles(raw, int(now.timestamp()), 300)
+            candles = ind.closed_candles(raw, int(now.timestamp()), 3600 if strat in sl.DAILY_1H else 300)
             # signal réel : on revient à chaque passage (5 min) tant que la bougie 1 h close n'est pas arrivée
             # (données Yahoo des contrats CME en retard d'environ 10 min), 40 min au plus
-            hour_seen = bool(candles) and candles[-1].ts >= int(hour.timestamp())
+            hour_seen = strat in sl.DAILY_1H or bool(candles) and candles[-1].ts >= int(hour.timestamp())
             if live_since and not hour_seen and now - hour < timedelta(minutes=40):
                 continue
             runner = sl.RUNNERS_1H.get(strat) or sl.RUNNERS_5M.get(strat)
@@ -1561,6 +1565,11 @@ class Engine:
                     exit_txt = (f"vente à {midnight.astimezone(tz).strftime('%H:%M')} (00:00 UTC), "
                                 "ou au SL (ouverture du jour)")
                     note = "Cassure Larry Williams Bitcoin, prouvée sur 2017-2026 (essai 30), mais 2022 et 2025 négatives."
+                elif strat == "double7":
+                    why = "plus basse clôture des 7 derniers jours, au-dessus de la moyenne 200 jours"
+                    exit_txt = "vente à la 1re clôture (16:00 New York) au plus haut des 7 jours, au SL, ou au bout de 10 jours"
+                    note = ("Double 7 Nasdaq (essai 52) : 65 % de gagnants sur 2014-2026, environ 1 trade par mois, "
+                            "gardé plusieurs jours. Seule réussite sur 18 essais : à confirmer en direct.")
                 elif strat == "donchian_1h":
                     why = f"cassure du canal des 10 dernières heures (bougie 1 h de {hh})"
                     exit_txt = "cassure du canal dans l'autre sens, ou au SL"
