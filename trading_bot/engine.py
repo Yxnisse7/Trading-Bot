@@ -1630,6 +1630,13 @@ class Engine:
                     notify("\n".join(lines), html=True, key=f"lab-{strat}-{t['entry_ts']}",
                            buttons=msg.site_buttons(self.cfg.site_url, asset.key), avis=avis)
                 t["notified_entry"] = iso(now)
+            tag = "v2" if name.startswith("noise_area_v2") else ""
+            if t["status"] != "closed" and t.get("notified_entry") and not t.get("pc_absent") and t.get("micros") \
+                    and asset.key in PRODUCTS:
+                # trade ouvert : visible dans « trades ouverts » du compte Topstep dès l'entrée (26/10/2026)
+                acct.set_open(asset.key, t["direction"], t["entry"], t["stop"], None, int(t["micros"]), opened,
+                              datetime.fromtimestamp(t["close_at"], timezone.utc) if t.get("close_at") else None,
+                              note=f"signal réel {name}", tag=tag)
             if t["status"] == "closed" and not t.get("notified_exit") and t.get("pc_absent"):
                 t["notified_exit"] = iso(now)
             if t["status"] == "closed" and not t.get("notified_exit"):
@@ -1673,6 +1680,7 @@ class Engine:
                                      tag="v2" if strat == "noise_area_v2" else "")
                 except ValueError as exc:
                     log.info("journal Topstep : %s", exc)
+                acct.drop_open(asset.key, opened, "v2" if strat == "noise_area_v2" else "")
 
 
     def _lab_portfolio(self, name: str, asset, t: dict[str, Any], opened: datetime,

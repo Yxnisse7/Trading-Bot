@@ -116,6 +116,11 @@ class TopstepAccount:
                 self.state.setdefault("removed", []).append(key)
                 self.save()
                 return key
+        for o in list(self.state.get("open_lab", [])):
+            if o["id"].startswith(ref):
+                self.state["open_lab"].remove(o)
+                self.save()
+                return o["id"]
         for j in journal:
             if j["id"].startswith(ref):
                 journal.remove(j)
@@ -171,12 +176,38 @@ class TopstepAccount:
             raise ValueError("sens attendu : long ou short")
         if not 1 <= contracts <= RULES["max_micros"]:
             raise ValueError(f"nombre de micros entre 1 et {RULES['max_micros']}")
-        row = {"id": "j" + opened_at.strftime("%m%d%H%M") + asset[:3] + tag, "asset": asset, "direction": direction,
+        row = {"id": self.journal_id(asset, opened_at, tag), "asset": asset, "direction": direction,
                "entry": float(entry), "exit": float(exit_), "contracts": int(contracts),
                "opened_at": iso(opened_at), "closed_at": iso(closed_at or opened_at), "note": note[:120]}
         self.state.setdefault("journal", []).append(row)
         self.save()
         return row
+
+    @staticmethod
+    def journal_id(asset: str, opened_at: datetime, tag: str = "") -> str:
+        return "j" + opened_at.strftime("%m%d%H%M") + asset[:3] + tag
+
+    def set_open(self, asset: str, direction: str, entry: float, stop: float, target: float | None, contracts: int,
+                 opened_at: datetime, expires_at: datetime | None = None, note: str = "", tag: str = "") -> None:
+        """Trade d'une stratégie en réel encore ouvert : il apparaît dans « trades ouverts » dès l'entrée (26/10/2026) ;
+        à la sortie, `add_journal` écrit la même ligne (même identifiant) et `drop_open` retire celle-ci."""
+        if asset not in PRODUCTS:
+            return
+        rid = self.journal_id(asset, opened_at, tag)
+        row = {"id": rid, "asset": asset, "direction": direction, "entry": float(entry), "stop": float(stop),
+               "target": None if target is None else float(target), "contracts": int(contracts),
+               "opened_at": iso(opened_at), "expires_at": iso(expires_at) if expires_at else None, "note": note[:120]}
+        rows = self.state.setdefault("open_lab", [])
+        if row not in rows:
+            rows[:] = [r for r in rows if r["id"] != rid] + [row]
+            self.save()
+
+    def drop_open(self, asset: str, opened_at: datetime, tag: str = "") -> None:
+        rid = self.journal_id(asset, opened_at, tag)
+        rows = self.state.get("open_lab", [])
+        if any(r["id"] == rid for r in rows):
+            self.state["open_lab"] = [r for r in rows if r["id"] != rid]
+            self.save()
 
     def set_risk(self, pct: float) -> None:
         if not 0.1 <= pct <= 10:
@@ -290,6 +321,21 @@ class TopstepAccount:
                 continue
             rows.append(self._row(s.id, s.asset, s.asset_label, symbol, mult, s.direction, s.entry, exit_price, n,
                                   s.created_at, closed_at, status, origin))
+        done = {r["id"] for r in rows}
+        for o in self.state.get("open_lab", []):
+            if o["id"] in done or (since is not None and parse_iso(o["opened_at"]) < since):
+                continue
+            symbol, mult = PRODUCTS[o["asset"]]
+            asset = cfg.assets.get(o["asset"])
+            open_rows.append({"id": o["id"], "asset": o["asset"], "asset_label": asset.label if asset else o["asset"],
+                              "symbol": symbol, "direction": o["direction"], "entry": o["entry"],
+                              "take_profit": o["target"], "stop_loss": o["stop"], "contracts": o["contracts"],
+                              "multiplier": mult, "origin": "stratégie", "opened_at": o["opened_at"],
+                              "expires_at": o["expires_at"],
+                              "risk": round(abs(o["entry"] - o["stop"]) * mult * o["contracts"], 2),
+                              "notional": round(o["entry"] * mult * o["contracts"], 2),
+                              "cost_pct": 0.0,
+                              "fee_per_order": round(sum(FEES.get(o["asset"], (0.0, 0.0))) * o["contracts"] / 2, 2)})
         rows.sort(key=lambda r: r["closed_at"])
         data = self._apply_rules(rows, open_rows, now)
         data["daily_target"] = self.daily_target()

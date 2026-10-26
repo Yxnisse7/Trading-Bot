@@ -244,3 +244,22 @@ def test_bot_trade_still_open_at_15h10_chicago_is_closed_like_topstep(tmp_path):
     # sans prix (ou trade fini avant 15:10), rien ne change
     early = _sig("e", when=T0)
     assert acct.compute([early], cfg, mirror_ids={"e"}, price_at=price)["trades"][0]["status"] == "tp"
+
+
+def test_strategy_trade_is_open_in_topstep_from_its_entry(tmp_path):
+    """26/10 : un trade de stratégie en réel apparaît dans « trades ouverts » dès l'entrée, puis devient une ligne du
+    journal (même identifiant) à la sortie."""
+    cfg = Config(assets=default_assets())
+    acct = _acct(tmp_path)
+    acct.reset(None, T0 - timedelta(hours=1))
+    acct.set_open("nasdaq", "long", 29000.0, 28900.0, None, 3, T0, T0 + timedelta(hours=6), tag="v2")
+    acct.set_open("nasdaq", "long", 29000.0, 28900.0, None, 3, T0, T0 + timedelta(hours=6), tag="v2")   # idempotent
+    d = acct.compute([], cfg, now=T0 + timedelta(minutes=30))
+    assert [o["id"] for o in d["open"]] == ["j09221400nasv2"] and d["open"][0]["contracts"] == 3
+    assert d["open"][0]["risk"] == 600.0 and d["trades"] == []
+    acct.add_journal("nasdaq", "long", 29000.0, 29050.0, 3, T0, T0 + timedelta(hours=2), tag="v2")
+    acct.drop_open("nasdaq", T0, "v2")
+    d = acct.compute([], cfg, now=T0 + timedelta(hours=3))
+    assert d["open"] == [] and [t["id"] for t in d["trades"]] == ["j09221400nasv2"]
+    acct.set_open("nasdaq", "short", 29000.0, 29100.0, None, 1, T0 + timedelta(hours=4))
+    assert acct.remove("j09221800nas") == "j09221800nas"                  # « Retirer » fonctionne aussi
