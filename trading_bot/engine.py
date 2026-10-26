@@ -30,6 +30,7 @@ from .report import build_dashboard, build_report
 from .signals import build_signal, round_to_tick
 from . import bot_model
 from . import pc_link
+from . import taille
 from .storage import Store
 from .summary import daily_summary
 from .tracker import update_signal
@@ -1492,6 +1493,25 @@ class Engine:
                 for k in [k for k, t in kept.items() if k > ts and not t.get("notified_entry")]:
                     del kept[k]
 
+    def _taille(self, asset, opened: datetime) -> float | None:
+        """Taille conseillée de l'essai 56 (information), sur les bougies 1 h Yahoo (2 ans) regroupées par jour de
+        New York, jours d'avant celui du trade."""
+        try:
+            rows = market.fetch_candles_1h_long(asset)
+        except (ProviderError, ValueError):
+            return None
+        ny = ZoneInfo("America/New_York")
+        day = opened.astimezone(ny).date()
+        days: dict[Any, list[float]] = {}
+        for c in rows:
+            d = datetime.fromtimestamp(c.ts, ny).date()
+            if d >= day:
+                continue
+            r = days.get(d)
+            days[d] = [c.high, c.low, c.close] if r is None else [max(r[0], c.high), min(r[1], c.low), c.close]
+        k = taille.factor([days[d] for d in sorted(days)])
+        return None if k is None else round(k, 2)
+
     def _live_signals(self, name: str, asset, trades: list[dict[str, Any]], since: datetime, now: datetime,
                       until: datetime | None = None) -> None:
         """Stratégie passée en signaux réels (strategies.LIVE) : message Telegram à l'entrée (avec les micros
@@ -1595,6 +1615,10 @@ class Engine:
                 cur = self.portfolio.data.get("currency", self.cfg.portfolio_currency)
                 if sizing:
                     lines.append(msg.sizing_line(sizing, cur))
+                if strat in taille.STRATS:
+                    t["taille_x"] = self._taille(asset, opened)
+                    if taille.line(t["taille_x"]):
+                        lines.append(taille.line(t["taille_x"]))
                 lines.append("MT5 démo : copié tout seul par le pont du PC"
                              + (" (au moins 0,05 lot)" if strat == "nuit_asie" else " (5 % du solde au SL)"))
                 lines.append(f"<i>{msg.esc(note)} Le bot ne passe aucun ordre réel.</i>")

@@ -24,6 +24,7 @@ from typing import Any, Callable
 
 from . import messages as msg
 from . import pc_link
+from . import taille
 from .mt5_local import server_offset
 from .notify import _telegram, chat_key, telegram_chat_ids
 
@@ -145,6 +146,7 @@ class Relay:
                  f"Sortie : {EXITS.get(strat, 'selon la règle de la stratégie')}.",
                  "",
                  f"MT5 démo : {msg.esc(copy)}",
+                 *([taille.line(k)] if (k := self._taille(strat, sym, s)) is not None else []),
                  "Topstep et Simulation : calculés par le bot en ligne (voir le site).",
                  "<i>Annoncé par ton PC, prix MetaTrader 5. Le bot ne passe aucun ordre réel.</i>"]
         ids = self._post("\n".join(lines))
@@ -252,6 +254,15 @@ class Relay:
             self.running.append((proc, self.clock(), key))
         except Exception:                             # l'avis ne doit jamais gêner le pont
             log.exception("agent IA (%s)", key)
+
+    def _taille(self, strat: str, sym: str, s: dict[str, Any]) -> float | None:
+        """Taille conseillée de l'essai 56 (information), sur les bougies jour MT5 d'avant le jour du signal."""
+        if strat not in taille.STRATS:
+            return None
+        created = s.get("created") or self.clock()
+        rows = self._candles(sym, "TIMEFRAME_D1", 300, int(created))[:-1]     # sans le jour en cours
+        k = taille.factor([(r[2], r[3], r[4]) for r in rows])
+        return None if k is None else round(k, 2)
 
     def _chat_ids(self, ids: dict[str, int]) -> dict[str, int]:
         """Numéros des messages par chat, pour l'agent (ce fichier reste sur le PC)."""
