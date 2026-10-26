@@ -57,7 +57,7 @@ def prep(src: Path) -> None:
         where t.price_sol > 0 and t.v_sol_bonding_curve > 0 and t.v_tokens_bonding_curve > 0
           and t.seconds_since_launch <= 4500
         order by k.id, ts""").fetchnumpy()
-    tok = con.sql("select id, launch, grad, clean, supply from tok order by id").fetchnumpy()
+    tok = con.sql("select id, mint, launch, grad, clean, supply from tok order by id").fetchnumpy()
     ids = tr["id"].astype(np.int64)
     present = np.unique(ids)
     start = np.searchsorted(ids, present)
@@ -65,7 +65,7 @@ def prep(src: Path) -> None:
     np.savez(PF_DIR / "early.npz", ts=tr["ts"], p=tr["p"], vs=tr["vs"], vt=tr["vt"],
              start=np.append(start, len(ids)), keep=np.ones(len(present), bool),
              launch=tok["launch"][present], grad=tok["grad"][present],
-             clean=tok["clean"][present], supply=tok["supply"][present])
+             clean=tok["clean"][present], supply=tok["supply"][present], mints=tok["mint"][present].astype(str))
 
 
 def buy_tokens(p: float, vs: float) -> float:
