@@ -343,7 +343,7 @@ class Hunter:
                  msg.esc(str(a.get("raison", ""))),
                  *(["", "📊 " + msg.esc(hit_table.text(t["passe"]))] if t.get("passe") else []),
                  "",
-                 f"MT5 démo : {msg.num(t['lot'], 2)} lot (1 % du solde au SL), sortie au SL, au TP ou au bout de {self.MAX_HOLD // 3600} h.",
+                 f"MT5 démo : {msg.num(t['lot'], 2)} lot (risque ≈ {msg.num(t.get('risk_usd', 0), 1)} $ au SL), sortie au SL, au TP ou au bout de {self.MAX_HOLD // 3600} h.",
                  "<i>Décidé par l'agent IA sur ton PC. Démo seulement, aucun ordre réel.</i>"]
         return self.relay._post("\n".join(lines))
 
