@@ -59,7 +59,13 @@ ENTRY = re.compile(r"entr[ée]e\s*:?\s*" + NUM + r"(?:\s*[-–/à]\s*" + NUM + "
 STOP = re.compile(r"(?:stop\s*loss|\bsl)\s*:?\s*" + NUM, re.I)
 TARGET = re.compile(r"(?:take\s*profit|\btp)\s*\d?\s*:?\s*" + NUM, re.I)
 SECURE = re.compile(r"s[ée]curis|break\s*even|\bBE\b", re.I)
-CLOSE = re.compile(r"cl[oô]tur|fermez|\bclose\b", re.I)
+# Fermetures (choix de Yanisse le 26/10/2026, après lecture de 48 messages du canal) : « Close now », « on clôture
+# (toute) la position », « fermer la position » ou un message qui commence par « Clôture » ferment tout ;
+# « Clôture partielle » ferme un seul ordre (celui du TP le plus proche) ; les témoignages (« belle clôture »,
+# « j'ai clôturé mon … », « les clôtures ») ne déclenchent rien.
+PARTIAL = re.compile(r"cl[oô]ture\s+partielle|cl[oô]tur\w*\s+(?:encore\s+)?une\s+partie", re.I)
+CLOSE = re.compile(r"\bclose\s+now\b|cl[oô]tur\w*\s+(?:toute\s+)?(?:la|ma|les|vos|toute)\s+positions?|"
+                   r"ferme[rz]?\s+(?:toute\s+)?(?:la|les|vos|ta|ma)\s+positions?|^\W*cl[oô]ture\b", re.I | re.M)
 DEFAULTS = {"command": r"E:\TradingBot\venv\Scripts\python.exe -m trading_bot.tg_parse",
             "listen": r"E:\TradingBot\venv\Scripts\python.exe -m trading_bot.tg_listen run",
             "dir": r"E:\TradingBot\bot", "agent_dir": r"E:\TradingBot\agent\agent", "session_dir": str(SESSION_DIR)}
@@ -79,13 +85,16 @@ def parse(text: str, reply_to: int | None, opened: list[dict[str, Any]]) -> dict
                 "vente", "entree": zone[0] if len(zone) == 1 else None, "zone": zone if len(zone) == 2 else None,
                 "stop": _num(stop.group(1)), "objectifs": [_num(x) for x in TARGET.findall(text)], "signal": None,
                 "raison": "format BENAGOLD"}
-    kind = "stop" if SECURE.search(text) else "fermer" if CLOSE.search(text) else None
+    partial = bool(PARTIAL.search(text))
+    kind = "stop" if SECURE.search(text) else "fermer" if partial or CLOSE.search(text) else None
     if kind is None or not opened:
         return None
     target = next((o for o in opened if o["msg_id"] == reply_to), None) or opened[-1]
     return {"type": kind, "marche": None, "sens": None, "entree": None,
             "stop": target["entree"] if kind == "stop" else None, "objectifs": [], "signal": target["id"],
-            "raison": "sécurisez : stop au prix d'entrée" if kind == "stop" else "fermeture demandée"}
+            "partiel": partial and kind == "fermer",
+            "raison": "sécurisez : stop au prix d'entrée" if kind == "stop" else
+            "clôture partielle" if partial else "fermeture demandée"}
 
 
 class TgCopier:
@@ -244,7 +253,7 @@ class TgCopier:
             elif d.get("type") == "stop":
                 self._move(d, data)
             elif d.get("type") == "fermer":
-                self._close_signal(d["signal"], "demandé par le canal")
+                self._close_signal(d["signal"], "demandé par le canal", partial=bool(d.get("partiel")))
         except (KeyError, TypeError, ValueError) as exc:
             log.warning("copie Telegram : action impossible (%s)", exc)
 
@@ -415,12 +424,16 @@ class TgCopier:
         self._post(f"📡 Stop déplacé à {msg.code_price(new, s['digits'])}{' (BE)' if be else ''}, demandé par le canal.",
                    reply=s["msg"])
 
-    def _close_signal(self, sid: str, why: str) -> None:
+    def _close_signal(self, sid: str, why: str, partial: bool = False) -> None:
         s = self.state["signals"].get(sid)
         if not s:
             return
         pos, orders = self._live(s)
         m = self.mt5
+        if partial:                       # un seul ordre : celui dont le TP est le plus proche de l'entrée
+            near = lambda x: abs((getattr(x, "tp", 0.0) or 1e12) - s["entry"])  # noqa: E731
+            first = min(pos + orders, key=near, default=None)
+            pos, orders = ([first], []) if first in pos else ([], [first] if first is not None else [])
         for o in orders:
             m.order_send({"action": m.TRADE_ACTION_REMOVE, "order": o.ticket})
         tick = m.symbol_info_tick(s["sym"])
@@ -431,7 +444,8 @@ class TgCopier:
                           "price": tick.bid if long else tick.ask, "deviation": 30, "magic": MAGIC,
                           "comment": "tg fin", "type_time": m.ORDER_TIME_GTC,
                           "type_filling": self._filling(m.symbol_info(s["sym"]))})
-        s["why"] = why
+        if not partial:
+            s["why"] = why
 
     # ------------------------------------------------------------------ suivi
     def _follow(self, sid: str) -> None:

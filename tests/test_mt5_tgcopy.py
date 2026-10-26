@@ -237,3 +237,28 @@ def test_fixed_lot_per_target(tmp_path):
     post(tmp_path, 60, BENA, now[0])
     c.step()
     assert [r["volume"] for r in mt5.sent] == [0.2, 0.2, 0.2] and "3 × 0,20 lot" in sent[-1][0]
+
+
+def test_benagold_close_messages(tmp_path):
+    """26/10 : « Clôture partielle » ferme un seul ordre, « Close now » le reste, les témoignages rien."""
+    now = [T0]
+    c, mt5, sent = make(tmp_path, [], now, claude=False)
+    mt5.bid = 4030.0
+    post(tmp_path, 40, BENA, now[0])
+    c.step()
+    tickets = c.state["signals"]["100123-40"]["tickets"]
+    mt5.positions = [NS(magic=tc.MAGIC, ticket=t, type=1, volume=0.02, tp=tp)
+                     for t, tp in zip(tickets, (4019.0, 4007.0, 3989.0))]
+    n = len(mt5.sent)
+    post(tmp_path, 41, "Belle cloture 🙂 je te suis", now[0])
+    c.step()
+    assert len(mt5.sent) == n
+    post(tmp_path, 42, "Clôture partielle !", now[0])
+    c.step()
+    closes = [r for r in mt5.sent[n:] if r["action"] == mt5.TRADE_ACTION_DEAL]
+    assert [r["position"] for r in closes] == [tickets[0]]
+    mt5.positions = mt5.positions[1:]
+    post(tmp_path, 43, "Close now", now[0])
+    c.step()
+    closes = [r for r in mt5.sent[n:] if r["action"] == mt5.TRADE_ACTION_DEAL]
+    assert [r["position"] for r in closes] == [tickets[0], tickets[1], tickets[2]]
