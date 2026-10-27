@@ -253,6 +253,41 @@ def telegram_updates(offset: int | None = None) -> list[dict]:
     return out
 
 
+# Menu qui s'affiche quand on tape « / » dans Telegram (setMyCommands) ; noms en minuscules sans accent.
+COMMAND_MENU = [
+    ("status", "Signaux ouverts : entrée, objectif, stop"),
+    ("resume", "Bilan de la dernière journée"),
+    ("balance", "État de la simulation (sans montant !)"),
+    ("propose", "Analyser un actif maintenant : /propose btc"),
+    ("long", "Signal manuel à l'achat : /long nasdaq"),
+    ("short", "Signal manuel à la vente : /short eth"),
+    ("stop", "Arrêter un trade ouvert au prix du moment"),
+    ("hugo", "Agent IA : méthode Hugo sur le Nasdaq (PC allumé)"),
+    ("avis", "Poser une question à l'agent IA (PC allumé)"),
+    ("topstep", "État du compte Topstep 50K"),
+    ("pris", "Ajouter un signal au compte Topstep"),
+    ("sortie", "Je suis sorti d'un trade sur Topstep"),
+    ("retirer", "Retirer un trade du compte Topstep"),
+    ("journal", "Noter un trade fait hors du bot"),
+    ("help", "Guide de toutes les commandes"),
+]
+
+
+def telegram_set_menu() -> bool:
+    """Publie le menu des commandes (liste qui apparaît avec « / »). Faux sans jeton ou si Telegram refuse."""
+    token = os.environ.get("TELEGRAM_BOT_TOKEN")
+    if not token:
+        return False
+    cmds = [{"command": c, "description": d} for c, d in COMMAND_MENU]
+    try:
+        r = requests.post(f"https://api.telegram.org/bot{token}/setMyCommands", json={"commands": cmds}, timeout=15)
+        r.raise_for_status()
+        return bool(r.json().get("ok"))
+    except (requests.RequestException, ValueError) as exc:
+        log.warning("Telegram : menu des commandes impossible (%s)", exc)
+        return False
+
+
 def telegram_chat_id() -> str | None:
     ids = telegram_chat_ids()
     return ids[0] if ids else None

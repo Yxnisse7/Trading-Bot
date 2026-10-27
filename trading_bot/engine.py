@@ -2,6 +2,8 @@
 from __future__ import annotations
 
 import copy
+import hashlib
+import json
 import os
 import re
 from dataclasses import replace
@@ -18,7 +20,7 @@ from .learning import learn
 from .models import Signal, iso, parse_iso, utcnow
 from . import messages as msg
 from .learning import neutral_win_rate, win_rate
-from .notify import Message, chat_key, notify, telegram_chat_ids, telegram_updates
+from .notify import COMMAND_MENU, Message, chat_key, notify, telegram_chat_ids, telegram_set_menu, telegram_updates
 from .portfolio import Portfolio
 from .providers import calendar as calmod
 from .providers import market
@@ -1340,6 +1342,13 @@ class Engine:
         sl = levels[1] if len(levels) > 1 else None
         return (tp, sl), rest
 
+    def _sync_menu(self, st: dict[str, Any]) -> None:
+        """Menu « / » de Telegram : republié seulement quand la liste des commandes change."""
+        sig = hashlib.sha1(json.dumps(COMMAND_MENU).encode()).hexdigest()[:12]
+        if st.get("telegram_menu") != sig and telegram_set_menu():
+            st["telegram_menu"] = sig
+            self.store.save_state(st)
+
     def process_commands(self, now: datetime | None = None) -> int:
         """Lit les messages Telegram reçus depuis le dernier passage et exécute les commandes.
 
@@ -1349,6 +1358,7 @@ class Engine:
         if not allowed:
             return 0
         st = self.store.state()
+        self._sync_menu(st)
         offset = st.get("telegram_offset")
         updates = telegram_updates(offset)
         if not updates:

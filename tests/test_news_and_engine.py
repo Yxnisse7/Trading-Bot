@@ -781,3 +781,17 @@ def test_gold_3h_variant_is_its_own_trial_and_promotion_makes_it_real():
     cfg = Config(assets=default_assets())
     labels = variant_labels(cfg)
     assert "horizon_3h_gold" in labels and "horizon_3h" in labels
+
+
+def test_command_menu_is_published_once_per_change(monkeypatch):
+    from trading_bot import notify as nt
+    assert all(c.islower() and c.isascii() and len(d) <= 256 for c, d in nt.COMMAND_MENU)
+    assert {"avis", "hugo", "status", "help"} <= {c for c, _ in nt.COMMAND_MENU}
+    posted = []
+    monkeypatch.setenv("TELEGRAM_BOT_TOKEN", "t")
+    monkeypatch.setattr(nt.requests, "post", lambda url, json, timeout: (posted.append((url, json)),
+                        type("R", (), {"raise_for_status": lambda s: None, "json": lambda s: {"ok": True}})())[1])
+    assert nt.telegram_set_menu() and posted[0][0].endswith("/setMyCommands")
+    assert posted[0][1]["commands"][0] == {"command": "status", "description": nt.COMMAND_MENU[0][1]}
+    monkeypatch.delenv("TELEGRAM_BOT_TOKEN")
+    assert nt.telegram_set_menu() is False
