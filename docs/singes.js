@@ -128,11 +128,21 @@
       <path d="M74 128 l6 8 l6 -8 l6 8 l6 -8 l6 8 l6 -8 l6 8 l6 -8 l6 8" fill="none" stroke="#f5f5f5" stroke-width="2.5" stroke-linejoin="round"/>
     </g>`;
 
+  // Dessins pixel (Gemini, validés par Yanisse le 27/10) : docs/singes/<agent|simu|topper>-<humeur>.png, carrés,
+  // fond transparent ; Agent argent, Simu bronze, Topper or. Un compte sans dessins garde le singe SVG ci-dessus.
+  const IMAGES = { mt5: "agent", simulation: "simu", topstep: "topper" };
+
   Y.singe = function (humeur, opts = {}) {
     const id = ++uid;
     const c = COMPTES[opts.compte] || COMPTES.mt5;
     const h = VISAGES[humeur] ? humeur : "serein";
     const taille = opts.taille || 160;
+    const img = IMAGES[opts.compte || "mt5"];
+    if (img) {
+      const label = (Y.SINGE_HUMEURS[h] || {}).label || h;
+      return `<img class="singe singe-${h} singe-pixel" src="singes/${img}-${h}.png" width="${taille}" height="${taille}"
+        alt="Singe ${c.nom} : ${label}" loading="lazy" decoding="async">`;
+    }
     const penche = h === "pause" ? "rotate(-6 100 200)" : h === "peur" ? "translate(-20 8)" : "";
     const label = (Y.SINGE_HUMEURS[h] || {}).label || h;
     return `<svg class="singe singe-${h}" viewBox="-20 -20 240 250" width="${taille}" height="${Math.round(taille * 250 / 240)}" role="img"
