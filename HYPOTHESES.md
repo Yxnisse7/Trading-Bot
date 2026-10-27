@@ -1301,6 +1301,38 @@ juin copiés sur les coins de juillet (contrôles de l'essai 60). **Gains** : **
 
 **Décidé d'avance** : comme l'essai 38.
 
+## Essai 63 — faire apprendre les stratégies en réel : un arbitre et un chef d'orchestre
+
+Écrit le 27 octobre 2026, **avant** tout calcul, à la demande de Yanisse (« les stratégies pourraient-elles apprendre et
+s'adapter aux périodes, à la volatilité, aux news, après une série de pertes ? »). Stratégies : les **6 en réel** ce
+jour (`noise_area_v2` et `double7` Nasdaq, `nuit_asie` or, `donchian_1h`, `swing_w3`, `cassure_williams` Bitcoin),
+règles inchangées, rejouées sur 2014 → 10/2026 (HistData 1 min pour Nasdaq et or, Binance 5 min pour Bitcoin dès
+08/2017, puis l'historique du dépôt), frais du Labo (`essai21.bot_cost`). Le bot classique n'en fait pas partie (il a
+déjà son modèle, essais 25-26).
+
+**A. L'arbitre** (méta-étiquetage) : un modèle dit « on prend » ou « on saute » chaque trade. Ce qu'il voit, calculé
+**avant l'entrée** : volatilité (ATR 1 h du moment / ATR 1 h moyen des 20 jours), mouvement du jour (amplitude depuis
+minuit UTC / ATR journalier 20 j), tendance (rendement 20 jours en ATR, prix contre moyenne 200 h), forme récente de
+la stratégie (R net moyen de ses 10 et 20 derniers trades **déjà clos**), heure, jour de la semaine, sens, jour
+d'annonce NFP / CPI / Fed (fichier 2010-2024 ; ensuite calendrier du site s'il couvre, sinon 0). Modèle : arbres
+`HistGradientBoosting` (200 × profondeur 3, comme l'essai 25), cible = R net. **Walk-forward annuel** : appris sur les
+années < Y (au moins 3 ans de trades), testé sur l'année Y ; on prend le trade si le R prévu > 0. **A1** : un seul
+modèle pour les 6 stratégies (stratégie en entrée) ; **A2** : un modèle par stratégie.
+
+**B. Le chef d'orchestre** : chaque trade garde son R, mais sa mise varie selon la forme récente de sa stratégie
+(trades déjà clos seulement). **B1** « bandit » : mise = 0,25 + 1,75 × P(moyenne > 0), P tirée d'une moyenne des R
+pondérée à oubli 0,97 par trade (loi normale) ; **B2** : mise ×2 si les 20 derniers trades sont positifs, ×0,5 sinon ;
+**B3** (idée de Yanisse) : stratégie coupée (suivie en ombre, mise 0) quand ses 10 derniers trades font < 0 R, remise
+dès qu'ils repassent ≥ 0. Résultat ramené à une mise moyenne de 1 (même risque total que le portefeuille égal).
+
+**Singes** (1 000) : A — on saute au hasard la même part de trades dans chaque stratégie et chaque année ; B — on
+mélange au hasard l'ordre des mises de chaque stratégie. **5 cellules**, seuil z **2,33** (0,05 / 5, unilatéral).
+
+**Décidé d'avance** : une cellule passe si, sur les années testées, elle fait **mieux que le portefeuille sans
+apprentissage** de façon prouvée (z ≥ 2,33 sur l'écart par trade, ou par mois pour B), **bat 95 % des singes**, fait
+mieux **au moins 6 années sur 10**, et sa pire baisse n'est pas plus grande. Alors : proposer à Yanisse de la suivre en
+ombre. Sinon : dossier clos, rien ne change en réel.
+
 ## Journal des essais
 
 | Date | Essai | Résultat |
