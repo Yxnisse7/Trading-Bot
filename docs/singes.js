@@ -140,7 +140,7 @@
     const img = IMAGES[opts.compte || "mt5"];
     if (img) {
       const label = (Y.SINGE_HUMEURS[h] || {}).label || h;
-      return `<img class="singe singe-${h} singe-pixel" src="singes/${img}-${h}.webp" width="${taille}" height="${taille}"
+      return `<img class="singe singe-${h} singe-pixel" src="singes/${img}-${h}.webp?v=3" width="${taille}" height="${taille}"
         alt="Singe ${c.nom} : ${label}" loading="lazy" decoding="async">`;
     }
     const penche = h === "pause" ? "rotate(-6 100 200)" : h === "peur" ? "translate(-20 8)" : "";
