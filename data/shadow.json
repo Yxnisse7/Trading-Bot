@@ -86,7 +86,7 @@
       "variant": "modele_arbres",
       "exc": {
         "mfe": 0.375,
-        "mae": 0.1041,
+        "mae": 0.8958,
         "armed": {
           "0.5": false,
           "0.8": false,
@@ -97,7 +97,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1793085000
+        "last_ts": 1793085300
       }
     }
   },
@@ -182,8 +182,8 @@
       "price_time": "2026-10-27T07:05:00Z",
       "variant": "hors_session",
       "exc": {
-        "mfe": 0.0505,
-        "mae": 0.0325,
+        "mfe": 0.148,
+        "mae": 0.1408,
         "armed": {
           "0.5": false,
           "0.8": false,
@@ -194,7 +194,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": null
+        "last_ts": 1793085300
       }
     }
   },
@@ -382,7 +382,7 @@
       "variant": "modele_arbres",
       "exc": {
         "mfe": 0.0,
-        "mae": 0.3,
+        "mae": 0.875,
         "armed": {
           "0.5": false,
           "0.8": false,
@@ -477,6 +477,103 @@
         "source": "essai 29"
       },
       "price_time": "2026-10-27T07:15:00Z",
+      "variant": "hors_session",
+      "exc": {
+        "mfe": 0.0,
+        "mae": 0.0899,
+        "armed": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "be": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "last_ts": null
+      }
+    }
+  },
+  {
+    "id": "983c07ff15",
+    "asset": "nasdaq",
+    "asset_label": "Nasdaq 100 (NQ)",
+    "direction": "short",
+    "entry": 29312.25,
+    "take_profit": 29104.0,
+    "stop_loss": 29381.5,
+    "risk_reward": 3.01,
+    "confidence": "fort",
+    "score": 7.97,
+    "criteria": [
+      "adx",
+      "level",
+      "rsi",
+      "trend_15m",
+      "trend_1h",
+      "trend_5m",
+      "vwap"
+    ],
+    "rationale": "Vente : tendance forte (ADX), niveau clé favorable, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 115.39 (0.39 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 50%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+    "news_context": "actualité à surveiller (score 2) : Japan’s trend inflation index hits 3-year high, cements case for BOJ rate hike",
+    "created_at": "2026-10-27T07:25:45Z",
+    "expires_at": "2026-10-28T07:25:45Z",
+    "status": "open",
+    "closed_at": null,
+    "close_price": null,
+    "pnl_pct": null,
+    "pnl_gross_pct": null,
+    "duration_minutes": null,
+    "hourly_range": 115.391304,
+    "source": "shadow",
+    "horizon": "24h",
+    "horizon_minutes": 1440,
+    "meta": {
+      "tick": 0.25,
+      "details": {
+        "trend_5m": "EMA20 29341.13 / EMA50 29387.78 (5 min)",
+        "trend_15m": "EMA20 29390.37 / EMA50 29411.28",
+        "trend_1h": "prix vs EMA20 1 h 29386.08",
+        "adx": "ADX15 31.2 (+DI 11.0 / -DI 31.8)",
+        "vwap": "VWAP jour 29459.15",
+        "rsi": "RSI14 5 min 33.2",
+        "macd": "histogramme MACD 0.5277",
+        "level": "support 29227.75 / résistance 29326.00",
+        "volume": "z-score volume -2.48",
+        "pdhl": "veille : haut 29572.00 / bas 29024.25",
+        "activity": "activité de l'heure 0.85× la moyenne"
+      },
+      "support": 29227.75,
+      "resistance": 29326.0,
+      "atr_5m": 22.462759940750832,
+      "atr_ratio": 0.7240072192550161,
+      "hourly_range_pct": 0.3937,
+      "adx_15m": 31.24813366903044,
+      "sigma_5m": 0.0005607005403513988,
+      "p_resolution": 0.5036666666666667,
+      "p_tp_neutral": 0.17666666666666667,
+      "activity_ratio": 0.853,
+      "base_minutes": 5,
+      "ctx": {
+        "adx": 31.25,
+        "rsi_dir": 66.85,
+        "vwap_ext": 1.2731,
+        "ema_ext": 0.2503,
+        "atr_ratio": 0.724,
+        "activity": 0.853,
+        "range_pct": 0.3937,
+        "cost_r": 0.0634,
+        "us_open_min": -364.2,
+        "weekday": 1
+      },
+      "exit_override": {
+        "stop_x": 1.5,
+        "target_x": 3.0,
+        "minutes": 1440,
+        "source": "essai 29"
+      },
+      "price_time": "2026-10-27T07:20:00Z",
       "variant": "hors_session"
     }
   }
