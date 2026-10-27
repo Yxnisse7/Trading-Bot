@@ -67,6 +67,7 @@ class Bridge:
         self.copier = None
         self.hunter = None
         self.hugo = None
+        self.asker = None
         self.tgcopy = None
         self.relay = None
         if cfg.get("copy_bot") and cfg["mode"] == "demo":
@@ -87,6 +88,9 @@ class Bridge:
             if cfg.get("hugo", True):            # méthode Hugo sur le Nasdaq + commande /hugo (mt5_hugo.py)
                 from .mt5_hugo import HugoHunter
                 self.hugo = HugoHunter(mt5, root, clock, relay=relay, cfg=cfg.get("hugo_cfg"))
+            if cfg.get("ask", True):             # questions à l'agent depuis Telegram : /avis (mt5_ask.py)
+                from .mt5_ask import Asker
+                self.asker = Asker(mt5, root, clock, relay=relay, cfg=cfg.get("ask_cfg"))
             if (cfg.get("tg_copy") or {}).get("channels"):   # copie des canaux Telegram de signaleurs (mt5_tgcopy.py)
                 from .mt5_tgcopy import TgCopier
                 self.tgcopy = TgCopier(mt5, root, clock, relay=relay, cfg=cfg["tg_copy"])
@@ -289,6 +293,13 @@ class Bridge:
                     log.info("%s", state)
             except Exception:                      # idem pour la méthode Hugo
                 log.exception("méthode Hugo de l'agent IA")
+        if self.asker is not None:
+            try:
+                state = self.asker.step()
+                if state:
+                    log.info("%s", state)
+            except Exception:                      # idem pour les questions à l'agent
+                log.exception("questions à l'agent IA")
         if self.tgcopy is not None:
             try:
                 state = self.tgcopy.step()
