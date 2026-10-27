@@ -80,6 +80,9 @@ class Bridge:
                 bot = LocalBot(mt5, SYMBOLS, clock, root)
             relay = Relay(mt5, root, clock, agent=cfg["avis"])
             self.relay = relay
+            if relay.enabled():                  # menu des commandes quand on tape « / » dans Telegram
+                from .notify import telegram_set_menu
+                telegram_set_menu()
             self.copier = Copier(mt5, root, self.journal, clock, local=bool(cfg.get("local_strategies", True)),
                                  relay=relay, bot=bot)
             if cfg.get("hunt", True):            # l'agent IA cherche des trades sur l'or à heures fixes (mt5_hunt.py)
