@@ -1,6 +1,6 @@
 # Trading-Bot — rapport
 
-_Mis à jour le 27/10/2026 à 10:05 (Europe/Paris)._
+_Mis à jour le 27/10/2026 à 10:11 (Europe/Paris)._
 
 ## Vue d'ensemble
 
@@ -8,7 +8,7 @@ _Mis à jour le 27/10/2026 à 10:05 (Europe/Paris)._
 - Taux de réussite cumulé (TP / (TP+SL)) : **43%** — hasard attendu 40%, avantage **+3%**
 - P&L théorique cumulé, net des coûts estimés (somme des % par trade, sans levier) : **-2.08 %** (brut +1.88 %)
 - Signaux ouverts : **0**
-- Signaux fantômes (suivis en silence pour l'apprentissage) : **902** clôturés, 1 ouverts, taux de réussite 35% (hasard attendu 36%)
+- Signaux fantômes (suivis en silence pour l'apprentissage) : **903** clôturés, 0 ouverts, taux de réussite 35% (hasard attendu 36%)
 
 ## Statistiques
 
@@ -114,18 +114,18 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 
 | Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
 |---|---:|---:|---:|---:|---:|---:|
-| adx | 902 | 261 | 489 | 152 | 35% | -0.013 % |
+| adx | 903 | 261 | 490 | 152 | 35% | -0.013 % |
 | corr | 80 | 15 | 49 | 16 | 23% | -0.077 % |
 | level | 65 | 23 | 28 | 14 | 45% | -0.053 % |
-| macd | 231 | 51 | 142 | 38 | 26% | -0.077 % |
+| macd | 232 | 51 | 143 | 38 | 26% | -0.078 % |
 | orb | 36 | 16 | 14 | 6 | 53% | +0.048 % |
 | pdhl | 104 | 41 | 50 | 13 | 45% | +0.074 % |
 | rsi | 684 | 210 | 371 | 103 | 36% | -0.003 % |
-| trend_15m | 902 | 261 | 489 | 152 | 35% | -0.013 % |
-| trend_1h | 887 | 253 | 486 | 148 | 34% | -0.014 % |
-| trend_5m | 793 | 238 | 438 | 117 | 35% | -0.009 % |
+| trend_15m | 903 | 261 | 490 | 152 | 35% | -0.013 % |
+| trend_1h | 888 | 253 | 487 | 148 | 34% | -0.014 % |
+| trend_5m | 794 | 238 | 439 | 117 | 35% | -0.009 % |
 | volume | 11 | 2 | 7 | 2 | 22% | -0.128 % |
-| vwap | 878 | 256 | 476 | 146 | 35% | -0.012 % |
+| vwap | 879 | 256 | 477 | 146 | 35% | -0.012 % |
 
 ### Fantômes par actif
 
@@ -136,7 +136,7 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 | euro | 36 | 12 | 23 | 1 | 34% | -0.025 % |
 | gold | 240 | 67 | 126 | 47 | 35% | -0.029 % |
 | nasdaq | 373 | 114 | 206 | 53 | 36% | +0.032 % |
-| oil | 90 | 26 | 45 | 19 | 37% | -0.058 % |
+| oil | 91 | 26 | 46 | 19 | 36% | -0.061 % |
 | sp500 | 107 | 29 | 65 | 13 | 31% | -0.042 % |
 
 ## Derniers trades
@@ -184,7 +184,7 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 | adx | 1.0 |
 | vwap | 0.75 |
 | rsi | 1.0 |
-| macd | 0.928 |
+| macd | 0.922 |
 | level | 1.0 |
 | volume | 0.75 |
 | orb | 1.0 |
@@ -195,10 +195,10 @@ Tranches horaires évitées (UTC) : [11, 12, 19]
 
 Corrections par actif :
 
-- ethereum : {'trend_5m': 0.849, 'trend_15m': 0.849, 'trend_1h': 0.849, 'adx': 0.849, 'rsi': 0.797}
+- ethereum : {'trend_5m': 0.851, 'trend_15m': 0.851, 'trend_1h': 0.851, 'adx': 0.851, 'rsi': 0.797}
 - gold : {'rsi': 0.979}
-- nasdaq : {'trend_5m': 1.18, 'trend_15m': 1.18, 'trend_1h': 1.18, 'adx': 1.18, 'vwap': 0.872, 'rsi': 1.258}
-- sp500 : {'trend_5m': 0.863, 'trend_15m': 0.863, 'trend_1h': 0.863, 'adx': 0.863, 'vwap': 0.645, 'rsi': 0.922}
+- nasdaq : {'trend_5m': 1.182, 'trend_15m': 1.182, 'trend_1h': 1.182, 'adx': 1.182, 'vwap': 0.874, 'rsi': 1.258}
+- sp500 : {'trend_5m': 0.864, 'trend_15m': 0.864, 'trend_1h': 0.864, 'adx': 0.864, 'vwap': 0.647, 'rsi': 0.922}
 
 | Variante testée en fantôme | Trades | Gain net moyen | Statut |
 |---|---:|---:|---|
@@ -211,13 +211,13 @@ Corrections par actif :
 | nouvel actif : Bitcoin (BTC/USD) | 7 | -0.50 R | en test |
 | nouvel actif : Ethereum (ETH/USD) | 21 | -0.51 R | en test |
 | horizon ~3 h sur Or (XAU/USD) | 32 | +0.03 R | en test |
-| nouvel actif : Pétrole WTI (CL) | 90 | -0.15 R | en test |
+| nouvel actif : Pétrole WTI (CL) | 91 | -0.16 R | en test |
 | nouvel actif : Euro / dollar (6E) | 36 | -0.41 R | en test |
 
 Notes :
 
 - trades réels : +0,11 R ± 0,19 R par trade avant frais sur 160 trades (0 R = hasard)
-- macd : -0,15 R ± 0,12 R sur 395 trades éq. → poids ×0,93
+- macd : -0,15 R ± 0,12 R sur 396 trades éq. → poids ×0,92
 - tranche 11h UTC : -0,31 R sur 77 trades éq. → évitée
 - tranche 12h UTC : -0,45 R sur 65 trades éq. → évitée
 - tranche 19h UTC : -0,31 R sur 82 trades éq. → évitée
