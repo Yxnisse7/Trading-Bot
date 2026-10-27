@@ -110,3 +110,20 @@ def test_empty_question_and_queue_limit(tmp_path, monkeypatch):
     a.proc = (NS(poll=lambda: None), MON16, "x", tmp_path / "x.log", {})                # une analyse déjà en cours
     a.step()
     assert len(a.queue) == 3 and "Trois questions attendent" in sent[-1]
+
+
+def test_closed_market_uses_last_known_price_and_candles(tmp_path, monkeypatch):
+    rep = {"conseil": "garder", "reponse": "Marché fermé, je garde."}
+    upd = [{"update_id": 5, "message": {"text": "/avis nasdaq, je garde ?", "chat": {"id": 42}, "date": MON16 - 5}}]
+    a, mt5, now, sent, data = _setup(tmp_path, monkeypatch, [rep, rep], upd)
+    mt5.symbol_info_tick = lambda s: NS(time=now[0] + 10800 - 11000, bid=29400.0, ask=29400.5)   # cotation vieille de 3 h
+    a.state["off"] = 10800
+    assert a.step() == "question : agent réveillé (nasdaq)"
+    assert data[0]["ferme"].startswith("marché fermé") and data[0]["bid"] == 29400.0 and data[0]["candles_5m"]
+    assert "ATTENTION : marché fermé" in ask.message(data[0])
+    assert "marché fermé" not in ask.message(dict(data[0], ferme=""))
+    mt5.symbol_info_tick = lambda s: None                                  # aucune cotation : on prend la dernière bougie
+    a.queue.append("nasdaq ?")
+    a.proc = None
+    a.step()
+    assert data[-1]["bid"] == data[-1]["candles_5m"][-1][4]

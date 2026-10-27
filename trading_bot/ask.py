@@ -42,6 +42,7 @@ Réponds à sa question, en français simple, en 6 phrases au plus :
   clair), avec les niveaux de prix qui comptent (support, résistance, creux ou sommet récent).
 - S'il a des positions et que sa question les concerne : pour chacune, dis s'il vaut mieux la garder, sécuriser
   (remonter le stop à l'entrée ou sous un creux récent, en donnant le niveau) ou la fermer, et pourquoi.
+- Si le marché est fermé, dis-le en une phrase, et donne ton avis pour la réouverture (écart possible à l'ouverture).
 - Dis ce qui changerait ton avis (un niveau cassé, une annonce).
 - Pas de promesse, pas de certitude : le marché peut faire l'inverse. Tu ne passes aucun ordre et tu ne déplaces
   aucun stop : tu donnes un avis, c'est lui qui décide.
@@ -71,6 +72,7 @@ def message(m: dict[str, Any]) -> str:
 
 Marché concerné : {m.get('asset_label', m.get('asset', '?'))} · {now:%A %d/%m/%Y %H:%M} (heure de Paris)
 Prix : achat (ask) {m['ask']:g} · vente (bid) {m['bid']:g}
+{("ATTENTION : " + m["ferme"] + ". Le prix ci-dessus est le dernier connu, les bougies s'arrêtent à la clôture : donne ton avis pour la réouverture.") if m.get("ferme") else ""}
 
 Positions ouvertes sur son démo (tous marchés) :
 {pos}

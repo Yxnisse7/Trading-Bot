@@ -13,14 +13,14 @@ import json
 import logging
 import subprocess
 import time
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Callable
 
 from . import messages as msg
 from .mt5_copy import SYMBOLS
 from .mt5_hugo import FRESH, POLL, _updates
-from .mt5_hunt import Hunter
+from .mt5_hunt import PARIS, Hunter
 from .mt5_local import server_offset
 from .notify import chat_key, telegram_chat_ids
 
@@ -43,6 +43,11 @@ def parse(text: str) -> str | None:
     if not parts or parts[0].lower().split("@", 1)[0] not in COMMANDS:
         return None
     return parts[1].strip() if len(parts) > 1 else ""
+
+
+def server_offset_guess(now: float) -> int:
+    """Heure du serveur Vantage hors cotation : UTC+3 d'avril à octobre, UTC+2 sinon (heure d'été américaine)."""
+    return 3 * 3600 if 4 <= datetime.fromtimestamp(now, timezone.utc).month <= 10 else 2 * 3600
 
 
 def asset_of(question: str, positions: list[dict[str, Any]]) -> str:
@@ -119,6 +124,17 @@ class Asker(Hunter):
         self._save()
         return got
 
+    def _candles(self, sym: str, tf: str, n: int, off: int, keep_last: bool = False) -> list[list[float]]:
+        """Marché fermé : la dernière bougie est finie, on la garde."""
+        rows = super()._candles(sym, tf, n + 1, off) if keep_last else super()._candles(sym, tf, n, off)
+        if keep_last:
+            rates = self.mt5.copy_rates_from_pos(sym, getattr(self.mt5, tf), 0, 1)
+            for x in rates if rates is not None else []:
+                row = [int(x["time"]) - off, float(x["open"]), float(x["high"]), float(x["low"]), float(x["close"])]
+                if not rows or row[0] > rows[-1][0]:
+                    rows.append(row)
+        return rows[-n:]
+
     def positions(self, off: int) -> list[dict[str, Any]]:
         back = {v: k for k, v in SYMBOLS.items()}
         out = []
@@ -144,18 +160,32 @@ class Asker(Hunter):
         self.mt5.symbol_select(sym, True)
         off = server_offset(self.mt5, sym, now)
         tick = self.mt5.symbol_info_tick(sym)
-        if off is None or tick is None:
-            self.relay._post(f"🔎 Le marché {LABELS.get(asset, asset)} est fermé : je n'ai pas de prix pour répondre.")
-            return f"question : marché fermé ({asset})"
+        closed = ""
+        if off is not None:
+            self.state["off"] = off
+        else:                                   # marché fermé : dernières bougies et dernier prix connus
+            off = int(self.state.get("off") or server_offset_guess(now))
+            rows = self._candles(sym, "TIMEFRAME_M5", 2, off)
+            last = int(getattr(tick, "time", 0) or 0) - off if tick is not None else (rows[-1][0] if rows else 0)
+            if tick is None and not rows:
+                self.relay._post(f"🔎 Le marché {LABELS.get(asset, asset)} est fermé et je n'ai aucune bougie récente.")
+                return f"question : marché fermé ({asset})"
+            when = datetime.fromtimestamp(last, PARIS).strftime("%d/%m %H:%M") if last else "?"
+            closed = f"marché fermé en ce moment, dernier prix reçu le {when} (heure de Paris)"
+        if tick is None:
+            c = self._candles(sym, "TIMEFRAME_M5", 2, off)[-1][4]
+            bid = ask = c
+        else:
+            bid, ask = tick.bid, tick.ask
         evs = self.events()
         data = {"id": f"question-{asset}-{int(now)}", "asset": asset, "asset_label": LABELS.get(asset, asset),
                 "now": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(now)), "question": question,
-                "bid": tick.bid, "ask": tick.ask, "positions": pos,
+                "bid": bid, "ask": ask, "positions": pos, "ferme": closed,
                 "annonces": [{"heure": e["at"], "titre": e["name"], "impact": e.get("impact")} for e in evs
                              if str(e.get("name", "")).startswith("USD")
                              and -7200 <= datetime.fromisoformat(e["at"]).timestamp() - now <= 6 * 3600]}
         for k, tf, n in self.FRAMES:
-            data[k] = self._candles(sym, tf, n, off)
+            data[k] = self._candles(sym, tf, n, off, keep_last=bool(closed))
         self.folder.mkdir(parents=True, exist_ok=True)
         path = self.folder / f"{data['id']}.json"
         path.write_text(json.dumps(data, separators=(",", ":")), encoding="utf-8")
