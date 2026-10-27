@@ -92,7 +92,8 @@
   const PAGES = [["dashboard", "index.html", "Tableau de bord", "Tableau", "home"], ["simulation", "portfolio.html", "Simulation", "Simulation", "wallet"],
                  ["learning", "apprentissage.html", "Apprentissage", "Apprendre", "learn"], ["topstep", "topstep.html", "Topstep", "Topstep", "flag"]];
   // pages d'analyse : onglets en haut, et petite barre sous l'en-tête sur téléphone (la navigation du bas est pleine)
-  const EXTRA = [["chart", "graphique.html", "Graphique"], ["events", "evenements.html", "Événements"], ["labo", "labo.html", "Labo"]];
+  const EXTRA = [["chart", "graphique.html", "Graphique"], ["events", "evenements.html", "Événements"], ["labo", "labo.html", "Labo"],
+                 ["traders", "traders.html", "Les traders"]];
   // Espace Investir (page à part) : ses onglets sont les parties de la page
   const INVEST = [["portefeuilles", "Portefeuilles", "Portef.", "wallet"], ["poche", "Actions", "Actions", "learn"], ["pepites", "Pépites", "", ""],
                   ["plan-mois", "Mon plan", "Mon plan", "home"], ["zakat", "Zakat", "Zakat", "crescent"], ["simulateur", "Simulateur", "", ""],
@@ -110,7 +111,7 @@
     host.innerHTML = `<div class="yk-top-in">
       <div class="yk-left">
         <a class="yk-brand" href="index.html" aria-label="Yasuke, tableau de bord">${I.logo(32)}<span><b>Yasuke</b><small>Trading</small></span></a>
-        <nav class="yk-tabs" aria-label="Pages">${[PAGES[0], PAGES[1], EXTRA[0], EXTRA[1], PAGES[3], PAGES[2], EXTRA[2]].map(([k, href, l]) => `<a class="yk-tab${k === page ? " active" : ""}" href="${href}"${k === page ? ' aria-current="page"' : ""}>${l}</a>`).join("")}</nav>
+        <nav class="yk-tabs" aria-label="Pages">${[PAGES[0], PAGES[1], EXTRA[3], EXTRA[0], EXTRA[1], PAGES[3], PAGES[2], EXTRA[2]].map(([k, href, l]) => `<a class="yk-tab${k === page ? " active" : ""}" href="${href}"${k === page ? ' aria-current="page"' : ""}>${l}</a>`).join("")}</nav>
       </div>
       <div class="yk-right">
         ${spaceSwitch("trade")}
@@ -142,6 +143,28 @@
     themeButton();
     fitHeader(host);
     ticker(sub);
+    if (page !== "traders") sideMonkey(page);
+  }
+
+  // Petit singe trader sur le côté des pages (27/10/2026) : le singe du compte de la page (Simulation, Topstep),
+  // sinon celui de l'agent IA (démo MT5) ; un clic mène à la page « Les traders ». Il ne décide rien.
+  function sideMonkey(page) {
+    const key = page === "simulation" ? "simulation" : page === "topstep" ? "topstep" : "mt5";
+    const go = (d) => {
+      const a = d && d.comptes && d.comptes[key];
+      if (!a || !window.YK.singe) return;
+      const h = window.YK.SINGE_HUMEURS[a.humeur] || {};
+      const box = document.createElement("a");
+      box.className = "yk-monkey"; box.href = "traders.html";
+      box.setAttribute("aria-label", `${window.YK.SINGE_COMPTES[key].nom} est ${h.label || a.humeur} : voir les traders`);
+      box.innerHTML = `<span class="yk-monkey-bubble"><b style="color:${h.couleur}">${esc(h.label || "")}</b>${esc(a.pensee || "")}</span>`
+        + window.YK.singe(a.humeur, { compte: key, taille: 76 });
+      document.body.appendChild(box);
+    };
+    const sc = document.createElement("script");
+    sc.src = "singes.js?d=" + new Date().toISOString().slice(0, 10);
+    sc.onload = () => getJson("live/traders.json").then(go).catch(() => { /* pas encore de singes */ });
+    document.body.appendChild(sc);
   }
 
   // Espace Investir : marque et couleur à part, onglets = parties de la page, suivis au défilement

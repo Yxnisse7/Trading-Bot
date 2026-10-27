@@ -391,3 +391,15 @@ input, select, textarea { border-radius: 8px; }
 .live-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--up); flex: none; margin-top: 6px; animation: yk-pulse 2.4s ease-in-out infinite; }
 .live-dot.idle { background: var(--faint); animation: none; }
 [data-space="invest"] .note-box.ok { background: var(--brand-soft); color: var(--brand-text); }
+
+/* petit singe trader sur le côté des pages (singes.js, page « Les traders ») */
+.yk-monkey { position: fixed; right: 16px; bottom: 16px; z-index: 30; display: flex; align-items: flex-end; gap: 6px; text-decoration: none !important; }
+.yk-monkey .singe { filter: drop-shadow(0 4px 10px rgba(0,0,0,.25)); transition: transform .15s; }
+.yk-monkey:hover .singe { transform: translateY(-3px) rotate(-3deg); }
+.yk-monkey-bubble { max-width: 220px; background: var(--card); color: var(--text); border: 1px solid var(--line); border-radius: 12px 12px 2px 12px;
+  padding: 8px 10px; font-size: 12.5px; line-height: 1.4; box-shadow: 0 6px 18px rgba(0,0,0,.18); opacity: 0; transform: translateY(6px);
+  transition: opacity .15s, transform .15s; pointer-events: none; margin-bottom: 40px; }
+.yk-monkey-bubble b { display: block; font-size: 12px; margin-bottom: 2px; }
+.yk-monkey:hover .yk-monkey-bubble, .yk-monkey:focus-visible .yk-monkey-bubble { opacity: 1; transform: none; }
+@media (max-width: 860px) { .yk-monkey { bottom: calc(76px + env(safe-area-inset-bottom)); right: 8px; } .yk-monkey .singe { width: 58px; height: auto; } }
+@media print { .yk-monkey { display: none; } }

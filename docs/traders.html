@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Les traders · Yasuke Trading-Bot</title>
+<meta name="description" content="Chaque compte est un trader singe : Simulation, Topstep et le démo MT5 de l'agent IA, avec leur courbe et leur humeur.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap">
+<link rel="stylesheet" href="yasuke.css?v=3666f287b2">
+<script>/* Trading : sombre par défaut */ try { document.documentElement.dataset.theme = localStorage.getItem("tb-theme") || "dark"; } catch (e) { document.documentElement.dataset.theme = "dark"; }</script>
+<style>
+  .tr-grid { display: grid; gap: 16px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .tr-card { padding: 18px; display: grid; gap: 14px; align-content: start; border-top: 4px solid var(--mood, var(--line)); }
+  .tr-head { display: grid; grid-template-columns: 132px 1fr; gap: 12px; align-items: center; }
+  .tr-head .singe { width: 132px; height: auto; }
+  .tr-name { font-size: 13px; color: var(--muted); font-weight: 500; }
+  .tr-name b { color: var(--text); font-size: 18px; display: block; letter-spacing: -0.01em; }
+  .tr-mood { display: inline-flex; align-items: center; gap: 6px; margin-top: 6px; padding: 4px 10px; border-radius: 999px; font-size: 13px; font-weight: 600;
+             background: color-mix(in srgb, var(--mood) 18%, transparent); color: var(--mood); }
+  .tr-moral { margin-top: 10px; font-size: 12px; color: var(--muted); }
+  .tr-moral i { display: block; height: 6px; border-radius: 3px; background: var(--soft); margin-top: 4px; overflow: hidden; }
+  .tr-moral i span { display: block; height: 100%; background: var(--mood); border-radius: 3px; }
+  .tr-bubble { position: relative; background: var(--soft); border-radius: 12px; padding: 10px 14px; font-size: 14px; line-height: 1.45; font-style: italic; }
+  .tr-bubble:before { content: ""; position: absolute; top: -7px; left: 52px; border: 7px solid transparent; border-top: 0; border-bottom-color: var(--soft); }
+  .tr-why { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tr-why span { font-size: 12px; padding: 3px 8px; border-radius: 6px; background: var(--soft); color: var(--muted); }
+  .tr-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+  .tr-stats div { display: grid; gap: 2px; }
+  .tr-stats small { color: var(--muted); font-size: 12px; }
+  .tr-stats b { font-size: 16px; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .tr-curve svg { width: 100%; height: 90px; display: block; }
+  .tr-last { display: grid; gap: 4px; font-size: 13px; }
+  .tr-last div { display: flex; justify-content: space-between; gap: 8px; border-bottom: 1px solid var(--line); padding: 4px 0; }
+  .tr-last div:last-child { border-bottom: 0; }
+  .tr-last span { color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tr-note { font-size: 12px; color: var(--faint); }
+  .tr-shadow { display: grid; grid-template-columns: 120px 1fr; gap: 16px; align-items: center; padding: 18px; }
+  .tr-legend { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 10px; }
+  .tr-legend .card { padding: 10px; text-align: center; display: grid; gap: 4px; justify-items: center; }
+  .tr-legend .singe { width: 84px; height: auto; }
+  .tr-legend b { font-size: 13px; } .tr-legend small { font-size: 11.5px; color: var(--muted); line-height: 1.35; }
+  @media (max-width: 1080px) { .tr-grid { grid-template-columns: 1fr; } .tr-legend { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+  @media (max-width: 560px) { .tr-head { grid-template-columns: 100px 1fr; } .tr-head .singe { width: 100px; }
+    .tr-legend { grid-template-columns: repeat(2, minmax(0, 1fr)); } .tr-shadow { grid-template-columns: 1fr; justify-items: center; } }
+</style>
+</head>
+<body data-page="traders">
+<header id="yk-header"></header>
+<div class="wrap">
+  <div class="pagehead">
+    <div><h1>Les traders</h1><div class="sub" id="updated">Chargement…</div></div>
+    <div class="actions"><span class="muted">Un singe par compte, en souvenir des 1 000 singes de l'essai 21</span></div>
+  </div>
+
+  <div class="tr-grid" id="cards">
+    <div class="card tr-card"><span class="sk" style="height:140px"></span></div>
+    <div class="card tr-card"><span class="sk" style="height:140px"></span></div>
+    <div class="card tr-card"><span class="sk" style="height:140px"></span></div>
+  </div>
+
+  <h2>Son ombre</h2>
+  <div class="card tr-shadow" id="shadow"></div>
+
+  <h2>Les 7 humeurs</h2>
+  <div class="tr-legend" id="legend"></div>
+  <p class="faint" style="margin-top:18px;font-size:12px">Les singes ne décident rien : ils montrent l'état du compte. Les trades suivent toujours les mêmes règles
+    (l'essai 63 a montré que couper ou réduire une stratégie selon sa forme récente fait perdre). Les vraies protections, comme l'arrêt du jour, restent dans le code ;
+    le singe passe alors « en pause ». Humeur recalculée à chaque passage du bot ; le compte MT5 est relevé par le pont du PC toutes les 10 minutes.</p>
+</div>
+<script src="yasuke.js?v=5e384a2831"></script>
+<script src="singes.js?v=e043ff0d8c"></script>
+<script>
+(function () {
+  const Y = window.YK, $ = Y.$, esc = Y.esc, H = Y.SINGE_HUMEURS, C = Y.SINGE_COMPTES;
+  const ORDER = [["mt5", "Démo MT5 · l'agent IA"], ["simulation", "Simulation"], ["topstep", "Topstep 50K"]];
+  const RULES = {
+    serein: "rien d'inhabituel, il suit son plan", confiant: "au moins 3 gains sur les 5 derniers trades",
+    euphorique: "5 gains d'affilée, ou 8 sur 10", frustre: "4 pertes sur 5, ou loin de son plus haut",
+    tilt: "grosse perte du jour", pause: "arrêté par une limite, ou rien depuis 4 jours",
+    peur: "les stratégies en ombre font mieux que celles en réel",
+  };
+  const usd = (v, d = 2) => `<span class="${Y.tone(v)}">${Y.smoney(v, "$", d)}</span>`;
+  const when = (t) => new Date(t * 1000).toLocaleString("fr-FR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" });
+
+  function curve(pts, color) {
+    if (!pts || pts.length < 2) return `<div class="tr-note">La courbe apparaît après deux trades.</div>`;
+    const W = 320, Hh = 90, vs = pts.map((p) => p[1]), lo = Math.min(...vs), hi = Math.max(...vs), sp = hi - lo || 1;
+    const x = (i) => 2 + i / (pts.length - 1) * (W - 4), y = (v) => 6 + (hi - v) / sp * (Hh - 12);
+    const d = pts.map((p, i) => `${i ? "L" : "M"}${x(i).toFixed(1)},${y(p[1]).toFixed(1)}`).join("");
+    return `<svg viewBox="0 0 ${W} ${Hh}" preserveAspectRatio="none" role="img" aria-label="Courbe du solde">
+      <path d="${d}L${W - 2},${Hh}L2,${Hh}Z" fill="${color}" opacity=".12"/>
+      <path d="${d}" fill="none" stroke="${color}" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linejoin="round"/></svg>`;
+  }
+
+  function card(key, title, a) {
+    if (!a) return `<div class="card tr-card"><div class="tr-head">${Y.singe("pause", { compte: key, taille: 132 })}
+      <div class="tr-name">${esc(title)}<b>${esc(C[key].nom)}</b></div></div><div class="tr-note">Pas encore de données pour ce compte${key === "mt5" ? " : le pont du PC doit être relancé une fois" : ""}.</div></div>`;
+    const h = H[a.humeur] || H.serein, s = a.stats;
+    const releve = a.releve ? ` · relevé ${Y.ago(a.releve)}` : "";
+    return `<article class="card tr-card" style="--mood:${h.couleur}">
+      <div class="tr-head">${Y.singe(a.humeur, { compte: key, taille: 132 })}
+        <div><div class="tr-name">${esc(title)}<b>${esc(C[key].nom)}</b></div>
+          <span class="tr-mood">${esc(h.label)}</span>
+          <div class="tr-moral">Moral ${a.moral}/100<i><span style="width:${a.moral}%"></span></i></div></div></div>
+      <div class="tr-bubble">« ${esc(a.pensee)} »</div>
+      <div class="tr-why">${(a.raisons || []).map((r) => `<span>${esc(r)}</span>`).join("")}</div>
+      <div class="tr-stats">
+        <div><small>Solde</small><b>${Y.money(s.solde, "$", 0)}</b></div>
+        <div><small>Depuis le départ</small><b>${usd(s.resultat, 0)}</b></div>
+        <div><small>Aujourd'hui</small><b>${usd(s.jour, 0)}</b></div>
+        <div><small>Gagnants</small><b>${s.gagnants_pct === null ? "n/a" : Y.num(s.gagnants_pct, 0) + Y.NB + "%"}</b></div>
+        <div><small>Sous le plus haut</small><b>${Y.num(s.baisse_pct, 1)}${Y.NB}%</b></div>
+        <div><small>Série</small><b class="${Y.tone(s.serie)}">${s.serie > 0 ? s.serie + " gain" + (s.serie > 1 ? "s" : "") : s.serie < 0 ? -s.serie + " perte" + (s.serie < -1 ? "s" : "") : "—"}</b></div>
+      </div>
+      <div class="tr-curve">${curve(a.courbe, h.couleur)}</div>
+      <div class="tr-last">${(a.derniers || []).slice(0, 5).map((t) => `<div><span>${when(t.t)} · ${esc(Y.shortLabel(t.actif || ""))}${t.source ? " · " + esc(t.source) : ""}</span>${usd(t.pnl)}</div>`).join("")
+        || `<div class="tr-note">Aucun trade fermé.</div>`}</div>
+      <div class="tr-note">${esc(a.note || "")}${releve}</div>
+    </article>`;
+  }
+
+  function render(d) {
+    $("#updated").textContent = d ? `Humeurs mises à jour ${Y.ago(d.updated_at)}` : "Pas encore de données : la page se remplit au prochain passage du bot.";
+    const c = (d && d.comptes) || {};
+    $("#cards").innerHTML = ORDER.map(([k, t]) => card(k, t, c[k])).join("");
+    const o = (d && d.ombre) || {};
+    const fmt = (v) => v === null || v === undefined ? "n/a" : Y.signed(v, 2) + Y.NB + "R";
+    $("#shadow").innerHTML = `${Y.singe(o.peur ? "peur" : "serein", { compte: "mt5", taille: 120 })}
+      <div><b>${o.peur ? "Les singes ont peur de leur ombre." : "Les singes n'ont pas peur de leur ombre."}</b>
+      <p class="muted" style="margin:6px 0 0">Sur ${o.jours || 14} jours, les stratégies en réel font ${fmt(o.reel_r)} par trade (${o.reel_n || 0} trades) ;
+      celles suivies en ombre, sans signal, font ${fmt(o.ombre_r)} (${o.ombre_n || 0} trades). Le singe a peur quand l'ombre gagne et fait au moins
+      0,3 R de mieux, sur 8 trades ou plus. Ça ne prouve rien à soi seul : sur deux semaines, le hasard peut suffire.</p></div>`;
+  }
+
+  $("#legend").innerHTML = Object.entries(H).map(([k, h]) => `<div class="card">${Y.singe(k, { compte: "mt5", taille: 84 })}
+    <b style="color:${h.couleur}">${esc(h.label)}</b><small>${esc(RULES[k])}</small></div>`).join("");
+  const load = () => Y.getJson("live/traders.json").then(render).catch(() => render(null));
+  load();
+  Y.poll(load);
+})();
+</script>
+</body>
+</html>

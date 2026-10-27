@@ -68,6 +68,8 @@ jobs:
           # écrit chaque minute par le pont MT5 du PC (trading_bot/pc_link.py) : PC allumé, il annonce lui-même
           PC_ALIVE: ${{ vars.PC_ALIVE }}
           PC_TRADES: ${{ vars.PC_TRADES }}
+          # résumé du compte démo MT5 (solde, trades des 30 derniers jours) pour la page « Les traders »
+          PC_ACCOUNT: ${{ vars.PC_ACCOUNT }}
           # réveille l'agent IA (dépôt privé) à chaque signal réel annoncé d'ici ; vide = rien
           AGENT_DISPATCH_TOKEN: ${{ secrets.AGENT_DISPATCH_TOKEN }}
           CMD: ${{ github.event.inputs.command || 'tick' }}

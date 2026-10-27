@@ -950,11 +950,20 @@ class Engine:
         pc = pc_link.trades(os.environ.get(pc_link.TRADES))
         if pc is not None:                             # trades du bot classique calculés sur le PC (prix MT5)
             self.store.save_live("bot_pc", {"updated_at": iso(utcnow()), "trades": pc})
+        ts_data: dict[str, Any] = {}
         if self.TOPSTEP:
             try:
-                self.topstep_update(all_sigs)
+                ts_data = self.topstep_update(all_sigs)
             except Exception:  # noqa: BLE001 — le compte Topstep ne doit jamais casser un passage
                 log.exception("compte Topstep")
+        try:                                           # les singes traders (page « Les traders »)
+            from . import humeur
+            prev = self.store._read(self.store.dir / "live" / "traders.json", None)
+            self.store.save_live("traders", humeur.build(
+                portfolio=self.store.portfolio(), topstep_acct=ts_data, lab_shadow=dash.get("lab_shadow"),
+                pc_raw=os.environ.get(humeur.VAR), previous=prev, now=utcnow().timestamp()))
+        except Exception:  # noqa: BLE001 — l'humeur des singes ne doit jamais casser un passage
+            log.exception("singes traders")
         return text
 
     # ------------------------------------------------------------ compte Topstep (simulation séparée)

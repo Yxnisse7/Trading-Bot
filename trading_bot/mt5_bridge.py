@@ -68,6 +68,7 @@ class Bridge:
         self.hunter = None
         self.hugo = None
         self.tgcopy = None
+        self.relay = None
         if cfg.get("copy_bot") and cfg["mode"] == "demo":
             from .mt5_copy import Copier
             from .pc_relay import Relay
@@ -77,6 +78,7 @@ class Bridge:
                 from .mt5_copy import SYMBOLS
                 bot = LocalBot(mt5, SYMBOLS, clock, root)
             relay = Relay(mt5, root, clock, agent=cfg["avis"])
+            self.relay = relay
             self.copier = Copier(mt5, root, self.journal, clock, local=bool(cfg.get("local_strategies", True)),
                                  relay=relay, bot=bot)
             if cfg.get("hunt", True):            # l'agent IA cherche des trades sur l'or à heures fixes (mt5_hunt.py)
@@ -154,7 +156,32 @@ class Bridge:
                 "balance": a.balance, "equity": a.equity, "profit": a.profit, "margin_free": a.margin_free,
                 "stopped": self.stop_rule, "positions": pos, "deals": sorted(deals, key=lambda d: -d["closed"])}
 
+    def account_summary(self, days: int = 30) -> dict[str, Any] | None:
+        """Résumé du compte pour la page « Les traders » du site (variable PC_ACCOUNT, humeur.py) : solde, et pour
+        chaque position fermée des `days` derniers jours [fermeture UTC, résultat $ frais compris, magic, symbole].
+        Aucun identifiant (numéro de compte, serveur)."""
+        a = self.mt5.account_info()
+        if a is None or a.trade_mode != self.mt5.ACCOUNT_TRADE_MODE_DEMO:
+            return None
+        off = self.offset() or 0
+        now = self.clock()
+        lo = datetime.fromtimestamp(now + off - days * 86400, timezone.utc)
+        hi = datetime.fromtimestamp(now + off + 86400, timezone.utc)
+        pos: dict[int, list] = {}
+        for d in self.mt5.history_deals_get(lo, hi) or []:
+            if not d.symbol:
+                continue
+            row = pos.setdefault(d.position_id, [0, 0.0, d.magic, d.symbol])
+            row[1] += d.profit + d.commission + d.swap
+            if d.entry == 1:                       # sortie : heure de fermeture
+                row[0] = max(row[0], int(d.time) - off)
+        closed = sorted(([r[0], round(r[1], 2), r[2], r[3]] for r in pos.values() if r[0]), key=lambda r: r[0])
+        return {"ts": int(now), "bal": round(a.balance, 2), "eq": round(a.equity, 2),
+                "open": len(self.mt5.positions_get() or []), "stop": self.stop_rule, "d": closed[-400:]}
+
     def write_snapshot(self) -> None:
+        if self.relay is not None:
+            self.relay.account(self.account_summary)
         snap = self.snapshot()
         if snap is None:
             return

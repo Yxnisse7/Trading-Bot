@@ -32,6 +32,7 @@ log = logging.getLogger("pc_relay")
 
 REPO = "Yxnisse7/Trading-Bot"
 BEAT = 60
+ACCOUNT_EVERY = 600      # s : résumé du compte démo (PC_ACCOUNT) pour la page « Les traders »
 AGENT_TIMEOUT = 90
 ASSETS = {"gold": "Or (XAU/USD)", "nasdaq": "Nasdaq 100", "sp500": "S&P 500", "bitcoin": "Bitcoin (BTC/USD)",
           "ethereum": "Ethereum", "oil": "Pétrole", "euro": "Euro (EUR/USD)"}
@@ -64,6 +65,7 @@ class Relay:
         self.agent = agent or {}
         self.file = root / "journal" / "telegram_pc.json"
         self.last_beat = 0.0
+        self.last_account = 0.0
         self.local_ok: set[str] = set()               # stratégies calculées sur le PC au dernier passage
         self.pc_trades: list[dict[str, Any]] | None = None   # trades du bot classique sur le PC (mt5_bot)
         self.sent_trades = ""
@@ -108,6 +110,22 @@ class Relay:
             trades = json.dumps(self.pc_trades, separators=(",", ":"), ensure_ascii=False)
             if trades != self.sent_trades and self._put(tok, pc_link.TRADES, trades):
                 self.sent_trades = trades
+
+    def account(self, summary: Callable[[], dict[str, Any] | None]) -> None:
+        """Écrit PC_ACCOUNT (résumé du compte démo pour la page « Les traders ») au plus toutes les 10 min."""
+        now = self.clock()
+        tok = self.env.get("PONT_GITHUB_TOKEN")
+        if not tok or now - self.last_account < ACCOUNT_EVERY:
+            return
+        self.last_account = now
+        try:
+            snap = summary()
+        except Exception as exc:                      # le résumé ne doit jamais gêner le pont
+            log.warning("résumé du compte : %s", exc)
+            return
+        if snap is not None:
+            from .humeur import VAR, encode_pc
+            self._put(tok, VAR, encode_pc(snap))
 
     def _put(self, tok: str, name: str, value: str) -> bool:
         base = f"https://api.github.com/repos/{REPO}/actions/variables"

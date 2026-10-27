@@ -143,3 +143,18 @@ def test_snapshot_for_local_interface(tmp_path):
     assert snap["demo"] and snap["equity"] == 1001.2 and "login" not in json.dumps(snap)
     assert snap["positions"][0]["origin"] == "Copie du bot" and snap["positions"][0]["opened"] == NOW - 600
     assert [d["profit"] for d in snap["deals"]] == [-3.07] and snap["deals"][0]["origin"] == "Pont (or)"
+
+
+def test_account_summary_for_traders_page(tmp_path):
+    mt5 = FakeMT5()
+    mt5.account_info = lambda: NS(trade_mode=0, balance=998.7, equity=1001.2, login=123456)
+    mt5.deals = [NS(position_id=6, symbol="XAUUSD+", profit=-3.0, commission=-0.07, swap=0.0, time=NOW + OFFSET - 3600,
+                    magic=200001, entry=1),
+                 NS(position_id=6, symbol="XAUUSD+", profit=0.0, commission=-0.07, swap=0.0, time=NOW + OFFSET - 4000,
+                    magic=200001, entry=0),
+                 NS(position_id=9, symbol="NAS100", profit=0.0, commission=0.0, swap=0.0, time=NOW + OFFSET - 60,
+                    magic=777002, entry=0)]                                       # encore ouverte : pas comptée
+    s = bridge(tmp_path, mt5, "demo").account_summary()
+    assert s["bal"] == 998.7 and s["d"] == [[NOW - 3600, -3.14, 200001, "XAUUSD+"]] and "login" not in json.dumps(s)
+    mt5.account_info = lambda: NS(trade_mode=2, balance=1.0, equity=1.0)
+    assert bridge(tmp_path, mt5, "demo").account_summary() is None             # jamais un compte réel
