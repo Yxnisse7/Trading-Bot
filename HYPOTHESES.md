@@ -1267,6 +1267,25 @@ comparer avec T20) : un tiers vendu quand le prix atteint 2 fois l'entrée, un t
 
 **9 cellules en tout** (seuil z 2,54). **Décidé d'avance** : comme l'essai 38.
 
+## Essai 61 — memecoins pump.fun : copier un streamer (AlxCooks)
+
+Écrit le 27 octobre 2026, **avant** tout calcul, à la demande de Yanisse (« si on a le portefeuille d'un streamer
+et qu'on entre juste après lui, on profite de la montée faite par sa communauté, et on revend quand il vend »).
+Portefeuille public attribué à AlxCooks par kolexplorer.com et Cielo : `89HbgWduLwoxcofWpmn1EiF9wEdpgkNDEyPjzZ72mkDi`.
+Présent dans le corpus de l'essai 38 (5 juin → 14 juillet 2026). Mêmes données, exécution, frais **Axiom** (2,25 %
+par côté), singes et réserve que l'essai 60. Copie de son premier achat dans chaque coin, s'il a lieu dans les 10
+premières minutes du coin. Réserve : le corpus ne couvre que la courbe de lancement ; s'il revend après la
+« graduation », on sort au dernier prix de la courbe.
+
+**Délai de copie** : **D1** 1 s (bot rapide), **D3** 3 s, **D10** 10 s (proche du retard d'un spectateur du live).
+**Sorties** : **X1** on revend quand il fait sa première vente dans le coin (+ même délai), **T20** suiveur 20 %.
+Au plus 60 min. **6 cellules** (seuil z 2,39). Contrôles de l'essai 38 (moitiés avant / depuis le 25 juin,
+7 derniers jours, frais doublés, 1 000 singes). Pour information : son propre résultat sur ces coins, sans délai ni
+frais Axiom.
+
+**Décidé d'avance** : une cellule prouvée → proposition d'un suivi papier en direct de son portefeuille
+(2 semaines au moins), rien de plus.
+
 ## Journal des essais
 
 | Date | Essai | Résultat |
@@ -1413,3 +1432,4 @@ comparer avec T20) : un tiers vendu quand le prix atteint 2 fois l'entrée, un t
 | 26/10/2026 | Décision (Yanisse, carte « Oui, répétition ») : la copie démo répète le futur compte réel de 300 € : 2 % visé par trade, lot minimum pris jusqu'à 15 % du solde (mt5_copy.MIN_LOT_CAP), plus de taille minimale par stratégie ni de plancher en $ par point, arrêt du jour à −6 % du solde du matin et arrêt total sous 90 $ de solde (demo_rules, magic 200001), aucune limite de trades. Simulation 2016-2025 (7 stratégies, départ 345 $) : plafond 15 % = 25 trades ratés par an au lieu de 258, pire année 411 $. Le réel reste interdit tant que Yanisse ne le demande pas. |
 
 | 26/10/2026 | Demande de Yanisse : les trades des stratégies en réel apparaissent dans « trades ouverts » du compte Topstep dès l'entrée, pas seulement à la sortie. Fait : état `open_lab` du compte (set_open à l'entrée, repris à chaque passage ; drop_open + add_journal à la sortie, même identifiant). Règles Topstep inchangées (0,5 %, flat 15:08 Chicago, day_start 17 h) : les micros viennent du calcul d'entrée existant. Information d'affichage, aucun effet sur les trades. |
+| 2026-10-27 | Pré-enregistrement de l'essai 61 (memecoins, copie du streamer AlxCooks) | — |
