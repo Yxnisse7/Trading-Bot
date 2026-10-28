@@ -8,9 +8,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap">
 <link rel="stylesheet" href="yasuke.css?v=39f9b75eae">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&display=swap">
-<script>/* look HUD : sombre seulement */ document.documentElement.dataset.space = "invest"; document.documentElement.dataset.theme = "dark"; document.documentElement.dataset.look = "hud";</script>
-<link rel="stylesheet" href="hud.css?v=1efffcfad7">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=VT323&display=swap">
+<script>/* look rétro : sombre seulement, palette choisie sur la page Palettes */ (function () { var r = document.documentElement; r.dataset.space = "invest"; r.dataset.theme = "dark"; r.dataset.look = "retro"; var p = null; try { p = localStorage.getItem("tb-palette-invest"); } catch (e) {} r.dataset.palette = /^(nuit|ocean|neon|gameboy|sunset|foret|nes)$/.test(p) ? p : "ocean"; })();</script>
+<link rel="stylesheet" href="retro.css?v=d2d09525bf">
 <style>
   .principles { display: grid; gap: 14px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .principles div { display: grid; gap: 4px; font-size: 14px; }
@@ -188,7 +188,7 @@
 </div>
 
 <div id="tip" role="tooltip"></div>
-<script src="yasuke.js?v=68b50ba114"></script>
+<script src="yasuke.js?v=c37f5412ed"></script>
 <script src="charts.js?v=232a285ab5"></script>
 <script src="sections.js?v=0d56d6cb86"></script>
 <script src="hud-invest.js?v=237d0e7786"></script>

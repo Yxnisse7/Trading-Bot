@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Palettes · Yasuke Trading-Bot</title>
+<meta name="description" content="Choisir la palette de couleurs du site, une pour Trading et une pour Investir.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap">
+<link rel="stylesheet" href="yasuke.css?v=39f9b75eae">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=VT323&display=swap">
+<script>/* look rétro : sombre seulement, palette choisie sur la page Palettes */ (function () { var r = document.documentElement; r.dataset.theme = "dark"; r.dataset.look = "retro"; var p = null; try { p = localStorage.getItem("tb-palette"); } catch (e) {} r.dataset.palette = /^(nuit|ocean|neon|gameboy|sunset|foret|nes)$/.test(p) ? p : "nuit"; })();</script>
+<link rel="stylesheet" href="retro.css?v=d2d09525bf">
+<style>
+  .pal-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 22px; }
+  .pal { color: var(--text); display: grid; gap: 14px; }
+  .pal h3 { margin: 0; }
+  .pal .row { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+  .pal .big { font-family: var(--fx-head); font-size: 24px; color: var(--brand); }
+  .pal .up { color: var(--up); } .pal .dn { color: var(--dn); }
+  .pal .hp { height: 18px; border: 2px solid var(--line); padding: 2px; background: var(--deep); box-sizing: border-box; }
+  .pal .hp i { display: block; height: 100%; width: 68%; background: var(--up); background-image: repeating-linear-gradient(90deg, transparent 0 6px, var(--deep) 6px 8px); }
+  .pal .sw { display: flex; gap: 6px; }
+  .pal .sw i { width: 26px; height: 26px; border: 2px solid var(--line); display: block; }
+  .pal .use { display: flex; gap: 10px; flex-wrap: wrap; }
+  .pal .use button { flex: 1; }
+  .pal .use button[aria-pressed="true"] { background: var(--up); color: #04210f; box-shadow: 0 4px 0 color-mix(in srgb, var(--up) 55%, black); }
+  .pal .use button[aria-pressed="true"]::before { content: "✓ "; }
+</style>
+</head>
+<body data-page="palettes">
+<header id="yk-header"></header>
+<div class="wrap">
+  <div class="pagehead">
+    <div><h1>Palettes</h1><div class="sub">Une palette pour Trading, une autre pour Investir · enregistrée sur cet appareil</div></div>
+  </div>
+  <div class="note-box" style="margin-bottom:22px"><span>Chaque carte montre la palette en vrai. Gain et perte restent toujours séparés (vert contre rouge). Clique « Trading » ou « Investir » pour l'appliquer, la page change tout de suite.</span></div>
+  <div class="pal-grid" id="pal-grid"></div>
+  <div class="foot"><div>Le choix est gardé dans le navigateur, pas sur GitHub : il faut le refaire sur chaque appareil.</div></div>
+</div>
+<script src="yasuke.js?v=c37f5412ed"></script>
+<script>
+(function () {
+  const Y = window.YK, $ = Y.$;
+  const KEYS = { trade: "tb-palette", invest: "tb-palette-invest" }, DEF = { trade: "nuit", invest: "ocean" };
+  const cur = (k) => { const v = Y.store.get(KEYS[k]); return Y.PALETTES.some((p) => p[0] === v) ? v : DEF[k]; };
+  function draw() {
+    $("#pal-grid").innerHTML = Y.PALETTES.map(([id, name]) => `<div class="card pal" data-palette="${id}">
+      <div class="row"><h3>${name}</h3><span class="faint">${id === DEF.trade ? "défaut Trading" : id === DEF.invest ? "défaut Investir" : ""}</span></div>
+      <div class="row"><span class="big">+2 964 $</span><span class="big dn">−59 $</span></div>
+      <div class="hp" aria-hidden="true"><i></i></div>
+      <div class="sw" aria-hidden="true"><i style="background:var(--brand)"></i><i style="background:var(--up)"></i><i style="background:var(--dn)"></i><i style="background:var(--warn)"></i><i style="background:var(--info)"></i><i style="background:var(--card)"></i></div>
+      <div class="use"><button type="button" class="secondary" data-k="trade" data-p="${id}" aria-pressed="${cur("trade") === id}">Trading</button>
+        <button type="button" class="secondary" data-k="invest" data-p="${id}" aria-pressed="${cur("invest") === id}">Investir</button></div></div>`).join("");
+  }
+  $("#pal-grid").addEventListener("click", (e) => {
+    const b = e.target.closest("button[data-k]"); if (!b) return;
+    Y.store.set(KEYS[b.dataset.k], b.dataset.p);
+    if (b.dataset.k === "trade") document.documentElement.dataset.palette = b.dataset.p;
+    draw();
+  });
+  draw();
+})();
+</script>
+</body>
+</html>

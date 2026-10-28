@@ -93,7 +93,7 @@
                  ["learning", "apprentissage.html", "Apprentissage", "Apprendre", "learn"], ["topstep", "topstep.html", "Topstep", "Topstep", "flag"]];
   // pages d'analyse : onglets en haut, et petite barre sous l'en-tête sur téléphone (la navigation du bas est pleine)
   const EXTRA = [["chart", "graphique.html", "Graphique"], ["events", "evenements.html", "Événements"], ["labo", "labo.html", "Labo"],
-                 ["traders", "traders.html", "Les traders"], ["demo", "demo.html", "MT5"]];
+                 ["traders", "traders.html", "Les traders"], ["demo", "demo.html", "MT5"], ["palettes", "palettes.html", "Palettes"]];
   // Espace Investir (page à part) : ses onglets sont les parties de la page
   const INVEST = [["portefeuilles", "Portefeuilles", "Portef.", "wallet"], ["poche", "Actions", "Actions", "learn"], ["pepites", "Pépites", "", ""],
                   ["plan-mois", "Mon plan", "Mon plan", "home"], ["zakat", "Zakat", "Zakat", "crescent"], ["simulateur", "Simulateur", "", ""],
@@ -107,15 +107,9 @@
     if (document.querySelector(".yk-skip")) return;
     host.insertAdjacentHTML("beforebegin", `<a class="yk-skip" href="#${main.id}">Aller au contenu</a>`);
   }
-  // Cadre « HUD » : fenêtre fixe sur un fond dégradé (voir hud.css)
-  function hudFrame() {
-    if (document.querySelector(".fx-frame")) return;
-    document.body.insertAdjacentHTML("afterbegin", '<div class="fx-frame" aria-hidden="true"></div><div class="fx-world" aria-hidden="true"></div>');
-  }
   function header(page) {
     const host = document.getElementById("yk-header");
     if (!host) return;
-    if (document.documentElement.dataset.look === "hud") hudFrame();
     if (page === "invest") return investHeader(host);
     const onDash = page === "dashboard";
     const trade = onDash ? `<button type="button" id="btn-trade">${I.plus}<span class="btn-lbl">Nouveau trade</span></button>`
@@ -125,7 +119,7 @@
     host.innerHTML = `<div class="yk-top-in">
       <div class="yk-left">
         <a class="yk-brand" href="index.html" aria-label="Yasuke, tableau de bord">${I.logo(32)}<span><b>Yasuke</b><small>Trading</small></span></a>
-        <nav class="yk-tabs" aria-label="Pages">${[PAGES[0], PAGES[1], EXTRA[4], EXTRA[3], EXTRA[0], EXTRA[1], PAGES[3], PAGES[2], EXTRA[2]].map(([k, href, l]) => `<a class="yk-tab${k === page ? " active" : ""}" href="${href}"${k === page ? ' aria-current="page"' : ""}>${l}</a>`).join("")}</nav>
+        <nav class="yk-tabs" aria-label="Pages">${[PAGES[0], PAGES[1], EXTRA[4], EXTRA[3], EXTRA[0], EXTRA[1], PAGES[3], PAGES[2], EXTRA[2], EXTRA[5]].map(([k, href, l]) => `<a class="yk-tab${k === page ? " active" : ""}" href="${href}"${k === page ? ' aria-current="page"' : ""}>${l}</a>`).join("")}</nav>
       </div>
       <div class="yk-right">
         ${spaceSwitch("trade")}
@@ -184,6 +178,7 @@
       </div>
       <div class="yk-right">
         ${spaceSwitch("invest")}
+        <a class="btn-icon yk-pal" href="palettes.html">Palettes</a>
       </div></div>`;
     const nav = document.createElement("nav");
     nav.className = "yk-bnav"; nav.setAttribute("aria-label", "Navigation");
@@ -192,7 +187,7 @@
     document.body.appendChild(nav);
     const sub = document.createElement("nav");
     sub.className = "yk-sub"; sub.setAttribute("aria-label", "Parties");
-    sub.innerHTML = INVEST.map(([id, l]) => `<a href="#${id}" data-sec="${id}">${l}</a>`).join("");
+    sub.innerHTML = INVEST.map(([id, l]) => `<a href="#${id}" data-sec="${id}">${l}</a>`).join("") + `<a href="palettes.html">Palettes</a>`;
     host.after(sub);
     themeButton();
     fitHeader(host);
@@ -260,8 +255,15 @@
   // Trading et Investir gardent chacun leur thème : Trading sombre par défaut, Investir clair
   const themeKey = () => document.documentElement.dataset.space === "invest" ? "tb-theme-invest" : "tb-theme";
   const themeDefault = () => document.documentElement.dataset.space === "invest" ? "light" : "dark";
-  // Look HUD : sombre seulement (le bouton de thème a disparu)
-  function applyStoredTheme() { document.documentElement.dataset.theme = "dark"; document.documentElement.dataset.look = document.documentElement.dataset.look || "hud"; }
+  // Look rétro : sombre seulement ; la palette se choisit sur la page « Palettes » (une par espace : Trading, Investir)
+  const PALETTES = [["nuit", "Nuit d'arcade"], ["ocean", "Océan"], ["neon", "Néon cyber"], ["gameboy", "Game Boy"], ["sunset", "Coucher de soleil"], ["foret", "Forêt RPG"], ["nes", "Console grise"]];
+  const palKey = () => document.documentElement.dataset.space === "invest" ? "tb-palette-invest" : "tb-palette";
+  const palDefault = () => document.documentElement.dataset.space === "invest" ? "ocean" : "nuit";
+  function applyPalette() {
+    const v = store.get(palKey());
+    document.documentElement.dataset.palette = PALETTES.some((p) => p[0] === v) ? v : palDefault();
+  }
+  function applyStoredTheme() { const r = document.documentElement; r.dataset.theme = "dark"; r.dataset.look = "retro"; applyPalette(); }
   function isDark() { return (document.documentElement.dataset.theme || themeDefault()) === "dark"; }
   // couleur de la barre du navigateur sur téléphone : celle du fond de la page (directive « Web Interface Guidelines »)
   function themeColor() {
@@ -612,7 +614,7 @@
   applyStoredTheme();
   // l'en-tête est dessiné tout de suite (le script est chargé en fin de page), avant sections.js
   if (document.getElementById("yk-header")) header(document.body.dataset.page || "");
-  window.YK = {
+  window.YK = { PALETTES,
     $, esc, store, num, signed, pct, pctv, money, smoney, price, decimals, tone, ago, hhmm, ddmm, CRIT, SRC, RES, shortLabel,
     critTags, resultPill, dirHtml, I, header, isDark, status, toast, countTo, spark, ghSettings, bindGhSettings,
     loadDashboard, dispatch, modeText, state: S, MINUS, NB, ghRaw, getJson, poll,
