@@ -207,3 +207,33 @@ def test_copier_skips_github_signals_the_pc_does_not_see(tmp_path):
     # GitHub l'a marqué « absent » : il n'est même plus lu
     trade["pc_absent"] = True
     assert all(s["key"] != f"lab:nuit_asie:{old}" for s in mc.read_signals(get)[0])
+
+
+def test_demo_snapshot_is_published_without_tickets_once_a_minute_when_it_changes():
+    import json as _json
+    from types import SimpleNamespace as _NS
+    from trading_bot import pc_relay as pr
+    puts, now = [], [1000.0]
+    r = pr.Relay.__new__(pr.Relay)
+    r.clock, r.env, r.last_demo, r.sent_demo = lambda: now[0], {"PONT_GITHUB_TOKEN": "t"}, 0.0, ""
+    r.github = lambda method, url, tok, body=None: (puts.append((method, url, body)), 204)[1]
+    snap = {"updated_at": "2026-10-28T10:00:00Z", "demo": True, "balance": 100.0, "equity": 101.0, "profit": 1.0,
+            "positions": [{"ticket": 7, "symbol": "NAS100", "side": "achat", "comment": "lab:bot:1", "profit": 1.0}],
+            "deals": [{"ticket": 8, "symbol": "XAUUSD+", "comment": "x", "profit": 2.0, "closed": 5}]}
+    r.demo(snap)
+    sent = _json.loads(puts[0][2]["value"])
+    assert puts[0][1].endswith("/variables/PC_DEMO") and sent["balance"] == 100.0 and sent["updated_at"]
+    assert "ticket" not in sent["positions"][0] and "comment" not in sent["deals"][0]
+    now[0] += 30
+    r.demo(snap)
+    assert len(puts) == 1                                           # moins d'une minute
+    now[0] += 61
+    r.demo(dict(snap, updated_at="2026-10-28T10:02:00Z"))
+    assert len(puts) == 1                                           # rien n'a changé (l'heure seule ne compte pas)
+    now[0] += 61
+    r.demo(dict(snap, equity=105.0))
+    assert len(puts) == 2
+    r.demo(dict(snap, demo=False, equity=1.0))
+    now[0] += 61
+    r.demo(dict(snap, demo=False, equity=2.0))
+    assert len(puts) == 2                                           # jamais un compte réel

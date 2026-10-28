@@ -196,6 +196,8 @@ class Bridge:
         snap = self.snapshot()
         if snap is None:
             return
+        if self.relay is not None:
+            self.relay.demo(snap)                      # copie pour la page « Démo MT5 » du site (toutes les minutes)
         f = self.root / "journal" / "demo_live.json"
         f.parent.mkdir(exist_ok=True)
         tmp = f.with_suffix(".tmp")

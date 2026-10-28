@@ -32,6 +32,7 @@ log = logging.getLogger("pc_relay")
 
 REPO = "Yxnisse7/Trading-Bot"
 BEAT = 60
+DEMO_EVERY = 60         # s : état du démo (PC_DEMO) pour la page « Démo MT5 » du site
 ACCOUNT_EVERY = 600      # s : résumé du compte démo (PC_ACCOUNT) pour la page « Les traders »
 AGENT_TIMEOUT = 90
 ASSETS = {"gold": "Or (XAU/USD)", "nasdaq": "Nasdaq 100", "sp500": "S&P 500", "bitcoin": "Bitcoin (BTC/USD)",
@@ -66,6 +67,8 @@ class Relay:
         self.file = root / "journal" / "telegram_pc.json"
         self.last_beat = 0.0
         self.last_account = 0.0
+        self.last_demo = 0.0
+        self.sent_demo = ""
         self.local_ok: set[str] = set()               # stratégies calculées sur le PC au dernier passage
         self.pc_trades: list[dict[str, Any]] | None = None   # trades du bot classique sur le PC (mt5_bot)
         self.sent_trades = ""
@@ -126,6 +129,27 @@ class Relay:
         if snap is not None:
             from .humeur import VAR, encode_pc
             self._put(tok, VAR, encode_pc(snap))
+
+    def demo(self, snap: dict[str, Any]) -> None:
+        """Écrit PC_DEMO (positions, solde et trades récents du démo) au plus toutes les minutes, seulement si ça a
+        changé : le bot de GitHub en fait docs/live/demo.json, lu par la page « Démo MT5 » du site (28/10/2026).
+        Ni numéro de ticket ni commentaire d'ordre."""
+        now = self.clock()
+        tok = self.env.get("PONT_GITHUB_TOKEN")
+        if not tok or not snap.get("demo") or now - self.last_demo < DEMO_EVERY:
+            return
+        self.last_demo = now
+        slim = {k: v for k, v in snap.items() if k not in ("positions", "deals", "updated_at")}
+        drop = ("ticket", "comment")
+        slim["positions"] = [{k: v for k, v in p.items() if k not in drop} for p in snap.get("positions", [])[:40]]
+        slim["deals"] = [{k: v for k, v in d.items() if k not in drop} for d in snap.get("deals", [])[:60]]
+        body = json.dumps(slim, separators=(",", ":"), ensure_ascii=False)
+        if body == self.sent_demo:
+            return
+        slim["updated_at"] = snap["updated_at"]
+        full = json.dumps(slim, separators=(",", ":"), ensure_ascii=False)
+        if self._put(tok, "PC_DEMO", full):
+            self.sent_demo = body
 
     def _put(self, tok: str, name: str, value: str) -> bool:
         base = f"https://api.github.com/repos/{REPO}/actions/variables"

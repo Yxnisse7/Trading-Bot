@@ -27,7 +27,7 @@
 <div class="wrap">
   <div class="pagehead">
     <div><h1>Démo MT5</h1><div class="sub"><span class="dm-live"><span class="live-dot idle" id="dot"></span><span id="updated">Chargement…</span></span></div></div>
-    <div class="actions"><span class="muted">Compte démo Vantage · lu par le pont du PC toutes les 2 s</span></div>
+    <div class="actions"><span class="muted">Compte démo Vantage · lu par le pont du PC (en direct dans l'appli du PC, copie toutes les 5 min sur le site)</span></div>
   </div>
 
   <div id="body">
@@ -55,13 +55,16 @@
   const dg = (sym) => /EUR|USD$/.test(sym) && !/XAU|BTC|ETH/.test(sym) ? 5 : 2;
   const side = (s) => s === "achat" ? `<span class="dir"><b class="up">↗</b>Achat</span>` : `<span class="dir"><b class="dn">↘</b>Vente</span>`;
   const usd = (v) => `<span class="${Y.tone(v)}">${Y.smoney(v, "$")}</span>`;
-  let failed = 0, ok = false;
+  let failed = 0, ok = false, siteMode = false, lastSite = 0;
 
-  function render(d) {
+  function render(d, site) {
     const ageS = Math.round((Date.now() - new Date(d.updated_at).getTime()) / 1000);
-    const live = ageS < 30;
+    const live = site ? ageS < 900 : ageS < 30;
     $("#dot").className = "live-dot" + (live ? "" : " idle");
-    $("#updated").textContent = live ? `En direct · ${new Date(d.updated_at).toLocaleTimeString("fr-FR")}`
+    $("#updated").textContent = site
+      ? (live ? `Copie du site · lue ${Y.ago(d.updated_at)} (rafraîchie toutes les 5 min environ)`
+              : `PC éteint ou pont arrêté ? dernière copie ${Y.ago(d.updated_at)}`)
+      : live ? `En direct · ${new Date(d.updated_at).toLocaleTimeString("fr-FR")}`
       : `Pont arrêté ? dernière lecture ${Y.ago(d.updated_at)}`;
     const midnight = new Date(); midnight.setHours(0, 0, 0, 0);
     const today = d.deals.filter((x) => x.closed * 1000 >= midnight.getTime());
@@ -86,16 +89,27 @@
       : `<tr><td colspan="7" class="empty">Aucun trade fermé sur les 36 dernières heures.</td></tr>`;
   }
 
+  // site public : l'appli du PC n'est pas là, on lit la copie que le pont dépose sur GitHub (live/demo.json)
+  async function loadSite() {
+    try {
+      const d = await Y.getJson("live/demo.json");
+      if (!d || !d.updated_at) throw new Error("vide");
+      render(d, true); ok = true; failed = 0; return true;
+    } catch (e) { return false; }
+  }
+
   async function load() {
+    if (siteMode) { if (Date.now() - lastSite > 30000) { lastSite = Date.now(); await loadSite(); } return; }
     try {
       const r = await fetch("/api/demo", { cache: "no-store" });
       if (!r.ok) throw new Error(r.status);
       render(await r.json()); failed = 0; ok = true;
     } catch (e) {
       if (ok) { $("#updated").textContent = "Connexion au PC perdue, nouvel essai…"; $("#dot").className = "live-dot idle"; return; }
-      if (++failed > 1) {
+      if (++failed > 1 && await loadSite()) { siteMode = true; return; }
+      if (failed > 1) {
         $("#updated").textContent = "Indisponible ici";
-        $("#body").innerHTML = `<div class="card"><div class="empty" style="padding:8px 0">Le démo MT5 se lit seulement depuis l'appli du PC (icône « Interface »), ou depuis son adresse privée une fois le tunnel Cloudflare en place. Le pont doit tourner.</div></div>`;
+        $("#body").innerHTML = `<div class="card"><div class="empty" style="padding:8px 0">Pas encore de copie du démo sur le site : elle arrive quand le pont du PC tourne (PC allumé), ou ouvre l'appli du PC (icône « Interface »).</div></div>`;
       }
     }
   }

@@ -70,6 +70,8 @@ jobs:
           PC_TRADES: ${{ vars.PC_TRADES }}
           # résumé du compte démo MT5 (solde, trades des 30 derniers jours) pour la page « Les traders »
           PC_ACCOUNT: ${{ vars.PC_ACCOUNT }}
+          # état du démo MT5 (positions, solde, trades récents) pour la page « Démo MT5 » du site
+          PC_DEMO: ${{ vars.PC_DEMO }}
           # réveille l'agent IA (dépôt privé) à chaque signal réel annoncé d'ici ; vide = rien
           AGENT_DISPATCH_TOKEN: ${{ secrets.AGENT_DISPATCH_TOKEN }}
           CMD: ${{ github.event.inputs.command || 'tick' }}

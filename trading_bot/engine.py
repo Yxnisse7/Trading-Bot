@@ -971,6 +971,13 @@ class Engine:
                 pc_raw=os.environ.get(humeur.VAR), previous=prev, now=utcnow().timestamp(), prices=prices))
         except Exception:  # noqa: BLE001 — l'humeur des singes ne doit jamais casser un passage
             log.exception("singes traders")
+        try:                                           # démo MT5 vu du site : copie écrite par le pont (PC_DEMO)
+            raw = os.environ.get("PC_DEMO")
+            demo = json.loads(raw) if raw else None
+            if isinstance(demo, dict) and demo.get("updated_at"):
+                self.store.save_live("demo", demo)
+        except Exception:  # noqa: BLE001 — la page Démo MT5 ne doit jamais casser un passage
+            log.exception("démo MT5 du site")
         return text
 
     # ------------------------------------------------------------ compte Topstep (simulation séparée)
