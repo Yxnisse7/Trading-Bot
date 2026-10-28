@@ -8,13 +8,13 @@
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap">
-<link rel="stylesheet" href="yasuke.css?v=3666f287b2">
+<link rel="stylesheet" href="yasuke.css?v=3b9ad39340">
 <script>/* Trading : sombre par défaut */ try { document.documentElement.dataset.theme = localStorage.getItem("tb-theme") || "dark"; } catch (e) { document.documentElement.dataset.theme = "dark"; }</script>
 <style>
   .tr-grid { display: grid; gap: 16px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .tr-card { padding: 18px; display: grid; gap: 14px; align-content: start; border-top: 4px solid var(--mood, var(--line)); }
-  .tr-card[data-href] { cursor: pointer; transition: transform .12s, box-shadow .12s; }
-  .tr-card[data-href]:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,.18); }
+  .tr-card { padding: 18px; display: grid; gap: 14px; align-content: start; }
+  .tr-card[data-href] { cursor: pointer; transition: border-color .12s; }
+  .tr-card[data-href]:hover { border-color: color-mix(in srgb, var(--mood, var(--muted)) 55%, var(--line)); }
   .tr-card[data-href]:focus-visible { outline: 2px solid var(--mood, var(--accent)); outline-offset: 2px; }
   .tr-head { display: grid; grid-template-columns: 132px 1fr; gap: 12px; align-items: center; }
   .tr-head .singe { width: 132px; height: auto; }
@@ -109,7 +109,7 @@
           <span class="tr-mood">${esc(h.label)}</span>
           <div class="tr-moral">Moral ${a.moral}/100<i><span style="width:${a.moral}%"></span></i></div></div></div>
       <div class="tr-bubble">« ${esc(a.pensee)} »</div>
-      <div class="tr-why">${(a.raisons || []).map((r) => `<span>${esc(r)}</span>`).join("")}</div>
+      <div class="tr-why">${(s.serie ? [`série en cours : ${Math.abs(s.serie)} ${s.serie > 0 ? "gain" : "perte"}${Math.abs(s.serie) > 1 ? "s" : ""}`] : []).concat(a.raisons || []).map((r) => `<span>${esc(r)}</span>`).join("")}</div>
       <div class="tr-stats">
         <div><small>Solde</small><b>${Y.money(s.solde, "$", 0)}</b></div>
         <div><small>Depuis le départ</small><b>${usd(s.resultat, 0)}</b></div>
@@ -117,7 +117,6 @@
         <div><small>En cours</small><b>${s.ouverts ? (s.en_cours === null || s.en_cours === undefined ? s.ouverts + " ouvert" + (s.ouverts > 1 ? "s" : "") : usd(s.en_cours, 0)) : "aucun"}</b></div>
         <div><small>Gagnants</small><b>${s.gagnants_pct === null ? "n/a" : Y.num(s.gagnants_pct, 0) + Y.NB + "%"}</b></div>
         <div><small>Sous le plus haut</small><b>${Y.num(s.baisse_pct, 1)}${Y.NB}%</b></div>
-        <div><small>Série</small><b class="${Y.tone(s.serie)}">${s.serie > 0 ? s.serie + " gain" + (s.serie > 1 ? "s" : "") : s.serie < 0 ? -s.serie + " perte" + (s.serie < -1 ? "s" : "") : "—"}</b></div>
       </div>
       <div class="tr-curve">${curve(a.courbe, h.couleur)}</div>
       <div class="tr-last">${(a.derniers || []).slice(0, 5).map((t) => `<div><span>${when(t.t)} · ${esc(Y.shortLabel(t.actif || ""))}${t.source ? " · " + esc(t.source) : ""}</span>${usd(t.pnl)}</div>`).join("")
