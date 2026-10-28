@@ -961,9 +961,14 @@ class Engine:
         try:                                           # les singes traders (page « Les traders »)
             from . import humeur
             prev = self.store._read(self.store.dir / "live" / "traders.json", None)
+            prices = {}                                # dernier prix par actif, pour les trades en cours
+            for key in self.cfg.assets:
+                last = (self.store._read(self.store.dir / "live" / f"{key}.json", None) or {}).get("last")
+                if last is not None:
+                    prices[key] = float(last)
             self.store.save_live("traders", humeur.build(
                 portfolio=self.store.portfolio(), topstep_acct=ts_data, lab_shadow=dash.get("lab_shadow"),
-                pc_raw=os.environ.get(humeur.VAR), previous=prev, now=utcnow().timestamp()))
+                pc_raw=os.environ.get(humeur.VAR), previous=prev, now=utcnow().timestamp(), prices=prices))
         except Exception:  # noqa: BLE001 — l'humeur des singes ne doit jamais casser un passage
             log.exception("singes traders")
         return text

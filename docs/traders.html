@@ -110,6 +110,7 @@
         <div><small>Solde</small><b>${Y.money(s.solde, "$", 0)}</b></div>
         <div><small>Depuis le départ</small><b>${usd(s.resultat, 0)}</b></div>
         <div><small>Aujourd'hui</small><b>${usd(s.jour, 0)}</b></div>
+        <div><small>En cours</small><b>${s.ouverts ? (s.en_cours === null || s.en_cours === undefined ? s.ouverts + " ouvert" + (s.ouverts > 1 ? "s" : "") : usd(s.en_cours, 0)) : "aucun"}</b></div>
         <div><small>Gagnants</small><b>${s.gagnants_pct === null ? "n/a" : Y.num(s.gagnants_pct, 0) + Y.NB + "%"}</b></div>
         <div><small>Sous le plus haut</small><b>${Y.num(s.baisse_pct, 1)}${Y.NB}%</b></div>
         <div><small>Série</small><b class="${Y.tone(s.serie)}">${s.serie > 0 ? s.serie + " gain" + (s.serie > 1 ? "s" : "") : s.serie < 0 ? -s.serie + " perte" + (s.serie < -1 ? "s" : "") : "—"}</b></div>

@@ -47,3 +47,25 @@ def test_mt5_curve_rebuilt_from_balance_and_previous_kept():
     assert [p[1] for p in m["courbe"]] == [1000, 950, 900] and m["derniers"][0]["source"] == "Agent IA"
     again = h.build(portfolio={}, topstep_acct={}, lab_shadow={}, pc_raw=None, previous=out, now=NOW)
     assert again["comptes"]["mt5"] == m                                       # PC éteint : dernier résumé gardé
+
+
+def test_open_trades_move_the_mood():
+    calm = [10, -5, 10, -5]
+    assert mood(calm, open_n=1, floating=25) == "confiant"                  # trade en cours en gain
+    assert mood(calm, open_n=1, floating=-25) == "frustre"                  # trade en cours en perte
+    assert mood(calm, open_n=1, floating=-5) == "serein"                    # petit écart : rien ne change
+    assert mood(calm, open_n=1, floating=-700, day_limit=1000) == "tilt"    # grosse perte en cours
+    assert mood(calm, open_n=0, floating=-25) == "serein"                   # sans trade ouvert, ignoré
+    out = h.humeur(trades(calm), now=NOW, balance=1000, peak=1000, start=1000, unit=20, open_n=1, floating=25)
+    assert out["stats"]["en_cours"] == 25 and "en gain" in out["raisons"][0]
+
+
+def test_floating_from_prices():
+    pf = {"balance": 1000, "balance_initial": 1000, "risk_pct": 2, "history": [],
+          "open": {"a": {"asset": "nasdaq", "direction": "long", "entry": 100.0, "stop_loss": 90.0, "risk_amount": 20}}}
+    out = h.simulation(pf, NOW, False, {"nasdaq": 115.0})                   # +1,5 R × 20 $ = +30 $
+    assert out["stats"]["en_cours"] == 30
+    acct = {"rules": {"start_balance": 50000}, "balance": 50000, "trades": [],
+            "open": [{"asset": "gold", "direction": "short", "entry": 2000.0, "stop_loss": 2010.0,
+                      "contracts": 2, "multiplier": 10}]}
+    assert h.topstep(acct, NOW, False, {"gold": 1995.0})["stats"]["en_cours"] == 100

@@ -83,8 +83,9 @@ def ombre(lab_shadow: dict[str, Any] | None, now: float) -> dict[str, Any]:
 # ---------------------------------------------------------------- humeur d'un compte
 def humeur(trades: list[dict[str, Any]], *, now: float, balance: float, peak: float, start: float, unit: float,
            day_limit: float | None = None, stopped: str | None = None, open_n: int = 0, scared: bool = False,
-           drawdown_bad: float = 0.25) -> dict[str, Any]:
-    """trades : [{"closed": ts, "pnl": $}] triés du plus ancien au plus récent. unit : une mise typique en $."""
+           drawdown_bad: float = 0.25, floating: float = 0.0) -> dict[str, Any]:
+    """trades : [{"closed": ts, "pnl": $}] triés du plus ancien au plus récent. unit : une mise typique en $.
+    floating : gain ou perte des trades encore ouverts, au dernier prix connu (idée de Yanisse, 28/10)."""
     pnls = [t["pnl"] for t in trades]
     last5, last10 = pnls[-5:], pnls[-10:]
     streak_w = 0
@@ -112,9 +113,10 @@ def humeur(trades: list[dict[str, Any]], *, now: float, balance: float, peak: fl
     elif quiet:
         mood = "pause"
         reasons.append(f"aucun trade fermé depuis {QUIET_DAYS} jours")
-    elif (day_limit and day_pnl <= -0.6 * day_limit) or (day_losses >= 3 and day_pnl <= -2 * unit):
+    elif (day_limit and day_pnl + min(floating, 0) <= -0.6 * day_limit) or (day_losses >= 3 and day_pnl <= -2 * unit):
         mood = "tilt"
-        reasons.append(f"{day_losses} perte{'s' if day_losses > 1 else ''} aujourd'hui ({day_pnl:+.0f} $)")
+        reasons.append(f"{day_losses} perte{'s' if day_losses > 1 else ''} aujourd'hui ({day_pnl:+.0f} $)" if day_losses
+                       else f"grosse perte en cours ({floating:+.0f} $)")
     elif scared:
         mood = "peur"
         reasons.append("les stratégies en ombre font mieux que celles en réel")
@@ -133,11 +135,22 @@ def humeur(trades: list[dict[str, Any]], *, now: float, balance: float, peak: fl
     else:
         mood = "serein"
         reasons.append("rien d'inhabituel")
+    float_txt = f"{open_n} trade{'s' if open_n > 1 else ''} en cours ({floating:+.0f} $)"
+    if open_n and unit > 0 and mood in ("serein", "confiant", "euphorique") and floating <= -unit:
+        mood = "frustre"
+        reasons = [float_txt.replace("en cours", "en cours, en perte")]
+    elif open_n and unit > 0 and mood == "serein" and floating >= unit:
+        mood = "confiant"
+        reasons = [float_txt.replace("en cours", "en cours, en gain")]
+    elif open_n and "en cours" not in " ".join(reasons):
+        reasons.append(float_txt)
     if scared and mood != "peur":
         reasons.append("son ombre fait mieux que lui")
 
     w10 = sum(1 for p in last10 if p > 0)
     moral = 50 + 5 * (w10 - (len(last10) - w10)) - 100 * dd / 2 + (10 if day_pnl > 0 else -10 if day_pnl < 0 else 0)
+    if unit > 0:
+        moral += max(-15.0, min(15.0, 10 * floating / unit))
     if mood == "pause" and stopped:
         moral = min(moral, 20)
     day_n = int(now // DAY)
@@ -147,7 +160,8 @@ def humeur(trades: list[dict[str, Any]], *, now: float, balance: float, peak: fl
                       "resultat": round(balance - start, 2), "baisse_pct": round(100 * dd, 1),
                       "jour": round(day_pnl, 2), "trades": len(pnls),
                       "gagnants_pct": round(100 * sum(1 for p in pnls if p > 0) / len(pnls), 1) if pnls else None,
-                      "serie": streak_w if streak_w else -streak_l, "ouverts": open_n}}
+                      "serie": streak_w if streak_w else -streak_l, "ouverts": open_n,
+                      "en_cours": round(floating, 2) if open_n else None}}
 
 
 def _curve(points: list[tuple[int, float]]) -> list[list[float]]:
@@ -158,7 +172,15 @@ def _curve(points: list[tuple[int, float]]) -> list[list[float]]:
 
 
 # ---------------------------------------------------------------- les trois comptes
-def simulation(pf: dict[str, Any], now: float, scared: bool) -> dict[str, Any] | None:
+def _move(o: dict[str, Any], prices: dict[str, float]) -> float | None:
+    """Écart du dernier prix à l'entrée, dans le sens du trade (None si prix inconnu)."""
+    last = prices.get(o.get("asset") or "")
+    if last is None or o.get("entry") is None:
+        return None
+    return (float(last) - float(o["entry"])) * (1 if o.get("direction") == "long" else -1)
+
+
+def simulation(pf: dict[str, Any], now: float, scared: bool, prices: dict[str, float] | None = None) -> dict[str, Any] | None:
     hist = [h for h in pf.get("history") or [] if h.get("closed_at") and h.get("pnl") is not None]
     if not pf:
         return None
@@ -167,8 +189,14 @@ def simulation(pf: dict[str, Any], now: float, scared: bool) -> dict[str, Any] |
     bal, start = float(pf.get("balance") or 0), float(pf.get("balance_initial") or 0)
     peak = max([start, bal] + [float(h.get("balance_after") or 0) for h in hist])
     unit = bal * float(pf.get("risk_pct") or 1) / 100
-    out = humeur(trades, now=now, balance=bal, peak=peak, start=start, unit=unit, open_n=len(pf.get("open") or []),
-                 scared=scared, drawdown_bad=0.35)
+    opens = list((pf.get("open") or {}).values()) if isinstance(pf.get("open"), dict) else list(pf.get("open") or [])
+    floating = 0.0
+    for o in opens:                                  # en R × montant risqué : vaut quel que soit le lot
+        mv, risk = _move(o, prices or {}), abs(float(o.get("entry") or 0) - float(o.get("stop_loss") or 0))
+        if mv is not None and risk > 0:
+            floating += mv / risk * float(o.get("risk_amount") or 0)
+    out = humeur(trades, now=now, balance=bal, peak=peak, start=start, unit=unit, open_n=len(opens),
+                 scared=scared, drawdown_bad=0.35, floating=floating)
     start_ts = _ts(pf.get("started_at")) or (trades[0]["closed"] if trades else now)
     out["courbe"] = _curve([(start_ts, start)] + [(t["closed"], float(h.get("balance_after") or 0))
                                                   for t, h in zip(trades, hist)])
@@ -178,7 +206,7 @@ def simulation(pf: dict[str, Any], now: float, scared: bool) -> dict[str, Any] |
     return out
 
 
-def topstep(acct: dict[str, Any], now: float, scared: bool) -> dict[str, Any] | None:
+def topstep(acct: dict[str, Any], now: float, scared: bool, prices: dict[str, float] | None = None) -> dict[str, Any] | None:
     if not acct:
         return None
     rules = acct.get("rules") or {}
@@ -194,9 +222,15 @@ def topstep(acct: dict[str, Any], now: float, scared: bool) -> dict[str, Any] | 
     elif acct.get("day_closed"):
         stopped = "journée arrêtée (limite du jour)"
     max_loss = float(rules.get("max_loss") or 2000)
+    opens = list(acct.get("open") or [])
+    floating = 0.0
+    for o in opens:
+        mv = _move(o, prices or {})
+        if mv is not None:
+            floating += mv * float(o.get("multiplier") or 0) * float(o.get("contracts") or 0)
     out = humeur(trades, now=now, balance=bal, peak=peak, start=start, unit=float(acct.get("risk_pct") or 0) / 100 * start or 250,
-                 day_limit=float(rules.get("daily_loss") or 1000), stopped=stopped, open_n=len(acct.get("open") or []),
-                 scared=scared, drawdown_bad=0.5 * max_loss / peak if peak else 0.02)
+                 day_limit=float(rules.get("daily_loss") or 1000), stopped=stopped, open_n=len(opens),
+                 scared=scared, drawdown_bad=0.5 * max_loss / peak if peak else 0.02, floating=floating)
     start_ts = _ts(acct.get("started_at")) or (trades[0]["closed"] if trades else now)
     out["courbe"] = _curve([(start_ts, start)] + [(t["closed"], float(r.get("balance_after") or 0))
                                                   for t, r in zip(trades, trades_raw)])
@@ -231,7 +265,8 @@ def mt5(raw: dict[str, Any] | None, now: float, scared: bool) -> dict[str, Any] 
     day0 = [b for t, b in pts if _paris_day(t) < _paris_day(now)]
     out = humeur(trades, now=now, balance=bal, peak=peak, start=start, unit=0.02 * bal,
                  day_limit=0.06 * (day0[-1] if day0 else bal), stopped=raw.get("stop"), open_n=int(raw.get("open") or 0),
-                 scared=scared, drawdown_bad=0.30)
+                 scared=scared, drawdown_bad=0.30,
+                 floating=float(raw["eq"]) - bal if raw.get("eq") is not None and raw.get("open") else 0.0)
     out["courbe"] = _curve(pts)
     out["derniers"] = [{"t": int(d[0]), "pnl": round(float(d[1]), 2), "actif": d[3] if len(d) > 3 else None, "sens": None,
                         "source": ORIGINS.get(str(d[2]), str(d[2]))} for d in deals[-8:]][::-1]
@@ -242,7 +277,9 @@ def mt5(raw: dict[str, Any] | None, now: float, scared: bool) -> dict[str, Any] 
 
 
 def build(*, portfolio: dict[str, Any], topstep_acct: dict[str, Any], lab_shadow: dict[str, Any] | None,
-          pc_raw: str | None, previous: dict[str, Any] | None, now: float) -> dict[str, Any]:
+          pc_raw: str | None, previous: dict[str, Any] | None, now: float,
+          prices: dict[str, float] | None = None) -> dict[str, Any]:
+    """prices : dernier prix connu par actif (docs/live/<actif>.json « last »), pour les trades en cours."""
     sh = ombre(lab_shadow, now)
     raw = None
     if pc_raw:
@@ -251,8 +288,8 @@ def build(*, portfolio: dict[str, Any], topstep_acct: dict[str, Any], lab_shadow
         except ValueError:
             raw = None
     comptes: dict[str, Any] = {}
-    for key, val in (("simulation", simulation(portfolio, now, sh["peur"])),
-                     ("topstep", topstep(topstep_acct, now, sh["peur"])),
+    for key, val in (("simulation", simulation(portfolio, now, sh["peur"], prices)),
+                     ("topstep", topstep(topstep_acct, now, sh["peur"], prices)),
                      ("mt5", mt5(raw, now, sh["peur"]))):
         if val is None and previous:
             val = (previous.get("comptes") or {}).get(key)
