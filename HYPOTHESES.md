@@ -1333,6 +1333,31 @@ apprentissage** de façon prouvée (z ≥ 2,33 sur l'écart par trade, ou par mo
 mieux **au moins 6 années sur 10**, et sa pire baisse n'est pas plus grande. Alors : proposer à Yanisse de la suivre en
 ombre. Sinon : dossier clos, rien ne change en réel.
 
+## Essai 64 — l'or juste après la pause du CME (idée du canal MQL5)
+
+Écrit le 28 octobre 2026, **avant** tout calcul, à la demande de Yanisse. Source : un résumé du canal Telegram
+« MQL5 Trading Algorithmique » (15/10/2026) : sur 11 ans, la première heure après la pause quotidienne du CME sur l'or
+monterait plus souvent ; l'EA achète à la réouverture, garde 2 h, stop selon la volatilité ; l'écart réel à ce
+moment-là est d'environ 60 points (0,60 $) et non 19.
+
+Données : or 1 min HistData 2014 → 10/2026 (`data/history/long/gold_1m.npz`). Réouverture = première bougie à partir
+de 18:00 heure de New York, du dimanche au jeudi (la pause va de 17:00 à 18:00 New York). Achat à l'ouverture de cette
+bougie. Stop = 1,5 × l'amplitude moyenne des 14 dernières bougies d'une heure avant l'entrée. Frais : 0,90 $ l'once
+(commission 0,30 + écart élargi 0,60) ; contrôle à 1,80 $.
+
+**4 cellules** : **R1** achat à la réouverture, sortie 2 h après ; **R2** pareil, sortie 1 h après ; **R3** achat
+5 min après la réouverture (écart revenu à la normale, frais 0,45 $), sortie 2 h après ; **R4** comme R1 sans stop
+(le risque sert seulement à compter en R).
+
+**Singes** (1 000) : les mêmes jours, même sens (achat), même stop, même durée, mais à une heure tirée au hasard dans la
+même journée, hors 16:00-19:00 New York, avec les frais normaux (0,45 $). Ils disent si cette heure-là a quelque chose
+de spécial.
+
+**Décidé d'avance** : une cellule passe si son R net moyen est > 0 avec z ≥ 2,24 (0,05 / 4, unilatéral), si elle bat
+95 % des singes, si elle est positive avant et après 2020, sur au moins 60 % des années, et encore > 0 avec les frais
+doublés. Alors : proposer à Yanisse de la suivre en ombre. Rien en réel ni sur le démo sans son accord.
+`trading_bot/essai64.py`
+
 ## Journal des essais
 
 | Date | Essai | Résultat |
