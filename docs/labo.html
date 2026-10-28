@@ -9,7 +9,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap">
 <link rel="stylesheet" href="yasuke.css?v=39f9b75eae">
-<script>/* Trading : sombre par défaut */ try { document.documentElement.dataset.theme = localStorage.getItem("tb-theme") || "dark"; } catch (e) { document.documentElement.dataset.theme = "dark"; }</script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&display=swap">
+<script>/* look HUD : sombre seulement */ document.documentElement.dataset.theme = "dark"; document.documentElement.dataset.look = "hud";</script>
+<link rel="stylesheet" href="hud.css?v=1efffcfad7">
 <style>
   .lb-bar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 16px; }
   .lb-bar .seg { flex-wrap: wrap; }
@@ -86,7 +88,7 @@
   <div class="lb-grid" id="grid"></div>
   <p class="faint" style="margin-top:18px;font-size:12px">R = ce qu'on risque sur un trade (distance du stop). +1 R = on gagne une fois sa mise de risque. Résultat cumulé = somme des R trade après trade. « Singes » : 500 faux traders qui entrent au hasard à la même heure, avec le même sens, le même stop et la même durée (essai 21) ; l'éventail montre 90 % de leurs résultats. Une stratégie qui ne sort pas nettement au-dessus de l'éventail ne bat pas le hasard.</p>
 </div>
-<script src="yasuke.js?v=e408e816d5"></script>
+<script src="yasuke.js?v=4c31cc5a64"></script>
 <script>
 (function () {
   const Y = window.YK, $ = Y.$, esc = Y.esc;

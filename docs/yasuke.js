@@ -107,9 +107,15 @@
     if (document.querySelector(".yk-skip")) return;
     host.insertAdjacentHTML("beforebegin", `<a class="yk-skip" href="#${main.id}">Aller au contenu</a>`);
   }
+  // Cadre « HUD » : fenêtre fixe sur un fond dégradé (voir hud.css)
+  function hudFrame() {
+    if (document.querySelector(".fx-frame")) return;
+    document.body.insertAdjacentHTML("afterbegin", '<div class="fx-frame" aria-hidden="true"></div><div class="fx-world" aria-hidden="true"></div>');
+  }
   function header(page) {
     const host = document.getElementById("yk-header");
     if (!host) return;
+    hudFrame();
     if (page === "invest") return investHeader(host);
     const onDash = page === "dashboard";
     const trade = onDash ? `<button type="button" id="btn-trade">${I.plus}<span class="btn-lbl">Nouveau trade</span></button>`
@@ -124,7 +130,6 @@
       <div class="yk-right">
         ${spaceSwitch("trade")}
         <span class="yk-status" id="yk-status" role="status"><span class="dot"></span><b>Chargement</b><span class="yk-st-sub"></span></span>
-        <button type="button" class="btn-icon" id="btn-theme" aria-label="Changer de thème" title="Thème clair ou sombre"></button>
         ${trade}
       </div></div>`;
     const nav = document.createElement("nav");
@@ -179,7 +184,6 @@
       </div>
       <div class="yk-right">
         ${spaceSwitch("invest")}
-        <button type="button" class="btn-icon" id="btn-theme" aria-label="Changer de thème" title="Thème clair ou sombre"></button>
       </div></div>`;
     const nav = document.createElement("nav");
     nav.className = "yk-bnav"; nav.setAttribute("aria-label", "Navigation");
@@ -256,7 +260,8 @@
   // Trading et Investir gardent chacun leur thème : Trading sombre par défaut, Investir clair
   const themeKey = () => document.documentElement.dataset.space === "invest" ? "tb-theme-invest" : "tb-theme";
   const themeDefault = () => document.documentElement.dataset.space === "invest" ? "light" : "dark";
-  function applyStoredTheme() { document.documentElement.dataset.theme = store.get(themeKey()) || themeDefault(); }
+  // Look HUD : sombre seulement (le bouton de thème a disparu)
+  function applyStoredTheme() { document.documentElement.dataset.theme = "dark"; document.documentElement.dataset.look = "hud"; }
   function isDark() { return (document.documentElement.dataset.theme || themeDefault()) === "dark"; }
   // couleur de la barre du navigateur sur téléphone : celle du fond de la page (directive « Web Interface Guidelines »)
   function themeColor() {
