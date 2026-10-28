@@ -4,7 +4,10 @@ Chaîne : tg_listen.py (compte Telegram de Yanisse, lancé et relancé par le po
 dans journal/tg_inbox/ ; ici, chaque message est lu et le pont l'applique sur le démo et l'annonce sur Telegram (sortie
 en réponse). Premier canal : BENAGOLD, au format fixe (lu sans Claude, `parse`) :
     SELL GOLD / Prix d'entrée : 4028-4032 / Stop Loss : 4038 / Take Profit 1 : 4019 / 2 : 4007 / 3 : 3989
-et « sécurisez » = stop au prix d'entrée (choix de Yanisse le 23/10/2026). Tout autre message est ignoré. Pour un canal
+et « sécurisez » = stop au prix d'entrée (choix de Yanisse le 23/10/2026). Deuxième canal (28/10/2026) : RTZ ACADEMY,
+    🚨SELL XAUUSD / ENTRY : 4139-4145 / SL : 4148 / TP1: 4132
+(« BUY NOW XAUUSD » aussi ; les « TRADE MODIFIER » et un signal renvoyé à l'identique ne rouvrent rien).
+Tout autre message est ignoré. Pour un canal
 au format libre, "claude": true fait lire chaque message qui parle de trade par Claude (tg_parse.py).
 Zone d'entrée : on prend le prix de la zone le plus proche du prix actuel.
 
@@ -15,7 +18,10 @@ Prix d'entrée donné et déjà dépassé de plus d'un quart du stop : ordre lim
 
 Réglages (config.json du PC) : "tg_copy": {"channels": ["nom ou numéro du canal", …], "risk_pct": 0.01, "lot": 0.02}.
 "lot" : taille fixe de CHAQUE ordre (choix de Yanisse le 23/10/2026 : 3 trades de 0,02 lot quand il y a 3 TP), à la
-place du calcul au risque.
+place du calcul au risque. "tp_max": {"RTZ ACADEMY": 1} : au plus ce nombre d'objectifs pour ce canal (RTZ : TP1
+seul, c'est ce qui a été rejoué le 28/10/2026 : +0,18 R par trade contre +0,05 R avec tous les TP). "opens_only":
+["RTZ ACADEMY"] : on ne copie que les ouvertures de ce canal, sans « sécurisez / BE / clôturez » (RTZ en parle dans
+presque chaque message, souvent avant d'avoir à le faire ; le rejeu est fait sans).
 """
 from __future__ import annotations
 
@@ -53,9 +59,9 @@ LABELS = {"gold": "Or (XAU/USD)", "nasdaq": "Nasdaq 100", "sp500": "S&P 500", "b
 # un message sans aucun de ces mots ne part pas chez Claude (économie de l'abonnement)
 WORDS = re.compile(r"buy|sell|achat|achète|vente|vend|long|short|\bsl\b|\btp\d?\b|stop|\bbe\b|break|clos|clôt|ferm|"
                    r"sort|coupe|sécur|secur|entr|exit|cancel|annul", re.I)
-MARKET = re.compile(r"\b(BUY|SELL|ACHAT|VENTE)\s+(GOLD|XAU\w*|OR)\b", re.I)
+MARKET = re.compile(r"\b(BUY|SELL|ACHAT|VENTE)\s+(?:NOW\s+)?(GOLD|XAU\w*|OR)\b", re.I)
 NUM = r"(\d{3,}(?:[.,]\d+)?)"
-ENTRY = re.compile(r"entr[ée]e\s*:?\s*" + NUM + r"(?:\s*[-–/à]\s*" + NUM + ")?", re.I)
+ENTRY = re.compile(r"(?:entr[ée]e|entry(?:\s*price)?)\s*:?\s*" + NUM + r"(?:\s*[-–/à]\s*" + NUM + ")?", re.I)
 STOP = re.compile(r"(?:stop\s*loss|\bsl)\s*:?\s*" + NUM, re.I)
 TARGET = re.compile(r"(?:take\s*profit|\btp)\s*\d?\s*:?\s*" + NUM, re.I)
 SECURE = re.compile(r"s[ée]curis|break\s*even|\bBE\b", re.I)
@@ -79,10 +85,14 @@ def parse(text: str, reply_to: int | None, opened: list[dict[str, Any]]) -> dict
     """Message au format BENAGOLD → action (même forme que tg_parse), ou None si ce n'est pas un trade."""
     m, stop = MARKET.search(text), STOP.search(text)
     if m and stop:
+        if re.search(r"modifi", text, re.I):
+            return None                        # « TRADE MODIFIER » de RTZ : pas un nouveau trade
         e = ENTRY.search(text)
         zone = sorted(_num(x) for x in e.groups() if x) if e else []
-        return {"type": "ouverture", "marche": "gold", "sens": "achat" if m.group(1).lower() in ("buy", "achat") else
-                "vente", "entree": zone[0] if len(zone) == 1 else None, "zone": zone if len(zone) == 2 else None,
+        sens = "achat" if m.group(1).lower() in ("buy", "achat") else "vente"
+        if any(o["sens"] == sens and abs(float(o["stop"]) - _num(stop.group(1))) < 0.01 for o in opened):
+            return None                        # même signal renvoyé (RTZ le renvoie parfois 45 min après)
+        return {"type": "ouverture", "marche": "gold", "sens": sens, "entree": zone[0] if len(zone) == 1 else None, "zone": zone if len(zone) == 2 else None,
                 "stop": _num(stop.group(1)), "objectifs": [_num(x) for x in TARGET.findall(text)], "signal": None,
                 "raison": "format BENAGOLD"}
     partial = bool(PARTIAL.search(text))
@@ -191,7 +201,7 @@ class TgCopier:
                 if m.get("edited"):
                     continue                   # un message modifié (« TP1 ✅ » ajouté…) ne rouvre rien
                 d = parse(m["text"], m.get("reply_to"), self._opened(m["chat_id"]))
-                if d is None:
+                if d is None or (d["type"] != "ouverture" and self._in(m, "opens_only")):
                     continue
                 self._act(d, m)
                 return f"copie Telegram : {d['type']} ({m.get('chat')} n°{m['msg_id']})"
@@ -287,6 +297,17 @@ class TgCopier:
             n -= 1
         return []
 
+    @staticmethod
+    def _norm(x: Any) -> str:
+        return "".join(ch for ch in str(x).lower() if ch.isalnum())
+
+    def _in(self, data: dict[str, Any], key: str) -> bool:
+        return self._norm(data.get("chat", "")) in {self._norm(c) for c in self.cfg.get(key) or []}
+
+    def _tp_max(self, data: dict[str, Any]) -> int:
+        per = {self._norm(k): int(v) for k, v in (self.cfg.get("tp_max") or {}).items()}
+        return min(MAX_SPLIT, per.get(self._norm(data.get("chat", "")), MAX_SPLIT))
+
     def _open(self, d: dict[str, Any], data: dict[str, Any]) -> None:
         key = f"{data['chat_id']}:{data['msg_id']}"
         if any(s["key"] == key for s in self.state["signals"].values()):
@@ -316,7 +337,7 @@ class TgCopier:
             return self._refuse(data, d, "le prix a déjà atteint le stop")
         limit = (now_px - entry) * s > CHASE * dist
         px = entry if limit else now_px
-        targets = [float(x) for x in d.get("objectifs") or [] if (float(x) - px) * s > lvl][:MAX_SPLIT]
+        targets = [float(x) for x in d.get("objectifs") or [] if (float(x) - px) * s > lvl][:self._tp_max(data)]
         if d.get("objectifs") and not targets:
             return self._refuse(data, d, "le prix a déjà dépassé les objectifs")
         digits = int(getattr(info, "digits", 2) or 2)

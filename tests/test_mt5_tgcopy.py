@@ -262,3 +262,40 @@ def test_benagold_close_messages(tmp_path):
     c.step()
     closes = [r for r in mt5.sent[n:] if r["action"] == mt5.TRADE_ACTION_DEAL]
     assert [r["position"] for r in closes] == [tickets[0], tickets[1], tickets[2]]
+
+
+RTZ = """🚨SELL XAUUSD
+
+➡️ENTRY : 4139-4145
+
+🔴SL : 4148
+
+🟢TP1: 4132
+🟢TP2: Open
+
+⚠️Disclaimer : Il ne s’agit en aucun cas d’un conseil financier mais uniquement d’une alerte à titre indicative."""
+
+
+def test_rtz_format_tp1_only_and_resent(tmp_path):
+    """28/10 : canal RTZ ACADEMY (ENTRY / SL / TP1) : TP1 seul, ouvertures seules, renvois et « MODIFIER » ignorés."""
+    now = [T0]
+    c, mt5, _ = make(tmp_path, [], now, claude=False)
+    c.cfg["tp_max"] = {"RTZ ACADEMY": 1}
+    c.cfg["opens_only"] = ["RTZ ACADEMY"]
+    mt5.bid = 4141.0
+    d = tc.parse(RTZ, None, [])
+    assert d["zone"] == [4139.0, 4145.0] and d["stop"] == 4148.0 and d["objectifs"] == [4132.0] and d["sens"] == "vente"
+    assert tc.parse("🚨BUY NOW XAUUSD\n\n📈ENTRY: 4984-4982\n\n🔴SL: 4980\n\n🟢TP1: 4986\n🟢TP2: 4989", None, [])["zone"] \
+        == [4982.0, 4984.0]
+    assert tc.parse("📢 TRADE MODIFIER 📢\n\n🚨BUY XAUUSD 4668\n\nSL ❌ 4666\n\nTp1✅ 4670", None, []) is None
+    tg_listen.record(tmp_path, -100555, "RTZ ACADEMY", 70, RTZ, None, now[0], False)
+    c.step()
+    deals = [r for r in mt5.sent if r["action"] == mt5.TRADE_ACTION_DEAL]
+    assert len(deals) == 1 and deals[0]["tp"] == 4132.0 and deals[0]["sl"] == 4148.0
+    tg_listen.record(tmp_path, -100555, "RTZ ACADEMY", 71, RTZ, None, now[0], False)
+    c.step()
+    tg_listen.record(tmp_path, -100555, "RTZ ACADEMY", 72, "✅ SÉCURISEZ ET METTEZ VOUS BE", 70, now[0], False)
+    c.step()
+    tg_listen.record(tmp_path, -100555, "RTZ ACADEMY", 73, "✅ FERMER LES POSITIONS", 70, now[0], False)
+    c.step()
+    assert len(mt5.sent) == 1
