@@ -71,6 +71,7 @@ class Bridge:
         self.check = None
         self.tgcopy = None
         self.relay = None
+        self._closed: tuple[float, list[list]] | None = None
         if cfg.get("copy_bot") and cfg["mode"] == "demo":
             from .mt5_copy import Copier
             from .pc_relay import Relay
@@ -143,6 +144,41 @@ class Bridge:
     ORIGINS = {200001: "Copie du bot", 777001: "Claude", 777002: "Agent IA", 777003: "Méthode Hugo", 300001: "Copie Telegram",
                0: "Manuel"}
 
+    CLOSED_COLS = ["closed", "opened", "symbol", "side", "volume", "open", "close", "pnl", "origin", "why"]
+    WHY = {4: "SL", 5: "TP", 6: "marge", 3: "pont", 0: "main", 1: "main", 2: "main"}
+
+    def closed_positions(self, off: int, days: int = 30) -> list[list]:
+        """Positions fermées des `days` derniers jours, une ligne par position (colonnes CLOSED_COLS, plus récente
+        d'abord) : heures en UTC, résultat net frais compris, sens de la position, cause de la sortie. Relu au plus
+        toutes les 30 s : la page MT5 du site en tire sa courbe et ses tableaux."""
+        now = self.clock()
+        if self._closed is not None and now - self._closed[0] < 30:
+            return self._closed[1]
+        lo = datetime.fromtimestamp(now + off - days * 86400, timezone.utc)
+        hi = datetime.fromtimestamp(now + off + 86400, timezone.utc)
+        pos: dict[int, dict[str, Any]] = {}
+        for d in self.mt5.history_deals_get(lo, hi) or []:
+            if not d.symbol:
+                continue
+            p = pos.setdefault(d.position_id, {"pnl": 0.0, "magic": d.magic, "symbol": d.symbol})
+            p["pnl"] += d.profit + d.commission + d.swap
+            if d.entry == 0:                                  # entrée
+                p.update(side="vente" if d.type == 1 else "achat", opened=int(d.time) - off, open=d.price)
+            elif d.entry in (1, 3):                           # sortie (ou sortie par une position inverse)
+                p.update(closed=int(d.time) - off, close=d.price, volume=d.volume, why=self.WHY.get(getattr(d, "reason", -1), ""),
+                         exit_side="vente" if d.type == 1 else "achat")
+        rows = []
+        for p in pos.values():
+            if "closed" not in p:
+                continue
+            side = p.get("side") or ("achat" if p["exit_side"] == "vente" else "vente")
+            origin = "Pont (or)" if p["magic"] == self.magic else self.ORIGINS.get(p["magic"], f"Autre ({p['magic']})")
+            rows.append([p["closed"], p.get("opened"), p["symbol"], side, p["volume"], round(p.get("open") or 0, 5),
+                         round(p["close"], 5), round(p["pnl"], 2), origin, p["why"]])
+        rows.sort(key=lambda r: -r[0])
+        self._closed = (now, rows)
+        return rows
+
     def snapshot(self) -> dict[str, Any] | None:
         """Compte, positions ouvertes et trades fermés des dernières 36 h (heures en UTC), pour l'onglet « Démo MT5 »
         de l'interface locale. Aucun identifiant (numéro de compte, serveur) n'est écrit."""
@@ -165,7 +201,8 @@ class Bridge:
         return {"updated_at": datetime.fromtimestamp(now, timezone.utc).isoformat().replace("+00:00", "Z"),
                 "demo": a.trade_mode == self.mt5.ACCOUNT_TRADE_MODE_DEMO, "currency": a.currency,
                 "balance": a.balance, "equity": a.equity, "profit": a.profit, "margin_free": a.margin_free,
-                "stopped": self.stop_rule, "positions": pos, "deals": sorted(deals, key=lambda d: -d["closed"])}
+                "stopped": self.stop_rule, "positions": pos, "deals": sorted(deals, key=lambda d: -d["closed"]),
+                "cols": self.CLOSED_COLS, "closed": self.closed_positions(off)}
 
     def account_summary(self, days: int = 30) -> dict[str, Any] | None:
         """Résumé du compte pour la page « Les traders » du site (variable PC_ACCOUNT, humeur.py) : solde, et pour

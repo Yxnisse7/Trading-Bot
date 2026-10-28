@@ -4,22 +4,22 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>MT5 · Yasuke Trading-Bot</title>
-<meta name="description" content="Compte démo MetaTrader 5 en direct : solde, positions ouvertes et trades fermés, lus par le pont du PC.">
+<meta name="description" content="Compte MetaTrader 5 : solde, courbe, statistiques, positions ouvertes et trades fermés, lus par le pont du PC.">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap">
 <link rel="stylesheet" href="yasuke.css?v=3666f287b2">
 <script>/* Trading : sombre par défaut */ try { document.documentElement.dataset.theme = localStorage.getItem("tb-theme") || "dark"; } catch (e) { document.documentElement.dataset.theme = "dark"; }</script>
 <style>
-  .dm-tiles { display: grid; gap: 14px; grid-template-columns: repeat(4, minmax(0, 1fr)); margin-bottom: 8px; }
-  .dm-tiles .card { padding: 18px 20px; display: grid; gap: 6px; }
-  .dm-tiles .l { color: var(--muted); font-size: 13px; font-weight: 500; }
-  .dm-tiles b { font-size: 26px; font-weight: 600; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
-  .dm-tiles small { color: var(--muted); font-size: 12px; }
-  .dm-live { display: inline-flex; align-items: center; gap: 8px; }
-  .dm-stop { margin: 12px 0 0; padding: 12px 16px; border-radius: 12px; background: var(--dn-soft); color: var(--dn-text); font-size: 14px; }
+  .mt-by { width: 100%; }
+  .mt-filter { display: flex; align-items: center; gap: 10px; margin: 0 0 12px; font-size: 13px; color: var(--muted); }
+  .mt-filter select { max-width: 220px; }
+  .dm-stop { margin: 0 0 16px; padding: 12px 16px; border-radius: 12px; background: var(--dn-soft); color: var(--dn-text); font-size: 14px; }
   .orig { font-size: 12px; color: var(--muted); white-space: nowrap; }
-  @media (max-width: 860px) { .dm-tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); } .dm-tiles b { font-size: 21px; } }
+  .dm-live { display: inline-flex; align-items: center; gap: 8px; }
+  @media (max-width: 760px) { #hist th:nth-child(2), #hist td:nth-child(2), #hist th:nth-child(4), #hist td:nth-child(4), #hist th:nth-child(5), #hist td:nth-child(5), #hist th:nth-child(6), #hist td:nth-child(6), #hist th:nth-child(7), #hist td:nth-child(7), #hist th:nth-child(9), #hist td:nth-child(9), #hist th:nth-child(10), #hist td:nth-child(10),
+    #open th:nth-child(1), #open td:nth-child(1), #open th:nth-child(4), #open td:nth-child(4), #open th:nth-child(6), #open td:nth-child(6), #open th:nth-child(7), #open td:nth-child(7), #open th:nth-child(8), #open td:nth-child(8), #open th:nth-child(10), #open td:nth-child(10),
+    #by th:nth-child(4), #by td:nth-child(4) { display: none; } }
 </style>
 </head>
 <body data-page="demo" data-ticker="on">
@@ -27,67 +27,196 @@
 <div class="wrap">
   <div class="pagehead">
     <div><h1>MT5</h1><div class="sub"><span class="dm-live"><span class="live-dot idle" id="dot"></span><span id="updated">Chargement…</span></span></div></div>
-    <div class="actions"><span class="muted">Compte démo Vantage · lu par le pont du PC (en direct dans l'appli du PC, copie toutes les 5 min sur le site)</span></div>
+    <div class="actions"><span class="faint">Compte démo Vantage · lu par le pont du PC</span></div>
   </div>
 
-  <div id="body">
-    <div class="dm-tiles" id="tiles">
-      <div class="card"><span class="sk t"></span><span class="sk" style="height:26px;width:110px"></span></div>
-      <div class="card"><span class="sk t"></span><span class="sk" style="height:26px;width:110px"></span></div>
-      <div class="card"><span class="sk t"></span><span class="sk" style="height:26px;width:110px"></span></div>
-      <div class="card"><span class="sk t"></span><span class="sk" style="height:26px;width:110px"></span></div>
+  <div id="stop"></div>
+  <section class="hero-row">
+    <div class="card hero" id="hero" aria-busy="true"><span class="sk t" style="width:140px"></span><span class="sk big"></span><span class="sk t" style="width:80%"></span><span class="sk bar"></span><span class="sk t" style="width:60%"></span></div>
+    <div>
+      <div class="tiles" id="tiles">
+        <div class="card tile"><span class="sk t" style="width:110px"></span><span class="sk" style="height:30px;width:140px"></span></div>
+        <div class="card tile"><span class="sk t" style="width:110px"></span><span class="sk" style="height:30px;width:90px"></span></div>
+        <div class="card tile"><span class="sk t" style="width:110px"></span><span class="sk" style="height:30px;width:60px"></span></div>
+        <div class="card tile"><span class="sk t" style="width:110px"></span><span class="sk" style="height:30px;width:60px"></span></div>
+      </div>
+      <div class="dots" id="tile-dots" aria-hidden="true"><i class="on"></i><i></i><i></i></div>
     </div>
-    <div id="stop"></div>
+  </section>
 
-    <h2>Positions ouvertes</h2>
-    <div class="card"><div class="tbl"><table><thead><tr><th>Ouverte</th><th>Actif</th><th>Sens</th><th class="num">Lot</th><th class="num">Entrée</th><th class="num">Prix</th><th class="num">SL</th><th class="num">TP</th><th class="num">Résultat</th><th>Origine</th></tr></thead><tbody id="pos"></tbody></table></div></div>
+  <div class="card" id="live"></div>
 
-    <h2>Trades fermés (36 dernières heures)</h2>
-    <div class="card"><div class="tbl"><table><thead><tr><th>Fermé</th><th>Actif</th><th>Sens</th><th class="num">Lot</th><th class="num">Sortie</th><th class="num">Résultat</th><th>Origine</th></tr></thead><tbody id="deals"></tbody></table></div></div>
+  <div class="card" style="margin-top:20px">
+    <div class="card-head"><div><h3>Courbe du solde</h3><div class="sub" id="equity-note">Solde après chaque trade fermé</div></div><span id="eq-pill"></span></div>
+    <div class="chart" id="equity"></div>
   </div>
-  <p class="faint" style="margin-top:18px;font-size:12px">« Copie du bot » : signaux Telegram recopiés par le pont (prix du CFD, distances du signal). « Pont (or) » : règle R1 du pont. « Claude » : trades du poste horaire. Résultats en dollars, frais et swap compris. Compte démo seulement : le pont refuse tout compte réel.</p>
+
+  <h2 id="origines">Par origine</h2>
+  <div class="card tbl"><table class="mt-by" id="by"><thead><tr><th>Origine</th><th class="num">Trades</th><th class="num">Gagnants</th><th class="num">Moyen</th><th class="num">Net</th></tr></thead><tbody></tbody></table></div>
+
+  <h2 id="positions" data-hint="aucune position ouverte">Positions ouvertes</h2>
+  <div class="card tbl"><table id="open"><thead><tr><th>Ouverte</th><th>Actif</th><th>Sens</th><th class="num">Lot</th><th class="num">Entrée</th><th class="num">Prix</th><th class="num">SL</th><th class="num">TP</th><th class="num">Résultat</th><th>Origine</th></tr></thead><tbody></tbody></table></div>
+
+  <h2 id="historique">Trades fermés</h2>
+  <div class="card">
+    <div class="mt-filter"><label for="f-origin">Origine</label><select id="f-origin"><option value="">Toutes</option></select></div>
+    <div class="tbl"><table id="hist"><thead><tr><th>Fermé</th><th>Ouvert</th><th>Actif</th><th>Sens</th><th>Sortie</th><th class="num">Lot</th><th class="num">Entrée → sortie</th><th class="num">Net</th><th class="num">Solde après</th><th>Origine</th></tr></thead><tbody></tbody></table></div>
+    <div class="tbl-foot"><span id="hist-count"></span><button type="button" class="secondary" id="hist-more" hidden>Afficher 10 de plus</button></div>
+  </div>
+
+  <div class="foot">
+    <div>« Copie du bot » : signaux du bot recopiés par le pont (prix du CFD, distances du signal). « Copie Telegram » : canal suivi. « Agent IA », « Méthode Hugo » et « Claude » : trades de l'agent. « Manuel » : à la main. Résultats en dollars, frais et swap compris. Compte démo seulement : le pont refuse tout compte réel.</div>
+    <div>Le solde de départ et la courbe sont reconstitués à partir des trades fermés des 30 derniers jours (les plus anciens sont coupés si la liste est trop longue). Graphique : <a href="https://www.tradingview.com/lightweight-charts/" rel="noopener" target="_blank">TradingView Lightweight Charts</a>, licence Apache 2.0.</div>
+  </div>
 </div>
+
+<div id="tip" role="tooltip"></div>
+<script src="vendor/lightweight-charts.standalone.production.js"></script>
 <script src="yasuke.js?v=46359d9960"></script>
+<script src="charts.js?v=232a285ab5"></script>
+<script src="live-chart.js?v=68ead20c94"></script>
 <script>
 (function () {
   const Y = window.YK, $ = Y.$, esc = Y.esc;
-  const t = (s) => new Date(s * 1000).toLocaleString("fr-FR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" });
+  const ASSET = { "XAUUSD+": "gold", NAS100: "nasdaq", SP500: "sp500", BTCUSD: "bitcoin", ETHUSD: "ethereum", "CL-OIL": "oil", EURUSD: "euro" };
+  const live = window.LiveChart ? window.LiveChart.mount($("#live"), {}) : null;
   const dg = (sym) => /EUR|USD$/.test(sym) && !/XAU|BTC|ETH/.test(sym) ? 5 : 2;
-  const side = (s) => s === "achat" ? `<span class="dir"><b class="up">↗</b>Achat</span>` : `<span class="dir"><b class="dn">↘</b>Vente</span>`;
-  const usd = (v) => `<span class="${Y.tone(v)}">${Y.smoney(v, "$")}</span>`;
-  let failed = 0, ok = false, siteMode = false, lastSite = 0;
+  const when = (ts) => ts ? new Date(ts * 1000).toLocaleString("fr-FR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }) : "—";
+  const usd = (v, dec) => `<span class="${Y.tone(v)}">${Y.smoney(v, "$", dec)}</span>`;
+  const dir = (side) => Y.dirHtml(side === "achat" ? "long" : "short");
+  let data = null, rows = [], histLimit = 10, originFilter = "", mode = null, siteMode = false, lastSite = 0, failed = 0, ok = false;
 
-  function render(d, site) {
+  // lignes « closed » (colonnes dans d.cols) -> objets, avec le solde reconstitué après chaque trade
+  function build(d) {
+    const cols = d.cols || ["closed", "opened", "symbol", "side", "volume", "open", "close", "pnl", "origin", "why"];
+    // ancien pont (sans la liste sur 30 jours) : on se rabat sur les sorties des 36 dernières heures
+    const src = d.closed || (d.deals || []).map((x) => [x.closed, null, x.symbol, x.side === "vente" ? "achat" : "vente", x.volume, null, x.price, x.profit, x.origin, ""]);
+    const list = src.map((r) => { const o = {}; cols.forEach((c, i) => { o[c] = r[i]; }); return o; });
+    const asc = list.slice().sort((a, b) => a.closed - b.closed);
+    const start = d.balance - asc.reduce((a, x) => a + x.pnl, 0);
+    let b = start;
+    asc.forEach((x) => { b += x.pnl; x.after = b; });
+    return { asc, start };
+  }
+
+  function tile(label, value, sub, extra, badge) {
+    return `<div class="card tile"><div><div class="th"><span>${label}</span>${badge || ""}</div><div class="v">${value}</div></div><div class="s">${sub}</div>${extra || ""}</div>`;
+  }
+
+  let lastKey = "", picked = "";
+  function render(d, site, force) {
+    const key = JSON.stringify(d, (k, v) => k === "updated_at" ? undefined : v);
+    const same = !force && key === lastKey;
+    lastKey = key; data = d;
     const ageS = Math.round((Date.now() - new Date(d.updated_at).getTime()) / 1000);
-    const live = site ? ageS < 900 : ageS < 30;
-    $("#dot").className = "live-dot" + (live ? "" : " idle");
+    const fresh = site ? ageS < 900 : ageS < 30;
+    $("#dot").className = "live-dot" + (fresh ? "" : " idle");
     $("#updated").textContent = site
-      ? (live ? `Copie du site · lue ${Y.ago(d.updated_at)} (rafraîchie toutes les 5 min environ)`
-              : `PC éteint ou pont arrêté ? dernière copie ${Y.ago(d.updated_at)}`)
-      : live ? `En direct · ${new Date(d.updated_at).toLocaleTimeString("fr-FR")}`
-      : `Pont arrêté ? dernière lecture ${Y.ago(d.updated_at)}`;
-    const midnight = new Date(); midnight.setHours(0, 0, 0, 0);
-    const today = d.deals.filter((x) => x.closed * 1000 >= midnight.getTime());
-    const dayPnl = today.reduce((a, x) => a + x.profit, 0);
-    $("#tiles").innerHTML = `
-      <div class="card"><span class="l">Solde</span><b>${Y.money(d.balance, "$")}</b><small>${d.demo ? "compte démo" : "⚠ pas un compte démo"}</small></div>
-      <div class="card"><span class="l">Équité</span><b>${Y.money(d.equity, "$")}</b><small>solde + positions ouvertes</small></div>
-      <div class="card"><span class="l">En cours</span><b>${usd(d.profit)}</b><small>${d.positions.length} position${d.positions.length > 1 ? "s" : ""} ouverte${d.positions.length > 1 ? "s" : ""}</small></div>
-      <div class="card"><span class="l">Aujourd'hui</span><b>${usd(dayPnl)}</b><small>${today.length} trade${today.length > 1 ? "s" : ""} fermé${today.length > 1 ? "s" : ""}</small></div>`;
+      ? (fresh ? `Copie du site · lue ${Y.ago(d.updated_at)} (rafraîchie toutes les 5 min environ)` : `PC éteint ou pont arrêté ? dernière copie ${Y.ago(d.updated_at)}`)
+      : fresh ? `En direct · ${new Date(d.updated_at).toLocaleTimeString("fr-FR")}` : `Pont arrêté ? dernière lecture ${Y.ago(d.updated_at)}`;
+    if (same) return;                                  // rien n'a changé : on évite de tout redessiner toutes les 2 s
     $("#stop").innerHTML = d.stopped ? `<div class="dm-stop">Le pont s'est arrêté de trader : ${esc(d.stopped)}</div>` : "";
-    $("#pos").innerHTML = d.positions.length ? d.positions.map((p) => `<tr>
-        <td class="nowrap mono" style="font-size:12px">${t(p.opened)}</td><td><b>${esc(p.symbol)}</b></td><td>${side(p.side)}</td>
+
+    const { asc, start } = build(d);
+    rows = asc.slice().reverse();
+    const wins = asc.filter((x) => x.pnl > 0), losses = asc.filter((x) => x.pnl < 0);
+    const net = asc.reduce((a, x) => a + x.pnl, 0);
+    let peak = start, bal = start, dd = 0;
+    asc.forEach((x) => { bal = x.after; peak = Math.max(peak, bal); });
+    peak = Math.max(peak, d.balance); dd = peak ? (peak - d.balance) / peak * 100 : 0;
+    const midnight = new Date(); midnight.setHours(0, 0, 0, 0);
+    const today = asc.filter((x) => x.closed * 1000 >= midnight.getTime());
+    const dayPnl = today.reduce((a, x) => a + x.pnl, 0);
+    const since = asc.length ? new Date(asc[0].closed * 1000).toLocaleDateString("fr-FR", { day: "numeric", month: "long" }) : "";
+
+    const h = $("#hero"); h.removeAttribute("aria-busy");
+    h.innerHTML = `<div class="lab">Solde du compte</div><div class="big"><b id="h-bal"></b></div>
+      <p>Équité ${Y.money(d.equity, "$")} · ${d.positions.length} position${d.positions.length > 1 ? "s" : ""} ouverte${d.positions.length > 1 ? "s" : ""} (<span class="${Y.tone(d.profit)}">${Y.smoney(d.profit, "$")}</span>)</p>
+      <div class="cmp"><div class="h"><span>Trades gagnants</span><span class="up">${wins.length} sur ${asc.length}</span></div><div class="track"><i style="width:${asc.length ? (wins.length / asc.length * 100).toFixed(1) : 0}%"></i></div></div>
+      <hr><div class="rel"><span>Repli depuis le plus haut</span><span class="pill ${dd > 20 ? "dn" : "neu"}">${Y.num(dd, 1)}${Y.NB}%</span></div>
+      <div class="muted">Plus haut du solde${since ? " depuis le " + since : ""} : ${Y.money(peak, "$")}. ${d.demo ? "Compte démo." : "⚠ Ce n'est pas un compte démo."}</div>`;
+    Y.countTo($("#h-bal"), d.balance, (x) => Y.money(x, "$"));
+
+    const avgW = wins.length ? wins.reduce((a, x) => a + x.pnl, 0) / wins.length : null;
+    const avgL = losses.length ? losses.reduce((a, x) => a + x.pnl, 0) / losses.length : null;
+    const pts = [start, ...asc.map((x) => x.after)];
+    $("#tiles").innerHTML = [
+      tile("Résultat" + (since ? ` depuis le ${since}` : ""), `<span class="${Y.tone(net)}">${Y.smoney(net, "$")}</span>`, `${Y.signed(start ? net / start * 100 : 0, 1)}${Y.NB}% du solde de départ`, Y.spark(pts, net >= 0 ? "var(--up)" : "var(--dn)")),
+      tile("Aujourd'hui", `<span class="${Y.tone(dayPnl)}">${Y.smoney(dayPnl, "$")}</span>`, `${today.length} trade${today.length > 1 ? "s" : ""} fermé${today.length > 1 ? "s" : ""}`),
+      tile("Gain et perte moyens", `<span class="up">${avgW === null ? "n/a" : Y.smoney(avgW, "$", 0)}</span> <span class="muted" style="font-size:18px">/</span> <span class="dn">${avgL === null ? "n/a" : Y.smoney(avgL, "$", 0)}</span>`, "par trade gagnant, puis perdant"),
+      tile("Trades fermés", String(asc.length), asc.length ? `<div class="stackbar" style="margin:4px 0 8px"><i style="flex:${wins.length};background:var(--up)"></i><i style="flex:${losses.length};background:var(--dn)"></i></div>${wins.length} gagnants · ${losses.length} perdants` : "Aucun trade fermé"),
+    ].join("");
+    const tiles = $("#tiles"), dots = $("#tile-dots");
+    tiles.onscroll = () => { const i = Math.round(tiles.scrollLeft / Math.max(1, tiles.scrollWidth - tiles.clientWidth) * 2); dots.querySelectorAll("i").forEach((x, k) => x.classList.toggle("on", k === i)); };
+    drawEquity(pts, asc);
+
+    // positions ouvertes + graphique de la première
+    const first = d.positions.find((p) => ASSET[p.symbol]);
+    if (live && first && !live.hasSavedChoice() && picked !== ASSET[first.symbol]) { picked = ASSET[first.symbol]; live.select(picked); }
+    const det = document.getElementById("positions"); if (det && det.setHint) det.setHint(d.positions.length ? `${d.positions.length} position${d.positions.length > 1 ? "s" : ""} ouverte${d.positions.length > 1 ? "s" : ""}` : "aucune position ouverte");
+    $("#open tbody").innerHTML = d.positions.length ? d.positions.map((p) => `<tr>
+        <td class="nowrap mono" style="font-size:12px">${when(p.opened)}</td><td><b style="font-weight:500">${esc(p.symbol)}</b></td><td>${dir(p.side)}</td>
         <td class="num">${Y.num(p.volume, 2)}</td><td class="num">${Y.price(p.open, dg(p.symbol))}</td><td class="num">${Y.price(p.price, dg(p.symbol))}</td>
-        <td class="num">${p.sl ? Y.price(p.sl, dg(p.symbol)) : "—"}</td><td class="num">${p.tp ? Y.price(p.tp, dg(p.symbol)) : "—"}</td>
+        <td class="num dn">${p.sl ? Y.price(p.sl, dg(p.symbol)) : "—"}</td><td class="num up">${p.tp ? Y.price(p.tp, dg(p.symbol)) : "—"}</td>
         <td class="num"><b>${usd(p.profit)}</b></td><td class="orig">${esc(p.origin)}</td></tr>`).join("")
       : `<tr><td colspan="10" class="empty">Aucune position ouverte.</td></tr>`;
-    // une sortie de vente ferme un achat : on affiche le sens de la position
-    $("#deals").innerHTML = d.deals.length ? d.deals.map((x) => `<tr>
-        <td class="nowrap mono" style="font-size:12px">${t(x.closed)}</td><td><b>${esc(x.symbol)}</b></td><td>${side(x.side === "vente" ? "achat" : "vente")}</td>
-        <td class="num">${Y.num(x.volume, 2)}</td><td class="num">${Y.price(x.price, dg(x.symbol))}</td>
-        <td class="num"><b>${usd(x.profit)}</b></td><td class="orig">${esc(x.origin)}</td></tr>`).join("")
-      : `<tr><td colspan="7" class="empty">Aucun trade fermé sur les 36 dernières heures.</td></tr>`;
+
+    // par origine
+    const by = {};
+    asc.forEach((x) => { const o = by[x.origin] || (by[x.origin] = { n: 0, w: 0, net: 0 }); o.n++; o.net += x.pnl; if (x.pnl > 0) o.w++; });
+    $("#by tbody").innerHTML = Object.keys(by).length
+      ? Object.entries(by).sort((a, b) => b[1].n - a[1].n).map(([k, o]) => `<tr><td><b style="font-weight:500">${esc(k)}</b></td><td class="num">${o.n}</td><td class="num">${Y.num(o.w / o.n * 100, 0)}${Y.NB}%</td><td class="num ${Y.tone(o.net / o.n)}">${Y.smoney(o.net / o.n, "$")}</td><td class="num"><b>${usd(o.net)}</b></td></tr>`).join("")
+      : `<tr><td colspan="5" class="empty">Aucun trade fermé.</td></tr>`;
+    const sel = $("#f-origin"), cur = sel.value;
+    sel.innerHTML = `<option value="">Toutes</option>` + Object.keys(by).map((k) => `<option${k === cur ? " selected" : ""}>${esc(k)}</option>`).join("");
+    originFilter = sel.value;
+    renderHist();
   }
+
+  function renderHist() {
+    const list = rows.filter((x) => !originFilter || x.origin === originFilter), shown = list.slice(0, histLimit);
+    $("#hist tbody").innerHTML = shown.length ? shown.map((x) => `<tr><td class="mono nowrap" style="font-size:12px">${when(x.closed)}</td><td class="mono nowrap muted" style="font-size:12px">${when(x.opened)}</td>
+        <td class="nowrap"><b style="font-weight:500">${esc(x.symbol)}</b></td><td>${dir(x.side)}</td><td>${x.why ? `<span class="pill neu">${esc(x.why)}</span>` : ""}</td>
+        <td class="num">${Y.num(x.volume, 2)}</td><td class="num nowrap">${x.open ? Y.price(x.open, dg(x.symbol)) + " → " : "sortie "}${Y.price(x.close, dg(x.symbol))}</td>
+        <td class="num"><b>${usd(x.pnl)}</b></td><td class="num">${Y.money(x.after, "$")}</td><td class="orig">${esc(x.origin)}</td></tr>`).join("")
+      : `<tr><td colspan="10" class="empty">Aucun trade fermé sur les 30 derniers jours.</td></tr>`;
+    $("#hist-count").textContent = list.length ? `${shown.length} affichés sur ${list.length}` : "";
+    $("#hist-more").hidden = list.length <= histLimit;
+  }
+  $("#hist-more").addEventListener("click", () => { histLimit += 10; renderHist(); });
+  $("#f-origin").addEventListener("change", (e) => { originFilter = e.target.value; histLimit = 10; renderHist(); });
+
+  // Courbe du solde reconstitué : trait du solde, pointillé = solde de départ
+  function drawEquity(pts, asc) {
+    const root = $("#equity"); root.replaceChildren();
+    if (pts.length < 2) { root.innerHTML = `<div class="empty">La courbe apparaît après le premier trade fermé.</div>`; $("#eq-pill").innerHTML = ""; return; }
+    const initial = pts[0], bal = pts[pts.length - 1];
+    $("#eq-pill").innerHTML = `<span class="pill ${Y.tone(bal - initial)}"><b>${Y.smoney(bal - initial, "$")}</b></span>`;
+    const W = Math.max(320, root.clientWidth || 900), H = W < 500 ? 200 : 240, left = 4, right = 74, top = 10, bottom = 12;
+    const mn = Math.min(...pts), mx = Math.max(...pts), sp = (mx - mn) || 1;
+    const x = (i) => left + i / (pts.length - 1) * (W - left - right), y = (v) => top + (mx - v) / sp * (H - top - bottom);
+    const line = pts.map((v, i) => `${i ? "L" : "M"}${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(" ");
+    const tone = bal >= initial ? "var(--up)" : "var(--dn)";
+    root.innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Courbe du solde">
+      ${[mx, (mx + mn) / 2, mn].map((v) => `<line x1="${left}" x2="${W - right}" y1="${y(v)}" y2="${y(v)}" stroke="var(--grid)" stroke-dasharray="2 4"/><text class="mono" x="${W - right + 8}" y="${y(v) + 4}" style="font-size:11px">${Y.money(v, "$", 0)}</text>`).join("")}
+      <line x1="${left}" x2="${W - right}" y1="${y(initial)}" y2="${y(initial)}" stroke="var(--c-axis)" stroke-dasharray="5 4"/>
+      <text x="${W - right - 4}" y="${y(initial) + 14}" text-anchor="end" style="font-size:11px">départ ${Y.money(initial, "$", 0)}</text>
+      <path d="${line} L${x(pts.length - 1)},${y(initial)} L${x(0)},${y(initial)} Z" fill="${tone}" fill-opacity=".08"/>
+      <path d="${line}" fill="none" stroke="var(--text)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+      <circle cx="${x(pts.length - 1)}" cy="${y(bal)}" r="4.5" fill="${tone}" stroke="var(--card)" stroke-width="2"/>
+      <line id="eq-x" y1="${top}" y2="${H - bottom}" stroke="var(--c-axis)" visibility="hidden"/>
+      <rect id="eq-hit" x="${left}" y="0" width="${W - left - right}" height="${H}" fill="transparent"/></svg>`;
+    $("#equity-note").textContent = `Solde après chacun des ${pts.length - 1} trades fermés`;
+    const svg = root.querySelector("svg"), cross = root.querySelector("#eq-x");
+    root.querySelector("#eq-hit").addEventListener("pointermove", (e) => {
+      const r = svg.getBoundingClientRect(), px = (e.clientX - r.left) / r.width * W;
+      const i = Math.max(1, Math.min(pts.length - 1, Math.round((px - left) / (W - left - right) * (pts.length - 1)))), t = asc[i - 1];
+      cross.setAttribute("x1", x(i)); cross.setAttribute("x2", x(i)); cross.setAttribute("visibility", "visible");
+      YKCharts.showTip(e, `${t.symbol} · ${t.origin}`, [["Net", Y.smoney(t.pnl, "$"), null], ["Solde après", Y.money(t.after, "$"), null], ["Fermé", when(t.closed), null]]);
+    });
+    root.querySelector("#eq-hit").addEventListener("pointerleave", () => { YKCharts.hideTip(); cross.setAttribute("visibility", "hidden"); });
+  }
+  let rt = null; addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => data && render(data, siteMode, true), 200); });
 
   // site public : l'appli du PC n'est pas là, on lit la copie que le pont dépose sur GitHub (live/demo.json)
   async function loadSite() {
@@ -97,7 +226,6 @@
       render(d, true); ok = true; failed = 0; return true;
     } catch (e) { return false; }
   }
-
   async function load() {
     if (siteMode) { if (Date.now() - lastSite > 30000) { lastSite = Date.now(); await loadSite(); } return; }
     try {
@@ -109,11 +237,15 @@
       if (++failed > 1 && await loadSite()) { siteMode = true; return; }
       if (failed > 1) {
         $("#updated").textContent = "Indisponible ici";
-        $("#body").innerHTML = `<div class="card"><div class="empty" style="padding:8px 0">Pas encore de copie du démo sur le site : elle arrive quand le pont du PC tourne (PC allumé), ou ouvre l'appli du PC (icône « Interface »).</div></div>`;
+        $("#hero").innerHTML = `<div class="empty" style="padding:8px 0">Pas encore de copie du compte sur le site : elle arrive quand le pont du PC tourne (PC allumé), ou ouvre l'appli du PC (icône « Interface »).</div>`;
       }
     }
   }
-  const bot = async () => { const d = await Y.getJson("dashboard.json"); if (d && d.state) Y.status(d.state.last_scan, d.state.last_scan_note); };
+  const bot = async () => {
+    const d = await Y.getJson("dashboard.json");
+    if (d && d.state) Y.status(d.state.last_scan, d.state.last_scan_note);
+    if (d && d.assets && live) live.setAssets(d.assets.map((a) => [a.key, a.label, !!(a.trial && !a.trial_promoted)]));
+  };
   bot(); setInterval(bot, 30000);
   load();
   setInterval(() => { if (!document.hidden) load(); }, 2000);

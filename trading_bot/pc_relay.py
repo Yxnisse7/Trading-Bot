@@ -32,7 +32,8 @@ log = logging.getLogger("pc_relay")
 
 REPO = "Yxnisse7/Trading-Bot"
 BEAT = 60
-DEMO_EVERY = 60         # s : état du démo (PC_DEMO) pour la page « Démo MT5 » du site
+DEMO_MAX = 44000       # octets : taille maximale de PC_DEMO (GitHub accepte 48 Ko)
+DEMO_EVERY = 60        # s : état du démo (PC_DEMO) pour la page « Démo MT5 » du site
 ACCOUNT_EVERY = 600      # s : résumé du compte démo (PC_ACCOUNT) pour la page « Les traders »
 AGENT_TIMEOUT = 90
 ASSETS = {"gold": "Or (XAU/USD)", "nasdaq": "Nasdaq 100", "sp500": "S&P 500", "bitcoin": "Bitcoin (BTC/USD)",
@@ -139,10 +140,14 @@ class Relay:
         if not tok or not snap.get("demo") or now - self.last_demo < DEMO_EVERY:
             return
         self.last_demo = now
-        slim = {k: v for k, v in snap.items() if k not in ("positions", "deals", "updated_at")}
+        slim = {k: v for k, v in snap.items() if k not in ("positions", "deals", "updated_at", "closed")}
         drop = ("ticket", "comment")
         slim["positions"] = [{k: v for k, v in p.items() if k not in drop} for p in snap.get("positions", [])[:40]]
-        slim["deals"] = [{k: v for k, v in d.items() if k not in drop} for d in snap.get("deals", [])[:60]]
+        slim["deals"] = [{k: v for k, v in d.items() if k not in drop} for d in snap.get("deals", [])[:20]]
+        closed = list(snap.get("closed") or [])           # positions fermées, plus récentes d'abord ; variable GitHub ≤ 48 Ko
+        slim["closed"] = closed
+        while len(json.dumps(slim, separators=(",", ":"), ensure_ascii=False)) > DEMO_MAX and closed:
+            del closed[-10:]                                 # on abandonne les plus anciennes
         body = json.dumps(slim, separators=(",", ":"), ensure_ascii=False)
         if body == self.sent_demo:
             return

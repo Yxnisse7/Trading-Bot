@@ -237,3 +237,17 @@ def test_demo_snapshot_is_published_without_tickets_once_a_minute_when_it_change
     now[0] += 61
     r.demo(dict(snap, demo=False, equity=2.0))
     assert len(puts) == 2                                           # jamais un compte réel
+
+
+def test_demo_closed_rows_are_trimmed_to_fit_a_github_variable():
+    import json as _json
+    from trading_bot import pc_relay as pr
+    puts = []
+    r = pr.Relay.__new__(pr.Relay)
+    r.clock, r.env, r.last_demo, r.sent_demo = lambda: 1000.0, {"PONT_GITHUB_TOKEN": "t"}, 0.0, ""
+    r.github = lambda method, url, tok, body=None: (puts.append(body), 204)[1]
+    rows = [[2000000 - i, 1999000 - i, "XAUUSD+", "achat", 0.02, 4000.5, 4010.25, 1.5, "Copie du bot", "TP"] for i in range(2000)]
+    r.demo({"updated_at": "x", "demo": True, "balance": 1.0, "cols": ["closed"], "positions": [], "deals": [], "closed": rows})
+    sent = _json.loads(puts[0]["value"])
+    assert len(puts[0]["value"].encode()) <= pr.DEMO_MAX and 0 < len(sent["closed"]) < 2000
+    assert sent["closed"][0][0] == 2000000                          # on garde les plus récentes

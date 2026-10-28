@@ -143,6 +143,9 @@ def test_snapshot_for_local_interface(tmp_path):
     assert snap["demo"] and snap["equity"] == 1001.2 and "login" not in json.dumps(snap)
     assert snap["positions"][0]["origin"] == "Copie du bot" and snap["positions"][0]["opened"] == NOW - 600
     assert [d["profit"] for d in snap["deals"]] == [-3.07] and snap["deals"][0]["origin"] == "Pont (or)"
+    row = dict(zip(snap["cols"], snap["closed"][0]))                 # une ligne par position fermée, sens de l'entrée
+    assert len(snap["closed"]) == 1 and row["side"] == "achat" and row["pnl"] == -3.07 and row["origin"] == "Pont (or)"
+    assert row["open"] == 4104.0 and row["close"] == 4101.0 and row["opened"] == NOW - 4000 and row["closed"] == NOW - 3600
 
 
 def test_account_summary_for_traders_page(tmp_path):
