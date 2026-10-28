@@ -248,7 +248,8 @@ def test_late_github_copy_is_skipped_when_the_price_already_ran(tmp_path):
 
 def test_solo_trade_is_taken_at_two_hundredths_when_the_cap_allows_it():
     info = NS(trade_contract_size=1.0, volume_step=0.01, volume_min=0.01, volume_max=100.0)
-    assert mc.solo_floor(0.01, 1000, 100.0, info) == 0.02          # 0,02 lot risque 2 % : ok
+    assert mc.solo_floor(0.01, 1000, 100.0, info) == 0.02          # or (défaut du test) : 0,02 lot risque 2 % : ok
+    assert mc.solo_floor(0.01, 1000, 100.0, info, sym="BTCUSD") == 0.01       # autres marchés : comme avant
     assert mc.solo_floor(0.01, 100, 800.0, info) == 0.01           # 0,02 lot risquerait plus de 15 % du solde : on garde 0,01
     assert mc.solo_floor(0.05, 1000, 100.0, info) == 0.05 and mc.solo_floor(0.0, 1000, 100.0, info) == 0.0
     gold = NS(trade_contract_size=100.0, volume_step=0.01, volume_min=0.01, volume_max=100.0)
