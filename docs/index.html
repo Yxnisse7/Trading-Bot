@@ -5,13 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Yasuke Trading-Bot</title>
 <meta name="description" content="Signaux de scalping simulés, suivis et mesurés face au hasard.">
-<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta property="og:image" content="https://yxnisse7.github.io/Trading-Bot/og.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap">
 <link rel="stylesheet" href="yasuke.css?v=39f9b75eae">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=VT323&display=swap">
 <script>/* look rétro : sombre seulement, palette choisie sur la page Palettes */ (function () { var r = document.documentElement; r.dataset.theme = "dark"; r.dataset.look = "retro"; var p = null; try { p = localStorage.getItem("tb-palette"); } catch (e) {} r.dataset.palette = /^(nuit|ocean|neon|gameboy|sunset|foret|nes)$/.test(p) ? p : "nuit"; })();</script>
-<link rel="stylesheet" href="retro.css?v=d2d09525bf">
+<link rel="stylesheet" href="retro.css?v=ff4441374f">
 <style>
   .asset-rows { display: grid; gap: 12px; }
   .asset-row { display: grid; grid-template-columns: 140px minmax(0, 1fr) 28px 84px; align-items: center; gap: 12px; font-size: 13px; }
@@ -159,11 +161,11 @@
 
 <div id="tip" role="tooltip"></div>
 <script src="vendor/lightweight-charts.standalone.production.js"></script>
-<script src="yasuke.js?v=c37f5412ed"></script>
+<script src="yasuke.js?v=4fb9f21549"></script>
 <script src="charts.js?v=232a285ab5"></script>
 <script src="live-chart.js?v=68ead20c94"></script>
 <script src="sections.js?v=0d56d6cb86"></script>
-<script src="hud-dash.js?v=2415aae4dc"></script>
+<script src="hud-dash.js?v=6a2f3a7ea5"></script>
 <script>
 (function () {
   const Y = window.YK, $ = Y.$, esc = Y.esc;
@@ -313,12 +315,12 @@
       const tot = v.n ? v.mean_r * v.n : null;
       const dg = v.asset === "euro" ? 5 : 2;
       const since = new Date(v.since).toLocaleDateString("fr-FR", { day: "2-digit", month: "2-digit" });
-      return `<div class="card live-s">
+      return `<a class="card live-s" href="graphique.html?a=${encodeURIComponent(v.asset)}&amp;s=${encodeURIComponent(v.strategy)}" title="Voir ses niveaux et ses trades sur le graphique">
         <div class="t"><div><b>${esc(LIVE_NAMES[v.strategy] || v.strategy)}</b><small>${esc(lab(v.asset))} · depuis le ${since}</small></div><span class="live-dot${open ? "" : " idle"}" title="${open ? "position ouverte" : "en attente d'un signal"}"></span></div>
         <div class="v ${tot === null ? "neu" : Y.tone(tot)}">${tot === null ? "—" : Y.signed(tot, 2, " R")}</div>
         <div class="s">${v.n ? `${v.n} trade${v.n > 1 ? "s" : ""} clôturé${v.n > 1 ? "s" : ""} · ${Y.signed(v.mean_r, 2, " R")} en moyenne` : "Aucun trade clôturé pour l'instant"}</div>
         ${open ? `<div class="pos"><span>${open.direction === "long" ? '<b class="up">Achat</b>' : '<b class="dn">Vente</b>'} à ${Y.price(open.entry, dg)}</span><span>SL ${open.stop ? Y.price(open.stop, dg) : "—"}</span></div>` : ""}
-      </div>`;
+      </a>`;
     }).join("");
   }
 
@@ -326,7 +328,7 @@
     const rows = data.assets, max = Math.max(1, ...rows.map((a) => a.stats.n));
     $("#asset-rows").innerHTML = rows.map((a) => {
       const st = a.stats, trial = a.trial && !a.trial_promoted;
-      const bar = st.n ? `<div class="bar" style="width:${(st.n / max * 100).toFixed(1)}%" title="${st.tp} TP · ${st.sl} SL · ${st.expired} expirés · réussite ${Y.pct(st.win_rate)} contre ${Y.pct(st.neutral_win_rate)} au hasard">${[["tp", "var(--up)"], ["sl", "var(--dn)"], ["expired", "var(--neu)"]].map(([k, c]) => st[k] ? `<i style="flex:${st[k]};background:${c}"></i>` : "").join("")}</div>` : `<div class="bar none"></div>`;
+      const bar = st.n ? `<div class="bar" style="width:${(st.n / max * 100).toFixed(1)}%" data-tip="${esc(Y.shortLabel(a.label))}" data-tip-rows="TP=${st.tp}=var(--up)|SL=${st.sl}=var(--dn)|Expirés=${st.expired}=var(--neu)|Réussite=${Y.pct(st.win_rate)}|Hasard=${Y.pct(st.neutral_win_rate)}|Résultat=${Y.pctv(st.pnl_pct, 2)}=${st.pnl_pct >= 0 ? "var(--up)" : "var(--dn)"}">${[["tp", "var(--up)"], ["sl", "var(--dn)"], ["expired", "var(--neu)"]].map(([k, c]) => st[k] ? `<i style="flex:${st[k]};background:${c}"></i>` : "").join("")}</div>` : `<div class="bar none"></div>`;
       return `<div class="asset-row"><span class="nm">${esc(Y.shortLabel(a.label))}${trial ? ` <span class="pill brand" style="padding:1px 6px;font-size:11px" title="Suivi en silence : annoncé seulement après avoir fait ses preuves">essai</span>` : ""}</span>
         ${bar}<span class="n mono">${st.n || ""}</span><span class="r ${st.n ? Y.tone(st.pnl_pct) : "faint"}">${st.n ? Y.pctv(st.pnl_pct, 2) : "aucun"}</span></div>`;
     }).join("");

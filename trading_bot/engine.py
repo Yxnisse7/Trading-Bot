@@ -1483,6 +1483,15 @@ class Engine:
                 for flag in ("notified_entry", "notified_exit", "micros", "close_at", "pc", "pc_absent"):
                     if flag in before.get(t.entry_ts, {}):
                         kept[t.entry_ts][flag] = before[t.entry_ts][flag]
+            try:
+                lv = sl.chart_levels(strat, candles) if strat not in sl.DAILY_1H else None
+            except Exception:  # noqa: BLE001 — un niveau de graphique ne doit jamais casser le suivi
+                log.exception("niveaux graphique %s", name)
+                lv = None
+            if lv:
+                rec["levels"] = lv
+            else:
+                rec.pop("levels", None)
             self._keep_announced(before, kept, int(now.timestamp()))
             if live_since:
                 self._live_signals(name, asset, list(kept.values()), parse_iso(live_since), now, live_end)

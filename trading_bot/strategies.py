@@ -696,6 +696,78 @@ def run_all(asset: str, candles: list[Candle], only: list[str] | None = None) ->
     return out
 
 
+# ---------------------------------------------------------------- niveaux pour le graphique du site
+def chart_levels(strat: str, candles: list[Candle], lookback: int = 14) -> dict[str, Any] | None:
+    """Niveaux du jour d'une stratégie, pour les dessiner sur l'onglet Graphique (lecture seulement : les vrais
+    signaux restent ceux du suivi en ombre). Mêmes règles que les fonctions de test ci-dessus.
+
+    zone de bruit : bornes haute/basse à chaque clôture 5 min de la dernière séance (9:30-16:00 New York) ;
+    cassure Williams : niveau d'achat et stop du dernier jour UTC ; Donchian 1 h : canal 20 h sur 48 h ;
+    nuit asiatique : fenêtre 18:00 → 03:00 New York et stop à 1 %. None pour les autres."""
+    if not candles:
+        return None
+    s = _Series(candles)
+    if strat in ("noise_area", "noise_area_v2"):
+        days = _days(s.c)
+        moves: dict[date, dict[int, float]] = {}
+        for d in days:
+            i0 = s.at(_ny_ts(d, 9, 30))
+            if i0 is None:
+                continue
+            o, m, k, end = s.c[i0].open, {}, i0, _ny_ts(d, 16, 0)
+            while k < len(s.c) and s.c[k].ts < end:
+                m[(s.c[k].ts + 300 - s.c[i0].ts) // 60] = abs(s.c[k].close / o - 1)
+                k += 1
+            moves[d] = m
+        done = [d for d in days if d in moves]
+        if len(done) < lookback + 1:
+            return None
+        d = done[-1]
+        past = done[-lookback - 1:-1]
+        i0, pci = s.at(_ny_ts(d, 9, 30)), _prev_close(s, d)
+        if i0 is None or pci is None:
+            return None
+        o, pc = s.c[i0].open, s.c[pci].close
+        hi_base, lo_base = max(o, pc), min(o, pc)
+        pts = []
+        for minute in range(5, 391, 5):
+            vals = [moves[p][minute] for p in past if minute in moves[p]]
+            if len(vals) >= lookback // 2:
+                sig = sum(vals) / len(vals)
+                pts.append([s.c[i0].ts + minute * 60, round(hi_base * (1 + sig), 4), round(lo_base * (1 - sig), 4)])
+        return {"kind": "bands", "open_ts": s.c[i0].ts, "open": o, "prev_close": pc, "points": pts} if pts else None
+    if strat == "cassure_williams":
+        days = sorted({datetime.fromtimestamp(t, timezone.utc).date() for t in s.ts})
+        for d in reversed(days[1:]):
+            p0, t0 = _utc_ts(d - timedelta(days=1), 0), _utc_ts(d, 0)
+            i, a = bisect_left(s.ts, p0), bisect_left(s.ts, t0)
+            if a >= len(s.c) or s.ts[a] > t0 + 1800 or a - i < 200:
+                continue
+            prev = max(x.high for x in s.c[i:a]) - min(x.low for x in s.c[i:a])
+            day_open = s.c[a].open
+            return {"kind": "level", "from": t0, "to": t0 + 86400, "level": round(day_open + 0.5 * prev, 4),
+                    "stop": round(day_open, 4), "range": round(prev, 4)}
+        return None
+    if strat == "donchian_1h":
+        h = ind.resample(candles, 60)
+        pts = []
+        for i in range(max(20, len(h) - 48), len(h)):
+            prev = h[i - 20:i]
+            pts.append([h[i].ts, round(max(x.high for x in prev), 4), round(min(x.low for x in prev), 4)])
+        return {"kind": "channel", "points": pts} if pts else None
+    if strat == "nuit_asie":
+        for d in reversed(_days(s.c, NY)):
+            if d.weekday() > 3:
+                continue
+            t0, t1 = _ny_ts(d, 18, 0), _ny_ts(d + timedelta(days=1), 3, 0)
+            k = bisect_left(s.ts, t0)
+            entry = s.c[k].open if k < len(s.c) and s.ts[k] <= t0 + 1800 else None
+            return {"kind": "window", "from": t0, "to": t1, "entry": entry,
+                    "stop": round(entry * (1 - NUIT_STOP_PCT / 100), 4) if entry else None}
+        return None
+    return None
+
+
 # ---------------------------------------------------------------- évaluation
 def trade_rs(t: Trade, cost_bot_pct: float, topstep_cost: tuple[float, float] | None) -> dict[str, float]:
     """R brut, R net avec les frais du bot (% du prix), R net avec les frais Topstep ($ par micro)."""

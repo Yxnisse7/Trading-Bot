@@ -5,13 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Graphique · Yasuke Trading-Bot</title>
 <meta name="description" content="Graphique des actifs du bot avec la structure du marché : sommets, chasses aux stops, trous de prix, sessions, signaux et annonces.">
-<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta property="og:image" content="https://yxnisse7.github.io/Trading-Bot/og.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap">
 <link rel="stylesheet" href="yasuke.css?v=39f9b75eae">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=VT323&display=swap">
 <script>/* look rétro : sombre seulement, palette choisie sur la page Palettes */ (function () { var r = document.documentElement; r.dataset.theme = "dark"; r.dataset.look = "retro"; var p = null; try { p = localStorage.getItem("tb-palette"); } catch (e) {} r.dataset.palette = /^(nuit|ocean|neon|gameboy|sunset|foret|nes)$/.test(p) ? p : "nuit"; })();</script>
-<link rel="stylesheet" href="retro.css?v=d2d09525bf">
+<link rel="stylesheet" href="retro.css?v=ff4441374f">
 <style>
   .gx-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin-bottom: 14px; }
   .gx-bar select { width: auto; max-width: 100%; font: inherit; font-size: 14px; padding: 7px 10px; border-radius: 10px; border: 1px solid var(--line); background: var(--card); color: var(--text); }
@@ -60,6 +62,7 @@
   <div class="gx">
     <div class="card gx-chart"><div class="box" id="box"></div><canvas class="ov" id="ov"></canvas><div class="legend" id="legend"></div></div>
     <div class="gx-side">
+      <div class="card"><h3>Stratégies</h3><div class="ly" id="strats"><div class="muted" style="font-size:13px">Chargement…</div></div></div>
       <div class="card"><h3>Calques</h3><div class="ly" id="layers"></div>
         <div class="ly-all"><button type="button" class="secondary" id="ly-on">Tout</button><button type="button" class="secondary" id="ly-off">Rien</button><button type="button" class="secondary" id="ly-def">Par défaut</button></div></div>
       <div class="card"><h3>Inspecteur</h3><div id="insp" class="muted">Cliquez sur une bougie du graphique.</div></div>
@@ -69,7 +72,7 @@
 </div>
 
 <script src="vendor/lightweight-charts.standalone.production.js"></script>
-<script src="yasuke.js?v=c37f5412ed"></script>
+<script src="yasuke.js?v=4fb9f21549"></script>
 <script src="live-chart.js?v=68ead20c94"></script>
 <script src="structures.js?v=0525d87a9f"></script>
 <script>
@@ -94,7 +97,17 @@
   const save = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* navigation privée */ } };
   const qs = new URLSearchParams(location.search);
   let on = { ...DEF, ...read("tb-gx-layers", {}) };
+  // stratégies du labo : leurs niveaux du jour (publiés par le bot) et leurs trades, une couleur chacune
+  const ST_NAMES = { noise_area: "Zone de bruit", noise_area_v2: "Zone de bruit v2", donchian_1h: "Donchian 1 h", donchian_day: "Donchian jour",
+    swing_w3: "Repli W3", nuit_asie: "Nuit asiatique", cassure_williams: "Cassure Williams", creux_repris_15m: "Creux repris", double7: "Double 7" };
+  const ST_COL = { noise_area_v2: "info", noise_area: "info", cassure_williams: "warn", donchian_1h: "brand", swing_w3: "info",
+    nuit_asie: "brand", donchian_day: "warn", creux_repris_15m: "brand", double7: "warn" };
+  const ST_HOW = { noise_area_v2: "bornes du jour, achat au-dessus, vente en dessous", noise_area: "bornes du jour",
+    cassure_williams: "ouverture + ½ amplitude de la veille", donchian_1h: "canal des 20 dernières heures", nuit_asie: "achat 18 h → 3 h New York",
+    swing_w3: "repli du RSI dans la tendance", double7: "plus basse clôture de 7 jours", donchian_day: "canal 20 h, fermé le soir", creux_repris_15m: "creux cassé puis repris" };
+  let stOn = read("tb-gx-strats", {});
   let asset = qs.get("a") || read("tb-gx-asset", "gold"), tf = +(qs.get("tf") || read("tb-gx-tf", 300)), focus = +(qs.get("t") || 0);
+  if (qs.get("s")) { stOn[qs.get("s")] = true; save("tb-gx-strats", stOn); if (tf === 300 && /^(donchian_1h|swing_w3)$/.test(qs.get("s"))) tf = 900; }
   if (!ASSETS.some((a) => a[0] === asset)) asset = "gold";
   let chart, candle, ma20, ma50, raw = null, dash = null, A = null, lines = [];
 
@@ -129,6 +142,22 @@
     const t0 = A.candles[0].t, t1 = A.candles[A.candles.length - 1].t + 86400 * 2;
     return (dash.agenda || []).filter((e) => { const t = Date.parse(e.at) / 1000; return t >= t0 && t <= t1 && (!(e.assets || []).length || e.assets.includes(asset)); });
   }
+
+  function stratRecs() {
+    return Object.values((dash && dash.lab_shadow) || {}).filter((r) => r.asset === asset)
+      .sort((a, b) => (b.live ? 1 : 0) - (a.live ? 1 : 0) || String(a.strategy).localeCompare(b.strategy));
+  }
+  const stIsOn = (r) => (r.strategy in stOn ? stOn[r.strategy] : !!r.live);
+  const stTrades = (r) => { const t0 = A && A.candles.length ? A.candles[0].t : 0;
+    return (r.trades || []).filter((t) => (t.exit_ts || Infinity) >= t0 && !t.pc_absent); };
+  function drawStrats() {
+    const recs = stratRecs();
+    $("#strats").innerHTML = recs.length ? recs.map((r) => `<label title="${esc(ST_HOW[r.strategy] || "")}"><input type="checkbox" data-s="${esc(r.strategy)}"${stIsOn(r) ? " checked" : ""}>
+      <i style="background:var(--${ST_COL[r.strategy] || "muted"})"></i><span>${esc(ST_NAMES[r.strategy] || r.strategy)}<small>${r.live ? "en réel" : "en ombre"} · ${esc(ST_HOW[r.strategy] || "")}</small></span>
+      <span class="n">${A ? stTrades(r).length || "" : ""}</span></label>`).join("")
+      : `<div class="muted" style="font-size:13px">Aucune stratégie suivie sur cet actif.</div>`;
+  }
+  $("#strats").addEventListener("change", (e) => { const k = e.target.dataset.s; if (!k) return; stOn[k] = e.target.checked; save("tb-gx-strats", stOn); paint(); });
 
   function ensureChart() {
     if (chart) return;
@@ -204,6 +233,45 @@
       g.strokeStyle = alpha(css("dn"), 0.7); g.setLineDash([2, 3]); g.beginPath(); g.moveTo(x, 14); g.lineTo(x, h); g.stroke(); g.setLineDash([]);
       g.fillStyle = css("dn-text"); g.fillText("annonce", x + 3, 26);
     }
+    const t0c = A.candles[0].t, t1c = A.candles[A.candles.length - 1].t;
+    const inView = (a, b) => b >= t0c && a <= t1c + tf;
+    for (const r of stratRecs()) {
+      if (!stIsOn(r)) continue;
+      const col = css(ST_COL[r.strategy] || "muted"), name = ST_NAMES[r.strategy] || r.strategy, lv = r.levels;
+      g.font = "600 11px Inter, system-ui, sans-serif";
+      if (lv && lv.kind === "bands" && lv.points && lv.points.length && inView(lv.points[0][0], lv.points[lv.points.length - 1][0])) {
+        const pts = lv.points.filter((p) => p[0] >= t0c && p[0] <= t1c + tf).map((p) => [X(p[0] - tf), Yp(p[1]), Yp(p[2])]).filter((p) => p[0] != null && p[1] != null && p[2] != null);
+        if (pts.length > 1) {
+          g.fillStyle = alpha(col, 0.08); g.beginPath(); pts.forEach((p, i) => (i ? g.lineTo(p[0], p[1]) : g.moveTo(p[0], p[1])));
+          for (let i = pts.length - 1; i >= 0; i--) g.lineTo(pts[i][0], pts[i][2]); g.closePath(); g.fill();
+          g.strokeStyle = col; g.lineWidth = 1.5;
+          for (const k of [1, 2]) { g.beginPath(); pts.forEach((p, i) => (i ? g.lineTo(p[0], p[k]) : g.moveTo(p[0], p[k]))); g.stroke(); }
+          g.fillStyle = col; g.fillText(name + " · haut", pts[0][0] + 3, pts[0][1] - 3); g.fillText(name + " · bas", pts[0][0] + 3, pts[0][2] + 13);
+        }
+      }
+      if (lv && lv.kind === "level" && inView(lv.from, lv.to)) {
+        seg(X(lv.from), Xend(lv.to), Yp(lv.level), col, [6, 3], `${name} · achat au-dessus`);
+        seg(X(lv.from), Xend(lv.to), Yp(lv.stop), alpha(css("dn"), 0.8), [2, 3], `${name} · stop (ouverture du jour)`);
+      }
+      if (lv && lv.kind === "channel" && lv.points) {
+        const pts = lv.points.filter((p) => p[0] + 3600 >= t0c && p[0] <= t1c + tf);
+        for (const k of [1, 2]) {
+          g.strokeStyle = alpha(col, 0.9); g.lineWidth = 1.5; g.beginPath(); let started = false, lastY = null;
+          for (const p of pts) { const xa = X(p[0]), xb = Xend(p[0] + 3600), y = Yp(p[k]); if (xa == null || xb == null || y == null) continue;
+            if (!started) { g.moveTo(xa, y); started = true; } else g.lineTo(xa, lastY ?? y), g.lineTo(xa, y); g.lineTo(xb, y); lastY = y; }
+          g.stroke();
+        }
+        const lp = pts[pts.length - 1];
+        if (lp) { const x = Xend(lp[0] + 3600); g.fillStyle = col; g.textAlign = "right"; g.fillText(`${name} · haut 20 h`, x - 4, Yp(lp[1]) - 3); g.fillText(`${name} · bas 20 h`, x - 4, Yp(lp[2]) + 13); g.textAlign = "left"; }
+      }
+      if (lv && lv.kind === "window" && inView(lv.from, lv.to)) {
+        const x0 = ts.timeToCoordinate(Math.max(lv.from, t0c)) ?? (lv.from > t1c ? null : 0), x1 = Xend(lv.to);
+        if (x0 != null && x1 != null) { g.fillStyle = alpha(col, 0.07); g.fillRect(x0, 0, Math.max(2, x1 - x0), h); g.fillStyle = col; g.fillText(name + " (18 h → 3 h New York)", x0 + 4, h - 8); }
+        if (lv.entry) { seg(X(lv.from), Xend(lv.to), Yp(lv.entry), col, [6, 3], `${name} · entrée`); seg(X(lv.from), Xend(lv.to), Yp(lv.stop), alpha(css("dn"), 0.8), [2, 3], `${name} · stop 1 %`); }
+      }
+      for (const t of stTrades(r)) seg(X(t.entry_ts), Xend(t.exit_ts), Yp(t.stop), alpha(css("dn"), 0.6), [4, 3], "");
+      g.font = font;
+    }
     g.restore();
   }
 
@@ -218,6 +286,16 @@
       if (s.closed_at) m.push({ time: Math.floor(Date.parse(s.closed_at) / 1000 / tf) * tf, position: "inBar", color: s.pnl_pct > 0 ? css("up") : css("dn"), shape: "square",
         text: (s.status || "").toUpperCase() });
     }
+    for (const r of stratRecs()) {
+      if (!stIsOn(r)) continue;
+      const nm = ST_NAMES[r.strategy] || r.strategy, col = css(ST_COL[r.strategy] || "muted");
+      for (const t of stTrades(r)) {
+        const long = t.direction === "long";
+        m.push({ time: Math.floor(t.entry_ts / tf) * tf, position: long ? "belowBar" : "aboveBar", color: col, shape: long ? "arrowUp" : "arrowDown", text: `${nm} ${long ? "achat" : "vente"}` });
+        if (t.exit_ts) m.push({ time: Math.floor((t.exit_ts - 1) / tf) * tf, position: long ? "aboveBar" : "belowBar", color: (t.r_topstep ?? t.r_bot ?? 0) >= 0 ? css("up") : css("dn"),
+          shape: "square", text: `${(t.r_topstep ?? t.r_bot ?? 0) >= 0 ? "+" : ""}${Y.num(t.r_topstep ?? t.r_bot ?? 0, 2)} R` });
+      }
+    }
     const t0 = A.candles[0].t, t1 = A.candles[A.candles.length - 1].t;
     return m.filter((x) => x.time >= t0 && x.time <= t1).sort((a, b) => a.time - b.time);
   }
@@ -230,7 +308,7 @@
     ma20.setData(on.ma ? A.ma20 : []); ma50.setData(on.ma ? A.ma50 : []);
     candle.setMarkers(markers());
     for (const l of lines) candle.removePriceLine(l); lines = [];
-    drawLayers();
+    drawLayers(); drawStrats();
     requestAnimationFrame(overlay);
   }
 
@@ -246,6 +324,11 @@
     for (const s of A.sessions) if (t >= s.first && t <= s.last) it.push([`Session ${s.label}`, `ouverture ${S.fmt(s.open)} · haut ${S.fmt(s.hi)} · bas ${S.fmt(s.lo)}`]);
     for (const s of botItems()) { const a = Date.parse(s.created_at) / 1000; if (near(a)) it.push([`Signal du bot (${s.direction === "long" ? "achat" : "vente"})`,
       `entrée ${S.fmt(s.entry)}${s.stop_loss ? ` · stop ${S.fmt(s.stop_loss)}` : ""}${s.take_profit ? ` · objectif ${S.fmt(s.take_profit)}` : ""}${s.status ? ` · ${s.status}` : ""}`]); }
+    for (const r of stratRecs()) for (const tr of stTrades(r)) {
+      const nm = ST_NAMES[r.strategy] || r.strategy, rr = tr.r_topstep ?? tr.r_bot;
+      if (near(Math.floor(tr.entry_ts / tf) * tf)) it.push([`${nm} : ${tr.direction === "long" ? "achat" : "vente"}`, `entrée ${S.fmt(tr.entry)} · stop ${S.fmt(tr.stop)}${tr.status === "open" ? " · en cours" : ""}`]);
+      if (tr.exit_ts && near(Math.floor((tr.exit_ts - 1) / tf) * tf)) it.push([`${nm} : sortie`, `${S.fmt(tr.exit)} · ${rr == null ? "" : Y.signed(rr, 2, " R")}${tr.reason ? " · " + tr.reason : ""}`]);
+    }
     for (const e of newsItems()) if (near(Math.floor(Date.parse(e.at) / 1000 / tf) * tf)) it.push(["Annonce", e.name]);
     $("#insp").innerHTML = `<div><b>${esc(when(t))}</b></div>
       <dl><dt>Ouverture</dt><dd>${S.fmt(b.o)}</dd><dt>Haut</dt><dd>${S.fmt(b.h)}</dd><dt>Bas</dt><dd>${S.fmt(b.l)}</dd><dt>Clôture</dt><dd>${S.fmt(b.c)}</dd></dl>

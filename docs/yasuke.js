@@ -68,7 +68,7 @@
 
   // ------------------------------------------------------------------ icônes
   const I = {
-    logo: (s = 32) => `<svg width="${s}" height="${s}" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="var(--brand)"/><path d="M10.5 9 L16 16.5 L21.5 9 M16 16.5 V23.5" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M7.5 25.5 L25 7" stroke="#fff" stroke-opacity=".4" stroke-width="1.3" stroke-linecap="round"/></svg>`,
+    logo: (s = 32) => `<img class="yk-logo" src="logo.png" width="${s}" height="${s}" alt="" decoding="async">`,
     moon: `<svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M13.5 9.6A5.6 5.6 0 0 1 6.4 2.5a5.6 5.6 0 1 0 7.1 7.1z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>`,
     sun: `<svg width="16" height="16" viewBox="0 0 18 18" aria-hidden="true"><circle cx="9" cy="9" r="3.4" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M9 1.5v1.8M9 14.7v1.8M1.5 9h1.8M14.7 9h1.8M3.7 3.7l1.3 1.3M13 13l1.3 1.3M3.7 14.3L5 13M13 5l1.3-1.3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>`,
     plus: `<svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`,
@@ -611,6 +611,31 @@
   }
   const modeText = (m) => ({ local: "serveur local", mcp: "connecté à GitHub via claude.ai", github: "lecture directe sur GitHub", static: "GitHub Pages" }[m] || m);
 
+  // Infobulles au survol : tout élément avec data-tip (titre) et data-tip-rows (« clé=valeur=couleur » séparés par |)
+  function hoverTips() {
+    let tip = null, cur = null;
+    const el = () => { if (!tip) { tip = document.getElementById("tip") || Object.assign(document.createElement("div"), { id: "tip" }); tip.setAttribute("role", "tooltip"); if (!tip.parentNode) document.body.appendChild(tip); } return tip; };
+    const move = (e) => { const t = el(), w = t.offsetWidth, h = t.offsetHeight; let x = e.clientX + 14, y = e.clientY + 14;
+      if (x + w > innerWidth - 8) x = e.clientX - w - 14; if (y + h > innerHeight - 8) y = e.clientY - h - 14; t.style.left = x + "px"; t.style.top = y + "px"; };
+    document.addEventListener("pointerover", (e) => {
+      const n = e.target.closest && e.target.closest("[data-tip]");
+      if (n === cur) return;
+      cur = n;
+      if (!n) { if (tip) tip.style.display = "none"; return; }
+      const t = el(); t.replaceChildren();
+      const b = document.createElement("b"); b.textContent = n.dataset.tip; t.appendChild(b);
+      for (const row of (n.dataset.tipRows || "").split("|").filter(Boolean)) {
+        const [k, v, c] = row.split("=");
+        const r = document.createElement("div"); r.className = "r";
+        const ks = document.createElement("span"); if (c) { const i = document.createElement("i"); i.className = "k"; i.style.background = c; ks.appendChild(i); } ks.appendChild(document.createTextNode(k || ""));
+        const vs = document.createElement("strong"); vs.textContent = v || ""; if (c) vs.style.color = c; r.append(ks, vs); t.appendChild(r);
+      }
+      t.style.display = "block"; move(e);
+    });
+    document.addEventListener("pointermove", (e) => { if (cur && tip) move(e); });
+    document.addEventListener("scroll", () => { if (tip) tip.style.display = "none"; cur = null; }, { passive: true });
+  }
+  hoverTips();
   applyStoredTheme();
   // l'en-tête est dessiné tout de suite (le script est chargé en fin de page), avant sections.js
   if (document.getElementById("yk-header")) header(document.body.dataset.page || "");
