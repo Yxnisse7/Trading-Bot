@@ -16,7 +16,7 @@ import sys
 from pathlib import Path
 
 DOCS = Path(__file__).resolve().parent.parent / "docs"
-ASSETS = ("yasuke.css", "yasuke.js", "charts.js", "live-chart.js", "sections.js", "structures.js", "singes.js", "hud.css", "hud-dash.js", "hud-invest.js")
+ASSETS = ("yasuke.css", "yasuke.js", "charts.js", "live-chart.js", "sections.js", "structures.js", "singes.js", "hud.css", "retro.css", "hud-dash.js", "hud-invest.js")
 
 
 def fingerprint(name: str) -> str:

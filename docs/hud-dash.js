@@ -17,7 +17,7 @@
     const v = d.overview.visible, pf = d.portfolio || {}, cur = pf.currency || "$", wrap = document.querySelector(".hero-row");
     if (!wrap || !v.n) return;
     const p = v.neutral_win_rate ?? 0.4, need = Math.ceil(7.84 * p * (1 - p) / 0.01), rel = Math.min(1, v.n / need);
-    const tone = (x) => x >= 0 ? "" : "dn", arrow = (x) => (x >= 0 ? "▲ " : "▼ ");
+    const tone = (x) => x >= 0 ? "up" : "dn", arrow = (x) => (x >= 0 ? "▲ " : "▼ ");
     const edge = v.edge * 100;
     const kpis = [
       pf.balance !== undefined ? ["Balance simulée", Y.money(pf.balance, cur, 0), `${arrow(pf.pnl_pct)}${Y.signed(pf.pnl_pct, 1)} %`, tone(pf.pnl_pct)] : null,

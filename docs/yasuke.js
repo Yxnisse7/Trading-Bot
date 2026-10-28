@@ -115,7 +115,7 @@
   function header(page) {
     const host = document.getElementById("yk-header");
     if (!host) return;
-    hudFrame();
+    if (document.documentElement.dataset.look === "hud") hudFrame();
     if (page === "invest") return investHeader(host);
     const onDash = page === "dashboard";
     const trade = onDash ? `<button type="button" id="btn-trade">${I.plus}<span class="btn-lbl">Nouveau trade</span></button>`
@@ -261,7 +261,7 @@
   const themeKey = () => document.documentElement.dataset.space === "invest" ? "tb-theme-invest" : "tb-theme";
   const themeDefault = () => document.documentElement.dataset.space === "invest" ? "light" : "dark";
   // Look HUD : sombre seulement (le bouton de thème a disparu)
-  function applyStoredTheme() { document.documentElement.dataset.theme = "dark"; document.documentElement.dataset.look = "hud"; }
+  function applyStoredTheme() { document.documentElement.dataset.theme = "dark"; document.documentElement.dataset.look = document.documentElement.dataset.look || "hud"; }
   function isDark() { return (document.documentElement.dataset.theme || themeDefault()) === "dark"; }
   // couleur de la barre du navigateur sur téléphone : celle du fond de la page (directive « Web Interface Guidelines »)
   function themeColor() {
