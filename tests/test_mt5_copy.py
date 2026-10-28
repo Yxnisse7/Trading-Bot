@@ -135,7 +135,7 @@ def test_asian_night_follows_the_same_cap_as_the_others(tmp_path):
          "entry_ts": created, "close_at": created + 9 * 3600}]}}
     get = lambda url: lab if "lab_shadow" in url else {"open_signals": []}
     mc.Copier(mt5, tmp_path, lambda *a, **k: None, lambda: created + 60, get=get).step()
-    assert mt5.sent[0]["volume"] == 0.01
+    assert mt5.sent[0]["volume"] == 0.02          # 28/10 : trade du bot pris seul = 0,02 lot au moins
 
 
 def test_lab_signal_age_counts_from_the_telegram_announcement(tmp_path):
@@ -244,3 +244,12 @@ def test_late_github_copy_is_skipped_when_the_price_already_ran(tmp_path):
     c = mc.Copier(mt5, tmp_path, lambda *a, **k: None, lambda: created + 300, get=site([sig()]))
     c.step()
     assert mt5.sent == [] and c.state["bot:abc"]["status"].startswith("prix déjà parti")
+
+
+def test_solo_trade_is_taken_at_two_hundredths_when_the_cap_allows_it():
+    info = NS(trade_contract_size=1.0, volume_step=0.01, volume_min=0.01, volume_max=100.0)
+    assert mc.solo_floor(0.01, 1000, 100.0, info) == 0.02          # 0,02 lot risque 2 % : ok
+    assert mc.solo_floor(0.01, 100, 800.0, info) == 0.01           # 0,02 lot risquerait plus de 15 % du solde : on garde 0,01
+    assert mc.solo_floor(0.05, 1000, 100.0, info) == 0.05 and mc.solo_floor(0.0, 1000, 100.0, info) == 0.0
+    gold = NS(trade_contract_size=100.0, volume_step=0.01, volume_min=0.01, volume_max=100.0)
+    assert mc.solo_floor(0.01, 190, 40.0, gold) == 0.01            # or à 190 $ : 0,02 lot = 80 $ (42 %) > 15 %

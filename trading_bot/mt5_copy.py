@@ -30,6 +30,8 @@ MAGIC = 200001
 # en $ par point (avant : 5 % de risque, nuit asiatique à 0,05 lot, 0,5-1 $ par point).
 RISK_PCT = 0.02
 MIN_LOT_CAP = 0.15
+SOLO_MIN_LOT = 0.02   # 28/10 (choix de Yanisse) : un trade du bot pris seul fait 0,02 lot au moins ; 0,01 reste pour les trades
+#                      Telegram (3 ordres à la fois). Si 0,02 risque plus que MIN_LOT_CAP, le lot calculé est gardé.
 MIN_LOT_MAX_RISK: dict[str, float] = {}
 MIN_LOT: dict[str, float] = {}
 MIN_POINT_VALUE: dict[str, float] = {}
@@ -111,6 +113,18 @@ def lot_for(balance: float, dist: float, info, min_lot_risk: float | None = None
         cap = max(MIN_LOT_CAP, min_lot_risk or 0.0)
         return float(info.volume_min) if info.volume_min * dist * contract <= cap * balance else 0.0
     return round(min(lot, float(info.volume_max)), 2)
+
+
+def solo_floor(lot: float, balance: float, dist: float, info, min_lot_risk: float | None = None) -> float:
+    """Remonte un lot de 0,01 à SOLO_MIN_LOT quand le risque au stop reste sous le plafond (MIN_LOT_CAP)."""
+    contract, step = float(info.trade_contract_size), float(info.volume_step)
+    if lot <= 0 or lot >= SOLO_MIN_LOT or contract <= 0 or step <= 0:
+        return lot
+    cap = max(MIN_LOT_CAP, min_lot_risk or 0.0)
+    want = math.ceil(SOLO_MIN_LOT / step - 1e-9) * step
+    if want > float(info.volume_max) or want * dist * contract > cap * balance:
+        return lot
+    return round(want, 2)
 
 
 def floor_lot(lot: float, balance: float, dist: float, info, point_value: float | None) -> float:
@@ -294,6 +308,7 @@ class Copier:
             return {"status": late}
         strat = s["key"].split(":")[1] if s["key"].startswith("lab:") else None
         lot = lot_for(balance, s["stop"], info, MIN_LOT_MAX_RISK.get(strat))
+        lot = solo_floor(lot, balance, s["stop"], info, MIN_LOT_MAX_RISK.get(strat))
         lot = floor_lot(lot, balance, s["stop"], info, MIN_POINT_VALUE.get(sym))
         if strat in MIN_LOT:
             lot = round(min(max(lot, MIN_LOT[strat]), float(info.volume_max)), 2)
