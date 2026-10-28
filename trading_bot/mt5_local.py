@@ -39,12 +39,44 @@ def active(now: float) -> list[tuple[str, str]]:
     return out
 
 
-def server_offset(mt5, sym: str, now: float) -> int | None:
-    """Décalage de l'heure du serveur (arrondi à la demi-heure) ; None sans cotation récente."""
-    tick = mt5.symbol_info_tick(sym)
+_REF = ("BTCUSD", "ETHUSD")           # cotés 24 h sur 24 : leur dernière cotation est toujours fraîche
+_LAST: dict[int, tuple[int, float]] = {}
+
+
+def _fresh_offset(tick, now: float) -> int | None:
     if tick is None or not getattr(tick, "time", 0):
         return None
     off = round((tick.time - now) / 1800) * 1800
+    return off if abs(tick.time - off - now) <= 180 else None
+
+
+def broker_offset(mt5, now: float) -> int | None:
+    """Décalage de l'heure du serveur, lu sur une cotation qui ne s'arrête jamais (crypto), sinon le dernier connu."""
+    for ref in _REF:
+        try:
+            mt5.symbol_select(ref, True)
+            off = _fresh_offset(mt5.symbol_info_tick(ref), now)
+        except Exception:                                        # noqa: BLE001 — symbole absent chez ce courtier
+            off = None
+        if off is not None:
+            _LAST[id(mt5)] = (off, now)
+            return off
+    known = _LAST.get(id(mt5))
+    return known[0] if known and now - known[1] < 2 * 86400 else None
+
+
+def server_offset(mt5, sym: str, now: float) -> int | None:
+    """Décalage de l'heure du serveur (arrondi à la demi-heure) ; None sans cotation récente sur ce symbole.
+
+    28/10/2026 : marché fermé (pause du Nasdaq), la dernière cotation vieille d'une demi-heure ou d'une heure
+    pile donnait un faux décalage accepté : les bougies étaient décalées et le suivi du bot fermait à tort des
+    trades. Le décalage vient donc d'une crypto, et la cotation du symbole doit être fraîche avec ce décalage."""
+    tick = mt5.symbol_info_tick(sym)
+    if tick is None or not getattr(tick, "time", 0):
+        return None
+    off = broker_offset(mt5, now)
+    if off is None:
+        off = round((tick.time - now) / 1800) * 1800
     return off if abs(tick.time - off - now) <= 180 else None
 
 

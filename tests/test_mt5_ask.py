@@ -127,3 +127,24 @@ def test_closed_market_uses_last_known_price_and_candles(tmp_path, monkeypatch):
     a.proc = None
     a.step()
     assert data[-1]["bid"] == data[-1]["candles_5m"][-1][4]
+
+
+def test_server_offset_ignores_a_stale_tick_when_the_market_is_closed():
+    """28/10 : Nasdaq fermé, cotation vieille d'une demi-heure pile = faux décalage accepté, bougies décalées."""
+    from trading_bot import mt5_local as ml
+    now = float(MON16)
+    off = 10800
+
+    class M:
+        def symbol_select(self, s, on):
+            return True
+
+        def symbol_info_tick(self, s):
+            if s in ("BTCUSD", "ETHUSD"):
+                return NS(time=int(now) + off - 2)                       # crypto : toujours fraîche
+            return NS(time=int(now) + off - 1800 - 60)                   # Nasdaq : fermé depuis 31 min
+    m = M()
+    assert ml.broker_offset(m, now) == off
+    assert ml.server_offset(m, "NAS100", now) is None                    # avant : renvoyait 9000
+    m.symbol_info_tick = lambda s: NS(time=int(now) + off - 5)
+    assert ml.server_offset(m, "NAS100", now) == off
