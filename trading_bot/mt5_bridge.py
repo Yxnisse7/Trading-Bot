@@ -68,6 +68,7 @@ class Bridge:
         self.hunter = None
         self.hugo = None
         self.asker = None
+        self.check = None
         self.tgcopy = None
         self.relay = None
         if cfg.get("copy_bot") and cfg["mode"] == "demo":
@@ -94,6 +95,9 @@ class Bridge:
             if cfg.get("ask", True):             # questions à l'agent depuis Telegram : /avis (mt5_ask.py)
                 from .mt5_ask import Asker
                 self.asker = Asker(mt5, root, clock, relay=relay, cfg=cfg.get("ask_cfg"))
+            if cfg.get("controle", True):        # contrôle du soir : signaux annoncés contre trades pris (mt5_check.py)
+                from .mt5_check import DailyCheck
+                self.check = DailyCheck(self.copier, relay, root, clock)
             if (cfg.get("tg_copy") or {}).get("channels"):   # copie des canaux Telegram de signaleurs (mt5_tgcopy.py)
                 from .mt5_tgcopy import TgCopier
                 self.tgcopy = TgCopier(mt5, root, clock, relay=relay, cfg=cfg["tg_copy"])
@@ -303,6 +307,13 @@ class Bridge:
                     log.info("%s", state)
             except Exception:                      # idem pour les questions à l'agent
                 log.exception("questions à l'agent IA")
+        if self.check is not None:
+            try:
+                state = self.check.step()
+                if state:
+                    log.info("%s", state)
+            except Exception:                      # idem pour le contrôle du soir
+                log.exception("contrôle du soir")
         if self.tgcopy is not None:
             try:
                 state = self.tgcopy.step()

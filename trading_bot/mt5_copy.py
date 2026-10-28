@@ -237,7 +237,7 @@ class Copier:
                          if r.get("source", "github") != s.get("source", "github")
                          and same_signal(key, s["direction"], k, r.get("direction"))), None)
             self.state[key] = {"asset": s["asset"], "status": "vu", "expires": s["expires"], "symbol": SYMBOLS.get(s["asset"], ""),
-                               "direction": s["direction"], "source": s.get("source", "github")}
+                               "direction": s["direction"], "source": s.get("source", "github"), "seen": int(now)}
             if twin:
                 self.state[key]["status"] = f"même signal que {twin}"
                 continue
