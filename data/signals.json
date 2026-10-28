@@ -101,7 +101,7 @@
         ]
       },
       "exc": {
-        "mfe": 2.7326,
+        "mfe": 2.9931,
         "mae": 0.2257,
         "armed": {
           "0.5": true,
@@ -113,7 +113,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1793158800
+        "last_ts": 1793159100
       }
     }
   },
@@ -219,7 +219,7 @@
         ]
       },
       "exc": {
-        "mfe": 2.6597,
+        "mfe": 2.9201,
         "mae": 0.2222,
         "armed": {
           "0.5": true,
@@ -231,129 +231,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1793158800
-      }
-    }
-  },
-  {
-    "id": "c2cc58c85c",
-    "asset": "nasdaq",
-    "asset_label": "Nasdaq 100 (NQ)",
-    "direction": "long",
-    "entry": 29717.0,
-    "take_profit": 29927.5,
-    "stop_loss": 29647.0,
-    "risk_reward": 3.01,
-    "confidence": "fort",
-    "score": 7.82,
-    "criteria": [
-      "adx",
-      "orb",
-      "rsi",
-      "trend_15m",
-      "trend_1h",
-      "trend_5m",
-      "vwap"
-    ],
-    "rationale": "Achat : tendance forte (ADX), cassure du range d'ouverture, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 117.17 (0.39 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 83%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
-    "news_context": "actualité à surveiller (score 2) : S&P 500, Nasdaq advance as oil eases ahead of Fed decision",
-    "created_at": "2026-10-27T15:20:57Z",
-    "expires_at": "2026-10-28T15:20:57Z",
-    "status": "open",
-    "closed_at": null,
-    "close_price": null,
-    "pnl_pct": null,
-    "pnl_gross_pct": null,
-    "duration_minutes": null,
-    "hourly_range": 117.166667,
-    "source": "bot",
-    "horizon": "24h",
-    "horizon_minutes": 1440,
-    "meta": {
-      "tick": 0.25,
-      "details": {
-        "trend_5m": "EMA20 29641.99 / EMA50 29588.26 (5 min)",
-        "trend_15m": "EMA20 29579.15 / EMA50 29508.53",
-        "trend_1h": "prix vs EMA20 1 h 29500.19",
-        "adx": "ADX15 36.1 (+DI 35.6 / -DI 10.4)",
-        "vwap": "VWAP jour 29555.08",
-        "rsi": "RSI14 5 min 66.2",
-        "macd": "histogramme MACD 13.0130",
-        "level": "support 29461.50 / résistance -",
-        "volume": "z-score volume -2.19",
-        "orb": "range d'ouverture 29523.75 – 29687.75",
-        "pdhl": "veille : haut 29572.00 / bas 29024.25",
-        "activity": "activité de l'heure 1.30× la moyenne",
-        "corr": "VIX -0.3 % sur 15 min"
-      },
-      "support": 29461.5,
-      "resistance": null,
-      "atr_5m": 41.1570144071918,
-      "atr_ratio": 1.3205368910459074,
-      "hourly_range_pct": 0.3943,
-      "adx_15m": 36.07725938852089,
-      "sigma_5m": 0.0008950685675641836,
-      "p_resolution": 0.8273333333333334,
-      "p_tp_neutral": 0.3363333333333333,
-      "activity_ratio": 1.304,
-      "base_minutes": 5,
-      "ctx": {
-        "adx": 36.08,
-        "rsi_dir": 66.23,
-        "vwap_ext": 1.3819,
-        "ema_ext": 0.6402,
-        "atr_ratio": 1.321,
-        "activity": 1.304,
-        "range_pct": 0.3943,
-        "cost_r": 0.0636,
-        "us_open_min": 111.0,
-        "weekday": 1
-      },
-      "exit_override": {
-        "stop_x": 1.5,
-        "target_x": 3.0,
-        "minutes": 1440,
-        "source": "essai 29"
-      },
-      "price_time": "2026-10-27T15:15:00Z",
-      "ctx_avoid": [
-        "écart au VWAP dans le sens du trade (en range) : milieu (0,87 à 1,49)"
-      ],
-      "model_r": 0.0836,
-      "filters": [
-        "filtre_contexte"
-      ],
-      "filters_checked": true,
-      "pc": true,
-      "sim": {
-        "lots": 1,
-        "lot_label": "MNQ",
-        "risk_amount": 140.0,
-        "risk_pct_effective": 9.829,
-        "notional": 59434.0,
-        "leverage": 41.73,
-        "capped_by_leverage": true,
-        "balance_at_open": 1424.38,
-        "risky": true,
-        "warnings": [
-          "lot minimal 1 MNQ imposé : risque au stop 140.00 au lieu de 142.44 visé",
-          "levier ×41.7 au-delà du plafond ×20"
-        ]
-      },
-      "exc": {
-        "mfe": 2.9571,
-        "mae": 0.0,
-        "armed": {
-          "0.5": true,
-          "0.8": true,
-          "1.0": true
-        },
-        "be": {
-          "0.5": false,
-          "0.8": false,
-          "1.0": false
-        },
-        "last_ts": 1793158800
+        "last_ts": 1793159100
       }
     }
   }
