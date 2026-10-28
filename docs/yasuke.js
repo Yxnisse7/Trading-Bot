@@ -100,6 +100,13 @@
                   ["produits", "Produits", "", ""], ["actus", "Actualités", "", ""], ["comment", "Guide", "", ""]];
   const spaceSwitch = (space) => `<div class="yk-space" role="group" aria-label="Espace">
       <a href="index.html"${space === "trade" ? ' aria-current="page"' : ""}>Trading</a><a href="investissement.html"${space === "invest" ? ' aria-current="page"' : ""}>Investir</a></div>`;
+  // lien d'évitement : au clavier, le premier Tab propose de sauter le menu
+  function skipLink(host) {
+    const main = document.querySelector(".wrap"); if (!main) return;
+    main.id = main.id || "contenu"; main.tabIndex = -1;
+    if (document.querySelector(".yk-skip")) return;
+    host.insertAdjacentHTML("beforebegin", `<a class="yk-skip" href="#${main.id}">Aller au contenu</a>`);
+  }
   function header(page) {
     const host = document.getElementById("yk-header");
     if (!host) return;
@@ -108,6 +115,7 @@
     const trade = onDash ? `<button type="button" id="btn-trade">${I.plus}<span class="btn-lbl">Nouveau trade</span></button>`
                          : `<a class="btn" id="btn-trade" href="index.html#trade">${I.plus}<span class="btn-lbl">Nouveau trade</span></a>`;
     host.className = "yk-top";
+    skipLink(host);
     host.innerHTML = `<div class="yk-top-in">
       <div class="yk-left">
         <a class="yk-brand" href="index.html" aria-label="Yasuke, tableau de bord">${I.logo(32)}<span><b>Yasuke</b><small>Trading</small></span></a>
@@ -162,6 +170,7 @@
   function investHeader(host) {
     document.documentElement.dataset.space = "invest";
     host.className = "yk-top";
+    skipLink(host);
     host.innerHTML = `<div class="yk-top-in">
       <div class="yk-left">
         <a class="yk-brand" href="investissement.html" aria-label="Yasuke Invest">${I.logo(32)}<span><b>Yasuke</b><small>Invest · halal</small></span></a>
@@ -248,9 +257,15 @@
   const themeDefault = () => document.documentElement.dataset.space === "invest" ? "light" : "dark";
   function applyStoredTheme() { document.documentElement.dataset.theme = store.get(themeKey()) || themeDefault(); }
   function isDark() { return (document.documentElement.dataset.theme || themeDefault()) === "dark"; }
+  // couleur de la barre du navigateur sur téléphone : celle du fond de la page (directive « Web Interface Guidelines »)
+  function themeColor() {
+    let m = document.querySelector('meta[name="theme-color"]');
+    if (!m) { m = document.createElement("meta"); m.name = "theme-color"; document.head.appendChild(m); }
+    m.content = getComputedStyle(document.body).backgroundColor || "";
+  }
   function themeButton() {
     const b = document.getElementById("btn-theme"); if (!b) return;
-    const paint = () => { b.innerHTML = isDark() ? I.sun : I.moon; };
+    const paint = () => { b.innerHTML = isDark() ? I.sun : I.moon; themeColor(); };
     paint();
     b.addEventListener("click", () => {
       const root = document.documentElement;

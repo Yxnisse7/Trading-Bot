@@ -405,22 +405,12 @@ input, select, textarea { border-radius: 8px; }
 @media print { .yk-monkey { display: none; } }
 
 /* ---- Retouche du 28/10/2026 (skill design-refinement) : plus calme, moins « gabarit IA » ---------------------------------
-   Les chiffres restent neutres, la direction se lit sur une petite pastille ; les encadrés d'information sont gris (seuls les
-   avertissements gardent une teinte) ; une seule échelle de rayons ; plus de halo ni de pulsation sur l'état du bot ; le singe
+   Les chiffres et encadrés gardent leurs couleurs (Yasuke y tient pour distinguer d'un coup d'œil gains, pertes et infos) ; une seule échelle de rayons ;
+   plus de halo ni de pulsation sur l'état du bot ; le singe
    flottant est plus petit pour ne plus couvrir le texte. */
 .card { border-radius: 14px; }
 dialog.yk-modal { border-radius: 16px; }
 .note-box { border-radius: 10px; }
-.note-box.ok, [data-space="invest"] .note-box.ok { background: var(--soft); color: var(--text); border: 1px solid var(--line); }
-.note-box.ok svg { color: var(--muted); }
-.tile .v .up, .tile .v .dn, .tile .v.up, .tile .v.dn, .live-s .v .up, .live-s .v .dn, .live-s .v.up, .live-s .v.dn, .hero .big .up, .hero .big .dn,
-.tr-stats b .up, .tr-stats b .dn, .tr-stats b.up, .tr-stats b.dn { color: var(--text); }
-.tile .v .up::before, .tile .v .dn::before, .tile .v.up::before, .tile .v.dn::before,
-.live-s .v .up::before, .live-s .v .dn::before, .live-s .v.up::before, .live-s .v.dn::before,
-.tr-stats b .up::before, .tr-stats b .dn::before, .tr-stats b.up::before, .tr-stats b.dn::before {
-  content: ""; display: inline-block; width: .3em; height: .3em; border-radius: 50%; margin-right: .32em; vertical-align: .16em; }
-.tile .v .up::before, .tile .v.up::before, .live-s .v .up::before, .live-s .v.up::before, .tr-stats b .up::before, .tr-stats b.up::before { background: var(--up); }
-.tile .v .dn::before, .tile .v.dn::before, .live-s .v .dn::before, .live-s .v.dn::before, .tr-stats b .dn::before, .tr-stats b.dn::before { background: var(--dn); }
 .yk-status .dot { width: 8px; height: 8px; background: currentColor; }
 .yk-status .dot::after { display: none; }
 .yk-status.ok .dot::after { animation: none; }
@@ -429,3 +419,9 @@ dialog.yk-modal { border-radius: 16px; }
 .yk-monkey .singe { width: 64px; height: auto; filter: none; opacity: .94; }
 .yk-monkey:hover .singe { opacity: 1; }
 @media (max-width: 860px) { .yk-monkey .singe { width: 46px; } }
+.yk-skip { position: fixed; left: 12px; top: -48px; z-index: 100; padding: 8px 14px; border-radius: 8px; background: var(--card); color: var(--text); border: 1px solid var(--line); font-size: 14px; transition: top .15s; }
+.yk-skip:focus { top: 12px; }
+a, button, select, summary, input, .tr-card[data-href] { touch-action: manipulation; }
+h1, h2, h3 { text-wrap: balance; }
+dialog.yk-modal { overscroll-behavior: contain; }
+.wrap:focus { outline: none; }

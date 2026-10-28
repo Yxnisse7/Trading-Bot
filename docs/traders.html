@@ -8,11 +8,11 @@
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap">
-<link rel="stylesheet" href="yasuke.css?v=3b9ad39340">
+<link rel="stylesheet" href="yasuke.css?v=03f3fd4d55">
 <script>/* Trading : sombre par défaut */ try { document.documentElement.dataset.theme = localStorage.getItem("tb-theme") || "dark"; } catch (e) { document.documentElement.dataset.theme = "dark"; }</script>
 <style>
   .tr-grid { display: grid; gap: 16px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .tr-card { padding: 18px; display: grid; gap: 14px; align-content: start; }
+  .tr-card { padding: 18px; display: grid; gap: 14px; align-content: start; border-top: 4px solid var(--mood, var(--line)); }
   .tr-card[data-href] { cursor: pointer; transition: border-color .12s; }
   .tr-card[data-href]:hover { border-color: color-mix(in srgb, var(--mood, var(--muted)) 55%, var(--line)); }
   .tr-card[data-href]:focus-visible { outline: 2px solid var(--mood, var(--accent)); outline-offset: 2px; }
@@ -72,7 +72,7 @@
     (l'essai 63 a montré que couper ou réduire une stratégie selon sa forme récente fait perdre). Les vraies protections, comme l'arrêt du jour, restent dans le code ;
     le singe passe alors « en pause ». Humeur recalculée à chaque passage du bot ; le compte MT5 est relevé par le pont du PC toutes les 10 minutes.</p>
 </div>
-<script src="yasuke.js?v=46359d9960"></script>
+<script src="yasuke.js?v=7041498c56"></script>
 <script src="singes.js?v=45033ffabf"></script>
 <script>
 (function () {
