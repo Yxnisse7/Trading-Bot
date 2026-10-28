@@ -416,9 +416,12 @@ dialog.yk-modal { border-radius: 16px; }
 .yk-status.ok .dot::after { animation: none; }
 #btn-sections { background: transparent; border-color: transparent; color: var(--muted); }
 #btn-sections:hover { background: var(--soft); border-color: var(--line); color: var(--text); }
-.yk-monkey .singe { width: 64px; height: auto; filter: none; opacity: .94; }
-.yk-monkey:hover .singe { opacity: 1; }
-@media (max-width: 860px) { .yk-monkey .singe { width: 46px; } }
+.yk-monkey { flex-direction: column; align-items: flex-end; gap: 2px; }
+.yk-monkey .singe { width: 112px; height: auto; filter: drop-shadow(0 6px 12px rgba(0,0,0,.3)); }
+.yk-monkey-tag { font-size: 11.5px; font-weight: 600; padding: 3px 9px; border-radius: 999px; background: var(--card); border: 1px solid var(--line); color: var(--text); white-space: nowrap;
+  box-shadow: inset 0 -2px 0 var(--mood, var(--line)); }
+.yk-monkey-bubble { position: absolute; right: 0; bottom: 100%; margin-bottom: 8px; width: max-content; }
+@media (max-width: 860px) { .yk-monkey .singe { width: 52px; } .yk-monkey-tag { display: none; } }
 .yk-skip { position: fixed; left: 12px; top: -48px; z-index: 100; padding: 8px 14px; border-radius: 8px; background: var(--card); color: var(--text); border: 1px solid var(--line); font-size: 14px; transition: top .15s; }
 .yk-skip:focus { top: 12px; }
 a, button, select, summary, input, .tr-card[data-href] { touch-action: manipulation; }

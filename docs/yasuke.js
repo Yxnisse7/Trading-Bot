@@ -157,7 +157,8 @@
       box.className = "yk-monkey"; box.href = "traders.html";
       box.setAttribute("aria-label", `${window.YK.SINGE_COMPTES[key].nom} est ${h.label || a.humeur} : voir les traders`);
       box.innerHTML = `<span class="yk-monkey-bubble"><b style="color:${h.couleur}">${esc(h.label || "")}</b>${esc(a.pensee || "")}</span>`
-        + window.YK.singe(a.humeur, { compte: key, taille: 76 });
+        + window.YK.singe(a.humeur, { compte: key, taille: 112 })
+        + `<span class="yk-monkey-tag" style="--mood:${h.couleur || "var(--muted)"}">${esc(window.YK.SINGE_COMPTES[key].nom)} · ${esc(h.label || "")}</span>`;
       document.body.appendChild(box);
     };
     const sc = document.createElement("script");
