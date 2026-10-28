@@ -93,7 +93,7 @@
                  ["learning", "apprentissage.html", "Apprentissage", "Apprendre", "learn"], ["topstep", "topstep.html", "Topstep", "Topstep", "flag"]];
   // pages d'analyse : onglets en haut, et petite barre sous l'en-tête sur téléphone (la navigation du bas est pleine)
   const EXTRA = [["chart", "graphique.html", "Graphique"], ["events", "evenements.html", "Événements"], ["labo", "labo.html", "Labo"],
-                 ["traders", "traders.html", "Les traders"]];
+                 ["traders", "traders.html", "Les traders"], ["demo", "demo.html", "MT5"]];
   // Espace Investir (page à part) : ses onglets sont les parties de la page
   const INVEST = [["portefeuilles", "Portefeuilles", "Portef.", "wallet"], ["poche", "Actions", "Actions", "learn"], ["pepites", "Pépites", "", ""],
                   ["plan-mois", "Mon plan", "Mon plan", "home"], ["zakat", "Zakat", "Zakat", "crescent"], ["simulateur", "Simulateur", "", ""],
@@ -111,7 +111,7 @@
     host.innerHTML = `<div class="yk-top-in">
       <div class="yk-left">
         <a class="yk-brand" href="index.html" aria-label="Yasuke, tableau de bord">${I.logo(32)}<span><b>Yasuke</b><small>Trading</small></span></a>
-        <nav class="yk-tabs" aria-label="Pages">${[PAGES[0], PAGES[1], EXTRA[3], EXTRA[0], EXTRA[1], PAGES[3], PAGES[2], EXTRA[2]].map(([k, href, l]) => `<a class="yk-tab${k === page ? " active" : ""}" href="${href}"${k === page ? ' aria-current="page"' : ""}>${l}</a>`).join("")}</nav>
+        <nav class="yk-tabs" aria-label="Pages">${[PAGES[0], PAGES[1], EXTRA[4], EXTRA[3], EXTRA[0], EXTRA[1], PAGES[3], PAGES[2], EXTRA[2]].map(([k, href, l]) => `<a class="yk-tab${k === page ? " active" : ""}" href="${href}"${k === page ? ' aria-current="page"' : ""}>${l}</a>`).join("")}</nav>
       </div>
       <div class="yk-right">
         ${spaceSwitch("trade")}
@@ -131,15 +131,6 @@
     sub.innerHTML = EXTRA.map(([k, href, l]) => `<a href="${href}"${k === page ? ' class="active" aria-current="page"' : ""}>${l}</a>`).join("")
       + `<a class="yk-sub-space" href="investissement.html">Investir ${I.chevR}</a>`;
     host.after(sub);
-    // onglet « Démo MT5 » : seulement dans l'appli du PC (ou son adresse privée), où le pont écrit l'état du compte
-    const addDemo = () => {
-      if (host.querySelector('[data-k="demo"]')) return;
-      const on = page === "demo" ? ' active" aria-current="page' : "";
-      host.querySelector(".yk-tabs").insertAdjacentHTML("beforeend", `<a class="yk-tab${on}" data-k="demo" href="demo.html">Démo MT5</a>`);
-      sub.querySelector(".yk-sub-space").insertAdjacentHTML("beforebegin", `<a data-k="demo" href="demo.html"${page === "demo" ? ' class="active"' : ""}>Démo MT5</a>`);
-    };
-    if (page === "demo") addDemo();
-    else fetch("/api/ping", { cache: "no-store" }).then((r) => r.ok ? r.json() : null).then((j) => { if (j && j.demo) addDemo(); }).catch(() => { /* site en ligne */ });
     themeButton();
     fitHeader(host);
     ticker(sub);

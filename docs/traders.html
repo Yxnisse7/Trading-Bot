@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Les traders · Yasuke Trading-Bot</title>
-<meta name="description" content="Chaque compte est un trader singe : Simulation, Topstep et le démo MT5 de l'agent IA, avec leur courbe et leur humeur.">
+<meta name="description" content="Chaque compte est un trader singe : Simulation, Topstep et le compte MT5 de l'agent IA, avec leur courbe et leur humeur.">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap">
@@ -13,6 +13,9 @@
 <style>
   .tr-grid { display: grid; gap: 16px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .tr-card { padding: 18px; display: grid; gap: 14px; align-content: start; border-top: 4px solid var(--mood, var(--line)); }
+  .tr-card[data-href] { cursor: pointer; transition: transform .12s, box-shadow .12s; }
+  .tr-card[data-href]:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,.18); }
+  .tr-card[data-href]:focus-visible { outline: 2px solid var(--mood, var(--accent)); outline-offset: 2px; }
   .tr-head { display: grid; grid-template-columns: 132px 1fr; gap: 12px; align-items: center; }
   .tr-head .singe { width: 132px; height: auto; }
   .tr-name { font-size: 13px; color: var(--muted); font-weight: 500; }
@@ -69,12 +72,13 @@
     (l'essai 63 a montré que couper ou réduire une stratégie selon sa forme récente fait perdre). Les vraies protections, comme l'arrêt du jour, restent dans le code ;
     le singe passe alors « en pause ». Humeur recalculée à chaque passage du bot ; le compte MT5 est relevé par le pont du PC toutes les 10 minutes.</p>
 </div>
-<script src="yasuke.js?v=5e384a2831"></script>
+<script src="yasuke.js?v=46359d9960"></script>
 <script src="singes.js?v=45033ffabf"></script>
 <script>
 (function () {
   const Y = window.YK, $ = Y.$, esc = Y.esc, H = Y.SINGE_HUMEURS, C = Y.SINGE_COMPTES;
-  const ORDER = [["mt5", "Démo MT5 · l'agent IA"], ["simulation", "Simulation"], ["topstep", "Topstep 50K"]];
+  const ORDER = [["mt5", "MT5 · l'agent IA"], ["simulation", "Simulation"], ["topstep", "Topstep 50K"]];
+  const PAGE = { mt5: "demo.html", simulation: "portfolio.html", topstep: "topstep.html" };
   const RULES = {
     serein: "rien d'inhabituel, il suit son plan", confiant: "au moins 3 gains sur les 5 derniers trades",
     euphorique: "5 gains d'affilée, ou 8 sur 10", frustre: "4 pertes sur 5, ou loin de son plus haut",
@@ -95,11 +99,11 @@
   }
 
   function card(key, title, a) {
-    if (!a) return `<div class="card tr-card"><div class="tr-head">${Y.singe("pause", { compte: key, taille: 132 })}
+    if (!a) return `<div class="card tr-card" data-href="${PAGE[key]}" tabindex="0" role="link"><div class="tr-head">${Y.singe("pause", { compte: key, taille: 132 })}
       <div class="tr-name">${esc(title)}<b>${esc(C[key].nom)}</b></div></div><div class="tr-note">Pas encore de données pour ce compte${key === "mt5" ? " : le pont du PC doit être relancé une fois" : ""}.</div></div>`;
     const h = H[a.humeur] || H.serein, s = a.stats;
     const releve = a.releve ? ` · relevé ${Y.ago(a.releve)}` : "";
-    return `<article class="card tr-card" style="--mood:${h.couleur}">
+    return `<article class="card tr-card" style="--mood:${h.couleur}" data-href="${PAGE[key]}" tabindex="0" role="link" aria-label="Ouvrir la page ${esc(C[key].nom)}">
       <div class="tr-head">${Y.singe(a.humeur, { compte: key, taille: 132 })}
         <div><div class="tr-name">${esc(title)}<b>${esc(C[key].nom)}</b></div>
           <span class="tr-mood">${esc(h.label)}</span>
@@ -137,6 +141,9 @@
 
   $("#legend").innerHTML = Object.entries(H).map(([k, h]) => `<div class="card">${Y.singe(k, { compte: "mt5", taille: 84 })}
     <b style="color:${h.couleur}">${esc(h.label)}</b><small>${esc(RULES[k])}</small></div>`).join("");
+  const go = (e) => { const c = e.target.closest(".tr-card[data-href]"); if (c && !(window.getSelection() + "")) location.href = c.dataset.href; };
+  $("#cards").addEventListener("click", go);
+  $("#cards").addEventListener("keydown", (e) => { if (e.key === "Enter" && e.target.matches(".tr-card[data-href]")) location.href = e.target.dataset.href; });
   const load = () => Y.getJson("live/traders.json").then(render).catch(() => render(null));
   load();
   Y.poll(load);
