@@ -72,6 +72,7 @@ class Bridge:
         self.tgcopy = None
         self.relay = None
         self._closed: tuple[float, list[list]] | None = None
+        self._levels: dict[int, tuple[float | None, float | None]] = {}
         if cfg.get("copy_bot") and cfg["mode"] == "demo":
             from .mt5_copy import Copier
             from .pc_relay import Relay
@@ -144,7 +145,10 @@ class Bridge:
     ORIGINS = {200001: "Copie du bot", 777001: "Claude", 777002: "Agent IA", 777003: "Méthode Hugo", 300001: "Copie Telegram",
                0: "Manuel"}
 
-    CLOSED_COLS = ["closed", "opened", "symbol", "side", "volume", "open", "close", "pnl", "origin", "why"]
+    CLOSED_COLS = ["closed", "opened", "symbol", "side", "volume", "open", "close", "pnl", "origin", "why", "sl", "tp"]
+    # trades de l'agent IA : stop et objectif de l'ordre d'entrée, pour que la Simulation et Topstep les prennent
+    # aussi (29/10/2026, demande de Yanisse) ; vides pour les autres
+    AGENT_MAGICS = (777002, 777003)
     WHY = {4: "SL", 5: "TP", 6: "marge", 3: "pont", 0: "main", 1: "main", 2: "main"}
 
     def closed_positions(self, off: int, days: int = 30) -> list[list]:
@@ -160,7 +164,7 @@ class Bridge:
         for d in self.mt5.history_deals_get(lo, hi) or []:
             if not d.symbol:
                 continue
-            p = pos.setdefault(d.position_id, {"pnl": 0.0, "magic": d.magic, "symbol": d.symbol})
+            p = pos.setdefault(d.position_id, {"pnl": 0.0, "magic": d.magic, "symbol": d.symbol, "pid": d.position_id})
             p["pnl"] += d.profit + d.commission + d.swap
             if d.entry == 0:                                  # entrée
                 p.update(side="vente" if d.type == 1 else "achat", opened=int(d.time) - off, open=d.price)
@@ -173,11 +177,27 @@ class Bridge:
                 continue
             side = p.get("side") or ("achat" if p["exit_side"] == "vente" else "vente")
             origin = "Pont (or)" if p["magic"] == self.magic else self.ORIGINS.get(p["magic"], f"Autre ({p['magic']})")
+            sl, tp = self._entry_levels(p["pid"]) if p["magic"] in self.AGENT_MAGICS else (None, None)
             rows.append([p["closed"], p.get("opened"), p["symbol"], side, p["volume"], round(p.get("open") or 0, 5),
-                         round(p["close"], 5), round(p["pnl"], 2), origin, p["why"]])
+                         round(p["close"], 5), round(p["pnl"], 2), origin, p["why"], sl, tp])
         rows.sort(key=lambda r: -r[0])
         self._closed = (now, rows)
         return rows
+
+    def _entry_levels(self, pid: int) -> tuple[float | None, float | None]:
+        """Stop et objectif posés à l'entrée d'une position (ordres de l'historique, gardés en mémoire)."""
+        if pid in self._levels:
+            return self._levels[pid]
+        sl = tp = None
+        try:
+            for o in sorted(self.mt5.history_orders_get(position=pid) or [], key=lambda o: o.time_setup):
+                if o.sl or o.tp:
+                    sl, tp = o.sl or None, o.tp or None
+                    break
+        except Exception:  # noqa: BLE001 — sans niveaux, la ligne reste affichée, simplement sans stop
+            pass
+        self._levels[pid] = (sl, tp)
+        return sl, tp
 
     def snapshot(self) -> dict[str, Any] | None:
         """Compte, positions ouvertes et trades fermés des dernières 36 h (heures en UTC), pour l'onglet « Démo MT5 »

@@ -1561,7 +1561,7 @@ class Engine:
         """Stratégie passée en signaux réels (strategies.LIVE) : message Telegram à l'entrée (avec les micros
         Topstep) et à la sortie ; la sortie est aussi inscrite au journal du compte Topstep simulé."""
         from . import strategies as sl
-        from .topstep import FEES as TOPSTEP_FEES, PRODUCTS
+        from .topstep import FEES as TOPSTEP_FEES, PRODUCTS, in_session as topstep_session
         tz = ZoneInfo(self.cfg.timezone)
         acct = self.topstep()
         mult = PRODUCTS[asset.key][1] if asset.key in PRODUCTS else 1.0
@@ -1594,6 +1594,8 @@ class Engine:
                 risk_usd = self._topstep_balance() * acct.risk_pct() / 100.0
                 per_micro = t["risk"] * mult
                 micros = max(1, min(50, int(risk_usd // per_micro))) if per_micro > 0 else 1
+                if not topstep_session(opened):
+                    micros = None                   # entrée de nuit : pas dans le compte Topstep (29/10/2026)
                 t["micros"], t["close_at"] = micros, close_at
                 fmt_end = "%d/%m %H:%M" if close_at and close_at - t["entry_ts"] > 86400 else "%H:%M"
                 end = datetime.fromtimestamp(close_at, timezone.utc).astimezone(tz).strftime(fmt_end) if close_at else "?"
@@ -1651,9 +1653,12 @@ class Engine:
                          f"Sortie : {exit_txt} (heure de Paris).",
                          "",
                          f"Pourquoi : {why}"]
-                topstep = f"Topstep : {micros} {symbol} · risque {money(micros * per_micro)} $"
-                if strat in sl.OVERNIGHT:
-                    topstep += " <i>(gardé la nuit : interdit sur un vrai compte Topstep)</i>"
+                if micros is None:
+                    topstep = "Topstep : pas pris (entrée de nuit, hors des heures du compte)"
+                else:
+                    topstep = f"Topstep : {micros} {symbol} · risque {money(micros * per_micro)} $"
+                    if strat in sl.OVERNIGHT:
+                        topstep += " <i>(gardé la nuit : interdit sur un vrai compte Topstep)</i>"
                 lines.append(topstep)
                 sizing = self._lab_portfolio(name, asset, t, opened, open_=True)
                 cur = self.portfolio.data.get("currency", self.cfg.portfolio_currency)
@@ -1686,7 +1691,7 @@ class Engine:
             if t["status"] == "closed" and not t.get("notified_exit"):
                 strat = name.split(":")[0]
                 label = LIVE_SUMMARY.get(strat, (strat, ""))[0]
-                micros = int(t.get("micros") or 1)
+                micros = int(t.get("micros") or 0)
                 why = {"heure": "fin de séance (15:00 à Chicago)", "canal": "cassure du canal 10 h", "stop": "SL touché",
                        "durée": "durée maximale (4 h)" if name.startswith("creux_repris_15m") else
                        "durée maximale (5 jours)" if name.startswith("swing_w3") else "durée maximale",
@@ -1706,7 +1711,8 @@ class Engine:
                          f"{msg.pct((t['exit'] / t['entry'] - 1) * 100.0 * sign)} · {msg.duration_text(minutes)}",
                          f"Raison : {why}",
                          "",
-                         f"Topstep : <b>{msg.money(usd, sign=True)}</b> ({micros} {symbol}, frais compris)"]
+                         f"Topstep : <b>{msg.money(usd, sign=True)}</b> ({micros} {symbol}, frais compris)" if micros
+                         else "Topstep : pas pris (entrée de nuit)"]
                 cur = self.portfolio.data.get("currency", self.cfg.portfolio_currency)
                 if row:
                     lines.append(f"Simulation : <b>{msg.money(row['pnl'], cur, sign=True)}</b> · "
@@ -1719,13 +1725,111 @@ class Engine:
                            buttons=msg.site_buttons(self.cfg.site_url, asset.key))
                 t["notified_exit"] = iso(now)
                 try:
-                    acct.add_journal(asset.key, t["direction"], t["entry"], t["exit"], micros, opened,
-                                     datetime.fromtimestamp(t["exit_ts"], timezone.utc), note=f"signal réel {name}",
-                                     tag="v2" if strat == "noise_area_v2" else "")
+                    if micros:
+                        acct.add_journal(asset.key, t["direction"], t["entry"], t["exit"], micros, opened,
+                                         datetime.fromtimestamp(t["exit_ts"], timezone.utc), note=f"signal réel {name}",
+                                         tag="v2" if strat == "noise_area_v2" else "")
                 except ValueError as exc:
                     log.info("journal Topstep : %s", exc)
                 acct.drop_open(asset.key, opened, "v2" if strat == "noise_area_v2" else "")
 
+
+    # ------------------------------------------------------------- trades de l'agent IA (démo MT5 du PC)
+    # 29/10/2026, demande de Yanisse : la Simulation et le compte Topstep prennent aussi les trades de l'agent IA
+    # (chasse et méthode Hugo), lus dans l'état du démo que le pont publie (PC_DEMO) ; Topstep sans les entrées de nuit
+    AGENT_SINCE = datetime(2026, 10, 29, 17, 0, tzinfo=timezone.utc)
+    AGENT_ORIGINS = {"Agent IA": "ag", "Méthode Hugo": "hu"}
+    AGENT_SYMBOLS = {"XAUUSD+": "gold", "NAS100": "nasdaq", "SP500": "sp500", "BTCUSD": "bitcoin", "ETHUSD": "ethereum"}
+
+    def agent_trades(self, demo: dict[str, Any] | None) -> list[dict[str, Any]]:
+        """Trades de l'agent IA du démo (ouverts et fermés), avec stop, depuis AGENT_SINCE."""
+        if not isinstance(demo, dict):
+            return []
+        out = []
+        cols = demo.get("cols") or []
+        rows = [dict(zip(cols, r)) for r in demo.get("closed") or []]
+        rows += [{**p, "closed": None, "close": None} for p in demo.get("positions") or []]
+        for r in rows:
+            tag = self.AGENT_ORIGINS.get(r.get("origin"))
+            asset = self.AGENT_SYMBOLS.get(r.get("symbol"))
+            try:
+                opened, entry, stop = int(r["opened"]), float(r["open"]), float(r["sl"])
+            except (KeyError, TypeError, ValueError):
+                continue
+            if tag is None or asset is None or asset not in self.cfg.assets or entry == stop \
+                    or opened < self.AGENT_SINCE.timestamp():
+                continue
+            out.append({"id": f"agent-{tag}-{opened}", "tag": tag, "asset": asset,
+                        "direction": "long" if r.get("side") == "achat" else "short", "entry": entry, "stop": stop,
+                        "target": float(r["tp"]) if r.get("tp") else None, "opened": opened,
+                        "closed": int(r["closed"]) if r.get("closed") else None,
+                        "exit": float(r["close"]) if r.get("close") is not None else None,
+                        "label": "agent IA (chasse)" if tag == "ag" else "agent IA (méthode Hugo)"})
+        return out
+
+    def agent_accounts(self, demo: dict[str, Any] | None = None) -> int:
+        """Reporte les trades de l'agent IA dans la Simulation et le compte Topstep. Renvoie le nombre de changements."""
+        if not self.TOPSTEP:
+            return 0
+        if demo is None:
+            raw = os.environ.get("PC_DEMO")
+            try:
+                demo = json.loads(raw) if raw else self.store._read(self.store.dir / "live" / "demo.json", None)
+            except ValueError:
+                return 0
+        from .topstep import PRODUCTS, in_session
+        if self.portfolio.store is not self.store:            # magasin remplacé après coup (tests, outils)
+            self.portfolio = Portfolio(self.store, self.cfg)
+        acct = None
+        pf = self.portfolio.data
+        done = {h["id"] for h in pf.get("history", [])} | {x.get("id") for x in pf.get("skipped", [])}
+        changed = 0
+        for t in self.agent_trades(demo):
+            asset = self.cfg.assets[t["asset"]]
+            opened = datetime.fromtimestamp(t["opened"], timezone.utc)
+            sig = Signal(id=t["id"], asset=asset.key, asset_label=asset.label, direction=t["direction"],
+                         entry=t["entry"], take_profit=t["target"] or t["entry"], stop_loss=t["stop"], risk_reward=0.0,
+                         confidence="moyen", score=0.0, criteria=[], rationale=t["label"], news_context="",
+                         created_at=iso(opened), expires_at=iso(opened), source="agent")
+            if t["id"] not in done:                         # Simulation
+                if t["id"] not in pf.get("open", {}):
+                    self.portfolio.on_open(sig, asset)
+                    changed += 1
+                if t["closed"] is not None and t["id"] in self.portfolio.data.get("open", {}):
+                    sig.status, sig.close_price = "agent", t["exit"]
+                    sig.closed_at = iso(datetime.fromtimestamp(t["closed"], timezone.utc))
+                    self.portfolio.on_close(sig, asset)
+                    changed += 1
+            if asset.key not in PRODUCTS or not in_session(opened):
+                continue                                    # Topstep : pas d'entrée de nuit
+            acct = acct or self.topstep()
+            rid = acct.journal_id(asset.key, opened, t["tag"])
+            if any(j["id"] == rid for j in acct.state.get("journal", [])):
+                continue
+            row = next((r for r in acct.state.get("open_lab", []) if r["id"] == rid), None)
+            micros = int(row["contracts"]) if row else self._agent_micros(asset.key, t)
+            note = f"trade de l'{t['label']}"
+            if t["closed"] is None:
+                if row is None:
+                    acct.set_open(asset.key, t["direction"], t["entry"], t["stop"], t["target"], micros, opened,
+                                  note=note, tag=t["tag"])
+                    changed += 1
+                continue
+            try:
+                acct.add_journal(asset.key, t["direction"], t["entry"], t["exit"], micros, opened,
+                                 datetime.fromtimestamp(t["closed"], timezone.utc), note=note, tag=t["tag"])
+            except ValueError as exc:
+                log.info("journal Topstep (agent) : %s", exc)
+            acct.drop_open(asset.key, opened, t["tag"])
+            changed += 1
+        return changed
+
+    def _agent_micros(self, asset_key: str, t: dict[str, Any]) -> int:
+        from .topstep import PRODUCTS
+        acct = self.topstep()
+        per_micro = abs(t["entry"] - t["stop"]) * PRODUCTS[asset_key][1]
+        risk_usd = self._topstep_balance() * acct.risk_pct() / 100.0
+        return max(1, min(50, int(risk_usd // per_micro))) if per_micro > 0 else 1
 
     def _lab_portfolio(self, name: str, asset, t: dict[str, Any], opened: datetime,
                        open_: bool) -> dict[str, Any] | None:
@@ -1814,6 +1918,10 @@ class Engine:
             self.lab_shadow(now)
         except Exception:  # noqa: BLE001 — le suivi en ombre ne doit jamais casser un passage
             log.exception("laboratoire en ombre")
+        try:
+            self.agent_accounts()
+        except Exception:  # noqa: BLE001 — les trades de l'agent ne doivent jamais casser un passage
+            log.exception("trades de l'agent IA (Simulation, Topstep)")
         try:
             self.check_drift(now)
         except Exception:  # noqa: BLE001 — l'alerte de décrochage ne doit jamais casser un passage

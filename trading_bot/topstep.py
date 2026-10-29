@@ -251,7 +251,7 @@ class TopstepAccount:
                 out.append((s, int(fixed) if fixed else None, "pris"))
             elif s.source in ("manual", "request"):
                 out.append((s, None, "manuel"))
-            elif s.id in mirror:
+            elif s.id in mirror and in_session(parse_iso(s.created_at)):
                 out.append((s, None, "bot"))
         return out
 
@@ -472,6 +472,16 @@ def trading_day(t: datetime):
     """Journée de trading Topstep : de 17:00 à 17:00 heure de Chicago (le soir compte pour le lendemain)."""
     ct = t.astimezone(CHICAGO)
     return (ct + timedelta(days=1)).date() if ct.hour >= RULES["day_start_ct"] else ct.date()
+
+
+PARIS = ZoneInfo("Europe/Paris")
+DAY_START_PARIS = 8        # 29/10/2026 (choix de Yanisse) : le compte Topstep ne prend aucun trade ouvert la nuit
+
+
+def in_session(t: datetime) -> bool:
+    """Heure d'entrée acceptée par le compte Topstep : en semaine, de 8 h (Paris) à 15:10 (Chicago)."""
+    ct, paris = t.astimezone(CHICAGO), t.astimezone(PARIS)
+    return ct.weekday() < 5 and paris.hour >= DAY_START_PARIS and (ct.hour, ct.minute) < RULES["flat_by_ct"]
 
 
 def _flat_limit(t: datetime) -> datetime:
