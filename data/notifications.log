@@ -6353,3 +6353,39 @@ Lecture des indicateurs :
   • cassure des extrêmes de la veille : veille : haut 4097.20 / bas 4036.90
   • activity : activité de l'heure 0.88× la moyenne
 
+--- 2026-10-29T09:48:40.183517+00:00 ---
+📖 GUIDE DU BOT — toutes les commandes
+
+Ce bot repère des opportunités de scalping sur 5 marchés et vous les envoie ici. Il n'exécute AUCUN ordre réel : il propose, vous décidez.
+
+▶️ CONSULTER
+/status — les signaux actuellement ouverts (entrée, objectif, stop)
+/resume — le bilan de la dernière journée : trades, réussite, enseignements
+/balance — l'état de la simulation de compte, sans rien modifier
+/help — ce message
+
+▶️ DEMANDER UNE ANALYSE
+/propose <actif> — le bot analyse l'actif maintenant et propose un trade s'il en voit un
+/long <actif> [objectif] [stop] [commentaire] — signal manuel à l'achat
+/short <actif> [objectif] [stop] [commentaire] — signal manuel à la vente
+/stop [actif] — arrêter un trade ouvert au prix du moment (le bot le suit ensuite en silence pour apprendre)
+/hugo — l'agent IA du PC analyse le nq avec la méthode Hugo (BPR) et dit s'il y a un trade ou quoi surveiller (PC allumé)
+/avis <question> — pose une question à l'agent IA du PC (ex. /avis ton avis sur le nasdaq, je garde mes trades ou je sécurise ?) : avis seulement, aucun ordre (PC allumé)
+
+▶️ COMPTE TOPSTEP 50K (les trades de la simulation, en micros Topstep)
+/topstep — état du compte : balance, perte maximale, objectif · /topstep risque 0,5 (% de la balance) · /topstep objectif 1200 (0 = sans) · /topstep reset
+/pris [actif] [micros] — ajouter un signal, ou imposer vos micros (le dernier de l'actif ; calculés sinon)
+/sortie [actif] [prix] — je suis sorti de ce trade sur Topstep (prix du moment sinon ; le bot n'est pas touché)
+/retirer <id> — retirer un trade du compte Topstep
+/journal <actif> <long|short> <entrée> <sortie> <micros> [AAAA-MM-JJTHH:MM] — trade fait hors du bot
+Sans chiffres, le bot calibre l'objectif et le stop sur la volatilité du moment. Avec, ce sont vos niveaux qui sont suivis : l'objectif d'abord, le stop ensuite.
+
+Actifs : nasdaq (nq) · sp500 (es) · bitcoin (btc) · ethereum (eth) · gold (or) · petrole (wti) · euro (eurusd). À l'essai : S&P 500 (ES), Bitcoin (BTC/USD), Ethereum (ETH/USD), Pétrole WTI (CL), Euro / dollar (6E). Le bot les suit en silence et ne les annoncera qu'une fois qu'ils auront fait leurs preuves.
+Exemples : /propose btc — /long nasdaq cassure du plus haut — /short eth 2450 2530 rejet
+
+⛔ À NE PAS UTILISER
+/balance <montant> — ne changez PAS la balance. Suivie d'un montant, cette commande remet la simulation de compte à zéro pour tout le monde et archive les trades en cours. Elle est réservée au propriétaire du bot. Un mode invité viendra l'empêcher ; en attendant, tapez /balance seul pour consulter, jamais avec un montant.
+
+📊 Tableau de bord : https://yxnisse7.github.io/Trading-Bot/
+💼 Simulation de compte : https://yxnisse7.github.io/Trading-Bot/portfolio.html
+
