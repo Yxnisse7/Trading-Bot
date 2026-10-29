@@ -24,6 +24,8 @@ FRESH = 600          # s : au-delà, le PC est considéré éteint (la variable 
                      # qui peut durer quelques minutes : 3 min de marge feraient des doublons)
 WAIT = 15 * 60       # s après la bougie d'entrée : délai laissé au PC avant que GitHub annonce lui-même
 KEEP = 2 * 86400     # s : durée de vie des clés annoncées dans la variable
+# /propose : PC allumé, l'agent IA (Claude) du PC répond pour ces marchés (mt5_ask.py) et GitHub se tait (29/10/2026)
+PROPOSE_ASSETS = ("gold", "nasdaq", "bitcoin", "sp500", "ethereum")
 
 LABELS = {"creux_repris_15m": "Creux repris", "noise_area": "Zone de bruit", "noise_area_v2": "Zone de bruit v2",
           "swing_w3": "Swing W3", "nuit_asie": "Nuit asiatique", "donchian_1h": "Donchian 1 h",

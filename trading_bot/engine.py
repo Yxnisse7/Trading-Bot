@@ -1216,7 +1216,7 @@ class Engine:
         "/help — ce message\n"
         "\n"
         "▶️ DEMANDER UNE ANALYSE\n"
-        "/propose <actif> — le bot analyse l'actif maintenant et propose un trade s'il en voit un\n"
+        "/propose <actif> — l'agent IA (Claude, PC allumé) analyse l'actif maintenant et propose un trade s'il en voit un ; PC éteint, c'est le bot qui répond\n"
         "/long <actif> [objectif] [stop] [commentaire] — signal manuel à l'achat\n"
         "/short <actif> [objectif] [stop] [commentaire] — signal manuel à la vente\n"
         "/stop [actif] — arrêter un trade ouvert au prix du moment (le bot le suit ensuite en silence pour apprendre)\n"
@@ -1327,6 +1327,9 @@ class Engine:
                 return f"Actif inconnu « {args[0]} ». " + self.help_text()
             try:
                 if cmd == "/propose":
+                    if asset_key in pc_link.PROPOSE_ASSETS and pc_link.alive(os.environ.get(pc_link.VAR),
+                                                                            (now or utcnow()).timestamp()):
+                        return None                # PC allumé : c'est l'agent IA du PC qui répond (mt5_ask.py)
                     self.propose(asset_key, now)   # envoie lui-même la notification
                     return None
                 levels, rest = self._parse_levels(args[1:])

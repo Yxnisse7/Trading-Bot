@@ -258,7 +258,7 @@ COMMAND_MENU = [
     ("status", "Signaux ouverts : entrée, objectif, stop"),
     ("resume", "Bilan de la dernière journée"),
     ("balance", "État de la simulation (sans montant !)"),
-    ("propose", "Analyser un actif maintenant : /propose btc"),
+    ("propose", "L'agent IA propose un trade : /propose btc"),
     ("long", "Signal manuel à l'achat : /long nasdaq"),
     ("short", "Signal manuel à la vente : /short eth"),
     ("stop", "Arrêter un trade ouvert au prix du moment"),

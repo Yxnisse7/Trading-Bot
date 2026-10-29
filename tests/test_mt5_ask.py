@@ -148,3 +148,54 @@ def test_server_offset_ignores_a_stale_tick_when_the_market_is_closed():
     assert ml.server_offset(m, "NAS100", now) is None                    # avant : renvoyait 9000
     m.symbol_info_tick = lambda s: NS(time=int(now) + off - 5)
     assert ml.server_offset(m, "NAS100", now) == off
+
+
+def test_propose_is_answered_by_the_agent_without_order(tmp_path, monkeypatch):
+    """29/10 : /propose passe par l'agent IA (Claude) du PC ; le bot de GitHub se tait PC allumé."""
+    assert ma.parse_propose("/propose btc") == "bitcoin" and ma.parse_propose("/PROPOSE@MonBot or") == "gold"
+    assert ma.parse_propose("/propose") == "" and ma.parse_propose("/propose petrole") is None
+    assert ma.parse_propose("/avis btc") is None and ma.parse("/propose btc") is None
+    rep = {"decision": "vente", "entree": 29400.0, "stop": 29480.0, "objectif": 29250.0, "confiance": 3,
+           "reponse": "Tendance baissière sur 1 h, rejet sous 29 450."}
+    upd = [{"update_id": 3, "message": {"text": "/propose nasdaq", "chat": {"id": 42}, "date": MON16 - 5}},
+           {"update_id": 4, "message": {"text": "/propose", "chat": {"id": 42}, "date": MON16 - 5}}]
+    a, mt5, now, sent, data = _setup(tmp_path, monkeypatch, [rep], upd)
+    assert a.step() == "proposition : agent réveillé (nasdaq)"
+    assert any("Dis-moi le marché" in x for x in sent)
+    assert data[0]["mode"] == "propose" and data[0]["asset"] == "nasdaq" and data[0]["id"].startswith("propose-")
+    assert "propose-moi un trade" in ask.message(data[0]) and "Question du trader" not in ask.message(data[0])
+    a.step()
+    assert "🔴 VENTE" in sent[-1] and "29480.0" in sent[-1] and "1.9 fois le risque" in sent[-1]
+    assert "pas un ordre" in sent[-1] and mt5.orders == []
+
+
+def test_propose_checks_levels():
+    m = {"ask": 100.5, "bid": 100.0, "mode": "propose"}
+    ok = ask.check_propose({"decision": "achat", "stop": 99, "objectif": 103, "confiance": 4, "reponse": "x"}, m)
+    assert ok["decision"] == "achat" and ok["entree"] == 100.5
+    bad = ask.check_propose({"decision": "achat", "entree": 100, "stop": 101, "objectif": 103, "reponse": "x"}, m)
+    assert bad["decision"] == "rien" and "mauvais côté" in bad["reponse"]
+    assert ask.check_propose({"decision": "vente", "reponse": "x"}, m)["decision"] == "rien"
+    seen = {}
+
+    def call(message, consigne, schema, timeout):
+        seen.update(consigne=consigne, schema=schema)
+        return {"structured_output": {"decision": "rien", "confiance": 2, "reponse": "Pas clair, j'attends."}}
+    m.update(now="2026-10-26T15:00:00Z", asset_label="Nasdaq 100")
+    r = ask.decide(m, call)
+    assert r["decision"] == "rien" and "decision" in seen["schema"]["properties"] and "/propose" in seen["consigne"]
+
+
+def test_github_bot_stays_silent_on_propose_when_pc_is_on(monkeypatch):
+    from trading_bot import engine as en, pc_link
+    calls = []
+    eng = en.Engine.__new__(en.Engine)
+    monkeypatch.setattr(en.Engine, "propose", lambda self, k, now=None: calls.append(k))
+    now = datetime.fromtimestamp(MON16, timezone.utc)
+    monkeypatch.setenv(pc_link.VAR, pc_link.encode(MON16 - 60, []))
+    assert eng.handle_command("/propose btc", now) is None and calls == []
+    eng.handle_command("/propose petrole", now)
+    assert calls == ["oil"]                                              # marché que le PC ne traite pas
+    monkeypatch.setenv(pc_link.VAR, pc_link.encode(MON16 - 3600, []))     # PC éteint : le bot répond
+    eng.handle_command("/propose btc", now)
+    assert calls == ["oil", "bitcoin"]

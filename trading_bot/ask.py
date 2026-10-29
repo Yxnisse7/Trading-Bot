@@ -5,7 +5,10 @@ Le pont MT5 du PC (mt5_ask.py) lance ce script avec le marché du moment, les po
     python -m trading_bot.ask --marche chemin/marche.json
 
 La DERNIÈRE ligne affichée est la réponse en JSON : {"conseil": "garder"|"securiser"|"fermer"|"aucune_position"|
-"autre", "reponse": "..."}. Un avis seulement : aucun ordre, aucun stop déplacé. L'appel à Claude réutilise agent/ia.py
+"autre", "reponse": "..."}. Un avis seulement : aucun ordre, aucun stop déplacé.
+
+« /propose btc » (29/10/2026, mode "propose" dans le fichier) : Claude propose un trade sur ce marché, ou rien. Réponse :
+{"decision": "achat"|"vente"|"rien", "entree", "stop", "objectif", "confiance": 1-5, "reponse"}. Aucun ordre non plus. L'appel à Claude réutilise agent/ia.py
 du dépôt privé de l'agent, copié sur le PC (dossier réglable par AGENT_DIR).
 """
 from __future__ import annotations
@@ -53,6 +56,39 @@ Ne conseille jamais de trader un compte réel ni de grossir une position pour se
 
 FAIL = {"conseil": "autre"}
 
+DECISIONS = ("achat", "vente", "rien")
+SCHEMA_PROPOSE = {
+    "type": "object",
+    "properties": {
+        "decision": {"type": "string", "enum": list(DECISIONS)},
+        "entree": {"type": ["number", "null"]},
+        "stop": {"type": ["number", "null"]},
+        "objectif": {"type": ["number", "null"]},
+        "confiance": {"type": "integer", "minimum": 1, "maximum": 5},
+        "reponse": {"type": "string"},
+    },
+    "required": ["decision", "confiance", "reponse"],
+}
+
+CONSIGNE_PROPOSE = """Tu es le conseiller d'un trader débutant qui te demande depuis Telegram (/propose) un trade sur un
+marché, maintenant, pour son compte démo MT5. Tu vois les bougies (jour, 1 h, 15 min, 5 min), le prix du moment, les
+annonces à venir et ses positions ouvertes.
+
+Dis s'il y a un trade à prendre maintenant, ou s'il vaut mieux attendre :
+- decision « achat » ou « vente » seulement si tu vois une vraie raison (tendance claire sur 1 h et 15 min, repli
+  terminé sur un support ou une résistance, cassure nette) ; sinon « rien ». « Rien » est une bonne réponse.
+- entree : le prix d'entrée (le prix du moment, ou un prix d'attente proche si mieux vaut attendre un repli).
+- stop : derrière le dernier creux (achat) ou le dernier sommet (vente) qui invaliderait l'idée, pas plus serré que le
+  bruit des bougies 5 min.
+- objectif : un niveau réaliste (sommet ou creux récent, chiffre rond), au moins 1,5 fois la distance du stop.
+- confiance : de 1 (très incertain) à 5 (très net). Un trade correct mais ordinaire vaut 3.
+- reponse : en français simple, 5 phrases au plus : la tendance, pourquoi ce trade (ou pourquoi attendre), les
+  niveaux, ce qui l'annulerait (un niveau cassé, une annonce dans l'heure). Si le marché est fermé, decision « rien »
+  et dis ce que tu surveilles à la réouverture.
+- S'il a déjà une position ouverte sur ce marché, tiens-en compte (ne propose pas le sens inverse sans le dire).
+Pas de promesse, pas de certitude. Tu ne passes aucun ordre : c'est lui qui décide. Ne conseille jamais de trader un
+compte réel ni de grossir une position pour se refaire."""
+
 
 def fmt(bougies: list[list[float]], n: int) -> str:
     return "\n".join(
@@ -68,7 +104,9 @@ def message(m: dict[str, Any]) -> str:
         f"- {p.get('marche')} {p.get('sens')} {p.get('lot')} lot, entrée {p.get('entree')}, stop {p.get('stop')}, "
         f"objectif {p.get('objectif')}, gain/perte du moment {p.get('profit')} $, ouverte par {p.get('origine')}"
         for p in m.get("positions") or []) or "- aucune position ouverte"
-    return f"""Question du trader : {m.get('question', '')}
+    demande = ("Demande du trader : propose-moi un trade sur ce marché maintenant, ou dis-moi d'attendre."
+               if m.get("mode") == "propose" else f"Question du trader : {m.get('question', '')}")
+    return f"""{demande}
 
 Marché concerné : {m.get('asset_label', m.get('asset', '?'))} · {now:%A %d/%m/%Y %H:%M} (heure de Paris)
 Prix : achat (ask) {m['ask']:g} · vente (bid) {m['bid']:g}
@@ -103,16 +141,39 @@ def check(rep: dict[str, Any]) -> dict[str, Any]:
     return {"conseil": conseil, "reponse": text}
 
 
+def check_propose(rep: dict[str, Any], m: dict[str, Any]) -> dict[str, Any]:
+    """Un achat ou une vente sans stop et objectif du bon côté de l'entrée devient « rien »."""
+    text = str(rep.get("reponse") or "").strip() or "Pas d'explication de Claude."
+    try:
+        conf = min(5, max(1, int(rep.get("confiance") or 1)))
+    except (TypeError, ValueError):
+        conf = 1
+    out = {"decision": "rien", "entree": None, "stop": None, "objectif": None, "confiance": conf, "reponse": text}
+    d = rep.get("decision")
+    if d not in ("achat", "vente"):
+        return out
+    try:
+        stop, target = float(rep["stop"]), float(rep["objectif"])
+        entry = float(rep.get("entree") or (m["ask"] if d == "achat" else m["bid"]))
+    except (KeyError, TypeError, ValueError):
+        return dict(out, reponse=text + " (Niveaux incomplets : pas de trade proposé.)")
+    if not (stop < entry < target if d == "achat" else target < entry < stop):
+        return dict(out, reponse=text + " (Stop ou objectif du mauvais côté : pas de trade proposé.)")
+    return dict(out, decision=d, entree=entry, stop=stop, objectif=target)
+
+
 def decide(m: dict[str, Any], call: Callable[..., Any] | None = None) -> dict[str, Any]:
+    propose = m.get("mode") == "propose"
+    fail = {"decision": "rien", "entree": None, "stop": None, "objectif": None, "confiance": 1} if propose else FAIL
     if call is None:
         if not os.environ.get("CLAUDE_CODE_OAUTH_TOKEN"):
-            return dict(FAIL, reponse="Claude n'est pas connecté sur le PC.")
+            return dict(fail, reponse="Claude n'est pas connecté sur le PC.")
         sys.path.insert(0, os.environ.get("AGENT_DIR", AGENT_DIR))
         from ia import appeler_claude, installer_claude  # dépôt privé de l'agent, copié sur le PC
         if not installer_claude():
-            return dict(FAIL, reponse="Claude n'est pas installé sur le PC.")
+            return dict(fail, reponse="Claude n'est pas installé sur le PC.")
         call = appeler_claude
-    out = call(message(m), CONSIGNE, SCHEMA, TIMEOUT)
+    out = call(message(m), CONSIGNE_PROPOSE if propose else CONSIGNE, SCHEMA_PROPOSE if propose else SCHEMA, TIMEOUT)
     rep = (out or {}).get("structured_output")
     if not rep and out:
         text = out.get("result", "")
@@ -121,8 +182,8 @@ def decide(m: dict[str, Any], call: Callable[..., Any] | None = None) -> dict[st
         except ValueError:
             rep = None
     if not rep or (out or {}).get("is_error"):
-        return dict(FAIL, reponse="Pas de réponse lisible de Claude.")
-    return check(rep)
+        return dict(fail, reponse="Pas de réponse lisible de Claude.")
+    return check_propose(rep, m) if propose else check(rep)
 
 
 def main() -> None:
@@ -132,7 +193,8 @@ def main() -> None:
     try:
         d = decide(m)
     except Exception as e:  # noqa: BLE001 — le pont attend toujours une réponse sur la dernière ligne
-        d = dict(FAIL, reponse=f"Erreur de l'agent ({type(e).__name__}).")
+        d = dict({"decision": "rien", "confiance": 1} if m.get("mode") == "propose" else FAIL,
+                 reponse=f"Erreur de l'agent ({type(e).__name__}).")
     print(json.dumps(d, ensure_ascii=False))
 
 

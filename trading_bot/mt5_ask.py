@@ -4,8 +4,11 @@
 les positions ouvertes du démo et la question, lance l'agent (trading_bot/ask.py) et poste sa réponse sur Telegram.
 Un avis seulement : aucun ordre, aucun stop déplacé, aucun trade ouvert ici.
 
+`/propose btc` (29/10/2026) : même chemin, mais l'agent propose un trade (achat, vente ou rien, avec entrée, stop,
+objectif et confiance). Rien n'est passé sur le démo : c'est Yanisse qui décide.
+
 Comme /hugo, les messages sont lus sans être acquittés (getUpdates sans offset) : le bot de GitHub continue de recevoir
-les autres commandes et ignore /avis.
+les autres commandes et ignore /avis ; pour /propose, il se tait tant que le PC est allumé (pc_link.PROPOSE_ASSETS).
 """
 from __future__ import annotations
 
@@ -23,10 +26,16 @@ from .mt5_hugo import FRESH, POLL, _updates
 from .mt5_hunt import PARIS, Hunter
 from .mt5_local import server_offset
 from .notify import chat_key, telegram_chat_ids
+from .pc_link import PROPOSE_ASSETS
 
 log = logging.getLogger("mt5_ask")
 
 COMMANDS = ("/avis", "/question", "/ask")
+PROPOSE = "/propose"
+ALIASES = {"nasdaq": "nasdaq", "nq": "nasdaq", "ndx": "nasdaq", "nas100": "nasdaq", "us100": "nasdaq",
+           "sp500": "sp500", "sp": "sp500", "spx": "sp500", "es": "sp500", "s&p": "sp500", "s&p500": "sp500",
+           "bitcoin": "bitcoin", "btc": "bitcoin", "ethereum": "ethereum", "eth": "ethereum",
+           "gold": "gold", "or": "gold", "xau": "gold", "xauusd": "gold"}
 LABELS = {"gold": "Or (XAU/USD)", "nasdaq": "Nasdaq 100", "bitcoin": "Bitcoin", "sp500": "S&P 500",
           "ethereum": "Ethereum"}
 WORDS = {"nasdaq": ("nasdaq", "nq", "nas100", "us100"), "gold": ("gold", "xau", "l'or", " or ", "l or"),
@@ -43,6 +52,17 @@ def parse(text: str) -> str | None:
     if not parts or parts[0].lower().split("@", 1)[0] not in COMMANDS:
         return None
     return parts[1].strip() if len(parts) > 1 else ""
+
+
+def parse_propose(text: str) -> str | None:
+    """Marché après /propose (None : pas la commande, ou marché que GitHub traite seul ; chaîne vide : sans marché)."""
+    parts = text.strip().split()
+    if not parts or parts[0].lower().split("@", 1)[0] != PROPOSE:
+        return None
+    if len(parts) == 1:
+        return ""
+    asset = ALIASES.get(parts[1].lower())
+    return asset if asset in PROPOSE_ASSETS else None
 
 
 def server_offset_guess(now: float) -> int:
@@ -78,7 +98,7 @@ class Asker(Hunter):
         super().__init__(mt5, root, clock, relay=relay, cfg=cfg, **kw)
         self.updates = updates
         self.last_poll = 0.0
-        self.queue: list[str] = []
+        self.queue: list[Any] = []               # question (texte) ou ("propose", marché)
 
     def ready(self) -> bool:
         return (Path(self.cfg["dir"]) / "trading_bot" / "ask.py").exists() and \
@@ -89,7 +109,10 @@ class Asker(Hunter):
         self._reap()
         said = self.poll()
         if self.proc is None and self.queue:
-            return self._ask(self.clock(), self.queue.pop(0)) or said
+            item = self.queue.pop(0)
+            if isinstance(item, tuple):
+                return self._ask(self.clock(), "", mode=item[0], asset=item[1]) or said
+            return self._ask(self.clock(), item) or said
         return said
 
     def poll(self) -> str:
@@ -106,20 +129,25 @@ class Asker(Hunter):
             if uid <= seen:
                 continue
             seen = max(seen, uid)
-            question = parse(str(m.get("text") or ""))
-            if question is None:
+            text = str(m.get("text") or "")
+            question, asset = parse(text), parse_propose(text)
+            if question is None and asset is None:
                 continue
             if chat_key(str((m.get("chat") or {}).get("id"))) not in allowed or now - float(m.get("date") or 0) > FRESH:
                 continue
-            if not question:
+            if asset == "":
+                self.relay._post("🔎 Dis-moi le marché après la commande, par exemple : <code>/propose nasdaq</code> "
+                                 "(nasdaq, or, btc, sp500, eth).")
+                continue
+            if not question and asset is None:
                 self.relay._post("🔎 Écris ta question après la commande, par exemple : "
                                  "<code>/avis ton avis sur le Nasdaq, je garde mes trades ou je sécurise ?</code>")
                 continue
             if len(self.queue) >= 3:
                 self.relay._post("🔎 Trois questions attendent déjà : je réponds d'abord à celles-là.")
                 continue
-            self.queue.append(question[:500])
-            got = "question reçue"
+            self.queue.append(("propose", asset) if asset else question[:500])
+            got = "proposition demandée" if asset else "question reçue"
         self.state["tg_seen"] = seen
         self._save()
         return got
@@ -146,7 +174,7 @@ class Asker(Hunter):
                         "origine": ORIGINS.get(p.magic, f"magic {p.magic}")})
         return out
 
-    def _ask(self, now: float, question: str) -> str:
+    def _ask(self, now: float, question: str, mode: str = "avis", asset: str | None = None) -> str:
         if not self.ready():
             self.relay._post("🔎 L'agent n'est pas installé sur le PC, je ne peux pas répondre.")
             return "question : agent absent"
@@ -155,7 +183,7 @@ class Asker(Hunter):
             self.relay._post("🔎 MT5 n'est pas sur le compte démo, je ne réponds pas.")
             return "question : pas de démo"
         pos = self.positions(0)
-        asset = asset_of(question, pos)
+        asset = asset or asset_of(question, pos)
         sym = SYMBOLS[asset]
         self.mt5.symbol_select(sym, True)
         off = server_offset(self.mt5, sym, now)
@@ -178,7 +206,7 @@ class Asker(Hunter):
         else:
             bid, ask = tick.bid, tick.ask
         evs = self.events()
-        data = {"id": f"question-{asset}-{int(now)}", "asset": asset, "asset_label": LABELS.get(asset, asset),
+        data = {"id": f"{'propose' if mode == 'propose' else 'question'}-{asset}-{int(now)}", "mode": mode, "asset": asset, "asset_label": LABELS.get(asset, asset),
                 "now": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(now)), "question": question,
                 "bid": bid, "ask": ask, "positions": pos, "ferme": closed,
                 "annonces": [{"heure": e["at"], "titre": e["name"], "impact": e.get("impact")} for e in evs
@@ -193,15 +221,35 @@ class Asker(Hunter):
         proc = self.spawn(self.cfg["command"].split() + ["--marche", str(path)], cwd=self.cfg["dir"], stdout=out,
                           stderr=subprocess.STDOUT, creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
         self.proc = (proc, now, data["id"], self.folder / f"{data['id']}.log", data)
-        self.relay._post(f"🔎 Je regarde {msg.esc(LABELS.get(asset, asset))} et tes positions, réponse dans une minute.")
-        log.info("question : agent réveillé (%s)", asset)
-        return f"question : agent réveillé ({asset})"
+        what = "s'il y a un trade sur" if mode == "propose" else "et tes positions sur"
+        self.relay._post(f"🔎 Je regarde {what} {msg.esc(LABELS.get(asset, asset))}, réponse dans une minute.")
+        log.info("%s : agent réveillé (%s)", mode, asset)
+        return f"{'proposition' if mode == 'propose' else 'question'} : agent réveillé ({asset})"
 
     def _decide(self, a: dict[str, Any], data: dict[str, Any]) -> None:
         if self.relay is None or not self.relay.enabled():
+            return
+        if data.get("mode") == "propose":
+            self._proposal(a, data)
             return
         lines = [f"<b>{ICONS.get(a.get('conseil'), '💬')} · {msg.esc(data['asset_label'])}</b> · avis de l'agent IA",
                  "", msg.esc(str(a.get("reponse", ""))), "",
                  "<i>Un avis, pas un ordre : rien n'a été déplacé ni fermé. Démo seulement.</i>"]
         self.relay._post("\n".join(lines))
         log.info("question : réponse envoyée (%s)", a.get("conseil"))
+
+    def _proposal(self, a: dict[str, Any], data: dict[str, Any]) -> None:
+        label = msg.esc(data["asset_label"])
+        conf = a.get("confiance") or "?"
+        if a.get("decision") in ("achat", "vente"):
+            head = f"<b>{'🟢 ACHAT' if a['decision'] == 'achat' else '🔴 VENTE'} · {label}</b> · proposé par l'agent IA"
+            risk, gain = abs(a["entree"] - a["stop"]), abs(a["objectif"] - a["entree"])
+            ratio = f" (gain {gain / risk:.1f} fois le risque)" if risk else ""
+            lines = [head, "", f"Entrée : <b>{round(a['entree'], 2)}</b>", f"Stop : <b>{round(a['stop'], 2)}</b>",
+                     f"Objectif : <b>{round(a['objectif'], 2)}</b>{ratio}", f"Confiance : {conf}/5"]
+        else:
+            lines = [f"<b>⏸ Pas de trade · {label}</b> · avis de l'agent IA", "", f"Confiance : {conf}/5"]
+        lines += ["", msg.esc(str(a.get("reponse", ""))), "",
+                  "<i>Une proposition, pas un ordre : rien n'a été passé sur le démo. C'est toi qui décides.</i>"]
+        self.relay._post("\n".join(lines))
+        log.info("proposition : réponse envoyée (%s)", a.get("decision"))
