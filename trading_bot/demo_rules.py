@@ -5,11 +5,16 @@ relancer (en changeant `since` ici, après en avoir parlé). Comptées sur les t
 """
 from __future__ import annotations
 
-from datetime import datetime, timedelta, timezone
+from datetime import date, datetime, timedelta, timezone
 from typing import Any
+from zoneinfo import ZoneInfo
 
 SINCE = datetime(2026, 10, 14, tzinfo=timezone.utc)
 R1_ONE_R_PER_LOT = 371.0          # 1 R ≈ 3,71 $ à 0,01 lot (stop moyen de R1 à l'essai 18)
+PARIS = ZoneInfo("Europe/Paris")
+# 29/10 (choix de Yanisse) : un trade ouvert la nuit (nuit asiatique sur l'or surtout) ne compte pas dans la perte du
+# jour : son stop ne doit pas bloquer la copie des trades de la journée
+NIGHT = (22, 8)                   # heures de Paris : ouvert de 22 h à 8 h = trade de nuit
 
 RULES: dict[int, dict[str, Any]] = {
     180018: {"name": "pont R1", "max_loss": 25.0, "max_streak": 8, "check_after": 40, "min_mean_r": -0.30},
@@ -26,17 +31,38 @@ RULES: dict[int, dict[str, Any]] = {
 }
 
 
-def closed_trades(deals, magic: int, entry_out: int) -> list[tuple[int, float]]:
-    """(heure de fermeture, résultat en $ frais compris) par position fermée, dans l'ordre."""
+def closed_trades(deals, magic: int, entry_out: int, opened: bool = False) -> list[tuple]:
+    """(heure de fermeture, résultat en $ frais compris) par position fermée, dans l'ordre ; avec opened=True, l'heure
+    d'ouverture (heure du serveur) en troisième."""
     pos: dict[int, dict[str, Any]] = {}
     for d in deals or []:
         if d.magic != magic:
             continue
-        p = pos.setdefault(getattr(d, "position_id", id(d)), {"pnl": 0.0, "closed": None})
+        p = pos.setdefault(getattr(d, "position_id", id(d)), {"pnl": 0.0, "closed": None, "opened": None})
         p["pnl"] += d.profit + d.commission + d.swap
         if getattr(d, "entry", entry_out) == entry_out:
             p["closed"] = max(p["closed"] or 0, int(d.time))
-    return sorted((p["closed"], p["pnl"]) for p in pos.values() if p["closed"] is not None)
+        else:
+            p["opened"] = min(p["opened"] or int(d.time), int(d.time))
+    rows = [p for p in pos.values() if p["closed"] is not None]
+    if opened:
+        return sorted((p["closed"], p["pnl"], p["opened"] or p["closed"]) for p in rows)
+    return sorted((p["closed"], p["pnl"]) for p in rows)
+
+
+def _us_dst(d: date) -> bool:
+    """Heure d'été américaine (du 2e dimanche de mars au 1er dimanche de novembre) : Vantage est alors à UTC+3."""
+    mar = date(d.year, 3, 8) + timedelta(days=(6 - date(d.year, 3, 8).weekday()) % 7)
+    nov = date(d.year, 11, 1) + timedelta(days=(6 - date(d.year, 11, 1).weekday()) % 7)
+    return mar <= d < nov
+
+
+def is_night(server_ts: int) -> bool:
+    """Heure du serveur Vantage → ouvert la nuit (heure de Paris, NIGHT) ?"""
+    t = datetime.fromtimestamp(server_ts, timezone.utc)
+    utc = t - timedelta(hours=3 if _us_dst(t.date()) else 2)
+    h = utc.astimezone(PARIS).hour
+    return h >= NIGHT[0] or h < NIGHT[1]
 
 
 def breach(trades: list[tuple[int, float]], magic: int, lot: float = 0.01) -> str | None:
@@ -66,12 +92,14 @@ def check(mt5, magic: int, lot: float = 0.01, now: datetime | None = None) -> st
     """Lit l'historique du terminal depuis SINCE et renvoie la règle franchie, ou None."""
     now = now or datetime.now(timezone.utc) + timedelta(days=1)    # l'heure du serveur est en avance sur UTC
     deals = mt5.history_deals_get(SINCE, now) or []
-    trades = closed_trades(deals, magic, getattr(mt5, "DEAL_ENTRY_OUT", 1))
-    return breach(trades, magic, lot) or balance_breach(mt5, magic, trades, now)
+    trades = closed_trades(deals, magic, getattr(mt5, "DEAL_ENTRY_OUT", 1), opened=True)
+    return breach([t[:2] for t in trades], magic, lot) or balance_breach(mt5, magic, trades, now)
 
 
-def balance_breach(mt5, magic: int, trades: list[tuple[int, float]], now: datetime) -> str | None:
-    """Règles en % du solde : arrêt du jour (jour du serveur Vantage, solde du matin) et solde minimum du compte."""
+def balance_breach(mt5, magic: int, trades: list[tuple], now: datetime) -> str | None:
+    """Règles en % du solde : arrêt du jour (jour du serveur Vantage, solde du matin) et solde minimum du compte.
+    trades : (fermeture, résultat) ou (fermeture, résultat, ouverture) ; les trades ouverts la nuit ne comptent pas
+    dans la perte du jour (ils restent dans le solde)."""
     rule = RULES.get(magic) or {}
     if not rule.get("day_loss_pct") and not rule.get("min_balance"):
         return None
@@ -83,8 +111,9 @@ def balance_breach(mt5, magic: int, trades: list[tuple[int, float]], now: dateti
     if rule.get("day_loss_pct"):
         # les heures des deals sont celles du serveur (UTC+3 l'été, +2 l'hiver) ; `now` est déjà décalé d'un jour
         today = (now - timedelta(days=1) + timedelta(hours=3)).date()
-        pnl = sum(x for t, x in trades if datetime.fromtimestamp(t, timezone.utc).date() == today)
-        start = acc.balance - pnl
+        mine = [x for x in trades if datetime.fromtimestamp(x[0], timezone.utc).date() == today]
+        start = acc.balance - sum(x[1] for x in mine)        # solde du matin, trades de nuit compris
+        pnl = sum(x[1] for x in mine if len(x) < 3 or not is_night(x[2]))
         if start > 0 and pnl <= -rule["day_loss_pct"] / 100 * start:
             return f"perte du jour {pnl:.2f} $ ({-100 * pnl / start:.1f} % du solde du matin, limite {rule['day_loss_pct']:.0f} %)"
     return None

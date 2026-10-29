@@ -36,3 +36,23 @@ def test_balance_rules_for_the_demo_copy():
     assert dr.balance_breach(mt5, 200001, [(old, -50.0)], now) is None              # une perte d'un autre jour ne compte pas
     assert "solde" in dr.balance_breach(NS(account_info=lambda: NS(balance=85.0)), 200001, [], now)
     assert dr.balance_breach(mt5, 777002, [(today, -90.0)], now) is None            # règle propre à la copie
+
+
+def test_night_trades_do_not_count_in_the_day_loss():
+    """29/10 : le stop de la nuit asiatique (or) bloquait la copie de W3 Bitcoin à 12h20 (−40,77 $, 13,4 %)."""
+    from types import SimpleNamespace as NS
+    now = datetime(2026, 10, 29, 10, 0, tzinfo=timezone.utc) + timedelta(days=1)
+    srv = lambda *a: int(datetime(*a, tzinfo=timezone.utc).timestamp()) + 3 * 3600   # heure du serveur (UTC+3)
+    night_open = srv(2026, 10, 28, 23, 0)                                 # minuit Paris
+    day_open = srv(2026, 10, 29, 9, 0)                                    # 10 h Paris
+    assert dr.is_night(night_open) and not dr.is_night(day_open)
+    assert dr.is_night(srv(2026, 10, 29, 6, 30)) and not dr.is_night(srv(2026, 10, 29, 7, 30))   # 7h30 / 8h30 Paris
+    mt5 = NS(account_info=lambda: NS(balance=262.0))
+    closed = srv(2026, 10, 29, 8, 0)
+    assert dr.balance_breach(mt5, 200001, [(closed, -40.77, night_open)], now) is None
+    assert "perte du jour" in dr.balance_breach(mt5, 200001, [(closed, -40.77, day_open)], now)
+    assert "perte du jour" in dr.balance_breach(mt5, 200001, [(closed, -40.77, night_open), (closed, -20.0, day_open)],
+                                                now)                      # −20 $ de jour sur 322 $ le matin : 6,2 %
+    deals = [NS(magic=200001, position_id=1, profit=0.0, commission=-0.1, swap=0.0, time=night_open, entry=0),
+             NS(magic=200001, position_id=1, profit=-40.0, commission=-0.1, swap=0.0, time=closed, entry=1)]
+    assert dr.closed_trades(deals, 200001, 1, opened=True) == [(closed, -40.2, night_open)]
