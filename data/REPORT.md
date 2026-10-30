@@ -1,6 +1,6 @@
 # Trading-Bot — rapport
 
-_Mis à jour le 30/10/2026 à 15:21 (Europe/Paris)._
+_Mis à jour le 30/10/2026 à 15:31 (Europe/Paris)._
 
 ## Vue d'ensemble
 
@@ -8,7 +8,7 @@ _Mis à jour le 30/10/2026 à 15:21 (Europe/Paris)._
 - Taux de réussite cumulé (TP / (TP+SL)) : **45%** — hasard attendu 40%, avantage **+5%**
 - P&L théorique cumulé, net des coûts estimés (somme des % par trade, sans levier) : **+0.78 %** (brut +4.78 %)
 - Signaux ouverts : **0**
-- Signaux fantômes (suivis en silence pour l'apprentissage) : **963** clôturés, 2 ouverts, taux de réussite 36% (hasard attendu 36%)
+- Signaux fantômes (suivis en silence pour l'apprentissage) : **965** clôturés, 1 ouverts, taux de réussite 36% (hasard attendu 36%)
 
 ## Statistiques
 
@@ -114,18 +114,18 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 
 | Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
 |---|---:|---:|---:|---:|---:|---:|
-| adx | 963 | 280 | 508 | 175 | 36% | -0.008 % |
-| corr | 82 | 16 | 50 | 16 | 24% | -0.076 % |
+| adx | 965 | 282 | 508 | 175 | 36% | -0.007 % |
+| corr | 84 | 18 | 50 | 16 | 26% | -0.065 % |
 | level | 68 | 24 | 30 | 14 | 44% | -0.053 % |
-| macd | 251 | 54 | 148 | 49 | 27% | -0.063 % |
+| macd | 253 | 56 | 148 | 49 | 27% | -0.060 % |
 | orb | 49 | 18 | 14 | 17 | 56% | +0.101 % |
 | pdhl | 105 | 42 | 50 | 13 | 46% | +0.076 % |
 | rsi | 731 | 225 | 386 | 120 | 37% | +0.003 % |
-| trend_15m | 963 | 280 | 508 | 175 | 36% | -0.008 % |
-| trend_1h | 947 | 272 | 504 | 171 | 35% | -0.008 % |
-| trend_5m | 853 | 257 | 457 | 139 | 36% | -0.003 % |
+| trend_15m | 965 | 282 | 508 | 175 | 36% | -0.007 % |
+| trend_1h | 949 | 274 | 504 | 171 | 35% | -0.007 % |
+| trend_5m | 855 | 259 | 457 | 139 | 36% | -0.002 % |
 | volume | 11 | 2 | 7 | 2 | 22% | -0.128 % |
-| vwap | 939 | 275 | 495 | 169 | 36% | -0.006 % |
+| vwap | 941 | 277 | 495 | 169 | 36% | -0.006 % |
 
 ### Fantômes par actif
 
@@ -134,7 +134,7 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 | bitcoin | 30 | 9 | 9 | 12 | 50% | -0.028 % |
 | ethereum | 29 | 5 | 17 | 7 | 23% | -0.197 % |
 | euro | 36 | 12 | 23 | 1 | 34% | -0.025 % |
-| gold | 268 | 84 | 134 | 50 | 39% | -0.018 % |
+| gold | 270 | 86 | 134 | 50 | 39% | -0.015 % |
 | nasdaq | 392 | 114 | 208 | 70 | 35% | +0.041 % |
 | oil | 98 | 27 | 50 | 21 | 35% | -0.068 % |
 | sp500 | 110 | 29 | 67 | 14 | 30% | -0.043 % |
@@ -195,10 +195,10 @@ Tranches horaires évitées (UTC) : [11, 12, 19]
 
 Corrections par actif :
 
-- ethereum : {'trend_5m': 0.815, 'trend_15m': 0.815, 'trend_1h': 0.815, 'adx': 0.815, 'rsi': 0.802}
-- nasdaq : {'trend_5m': 1.242, 'trend_15m': 1.242, 'trend_1h': 1.242, 'adx': 1.242, 'vwap': 0.918, 'rsi': 1.409}
+- ethereum : {'trend_5m': 0.81, 'trend_15m': 0.81, 'trend_1h': 0.81, 'adx': 0.81, 'rsi': 0.802}
+- nasdaq : {'trend_5m': 1.237, 'trend_15m': 1.237, 'trend_1h': 1.237, 'adx': 1.237, 'vwap': 0.915, 'rsi': 1.409}
 - oil : {'rsi': 1.03}
-- sp500 : {'trend_5m': 0.78, 'trend_15m': 0.78, 'trend_1h': 0.78, 'adx': 0.78, 'vwap': 0.581, 'rsi': 0.853}
+- sp500 : {'trend_5m': 0.775, 'trend_15m': 0.775, 'trend_1h': 0.775, 'adx': 0.775, 'vwap': 0.577, 'rsi': 0.853}
 
 | Variante testée en fantôme | Trades | Gain net moyen | Statut |
 |---|---:|---:|---|
@@ -222,7 +222,7 @@ Notes :
 - tranche 11h UTC : -0,31 R sur 77 trades éq. → évitée
 - tranche 12h UTC : -0,45 R sur 65 trades éq. → évitée
 - tranche 19h UTC : -0,31 R sur 82 trades éq. → évitée
-- ethereum, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,24 R contre +0,06 R en global sur 75 trades éq. → poids ×0,82 sur cet actif
+- ethereum, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,24 R contre +0,06 R en global sur 75 trades éq. → poids ×0,81 sur cet actif
 - ethereum, rsi : -0,26 R contre +0,10 R en global sur 56 trades éq. → poids ×0,77 sur cet actif
 - nasdaq, tendance (trend_5m, trend_15m, trend_1h, adx) : +0,30 R contre +0,06 R en global sur 470 trades éq. → poids ×1,24 sur cet actif
 - nasdaq, vwap : +0,30 R contre +0,07 R en global sur 463 trades éq. → poids ×1,22 sur cet actif
