@@ -85,7 +85,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1793373660
+        "last_ts": 1793373840
       }
     }
   },
@@ -180,7 +180,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1793373660
+        "last_ts": 1793373840
       }
     }
   },
@@ -276,7 +276,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1793373660
+        "last_ts": 1793373840
       }
     }
   },
@@ -374,11 +374,11 @@
           "1.0": false
         },
         "be": {
-          "0.5": false,
+          "0.5": true,
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1793373660
+        "last_ts": 1793373840
       }
     }
   },
@@ -474,7 +474,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1793373660
+        "last_ts": 1793373840
       }
     }
   },
@@ -573,11 +573,11 @@
           "1.0": false
         },
         "be": {
-          "0.5": false,
+          "0.5": true,
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1793373660
+        "last_ts": 1793373840
       }
     }
   },
@@ -673,7 +673,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1793373660
+        "last_ts": 1793373840
       }
     }
   },
@@ -755,18 +755,18 @@
       "variant": "essai_sp500",
       "exc": {
         "mfe": 0.7812,
-        "mae": 0.2812,
+        "mae": 0.3125,
         "armed": {
           "0.5": true,
           "0.8": false,
           "1.0": false
         },
         "be": {
-          "0.5": false,
+          "0.5": true,
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1793373660
+        "last_ts": 1793373840
       }
     }
   },
@@ -865,7 +865,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1793373660
+        "last_ts": 1793373840
       }
     }
   },
@@ -953,7 +953,7 @@
       "variant": "modele_arbres",
       "exc": {
         "mfe": 0.4493,
-        "mae": 0.0,
+        "mae": 0.4928,
         "armed": {
           "0.5": false,
           "0.8": false,
@@ -964,7 +964,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1793373660
+        "last_ts": 1793373840
       }
     }
   },
@@ -1052,7 +1052,7 @@
       "variant": "modele_arbres",
       "exc": {
         "mfe": 0.3768,
-        "mae": 0.0,
+        "mae": 0.1739,
         "armed": {
           "0.5": false,
           "0.8": false,
@@ -1143,6 +1143,105 @@
       },
       "price_time": "2026-10-30T15:25:00Z",
       "model_r": -0.0415,
+      "filters": [
+        "modele_arbres",
+        "bot_en_ombre"
+      ],
+      "filters_checked": true,
+      "variant": "modele_arbres",
+      "exc": {
+        "mfe": 0.0,
+        "mae": 0.6377,
+        "armed": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "be": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "last_ts": null
+      }
+    }
+  },
+  {
+    "id": "23fcedc099",
+    "asset": "gold",
+    "asset_label": "Or (XAU/USD)",
+    "direction": "short",
+    "entry": 3920.7,
+    "take_profit": 3910.3,
+    "stop_loss": 3927.7,
+    "risk_reward": 1.49,
+    "confidence": "fort",
+    "score": 6.78,
+    "criteria": [
+      "adx",
+      "orb",
+      "rsi",
+      "trend_15m",
+      "trend_1h",
+      "trend_5m",
+      "vwap"
+    ],
+    "rationale": "Vente : tendance forte (ADX), cassure du range d'ouverture, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 17.40 (0.44 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 92%.",
+    "news_context": "actualité calme sur les 2 dernières heures",
+    "created_at": "2026-10-30T15:35:40Z",
+    "expires_at": "2026-10-30T16:35:40Z",
+    "status": "open",
+    "closed_at": null,
+    "close_price": null,
+    "pnl_pct": null,
+    "pnl_gross_pct": null,
+    "duration_minutes": null,
+    "hourly_range": 17.395656,
+    "source": "shadow",
+    "horizon": "1h",
+    "horizon_minutes": 60,
+    "meta": {
+      "tick": 0.1,
+      "details": {
+        "trend_5m": "EMA20 3926.22 / EMA50 3944.36 (5 min)",
+        "trend_15m": "EMA20 3948.09 / EMA50 3974.77",
+        "trend_1h": "prix vs EMA20 1 h 3984.04",
+        "adx": "ADX15 48.1 (+DI 11.5 / -DI 37.1)",
+        "vwap": "VWAP jour 3968.01",
+        "rsi": "RSI14 5 min 40.1",
+        "macd": "histogramme MACD 1.9558",
+        "level": "support 3900.90 / résistance -",
+        "volume": "z-score volume -1.48",
+        "orb": "range d'ouverture 3924.70 – 3956.00",
+        "pdhl": "veille : haut 4081.00 / bas 4016.30",
+        "activity": "activité de l'heure 0.94× la moyenne",
+        "corr": "DXY -0.07 % sur 1 h, taux 10 ans +0.4 % sur 1 h"
+      },
+      "support": 3900.89990234375,
+      "resistance": null,
+      "atr_5m": 7.682769906994389,
+      "atr_ratio": 1.5967303979253904,
+      "hourly_range_pct": 0.4437,
+      "adx_15m": 48.05704631000741,
+      "sigma_5m": 0.001239835264198227,
+      "p_resolution": 0.9186666666666666,
+      "p_tp_neutral": 0.38466666666666666,
+      "activity_ratio": 0.944,
+      "base_minutes": 5,
+      "ctx": {
+        "adx": 48.06,
+        "rsi_dir": 59.92,
+        "vwap_ext": 2.7194,
+        "ema_ext": 0.3174,
+        "atr_ratio": 1.597,
+        "activity": 0.944,
+        "range_pct": 0.4437,
+        "cost_r": 0.112,
+        "us_open_min": 125.7,
+        "weekday": 4
+      },
+      "price_time": "2026-10-30T15:25:00Z",
+      "model_r": -0.0087,
       "filters": [
         "modele_arbres",
         "bot_en_ombre"
