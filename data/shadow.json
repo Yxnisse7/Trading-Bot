@@ -74,7 +74,7 @@
       "variant": "essai_oil",
       "exc": {
         "mfe": 0.1667,
-        "mae": 0.3056,
+        "mae": 0.6111,
         "armed": {
           "0.5": false,
           "0.8": false,
@@ -85,7 +85,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1793347800
+        "last_ts": 1793348100
       }
     }
   },
@@ -174,19 +174,19 @@
       "filters_checked": true,
       "variant": "modele_arbres",
       "exc": {
-        "mfe": 0.6825,
-        "mae": 0.381,
+        "mfe": 0.7778,
+        "mae": 0.7302,
         "armed": {
           "0.5": true,
           "0.8": false,
           "1.0": false
         },
         "be": {
-          "0.5": false,
+          "0.5": true,
           "0.8": false,
           "1.0": false
         },
-        "last_ts": null
+        "last_ts": 1793348100
       }
     }
   },
@@ -276,16 +276,16 @@
       "variant": "modele_arbres",
       "exc": {
         "mfe": 1.082,
-        "mae": 0.0,
+        "mae": 0.2951,
         "armed": {
           "0.5": true,
           "0.8": true,
           "1.0": true
         },
         "be": {
-          "0.5": false,
-          "0.8": false,
-          "1.0": false
+          "0.5": true,
+          "0.8": true,
+          "1.0": true
         },
         "last_ts": null
       }
@@ -370,93 +370,22 @@
         "source": "essai 29"
       },
       "price_time": "2026-10-30T08:15:00Z",
-      "variant": "hors_session"
-    }
-  },
-  {
-    "id": "707169614a",
-    "asset": "gold",
-    "asset_label": "Or (XAU/USD)",
-    "direction": "short",
-    "entry": 3986.6,
-    "take_profit": 3977.4,
-    "stop_loss": 3992.7,
-    "risk_reward": 1.51,
-    "confidence": "fort",
-    "score": 5.8,
-    "criteria": [
-      "adx",
-      "rsi",
-      "trend_15m",
-      "trend_1h",
-      "trend_5m",
-      "vwap"
-    ],
-    "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 15.37 (0.39 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 79%.",
-    "news_context": "actualité à surveiller (score 2) : Trump’s tariffs fail to cut US trade deficit, IW report shows | Japan’s Nikkei slumps up to 3% as tech stocks tumble on AI worries",
-    "created_at": "2026-10-30T08:20:54Z",
-    "expires_at": "2026-10-30T09:20:54Z",
-    "status": "open",
-    "closed_at": null,
-    "close_price": null,
-    "pnl_pct": null,
-    "pnl_gross_pct": null,
-    "duration_minutes": null,
-    "hourly_range": 15.365203,
-    "source": "shadow",
-    "horizon": "1h",
-    "horizon_minutes": 60,
-    "meta": {
-      "tick": 0.1,
-      "details": {
-        "trend_5m": "EMA20 3991.22 / EMA50 3998.00 (5 min)",
-        "trend_15m": "EMA20 3999.80 / EMA50 4011.43",
-        "trend_1h": "prix vs EMA20 1 h 4014.13",
-        "adx": "ADX15 22.2 (+DI 15.8 / -DI 31.0)",
-        "vwap": "VWAP jour 4003.79",
-        "rsi": "RSI14 5 min 43.0",
-        "macd": "histogramme MACD -0.0182",
-        "level": "support - / résistance 4020.30",
-        "volume": "z-score volume -1.40",
-        "pdhl": "veille : haut 4081.00 / bas 4016.30",
-        "activity": "activité de l'heure 1.18× la moyenne",
-        "corr": "DXY -0.07 % sur 1 h"
-      },
-      "support": null,
-      "resistance": 4020.300048828125,
-      "atr_5m": 6.256322762386418,
-      "atr_ratio": 1.3967373061466681,
-      "hourly_range_pct": 0.3854,
-      "adx_15m": 22.235763448172015,
-      "sigma_5m": 0.0008349874802078688,
-      "p_resolution": 0.789,
-      "p_tp_neutral": 0.315,
-      "activity_ratio": 1.175,
-      "base_minutes": 5,
-      "ctx": {
-        "adx": 22.24,
-        "rsi_dir": 56.95,
-        "vwap_ext": 1.1186,
-        "ema_ext": 0.3005,
-        "atr_ratio": 1.397,
-        "activity": 1.175,
-        "range_pct": 0.3854,
-        "cost_r": 0.1307,
-        "us_open_min": -309.1,
-        "weekday": 4
-      },
-      "price_time": "2026-10-30T08:15:00Z",
-      "ctx_avoid": [
-        "minutes depuis l'ouverture américaine : plus de 30 min avant l'ouverture US"
-      ],
-      "model_r": -0.0874,
-      "filters": [
-        "filtre_contexte",
-        "modele_arbres",
-        "bot_en_ombre"
-      ],
-      "filters_checked": true,
-      "variant": "modele_arbres"
+      "variant": "hors_session",
+      "exc": {
+        "mfe": 0.0,
+        "mae": 0.1667,
+        "armed": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "be": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "last_ts": null
+      }
     }
   }
 ]
