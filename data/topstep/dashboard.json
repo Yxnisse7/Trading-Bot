@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-30T19:50:54Z",
+  "updated_at": "2026-10-30T19:55:52Z",
   "rules": {
     "account": "50K",
     "start_balance": 50000.0,
@@ -57,22 +57,26 @@
       "file": "history/3.json"
     }
   ],
-  "balance": 48587.77,
-  "profit": -1412.23,
+  "balance": 48386.05,
+  "profit": -1613.95,
   "mll": 48446.7,
-  "room_to_mll": 141.07,
+  "room_to_mll": -60.65,
   "peak_eod": 50446.7,
   "target_balance": 53000.0,
   "needed_profit": 3000.0,
   "best_day": 1422.42,
   "consistency_ok": true,
   "today": "2026-10-30",
-  "today_pnl": -1441.44,
-  "room_today": -441.44,
-  "status": "en cours",
-  "failed": null,
+  "today_pnl": -1643.16,
+  "room_today": -643.16,
+  "status": "échoué",
+  "failed": {
+    "at": "2026-10-30T19:50:01Z",
+    "balance": 48386.05,
+    "mll": 48446.7
+  },
   "violations": [
-    "journée du 30/10 : -1441 $, limite journalière de 1000 $ atteinte"
+    "journée du 30/10 : -1643 $, limite journalière de 1000 $ atteinte"
   ],
   "days": [
     {
@@ -101,7 +105,7 @@
     },
     {
       "day": "2026-10-30",
-      "pnl": -1441.44
+      "pnl": -1643.16
     }
   ],
   "trades": [
@@ -676,9 +680,7 @@
       "pnl": -1898.72,
       "past_flat_time": false,
       "balance_after": 48587.77
-    }
-  ],
-  "open": [
+    },
     {
       "id": "j10301910nasag",
       "asset": "nasdaq",
@@ -686,18 +688,23 @@
       "symbol": "MNQ",
       "direction": "short",
       "entry": 28265.0,
-      "take_profit": 28100.0,
-      "stop_loss": 28365.0,
+      "exit": 28365.0,
       "contracts": 1,
-      "multiplier": 2.0,
-      "origin": "stratégie",
+      "status": "journal",
+      "origin": "journal",
       "opened_at": "2026-10-30T19:10:37Z",
-      "expires_at": null,
-      "risk": 200.0,
-      "notional": 56530.0,
-      "cost_pct": 0.0,
-      "fee_per_order": 0.86
-    },
+      "closed_at": "2026-10-30T19:50:01Z",
+      "day": "2026-10-30",
+      "pnl_gross": -200.0,
+      "fees": 1.22,
+      "slippage": 0.5,
+      "cost": 1.72,
+      "pnl": -201.72,
+      "past_flat_time": false,
+      "balance_after": 48386.05
+    }
+  ],
+  "open": [
     {
       "id": "j10301530bit",
       "asset": "bitcoin",
@@ -737,9 +744,9 @@
       "fee_per_order": 0.86
     }
   ],
-  "journal_count": 20,
+  "journal_count": 21,
   "daily_target": 1200.0,
   "skipped": [],
-  "day_closed": "limite journalière atteinte (-1441 $) : Topstep bloque le compte jusqu'au lendemain",
+  "day_closed": "limite journalière atteinte (-1643 $) : Topstep bloque le compte jusqu'au lendemain",
   "candidates": []
 }
