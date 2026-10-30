@@ -1,6 +1,6 @@
 # Trading-Bot — rapport
 
-_Mis à jour le 30/10/2026 à 20:31 (Europe/Paris)._
+_Mis à jour le 30/10/2026 à 20:36 (Europe/Paris)._
 
 ## Vue d'ensemble
 
@@ -8,7 +8,7 @@ _Mis à jour le 30/10/2026 à 20:31 (Europe/Paris)._
 - Taux de réussite cumulé (TP / (TP+SL)) : **45%** — hasard attendu 40%, avantage **+5%**
 - P&L théorique cumulé, net des coûts estimés (somme des % par trade, sans levier) : **+0.78 %** (brut +4.78 %)
 - Signaux ouverts : **0**
-- Signaux fantômes (suivis en silence pour l'apprentissage) : **990** clôturés, 5 ouverts, taux de réussite 37% (hasard attendu 36%)
+- Signaux fantômes (suivis en silence pour l'apprentissage) : **991** clôturés, 4 ouverts, taux de réussite 37% (hasard attendu 36%)
 
 ## Statistiques
 
@@ -114,18 +114,18 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 
 | Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
 |---|---:|---:|---:|---:|---:|---:|
-| adx | 990 | 299 | 514 | 177 | 37% | +0.002 % |
+| adx | 991 | 299 | 514 | 178 | 37% | +0.002 % |
 | corr | 84 | 18 | 50 | 16 | 26% | -0.065 % |
 | level | 68 | 24 | 30 | 14 | 44% | -0.053 % |
 | macd | 254 | 56 | 149 | 49 | 27% | -0.060 % |
 | orb | 62 | 26 | 19 | 17 | 58% | +0.095 % |
 | pdhl | 105 | 42 | 50 | 13 | 46% | +0.076 % |
-| rsi | 753 | 239 | 392 | 122 | 38% | +0.012 % |
-| trend_15m | 990 | 299 | 514 | 177 | 37% | +0.002 % |
-| trend_1h | 974 | 291 | 510 | 173 | 36% | +0.002 % |
-| trend_5m | 879 | 275 | 463 | 141 | 37% | +0.007 % |
+| rsi | 754 | 239 | 392 | 123 | 38% | +0.012 % |
+| trend_15m | 991 | 299 | 514 | 178 | 37% | +0.002 % |
+| trend_1h | 975 | 291 | 510 | 174 | 36% | +0.002 % |
+| trend_5m | 880 | 275 | 463 | 142 | 37% | +0.007 % |
 | volume | 11 | 2 | 7 | 2 | 22% | -0.128 % |
-| vwap | 966 | 294 | 501 | 171 | 37% | +0.004 % |
+| vwap | 967 | 294 | 501 | 172 | 37% | +0.004 % |
 
 ### Fantômes par actif
 
@@ -134,7 +134,7 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 | bitcoin | 30 | 9 | 9 | 12 | 50% | -0.028 % |
 | ethereum | 29 | 5 | 17 | 7 | 23% | -0.197 % |
 | euro | 36 | 12 | 23 | 1 | 34% | -0.025 % |
-| gold | 286 | 96 | 138 | 52 | 41% | -0.008 % |
+| gold | 287 | 96 | 138 | 53 | 41% | -0.008 % |
 | nasdaq | 398 | 120 | 208 | 70 | 37% | +0.059 % |
 | oil | 99 | 27 | 51 | 21 | 35% | -0.071 % |
 | sp500 | 112 | 30 | 68 | 14 | 31% | -0.042 % |
@@ -199,7 +199,7 @@ Corrections par actif :
 - euro : {'trend_5m': 1.018, 'trend_15m': 1.018, 'trend_1h': 1.018, 'adx': 1.018}
 - nasdaq : {'trend_5m': 1.302, 'trend_15m': 1.302, 'trend_1h': 1.302, 'adx': 1.302, 'vwap': 0.98, 'rsi': 1.489}
 - oil : {'trend_5m': 1.015, 'trend_15m': 1.015, 'trend_1h': 1.015, 'adx': 1.015, 'vwap': 0.745, 'rsi': 1.008}
-- sp500 : {'trend_5m': 0.759, 'trend_15m': 0.759, 'trend_1h': 0.759, 'adx': 0.759, 'vwap': 0.575, 'rsi': 0.855}
+- sp500 : {'trend_5m': 0.759, 'trend_15m': 0.759, 'trend_1h': 0.759, 'adx': 0.759, 'vwap': 0.574, 'rsi': 0.855}
 
 | Variante testée en fantôme | Trades | Gain net moyen | Statut |
 |---|---:|---:|---|
@@ -218,9 +218,9 @@ Corrections par actif :
 Notes :
 
 - trades réels : +0,18 R ± 0,20 R par trade avant frais sur 164 trades (0 R = hasard)
-- tendance (trend_5m, trend_15m, trend_1h, adx) : +0,08 R ± 0,07 R sur 1510 trades éq. → poids ×1,03
-- vwap : +0,09 R ± 0,07 R sur 1415 trades éq. → poids ×1,04
-- rsi : +0,11 R ± 0,08 R sur 1193 trades éq. → poids ×1,09
+- tendance (trend_5m, trend_15m, trend_1h, adx) : +0,08 R ± 0,07 R sur 1511 trades éq. → poids ×1,03
+- vwap : +0,09 R ± 0,07 R sur 1416 trades éq. → poids ×1,04
+- rsi : +0,11 R ± 0,08 R sur 1194 trades éq. → poids ×1,09
 - orb : +0,38 R ± 0,28 R sur 98 trades éq. → poids ×1,25
 - tranche 11h UTC : -0,31 R sur 77 trades éq. → évitée
 - tranche 12h UTC : -0,45 R sur 65 trades éq. → évitée
