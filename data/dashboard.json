@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-30T09:06:02.033555+01:00",
+  "updated_at": "2026-10-30T09:11:13.931786+01:00",
   "timezone": "Europe/Paris",
   "equity_curve": [
     {
@@ -1806,15 +1806,15 @@
       "avg_pnl_pct": 0.0047
     },
     "shadow": {
-      "n": 951,
+      "n": 952,
       "tp": 277,
-      "sl": 500,
+      "sl": 501,
       "expired": 174,
-      "win_rate": 0.3564993564993565,
-      "neutral_win_rate": 0.3637,
-      "edge": -0.0072,
-      "pnl_pct": -6.1433,
-      "avg_pnl_pct": -0.0065
+      "win_rate": 0.3560411311053985,
+      "neutral_win_rate": 0.3638,
+      "edge": -0.0078,
+      "pnl_pct": -6.3342,
+      "avg_pnl_pct": -0.0067
     },
     "open": 0,
     "open_shadow": 3
@@ -1854,15 +1854,15 @@
       "avg_pnl_pct": 0.0
     },
     "shadow": {
-      "n": 951,
+      "n": 952,
       "tp": 277,
-      "sl": 500,
+      "sl": 501,
       "expired": 174,
-      "win_rate": 0.3564993564993565,
-      "neutral_win_rate": 0.3637,
-      "edge": -0.0072,
-      "pnl_pct": -6.1433,
-      "avg_pnl_pct": -0.0065
+      "win_rate": 0.3560411311053985,
+      "neutral_win_rate": 0.3638,
+      "edge": -0.0078,
+      "pnl_pct": -6.3342,
+      "avg_pnl_pct": -0.0067
     }
   },
   "by_horizon": {
@@ -2079,15 +2079,15 @@
         "avg_pnl_pct": -0.0342
       },
       "shadow": {
-        "n": 261,
+        "n": 262,
         "tp": 82,
-        "sl": 129,
+        "sl": 130,
         "expired": 50,
-        "win_rate": 0.3886255924170616,
+        "win_rate": 0.3867924528301887,
         "neutral_win_rate": 0.4139,
-        "edge": -0.0253,
-        "pnl_pct": -4.2616,
-        "avg_pnl_pct": -0.0163
+        "edge": -0.0271,
+        "pnl_pct": -4.4525,
+        "avg_pnl_pct": -0.017
       },
       "open": 0,
       "session_utc": [
@@ -2194,15 +2194,15 @@
       "label": "Tendance 5 min",
       "weight": 1.0,
       "stats": {
-        "n": 986,
+        "n": 987,
         "tp": 308,
-        "sl": 509,
+        "sl": 510,
         "expired": 169,
-        "win_rate": 0.3769889840881273,
-        "neutral_win_rate": 0.3653,
-        "edge": 0.0117,
-        "pnl_pct": 1.7478,
-        "avg_pnl_pct": 0.0018
+        "win_rate": 0.3765281173594132,
+        "neutral_win_rate": 0.3654,
+        "edge": 0.0111,
+        "pnl_pct": 1.5569,
+        "avg_pnl_pct": 0.0016
       },
       "by_source": {
         "bot": {
@@ -2239,18 +2239,52 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 841,
+          "n": 842,
           "tp": 254,
-          "sl": 449,
+          "sl": 450,
           "expired": 138,
-          "win_rate": 0.3613086770981508,
+          "win_rate": 0.36079545454545453,
           "neutral_win_rate": 0.3595,
-          "edge": 0.0018,
-          "pnl_pct": -1.0625,
-          "avg_pnl_pct": -0.0013
+          "edge": 0.0013,
+          "pnl_pct": -1.2534,
+          "avg_pnl_pct": -0.0015
         }
       },
       "last_trades": [
+        {
+          "id": "fa04554dce",
+          "asset": "gold",
+          "asset_label": "Or (XAU/USD)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 3978.4,
+          "take_profit": 3969.0,
+          "stop_loss": 3984.7,
+          "risk_reward": 1.49,
+          "confidence": "fort",
+          "score": 5.75,
+          "criteria": [
+            "adx",
+            "macd",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.1909,
+          "pnl_gross_pct": -0.1709,
+          "duration_minutes": 5,
+          "close_price": 3985.2,
+          "created_at": "2026-10-30T08:05:47Z",
+          "closed_at": "2026-10-30T08:10:58Z",
+          "created_local": "30/10 09:05",
+          "expires_at": "2026-10-30T09:05:47Z",
+          "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 15.65 (0.39 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 67%.",
+          "news_context": "actualité à surveiller (score 2) : Trump’s tariffs fail to cut US trade deficit, IW report shows | Japan’s Nikkei slumps up to 3% as tech stocks tumble on AI worries",
+          "manual_exit": null
+        },
         {
           "id": "6103f797e8",
           "asset": "gold",
@@ -2486,40 +2520,6 @@
           "created_local": "30/10 08:20",
           "expires_at": "2026-10-30T08:20:57Z",
           "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 15.04 (0.38 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 63%.",
-          "news_context": "actualité à surveiller (score 1) : Japan’s Nikkei slumps up to 3% as tech stocks tumble on AI worries",
-          "manual_exit": null
-        },
-        {
-          "id": "2f92629c62",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 3991.3,
-          "take_profit": 3982.3,
-          "stop_loss": 3997.3,
-          "risk_reward": 1.5,
-          "confidence": "fort",
-          "score": 5.7,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.1703,
-          "pnl_gross_pct": -0.1503,
-          "duration_minutes": 9,
-          "close_price": 3997.3,
-          "created_at": "2026-10-30T07:16:06Z",
-          "closed_at": "2026-10-30T07:25:49Z",
-          "created_local": "30/10 08:16",
-          "expires_at": "2026-10-30T08:16:06Z",
-          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 15.04 (0.38 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 62%.",
           "news_context": "actualité à surveiller (score 1) : Japan’s Nikkei slumps up to 3% as tech stocks tumble on AI worries",
           "manual_exit": null
         }
@@ -2530,15 +2530,15 @@
       "label": "Tendance 15 min",
       "weight": 1.0,
       "stats": {
-        "n": 1114,
+        "n": 1115,
         "tp": 335,
-        "sl": 571,
+        "sl": 572,
         "expired": 208,
-        "win_rate": 0.369757174392936,
+        "win_rate": 0.36934950385887544,
         "neutral_win_rate": 0.3689,
-        "edge": 0.0009,
-        "pnl_pct": -5.2093,
-        "avg_pnl_pct": -0.0047
+        "edge": 0.0004,
+        "pnl_pct": -5.4002,
+        "avg_pnl_pct": -0.0048
       },
       "by_source": {
         "bot": {
@@ -2575,18 +2575,52 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 951,
+          "n": 952,
           "tp": 277,
-          "sl": 500,
+          "sl": 501,
           "expired": 174,
-          "win_rate": 0.3564993564993565,
-          "neutral_win_rate": 0.3637,
-          "edge": -0.0072,
-          "pnl_pct": -6.1433,
-          "avg_pnl_pct": -0.0065
+          "win_rate": 0.3560411311053985,
+          "neutral_win_rate": 0.3638,
+          "edge": -0.0078,
+          "pnl_pct": -6.3342,
+          "avg_pnl_pct": -0.0067
         }
       },
       "last_trades": [
+        {
+          "id": "fa04554dce",
+          "asset": "gold",
+          "asset_label": "Or (XAU/USD)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 3978.4,
+          "take_profit": 3969.0,
+          "stop_loss": 3984.7,
+          "risk_reward": 1.49,
+          "confidence": "fort",
+          "score": 5.75,
+          "criteria": [
+            "adx",
+            "macd",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.1909,
+          "pnl_gross_pct": -0.1709,
+          "duration_minutes": 5,
+          "close_price": 3985.2,
+          "created_at": "2026-10-30T08:05:47Z",
+          "closed_at": "2026-10-30T08:10:58Z",
+          "created_local": "30/10 09:05",
+          "expires_at": "2026-10-30T09:05:47Z",
+          "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 15.65 (0.39 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 67%.",
+          "news_context": "actualité à surveiller (score 2) : Trump’s tariffs fail to cut US trade deficit, IW report shows | Japan’s Nikkei slumps up to 3% as tech stocks tumble on AI worries",
+          "manual_exit": null
+        },
         {
           "id": "6103f797e8",
           "asset": "gold",
@@ -2822,40 +2856,6 @@
           "created_local": "30/10 08:20",
           "expires_at": "2026-10-30T08:20:57Z",
           "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 15.04 (0.38 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 63%.",
-          "news_context": "actualité à surveiller (score 1) : Japan’s Nikkei slumps up to 3% as tech stocks tumble on AI worries",
-          "manual_exit": null
-        },
-        {
-          "id": "2f92629c62",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 3991.3,
-          "take_profit": 3982.3,
-          "stop_loss": 3997.3,
-          "risk_reward": 1.5,
-          "confidence": "fort",
-          "score": 5.7,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.1703,
-          "pnl_gross_pct": -0.1503,
-          "duration_minutes": 9,
-          "close_price": 3997.3,
-          "created_at": "2026-10-30T07:16:06Z",
-          "closed_at": "2026-10-30T07:25:49Z",
-          "created_local": "30/10 08:16",
-          "expires_at": "2026-10-30T08:16:06Z",
-          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 15.04 (0.38 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 62%.",
           "news_context": "actualité à surveiller (score 1) : Japan’s Nikkei slumps up to 3% as tech stocks tumble on AI worries",
           "manual_exit": null
         }
@@ -2866,15 +2866,15 @@
       "label": "Tendance 1 h",
       "weight": 1.0,
       "stats": {
-        "n": 1098,
+        "n": 1099,
         "tp": 327,
-        "sl": 567,
+        "sl": 568,
         "expired": 204,
-        "win_rate": 0.36577181208053694,
+        "win_rate": 0.3653631284916201,
         "neutral_win_rate": 0.3686,
-        "edge": -0.0028,
-        "pnl_pct": -5.6817,
-        "avg_pnl_pct": -0.0052
+        "edge": -0.0032,
+        "pnl_pct": -5.8726,
+        "avg_pnl_pct": -0.0053
       },
       "by_source": {
         "bot": {
@@ -2911,18 +2911,52 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 935,
+          "n": 936,
           "tp": 269,
-          "sl": 496,
+          "sl": 497,
           "expired": 170,
-          "win_rate": 0.3516339869281046,
-          "neutral_win_rate": 0.3632,
-          "edge": -0.0116,
-          "pnl_pct": -6.6157,
-          "avg_pnl_pct": -0.0071
+          "win_rate": 0.35117493472584854,
+          "neutral_win_rate": 0.3633,
+          "edge": -0.0121,
+          "pnl_pct": -6.8066,
+          "avg_pnl_pct": -0.0073
         }
       },
       "last_trades": [
+        {
+          "id": "fa04554dce",
+          "asset": "gold",
+          "asset_label": "Or (XAU/USD)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 3978.4,
+          "take_profit": 3969.0,
+          "stop_loss": 3984.7,
+          "risk_reward": 1.49,
+          "confidence": "fort",
+          "score": 5.75,
+          "criteria": [
+            "adx",
+            "macd",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.1909,
+          "pnl_gross_pct": -0.1709,
+          "duration_minutes": 5,
+          "close_price": 3985.2,
+          "created_at": "2026-10-30T08:05:47Z",
+          "closed_at": "2026-10-30T08:10:58Z",
+          "created_local": "30/10 09:05",
+          "expires_at": "2026-10-30T09:05:47Z",
+          "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 15.65 (0.39 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 67%.",
+          "news_context": "actualité à surveiller (score 2) : Trump’s tariffs fail to cut US trade deficit, IW report shows | Japan’s Nikkei slumps up to 3% as tech stocks tumble on AI worries",
+          "manual_exit": null
+        },
         {
           "id": "6103f797e8",
           "asset": "gold",
@@ -3158,40 +3192,6 @@
           "created_local": "30/10 08:20",
           "expires_at": "2026-10-30T08:20:57Z",
           "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 15.04 (0.38 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 63%.",
-          "news_context": "actualité à surveiller (score 1) : Japan’s Nikkei slumps up to 3% as tech stocks tumble on AI worries",
-          "manual_exit": null
-        },
-        {
-          "id": "2f92629c62",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 3991.3,
-          "take_profit": 3982.3,
-          "stop_loss": 3997.3,
-          "risk_reward": 1.5,
-          "confidence": "fort",
-          "score": 5.7,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.1703,
-          "pnl_gross_pct": -0.1503,
-          "duration_minutes": 9,
-          "close_price": 3997.3,
-          "created_at": "2026-10-30T07:16:06Z",
-          "closed_at": "2026-10-30T07:25:49Z",
-          "created_local": "30/10 08:16",
-          "expires_at": "2026-10-30T08:16:06Z",
-          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 15.04 (0.38 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 62%.",
           "news_context": "actualité à surveiller (score 1) : Japan’s Nikkei slumps up to 3% as tech stocks tumble on AI worries",
           "manual_exit": null
         }
@@ -3202,15 +3202,15 @@
       "label": "Force de tendance (ADX)",
       "weight": 1.0,
       "stats": {
-        "n": 1114,
+        "n": 1115,
         "tp": 335,
-        "sl": 571,
+        "sl": 572,
         "expired": 208,
-        "win_rate": 0.369757174392936,
+        "win_rate": 0.36934950385887544,
         "neutral_win_rate": 0.3689,
-        "edge": 0.0009,
-        "pnl_pct": -5.2093,
-        "avg_pnl_pct": -0.0047
+        "edge": 0.0004,
+        "pnl_pct": -5.4002,
+        "avg_pnl_pct": -0.0048
       },
       "by_source": {
         "bot": {
@@ -3247,18 +3247,52 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 951,
+          "n": 952,
           "tp": 277,
-          "sl": 500,
+          "sl": 501,
           "expired": 174,
-          "win_rate": 0.3564993564993565,
-          "neutral_win_rate": 0.3637,
-          "edge": -0.0072,
-          "pnl_pct": -6.1433,
-          "avg_pnl_pct": -0.0065
+          "win_rate": 0.3560411311053985,
+          "neutral_win_rate": 0.3638,
+          "edge": -0.0078,
+          "pnl_pct": -6.3342,
+          "avg_pnl_pct": -0.0067
         }
       },
       "last_trades": [
+        {
+          "id": "fa04554dce",
+          "asset": "gold",
+          "asset_label": "Or (XAU/USD)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 3978.4,
+          "take_profit": 3969.0,
+          "stop_loss": 3984.7,
+          "risk_reward": 1.49,
+          "confidence": "fort",
+          "score": 5.75,
+          "criteria": [
+            "adx",
+            "macd",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.1909,
+          "pnl_gross_pct": -0.1709,
+          "duration_minutes": 5,
+          "close_price": 3985.2,
+          "created_at": "2026-10-30T08:05:47Z",
+          "closed_at": "2026-10-30T08:10:58Z",
+          "created_local": "30/10 09:05",
+          "expires_at": "2026-10-30T09:05:47Z",
+          "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 15.65 (0.39 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 67%.",
+          "news_context": "actualité à surveiller (score 2) : Trump’s tariffs fail to cut US trade deficit, IW report shows | Japan’s Nikkei slumps up to 3% as tech stocks tumble on AI worries",
+          "manual_exit": null
+        },
         {
           "id": "6103f797e8",
           "asset": "gold",
@@ -3496,57 +3530,23 @@
           "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 15.04 (0.38 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 63%.",
           "news_context": "actualité à surveiller (score 1) : Japan’s Nikkei slumps up to 3% as tech stocks tumble on AI worries",
           "manual_exit": null
-        },
-        {
-          "id": "2f92629c62",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 3991.3,
-          "take_profit": 3982.3,
-          "stop_loss": 3997.3,
-          "risk_reward": 1.5,
-          "confidence": "fort",
-          "score": 5.7,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.1703,
-          "pnl_gross_pct": -0.1503,
-          "duration_minutes": 9,
-          "close_price": 3997.3,
-          "created_at": "2026-10-30T07:16:06Z",
-          "closed_at": "2026-10-30T07:25:49Z",
-          "created_local": "30/10 08:16",
-          "expires_at": "2026-10-30T08:16:06Z",
-          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 15.04 (0.38 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 62%.",
-          "news_context": "actualité à surveiller (score 1) : Japan’s Nikkei slumps up to 3% as tech stocks tumble on AI worries",
-          "manual_exit": null
         }
       ]
     },
     {
       "key": "vwap",
       "label": "VWAP",
-      "weight": 0.751,
+      "weight": 0.75,
       "stats": {
-        "n": 1088,
+        "n": 1089,
         "tp": 330,
-        "sl": 556,
+        "sl": 557,
         "expired": 202,
-        "win_rate": 0.3724604966139955,
+        "win_rate": 0.37204058624577224,
         "neutral_win_rate": 0.3679,
-        "edge": 0.0046,
-        "pnl_pct": -3.286,
-        "avg_pnl_pct": -0.003
+        "edge": 0.0041,
+        "pnl_pct": -3.4769,
+        "avg_pnl_pct": -0.0032
       },
       "by_source": {
         "bot": {
@@ -3583,18 +3583,52 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 927,
+          "n": 928,
           "tp": 272,
-          "sl": 487,
+          "sl": 488,
           "expired": 168,
-          "win_rate": 0.3583662714097497,
+          "win_rate": 0.35789473684210527,
           "neutral_win_rate": 0.3625,
-          "edge": -0.0041,
-          "pnl_pct": -4.8364,
-          "avg_pnl_pct": -0.0052
+          "edge": -0.0046,
+          "pnl_pct": -5.0273,
+          "avg_pnl_pct": -0.0054
         }
       },
       "last_trades": [
+        {
+          "id": "fa04554dce",
+          "asset": "gold",
+          "asset_label": "Or (XAU/USD)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 3978.4,
+          "take_profit": 3969.0,
+          "stop_loss": 3984.7,
+          "risk_reward": 1.49,
+          "confidence": "fort",
+          "score": 5.75,
+          "criteria": [
+            "adx",
+            "macd",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.1909,
+          "pnl_gross_pct": -0.1709,
+          "duration_minutes": 5,
+          "close_price": 3985.2,
+          "created_at": "2026-10-30T08:05:47Z",
+          "closed_at": "2026-10-30T08:10:58Z",
+          "created_local": "30/10 09:05",
+          "expires_at": "2026-10-30T09:05:47Z",
+          "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 15.65 (0.39 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 67%.",
+          "news_context": "actualité à surveiller (score 2) : Trump’s tariffs fail to cut US trade deficit, IW report shows | Japan’s Nikkei slumps up to 3% as tech stocks tumble on AI worries",
+          "manual_exit": null
+        },
         {
           "id": "6103f797e8",
           "asset": "gold",
@@ -3830,40 +3864,6 @@
           "created_local": "30/10 08:20",
           "expires_at": "2026-10-30T08:20:57Z",
           "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 15.04 (0.38 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 63%.",
-          "news_context": "actualité à surveiller (score 1) : Japan’s Nikkei slumps up to 3% as tech stocks tumble on AI worries",
-          "manual_exit": null
-        },
-        {
-          "id": "2f92629c62",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 3991.3,
-          "take_profit": 3982.3,
-          "stop_loss": 3997.3,
-          "risk_reward": 1.5,
-          "confidence": "fort",
-          "score": 5.7,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.1703,
-          "pnl_gross_pct": -0.1503,
-          "duration_minutes": 9,
-          "close_price": 3997.3,
-          "created_at": "2026-10-30T07:16:06Z",
-          "closed_at": "2026-10-30T07:25:49Z",
-          "created_local": "30/10 08:16",
-          "expires_at": "2026-10-30T08:16:06Z",
-          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 15.04 (0.38 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 62%.",
           "news_context": "actualité à surveiller (score 1) : Japan’s Nikkei slumps up to 3% as tech stocks tumble on AI worries",
           "manual_exit": null
         }
@@ -4210,15 +4210,15 @@
       "label": "MACD",
       "weight": 1.0,
       "stats": {
-        "n": 296,
+        "n": 297,
         "tp": 66,
-        "sl": 170,
+        "sl": 171,
         "expired": 60,
-        "win_rate": 0.2796610169491525,
-        "neutral_win_rate": 0.3707,
-        "edge": -0.091,
-        "pnl_pct": -17.0978,
-        "avg_pnl_pct": -0.0578
+        "win_rate": 0.27848101265822783,
+        "neutral_win_rate": 0.3708,
+        "edge": -0.0923,
+        "pnl_pct": -17.2887,
+        "avg_pnl_pct": -0.0582
       },
       "by_source": {
         "bot": {
@@ -4255,18 +4255,52 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 246,
+          "n": 247,
           "tp": 52,
-          "sl": 145,
+          "sl": 146,
           "expired": 49,
-          "win_rate": 0.2639593908629442,
-          "neutral_win_rate": 0.3654,
-          "edge": -0.1014,
-          "pnl_pct": -15.6551,
-          "avg_pnl_pct": -0.0636
+          "win_rate": 0.26262626262626265,
+          "neutral_win_rate": 0.3655,
+          "edge": -0.1029,
+          "pnl_pct": -15.846,
+          "avg_pnl_pct": -0.0642
         }
       },
       "last_trades": [
+        {
+          "id": "fa04554dce",
+          "asset": "gold",
+          "asset_label": "Or (XAU/USD)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 3978.4,
+          "take_profit": 3969.0,
+          "stop_loss": 3984.7,
+          "risk_reward": 1.49,
+          "confidence": "fort",
+          "score": 5.75,
+          "criteria": [
+            "adx",
+            "macd",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.1909,
+          "pnl_gross_pct": -0.1709,
+          "duration_minutes": 5,
+          "close_price": 3985.2,
+          "created_at": "2026-10-30T08:05:47Z",
+          "closed_at": "2026-10-30T08:10:58Z",
+          "created_local": "30/10 09:05",
+          "expires_at": "2026-10-30T09:05:47Z",
+          "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 15.65 (0.39 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 67%.",
+          "news_context": "actualité à surveiller (score 2) : Trump’s tariffs fail to cut US trade deficit, IW report shows | Japan’s Nikkei slumps up to 3% as tech stocks tumble on AI worries",
+          "manual_exit": null
+        },
         {
           "id": "a4890710b6",
           "asset": "sp500",
@@ -4510,42 +4544,6 @@
           "closed_at": "2026-10-28T15:40:57Z",
           "created_local": "27/10 16:40",
           "expires_at": "2026-10-28T15:40:55Z",
-          "rationale": "Achat : tendance forte (ADX), MACD en expansion, cassure du range d'ouverture, RSI en momentum, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 188.15 (0.63 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 80%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
-          "news_context": "actualité à surveiller (score 2) : S&P 500, Nasdaq advance as oil eases ahead of Fed decision",
-          "manual_exit": null
-        },
-        {
-          "id": "2052db336f",
-          "asset": "nasdaq",
-          "asset_label": "Nasdaq 100 (NQ)",
-          "direction": "long",
-          "horizon": "24h",
-          "entry": 29759.75,
-          "take_profit": 30098.5,
-          "stop_loss": 29647.0,
-          "risk_reward": 3.0,
-          "confidence": "fort",
-          "score": 8.75,
-          "criteria": [
-            "adx",
-            "macd",
-            "orb",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "expired",
-          "pnl_pct": 0.2597,
-          "pnl_gross_pct": 0.2697,
-          "duration_minutes": 1440,
-          "close_price": 29840.0,
-          "created_at": "2026-10-27T15:35:48Z",
-          "closed_at": "2026-10-28T15:35:51Z",
-          "created_local": "27/10 16:35",
-          "expires_at": "2026-10-28T15:35:48Z",
           "rationale": "Achat : tendance forte (ADX), MACD en expansion, cassure du range d'ouverture, RSI en momentum, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 188.15 (0.63 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 80%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
           "news_context": "actualité à surveiller (score 2) : S&P 500, Nasdaq advance as oil eases ahead of Fed decision",
           "manual_exit": null
@@ -5250,20 +5248,20 @@
   ],
   "open_signals": [
     {
-      "id": "fa04554dce",
+      "id": "0b9f59bd86",
       "asset": "gold",
       "asset_label": "Or (XAU/USD)",
       "direction": "short",
       "horizon": "1h",
-      "entry": 3978.4,
-      "take_profit": 3969.0,
-      "stop_loss": 3984.7,
+      "entry": 3989.9,
+      "take_profit": 3980.5,
+      "stop_loss": 3996.2,
       "risk_reward": 1.49,
       "confidence": "fort",
-      "score": 5.75,
+      "score": 5.8,
       "criteria": [
         "adx",
-        "macd",
+        "rsi",
         "trend_15m",
         "trend_1h",
         "trend_5m",
@@ -5275,11 +5273,11 @@
       "pnl_gross_pct": null,
       "duration_minutes": null,
       "close_price": null,
-      "created_at": "2026-10-30T08:05:47Z",
+      "created_at": "2026-10-30T08:10:58Z",
       "closed_at": null,
-      "created_local": "30/10 09:05",
-      "expires_at": "2026-10-30T09:05:47Z",
-      "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 15.65 (0.39 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 67%.",
+      "created_local": "30/10 09:10",
+      "expires_at": "2026-10-30T09:10:58Z",
+      "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 15.67 (0.39 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 69%.",
       "news_context": "actualité à surveiller (score 2) : Trump’s tariffs fail to cut US trade deficit, IW report shows | Japan’s Nikkei slumps up to 3% as tech stocks tumble on AI worries",
       "manual_exit": null
     },
@@ -6954,7 +6952,6 @@
   "adjustments": {
     "notes": [
       "trades réels : +0,18 R ± 0,20 R par trade avant frais sur 164 trades (0 R = hasard)",
-      "vwap : +0,07 R ± 0,07 R sur 1376 trades éq. → poids ×1,00",
       "rsi : +0,10 R ± 0,08 R sur 1163 trades éq. → poids ×1,05",
       "orb : +0,36 R ± 0,30 R sur 86 trades éq. → poids ×1,13",
       "tranche 11h UTC : -0,31 R sur 77 trades éq. → évitée",
@@ -6972,17 +6969,18 @@
       "variante « indices le matin européen » en test : 131 trades, -0,56 R net, pas meilleure que les signaux réels",
       "variante « horizon ~3 h » en test : 157 trades, -0,17 R net, pas meilleure que les signaux réels",
       "variante « confiance moyenne » en test : 68 trades, -0,01 R net, encore 32 trades avant décision",
-      "variante « entrées dans l'heure avant l'ouverture américaine » en test : 11 trades, +1,54 R net, encore 89 trades avant décision"
+      "variante « entrées dans l'heure avant l'ouverture américaine » en test : 11 trades, +1,54 R net, encore 89 trades avant décision",
+      "variante « reprise juste après un stop » en test : 28 trades, -0,31 R net, encore 72 trades avant décision"
     ],
     "avoid_hours_utc": [
       11,
       12,
       19
     ],
-    "sample": 1765,
+    "sample": 1766,
     "sample_by_source": {
       "bot": 163,
-      "shadow": 951,
+      "shadow": 952,
       "manual": 1,
       "backtest": 650
     },
@@ -6992,7 +6990,7 @@
       "trend_15m": 1.0,
       "trend_1h": 1.0,
       "adx": 1.0,
-      "vwap": 0.751,
+      "vwap": 0.75,
       "rsi": 1.053,
       "macd": 1.0,
       "level": 1.0,
@@ -7007,7 +7005,7 @@
         "trend_15m": 1.0,
         "trend_1h": 1.0,
         "adx": 1.0,
-        "vwap": 0.751,
+        "vwap": 0.75,
         "rsi": 1.053,
         "macd": 1.0,
         "level": 1.0,
@@ -7017,11 +7015,11 @@
         "corr": 0.5
       },
       "ethereum": {
-        "trend_5m": 0.807,
-        "trend_15m": 0.807,
-        "trend_1h": 0.807,
-        "adx": 0.807,
-        "vwap": 0.751,
+        "trend_5m": 0.808,
+        "trend_15m": 0.808,
+        "trend_1h": 0.808,
+        "adx": 0.808,
+        "vwap": 0.75,
         "rsi": 0.8,
         "macd": 1.0,
         "level": 1.0,
@@ -7035,7 +7033,7 @@
         "trend_15m": 1.0,
         "trend_1h": 1.0,
         "adx": 1.0,
-        "vwap": 0.751,
+        "vwap": 0.75,
         "rsi": 1.053,
         "macd": 1.0,
         "level": 1.0,
@@ -7049,7 +7047,7 @@
         "trend_15m": 1.0,
         "trend_1h": 1.0,
         "adx": 1.0,
-        "vwap": 0.751,
+        "vwap": 0.75,
         "rsi": 1.053,
         "macd": 1.0,
         "level": 1.0,
@@ -7059,10 +7057,10 @@
         "corr": 0.5
       },
       "nasdaq": {
-        "trend_5m": 1.239,
-        "trend_15m": 1.239,
-        "trend_1h": 1.239,
-        "adx": 1.239,
+        "trend_5m": 1.241,
+        "trend_15m": 1.241,
+        "trend_1h": 1.241,
+        "adx": 1.241,
         "vwap": 0.917,
         "rsi": 1.41,
         "macd": 1.0,
@@ -7077,7 +7075,7 @@
         "trend_15m": 1.0,
         "trend_1h": 1.0,
         "adx": 1.0,
-        "vwap": 0.751,
+        "vwap": 0.75,
         "rsi": 1.043,
         "macd": 1.0,
         "level": 1.0,
@@ -7087,11 +7085,11 @@
         "corr": 0.5
       },
       "sp500": {
-        "trend_5m": 0.771,
-        "trend_15m": 0.771,
-        "trend_1h": 0.771,
-        "adx": 0.771,
-        "vwap": 0.575,
+        "trend_5m": 0.773,
+        "trend_15m": 0.773,
+        "trend_1h": 0.773,
+        "adx": 0.773,
+        "vwap": 0.576,
         "rsi": 0.851,
         "macd": 1.0,
         "level": 1.0,
@@ -7109,21 +7107,21 @@
           "trend_1h",
           "adx"
         ],
-        "n": 1764,
-        "n_eff": 1470.7,
-        "mean_r": 0.0608,
-        "margin_r": 0.0671,
+        "n": 1765,
+        "n_eff": 1471.7,
+        "mean_r": 0.0601,
+        "margin_r": 0.067,
         "multiplier": 1.0
       },
       "vwap": {
         "members": [
           "vwap"
         ],
-        "n": 1631,
-        "n_eff": 1376.2,
-        "mean_r": 0.0705,
+        "n": 1632,
+        "n_eff": 1377.2,
+        "mean_r": 0.0696,
         "margin_r": 0.0699,
-        "multiplier": 1.001
+        "multiplier": 1.0
       },
       "rsi": {
         "members": [
@@ -7139,10 +7137,10 @@
         "members": [
           "macd"
         ],
-        "n": 505,
-        "n_eff": 411.7,
-        "mean_r": -0.0906,
-        "margin_r": 0.1209,
+        "n": 506,
+        "n_eff": 412.7,
+        "mean_r": -0.093,
+        "margin_r": 0.1207,
         "multiplier": 1.0
       },
       "level": {
@@ -7203,9 +7201,9 @@
         "margin_r": 0.1983
       },
       "fantômes": {
-        "n": 951,
-        "mean_r": 0.0552,
-        "margin_r": 0.0862
+        "n": 952,
+        "mean_r": 0.054,
+        "margin_r": 0.0861
       },
       "backtest": {
         "n": 650,
@@ -7309,9 +7307,9 @@
     },
     "variants_z": 2.73,
     "promoted_variants": [],
-    "updated_at": "2026-10-30T08:01:23.604492+00:00",
+    "updated_at": "2026-10-30T08:11:00.027964+00:00",
     "context": {
-      "n": 1533,
+      "n": 1534,
       "features": {
         "adx": {
           "label": "force de tendance (ADX 15 min)",
@@ -7319,31 +7317,31 @@
             {
               "label": "bas (< 27)",
               "lo": -1000000000.0,
-              "hi": 27.14,
+              "hi": 27.07,
               "n": 511,
-              "n_eff": 422.2,
-              "mean_r": -0.0423,
-              "margin_r": 0.1408,
+              "n_eff": 422.5,
+              "mean_r": -0.0467,
+              "margin_r": 0.1407,
               "avoid": false
             },
             {
               "label": "milieu (27 à 37)",
-              "lo": 27.14,
-              "hi": 37.39,
+              "lo": 27.07,
+              "hi": 37.38,
               "n": 511,
-              "n_eff": 424.9,
-              "mean_r": 0.1486,
-              "margin_r": 0.1683,
+              "n_eff": 424.5,
+              "mean_r": 0.1467,
+              "margin_r": 0.1684,
               "avoid": false
             },
             {
               "label": "haut (≥ 37)",
-              "lo": 37.39,
+              "lo": 37.38,
               "hi": 1000000000.0,
-              "n": 511,
-              "n_eff": 436.8,
-              "mean_r": 0.097,
-              "margin_r": 0.1735,
+              "n": 512,
+              "n_eff": 437.8,
+              "mean_r": 0.1004,
+              "margin_r": 0.1733,
               "avoid": false
             }
           ]
@@ -7375,10 +7373,10 @@
               "label": "haut (≥ 66)",
               "lo": 66.04,
               "hi": 1000000000.0,
-              "n": 512,
-              "n_eff": 425.4,
-              "mean_r": 0.0121,
-              "margin_r": 0.1614,
+              "n": 513,
+              "n_eff": 426.4,
+              "mean_r": 0.0094,
+              "margin_r": 0.1611,
               "avoid": false
             }
           ]
@@ -7399,21 +7397,21 @@
             {
               "label": "milieu (0,87 à 1,47)",
               "lo": 0.8736,
-              "hi": 1.4676,
-              "n": 480,
-              "n_eff": 406.6,
-              "mean_r": -0.1024,
-              "margin_r": 0.1522,
+              "hi": 1.4689,
+              "n": 481,
+              "n_eff": 407.3,
+              "mean_r": -0.1018,
+              "margin_r": 0.152,
               "avoid": false
             },
             {
               "label": "haut (≥ 1,47)",
-              "lo": 1.4676,
+              "lo": 1.4689,
               "hi": 1000000000.0,
               "n": 481,
-              "n_eff": 406.3,
-              "mean_r": 0.2578,
-              "margin_r": 0.1956,
+              "n_eff": 406.6,
+              "mean_r": 0.2542,
+              "margin_r": 0.1955,
               "avoid": false
             }
           ]
@@ -7445,10 +7443,10 @@
               "label": "haut (≥ 0,56)",
               "lo": 0.5576,
               "hi": 1000000000.0,
-              "n": 511,
-              "n_eff": 430.5,
-              "mean_r": 0.1541,
-              "margin_r": 0.1813,
+              "n": 512,
+              "n_eff": 431.5,
+              "mean_r": 0.151,
+              "margin_r": 0.1811,
               "avoid": false
             }
           ]
@@ -7470,10 +7468,10 @@
               "label": "milieu (1,09 à 1,45)",
               "lo": 1.091,
               "hi": 1.445,
-              "n": 511,
-              "n_eff": 420.7,
-              "mean_r": 0.0365,
-              "margin_r": 0.1558,
+              "n": 512,
+              "n_eff": 421.7,
+              "mean_r": 0.0337,
+              "margin_r": 0.1555,
               "avoid": false
             },
             {
@@ -7495,10 +7493,10 @@
               "label": "bas (< 1,02)",
               "lo": -1000000000.0,
               "hi": 1.022,
-              "n": 456,
-              "n_eff": 387.5,
-              "mean_r": -0.0144,
-              "margin_r": 0.1595,
+              "n": 457,
+              "n_eff": 388.5,
+              "mean_r": -0.0173,
+              "margin_r": 0.1593,
               "avoid": false
             },
             {
@@ -7539,21 +7537,21 @@
             {
               "label": "milieu (0,37 à 0,63)",
               "lo": 0.3696,
-              "hi": 0.6305,
+              "hi": 0.6303,
               "n": 511,
-              "n_eff": 440.1,
-              "mean_r": 0.0708,
-              "margin_r": 0.1652,
+              "n_eff": 440.4,
+              "mean_r": 0.0692,
+              "margin_r": 0.1651,
               "avoid": false
             },
             {
               "label": "haut (≥ 0,63)",
-              "lo": 0.6305,
+              "lo": 0.6303,
               "hi": 1000000000.0,
-              "n": 511,
-              "n_eff": 418.2,
-              "mean_r": 0.0105,
-              "margin_r": 0.1417,
+              "n": 512,
+              "n_eff": 418.9,
+              "mean_r": 0.0093,
+              "margin_r": 0.1416,
               "avoid": false
             }
           ]
@@ -7575,10 +7573,10 @@
               "label": "milieu (0,08 à 0,13)",
               "lo": 0.0789,
               "hi": 0.1274,
-              "n": 511,
-              "n_eff": 422.5,
-              "mean_r": 0.1361,
-              "margin_r": 0.161,
+              "n": 512,
+              "n_eff": 423.5,
+              "mean_r": 0.1329,
+              "margin_r": 0.1608,
               "avoid": false
             },
             {
@@ -7600,10 +7598,10 @@
               "label": "plus de 30 min avant l'ouverture US",
               "lo": -1000000000.0,
               "hi": -30.0,
-              "n": 546,
-              "n_eff": 464.0,
-              "mean_r": -0.196,
-              "margin_r": 0.1263,
+              "n": 547,
+              "n_eff": 465.0,
+              "mean_r": -0.1981,
+              "margin_r": 0.1261,
               "avoid": true
             },
             {
@@ -7675,10 +7673,10 @@
               "label": "vendredi",
               "lo": 4,
               "hi": 5,
-              "n": 312,
-              "n_eff": 255.1,
-              "mean_r": 0.271,
-              "margin_r": 0.2066,
+              "n": 313,
+              "n_eff": 256.1,
+              "mean_r": 0.2654,
+              "margin_r": 0.2063,
               "avoid": false
             },
             {
@@ -7718,8 +7716,8 @@
           "lo": -1000000000.0,
           "hi": -30.0,
           "label": "minutes depuis l'ouverture américaine : plus de 30 min avant l'ouverture US",
-          "mean_r": -0.196,
-          "n": 546
+          "mean_r": -0.1981,
+          "n": 547
         },
         {
           "feature": "weekday",
@@ -7733,32 +7731,32 @@
     },
     "exits": {
       "réels et en ombre": {
-        "n": 884,
-        "current_net_r": -0.0069,
-        "mfe_median": 0.898,
+        "n": 885,
+        "current_net_r": -0.0082,
+        "mfe_median": 0.893,
         "sl_reached": {
           "0.5": 176,
           "0.8": 97,
           "1.0": 68
         },
-        "n_sl": 459,
+        "n_sl": 460,
         "rules": {
           "0.5": {
-            "net_r": -0.0348,
+            "net_r": -0.0361,
             "diff_r": -0.0279,
-            "margin_r": 0.0566,
+            "margin_r": 0.0565,
             "better": false
           },
           "0.8": {
-            "net_r": -0.0567,
-            "diff_r": -0.0498,
-            "margin_r": 0.046,
+            "net_r": -0.058,
+            "diff_r": -0.0497,
+            "margin_r": 0.0459,
             "better": false
           },
           "1.0": {
-            "net_r": -0.0607,
-            "diff_r": -0.0538,
-            "margin_r": 0.0413,
+            "net_r": -0.062,
+            "diff_r": -0.0537,
+            "margin_r": 0.0412,
             "better": false
           }
         }
@@ -7863,10 +7861,10 @@
     }
   },
   "state": {
-    "last_scan": "2026-10-30T08:05:47Z",
+    "last_scan": "2026-10-30T08:10:58Z",
     "last_scan_note": "0 signal(aux)",
     "last_summary": "2026-10-29T23:05:49Z",
-    "last_track": "2026-10-30T08:05:47Z",
+    "last_track": "2026-10-30T08:10:58Z",
     "last_summary_day": "2026-10-29"
   },
   "limits": {
@@ -20908,22 +20906,22 @@
           "r_bot": 0.0257
         },
         {
-          "entry_ts": 1793332800,
-          "entry_at": "2026-10-30T04:00:00Z",
+          "entry_ts": 1793322000,
+          "entry_at": "2026-10-30T01:00:00Z",
           "direction": "short",
-          "entry": 4004.300048828125,
-          "risk": 29.984487,
-          "stop": 4034.284536,
+          "entry": 4016.0,
+          "risk": 30.651689,
+          "stop": 4046.651689,
           "status": "open",
           "reason": null,
           "exit_ts": null,
           "exit": null,
-          "last": 3993.0,
+          "last": 3989.89990234375,
           "r_topstep": null,
           "r_bot": null
         }
       ],
-      "checked_hour": "2026-10-30T07:00:00Z",
+      "checked_hour": "2026-10-30T08:00:00Z",
       "n": 13,
       "mean_r": -0.0493,
       "live": false
@@ -21224,7 +21222,7 @@
         }
       ],
       "live": false,
-      "checked_hour": "2026-10-30T07:00:00Z",
+      "checked_hour": "2026-10-30T08:00:00Z",
       "n": 19,
       "mean_r": -0.2513
     },
@@ -21427,404 +21425,404 @@
         }
       ],
       "live": false,
-      "checked_hour": "2026-10-30T07:00:00Z",
+      "checked_hour": "2026-10-30T08:00:00Z",
       "n": 12,
       "mean_r": 0.3177,
       "levels": {
         "kind": "bands",
         "open_ts": 1793280600,
-        "open": 29611.0,
-        "prev_close": 29990.5,
+        "open": 29610.75,
+        "prev_close": 29990.75,
         "points": [
           [
             1793280900,
-            30019.9045,
-            29581.9676
+            30020.0191,
+            29581.8517
           ],
           [
             1793281200,
-            30049.3814,
-            29552.8637
+            30049.2476,
+            29552.9936
           ],
           [
             1793281500,
-            30065.9469,
-            29536.5078
+            30066.1826,
+            29536.2731
           ],
           [
             1793281800,
-            30064.2488,
-            29538.1845
+            30063.8022,
+            29538.6234
           ],
           [
             1793282100,
-            30069.6986,
-            29532.8036
+            30069.3931,
+            29533.1033
           ],
           [
             1793282400,
-            30068.7034,
-            29533.7862
+            30068.7291,
+            29533.7589
           ],
           [
             1793282700,
-            30068.5844,
-            29533.9037
+            30068.3896,
+            29534.0941
           ],
           [
             1793283000,
-            30084.9362,
-            29517.7588
+            30084.7421,
+            29517.9488
           ],
           [
             1793283300,
-            30087.8993,
-            29514.8332
+            30087.4686,
+            29515.2569
           ],
           [
             1793283600,
-            30091.5948,
-            29511.1845
+            30091.095,
+            29511.6765
           ],
           [
             1793283900,
-            30097.1585,
-            29505.6911
+            30097.1091,
+            29505.7385
           ],
           [
             1793284200,
-            30106.981,
-            29495.993
+            30106.9331,
+            29496.039
           ],
           [
             1793284500,
-            30098.5264,
-            29504.3406
+            30098.604,
+            29504.2626
           ],
           [
             1793284800,
-            30119.9351,
-            29483.2028
+            30119.9569,
+            29483.1803
           ],
           [
             1793285100,
-            30126.4813,
-            29476.7395
+            30126.6139,
+            29476.6076
           ],
           [
             1793285400,
-            30135.608,
-            29467.7282
+            30135.5979,
+            29467.7374
           ],
           [
             1793285700,
-            30144.8706,
-            29458.5828
+            30144.8234,
+            29458.6288
           ],
           [
             1793286000,
-            30147.0081,
-            29456.4724
+            30147.0847,
+            29456.3962
           ],
           [
             1793286300,
-            30158.0734,
-            29445.547
+            30158.0413,
+            29445.5784
           ],
           [
             1793286600,
-            30169.5027,
-            29434.2624
+            30169.5466,
+            29434.2189
           ],
           [
             1793286900,
-            30170.4176,
-            29433.3591
+            30170.3696,
+            29433.4062
           ],
           [
             1793287200,
-            30166.2924,
-            29437.4321
+            30166.3714,
+            29437.3538
           ],
           [
             1793287500,
-            30168.7495,
-            29435.006
+            30168.8097,
+            29434.9464
           ],
           [
             1793287800,
-            30177.1014,
-            29426.7599
+            30177.1802,
+            29426.682
           ],
           [
             1793288100,
-            30170.7846,
-            29432.9967
+            30170.99,
+            29432.7937
           ],
           [
             1793288400,
-            30169.9481,
-            29433.8226
+            30170.0462,
+            29433.7256
           ],
           [
             1793288700,
-            30175.9941,
-            29427.8531
+            30176.1106,
+            29427.738
           ],
           [
             1793289000,
-            30178.2368,
-            29425.6389
+            30178.2978,
+            29425.5785
           ],
           [
             1793289300,
-            30177.1903,
-            29426.6721
+            30177.3422,
+            29426.5221
           ],
           [
             1793289600,
-            30182.8752,
-            29421.0591
+            30182.9205,
+            29421.0144
           ],
           [
             1793289900,
-            30178.184,
-            29425.6909
+            30178.2657,
+            29425.6103
           ],
           [
             1793290200,
-            30176.773,
-            29427.0841
+            30176.7814,
+            29427.0757
           ],
           [
             1793290500,
-            30173.2967,
-            29430.5164
+            30173.2692,
+            29430.5435
           ],
           [
             1793290800,
-            30170.4258,
-            29433.3509
+            30170.435,
+            29433.3417
           ],
           [
             1793291100,
-            30173.6943,
-            29430.1238
+            30173.7905,
+            29430.0287
           ],
           [
             1793291400,
-            30172.3726,
-            29431.4288
+            30172.5425,
+            29431.2609
           ],
           [
             1793291700,
-            30183.3652,
-            29420.5753
+            30183.5884,
+            29420.355
           ],
           [
             1793292000,
-            30185.5876,
-            29418.381
+            30185.706,
+            29418.2642
           ],
           [
             1793292300,
-            30184.0622,
-            29419.8871
+            30184.3397,
+            29419.6131
           ],
           [
             1793292600,
-            30183.0825,
-            29420.8545
+            30183.1627,
+            29420.7752
           ],
           [
             1793292900,
-            30173.354,
-            29430.4598
+            30173.5607,
+            29430.2556
           ],
           [
             1793293200,
-            30174.5077,
-            29429.3208
+            30174.5345,
+            29429.2942
           ],
           [
             1793293500,
-            30187.1956,
-            29416.7934
+            30187.2061,
+            29416.7831
           ],
           [
             1793293800,
-            30192.7018,
-            29411.3568
+            30192.8186,
+            29411.2417
           ],
           [
             1793294100,
-            30195.6593,
-            29408.4367
+            30195.7214,
+            29408.3757
           ],
           [
             1793294400,
-            30202.4813,
-            29401.7011
+            30202.327,
+            29401.8538
           ],
           [
             1793294700,
-            30199.0782,
-            29405.0612
+            30199.2685,
+            29404.8736
           ],
           [
             1793295000,
-            30199.3243,
-            29404.8182
+            30199.3151,
+            29404.8276
           ],
           [
             1793295300,
-            30193.0561,
-            29411.0071
+            30193.1589,
+            29410.9057
           ],
           [
             1793295600,
-            30200.6409,
-            29403.5182
+            30200.9025,
+            29403.2603
           ],
           [
             1793295900,
-            30199.7913,
-            29404.3571
+            30200.0166,
+            29404.1349
           ],
           [
             1793296200,
-            30204.8183,
-            29399.3936
+            30204.9735,
+            29399.2409
           ],
           [
             1793296500,
-            30206.8092,
-            29397.428
+            30206.9966,
+            29397.2434
           ],
           [
             1793296800,
-            30212.5156,
-            29391.7938
+            30212.6335,
+            29391.6779
           ],
           [
             1793297100,
-            30214.5944,
-            29389.7413
+            30214.732,
+            29389.606
           ],
           [
             1793297400,
-            30216.1437,
-            29388.2116
+            30216.2432,
+            29388.114
           ],
           [
             1793297700,
-            30209.488,
-            29394.7831
+            30209.6059,
+            29394.6672
           ],
           [
             1793298000,
-            30209.7672,
-            29394.5074
+            30209.903,
+            29394.3738
           ],
           [
             1793298300,
-            30207.5796,
-            29396.6674
+            30207.6617,
+            29396.5867
           ],
           [
             1793298600,
-            30211.1792,
-            29393.1133
+            30211.2589,
+            29393.0351
           ],
           [
             1793298900,
-            30212.5138,
-            29391.7955
+            30212.5037,
+            29391.8061
           ],
           [
             1793299200,
-            30205.574,
-            29398.6476
+            30205.7472,
+            29398.477
           ],
           [
             1793299500,
-            30201.5718,
-            29402.5991
+            30201.8509,
+            29402.3239
           ],
           [
             1793299800,
-            30200.8046,
-            29403.3566
+            30201.0987,
+            29403.0666
           ],
           [
             1793300100,
-            30208.5552,
-            29395.7041
+            30208.6379,
+            29395.6228
           ],
           [
             1793300400,
-            30207.4932,
-            29396.7526
+            30207.6303,
+            29396.6177
           ],
           [
             1793300700,
-            30210.8331,
-            29393.455
+            30211.061,
+            29393.2305
           ],
           [
             1793301000,
-            30219.6473,
-            29384.7523
+            30219.6438,
+            29384.7564
           ],
           [
             1793301300,
-            30213.4182,
-            29390.9026
+            30213.592,
+            29390.7315
           ],
           [
             1793301600,
-            30216.1633,
-            29388.1923
+            30216.2671,
+            29388.0903
           ],
           [
             1793301900,
-            30215.1861,
-            29389.1571
+            30215.2493,
+            29389.0952
           ],
           [
             1793302200,
-            30207.263,
-            29396.98
+            30207.4507,
+            29396.795
           ],
           [
             1793302500,
-            30216.3208,
-            29388.0368
+            30216.6545,
+            29387.7078
           ],
           [
             1793302800,
-            30226.2024,
-            29378.2802
+            30226.2858,
+            29378.1986
           ],
           [
             1793303100,
-            30226.1707,
-            29378.3114
+            30226.2527,
+            29378.2313
           ],
           [
             1793303400,
-            30224.7987,
-            29379.6661
+            30224.8578,
+            29379.6084
           ],
           [
             1793303700,
-            30208.7994,
-            29395.4629
+            30209.2042,
+            29395.0637
           ],
           [
             1793304000,
-            30208.0233,
-            29396.2293
+            30208.1783,
+            29396.0767
           ]
         ]
       }
@@ -22092,404 +22090,404 @@
         }
       ],
       "live": true,
-      "checked_hour": "2026-10-30T07:30:00Z",
+      "checked_hour": "2026-10-30T08:00:00Z",
       "n": 13,
       "mean_r": 0.4714,
       "levels": {
         "kind": "bands",
         "open_ts": 1793280600,
-        "open": 29611.0,
-        "prev_close": 29990.5,
+        "open": 29610.75,
+        "prev_close": 29990.75,
         "points": [
           [
             1793280900,
-            30019.9045,
-            29581.9676
+            30020.0191,
+            29581.8517
           ],
           [
             1793281200,
-            30049.3814,
-            29552.8637
+            30049.2476,
+            29552.9936
           ],
           [
             1793281500,
-            30065.9469,
-            29536.5078
+            30066.1826,
+            29536.2731
           ],
           [
             1793281800,
-            30064.2488,
-            29538.1845
+            30063.8022,
+            29538.6234
           ],
           [
             1793282100,
-            30069.6986,
-            29532.8036
+            30069.3931,
+            29533.1033
           ],
           [
             1793282400,
-            30068.7034,
-            29533.7862
+            30068.7291,
+            29533.7589
           ],
           [
             1793282700,
-            30068.5844,
-            29533.9037
+            30068.3896,
+            29534.0941
           ],
           [
             1793283000,
-            30084.9362,
-            29517.7588
+            30084.7421,
+            29517.9488
           ],
           [
             1793283300,
-            30087.8993,
-            29514.8332
+            30087.4686,
+            29515.2569
           ],
           [
             1793283600,
-            30091.5948,
-            29511.1845
+            30091.095,
+            29511.6765
           ],
           [
             1793283900,
-            30097.1585,
-            29505.6911
+            30097.1091,
+            29505.7385
           ],
           [
             1793284200,
-            30106.981,
-            29495.993
+            30106.9331,
+            29496.039
           ],
           [
             1793284500,
-            30098.5264,
-            29504.3406
+            30098.604,
+            29504.2626
           ],
           [
             1793284800,
-            30119.9351,
-            29483.2028
+            30119.9569,
+            29483.1803
           ],
           [
             1793285100,
-            30126.4813,
-            29476.7395
+            30126.6139,
+            29476.6076
           ],
           [
             1793285400,
-            30135.608,
-            29467.7282
+            30135.5979,
+            29467.7374
           ],
           [
             1793285700,
-            30144.8706,
-            29458.5828
+            30144.8234,
+            29458.6288
           ],
           [
             1793286000,
-            30147.0081,
-            29456.4724
+            30147.0847,
+            29456.3962
           ],
           [
             1793286300,
-            30158.0734,
-            29445.547
+            30158.0413,
+            29445.5784
           ],
           [
             1793286600,
-            30169.5027,
-            29434.2624
+            30169.5466,
+            29434.2189
           ],
           [
             1793286900,
-            30170.4176,
-            29433.3591
+            30170.3696,
+            29433.4062
           ],
           [
             1793287200,
-            30166.2924,
-            29437.4321
+            30166.3714,
+            29437.3538
           ],
           [
             1793287500,
-            30168.7495,
-            29435.006
+            30168.8097,
+            29434.9464
           ],
           [
             1793287800,
-            30177.1014,
-            29426.7599
+            30177.1802,
+            29426.682
           ],
           [
             1793288100,
-            30170.7846,
-            29432.9967
+            30170.99,
+            29432.7937
           ],
           [
             1793288400,
-            30169.9481,
-            29433.8226
+            30170.0462,
+            29433.7256
           ],
           [
             1793288700,
-            30175.9941,
-            29427.8531
+            30176.1106,
+            29427.738
           ],
           [
             1793289000,
-            30178.2368,
-            29425.6389
+            30178.2978,
+            29425.5785
           ],
           [
             1793289300,
-            30177.1903,
-            29426.6721
+            30177.3422,
+            29426.5221
           ],
           [
             1793289600,
-            30182.8752,
-            29421.0591
+            30182.9205,
+            29421.0144
           ],
           [
             1793289900,
-            30178.184,
-            29425.6909
+            30178.2657,
+            29425.6103
           ],
           [
             1793290200,
-            30176.773,
-            29427.0841
+            30176.7814,
+            29427.0757
           ],
           [
             1793290500,
-            30173.2967,
-            29430.5164
+            30173.2692,
+            29430.5435
           ],
           [
             1793290800,
-            30170.4258,
-            29433.3509
+            30170.435,
+            29433.3417
           ],
           [
             1793291100,
-            30173.6943,
-            29430.1238
+            30173.7905,
+            29430.0287
           ],
           [
             1793291400,
-            30172.3726,
-            29431.4288
+            30172.5425,
+            29431.2609
           ],
           [
             1793291700,
-            30183.3652,
-            29420.5753
+            30183.5884,
+            29420.355
           ],
           [
             1793292000,
-            30185.5876,
-            29418.381
+            30185.706,
+            29418.2642
           ],
           [
             1793292300,
-            30184.0622,
-            29419.8871
+            30184.3397,
+            29419.6131
           ],
           [
             1793292600,
-            30183.0825,
-            29420.8545
+            30183.1627,
+            29420.7752
           ],
           [
             1793292900,
-            30173.354,
-            29430.4598
+            30173.5607,
+            29430.2556
           ],
           [
             1793293200,
-            30174.5077,
-            29429.3208
+            30174.5345,
+            29429.2942
           ],
           [
             1793293500,
-            30187.1956,
-            29416.7934
+            30187.2061,
+            29416.7831
           ],
           [
             1793293800,
-            30192.7018,
-            29411.3568
+            30192.8186,
+            29411.2417
           ],
           [
             1793294100,
-            30195.6593,
-            29408.4367
+            30195.7214,
+            29408.3757
           ],
           [
             1793294400,
-            30202.4813,
-            29401.7011
+            30202.327,
+            29401.8538
           ],
           [
             1793294700,
-            30199.0782,
-            29405.0612
+            30199.2685,
+            29404.8736
           ],
           [
             1793295000,
-            30199.3243,
-            29404.8182
+            30199.3151,
+            29404.8276
           ],
           [
             1793295300,
-            30193.0561,
-            29411.0071
+            30193.1589,
+            29410.9057
           ],
           [
             1793295600,
-            30200.6409,
-            29403.5182
+            30200.9025,
+            29403.2603
           ],
           [
             1793295900,
-            30199.7913,
-            29404.3571
+            30200.0166,
+            29404.1349
           ],
           [
             1793296200,
-            30204.8183,
-            29399.3936
+            30204.9735,
+            29399.2409
           ],
           [
             1793296500,
-            30206.8092,
-            29397.428
+            30206.9966,
+            29397.2434
           ],
           [
             1793296800,
-            30212.5156,
-            29391.7938
+            30212.6335,
+            29391.6779
           ],
           [
             1793297100,
-            30214.5944,
-            29389.7413
+            30214.732,
+            29389.606
           ],
           [
             1793297400,
-            30216.1437,
-            29388.2116
+            30216.2432,
+            29388.114
           ],
           [
             1793297700,
-            30209.488,
-            29394.7831
+            30209.6059,
+            29394.6672
           ],
           [
             1793298000,
-            30209.7672,
-            29394.5074
+            30209.903,
+            29394.3738
           ],
           [
             1793298300,
-            30207.5796,
-            29396.6674
+            30207.6617,
+            29396.5867
           ],
           [
             1793298600,
-            30211.1792,
-            29393.1133
+            30211.2589,
+            29393.0351
           ],
           [
             1793298900,
-            30212.5138,
-            29391.7955
+            30212.5037,
+            29391.8061
           ],
           [
             1793299200,
-            30205.574,
-            29398.6476
+            30205.7472,
+            29398.477
           ],
           [
             1793299500,
-            30201.5718,
-            29402.5991
+            30201.8509,
+            29402.3239
           ],
           [
             1793299800,
-            30200.8046,
-            29403.3566
+            30201.0987,
+            29403.0666
           ],
           [
             1793300100,
-            30208.5552,
-            29395.7041
+            30208.6379,
+            29395.6228
           ],
           [
             1793300400,
-            30207.4932,
-            29396.7526
+            30207.6303,
+            29396.6177
           ],
           [
             1793300700,
-            30210.8331,
-            29393.455
+            30211.061,
+            29393.2305
           ],
           [
             1793301000,
-            30219.6473,
-            29384.7523
+            30219.6438,
+            29384.7564
           ],
           [
             1793301300,
-            30213.4182,
-            29390.9026
+            30213.592,
+            29390.7315
           ],
           [
             1793301600,
-            30216.1633,
-            29388.1923
+            30216.2671,
+            29388.0903
           ],
           [
             1793301900,
-            30215.1861,
-            29389.1571
+            30215.2493,
+            29389.0952
           ],
           [
             1793302200,
-            30207.263,
-            29396.98
+            30207.4507,
+            29396.795
           ],
           [
             1793302500,
-            30216.3208,
-            29388.0368
+            30216.6545,
+            29387.7078
           ],
           [
             1793302800,
-            30226.2024,
-            29378.2802
+            30226.2858,
+            29378.1986
           ],
           [
             1793303100,
-            30226.1707,
-            29378.3114
+            30226.2527,
+            29378.2313
           ],
           [
             1793303400,
-            30224.7987,
-            29379.6661
+            30224.8578,
+            29379.6084
           ],
           [
             1793303700,
-            30208.7994,
-            29395.4629
+            30209.2042,
+            29395.0637
           ],
           [
             1793304000,
-            30208.0233,
-            29396.2293
+            30208.1783,
+            29396.0767
           ]
         ]
       }
@@ -22786,7 +22784,7 @@
         }
       ],
       "live": true,
-      "checked_hour": "2026-10-30T07:45:00Z",
+      "checked_hour": "2026-10-30T08:00:00Z",
       "n": 10,
       "mean_r": -0.5024,
       "levels": {
