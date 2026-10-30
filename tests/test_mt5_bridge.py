@@ -154,10 +154,23 @@ def test_account_summary_for_traders_page(tmp_path):
     mt5.deals = [NS(position_id=6, symbol="XAUUSD+", profit=-3.0, commission=-0.07, swap=0.0, time=NOW + OFFSET - 3600,
                     magic=200001, entry=1),
                  NS(position_id=6, symbol="XAUUSD+", profit=0.0, commission=-0.07, swap=0.0, time=NOW + OFFSET - 4000,
-                    magic=200001, entry=0),
+                    magic=200001, entry=0, comment="lab:nuit_asie:1760356805"),
                  NS(position_id=9, symbol="NAS100", profit=0.0, commission=0.0, swap=0.0, time=NOW + OFFSET - 60,
                     magic=777002, entry=0)]                                       # encore ouverte : pas comptée
     s = bridge(tmp_path, mt5, "demo").account_summary()
-    assert s["bal"] == 998.7 and s["d"] == [[NOW - 3600, -3.14, 200001, "XAUUSD+"]] and "login" not in json.dumps(s)
+    assert s["bal"] == 998.7 and s["d"] == [[NOW - 3600, -3.14, 200001, "XAUUSD+", "lab:nuit_asie:1760356805"]] and "login" not in json.dumps(s)
     mt5.account_info = lambda: NS(trade_mode=2, balance=1.0, equity=1.0)
     assert bridge(tmp_path, mt5, "demo").account_summary() is None             # jamais un compte réel
+
+
+def test_history_uses_the_fixed_server_offset_when_the_market_is_closed(tmp_path):
+    """30/10/2026 au soir : marché fermé, l'heure déduite de la dernière cotation était fausse (trades décalés)."""
+    mt5 = FakeMT5()
+    mt5.account_info = lambda: NS(trade_mode=0, balance=998.7, equity=998.7, login=1)
+    mt5.deals = [NS(position_id=6, symbol="NAS100", profit=-10.0, commission=0.0, swap=0.0, time=NOW + OFFSET - 600,
+                    magic=777002, entry=1, comment="")]
+    b = bridge(tmp_path, mt5, "demo")
+    b.offset = lambda: None                                                      # plus de cotation récente
+    assert b.server_offset() == OFFSET and b.account_summary()["d"][0][0] == NOW - 600
+    b.clock = lambda: NOW + 30 * 86400                                           # novembre : heure d'hiver, UTC+2
+    assert b.server_offset() == 2 * 3600

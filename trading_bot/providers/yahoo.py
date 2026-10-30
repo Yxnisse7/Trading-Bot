@@ -36,7 +36,31 @@ def parse_chart(payload: dict[str, Any], interval: str | None = None) -> list[Ca
         v = q.get("volume", [None] * len(ts))[i] or 0.0
         candles.append(Candle(ts=int(t), open=float(o), high=float(h), low=float(l),
                               close=float(c), volume=float(v)))
-    return candles
+    return fix_bad_opens(candles)
+
+
+BAD_GAP = 0.02        # ouverture à plus de 2 % de la clôture d'avant…
+BAD_BACK = 0.3        # …alors que la bougie finit à moins de 30 % de cet écart : prix d'ouverture faux
+
+
+def fix_bad_opens(candles: list[Candle]) -> list[Candle]:
+    """Corrige les ouvertures fausses de Yahoo. Le 30/10/2026 à 19:00 UTC, la bougie 5 min du Nasdaq ouvrait à
+    29 562 (prix de la veille) pour une clôture d'avant à 28 234 et une fin à 28 307 : un faux sommet de 1 300
+    points qui a déclenché un SL qui n'a jamais existé (même chose sur le S&P 500). Un vrai trou d'ouverture
+    reste loin de la clôture d'avant ; celui-ci revient aussitôt. L'ouverture prend la clôture d'avant et le
+    plus haut (ou le plus bas) faux est ramené dans la bougie."""
+    out = candles[:1]
+    for c in candles[1:]:
+        pc = out[-1].close
+        gap = c.open - pc
+        if pc and abs(gap) > BAD_GAP * pc and abs(c.close - pc) < BAD_BACK * abs(gap):
+            if gap > 0:                                   # faux sommet : le plus haut vient de l'ouverture
+                hi, lo = max(pc, c.close), min(c.low, pc)
+            else:                                         # faux creux
+                hi, lo = max(c.high, pc), min(pc, c.close)
+            c = Candle(ts=c.ts, open=pc, high=hi, low=lo, close=c.close, volume=c.volume)
+        out.append(c)
+    return out
 
 
 def fetch_candles(symbol: str, interval: str = "5m", range_: str = "5d") -> list[Candle]:

@@ -1767,7 +1767,7 @@ class Engine:
                         "label": "agent IA (chasse)" if tag == "ag" else "agent IA (méthode Hugo)"})
         return out
 
-    def agent_accounts(self, demo: dict[str, Any] | None = None) -> int:
+    def agent_accounts(self, demo: dict[str, Any] | None = None, now: datetime | None = None) -> int:
         """Reporte les trades de l'agent IA dans la Simulation et le compte Topstep. Renvoie le nombre de changements."""
         if not self.TOPSTEP:
             return 0
@@ -1780,13 +1780,25 @@ class Engine:
         from .topstep import PRODUCTS, in_session
         if self.portfolio.store is not self.store:            # magasin remplacé après coup (tests, outils)
             self.portfolio = Portfolio(self.store, self.cfg)
+        if not isinstance(demo, dict) or not demo.get("off"):
+            return 0                    # relevé d'un pont d'avant le 30/10/2026 : heures pas sûres (voir _agent_print)
         acct = None
         pf = self.portfolio.data
         done = {h["id"] for h in pf.get("history", [])} | {x.get("id") for x in pf.get("skipped", [])}
+        seen = {self._agent_print(h["asset"], h["direction"], h["entry"], h.get("exit"), h.get("opened_at"),
+                                  h.get("closed_at")) for h in pf.get("history", []) if h.get("source") == "agent"}
         changed = 0
         for t in self.agent_trades(demo):
             asset = self.cfg.assets[t["asset"]]
             opened = datetime.fromtimestamp(t["opened"], timezone.utc)
+            if t["closed"] is not None:
+                fp = self._agent_print(t["asset"], t["direction"], t["entry"], t["exit"], iso(opened),
+                                       iso(datetime.fromtimestamp(t["closed"], timezone.utc)))
+                if fp in seen and t["id"] not in done:
+                    continue                                # même trade, heures décalées (voir _agent_print)
+                seen.add(fp)
+            if max(t["opened"], t["closed"] or 0) > (now or utcnow()).timestamp() + 300:
+                continue                                    # heure dans le futur : heure du serveur mal lue
             sig = Signal(id=t["id"], asset=asset.key, asset_label=asset.label, direction=t["direction"],
                          entry=t["entry"], take_profit=t["target"] or t["entry"], stop_loss=t["stop"], risk_reward=0.0,
                          confidence="moyen", score=0.0, criteria=[], rationale=t["label"], news_context="",
@@ -1806,6 +1818,11 @@ class Engine:
             rid = acct.journal_id(asset.key, opened, t["tag"])
             if any(j["id"] == rid for j in acct.state.get("journal", [])):
                 continue
+            if t["closed"] is not None and fp in {
+                    self._agent_print(j["asset"], j["direction"], j["entry"], j.get("exit"), j.get("opened_at"),
+                                      j.get("closed_at"))
+                    for j in acct.state.get("journal", []) if j["id"].endswith(t["tag"])}:
+                continue
             row = next((r for r in acct.state.get("open_lab", []) if r["id"] == rid), None)
             micros = int(row["contracts"]) if row else self._agent_micros(asset.key, t)
             note = f"trade de l'{t['label']}"
@@ -1823,6 +1840,18 @@ class Engine:
             acct.drop_open(asset.key, opened, t["tag"])
             changed += 1
         return changed
+
+    @staticmethod
+    def _agent_print(asset: str, direction: str, entry: float, exit_: float | None, opened_at: str | None,
+                     closed_at: str | None) -> tuple | None:
+        """Empreinte d'un trade fermé de l'agent, sans son heure : actif, sens, entrée, sortie et durée à la seconde.
+        Le 30/10/2026, après la fermeture des marchés, le PC a mal lu l'heure du serveur Vantage et a envoyé les
+        mêmes trades décalés de 30 min à 3 h : chaque décalage entrait comme un nouveau trade (le −205 $ trois fois
+        en Simulation). Deux vrais trades n'ont jamais la même entrée, la même sortie et la même durée."""
+        if exit_ is None or not opened_at or not closed_at:
+            return None
+        dur = int((parse_iso(closed_at) - parse_iso(opened_at)).total_seconds())
+        return asset, direction, round(float(entry), 5), round(float(exit_), 5), dur
 
     def _agent_micros(self, asset_key: str, t: dict[str, Any]) -> int:
         from .topstep import PRODUCTS

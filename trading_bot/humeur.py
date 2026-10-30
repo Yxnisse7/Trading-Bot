@@ -30,6 +30,30 @@ CURVE_POINTS = 200
 ORIGINS = {"200001": "Copie du bot", "777001": "Claude", "777002": "Agent IA", "777003": "Méthode Hugo",
            "300001": "Copie Telegram", "0": "Manuel"}
 
+def origine(rid: str = "", source: str | None = None, note: str | None = None, comment: str = "") -> str:
+    """Même nom de provenance sur les trois comptes (demande de Yanisse, 30/10/2026) : « Bot », le nom de la
+    stratégie (« Zone de bruit v2 »…), « Agent IA », « Méthode Hugo », « Manuel ». Avant, chaque page montrait son
+    code interne (« lab », « journal », « Copie du bot »)."""
+    from .engine import LIVE_SUMMARY
+    rid, note, comment = rid or "", note or "", comment or ""
+    if rid.startswith("agent-ag") or "(chasse)" in note:
+        return "Agent IA"
+    if rid.startswith("agent-hu") or "méthode Hugo" in note:
+        return "Méthode Hugo"
+    strat = None
+    if rid.startswith("lab-"):
+        strat = rid[4:].rsplit("-", 1)[0]
+    elif note.startswith("signal réel "):
+        strat = note[12:].split(":")[0]
+    elif comment.startswith("lab:"):
+        strat = comment.split(":")[1]
+    if strat:
+        return LIVE_SUMMARY.get(strat, (strat,))[0]
+    if source == "manual":
+        return "Manuel"
+    return "Bot"
+
+
 PENSEES = {
     "serein": ["Je suis mon plan, trade après trade.", "Rien d'extraordinaire, et c'est très bien comme ça.",
                "Les règles travaillent, moi je regarde."],
@@ -201,7 +225,8 @@ def simulation(pf: dict[str, Any], now: float, scared: bool, prices: dict[str, f
     out["courbe"] = _curve([(start_ts, start)] + [(t["closed"], float(h.get("balance_after") or 0))
                                                   for t, h in zip(trades, hist)])
     out["derniers"] = [{"t": t["closed"], "pnl": round(t["pnl"], 2), "actif": h.get("asset_label") or h.get("asset"),
-                        "sens": h.get("direction"), "source": h.get("source")} for t, h in list(zip(trades, hist))[-8:]][::-1]
+                        "sens": h.get("direction"), "source": origine(h.get("id"), h.get("source"))}
+                       for t, h in list(zip(trades, hist))[-8:]][::-1]
     out["note"] = f"compte simulé · départ {start:,.0f} $ · {float(pf.get('risk_pct') or 0):g} % de risque par trade".replace(",", " ")
     return out
 
@@ -235,7 +260,8 @@ def topstep(acct: dict[str, Any], now: float, scared: bool, prices: dict[str, fl
     out["courbe"] = _curve([(start_ts, start)] + [(t["closed"], float(r.get("balance_after") or 0))
                                                   for t, r in zip(trades, trades_raw)])
     out["derniers"] = [{"t": t["closed"], "pnl": round(t["pnl"], 2), "actif": r.get("asset_label") or r.get("asset"),
-                        "sens": r.get("direction"), "source": r.get("origin")} for t, r in list(zip(trades, trades_raw))[-8:]][::-1]
+                        "sens": r.get("direction"), "source": origine(r.get("id"), r.get("origin"), r.get("note"))}
+                       for t, r in list(zip(trades, trades_raw))[-8:]][::-1]
     out["stats"]["perte_max_reste"] = acct.get("room_to_mll")
     out["stats"]["objectif"] = acct.get("target_balance")
     out["note"] = f"Combine {rules.get('account', '50K')} simulé · statut : {acct.get('status', '?')}"
@@ -245,6 +271,15 @@ def topstep(acct: dict[str, Any], now: float, scared: bool, prices: dict[str, fl
 def encode_pc(snap: dict[str, Any]) -> str:
     """Résumé compact du compte MT5 pour la variable PC_ACCOUNT (côté PC, depuis Bridge.account_summary)."""
     return json.dumps(snap, separators=(",", ":"), ensure_ascii=False)
+
+
+def _mt5_origin(d: list) -> str:
+    """Copie du bot (magic 200001) : la stratégie d'origine est lue dans le commentaire d'entrée quand le pont l'envoie."""
+    if str(d[2]) == "200001" and len(d) > 4 and d[4]:
+        return origine(comment=str(d[4]))
+    if str(d[2]) == "200001":
+        return "Bot ou stratégie"
+    return ORIGINS.get(str(d[2]), str(d[2]))
 
 
 def mt5(raw: dict[str, Any] | None, now: float, scared: bool) -> dict[str, Any] | None:
@@ -269,7 +304,7 @@ def mt5(raw: dict[str, Any] | None, now: float, scared: bool) -> dict[str, Any] 
                  floating=float(raw["eq"]) - bal if raw.get("eq") is not None and raw.get("open") else 0.0)
     out["courbe"] = _curve(pts)
     out["derniers"] = [{"t": int(d[0]), "pnl": round(float(d[1]), 2), "actif": d[3] if len(d) > 3 else None, "sens": None,
-                        "source": ORIGINS.get(str(d[2]), str(d[2]))} for d in deals[-8:]][::-1]
+                        "source": _mt5_origin(d)} for d in deals[-8:]][::-1]
     out["stats"]["equite"] = raw.get("eq")
     out["note"] = "démo Vantage MT5 · 30 derniers jours · relevé par le pont du PC"
     out["releve"] = datetime.fromtimestamp(int(raw.get("ts") or now), timezone.utc).isoformat().replace("+00:00", "Z")

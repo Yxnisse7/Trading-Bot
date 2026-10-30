@@ -117,6 +117,13 @@ class Bridge:
         off = round((tick.time - self.clock()) / 1800) * 1800
         return off if abs(tick.time - off - self.clock()) <= 180 else None
 
+    def server_offset(self) -> int:
+        """Décalage de l'heure du serveur Vantage, fixe : UTC+3 pendant l'heure d'été américaine, UTC+2 sinon. Sert
+        à dater l'historique (trades fermés, positions). `offset()` le déduit de la dernière cotation et vaut n'importe
+        quoi quand le marché est fermé : le 30/10/2026 au soir, les trades ont été envoyés décalés de 30 min à 3 h."""
+        now = datetime.fromtimestamp(self.clock(), timezone.utc)
+        return 3600 * (3 if demo_rules._us_dst(now.date()) else 2)
+
     def candles(self, offset: int) -> list[Candle]:
         rates = self.mt5.copy_rates_from_pos(self.sym, self.mt5.TIMEFRAME_M1, 0, int(self.cfg["bars"]) + 1)
         if rates is None or len(rates) < 2:
@@ -205,7 +212,7 @@ class Bridge:
         a = self.mt5.account_info()
         if a is None:
             return None
-        off = self.offset() or 0
+        off = self.server_offset()
         origin = lambda m: "Pont (or)" if m == self.magic else self.ORIGINS.get(m, f"Autre ({m})")  # noqa: E731
         pos = [{"ticket": p.ticket, "symbol": p.symbol, "side": "achat" if p.type == 0 else "vente", "volume": p.volume,
                 "open": p.price_open, "price": p.price_current, "sl": p.sl or None, "tp": p.tp or None,
@@ -221,17 +228,18 @@ class Bridge:
         return {"updated_at": datetime.fromtimestamp(now, timezone.utc).isoformat().replace("+00:00", "Z"),
                 "demo": a.trade_mode == self.mt5.ACCOUNT_TRADE_MODE_DEMO, "currency": a.currency,
                 "balance": a.balance, "equity": a.equity, "profit": a.profit, "margin_free": a.margin_free,
-                "stopped": self.stop_rule, "positions": pos, "deals": sorted(deals, key=lambda d: -d["closed"]),
+                "stopped": self.stop_rule, "off": off, "positions": pos, "deals": sorted(deals, key=lambda d: -d["closed"]),
                 "cols": self.CLOSED_COLS, "closed": self.closed_positions(off)}
 
     def account_summary(self, days: int = 30) -> dict[str, Any] | None:
         """Résumé du compte pour la page « Les traders » du site (variable PC_ACCOUNT, humeur.py) : solde, et pour
-        chaque position fermée des `days` derniers jours [fermeture UTC, résultat $ frais compris, magic, symbole].
+        chaque position fermée des `days` derniers jours [fermeture UTC, résultat $ frais compris, magic, symbole,
+        commentaire d'entrée].
         Aucun identifiant (numéro de compte, serveur)."""
         a = self.mt5.account_info()
         if a is None or a.trade_mode != self.mt5.ACCOUNT_TRADE_MODE_DEMO:
             return None
-        off = self.offset() or 0
+        off = self.server_offset()
         now = self.clock()
         lo = datetime.fromtimestamp(now + off - days * 86400, timezone.utc)
         hi = datetime.fromtimestamp(now + off + 86400, timezone.utc)
@@ -239,11 +247,13 @@ class Bridge:
         for d in self.mt5.history_deals_get(lo, hi) or []:
             if not d.symbol:
                 continue
-            row = pos.setdefault(d.position_id, [0, 0.0, d.magic, d.symbol])
+            row = pos.setdefault(d.position_id, [0, 0.0, d.magic, d.symbol, ""])
             row[1] += d.profit + d.commission + d.swap
-            if d.entry == 1:                       # sortie : heure de fermeture
+            if d.entry == 0:                       # entrée : la copie note sa source (« bot:… », « lab:<stratégie>:… »)
+                row[4] = (getattr(d, "comment", "") or "")[:26]
+            elif d.entry == 1:                     # sortie : heure de fermeture
                 row[0] = max(row[0], int(d.time) - off)
-        closed = sorted(([r[0], round(r[1], 2), r[2], r[3]] for r in pos.values() if r[0]), key=lambda r: r[0])
+        closed = sorted(([r[0], round(r[1], 2), r[2], r[3], r[4]] for r in pos.values() if r[0]), key=lambda r: r[0])
         return {"ts": int(now), "bal": round(a.balance, 2), "eq": round(a.equity, 2),
                 "open": len(self.mt5.positions_get() or []), "stop": self.stop_rule, "d": closed[-400:]}
 

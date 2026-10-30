@@ -286,6 +286,7 @@ class TopstepAccount:
                 rows.append(self._row(j["id"], j["asset"], asset.label if asset else j["asset"], symbol, mult,
                                       j["direction"], j["entry"], j["exit"], j["contracts"], j["opened_at"],
                                       j["closed_at"], "journal", "journal"))
+                rows[-1]["note"] = j.get("note")
                 continue
             _, s, fixed, origin = item
             symbol, mult = PRODUCTS[s.asset]
