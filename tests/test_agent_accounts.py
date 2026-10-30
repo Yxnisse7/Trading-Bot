@@ -100,3 +100,21 @@ def test_yahoo_bad_open_is_fixed():
     assert out[0] == c[0] and out[2] == c[2]
     gap = [Candle(1, 100.0, 100.0, 100.0, 100.0, 1.0), Candle(2, 103.0, 104.0, 102.5, 103.5, 1.0)]  # vrai trou
     assert fix_bad_opens(gap) == gap
+
+
+def test_pc_bot_trades_reach_simulation_and_topstep_by_day_only(tmp_path):
+    """Bot classique du PC (PC_TRADES) : Simulation toujours, Topstep seulement en journée."""
+    eng = _engine(tmp_path)
+    iso_ = lambda ts: datetime.fromtimestamp(ts, timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")  # noqa: E731
+    mk = lambda ts, status: {"id": f"lab-bot-{ts}", "source": "bot", "asset": "nasdaq", "direction": "short",  # noqa: E731
+                             "entry": 28322.75, "take_profit": 28073.0, "stop_loss": 28330.0, "status": status,
+                             "created_at": iso_(ts), "closed_at": iso_(ts + 3600) if status != "open" else None,
+                             "close_price": 28330.0 if status != "open" else None, "meta": {"pc": True}}
+    assert eng.agent_accounts({}, LATER, pc_bot=[mk(DAY, "sl"), mk(NIGHT, "sl")]) >= 3
+    hist = eng.portfolio.data["history"]
+    assert {h["id"] for h in hist} == {f"lab-bot-{DAY}", f"lab-bot-{NIGHT}"} and all(h["source"] == "bot" for h in hist)
+    journal = eng.topstep().state["journal"]
+    assert [j["id"][-2:] for j in journal] == ["bo"] and journal[0]["exit"] == 28330.0
+    assert eng.agent_accounts({}, LATER, pc_bot=[mk(DAY, "sl"), mk(NIGHT, "sl")]) == 0
+    from trading_bot.humeur import origine
+    assert origine(f"lab-bot-{DAY}", "bot") == "Bot" and origine(journal[0]["id"], "journal", journal[0]["note"]) == "Bot"

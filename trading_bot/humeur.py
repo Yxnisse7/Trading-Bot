@@ -47,6 +47,8 @@ def origine(rid: str = "", source: str | None = None, note: str | None = None, c
         strat = note[12:].split(":")[0]
     elif comment.startswith("lab:"):
         strat = comment.split(":")[1]
+    if strat == "bot":                     # bot classique calculé sur le PC (« lab-bot-… »)
+        return "Bot"
     if strat:
         return LIVE_SUMMARY.get(strat, (strat,))[0]
     if source == "manual":

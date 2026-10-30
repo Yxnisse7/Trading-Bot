@@ -1767,10 +1767,36 @@ class Engine:
                         "label": "agent IA (chasse)" if tag == "ag" else "agent IA (méthode Hugo)"})
         return out
 
-    def agent_accounts(self, demo: dict[str, Any] | None = None, now: datetime | None = None) -> int:
-        """Reporte les trades de l'agent IA dans la Simulation et le compte Topstep. Renvoie le nombre de changements."""
+    def pc_bot_trades(self, trades: list[dict[str, Any]] | None) -> list[dict[str, Any]]:
+        """Trades du bot classique calculés sur le PC (prix MT5, variable PC_TRADES), depuis AGENT_SINCE. PC allumé,
+        GitHub se tait sur ce bot : sans cette reprise, ils n'arrivaient ni en Simulation ni sur Topstep (30/10/2026)."""
+        out = []
+        for t in trades or []:
+            try:
+                opened = int(parse_iso(t["created_at"]).timestamp())
+                entry, stop = float(t["entry"]), float(t["stop_loss"])
+            except (KeyError, TypeError, ValueError):
+                continue
+            if t.get("asset") not in self.cfg.assets or entry == stop or opened < self.AGENT_SINCE.timestamp():
+                continue
+            done = t.get("status") != "open" and t.get("close_price") is not None and t.get("closed_at")
+            out.append({"id": t["id"], "tag": "bo", "asset": t["asset"], "direction": t["direction"], "entry": entry,
+                        "stop": stop, "target": t.get("take_profit"), "opened": opened, "source": "bot",
+                        "status": t.get("status"),
+                        "closed": int(parse_iso(t["closed_at"]).timestamp()) if done else None,
+                        "exit": float(t["close_price"]) if done else None, "label": "bot classique (PC)"})
+        return out
+
+    def agent_accounts(self, demo: dict[str, Any] | None = None, now: datetime | None = None,
+                       pc_bot: list[dict[str, Any]] | None = None) -> int:
+        """Reporte les trades de l'agent IA et du bot classique du PC dans la Simulation et le compte Topstep.
+        Renvoie le nombre de changements."""
         if not self.TOPSTEP:
             return 0
+        if pc_bot is None:
+            pc_bot = pc_link.trades(os.environ.get(pc_link.TRADES))
+            if pc_bot is None:
+                pc_bot = (self.store._read(self.store.dir / "live" / "bot_pc.json", None) or {}).get("trades")
         if demo is None:
             raw = os.environ.get("PC_DEMO")
             try:
@@ -1780,18 +1806,20 @@ class Engine:
         from .topstep import PRODUCTS, in_session
         if self.portfolio.store is not self.store:            # magasin remplacé après coup (tests, outils)
             self.portfolio = Portfolio(self.store, self.cfg)
-        if not isinstance(demo, dict) or not demo.get("off"):
-            return 0                    # relevé d'un pont d'avant le 30/10/2026 : heures pas sûres (voir _agent_print)
+        items = self.pc_bot_trades(pc_bot)
+        if isinstance(demo, dict) and demo.get("off"):  # sans « off » : pont d'avant le 30/10/2026, heures pas sûres
+            items = self.agent_trades(demo) + items
         acct = None
         pf = self.portfolio.data
         done = {h["id"] for h in pf.get("history", [])} | {x.get("id") for x in pf.get("skipped", [])}
         seen = {self._agent_print(h["asset"], h["direction"], h["entry"], h.get("exit"), h.get("opened_at"),
                                   h.get("closed_at")) for h in pf.get("history", []) if h.get("source") == "agent"}
         changed = 0
-        for t in self.agent_trades(demo):
+        for t in items:
             asset = self.cfg.assets[t["asset"]]
             opened = datetime.fromtimestamp(t["opened"], timezone.utc)
-            if t["closed"] is not None:
+            fp = None
+            if t["closed"] is not None and t["tag"] != "bo":    # empreinte : relevés MT5 de l'agent seulement
                 fp = self._agent_print(t["asset"], t["direction"], t["entry"], t["exit"], iso(opened),
                                        iso(datetime.fromtimestamp(t["closed"], timezone.utc)))
                 if fp in seen and t["id"] not in done:
@@ -1802,13 +1830,13 @@ class Engine:
             sig = Signal(id=t["id"], asset=asset.key, asset_label=asset.label, direction=t["direction"],
                          entry=t["entry"], take_profit=t["target"] or t["entry"], stop_loss=t["stop"], risk_reward=0.0,
                          confidence="moyen", score=0.0, criteria=[], rationale=t["label"], news_context="",
-                         created_at=iso(opened), expires_at=iso(opened), source="agent")
+                         created_at=iso(opened), expires_at=iso(opened), source=t.get("source", "agent"))
             if t["id"] not in done:                         # Simulation
                 if t["id"] not in pf.get("open", {}):
                     self.portfolio.on_open(sig, asset)
                     changed += 1
                 if t["closed"] is not None and t["id"] in self.portfolio.data.get("open", {}):
-                    sig.status, sig.close_price = "agent", t["exit"]
+                    sig.status, sig.close_price = t.get("status") or "agent", t["exit"]
                     sig.closed_at = iso(datetime.fromtimestamp(t["closed"], timezone.utc))
                     self.portfolio.on_close(sig, asset)
                     changed += 1
@@ -1818,14 +1846,14 @@ class Engine:
             rid = acct.journal_id(asset.key, opened, t["tag"])
             if any(j["id"] == rid for j in acct.state.get("journal", [])):
                 continue
-            if t["closed"] is not None and fp in {
+            if fp is not None and fp in {
                     self._agent_print(j["asset"], j["direction"], j["entry"], j.get("exit"), j.get("opened_at"),
                                       j.get("closed_at"))
                     for j in acct.state.get("journal", []) if j["id"].endswith(t["tag"])}:
                 continue
             row = next((r for r in acct.state.get("open_lab", []) if r["id"] == rid), None)
             micros = int(row["contracts"]) if row else self._agent_micros(asset.key, t)
-            note = f"trade de l'{t['label']}"
+            note = f"trade de l'{t['label']}" if t["tag"] != "bo" else f"signal du {t['label']}"
             if t["closed"] is None:
                 if row is None:
                     acct.set_open(asset.key, t["direction"], t["entry"], t["stop"], t["target"], micros, opened,
