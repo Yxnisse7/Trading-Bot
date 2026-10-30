@@ -1,109 +1,5 @@
 [
   {
-    "id": "5fb8056db7",
-    "asset": "gold",
-    "asset_label": "Or (XAU/USD)",
-    "direction": "short",
-    "entry": 3994.0,
-    "take_profit": 3984.8,
-    "stop_loss": 4000.1,
-    "risk_reward": 1.51,
-    "confidence": "fort",
-    "score": 6.79,
-    "criteria": [
-      "adx",
-      "macd",
-      "rsi",
-      "trend_15m",
-      "trend_1h",
-      "trend_5m",
-      "vwap"
-    ],
-    "rationale": "Vente : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 15.34 (0.38 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 85%.",
-    "news_context": "actualité calme sur les 2 dernières heures",
-    "created_at": "2026-10-30T10:35:51Z",
-    "expires_at": "2026-10-30T11:35:51Z",
-    "status": "open",
-    "closed_at": null,
-    "close_price": null,
-    "pnl_pct": null,
-    "pnl_gross_pct": null,
-    "duration_minutes": null,
-    "hourly_range": 15.341665,
-    "source": "shadow",
-    "horizon": "1h",
-    "horizon_minutes": 60,
-    "meta": {
-      "tick": 0.1,
-      "details": {
-        "trend_5m": "EMA20 3998.11 / EMA50 3999.00 (5 min)",
-        "trend_15m": "EMA20 3999.27 / EMA50 4007.53",
-        "trend_1h": "prix vs EMA20 1 h 4012.76",
-        "adx": "ADX15 18.3 (+DI 17.6 / -DI 26.1)",
-        "vwap": "VWAP jour 4003.01",
-        "rsi": "RSI14 5 min 43.2",
-        "macd": "histogramme MACD -1.0748",
-        "level": "support 3974.70 / résistance 4009.20",
-        "volume": "z-score volume -1.41",
-        "pdhl": "veille : haut 4081.00 / bas 4016.30",
-        "activity": "activité de l'heure 0.89× la moyenne",
-        "corr": "DXY -0.07 % sur 1 h"
-      },
-      "support": 3974.699951171875,
-      "resistance": 4009.199951171875,
-      "atr_5m": 4.227526045605038,
-      "atr_ratio": 0.9227847307268107,
-      "hourly_range_pct": 0.3841,
-      "adx_15m": 18.340323943570862,
-      "sigma_5m": 0.0009165152027210454,
-      "p_resolution": 0.853,
-      "p_tp_neutral": 0.345,
-      "activity_ratio": 0.885,
-      "base_minutes": 5,
-      "ctx": {
-        "adx": 18.34,
-        "rsi_dir": 56.83,
-        "vwap_ext": 0.5874,
-        "ema_ext": 0.2677,
-        "atr_ratio": 0.923,
-        "activity": 0.885,
-        "range_pct": 0.3841,
-        "cost_r": 0.131,
-        "us_open_min": -174.2,
-        "weekday": 4
-      },
-      "price_time": "2026-10-30T10:30:00Z",
-      "ctx_avoid": [
-        "volatilité du moment / moyenne 24 h : bas (< 1,09)",
-        "minutes depuis l'ouverture américaine : plus de 30 min avant l'ouverture US"
-      ],
-      "model_r": -0.104,
-      "filters": [
-        "filtre_contexte",
-        "sans_etirement_or",
-        "modele_arbres",
-        "bot_en_ombre"
-      ],
-      "filters_checked": true,
-      "variant": "modele_arbres",
-      "exc": {
-        "mfe": 0.7705,
-        "mae": 0.0,
-        "armed": {
-          "0.5": true,
-          "0.8": false,
-          "1.0": false
-        },
-        "be": {
-          "0.5": false,
-          "0.8": false,
-          "1.0": false
-        },
-        "last_ts": 1793357100
-      }
-    }
-  },
-  {
     "id": "f978185154",
     "asset": "oil",
     "asset_label": "Pétrole WTI (CL)",
@@ -177,10 +73,10 @@
       "price_time": "2026-10-30T10:30:00Z",
       "variant": "essai_oil",
       "exc": {
-        "mfe": 0.1667,
+        "mfe": 0.5278,
         "mae": 0.6111,
         "armed": {
-          "0.5": false,
+          "0.5": true,
           "0.8": false,
           "1.0": false
         },
@@ -189,7 +85,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1793357100
+        "last_ts": 1793357460
       }
     }
   }
