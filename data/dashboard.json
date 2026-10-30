@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-30T10:01:44.908705+01:00",
+  "updated_at": "2026-10-30T10:06:03.988944+01:00",
   "timezone": "Europe/Paris",
   "equity_curve": [
     {
@@ -1806,18 +1806,18 @@
       "avg_pnl_pct": 0.0047
     },
     "shadow": {
-      "n": 958,
+      "n": 959,
       "tp": 277,
-      "sl": 507,
+      "sl": 508,
       "expired": 174,
-      "win_rate": 0.35331632653061223,
-      "neutral_win_rate": 0.364,
-      "edge": -0.0107,
-      "pnl_pct": -7.9213,
-      "avg_pnl_pct": -0.0083
+      "win_rate": 0.35286624203821654,
+      "neutral_win_rate": 0.3639,
+      "edge": -0.011,
+      "pnl_pct": -8.2271,
+      "avg_pnl_pct": -0.0086
     },
     "open": 0,
-    "open_shadow": 1
+    "open_shadow": 0
   },
   "by_source": {
     "bot": {
@@ -1854,15 +1854,15 @@
       "avg_pnl_pct": 0.0
     },
     "shadow": {
-      "n": 958,
+      "n": 959,
       "tp": 277,
-      "sl": 507,
+      "sl": 508,
       "expired": 174,
-      "win_rate": 0.35331632653061223,
-      "neutral_win_rate": 0.364,
-      "edge": -0.0107,
-      "pnl_pct": -7.9213,
-      "avg_pnl_pct": -0.0083
+      "win_rate": 0.35286624203821654,
+      "neutral_win_rate": 0.3639,
+      "edge": -0.011,
+      "pnl_pct": -8.2271,
+      "avg_pnl_pct": -0.0086
     }
   },
   "by_horizon": {
@@ -1921,15 +1921,15 @@
         "avg_pnl_pct": 0.0924
       },
       "shadow": {
-        "n": 391,
+        "n": 392,
         "tp": 114,
-        "sl": 207,
+        "sl": 208,
         "expired": 70,
-        "win_rate": 0.35514018691588783,
-        "neutral_win_rate": 0.2929,
-        "edge": 0.0622,
-        "pnl_pct": 16.5425,
-        "avg_pnl_pct": 0.0423
+        "win_rate": 0.35403726708074534,
+        "neutral_win_rate": 0.2928,
+        "edge": 0.0612,
+        "pnl_pct": 16.2367,
+        "avg_pnl_pct": 0.0414
       },
       "open": 0,
       "session_utc": [
@@ -2194,15 +2194,15 @@
       "label": "Tendance 5 min",
       "weight": 1.0,
       "stats": {
-        "n": 993,
+        "n": 994,
         "tp": 308,
-        "sl": 516,
+        "sl": 517,
         "expired": 169,
-        "win_rate": 0.3737864077669903,
-        "neutral_win_rate": 0.3656,
-        "edge": 0.0082,
-        "pnl_pct": -0.0302,
-        "avg_pnl_pct": -0.0
+        "win_rate": 0.37333333333333335,
+        "neutral_win_rate": 0.3655,
+        "edge": 0.0078,
+        "pnl_pct": -0.336,
+        "avg_pnl_pct": -0.0003
       },
       "by_source": {
         "bot": {
@@ -2239,15 +2239,15 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 848,
+          "n": 849,
           "tp": 254,
-          "sl": 456,
+          "sl": 457,
           "expired": 138,
-          "win_rate": 0.35774647887323946,
-          "neutral_win_rate": 0.3598,
-          "edge": -0.0021,
-          "pnl_pct": -2.8405,
-          "avg_pnl_pct": -0.0033
+          "win_rate": 0.35724331926863573,
+          "neutral_win_rate": 0.3597,
+          "edge": -0.0025,
+          "pnl_pct": -3.1463,
+          "avg_pnl_pct": -0.0037
         }
       },
       "last_trades": [
@@ -2317,6 +2317,40 @@
           "expires_at": "2026-10-30T09:20:54Z",
           "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 15.37 (0.39 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 79%.",
           "news_context": "actualité à surveiller (score 2) : Trump’s tariffs fail to cut US trade deficit, IW report shows | Japan’s Nikkei slumps up to 3% as tech stocks tumble on AI worries",
+          "manual_exit": null
+        },
+        {
+          "id": "fb646d176a",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "short",
+          "horizon": "24h",
+          "entry": 28900.25,
+          "take_profit": 28643.75,
+          "stop_loss": 28985.75,
+          "risk_reward": 3.0,
+          "confidence": "fort",
+          "score": 6.89,
+          "criteria": [
+            "adx",
+            "macd",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.3058,
+          "pnl_gross_pct": -0.2958,
+          "duration_minutes": 33,
+          "close_price": 28985.75,
+          "created_at": "2026-10-30T08:20:54Z",
+          "closed_at": "2026-10-30T08:54:00Z",
+          "created_local": "30/10 09:20",
+          "expires_at": "2026-10-31T08:20:54Z",
+          "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 142.23 (0.49 %), TP = 50 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 36%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+          "news_context": "actualité à surveiller (score 3) : Trump’s tariffs fail to cut US trade deficit, IW report shows | Japan’s Nikkei slumps up to 3% as tech stocks tumble on AI worries",
           "manual_exit": null
         },
         {
@@ -2486,40 +2520,6 @@
           "created_local": "30/10 09:01",
           "expires_at": "2026-10-30T09:01:22Z",
           "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 16.97 (0.43 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 60%.",
-          "news_context": "actualité à surveiller (score 2) : Trump’s tariffs fail to cut US trade deficit, IW report shows | Japan’s Nikkei slumps up to 3% as tech stocks tumble on AI worries",
-          "manual_exit": null
-        },
-        {
-          "id": "6103f797e8",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 3992.7,
-          "take_profit": 3983.7,
-          "stop_loss": 3998.7,
-          "risk_reward": 1.5,
-          "confidence": "fort",
-          "score": 5.69,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "tp",
-          "pnl_pct": 0.2881,
-          "pnl_gross_pct": 0.3081,
-          "duration_minutes": 0,
-          "close_price": 3980.39990234375,
-          "created_at": "2026-10-30T07:50:57Z",
-          "closed_at": "2026-10-30T07:51:00Z",
-          "created_local": "30/10 08:50",
-          "expires_at": "2026-10-30T08:50:57Z",
-          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 15.07 (0.38 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 63%.",
           "news_context": "actualité à surveiller (score 2) : Trump’s tariffs fail to cut US trade deficit, IW report shows | Japan’s Nikkei slumps up to 3% as tech stocks tumble on AI worries",
           "manual_exit": null
         }
@@ -2530,15 +2530,15 @@
       "label": "Tendance 15 min",
       "weight": 1.0,
       "stats": {
-        "n": 1121,
+        "n": 1122,
         "tp": 335,
-        "sl": 578,
+        "sl": 579,
         "expired": 208,
-        "win_rate": 0.3669222343921139,
-        "neutral_win_rate": 0.3691,
-        "edge": -0.0022,
-        "pnl_pct": -6.9873,
-        "avg_pnl_pct": -0.0062
+        "win_rate": 0.3665207877461707,
+        "neutral_win_rate": 0.369,
+        "edge": -0.0025,
+        "pnl_pct": -7.2931,
+        "avg_pnl_pct": -0.0065
       },
       "by_source": {
         "bot": {
@@ -2575,15 +2575,15 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 958,
+          "n": 959,
           "tp": 277,
-          "sl": 507,
+          "sl": 508,
           "expired": 174,
-          "win_rate": 0.35331632653061223,
-          "neutral_win_rate": 0.364,
-          "edge": -0.0107,
-          "pnl_pct": -7.9213,
-          "avg_pnl_pct": -0.0083
+          "win_rate": 0.35286624203821654,
+          "neutral_win_rate": 0.3639,
+          "edge": -0.011,
+          "pnl_pct": -8.2271,
+          "avg_pnl_pct": -0.0086
         }
       },
       "last_trades": [
@@ -2653,6 +2653,40 @@
           "expires_at": "2026-10-30T09:20:54Z",
           "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 15.37 (0.39 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 79%.",
           "news_context": "actualité à surveiller (score 2) : Trump’s tariffs fail to cut US trade deficit, IW report shows | Japan’s Nikkei slumps up to 3% as tech stocks tumble on AI worries",
+          "manual_exit": null
+        },
+        {
+          "id": "fb646d176a",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "short",
+          "horizon": "24h",
+          "entry": 28900.25,
+          "take_profit": 28643.75,
+          "stop_loss": 28985.75,
+          "risk_reward": 3.0,
+          "confidence": "fort",
+          "score": 6.89,
+          "criteria": [
+            "adx",
+            "macd",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.3058,
+          "pnl_gross_pct": -0.2958,
+          "duration_minutes": 33,
+          "close_price": 28985.75,
+          "created_at": "2026-10-30T08:20:54Z",
+          "closed_at": "2026-10-30T08:54:00Z",
+          "created_local": "30/10 09:20",
+          "expires_at": "2026-10-31T08:20:54Z",
+          "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 142.23 (0.49 %), TP = 50 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 36%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+          "news_context": "actualité à surveiller (score 3) : Trump’s tariffs fail to cut US trade deficit, IW report shows | Japan’s Nikkei slumps up to 3% as tech stocks tumble on AI worries",
           "manual_exit": null
         },
         {
@@ -2822,40 +2856,6 @@
           "created_local": "30/10 09:01",
           "expires_at": "2026-10-30T09:01:22Z",
           "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 16.97 (0.43 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 60%.",
-          "news_context": "actualité à surveiller (score 2) : Trump’s tariffs fail to cut US trade deficit, IW report shows | Japan’s Nikkei slumps up to 3% as tech stocks tumble on AI worries",
-          "manual_exit": null
-        },
-        {
-          "id": "6103f797e8",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 3992.7,
-          "take_profit": 3983.7,
-          "stop_loss": 3998.7,
-          "risk_reward": 1.5,
-          "confidence": "fort",
-          "score": 5.69,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "tp",
-          "pnl_pct": 0.2881,
-          "pnl_gross_pct": 0.3081,
-          "duration_minutes": 0,
-          "close_price": 3980.39990234375,
-          "created_at": "2026-10-30T07:50:57Z",
-          "closed_at": "2026-10-30T07:51:00Z",
-          "created_local": "30/10 08:50",
-          "expires_at": "2026-10-30T08:50:57Z",
-          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 15.07 (0.38 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 63%.",
           "news_context": "actualité à surveiller (score 2) : Trump’s tariffs fail to cut US trade deficit, IW report shows | Japan’s Nikkei slumps up to 3% as tech stocks tumble on AI worries",
           "manual_exit": null
         }
@@ -2866,15 +2866,15 @@
       "label": "Tendance 1 h",
       "weight": 1.0,
       "stats": {
-        "n": 1105,
+        "n": 1106,
         "tp": 327,
-        "sl": 574,
+        "sl": 575,
         "expired": 204,
-        "win_rate": 0.36293007769145397,
-        "neutral_win_rate": 0.3688,
-        "edge": -0.0059,
-        "pnl_pct": -7.4597,
-        "avg_pnl_pct": -0.0068
+        "win_rate": 0.3625277161862528,
+        "neutral_win_rate": 0.3686,
+        "edge": -0.0061,
+        "pnl_pct": -7.7655,
+        "avg_pnl_pct": -0.007
       },
       "by_source": {
         "bot": {
@@ -2911,15 +2911,15 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 942,
+          "n": 943,
           "tp": 269,
-          "sl": 503,
+          "sl": 504,
           "expired": 170,
-          "win_rate": 0.3484455958549223,
-          "neutral_win_rate": 0.3635,
-          "edge": -0.0151,
-          "pnl_pct": -8.3937,
-          "avg_pnl_pct": -0.0089
+          "win_rate": 0.34799482535575677,
+          "neutral_win_rate": 0.3634,
+          "edge": -0.0154,
+          "pnl_pct": -8.6995,
+          "avg_pnl_pct": -0.0092
         }
       },
       "last_trades": [
@@ -2989,6 +2989,40 @@
           "expires_at": "2026-10-30T09:20:54Z",
           "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 15.37 (0.39 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 79%.",
           "news_context": "actualité à surveiller (score 2) : Trump’s tariffs fail to cut US trade deficit, IW report shows | Japan’s Nikkei slumps up to 3% as tech stocks tumble on AI worries",
+          "manual_exit": null
+        },
+        {
+          "id": "fb646d176a",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "short",
+          "horizon": "24h",
+          "entry": 28900.25,
+          "take_profit": 28643.75,
+          "stop_loss": 28985.75,
+          "risk_reward": 3.0,
+          "confidence": "fort",
+          "score": 6.89,
+          "criteria": [
+            "adx",
+            "macd",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.3058,
+          "pnl_gross_pct": -0.2958,
+          "duration_minutes": 33,
+          "close_price": 28985.75,
+          "created_at": "2026-10-30T08:20:54Z",
+          "closed_at": "2026-10-30T08:54:00Z",
+          "created_local": "30/10 09:20",
+          "expires_at": "2026-10-31T08:20:54Z",
+          "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 142.23 (0.49 %), TP = 50 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 36%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+          "news_context": "actualité à surveiller (score 3) : Trump’s tariffs fail to cut US trade deficit, IW report shows | Japan’s Nikkei slumps up to 3% as tech stocks tumble on AI worries",
           "manual_exit": null
         },
         {
@@ -3158,40 +3192,6 @@
           "created_local": "30/10 09:01",
           "expires_at": "2026-10-30T09:01:22Z",
           "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 16.97 (0.43 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 60%.",
-          "news_context": "actualité à surveiller (score 2) : Trump’s tariffs fail to cut US trade deficit, IW report shows | Japan’s Nikkei slumps up to 3% as tech stocks tumble on AI worries",
-          "manual_exit": null
-        },
-        {
-          "id": "6103f797e8",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 3992.7,
-          "take_profit": 3983.7,
-          "stop_loss": 3998.7,
-          "risk_reward": 1.5,
-          "confidence": "fort",
-          "score": 5.69,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "tp",
-          "pnl_pct": 0.2881,
-          "pnl_gross_pct": 0.3081,
-          "duration_minutes": 0,
-          "close_price": 3980.39990234375,
-          "created_at": "2026-10-30T07:50:57Z",
-          "closed_at": "2026-10-30T07:51:00Z",
-          "created_local": "30/10 08:50",
-          "expires_at": "2026-10-30T08:50:57Z",
-          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 15.07 (0.38 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 63%.",
           "news_context": "actualité à surveiller (score 2) : Trump’s tariffs fail to cut US trade deficit, IW report shows | Japan’s Nikkei slumps up to 3% as tech stocks tumble on AI worries",
           "manual_exit": null
         }
@@ -3202,15 +3202,15 @@
       "label": "Force de tendance (ADX)",
       "weight": 1.0,
       "stats": {
-        "n": 1121,
+        "n": 1122,
         "tp": 335,
-        "sl": 578,
+        "sl": 579,
         "expired": 208,
-        "win_rate": 0.3669222343921139,
-        "neutral_win_rate": 0.3691,
-        "edge": -0.0022,
-        "pnl_pct": -6.9873,
-        "avg_pnl_pct": -0.0062
+        "win_rate": 0.3665207877461707,
+        "neutral_win_rate": 0.369,
+        "edge": -0.0025,
+        "pnl_pct": -7.2931,
+        "avg_pnl_pct": -0.0065
       },
       "by_source": {
         "bot": {
@@ -3247,15 +3247,15 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 958,
+          "n": 959,
           "tp": 277,
-          "sl": 507,
+          "sl": 508,
           "expired": 174,
-          "win_rate": 0.35331632653061223,
-          "neutral_win_rate": 0.364,
-          "edge": -0.0107,
-          "pnl_pct": -7.9213,
-          "avg_pnl_pct": -0.0083
+          "win_rate": 0.35286624203821654,
+          "neutral_win_rate": 0.3639,
+          "edge": -0.011,
+          "pnl_pct": -8.2271,
+          "avg_pnl_pct": -0.0086
         }
       },
       "last_trades": [
@@ -3325,6 +3325,40 @@
           "expires_at": "2026-10-30T09:20:54Z",
           "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 15.37 (0.39 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 79%.",
           "news_context": "actualité à surveiller (score 2) : Trump’s tariffs fail to cut US trade deficit, IW report shows | Japan’s Nikkei slumps up to 3% as tech stocks tumble on AI worries",
+          "manual_exit": null
+        },
+        {
+          "id": "fb646d176a",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "short",
+          "horizon": "24h",
+          "entry": 28900.25,
+          "take_profit": 28643.75,
+          "stop_loss": 28985.75,
+          "risk_reward": 3.0,
+          "confidence": "fort",
+          "score": 6.89,
+          "criteria": [
+            "adx",
+            "macd",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.3058,
+          "pnl_gross_pct": -0.2958,
+          "duration_minutes": 33,
+          "close_price": 28985.75,
+          "created_at": "2026-10-30T08:20:54Z",
+          "closed_at": "2026-10-30T08:54:00Z",
+          "created_local": "30/10 09:20",
+          "expires_at": "2026-10-31T08:20:54Z",
+          "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 142.23 (0.49 %), TP = 50 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 36%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+          "news_context": "actualité à surveiller (score 3) : Trump’s tariffs fail to cut US trade deficit, IW report shows | Japan’s Nikkei slumps up to 3% as tech stocks tumble on AI worries",
           "manual_exit": null
         },
         {
@@ -3496,40 +3530,6 @@
           "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 16.97 (0.43 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 60%.",
           "news_context": "actualité à surveiller (score 2) : Trump’s tariffs fail to cut US trade deficit, IW report shows | Japan’s Nikkei slumps up to 3% as tech stocks tumble on AI worries",
           "manual_exit": null
-        },
-        {
-          "id": "6103f797e8",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 3992.7,
-          "take_profit": 3983.7,
-          "stop_loss": 3998.7,
-          "risk_reward": 1.5,
-          "confidence": "fort",
-          "score": 5.69,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "tp",
-          "pnl_pct": 0.2881,
-          "pnl_gross_pct": 0.3081,
-          "duration_minutes": 0,
-          "close_price": 3980.39990234375,
-          "created_at": "2026-10-30T07:50:57Z",
-          "closed_at": "2026-10-30T07:51:00Z",
-          "created_local": "30/10 08:50",
-          "expires_at": "2026-10-30T08:50:57Z",
-          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 15.07 (0.38 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 63%.",
-          "news_context": "actualité à surveiller (score 2) : Trump’s tariffs fail to cut US trade deficit, IW report shows | Japan’s Nikkei slumps up to 3% as tech stocks tumble on AI worries",
-          "manual_exit": null
         }
       ]
     },
@@ -3538,15 +3538,15 @@
       "label": "VWAP",
       "weight": 0.75,
       "stats": {
-        "n": 1095,
+        "n": 1096,
         "tp": 330,
-        "sl": 563,
+        "sl": 564,
         "expired": 202,
-        "win_rate": 0.36954087346024633,
-        "neutral_win_rate": 0.3681,
-        "edge": 0.0014,
-        "pnl_pct": -5.064,
-        "avg_pnl_pct": -0.0046
+        "win_rate": 0.3691275167785235,
+        "neutral_win_rate": 0.368,
+        "edge": 0.0011,
+        "pnl_pct": -5.3698,
+        "avg_pnl_pct": -0.0049
       },
       "by_source": {
         "bot": {
@@ -3583,15 +3583,15 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 934,
+          "n": 935,
           "tp": 272,
-          "sl": 494,
+          "sl": 495,
           "expired": 168,
-          "win_rate": 0.35509138381201044,
-          "neutral_win_rate": 0.3627,
-          "edge": -0.0076,
-          "pnl_pct": -6.6144,
-          "avg_pnl_pct": -0.0071
+          "win_rate": 0.3546284224250326,
+          "neutral_win_rate": 0.3626,
+          "edge": -0.008,
+          "pnl_pct": -6.9202,
+          "avg_pnl_pct": -0.0074
         }
       },
       "last_trades": [
@@ -3661,6 +3661,40 @@
           "expires_at": "2026-10-30T09:20:54Z",
           "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 15.37 (0.39 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 79%.",
           "news_context": "actualité à surveiller (score 2) : Trump’s tariffs fail to cut US trade deficit, IW report shows | Japan’s Nikkei slumps up to 3% as tech stocks tumble on AI worries",
+          "manual_exit": null
+        },
+        {
+          "id": "fb646d176a",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "short",
+          "horizon": "24h",
+          "entry": 28900.25,
+          "take_profit": 28643.75,
+          "stop_loss": 28985.75,
+          "risk_reward": 3.0,
+          "confidence": "fort",
+          "score": 6.89,
+          "criteria": [
+            "adx",
+            "macd",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.3058,
+          "pnl_gross_pct": -0.2958,
+          "duration_minutes": 33,
+          "close_price": 28985.75,
+          "created_at": "2026-10-30T08:20:54Z",
+          "closed_at": "2026-10-30T08:54:00Z",
+          "created_local": "30/10 09:20",
+          "expires_at": "2026-10-31T08:20:54Z",
+          "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 142.23 (0.49 %), TP = 50 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 36%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+          "news_context": "actualité à surveiller (score 3) : Trump’s tariffs fail to cut US trade deficit, IW report shows | Japan’s Nikkei slumps up to 3% as tech stocks tumble on AI worries",
           "manual_exit": null
         },
         {
@@ -3830,40 +3864,6 @@
           "created_local": "30/10 09:01",
           "expires_at": "2026-10-30T09:01:22Z",
           "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 16.97 (0.43 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 60%.",
-          "news_context": "actualité à surveiller (score 2) : Trump’s tariffs fail to cut US trade deficit, IW report shows | Japan’s Nikkei slumps up to 3% as tech stocks tumble on AI worries",
-          "manual_exit": null
-        },
-        {
-          "id": "6103f797e8",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 3992.7,
-          "take_profit": 3983.7,
-          "stop_loss": 3998.7,
-          "risk_reward": 1.5,
-          "confidence": "fort",
-          "score": 5.69,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "tp",
-          "pnl_pct": 0.2881,
-          "pnl_gross_pct": 0.3081,
-          "duration_minutes": 0,
-          "close_price": 3980.39990234375,
-          "created_at": "2026-10-30T07:50:57Z",
-          "closed_at": "2026-10-30T07:51:00Z",
-          "created_local": "30/10 08:50",
-          "expires_at": "2026-10-30T08:50:57Z",
-          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 15.07 (0.38 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 63%.",
           "news_context": "actualité à surveiller (score 2) : Trump’s tariffs fail to cut US trade deficit, IW report shows | Japan’s Nikkei slumps up to 3% as tech stocks tumble on AI worries",
           "manual_exit": null
         }
@@ -4210,15 +4210,15 @@
       "label": "MACD",
       "weight": 1.0,
       "stats": {
-        "n": 298,
+        "n": 299,
         "tp": 66,
-        "sl": 172,
+        "sl": 173,
         "expired": 60,
-        "win_rate": 0.2773109243697479,
-        "neutral_win_rate": 0.3709,
-        "edge": -0.0936,
-        "pnl_pct": -17.5474,
-        "avg_pnl_pct": -0.0589
+        "win_rate": 0.27615062761506276,
+        "neutral_win_rate": 0.3705,
+        "edge": -0.0943,
+        "pnl_pct": -17.8532,
+        "avg_pnl_pct": -0.0597
       },
       "by_source": {
         "bot": {
@@ -4255,18 +4255,52 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 248,
+          "n": 249,
           "tp": 52,
-          "sl": 147,
+          "sl": 148,
           "expired": 49,
-          "win_rate": 0.2613065326633166,
-          "neutral_win_rate": 0.3657,
-          "edge": -0.1044,
-          "pnl_pct": -16.1047,
-          "avg_pnl_pct": -0.0649
+          "win_rate": 0.26,
+          "neutral_win_rate": 0.3652,
+          "edge": -0.1052,
+          "pnl_pct": -16.4105,
+          "avg_pnl_pct": -0.0659
         }
       },
       "last_trades": [
+        {
+          "id": "fb646d176a",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "short",
+          "horizon": "24h",
+          "entry": 28900.25,
+          "take_profit": 28643.75,
+          "stop_loss": 28985.75,
+          "risk_reward": 3.0,
+          "confidence": "fort",
+          "score": 6.89,
+          "criteria": [
+            "adx",
+            "macd",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.3058,
+          "pnl_gross_pct": -0.2958,
+          "duration_minutes": 33,
+          "close_price": 28985.75,
+          "created_at": "2026-10-30T08:20:54Z",
+          "closed_at": "2026-10-30T08:54:00Z",
+          "created_local": "30/10 09:20",
+          "expires_at": "2026-10-31T08:20:54Z",
+          "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 142.23 (0.49 %), TP = 50 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 36%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+          "news_context": "actualité à surveiller (score 3) : Trump’s tariffs fail to cut US trade deficit, IW report shows | Japan’s Nikkei slumps up to 3% as tech stocks tumble on AI worries",
+          "manual_exit": null
+        },
         {
           "id": "fa04554dce",
           "asset": "gold",
@@ -4508,42 +4542,6 @@
           "expires_at": "2026-10-28T15:50:53Z",
           "rationale": "Achat : tendance forte (ADX), MACD en expansion, cassure du range d'ouverture, RSI en momentum, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 188.15 (0.63 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 80%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
           "news_context": "actualité à surveiller (score 3) : Honda warns 50% Canada auto tariffs would be catastrophic for auto industry | S&P 500, Nasdaq advance as oil eases ahead of Fed decision",
-          "manual_exit": null
-        },
-        {
-          "id": "2e5a79937d",
-          "asset": "nasdaq",
-          "asset_label": "Nasdaq 100 (NQ)",
-          "direction": "long",
-          "horizon": "24h",
-          "entry": 29758.0,
-          "take_profit": 30096.5,
-          "stop_loss": 29645.0,
-          "risk_reward": 3.0,
-          "confidence": "fort",
-          "score": 8.75,
-          "criteria": [
-            "adx",
-            "macd",
-            "orb",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "expired",
-          "pnl_pct": 0.3311,
-          "pnl_gross_pct": 0.3411,
-          "duration_minutes": 1444,
-          "close_price": 29859.5,
-          "created_at": "2026-10-27T15:45:59Z",
-          "closed_at": "2026-10-28T15:50:57Z",
-          "created_local": "27/10 16:45",
-          "expires_at": "2026-10-28T15:45:59Z",
-          "rationale": "Achat : tendance forte (ADX), MACD en expansion, cassure du range d'ouverture, RSI en momentum, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 188.15 (0.63 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 80%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
-          "news_context": "actualité à surveiller (score 2) : S&P 500, Nasdaq advance as oil eases ahead of Fed decision",
           "manual_exit": null
         }
       ]
@@ -5244,42 +5242,7 @@
       ]
     }
   ],
-  "open_signals": [
-    {
-      "id": "fb646d176a",
-      "asset": "nasdaq",
-      "asset_label": "Nasdaq 100 (NQ)",
-      "direction": "short",
-      "horizon": "24h",
-      "entry": 28900.25,
-      "take_profit": 28643.75,
-      "stop_loss": 28985.75,
-      "risk_reward": 3.0,
-      "confidence": "fort",
-      "score": 6.89,
-      "criteria": [
-        "adx",
-        "macd",
-        "trend_15m",
-        "trend_1h",
-        "trend_5m",
-        "vwap"
-      ],
-      "source": "shadow",
-      "status": "open",
-      "pnl_pct": null,
-      "pnl_gross_pct": null,
-      "duration_minutes": null,
-      "close_price": null,
-      "created_at": "2026-10-30T08:20:54Z",
-      "closed_at": null,
-      "created_local": "30/10 09:20",
-      "expires_at": "2026-10-31T08:20:54Z",
-      "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 142.23 (0.49 %), TP = 50 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 36%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
-      "news_context": "actualité à surveiller (score 3) : Trump’s tariffs fail to cut US trade deficit, IW report shows | Japan’s Nikkei slumps up to 3% as tech stocks tumble on AI worries",
-      "manual_exit": null
-    }
-  ],
+  "open_signals": [],
   "recent_trades": [
     {
       "id": "c2cc58c85c",
@@ -6887,16 +6850,16 @@
       "tranche 11h UTC : -0,31 R sur 77 trades éq. → évitée",
       "tranche 12h UTC : -0,45 R sur 65 trades éq. → évitée",
       "tranche 19h UTC : -0,31 R sur 82 trades éq. → évitée",
-      "ethereum, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,24 R contre +0,06 R en global sur 75 trades éq. → poids ×0,82 sur cet actif",
+      "ethereum, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,24 R contre +0,05 R en global sur 75 trades éq. → poids ×0,82 sur cet actif",
       "ethereum, rsi : -0,26 R contre +0,09 R en global sur 56 trades éq. → poids ×0,77 sur cet actif",
-      "nasdaq, tendance (trend_5m, trend_15m, trend_1h, adx) : +0,30 R contre +0,06 R en global sur 469 trades éq. → poids ×1,25 sur cet actif",
-      "nasdaq, vwap : +0,31 R contre +0,06 R en global sur 462 trades éq. → poids ×1,24 sur cet actif",
+      "nasdaq, tendance (trend_5m, trend_15m, trend_1h, adx) : +0,30 R contre +0,05 R en global sur 470 trades éq. → poids ×1,25 sur cet actif",
+      "nasdaq, vwap : +0,30 R contre +0,06 R en global sur 463 trades éq. → poids ×1,23 sur cet actif",
       "nasdaq, rsi : +0,40 R contre +0,09 R en global sur 368 trades éq. → poids ×1,35 sur cet actif",
       "oil, rsi : -0,07 R contre +0,09 R en global sur 195 trades éq. → poids ×0,97 sur cet actif",
-      "sp500, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,19 R contre +0,06 R en global sur 200 trades éq. → poids ×0,78 sur cet actif",
+      "sp500, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,19 R contre +0,05 R en global sur 200 trades éq. → poids ×0,79 sur cet actif",
       "sp500, vwap : -0,18 R contre +0,06 R en global sur 195 trades éq. → poids ×0,78 sur cet actif",
       "sp500, rsi : -0,15 R contre +0,09 R en global sur 166 trades éq. → poids ×0,82 sur cet actif",
-      "variante « indices le matin européen » en test : 131 trades, -0,56 R net, pas meilleure que les signaux réels",
+      "variante « indices le matin européen » en test : 132 trades, -0,56 R net, pas meilleure que les signaux réels",
       "variante « horizon ~3 h » en test : 157 trades, -0,17 R net, pas meilleure que les signaux réels",
       "variante « confiance moyenne » en test : 68 trades, -0,01 R net, encore 32 trades avant décision",
       "variante « entrées dans l'heure avant l'ouverture américaine » en test : 11 trades, +1,54 R net, encore 89 trades avant décision",
@@ -6907,10 +6870,10 @@
       12,
       19
     ],
-    "sample": 1772,
+    "sample": 1773,
     "sample_by_source": {
       "bot": 163,
-      "shadow": 958,
+      "shadow": 959,
       "manual": 1,
       "backtest": 650
     },
@@ -6945,10 +6908,10 @@
         "corr": 0.5
       },
       "ethereum": {
-        "trend_5m": 0.82,
-        "trend_15m": 0.82,
-        "trend_1h": 0.82,
-        "adx": 0.82,
+        "trend_5m": 0.822,
+        "trend_15m": 0.822,
+        "trend_1h": 0.822,
+        "adx": 0.822,
         "vwap": 0.75,
         "rsi": 0.804,
         "macd": 1.0,
@@ -6987,11 +6950,11 @@
         "corr": 0.5
       },
       "nasdaq": {
-        "trend_5m": 1.253,
-        "trend_15m": 1.253,
-        "trend_1h": 1.253,
-        "adx": 1.253,
-        "vwap": 0.927,
+        "trend_5m": 1.249,
+        "trend_15m": 1.249,
+        "trend_1h": 1.249,
+        "adx": 1.249,
+        "vwap": 0.924,
         "rsi": 1.408,
         "macd": 1.0,
         "level": 1.0,
@@ -7015,11 +6978,11 @@
         "corr": 0.5
       },
       "sp500": {
-        "trend_5m": 0.785,
-        "trend_15m": 0.785,
-        "trend_1h": 0.785,
-        "adx": 0.785,
-        "vwap": 0.585,
+        "trend_5m": 0.787,
+        "trend_15m": 0.787,
+        "trend_1h": 0.787,
+        "adx": 0.787,
+        "vwap": 0.586,
         "rsi": 0.855,
         "macd": 1.0,
         "level": 1.0,
@@ -7037,20 +7000,20 @@
           "trend_1h",
           "adx"
         ],
-        "n": 1771,
-        "n_eff": 1477.7,
-        "mean_r": 0.0554,
-        "margin_r": 0.0669,
+        "n": 1772,
+        "n_eff": 1478.7,
+        "mean_r": 0.0547,
+        "margin_r": 0.0668,
         "multiplier": 1.0
       },
       "vwap": {
         "members": [
           "vwap"
         ],
-        "n": 1638,
-        "n_eff": 1383.2,
-        "mean_r": 0.0647,
-        "margin_r": 0.0697,
+        "n": 1639,
+        "n_eff": 1384.2,
+        "mean_r": 0.064,
+        "margin_r": 0.0696,
         "multiplier": 1.0
       },
       "rsi": {
@@ -7067,10 +7030,10 @@
         "members": [
           "macd"
         ],
-        "n": 507,
-        "n_eff": 413.7,
-        "mean_r": -0.0961,
-        "margin_r": 0.1206,
+        "n": 508,
+        "n_eff": 414.7,
+        "mean_r": -0.0983,
+        "margin_r": 0.1203,
         "multiplier": 1.0
       },
       "level": {
@@ -7131,9 +7094,9 @@
         "margin_r": 0.1983
       },
       "fantômes": {
-        "n": 958,
-        "mean_r": 0.0468,
-        "margin_r": 0.0858
+        "n": 959,
+        "mean_r": 0.0457,
+        "margin_r": 0.0857
       },
       "backtest": {
         "n": 650,
@@ -7144,9 +7107,9 @@
     "variants": {
       "hors_session": {
         "label": "indices le matin européen",
-        "n": 131,
-        "mean_net_r": -0.5551,
-        "lower_r": -0.7756,
+        "n": 132,
+        "mean_net_r": -0.5587,
+        "lower_r": -0.7778,
         "promoted": false,
         "missing": 0
       },
@@ -7237,9 +7200,9 @@
     },
     "variants_z": 2.73,
     "promoted_variants": [],
-    "updated_at": "2026-10-30T09:01:34.876664+00:00",
+    "updated_at": "2026-10-30T09:05:57.075604+00:00",
     "context": {
-      "n": 1540,
+      "n": 1541,
       "features": {
         "adx": {
           "label": "force de tendance (ADX 15 min)",
@@ -7247,21 +7210,21 @@
             {
               "label": "bas (< 27)",
               "lo": -1000000000.0,
-              "hi": 27.05,
-              "n": 513,
-              "n_eff": 424.8,
-              "mean_r": -0.0547,
-              "margin_r": 0.1403,
+              "hi": 27.04,
+              "n": 512,
+              "n_eff": 424.1,
+              "mean_r": -0.0626,
+              "margin_r": 0.1402,
               "avoid": false
             },
             {
               "label": "milieu (27 à 37)",
-              "lo": 27.05,
+              "lo": 27.04,
               "hi": 37.34,
-              "n": 513,
-              "n_eff": 426.9,
-              "mean_r": 0.137,
-              "margin_r": 0.1677,
+              "n": 515,
+              "n_eff": 428.5,
+              "mean_r": 0.1414,
+              "margin_r": 0.1673,
               "avoid": false
             },
             {
@@ -7292,21 +7255,21 @@
             {
               "label": "milieu (59 à 66)",
               "lo": 58.91,
-              "hi": 66.04,
-              "n": 514,
-              "n_eff": 425.6,
-              "mean_r": 0.1273,
-              "margin_r": 0.1793,
+              "hi": 66.07,
+              "n": 516,
+              "n_eff": 427.2,
+              "mean_r": 0.1281,
+              "margin_r": 0.1787,
               "avoid": false
             },
             {
               "label": "haut (≥ 66)",
-              "lo": 66.04,
+              "lo": 66.07,
               "hi": 1000000000.0,
-              "n": 515,
-              "n_eff": 428.4,
-              "mean_r": 0.0033,
-              "margin_r": 0.1607,
+              "n": 514,
+              "n_eff": 427.7,
+              "mean_r": -0.0004,
+              "margin_r": 0.1609,
               "avoid": false
             }
           ]
@@ -7318,10 +7281,10 @@
               "label": "bas (< 0,87)",
               "lo": -1000000000.0,
               "hi": 0.8734,
-              "n": 482,
-              "n_eff": 408.9,
-              "mean_r": 0.0661,
-              "margin_r": 0.1472,
+              "n": 483,
+              "n_eff": 409.9,
+              "mean_r": 0.0634,
+              "margin_r": 0.1469,
               "avoid": false
             },
             {
@@ -7363,10 +7326,10 @@
               "label": "milieu (0,23 à 0,56)",
               "lo": 0.2299,
               "hi": 0.5575,
-              "n": 513,
-              "n_eff": 424.1,
-              "mean_r": 0.015,
-              "margin_r": 0.1641,
+              "n": 514,
+              "n_eff": 425.1,
+              "mean_r": 0.0125,
+              "margin_r": 0.1638,
               "avoid": false
             },
             {
@@ -7388,10 +7351,10 @@
               "label": "bas (< 1,09)",
               "lo": -1000000000.0,
               "hi": 1.091,
-              "n": 512,
-              "n_eff": 440.3,
-              "mean_r": -0.1511,
-              "margin_r": 0.1269,
+              "n": 513,
+              "n_eff": 441.3,
+              "mean_r": -0.1531,
+              "margin_r": 0.1267,
               "avoid": true
             },
             {
@@ -7423,10 +7386,10 @@
               "label": "bas (< 1,02)",
               "lo": -1000000000.0,
               "hi": 1.022,
-              "n": 459,
-              "n_eff": 390.5,
-              "mean_r": -0.0239,
-              "margin_r": 0.1588,
+              "n": 460,
+              "n_eff": 391.5,
+              "mean_r": -0.0266,
+              "margin_r": 0.1585,
               "avoid": false
             },
             {
@@ -7468,10 +7431,10 @@
               "label": "milieu (0,37 à 0,63)",
               "lo": 0.3699,
               "hi": 0.6303,
-              "n": 513,
-              "n_eff": 442.4,
-              "mean_r": 0.0629,
-              "margin_r": 0.1648,
+              "n": 514,
+              "n_eff": 443.4,
+              "mean_r": 0.0605,
+              "margin_r": 0.1645,
               "avoid": false
             },
             {
@@ -7493,10 +7456,10 @@
               "label": "bas (< 0,08)",
               "lo": -1000000000.0,
               "hi": 0.0789,
-              "n": 509,
-              "n_eff": 442.6,
-              "mean_r": 0.1079,
-              "margin_r": 0.1781,
+              "n": 510,
+              "n_eff": 443.6,
+              "mean_r": 0.1054,
+              "margin_r": 0.1778,
               "avoid": false
             },
             {
@@ -7528,10 +7491,10 @@
               "label": "plus de 30 min avant l'ouverture US",
               "lo": -1000000000.0,
               "hi": -30.0,
-              "n": 553,
-              "n_eff": 470.8,
-              "mean_r": -0.2114,
-              "margin_r": 0.1251,
+              "n": 554,
+              "n_eff": 471.8,
+              "mean_r": -0.2133,
+              "margin_r": 0.1249,
               "avoid": true
             },
             {
@@ -7603,10 +7566,10 @@
               "label": "vendredi",
               "lo": 4,
               "hi": 5,
-              "n": 319,
-              "n_eff": 262.1,
-              "mean_r": 0.2325,
-              "margin_r": 0.204,
+              "n": 320,
+              "n_eff": 263.1,
+              "mean_r": 0.2275,
+              "margin_r": 0.2036,
               "avoid": false
             },
             {
@@ -7638,16 +7601,16 @@
           "lo": -1000000000.0,
           "hi": 1.091,
           "label": "volatilité du moment / moyenne 24 h : bas (< 1,09)",
-          "mean_r": -0.1511,
-          "n": 512
+          "mean_r": -0.1531,
+          "n": 513
         },
         {
           "feature": "us_open_min",
           "lo": -1000000000.0,
           "hi": -30.0,
           "label": "minutes depuis l'ouverture américaine : plus de 30 min avant l'ouverture US",
-          "mean_r": -0.2114,
-          "n": 553
+          "mean_r": -0.2133,
+          "n": 554
         },
         {
           "feature": "weekday",
@@ -7661,30 +7624,30 @@
     },
     "exits": {
       "réels et en ombre": {
-        "n": 891,
-        "current_net_r": -0.0164,
+        "n": 892,
+        "current_net_r": -0.0175,
         "mfe_median": 0.876,
         "sl_reached": {
           "0.5": 178,
           "0.8": 98,
           "1.0": 69
         },
-        "n_sl": 466,
+        "n_sl": 467,
         "rules": {
           "0.5": {
-            "net_r": -0.0418,
+            "net_r": -0.0429,
             "diff_r": -0.0254,
             "margin_r": 0.0562,
             "better": false
           },
           "0.8": {
-            "net_r": -0.0646,
-            "diff_r": -0.0483,
-            "margin_r": 0.0457,
+            "net_r": -0.0657,
+            "diff_r": -0.0482,
+            "margin_r": 0.0456,
             "better": false
           },
           "1.0": {
-            "net_r": -0.0686,
+            "net_r": -0.0697,
             "diff_r": -0.0522,
             "margin_r": 0.041,
             "better": false
@@ -7791,10 +7754,10 @@
     }
   },
   "state": {
-    "last_scan": "2026-10-30T09:01:33Z",
+    "last_scan": "2026-10-30T09:05:56Z",
     "last_scan_note": "0 signal(aux)",
     "last_summary": "2026-10-29T23:05:49Z",
-    "last_track": "2026-10-30T09:01:33Z",
+    "last_track": "2026-10-30T09:05:56Z",
     "last_summary_day": "2026-10-29"
   },
   "limits": {
@@ -19898,14 +19861,14 @@
           "entry_ts": 1793307600,
           "entry_at": "2026-10-29T21:00:00Z",
           "direction": "short",
-          "entry": 78770.6171875,
-          "risk": 1197.48709,
-          "stop": 79968.104278,
+          "entry": 78741.140625,
+          "risk": 1192.8761,
+          "stop": 79934.016725,
           "status": "open",
           "reason": null,
           "exit_ts": null,
           "exit": null,
-          "last": 77988.3828125,
+          "last": 77884.828125,
           "r_topstep": null,
           "r_bot": null,
           "notified_entry": "2026-10-29T21:05:57Z",
@@ -19914,18 +19877,13 @@
           "pc": true
         }
       ],
-      "checked_hour": "2026-10-30T08:00:00Z",
+      "checked_hour": "2026-10-30T09:00:00Z",
       "n": 21,
       "mean_r": -0.4472,
       "live": true,
       "levels": {
         "kind": "channel",
         "points": [
-          [
-            1793178000,
-            81694.3906,
-            79743.8438
-          ],
           [
             1793181600,
             81694.3906,
@@ -19944,22 +19902,22 @@
           [
             1793192400,
             81694.3906,
-            80337.0078
+            80337.0
           ],
           [
             1793196000,
             81694.3906,
-            80297.4609
+            80294.7578
           ],
           [
             1793199600,
             81694.3906,
-            80297.4609
+            80294.7578
           ],
           [
             1793203200,
             81694.3906,
-            80297.4609
+            80294.7578
           ],
           [
             1793206800,
@@ -19983,182 +19941,187 @@
           ],
           [
             1793221200,
-            81708.3984,
+            81700.0,
             80277.2031
           ],
           [
             1793224800,
-            81708.3984,
+            81700.0,
             80277.2031
           ],
           [
             1793228400,
-            81708.3984,
+            81700.0,
             80277.2031
           ],
           [
             1793232000,
-            81708.3984,
+            81700.0,
             80277.2031
           ],
           [
             1793235600,
-            81708.3984,
+            81700.0,
             80277.2031
           ],
           [
             1793239200,
-            81708.3984,
-            79881.9922
+            81700.0,
+            79874.0
           ],
           [
             1793242800,
-            81708.3984,
-            79586.1719
+            81700.0,
+            79586.1797
           ],
           [
             1793246400,
-            81708.3984,
-            79586.1719
+            81700.0,
+            79586.1797
           ],
           [
             1793250000,
-            81708.3984,
-            79586.1719
+            81700.0,
+            79586.1797
           ],
           [
             1793253600,
-            81708.3984,
-            79586.1719
+            81700.0,
+            79586.1797
           ],
           [
             1793257200,
-            81708.3984,
-            79586.1719
+            81700.0,
+            79586.1797
           ],
           [
             1793260800,
-            81708.3984,
-            79586.1719
+            81700.0,
+            79586.1797
           ],
           [
             1793264400,
-            81708.3984,
-            79586.1719
+            81700.0,
+            79586.1797
           ],
           [
             1793268000,
-            81708.3984,
-            79586.1719
+            81700.0,
+            79586.1797
           ],
           [
             1793271600,
-            81708.3984,
-            79586.1719
+            81700.0,
+            79586.1797
           ],
           [
             1793275200,
-            81708.3984,
-            79586.1719
+            81700.0,
+            79586.1797
           ],
           [
             1793278800,
-            81708.3984,
-            79586.1719
+            81700.0,
+            79586.1797
           ],
           [
             1793282400,
-            81708.3984,
-            79586.1719
+            81700.0,
+            79586.1797
           ],
           [
             1793286000,
-            81708.3984,
-            79586.1719
+            81700.0,
+            79586.1797
           ],
           [
             1793289600,
-            81810.7031,
-            79586.1719
+            81800.0,
+            79586.1797
           ],
           [
             1793293200,
-            81879.3594,
-            79586.1719
+            81870.3828,
+            79586.1797
           ],
           [
             1793296800,
-            81879.3594,
-            79586.1719
+            81870.3828,
+            79586.1797
           ],
           [
             1793300400,
-            81879.3594,
-            79586.1719
+            81870.3828,
+            79586.1797
           ],
           [
             1793304000,
-            81879.3594,
-            79586.1719
+            81870.3828,
+            79586.1797
           ],
           [
             1793307600,
-            81879.3594,
-            78243.2578
+            81870.3828,
+            78282.7969
           ],
           [
             1793311200,
-            81879.3594,
-            78243.2578
+            81870.3828,
+            78282.7969
           ],
           [
             1793314800,
-            81879.3594,
-            78243.2578
+            81870.3828,
+            78282.7969
           ],
           [
             1793318400,
-            81879.3594,
-            77699.0312
+            81870.3828,
+            77700.0
           ],
           [
             1793322000,
-            81879.3594,
-            76622.2578
+            81870.3828,
+            76611.7031
           ],
           [
             1793325600,
-            81879.3594,
-            76481.1172
+            81870.3828,
+            76479.0781
           ],
           [
             1793329200,
-            81879.3594,
+            81870.3828,
             76324.9219
           ],
           [
             1793332800,
-            81879.3594,
+            81870.3828,
             76324.9219
           ],
           [
             1793336400,
-            81879.3594,
+            81870.3828,
             76324.9219
           ],
           [
             1793340000,
-            81879.3594,
+            81870.3828,
             76324.9219
           ],
           [
             1793343600,
-            81879.3594,
+            81870.3828,
             76324.9219
           ],
           [
             1793347200,
-            81879.3594,
+            81870.3828,
+            76324.9219
+          ],
+          [
+            1793350800,
+            81870.3828,
             76324.9219
           ]
         ]
@@ -22507,7 +22470,7 @@
         }
       ],
       "live": true,
-      "checked_hour": "2026-10-30T08:45:00Z",
+      "checked_hour": "2026-10-30T09:00:00Z",
       "n": 4,
       "mean_r": -0.7772
     },
@@ -22868,16 +22831,16 @@
         }
       ],
       "live": true,
-      "checked_hour": "2026-10-30T08:45:00Z",
+      "checked_hour": "2026-10-30T09:00:00Z",
       "n": 7,
       "mean_r": -0.4586,
       "levels": {
         "kind": "level",
         "from": 1793318400,
         "to": 1793404800,
-        "level": 79898.3906,
-        "stop": 77808.2266,
-        "range": 4180.3281
+        "level": 79886.3008,
+        "stop": 77801.1094,
+        "range": 4170.3828
       }
     },
     "double7:nasdaq": {
