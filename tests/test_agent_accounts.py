@@ -118,3 +118,29 @@ def test_pc_bot_trades_reach_simulation_and_topstep_by_day_only(tmp_path):
     assert eng.agent_accounts({}, LATER, pc_bot=[mk(DAY, "sl"), mk(NIGHT, "sl")]) == 0
     from trading_bot.humeur import origine
     assert origine(f"lab-bot-{DAY}", "bot") == "Bot" and origine(journal[0]["id"], "journal", journal[0]["note"]) == "Bot"
+
+
+def test_pc_strategy_trades_go_to_simulation_only(tmp_path, monkeypatch):
+    """30/10/2026 : PC allumé, la Simulation prend les trades des stratégies du PC (prix MT5), pas Topstep."""
+    from trading_bot import mt5_local, pc_link, strategies as sl
+    when = int(datetime(2026, 11, 2, 15, 0, tzinfo=timezone.utc).timestamp())
+    mk = lambda e, x, why: sl.Trade(strategy="noise_area_v2", asset="nasdaq", entry_ts=e, direction="short",  # noqa: E731
+                                    entry=28600.0, risk=75.0, exit_ts=x, exit=28520.0, reason=why)
+    rows = mt5_local._recent_rows("noise_area_v2", "nasdaq",
+                                  [mk(when, when + 3600, "heure"), mk(when + 1800, when + 5400, "heure"),
+                                   mk(when + 7200, when + 9000, "fin des données")], when + 8000)
+    assert [r["id"] for r in rows] == [f"lab-noise_area_v2-{when}", f"lab-noise_area_v2-{when + 7200}"]  # une à la fois
+    assert rows[0]["stop_loss"] == 28675.0 and rows[0]["close_price"] == 28520.0 and rows[1]["status"] == "open"
+    eng = _engine(tmp_path)
+    later = datetime(2026, 11, 3, tzinfo=timezone.utc)
+    assert eng.agent_accounts({}, later, pc_bot=rows) >= 2
+    pf = eng.portfolio.data
+    assert [h["id"] for h in pf["history"]] == [rows[0]["id"]] and rows[1]["id"] in pf["open"]
+    assert not eng.topstep().state.get("journal") and not eng.topstep().state.get("open_lab")
+    # PC allumé et stratégie calculée sur le PC : GitHub n'ouvre plus ce trade en Simulation
+    monkeypatch.setenv(pc_link.VAR, pc_link.encode(datetime.now(timezone.utc).timestamp(), [], {"noise_area_v2"}))
+    t = {"entry_ts": when + 20000, "direction": "short", "entry": 28600.0, "stop": 28675.0}
+    opened = datetime.fromtimestamp(when + 20000, timezone.utc)
+    assert eng._lab_portfolio("noise_area_v2:nasdaq", eng.cfg.assets["nasdaq"], t, opened, open_=True) is None
+    monkeypatch.setenv(pc_link.VAR, "")
+    assert eng._lab_portfolio("noise_area_v2:nasdaq", eng.cfg.assets["nasdaq"], t, opened, open_=True) is not None

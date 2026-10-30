@@ -74,7 +74,9 @@ def test_pc_announces_entry_then_exit_in_reply_and_launches_the_agent(tmp_path, 
     assert len(mt5.sent) == 1 and c.state[key]["status"] == "ouvert"
     assert len(sent) == 2 and "↗️ ACHAT" in sent[0][1] and "Nuit asiatique" in sent[0][1] and "copié" in sent[0][1]
     # GitHub apprend tout de suite que le PC l'a annoncé
-    raw = beats[-1][1]["value"]
+    raw = [b for _, b in beats if b["name"] == pc_link.VAR][-1]["value"]
+    pc = json.loads([b for _, b in beats if b["name"] == pc_link.TRADES][-1]["value"])   # trades du PC pour la Simulation
+    assert pc[-1]["id"] == f"lab-nuit_asie-{T22}" and pc[-1]["status"] == "open" and pc[0]["close_price"]
     assert pc_link.entry_owner(raw, "nuit_asie", T22, "long", now[0]) == "pc"
     # l'agent part en arrière-plan avec le signal et 24 h de bougies 5 min arrêtées à l'entrée
     args, cwd = spawned[0]
@@ -203,7 +205,7 @@ def test_copier_skips_github_signals_the_pc_does_not_see(tmp_path):
     mt5.now = now[0]
     c.last = 0
     c.step()
-    assert pc_link.local_strats(beats[-1][1]["value"]) == {"nuit_asie"}
+    assert pc_link.local_strats([b for _, b in beats if b["name"] == pc_link.VAR][-1]["value"]) == {"nuit_asie"}
     # GitHub l'a marqué « absent » : il n'est même plus lu
     trade["pc_absent"] = True
     assert all(s["key"] != f"lab:nuit_asie:{old}" for s in mc.read_signals(get)[0])

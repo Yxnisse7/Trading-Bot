@@ -4,15 +4,16 @@
 Le bot de GitHub annonce ses signaux environ 10 min après la bougie (prix Yahoo en retard, passage toutes les
 5 min, puis lecture du dépôt par le pont). Ici, le pont rejoue les mêmes règles (strategies.RUNNERS_*) sur les
 bougies 5 min du courtier dès qu'une bougie se ferme : la copie démo part tout de suite.
+Depuis le 30/10/2026 (choix de Yanisse), ses trades des 3 derniers jours (`recent`) partent aussi vers GitHub (variable
+PC_TRADES) : PC allumé, la Simulation suit les prix MT5 ; Topstep garde les prix des contrats à terme (Yahoo).
 
 Bascule : si le calcul local échoue (marché fermé, pas assez de bougies, erreur), la stratégie n'est pas marquée
-« lue » et la copie retombe sur les signaux de GitHub, comme avant. Telegram, Topstep et la Simulation viennent
-toujours du bot de GitHub, que le PC soit allumé ou non.
+« lue » et la copie retombe sur les signaux de GitHub, comme avant.
 """
 from __future__ import annotations
 
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any, Callable
 
 from . import strategies as sl
@@ -22,6 +23,7 @@ log = logging.getLogger("mt5_local")
 
 BAR = 300
 DEFAULT_DAYS = 8
+KEEP = 3 * 86400                     # s : trades publiés pour GitHub (PC_TRADES), comme le bot classique du PC
 # même stratégie, même sens, entrées à moins de 3 h d'écart : c'est le même signal (prix CFD et contrats à terme
 # ne cassent pas toujours à la même bougie)
 SAME_SIGNAL = 3 * 3600
@@ -91,6 +93,7 @@ class LocalEngine:
     def __init__(self, mt5, symbols: dict[str, str], clock: Callable[[], float]):
         self.mt5, self.symbols, self.clock = mt5, symbols, clock
         self.cache: dict[str, tuple[int, list[dict[str, Any]]]] = {}
+        self.done: dict[str, list[dict[str, Any]]] = {}           # trades récents par stratégie (ouverts et fermés)
 
     def _candles(self, sym: str, days: int, now: float) -> list[Candle]:
         off = server_offset(self.mt5, sym, now)
@@ -127,6 +130,7 @@ class LocalEngine:
                 log.exception("calcul local %s", name)
                 continue
             found = []
+            self.done[name] = _recent_rows(strat, asset, trades, now)
             for t in trades:
                 still_open = t.reason == "fin des données" or t.exit_ts > now
                 if not still_open:
@@ -138,6 +142,34 @@ class LocalEngine:
             out += found
             ok.add(f"local:{strat}")
         return out, ok
+
+    def recent(self) -> list[dict[str, Any]]:
+        """Trades des stratégies calculés sur le PC (3 derniers jours), pour la Simulation sur GitHub."""
+        return sorted((r for rows in self.done.values() for r in rows), key=lambda r: r["created_at"])
+
+
+def _iso(ts: int) -> str:
+    return datetime.fromtimestamp(ts, timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+
+def _recent_rows(strat: str, asset: str, trades: list, now: float) -> list[dict[str, Any]]:
+    """Trades des KEEP dernières secondes au format Signal (id = celui de la Simulation sur GitHub), une position à
+    la fois comme sur GitHub (Engine.lab_shadow)."""
+    out, last_exit = [], 0
+    for t in sorted(trades, key=lambda t: t.entry_ts):
+        if t.entry_ts < last_exit:
+            continue
+        still_open = t.reason == "fin des données" or t.exit_ts > now
+        last_exit = 10 ** 12 if still_open else t.exit_ts
+        if now - t.entry_ts > KEEP:
+            continue
+        stop = t.entry - t.risk if t.direction == "long" else t.entry + t.risk
+        out.append({"id": f"lab-{strat}-{t.entry_ts}", "source": "lab", "strategy": strat, "asset": asset,
+                    "direction": t.direction, "entry": round(t.entry, 6), "take_profit": None,
+                    "stop_loss": round(stop, 6), "status": "open" if still_open else (t.reason or "closed"),
+                    "created_at": _iso(t.entry_ts), "closed_at": None if still_open else _iso(t.exit_ts),
+                    "close_price": None if still_open else round(t.exit, 6), "meta": {"pc": True}})
+    return out
 
 
 def same_signal(a_key: str, a_dir: str | None, b_key: str, b_dir: str | None, window: int = SAME_SIGNAL) -> bool:

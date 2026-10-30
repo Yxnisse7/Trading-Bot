@@ -197,11 +197,13 @@ class Copier:
             for s in local:
                 k = LAB_TARGET_R.get(s["key"].split(":")[1])
                 s["target"] = k * s["stop"] if k else None
+            pc_trades = self.local.recent()           # stratégies sur prix MT5 : Simulation sur GitHub (30/10/2026)
             if self.bot is not None:
                 found, bok = self.bot.signals()       # objectif du bot gardé tel quel
                 local, lok = local + found, lok | bok
-                if self.relay is not None:
-                    self.relay.pc_trades = self.bot.recent()
+                pc_trades = self.bot.recent() + pc_trades
+            if self.relay is not None:
+                self.relay.pc_trades = pc_trades
             ok |= lok
             local_keys = {s["key"] for s in local}
             if self.relay is not None:

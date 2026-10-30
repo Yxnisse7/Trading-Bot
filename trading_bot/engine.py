@@ -1767,9 +1767,13 @@ class Engine:
                         "label": "agent IA (chasse)" if tag == "ag" else "agent IA (méthode Hugo)"})
         return out
 
+    # 30/10/2026, choix de Yanisse : PC allumé, la Simulation prend aussi les trades des stratégies calculés sur le PC
+    # (prix MT5) au lieu de ceux de GitHub (prix Yahoo) ; Topstep garde les prix des contrats à terme (Yahoo)
+    PC_LAB_SINCE = datetime(2026, 10, 30, 22, 30, tzinfo=timezone.utc)
+
     def pc_bot_trades(self, trades: list[dict[str, Any]] | None) -> list[dict[str, Any]]:
-        """Trades du bot classique calculés sur le PC (prix MT5, variable PC_TRADES), depuis AGENT_SINCE. PC allumé,
-        GitHub se tait sur ce bot : sans cette reprise, ils n'arrivaient ni en Simulation ni sur Topstep (30/10/2026)."""
+        """Trades calculés sur le PC (prix MT5, variable PC_TRADES) : bot classique depuis AGENT_SINCE (Simulation et
+        Topstep ; PC allumé, GitHub se tait sur ce bot), stratégies depuis PC_LAB_SINCE (Simulation seulement)."""
         out = []
         for t in trades or []:
             try:
@@ -1777,14 +1781,18 @@ class Engine:
                 entry, stop = float(t["entry"]), float(t["stop_loss"])
             except (KeyError, TypeError, ValueError):
                 continue
-            if t.get("asset") not in self.cfg.assets or entry == stop or opened < self.AGENT_SINCE.timestamp():
+            lab = t.get("source") == "lab"
+            since = self.PC_LAB_SINCE if lab else self.AGENT_SINCE
+            if t.get("asset") not in self.cfg.assets or entry == stop or opened < since.timestamp():
                 continue
             done = t.get("status") != "open" and t.get("close_price") is not None and t.get("closed_at")
-            out.append({"id": t["id"], "tag": "bo", "asset": t["asset"], "direction": t["direction"], "entry": entry,
-                        "stop": stop, "target": t.get("take_profit"), "opened": opened, "source": "bot",
-                        "status": t.get("status"),
+            strat = t.get("strategy") or ""
+            out.append({"id": t["id"], "tag": "pl" if lab else "bo", "asset": t["asset"], "direction": t["direction"],
+                        "entry": entry, "stop": stop, "target": t.get("take_profit"), "opened": opened,
+                        "source": "lab" if lab else "bot", "status": t.get("status"),
                         "closed": int(parse_iso(t["closed_at"]).timestamp()) if done else None,
-                        "exit": float(t["close_price"]) if done else None, "label": "bot classique (PC)"})
+                        "exit": float(t["close_price"]) if done else None,
+                        "label": strat if lab else "bot classique (PC)"})
         return out
 
     def agent_accounts(self, demo: dict[str, Any] | None = None, now: datetime | None = None,
@@ -1840,8 +1848,8 @@ class Engine:
                     sig.closed_at = iso(datetime.fromtimestamp(t["closed"], timezone.utc))
                     self.portfolio.on_close(sig, asset)
                     changed += 1
-            if asset.key not in PRODUCTS or not in_session(opened):
-                continue                                    # Topstep : pas d'entrée de nuit
+            if t["tag"] == "pl" or asset.key not in PRODUCTS or not in_session(opened):
+                continue                                    # Topstep : pas d'entrée de nuit, stratégies sur Yahoo
             acct = acct or self.topstep()
             rid = acct.journal_id(asset.key, opened, t["tag"])
             if any(j["id"] == rid for j in acct.state.get("journal", [])):
@@ -1900,6 +1908,9 @@ class Engine:
                      source="lab")
         if self.portfolio.store is not self.store:            # magasin remplacé après coup (tests, outils)
             self.portfolio = Portfolio(self.store, self.cfg)
+        raw = os.environ.get(pc_link.VAR)
+        if open_ and pc_link.alive(raw, utcnow().timestamp()) and name.split(":")[0] in pc_link.local_strats(raw):
+            return None                     # PC allumé : la Simulation prend le trade du PC (prix MT5, agent_accounts)
         try:
             if open_:
                 return self.portfolio.on_open(sig, asset)
