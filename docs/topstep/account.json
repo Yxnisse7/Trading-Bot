@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-02T15:26:04Z",
+  "updated_at": "2026-11-02T15:31:35Z",
   "rules": {
     "account": "50K",
     "start_balance": 50000.0,
@@ -57,22 +57,22 @@
       "file": "history/3.json"
     }
   ],
-  "balance": 49136.13,
-  "profit": -863.87,
+  "balance": 48892.69,
+  "profit": -1107.31,
   "mll": 48552.33,
-  "room_to_mll": 583.8,
+  "room_to_mll": 340.36,
   "peak_eod": 50552.33,
   "target_balance": 53000.0,
   "needed_profit": 3000.0,
   "best_day": 1422.42,
   "consistency_ok": true,
   "today": "2026-11-02",
-  "today_pnl": -1088.95,
-  "room_today": -88.95,
+  "today_pnl": -1332.39,
+  "room_today": -332.39,
   "status": "en cours",
   "failed": null,
   "violations": [
-    "journée du 02/11 : -1089 $, limite journalière de 1000 $ atteinte"
+    "journée du 02/11 : -1332 $, limite journalière de 1000 $ atteinte"
   ],
   "days": [
     {
@@ -109,7 +109,7 @@
     },
     {
       "day": "2026-11-02",
-      "pnl": -1088.95
+      "pnl": -1332.39
     }
   ],
   "trades": [
@@ -934,9 +934,7 @@
       "past_flat_time": false,
       "note": "signal du bot classique (PC)",
       "balance_after": 49136.13
-    }
-  ],
-  "open": [
+    },
     {
       "id": "j11021518nasag",
       "asset": "nasdaq",
@@ -944,20 +942,25 @@
       "symbol": "MNQ",
       "direction": "short",
       "entry": 28685.0,
-      "take_profit": 28570.0,
-      "stop_loss": 28745.0,
+      "exit": 28745.0,
       "contracts": 2,
-      "multiplier": 2.0,
-      "origin": "stratégie",
+      "status": "journal",
+      "origin": "journal",
       "opened_at": "2026-11-02T15:18:20Z",
-      "expires_at": null,
-      "risk": 240.0,
-      "notional": 114740.0,
-      "cost_pct": 0.0,
-      "fee_per_order": 1.72
+      "closed_at": "2026-11-02T15:24:33Z",
+      "day": "2026-11-02",
+      "pnl_gross": -240.0,
+      "fees": 2.44,
+      "slippage": 1.0,
+      "cost": 3.44,
+      "pnl": -243.44,
+      "past_flat_time": false,
+      "note": "trade de l'agent IA (chasse)",
+      "balance_after": 48892.69
     }
   ],
-  "journal_count": 30,
+  "open": [],
+  "journal_count": 31,
   "daily_target": 1200.0,
   "skipped": [
     {
@@ -967,8 +970,8 @@
       "symbol": "MNQ",
       "direction": "short",
       "opened_at": "2026-11-02T15:15:59Z",
-      "status": "open",
-      "pnl_pct": null,
+      "status": "sl",
+      "pnl_pct": -0.3253,
       "reason": "limite journalière atteinte (-1089 $) : Topstep bloque le compte jusqu'au lendemain"
     },
     {
@@ -978,11 +981,11 @@
       "symbol": "MNQ",
       "direction": "short",
       "opened_at": "2026-11-02T15:20:58Z",
-      "status": "open",
-      "pnl_pct": null,
+      "status": "sl",
+      "pnl_pct": -0.3244,
       "reason": "limite journalière atteinte (-1089 $) : Topstep bloque le compte jusqu'au lendemain"
     }
   ],
-  "day_closed": "limite journalière atteinte (-1089 $) : Topstep bloque le compte jusqu'au lendemain",
+  "day_closed": "limite journalière atteinte (-1332 $) : Topstep bloque le compte jusqu'au lendemain",
   "candidates": []
 }
