@@ -378,7 +378,7 @@
       "filters_checked": true,
       "variant": "modele_arbres",
       "exc": {
-        "mfe": 0.0,
+        "mfe": 0.3194,
         "mae": 0.5556,
         "armed": {
           "0.5": false,
@@ -476,10 +476,10 @@
       "filters_checked": true,
       "variant": "modele_arbres",
       "exc": {
-        "mfe": 0.1389,
+        "mfe": 0.7639,
         "mae": 0.0,
         "armed": {
-          "0.5": false,
+          "0.5": true,
           "0.8": false,
           "1.0": false
         },
@@ -579,7 +579,22 @@
         "modele_arbres"
       ],
       "filters_checked": true,
-      "variant": "modele_arbres"
+      "variant": "modele_arbres",
+      "exc": {
+        "mfe": 0.0,
+        "mae": 0.1404,
+        "armed": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "be": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "last_ts": null
+      }
     }
   },
   {
@@ -657,6 +672,104 @@
       },
       "price_time": "2026-11-02T15:05:00Z",
       "model_r": -0.0379,
+      "filters": [
+        "sans_ouverture_us",
+        "sans_etirement_or",
+        "modele_arbres",
+        "bot_en_ombre"
+      ],
+      "filters_checked": true,
+      "variant": "modele_arbres",
+      "exc": {
+        "mfe": 0.7101,
+        "mae": 0.0,
+        "armed": {
+          "0.5": true,
+          "0.8": false,
+          "1.0": false
+        },
+        "be": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "last_ts": null
+      }
+    }
+  },
+  {
+    "id": "4ada8a66ff",
+    "asset": "gold",
+    "asset_label": "Or (XAU/USD)",
+    "direction": "long",
+    "entry": 3974.5,
+    "take_profit": 3985.3,
+    "stop_loss": 3967.3,
+    "risk_reward": 1.5,
+    "confidence": "fort",
+    "score": 5.01,
+    "criteria": [
+      "adx",
+      "trend_15m",
+      "trend_1h",
+      "trend_5m",
+      "vwap"
+    ],
+    "rationale": "Achat : tendance forte (ADX), tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 18.06 (0.45 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 91%.",
+    "news_context": "actualité calme sur les 2 dernières heures",
+    "created_at": "2026-11-02T15:15:59Z",
+    "expires_at": "2026-11-02T16:15:59Z",
+    "status": "open",
+    "closed_at": null,
+    "close_price": null,
+    "pnl_pct": null,
+    "pnl_gross_pct": null,
+    "duration_minutes": null,
+    "hourly_range": 18.0625,
+    "source": "shadow",
+    "horizon": "1h",
+    "horizon_minutes": 60,
+    "meta": {
+      "tick": 0.1,
+      "details": {
+        "trend_5m": "EMA20 3951.63 / EMA50 3934.10 (5 min)",
+        "trend_15m": "EMA20 3933.21 / EMA50 3922.95",
+        "trend_1h": "prix vs EMA20 1 h 3927.61",
+        "adx": "ADX15 27.6 (+DI 37.1 / -DI 8.4)",
+        "vwap": "VWAP jour 3928.30",
+        "rsi": "RSI14 5 min 70.7",
+        "macd": "histogramme MACD 1.7009",
+        "level": "support - / résistance 4009.20",
+        "volume": "z-score volume -1.19",
+        "pdhl": "veille : haut 3911.10 / bas 3900.90",
+        "activity": "activité de l'heure 1.59× la moyenne",
+        "corr": "DXY -0.03 % sur 1 h"
+      },
+      "support": null,
+      "resistance": 4009.199951171875,
+      "atr_5m": 8.269318900778078,
+      "atr_ratio": 1.6840554311473237,
+      "hourly_range_pct": 0.4545,
+      "adx_15m": 27.62521547399927,
+      "sigma_5m": 0.0012525948542039221,
+      "p_resolution": 0.912,
+      "p_tp_neutral": 0.379,
+      "activity_ratio": 1.591,
+      "base_minutes": 5,
+      "ctx": {
+        "adx": 27.63,
+        "rsi_dir": 70.69,
+        "vwap_ext": 2.558,
+        "ema_ext": 1.2661,
+        "atr_ratio": 1.684,
+        "activity": 1.591,
+        "range_pct": 0.4545,
+        "cost_r": 0.1104,
+        "us_open_min": 46.0,
+        "weekday": 0
+      },
+      "price_time": "2026-11-02T14:55:00Z",
+      "model_r": -0.0345,
       "filters": [
         "sans_ouverture_us",
         "sans_etirement_or",
