@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-03T19:41:43Z",
+  "updated_at": "2026-11-03T19:46:35Z",
   "rules": {
     "account": "50K",
     "start_balance": 50000.0,
@@ -57,20 +57,24 @@
       "file": "history/3.json"
     }
   ],
-  "balance": 48621.9,
-  "profit": -1378.1,
+  "balance": 48353.96,
+  "profit": -1646.04,
   "mll": 48552.33,
-  "room_to_mll": 69.57,
+  "room_to_mll": -198.37,
   "peak_eod": 50552.33,
   "target_balance": 53000.0,
   "needed_profit": 3000.0,
   "best_day": 1422.42,
   "consistency_ok": true,
   "today": "2026-11-03",
-  "today_pnl": -139.06,
-  "room_today": 860.94,
-  "status": "en cours",
-  "failed": null,
+  "today_pnl": -407.0,
+  "room_today": 593.0,
+  "status": "échoué",
+  "failed": {
+    "at": "2026-11-03T19:35:00Z",
+    "balance": 48483.18,
+    "mll": 48552.33
+  },
   "violations": [
     "journée du 02/11 : -1464 $, limite journalière de 1000 $ atteinte"
   ],
@@ -113,7 +117,7 @@
     },
     {
       "day": "2026-11-03",
-      "pnl": -139.06
+      "pnl": -407.0
     }
   ],
   "trades": [
@@ -1030,9 +1034,7 @@
       "past_flat_time": false,
       "note": "signal réel noise_area_v2:nasdaq",
       "balance_after": 48621.9
-    }
-  ],
-  "open": [
+    },
     {
       "id": "95119093fa",
       "asset": "nasdaq",
@@ -1040,17 +1042,20 @@
       "symbol": "MNQ",
       "direction": "long",
       "entry": 28365.5,
-      "take_profit": 28571.5,
-      "stop_loss": 28297.0,
+      "exit": 28297.0,
       "contracts": 1,
-      "multiplier": 2.0,
+      "status": "sl",
       "origin": "bot",
       "opened_at": "2026-11-03T17:16:19Z",
-      "expires_at": "2026-11-04T17:16:19Z",
-      "risk": 137.0,
-      "notional": 56731.0,
-      "cost_pct": 0.0,
-      "fee_per_order": 0.86
+      "closed_at": "2026-11-03T19:35:00Z",
+      "day": "2026-11-03",
+      "pnl_gross": -137.0,
+      "fees": 1.22,
+      "slippage": 0.5,
+      "cost": 1.72,
+      "pnl": -138.72,
+      "past_flat_time": false,
+      "balance_after": 48483.18
     },
     {
       "id": "2e7cf10262",
@@ -1059,18 +1064,23 @@
       "symbol": "MNQ",
       "direction": "long",
       "entry": 28369.75,
-      "take_profit": 28561.0,
-      "stop_loss": 28306.0,
+      "exit": 28306.0,
       "contracts": 1,
-      "multiplier": 2.0,
+      "status": "sl",
       "origin": "bot",
       "opened_at": "2026-11-03T17:26:10Z",
-      "expires_at": "2026-11-04T17:26:10Z",
-      "risk": 127.5,
-      "notional": 56739.5,
-      "cost_pct": 0.0,
-      "fee_per_order": 0.86
-    },
+      "closed_at": "2026-11-03T19:35:00Z",
+      "day": "2026-11-03",
+      "pnl_gross": -127.5,
+      "fees": 1.22,
+      "slippage": 0.5,
+      "cost": 1.72,
+      "pnl": -129.22,
+      "past_flat_time": false,
+      "balance_after": 48353.96
+    }
+  ],
+  "open": [
     {
       "id": "j11031559nasag",
       "asset": "nasdaq",
