@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-03T15:36:04.062415+01:00",
+  "updated_at": "2026-11-03T15:41:10.776446+01:00",
   "timezone": "Europe/Paris",
   "equity_curve": [
     {
@@ -1824,18 +1824,18 @@
       "avg_pnl_pct": 0.0008
     },
     "shadow": {
-      "n": 1109,
+      "n": 1110,
       "tp": 344,
-      "sl": 560,
+      "sl": 561,
       "expired": 205,
-      "win_rate": 0.3805309734513274,
-      "neutral_win_rate": 0.3655,
-      "edge": 0.015,
-      "pnl_pct": 17.0496,
-      "avg_pnl_pct": 0.0154
+      "win_rate": 0.38011049723756907,
+      "neutral_win_rate": 0.3654,
+      "edge": 0.0147,
+      "pnl_pct": 16.6348,
+      "avg_pnl_pct": 0.015
     },
     "open": 0,
-    "open_shadow": 5
+    "open_shadow": 4
   },
   "by_source": {
     "bot": {
@@ -1872,15 +1872,15 @@
       "avg_pnl_pct": 0.0
     },
     "shadow": {
-      "n": 1109,
+      "n": 1110,
       "tp": 344,
-      "sl": 560,
+      "sl": 561,
       "expired": 205,
-      "win_rate": 0.3805309734513274,
-      "neutral_win_rate": 0.3655,
-      "edge": 0.015,
-      "pnl_pct": 17.0496,
-      "avg_pnl_pct": 0.0154
+      "win_rate": 0.38011049723756907,
+      "neutral_win_rate": 0.3654,
+      "edge": 0.0147,
+      "pnl_pct": 16.6348,
+      "avg_pnl_pct": 0.015
     }
   },
   "by_horizon": {
@@ -1939,15 +1939,15 @@
         "avg_pnl_pct": 0.0792
       },
       "shadow": {
-        "n": 424,
+        "n": 425,
         "tp": 135,
-        "sl": 219,
+        "sl": 220,
         "expired": 70,
-        "win_rate": 0.3813559322033898,
-        "neutral_win_rate": 0.2895,
-        "edge": 0.0919,
-        "pnl_pct": 35.8971,
-        "avg_pnl_pct": 0.0847
+        "win_rate": 0.38028169014084506,
+        "neutral_win_rate": 0.2894,
+        "edge": 0.0909,
+        "pnl_pct": 35.4823,
+        "avg_pnl_pct": 0.0835
       },
       "open": 0,
       "session_utc": [
@@ -2210,17 +2210,17 @@
     {
       "key": "trend_5m",
       "label": "Tendance 5 min",
-      "weight": 1.096,
+      "weight": 1.094,
       "stats": {
-        "n": 1136,
+        "n": 1137,
         "tp": 373,
-        "sl": 569,
+        "sl": 570,
         "expired": 194,
-        "win_rate": 0.39596602972399153,
-        "neutral_win_rate": 0.3665,
-        "edge": 0.0295,
-        "pnl_pct": 23.3526,
-        "avg_pnl_pct": 0.0206
+        "win_rate": 0.3955461293743372,
+        "neutral_win_rate": 0.3664,
+        "edge": 0.0291,
+        "pnl_pct": 22.9378,
+        "avg_pnl_pct": 0.0202
       },
       "by_source": {
         "bot": {
@@ -2257,15 +2257,15 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 989,
+          "n": 990,
           "tp": 319,
-          "sl": 507,
+          "sl": 508,
           "expired": 163,
-          "win_rate": 0.38619854721549635,
-          "neutral_win_rate": 0.362,
-          "edge": 0.0242,
-          "pnl_pct": 21.192,
-          "avg_pnl_pct": 0.0214
+          "win_rate": 0.3857315598548972,
+          "neutral_win_rate": 0.3618,
+          "edge": 0.0239,
+          "pnl_pct": 20.7772,
+          "avg_pnl_pct": 0.021
         }
       },
       "last_trades": [
@@ -2301,6 +2301,39 @@
           "expires_at": "2026-11-03T15:16:00Z",
           "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 28.27 (0.71 %), TP = 37 % du range, SL = 31 % du range, probabilité de résolution sous 1 h ≈ 85%.",
           "news_context": "actualité à surveiller (score 1) : Trump says U.S. close to Canada trade deal, fertilizer tariffs among key issues",
+          "manual_exit": null
+        },
+        {
+          "id": "e7f125797f",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "long",
+          "horizon": "24h",
+          "entry": 28346.5,
+          "take_profit": 28690.75,
+          "stop_loss": 28231.75,
+          "risk_reward": 3.0,
+          "confidence": "fort",
+          "score": 6.82,
+          "criteria": [
+            "adx",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.4148,
+          "pnl_gross_pct": -0.4048,
+          "duration_minutes": 28,
+          "close_price": 28231.75,
+          "created_at": "2026-11-03T14:01:30Z",
+          "closed_at": "2026-11-03T14:30:00Z",
+          "created_local": "03/11 15:01",
+          "expires_at": "2026-11-04T14:01:30Z",
+          "rationale": "Achat : tendance forte (ADX), tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 191.25 (0.67 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 38%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+          "news_context": "actualité à surveiller (score 1) : Sterling drifts as BoE rate decision comes into focus",
           "manual_exit": null
         },
         {
@@ -2509,57 +2542,23 @@
           "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 0.91 (0.93 %), TP = 51 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 71%.",
           "news_context": "actualité calme sur les 2 dernières heures",
           "manual_exit": null
-        },
-        {
-          "id": "59451bac09",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 3912.2,
-          "take_profit": 3907.3,
-          "stop_loss": 3916.2,
-          "risk_reward": 1.22,
-          "confidence": "fort",
-          "score": 6.39,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.1222,
-          "pnl_gross_pct": -0.1022,
-          "duration_minutes": 15,
-          "close_price": 3916.2,
-          "created_at": "2026-11-03T09:21:00Z",
-          "closed_at": "2026-11-03T09:36:00Z",
-          "created_local": "03/11 10:21",
-          "expires_at": "2026-11-03T10:21:00Z",
-          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 15.35 (0.39 %), TP = 32 % du range, SL = 26 % du range, probabilité de résolution sous 1 h ≈ 93%.",
-          "news_context": "actualité calme sur les 2 dernières heures",
-          "manual_exit": null
         }
       ]
     },
     {
       "key": "trend_15m",
       "label": "Tendance 15 min",
-      "weight": 1.096,
+      "weight": 1.094,
       "stats": {
-        "n": 1274,
+        "n": 1275,
         "tp": 402,
-        "sl": 633,
+        "sl": 634,
         "expired": 239,
-        "win_rate": 0.3884057971014493,
-        "neutral_win_rate": 0.3696,
-        "edge": 0.0188,
-        "pnl_pct": 17.3339,
-        "avg_pnl_pct": 0.0136
+        "win_rate": 0.38803088803088803,
+        "neutral_win_rate": 0.3695,
+        "edge": 0.0185,
+        "pnl_pct": 16.9191,
+        "avg_pnl_pct": 0.0133
       },
       "by_source": {
         "bot": {
@@ -2596,15 +2595,15 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 1109,
+          "n": 1110,
           "tp": 344,
-          "sl": 560,
+          "sl": 561,
           "expired": 205,
-          "win_rate": 0.3805309734513274,
-          "neutral_win_rate": 0.3655,
-          "edge": 0.015,
-          "pnl_pct": 17.0496,
-          "avg_pnl_pct": 0.0154
+          "win_rate": 0.38011049723756907,
+          "neutral_win_rate": 0.3654,
+          "edge": 0.0147,
+          "pnl_pct": 16.6348,
+          "avg_pnl_pct": 0.015
         }
       },
       "last_trades": [
@@ -2640,6 +2639,39 @@
           "expires_at": "2026-11-03T15:16:00Z",
           "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 28.27 (0.71 %), TP = 37 % du range, SL = 31 % du range, probabilité de résolution sous 1 h ≈ 85%.",
           "news_context": "actualité à surveiller (score 1) : Trump says U.S. close to Canada trade deal, fertilizer tariffs among key issues",
+          "manual_exit": null
+        },
+        {
+          "id": "e7f125797f",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "long",
+          "horizon": "24h",
+          "entry": 28346.5,
+          "take_profit": 28690.75,
+          "stop_loss": 28231.75,
+          "risk_reward": 3.0,
+          "confidence": "fort",
+          "score": 6.82,
+          "criteria": [
+            "adx",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.4148,
+          "pnl_gross_pct": -0.4048,
+          "duration_minutes": 28,
+          "close_price": 28231.75,
+          "created_at": "2026-11-03T14:01:30Z",
+          "closed_at": "2026-11-03T14:30:00Z",
+          "created_local": "03/11 15:01",
+          "expires_at": "2026-11-04T14:01:30Z",
+          "rationale": "Achat : tendance forte (ADX), tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 191.25 (0.67 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 38%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+          "news_context": "actualité à surveiller (score 1) : Sterling drifts as BoE rate decision comes into focus",
           "manual_exit": null
         },
         {
@@ -2845,39 +2877,6 @@
           "created_local": "03/11 11:20",
           "expires_at": "2026-11-03T11:20:50Z",
           "rationale": "Vente : tendance forte (ADX), niveau clé favorable, tendance 15 min, tendance 1 h, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 15.46 (0.39 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 55%.",
-          "news_context": "actualité calme sur les 2 dernières heures",
-          "manual_exit": null
-        },
-        {
-          "id": "d87ac0b9ff",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 3917.3,
-          "take_profit": 3908.0,
-          "stop_loss": 3923.5,
-          "risk_reward": 1.5,
-          "confidence": "fort",
-          "score": 5.12,
-          "criteria": [
-            "adx",
-            "level",
-            "trend_15m",
-            "trend_1h",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "expired",
-          "pnl_pct": -0.066,
-          "pnl_gross_pct": -0.046,
-          "duration_minutes": 64,
-          "close_price": 3919.1,
-          "created_at": "2026-11-03T10:16:00Z",
-          "closed_at": "2026-11-03T11:20:52Z",
-          "created_local": "03/11 11:16",
-          "expires_at": "2026-11-03T11:16:00Z",
-          "rationale": "Vente : tendance forte (ADX), niveau clé favorable, tendance 15 min, tendance 1 h, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 15.44 (0.39 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 55%.",
           "news_context": "actualité calme sur les 2 dernières heures",
           "manual_exit": null
         }
@@ -2886,17 +2885,17 @@
     {
       "key": "trend_1h",
       "label": "Tendance 1 h",
-      "weight": 1.096,
+      "weight": 1.094,
       "stats": {
-        "n": 1258,
+        "n": 1259,
         "tp": 394,
-        "sl": 629,
+        "sl": 630,
         "expired": 235,
-        "win_rate": 0.38514173998044965,
-        "neutral_win_rate": 0.3693,
-        "edge": 0.0158,
-        "pnl_pct": 16.8615,
-        "avg_pnl_pct": 0.0134
+        "win_rate": 0.384765625,
+        "neutral_win_rate": 0.3692,
+        "edge": 0.0156,
+        "pnl_pct": 16.4467,
+        "avg_pnl_pct": 0.0131
       },
       "by_source": {
         "bot": {
@@ -2933,15 +2932,15 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 1093,
+          "n": 1094,
           "tp": 336,
-          "sl": 556,
+          "sl": 557,
           "expired": 201,
-          "win_rate": 0.37668161434977576,
-          "neutral_win_rate": 0.3651,
-          "edge": 0.0116,
-          "pnl_pct": 16.5772,
-          "avg_pnl_pct": 0.0152
+          "win_rate": 0.3762597984322508,
+          "neutral_win_rate": 0.365,
+          "edge": 0.0113,
+          "pnl_pct": 16.1624,
+          "avg_pnl_pct": 0.0148
         }
       },
       "last_trades": [
@@ -2977,6 +2976,39 @@
           "expires_at": "2026-11-03T15:16:00Z",
           "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 28.27 (0.71 %), TP = 37 % du range, SL = 31 % du range, probabilité de résolution sous 1 h ≈ 85%.",
           "news_context": "actualité à surveiller (score 1) : Trump says U.S. close to Canada trade deal, fertilizer tariffs among key issues",
+          "manual_exit": null
+        },
+        {
+          "id": "e7f125797f",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "long",
+          "horizon": "24h",
+          "entry": 28346.5,
+          "take_profit": 28690.75,
+          "stop_loss": 28231.75,
+          "risk_reward": 3.0,
+          "confidence": "fort",
+          "score": 6.82,
+          "criteria": [
+            "adx",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.4148,
+          "pnl_gross_pct": -0.4048,
+          "duration_minutes": 28,
+          "close_price": 28231.75,
+          "created_at": "2026-11-03T14:01:30Z",
+          "closed_at": "2026-11-03T14:30:00Z",
+          "created_local": "03/11 15:01",
+          "expires_at": "2026-11-04T14:01:30Z",
+          "rationale": "Achat : tendance forte (ADX), tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 191.25 (0.67 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 38%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+          "news_context": "actualité à surveiller (score 1) : Sterling drifts as BoE rate decision comes into focus",
           "manual_exit": null
         },
         {
@@ -3182,39 +3214,6 @@
           "created_local": "03/11 11:20",
           "expires_at": "2026-11-03T11:20:50Z",
           "rationale": "Vente : tendance forte (ADX), niveau clé favorable, tendance 15 min, tendance 1 h, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 15.46 (0.39 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 55%.",
-          "news_context": "actualité calme sur les 2 dernières heures",
-          "manual_exit": null
-        },
-        {
-          "id": "d87ac0b9ff",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 3917.3,
-          "take_profit": 3908.0,
-          "stop_loss": 3923.5,
-          "risk_reward": 1.5,
-          "confidence": "fort",
-          "score": 5.12,
-          "criteria": [
-            "adx",
-            "level",
-            "trend_15m",
-            "trend_1h",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "expired",
-          "pnl_pct": -0.066,
-          "pnl_gross_pct": -0.046,
-          "duration_minutes": 64,
-          "close_price": 3919.1,
-          "created_at": "2026-11-03T10:16:00Z",
-          "closed_at": "2026-11-03T11:20:52Z",
-          "created_local": "03/11 11:16",
-          "expires_at": "2026-11-03T11:16:00Z",
-          "rationale": "Vente : tendance forte (ADX), niveau clé favorable, tendance 15 min, tendance 1 h, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 15.44 (0.39 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 55%.",
           "news_context": "actualité calme sur les 2 dernières heures",
           "manual_exit": null
         }
@@ -3223,17 +3222,17 @@
     {
       "key": "adx",
       "label": "Force de tendance (ADX)",
-      "weight": 1.096,
+      "weight": 1.094,
       "stats": {
-        "n": 1274,
+        "n": 1275,
         "tp": 402,
-        "sl": 633,
+        "sl": 634,
         "expired": 239,
-        "win_rate": 0.3884057971014493,
-        "neutral_win_rate": 0.3696,
-        "edge": 0.0188,
-        "pnl_pct": 17.3339,
-        "avg_pnl_pct": 0.0136
+        "win_rate": 0.38803088803088803,
+        "neutral_win_rate": 0.3695,
+        "edge": 0.0185,
+        "pnl_pct": 16.9191,
+        "avg_pnl_pct": 0.0133
       },
       "by_source": {
         "bot": {
@@ -3270,15 +3269,15 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 1109,
+          "n": 1110,
           "tp": 344,
-          "sl": 560,
+          "sl": 561,
           "expired": 205,
-          "win_rate": 0.3805309734513274,
-          "neutral_win_rate": 0.3655,
-          "edge": 0.015,
-          "pnl_pct": 17.0496,
-          "avg_pnl_pct": 0.0154
+          "win_rate": 0.38011049723756907,
+          "neutral_win_rate": 0.3654,
+          "edge": 0.0147,
+          "pnl_pct": 16.6348,
+          "avg_pnl_pct": 0.015
         }
       },
       "last_trades": [
@@ -3314,6 +3313,39 @@
           "expires_at": "2026-11-03T15:16:00Z",
           "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 28.27 (0.71 %), TP = 37 % du range, SL = 31 % du range, probabilité de résolution sous 1 h ≈ 85%.",
           "news_context": "actualité à surveiller (score 1) : Trump says U.S. close to Canada trade deal, fertilizer tariffs among key issues",
+          "manual_exit": null
+        },
+        {
+          "id": "e7f125797f",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "long",
+          "horizon": "24h",
+          "entry": 28346.5,
+          "take_profit": 28690.75,
+          "stop_loss": 28231.75,
+          "risk_reward": 3.0,
+          "confidence": "fort",
+          "score": 6.82,
+          "criteria": [
+            "adx",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.4148,
+          "pnl_gross_pct": -0.4048,
+          "duration_minutes": 28,
+          "close_price": 28231.75,
+          "created_at": "2026-11-03T14:01:30Z",
+          "closed_at": "2026-11-03T14:30:00Z",
+          "created_local": "03/11 15:01",
+          "expires_at": "2026-11-04T14:01:30Z",
+          "rationale": "Achat : tendance forte (ADX), tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 191.25 (0.67 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 38%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+          "news_context": "actualité à surveiller (score 1) : Sterling drifts as BoE rate decision comes into focus",
           "manual_exit": null
         },
         {
@@ -3521,56 +3553,23 @@
           "rationale": "Vente : tendance forte (ADX), niveau clé favorable, tendance 15 min, tendance 1 h, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 15.46 (0.39 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 55%.",
           "news_context": "actualité calme sur les 2 dernières heures",
           "manual_exit": null
-        },
-        {
-          "id": "d87ac0b9ff",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 3917.3,
-          "take_profit": 3908.0,
-          "stop_loss": 3923.5,
-          "risk_reward": 1.5,
-          "confidence": "fort",
-          "score": 5.12,
-          "criteria": [
-            "adx",
-            "level",
-            "trend_15m",
-            "trend_1h",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "expired",
-          "pnl_pct": -0.066,
-          "pnl_gross_pct": -0.046,
-          "duration_minutes": 64,
-          "close_price": 3919.1,
-          "created_at": "2026-11-03T10:16:00Z",
-          "closed_at": "2026-11-03T11:20:52Z",
-          "created_local": "03/11 11:16",
-          "expires_at": "2026-11-03T11:16:00Z",
-          "rationale": "Vente : tendance forte (ADX), niveau clé favorable, tendance 15 min, tendance 1 h, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 15.44 (0.39 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 55%.",
-          "news_context": "actualité calme sur les 2 dernières heures",
-          "manual_exit": null
         }
       ]
     },
     {
       "key": "vwap",
       "label": "VWAP",
-      "weight": 0.834,
+      "weight": 0.833,
       "stats": {
-        "n": 1248,
+        "n": 1249,
         "tp": 397,
-        "sl": 618,
+        "sl": 619,
         "expired": 233,
-        "win_rate": 0.39113300492610836,
-        "neutral_win_rate": 0.3687,
-        "edge": 0.0224,
-        "pnl_pct": 19.2572,
-        "avg_pnl_pct": 0.0154
+        "win_rate": 0.390748031496063,
+        "neutral_win_rate": 0.3686,
+        "edge": 0.0221,
+        "pnl_pct": 18.8424,
+        "avg_pnl_pct": 0.0151
       },
       "by_source": {
         "bot": {
@@ -3607,15 +3606,15 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 1085,
+          "n": 1086,
           "tp": 339,
-          "sl": 547,
+          "sl": 548,
           "expired": 199,
-          "win_rate": 0.38261851015801357,
-          "neutral_win_rate": 0.3645,
-          "edge": 0.0181,
-          "pnl_pct": 18.3565,
-          "avg_pnl_pct": 0.0169
+          "win_rate": 0.38218714768883877,
+          "neutral_win_rate": 0.3643,
+          "edge": 0.0179,
+          "pnl_pct": 17.9417,
+          "avg_pnl_pct": 0.0165
         }
       },
       "last_trades": [
@@ -3651,6 +3650,39 @@
           "expires_at": "2026-11-03T15:16:00Z",
           "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 28.27 (0.71 %), TP = 37 % du range, SL = 31 % du range, probabilité de résolution sous 1 h ≈ 85%.",
           "news_context": "actualité à surveiller (score 1) : Trump says U.S. close to Canada trade deal, fertilizer tariffs among key issues",
+          "manual_exit": null
+        },
+        {
+          "id": "e7f125797f",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "long",
+          "horizon": "24h",
+          "entry": 28346.5,
+          "take_profit": 28690.75,
+          "stop_loss": 28231.75,
+          "risk_reward": 3.0,
+          "confidence": "fort",
+          "score": 6.82,
+          "criteria": [
+            "adx",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.4148,
+          "pnl_gross_pct": -0.4048,
+          "duration_minutes": 28,
+          "close_price": 28231.75,
+          "created_at": "2026-11-03T14:01:30Z",
+          "closed_at": "2026-11-03T14:30:00Z",
+          "created_local": "03/11 15:01",
+          "expires_at": "2026-11-04T14:01:30Z",
+          "rationale": "Achat : tendance forte (ADX), tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 191.25 (0.67 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 38%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+          "news_context": "actualité à surveiller (score 1) : Sterling drifts as BoE rate decision comes into focus",
           "manual_exit": null
         },
         {
@@ -3856,39 +3888,6 @@
           "created_local": "03/11 11:20",
           "expires_at": "2026-11-03T11:20:50Z",
           "rationale": "Vente : tendance forte (ADX), niveau clé favorable, tendance 15 min, tendance 1 h, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 15.46 (0.39 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 55%.",
-          "news_context": "actualité calme sur les 2 dernières heures",
-          "manual_exit": null
-        },
-        {
-          "id": "d87ac0b9ff",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 3917.3,
-          "take_profit": 3908.0,
-          "stop_loss": 3923.5,
-          "risk_reward": 1.5,
-          "confidence": "fort",
-          "score": 5.12,
-          "criteria": [
-            "adx",
-            "level",
-            "trend_15m",
-            "trend_1h",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "expired",
-          "pnl_pct": -0.066,
-          "pnl_gross_pct": -0.046,
-          "duration_minutes": 64,
-          "close_price": 3919.1,
-          "created_at": "2026-11-03T10:16:00Z",
-          "closed_at": "2026-11-03T11:20:52Z",
-          "created_local": "03/11 11:16",
-          "expires_at": "2026-11-03T11:16:00Z",
-          "rationale": "Vente : tendance forte (ADX), niveau clé favorable, tendance 15 min, tendance 1 h, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 15.44 (0.39 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 55%.",
           "news_context": "actualité calme sur les 2 dernières heures",
           "manual_exit": null
         }
@@ -5387,39 +5386,6 @@
       "created_local": "03/11 15:05",
       "expires_at": "2026-11-04T14:05:41Z",
       "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 189.50 (0.67 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 39%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
-      "news_context": "actualité à surveiller (score 1) : Sterling drifts as BoE rate decision comes into focus",
-      "manual_exit": null
-    },
-    {
-      "id": "e7f125797f",
-      "asset": "nasdaq",
-      "asset_label": "Nasdaq 100 (NQ)",
-      "direction": "long",
-      "horizon": "24h",
-      "entry": 28346.5,
-      "take_profit": 28690.75,
-      "stop_loss": 28231.75,
-      "risk_reward": 3.0,
-      "confidence": "fort",
-      "score": 6.82,
-      "criteria": [
-        "adx",
-        "trend_15m",
-        "trend_1h",
-        "trend_5m",
-        "vwap"
-      ],
-      "source": "shadow",
-      "status": "open",
-      "pnl_pct": null,
-      "pnl_gross_pct": null,
-      "duration_minutes": null,
-      "close_price": null,
-      "created_at": "2026-11-03T14:01:30Z",
-      "closed_at": null,
-      "created_local": "03/11 15:01",
-      "expires_at": "2026-11-04T14:01:30Z",
-      "rationale": "Achat : tendance forte (ADX), tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 191.25 (0.67 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 38%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
       "news_context": "actualité à surveiller (score 1) : Sterling drifts as BoE rate decision comes into focus",
       "manual_exit": null
     }
@@ -7024,8 +6990,8 @@
   "adjustments": {
     "notes": [
       "trades réels : +0,16 R ± 0,20 R par trade avant frais sur 166 trades (0 R = hasard)",
-      "tendance (trend_5m, trend_15m, trend_1h, adx) : +0,10 R ± 0,06 R sur 1653 trades éq. → poids ×1,10",
-      "vwap : +0,11 R ± 0,07 R sur 1550 trades éq. → poids ×1,11",
+      "tendance (trend_5m, trend_15m, trend_1h, adx) : +0,10 R ± 0,06 R sur 1654 trades éq. → poids ×1,09",
+      "vwap : +0,11 R ± 0,07 R sur 1551 trades éq. → poids ×1,11",
       "rsi : +0,13 R ± 0,07 R sur 1306 trades éq. → poids ×1,15",
       "orb : +0,31 R ± 0,26 R sur 108 trades éq. → poids ×1,12",
       "pdhl : +0,29 R ± 0,20 R sur 202 trades éq. → poids ×1,22",
@@ -7038,7 +7004,7 @@
       "euro, vwap : -0,22 R contre +0,11 R en global sur 64 trades éq. → poids ×0,90 sur cet actif",
       "euro, rsi : -0,20 R contre +0,13 R en global sur 55 trades éq. → poids ×0,96 sur cet actif",
       "nasdaq, tendance (trend_5m, trend_15m, trend_1h, adx) : +0,37 R contre +0,10 R en global sur 506 trades éq. → poids ×1,31 sur cet actif",
-      "nasdaq, vwap : +0,37 R contre +0,11 R en global sur 498 trades éq. → poids ×1,30 sur cet actif",
+      "nasdaq, vwap : +0,37 R contre +0,11 R en global sur 499 trades éq. → poids ×1,29 sur cet actif",
       "nasdaq, rsi : +0,46 R contre +0,13 R en global sur 397 trades éq. → poids ×1,39 sur cet actif",
       "nasdaq, macd : +0,25 R contre -0,03 R en global sur 134 trades éq. → poids ×1,00 sur cet actif",
       "nasdaq, pdhl : +0,77 R contre +0,29 R en global sur 61 trades éq. → poids ×1,05 sur cet actif",
@@ -7049,20 +7015,20 @@
       12,
       19
     ],
-    "sample": 1960,
+    "sample": 1961,
     "sample_by_source": {
       "bot": 165,
-      "shadow": 1109,
+      "shadow": 1110,
       "manual": 1,
       "backtest": 685
     },
     "method": "v2 : recalcul complet, marge de sécurité, résultats en R, sources pondérées",
     "weights": {
-      "trend_5m": 1.096,
-      "trend_15m": 1.096,
-      "trend_1h": 1.096,
-      "adx": 1.096,
-      "vwap": 0.834,
+      "trend_5m": 1.094,
+      "trend_15m": 1.094,
+      "trend_1h": 1.094,
+      "adx": 1.094,
+      "vwap": 0.833,
       "rsi": 1.152,
       "macd": 1.0,
       "level": 1.0,
@@ -7073,11 +7039,11 @@
     },
     "weights_by_asset": {
       "bitcoin": {
-        "trend_5m": 1.096,
-        "trend_15m": 1.096,
-        "trend_1h": 1.096,
-        "adx": 1.096,
-        "vwap": 0.834,
+        "trend_5m": 1.094,
+        "trend_15m": 1.094,
+        "trend_1h": 1.094,
+        "adx": 1.094,
+        "vwap": 0.833,
         "rsi": 1.152,
         "macd": 1.0,
         "level": 1.0,
@@ -7091,7 +7057,7 @@
         "trend_15m": 0.84,
         "trend_1h": 0.84,
         "adx": 0.84,
-        "vwap": 0.834,
+        "vwap": 0.833,
         "rsi": 0.831,
         "macd": 1.0,
         "level": 1.0,
@@ -7105,7 +7071,7 @@
         "trend_15m": 0.94,
         "trend_1h": 0.94,
         "adx": 0.94,
-        "vwap": 0.753,
+        "vwap": 0.754,
         "rsi": 1.103,
         "macd": 1.0,
         "level": 1.0,
@@ -7115,11 +7081,11 @@
         "corr": 0.5
       },
       "gold": {
-        "trend_5m": 1.096,
-        "trend_15m": 1.096,
-        "trend_1h": 1.096,
-        "adx": 1.096,
-        "vwap": 0.834,
+        "trend_5m": 1.094,
+        "trend_15m": 1.094,
+        "trend_1h": 1.094,
+        "adx": 1.094,
+        "vwap": 0.833,
         "rsi": 1.152,
         "macd": 1.0,
         "level": 1.0,
@@ -7129,11 +7095,11 @@
         "corr": 0.5
       },
       "nasdaq": {
-        "trend_5m": 1.436,
-        "trend_15m": 1.436,
-        "trend_1h": 1.436,
-        "adx": 1.436,
-        "vwap": 1.08,
+        "trend_5m": 1.429,
+        "trend_15m": 1.429,
+        "trend_1h": 1.429,
+        "adx": 1.429,
+        "vwap": 1.075,
         "rsi": 1.5,
         "macd": 1.002,
         "level": 1.0,
@@ -7143,10 +7109,10 @@
         "corr": 0.5
       },
       "oil": {
-        "trend_5m": 1.049,
-        "trend_15m": 1.049,
-        "trend_1h": 1.049,
-        "adx": 1.049,
+        "trend_5m": 1.048,
+        "trend_15m": 1.048,
+        "trend_1h": 1.048,
+        "adx": 1.048,
         "vwap": 0.769,
         "rsi": 0.993,
         "macd": 1.0,
@@ -7157,10 +7123,10 @@
         "corr": 0.5
       },
       "sp500": {
-        "trend_5m": 0.742,
-        "trend_15m": 0.742,
-        "trend_1h": 0.742,
-        "adx": 0.742,
+        "trend_5m": 0.743,
+        "trend_15m": 0.743,
+        "trend_1h": 0.743,
+        "adx": 0.743,
         "vwap": 0.561,
         "rsi": 0.842,
         "macd": 1.0,
@@ -7179,21 +7145,21 @@
           "trend_1h",
           "adx"
         ],
-        "n": 1959,
-        "n_eff": 1652.7,
-        "mean_r": 0.1024,
+        "n": 1960,
+        "n_eff": 1653.7,
+        "mean_r": 0.1018,
         "margin_r": 0.0641,
-        "multiplier": 1.096
+        "multiplier": 1.094
       },
       "vwap": {
         "members": [
           "vwap"
         ],
-        "n": 1814,
-        "n_eff": 1550.1,
-        "mean_r": 0.1116,
+        "n": 1815,
+        "n_eff": 1551.1,
+        "mean_r": 0.1109,
         "margin_r": 0.0667,
-        "multiplier": 1.112
+        "multiplier": 1.11
       },
       "rsi": {
         "members": [
@@ -7273,9 +7239,9 @@
         "margin_r": 0.1969
       },
       "fantômes": {
-        "n": 1109,
-        "mean_r": 0.119,
-        "margin_r": 0.081
+        "n": 1110,
+        "mean_r": 0.118,
+        "margin_r": 0.0809
       },
       "backtest": {
         "n": 685,
@@ -7310,11 +7276,11 @@
       },
       "avant_ouverture": {
         "label": "entrées dans l'heure avant l'ouverture américaine",
-        "n": 13,
-        "mean_net_r": 1.3267,
-        "lower_r": -0.0474,
+        "n": 14,
+        "mean_net_r": 1.1588,
+        "lower_r": -0.1938,
         "promoted": false,
-        "missing": 87
+        "missing": 86
       },
       "reprise_apres_stop": {
         "label": "reprise juste après un stop",
@@ -7379,9 +7345,9 @@
     },
     "variants_z": 2.73,
     "promoted_variants": [],
-    "updated_at": "2026-11-03T14:36:00.952625+00:00",
+    "updated_at": "2026-11-03T14:41:07.636909+00:00",
     "context": {
-      "n": 1728,
+      "n": 1729,
       "features": {
         "adx": {
           "label": "force de tendance (ADX 15 min)",
@@ -7389,31 +7355,31 @@
             {
               "label": "bas (< 27)",
               "lo": -1000000000.0,
-              "hi": 27.31,
-              "n": 576,
-              "n_eff": 480.9,
-              "mean_r": 0.0576,
-              "margin_r": 0.1461,
+              "hi": 27.3,
+              "n": 575,
+              "n_eff": 480.2,
+              "mean_r": 0.0529,
+              "margin_r": 0.1462,
               "avoid": false
             },
             {
-              "label": "milieu (27 à 38)",
-              "lo": 27.31,
-              "hi": 37.51,
-              "n": 576,
-              "n_eff": 487.2,
-              "mean_r": 0.2007,
-              "margin_r": 0.1544,
+              "label": "milieu (27 à 37)",
+              "lo": 27.3,
+              "hi": 37.43,
+              "n": 577,
+              "n_eff": 487.9,
+              "mean_r": 0.2049,
+              "margin_r": 0.1543,
               "avoid": false
             },
             {
-              "label": "haut (≥ 38)",
-              "lo": 37.51,
+              "label": "haut (≥ 37)",
+              "lo": 37.43,
               "hi": 1000000000.0,
-              "n": 576,
-              "n_eff": 497.9,
-              "mean_r": 0.0963,
-              "margin_r": 0.1597,
+              "n": 577,
+              "n_eff": 498.9,
+              "mean_r": 0.094,
+              "margin_r": 0.1595,
               "avoid": false
             }
           ]
@@ -7445,10 +7411,10 @@
               "label": "haut (≥ 66)",
               "lo": 66.19,
               "hi": 1000000000.0,
-              "n": 577,
-              "n_eff": 485.2,
-              "mean_r": 0.0736,
-              "margin_r": 0.1549,
+              "n": 578,
+              "n_eff": 486.2,
+              "mean_r": 0.0713,
+              "margin_r": 0.1546,
               "avoid": false
             }
           ]
@@ -7459,21 +7425,21 @@
             {
               "label": "bas (< 0,89)",
               "lo": -1000000000.0,
-              "hi": 0.8949,
+              "hi": 0.8945,
               "n": 541,
-              "n_eff": 462.2,
-              "mean_r": 0.1048,
+              "n_eff": 462.6,
+              "mean_r": 0.1034,
               "margin_r": 0.1453,
               "avoid": false
             },
             {
               "label": "milieu (0,89 à 1,51)",
-              "lo": 0.8949,
+              "lo": 0.8945,
               "hi": 1.5126,
-              "n": 541,
-              "n_eff": 464.0,
-              "mean_r": 0.0555,
-              "margin_r": 0.1557,
+              "n": 542,
+              "n_eff": 464.7,
+              "mean_r": 0.0545,
+              "margin_r": 0.1555,
               "avoid": false
             },
             {
@@ -7502,23 +7468,23 @@
               "avoid": false
             },
             {
-              "label": "milieu (0,23 à 0,55)",
+              "label": "milieu (0,23 à 0,54)",
               "lo": 0.2334,
-              "hi": 0.545,
+              "hi": 0.5443,
               "n": 576,
               "n_eff": 487.0,
-              "mean_r": 0.0623,
-              "margin_r": 0.1546,
+              "mean_r": 0.057,
+              "margin_r": 0.1545,
               "avoid": false
             },
             {
-              "label": "haut (≥ 0,55)",
-              "lo": 0.545,
+              "label": "haut (≥ 0,54)",
+              "lo": 0.5443,
               "hi": 1000000000.0,
-              "n": 576,
-              "n_eff": 486.1,
-              "mean_r": 0.1618,
-              "margin_r": 0.1684,
+              "n": 577,
+              "n_eff": 487.1,
+              "mean_r": 0.1648,
+              "margin_r": 0.1682,
               "avoid": false
             }
           ]
@@ -7539,21 +7505,21 @@
             {
               "label": "milieu (1,09 à 1,44)",
               "lo": 1.086,
-              "hi": 1.438,
+              "hi": 1.435,
               "n": 576,
               "n_eff": 480.0,
-              "mean_r": 0.0965,
-              "margin_r": 0.1526,
+              "mean_r": 0.091,
+              "margin_r": 0.1525,
               "avoid": false
             },
             {
               "label": "haut (≥ 1,44)",
-              "lo": 1.438,
+              "lo": 1.435,
               "hi": 1000000000.0,
-              "n": 576,
-              "n_eff": 481.8,
-              "mean_r": 0.3786,
-              "margin_r": 0.1826,
+              "n": 577,
+              "n_eff": 482.8,
+              "mean_r": 0.3811,
+              "margin_r": 0.1823,
               "avoid": false
             }
           ]
@@ -7585,10 +7551,10 @@
               "label": "haut (≥ 1,30)",
               "lo": 1.305,
               "hi": 1000000000.0,
-              "n": 521,
-              "n_eff": 414.2,
-              "mean_r": 0.3682,
-              "margin_r": 0.1924,
+              "n": 522,
+              "n_eff": 415.2,
+              "mean_r": 0.3648,
+              "margin_r": 0.1921,
               "avoid": false
             }
           ]
@@ -7620,10 +7586,10 @@
               "label": "haut (≥ 0,62)",
               "lo": 0.6193,
               "hi": 1000000000.0,
-              "n": 576,
-              "n_eff": 474.4,
-              "mean_r": 0.0789,
-              "margin_r": 0.1375,
+              "n": 577,
+              "n_eff": 475.3,
+              "mean_r": 0.0762,
+              "margin_r": 0.1373,
               "avoid": false
             }
           ]
@@ -7634,31 +7600,31 @@
             {
               "label": "bas (< 0,08)",
               "lo": -1000000000.0,
-              "hi": 0.0795,
-              "n": 576,
-              "n_eff": 504.3,
-              "mean_r": 0.2276,
+              "hi": 0.0794,
+              "n": 575,
+              "n_eff": 504.0,
+              "mean_r": 0.2251,
               "margin_r": 0.1758,
               "avoid": false
             },
             {
               "label": "milieu (0,08 à 0,13)",
-              "lo": 0.0795,
-              "hi": 0.1254,
-              "n": 576,
-              "n_eff": 488.4,
-              "mean_r": 0.1302,
-              "margin_r": 0.1436,
+              "lo": 0.0794,
+              "hi": 0.1253,
+              "n": 577,
+              "n_eff": 488.8,
+              "mean_r": 0.1315,
+              "margin_r": 0.1437,
               "avoid": false
             },
             {
               "label": "haut (≥ 0,13)",
-              "lo": 0.1254,
+              "lo": 0.1253,
               "hi": 1000000000.0,
-              "n": 576,
-              "n_eff": 475.3,
-              "mean_r": -0.0174,
-              "margin_r": 0.1319,
+              "n": 577,
+              "n_eff": 476.3,
+              "mean_r": -0.0182,
+              "margin_r": 0.1316,
               "avoid": false
             }
           ]
@@ -7680,10 +7646,10 @@
               "label": "de 30 min avant à 1 h 30 après",
               "lo": -30.0,
               "hi": 90.0,
-              "n": 277,
-              "n_eff": 231.3,
-              "mean_r": 0.1577,
-              "margin_r": 0.2463,
+              "n": 278,
+              "n_eff": 232.3,
+              "mean_r": 0.1525,
+              "margin_r": 0.2455,
               "avoid": false
             },
             {
@@ -7715,10 +7681,10 @@
               "label": "mardi",
               "lo": 1,
               "hi": 2,
-              "n": 293,
-              "n_eff": 249.8,
-              "mean_r": 0.1129,
-              "margin_r": 0.1862,
+              "n": 294,
+              "n_eff": 250.8,
+              "mean_r": 0.1081,
+              "margin_r": 0.1858,
               "avoid": false
             },
             {
@@ -7795,31 +7761,31 @@
     },
     "exits": {
       "réels et en ombre": {
-        "n": 1044,
-        "current_net_r": 0.0534,
-        "mfe_median": 0.907,
+        "n": 1045,
+        "current_net_r": 0.0524,
+        "mfe_median": 0.902,
         "sl_reached": {
           "0.5": 185,
           "0.8": 100,
           "1.0": 69
         },
-        "n_sl": 521,
+        "n_sl": 522,
         "rules": {
           "0.5": {
-            "net_r": 0.0071,
-            "diff_r": -0.0464,
-            "margin_r": 0.0504,
+            "net_r": 0.0061,
+            "diff_r": -0.0463,
+            "margin_r": 0.0503,
             "better": false
           },
           "0.8": {
-            "net_r": 0.0061,
+            "net_r": 0.0051,
             "diff_r": -0.0473,
             "margin_r": 0.0398,
             "better": false
           },
           "1.0": {
-            "net_r": 0.0066,
-            "diff_r": -0.0469,
+            "net_r": 0.0056,
+            "diff_r": -0.0468,
             "margin_r": 0.0355,
             "better": false
           }
@@ -7925,10 +7891,10 @@
     }
   },
   "state": {
-    "last_scan": "2026-11-03T14:35:59Z",
+    "last_scan": "2026-11-03T14:41:03Z",
     "last_scan_note": "blackout USD Congressional Elections",
     "last_summary": "2026-11-02T23:06:05Z",
-    "last_track": "2026-11-03T14:35:59Z",
+    "last_track": "2026-11-03T14:41:03Z",
     "last_summary_day": "2026-11-02"
   },
   "limits": {
@@ -22423,404 +22389,404 @@
         }
       ],
       "live": true,
-      "checked_hour": "2026-11-03T14:00:00Z",
+      "checked_hour": "2026-11-03T14:30:00Z",
       "n": 17,
       "mean_r": 0.3934,
       "levels": {
         "kind": "bands",
-        "open_ts": 1793629800,
-        "open": 28721.25,
-        "prev_close": 28527.5,
+        "open_ts": 1793716200,
+        "open": 28266.0,
+        "prev_close": 28137.25,
         "points": [
           [
-            1793630100,
-            28761.2603,
-            28487.7596
+            1793716500,
+            28304.2717,
+            28099.1526
           ],
           [
-            1793630400,
-            28785.196,
-            28463.9853
+            1793716800,
+            28320.7139,
+            28082.7853
           ],
           [
-            1793630700,
-            28788.0228,
-            28461.1777
+            1793717100,
+            28321.8646,
+            28081.6399
           ],
           [
-            1793631000,
-            28790.6828,
-            28458.5356
+            1793717400,
+            28324.2152,
+            28079.3
           ],
           [
-            1793631300,
-            28790.9764,
-            28458.244
+            1793717700,
+            28325.7098,
+            28077.8122
           ],
           [
-            1793631600,
-            28789.2217,
-            28459.9868
+            1793718000,
+            28323.4425,
+            28080.0692
           ],
           [
-            1793631900,
-            28781.3238,
-            28467.8315
+            1793718300,
+            28315.5052,
+            28087.9703
           ],
           [
-            1793632200,
-            28798.5666,
-            28450.705
+            1793718600,
+            28330.5085,
+            28073.0353
           ],
           [
-            1793632500,
-            28807.0265,
-            28442.3021
+            1793718900,
+            28343.8287,
+            28059.7758
           ],
           [
-            1793632800,
-            28810.6213,
-            28438.7316
+            1793719200,
+            28350.4854,
+            28053.1495
           ],
           [
-            1793633100,
-            28818.0432,
-            28431.3598
+            1793719500,
+            28360.1283,
+            28043.5504
           ],
           [
-            1793633400,
-            28827.1846,
-            28422.28
+            1793719800,
+            28373.3493,
+            28030.3896
           ],
           [
-            1793633700,
-            28816.9548,
-            28432.4408
+            1793720100,
+            28360.0499,
+            28043.6285
           ],
           [
-            1793634000,
-            28828.5961,
-            28420.878
+            1793720400,
+            28368.978,
+            28034.741
           ],
           [
-            1793634300,
-            28835.6098,
-            28413.9117
+            1793720700,
+            28376.3291,
+            28027.4234
           ],
           [
-            1793634600,
-            28852.2764,
-            28397.3575
+            1793721000,
+            28391.3432,
+            28012.4778
           ],
           [
-            1793634900,
-            28863.1092,
-            28386.5978
+            1793721300,
+            28402.888,
+            28000.9855
           ],
           [
-            1793635200,
-            28864.1913,
-            28385.523
+            1793721600,
+            28401.3959,
+            28002.4708
           ],
           [
-            1793635500,
-            28875.9671,
-            28373.8266
+            1793721900,
+            28413.6846,
+            27990.2381
           ],
           [
-            1793635800,
-            28878.2521,
-            28371.557
+            1793722200,
+            28415.5643,
+            27988.367
           ],
           [
-            1793636100,
-            28882.2304,
-            28367.6055
+            1793722500,
+            28419.7363,
+            27984.214
           ],
           [
-            1793636400,
-            28881.2417,
-            28368.5876
+            1793722800,
+            28419.2806,
+            27984.6676
           ],
           [
-            1793636700,
-            28881.7157,
-            28368.1167
+            1793723100,
+            28423.6035,
+            27980.3644
           ],
           [
-            1793637000,
-            28887.7516,
-            28362.1216
+            1793723400,
+            28431.8935,
+            27972.1122
           ],
           [
-            1793637300,
-            28887.2451,
-            28362.6247
+            1793723700,
+            28429.4394,
+            27974.5551
           ],
           [
-            1793637600,
-            28890.4595,
-            28359.4319
+            1793724000,
+            28435.0712,
+            27968.9489
           ],
           [
-            1793637900,
-            28898.6988,
-            28351.2483
+            1793724300,
+            28442.4586,
+            27961.5951
           ],
           [
-            1793638200,
-            28899.7628,
-            28350.1914
+            1793724600,
+            28443.5528,
+            27960.5059
           ],
           [
-            1793638500,
-            28899.6964,
-            28350.2574
+            1793724900,
+            28441.9064,
+            27962.1448
           ],
           [
-            1793638800,
-            28904.8976,
-            28345.0913
+            1793725200,
+            28445.7981,
+            27958.2708
           ],
           [
-            1793639100,
-            28902.9506,
-            28347.0251
+            1793725500,
+            28442.0341,
+            27962.0178
           ],
           [
-            1793639400,
-            28903.2429,
-            28346.7348
+            1793725800,
+            28443.1735,
+            27960.8835
           ],
           [
-            1793639700,
-            28903.0244,
-            28346.9518
+            1793726100,
+            28442.5654,
+            27961.4888
           ],
           [
-            1793640000,
-            28898.5852,
-            28351.3611
+            1793726400,
+            28435.8178,
+            27968.2058
           ],
           [
-            1793640300,
-            28902.8669,
-            28347.1082
+            1793726700,
+            28441.9029,
+            27962.1483
           ],
           [
-            1793640600,
-            28898.4879,
-            28351.4577
+            1793727000,
+            28439.3476,
+            27964.692
           ],
           [
-            1793640900,
-            28912.2661,
-            28337.7724
+            1793727300,
+            28453.2904,
+            27950.8127
           ],
           [
-            1793641200,
-            28912.0129,
-            28338.024
+            1793727600,
+            28454.5341,
+            27949.5746
           ],
           [
-            1793641500,
-            28909.6218,
-            28340.3989
+            1793727900,
+            28454.2387,
+            27949.8687
           ],
           [
-            1793641800,
-            28915.9497,
-            28334.1137
+            1793728200,
+            28460.4678,
+            27943.668
           ],
           [
-            1793642100,
-            28906.6373,
-            28343.3633
+            1793728500,
+            28452.3923,
+            27951.7067
           ],
           [
-            1793642400,
-            28901.9723,
-            28347.9968
+            1793728800,
+            28447.5331,
+            27956.5438
           ],
           [
-            1793642700,
-            28918.0728,
-            28332.0049
+            1793729100,
+            28462.339,
+            27941.8053
           ],
           [
-            1793643000,
-            28927.2075,
-            28322.9318
+            1793729400,
+            28470.6259,
+            27933.5561
           ],
           [
-            1793643300,
-            28932.9814,
-            28317.1969
+            1793729700,
+            28478.5316,
+            27925.6865
           ],
           [
-            1793643600,
-            28937.6639,
-            28312.546
+            1793730000,
+            28482.6189,
+            27921.6178
           ],
           [
-            1793643900,
-            28932.4579,
-            28317.7169
+            1793730300,
+            28478.4604,
+            27925.7573
           ],
           [
-            1793644200,
-            28932.7826,
-            28317.3944
+            1793730600,
+            28481.5454,
+            27922.6864
           ],
           [
-            1793644500,
-            28929.5509,
-            28320.6042
+            1793730900,
+            28479.9806,
+            27924.244
           ],
           [
-            1793644800,
-            28938.2018,
-            28312.0117
+            1793731200,
+            28485.1976,
+            27919.0508
           ],
           [
-            1793645100,
-            28935.993,
-            28314.2056
+            1793731500,
+            28485.7301,
+            27918.5207
           ],
           [
-            1793645400,
-            28946.1597,
-            28304.1075
+            1793731800,
+            28496.4654,
+            27907.8344
           ],
           [
-            1793645700,
-            28953.7175,
-            28296.6007
+            1793732100,
+            28506.267,
+            27898.0774
           ],
           [
-            1793646000,
-            28956.9505,
-            28293.3895
+            1793732400,
+            28511.1631,
+            27893.2036
           ],
           [
-            1793646300,
-            28960.8103,
-            28289.5557
+            1793732700,
+            28516.4951,
+            27887.8958
           ],
           [
-            1793646600,
-            28961.5171,
-            28288.8537
+            1793733000,
+            28514.6315,
+            27889.751
           ],
           [
-            1793646900,
-            28956.1296,
-            28294.2049
+            1793733300,
+            28508.3701,
+            27895.9838
           ],
           [
-            1793647200,
-            28958.6212,
-            28291.7301
+            1793733600,
+            28515.5483,
+            27888.8384
           ],
           [
-            1793647500,
-            28956.7113,
-            28293.6271
+            1793733900,
+            28516.2646,
+            27888.1253
           ],
           [
-            1793647800,
-            28962.6614,
-            28287.7171
+            1793734200,
+            28519.9887,
+            27884.4182
           ],
           [
-            1793648100,
-            28968.7903,
-            28281.6296
+            1793734500,
+            28529.2206,
+            27875.2284
           ],
           [
-            1793648400,
-            28960.0544,
-            28290.3065
+            1793734800,
+            28525.6189,
+            27878.8137
           ],
           [
-            1793648700,
-            28955.0739,
-            28295.2534
+            1793735100,
+            28520.136,
+            27884.2716
           ],
           [
-            1793649000,
-            28956.7894,
-            28293.5496
+            1793735400,
+            28526.9005,
+            27877.5379
           ],
           [
-            1793649300,
-            28963.8422,
-            28286.5442
+            1793735700,
+            28528.9326,
+            27875.5151
           ],
           [
-            1793649600,
-            28938.0788,
-            28312.1339
+            1793736000,
+            28501.1916,
+            27903.1297
           ],
           [
-            1793649900,
-            28960.1607,
-            28290.201
+            1793736300,
+            28521.7804,
+            27882.6347
           ],
           [
-            1793650200,
-            28964.5446,
-            28285.8467
+            1793736600,
+            28525.4432,
+            27878.9885
           ],
           [
-            1793650500,
-            28959.2618,
-            28291.0938
+            1793736900,
+            28522.8649,
+            27881.5551
           ],
           [
-            1793650800,
-            28964.8213,
-            28285.5718
+            1793737200,
+            28525.0918,
+            27879.3384
           ],
           [
-            1793651100,
-            28960.0191,
-            28290.3416
+            1793737500,
+            28520.1936,
+            27884.2142
           ],
           [
-            1793651400,
-            28951.3115,
-            28298.9905
+            1793737800,
+            28514.7354,
+            27889.6476
           ],
           [
-            1793651700,
-            28959.3924,
-            28290.9641
+            1793738100,
+            28527.0653,
+            27877.3738
           ],
           [
-            1793652000,
-            28967.9968,
-            28282.4177
+            1793738400,
+            28539.4344,
+            27865.0611
           ],
           [
-            1793652300,
-            28968.1936,
-            28282.2223
+            1793738700,
+            28539.6789,
+            27864.8177
           ],
           [
-            1793652600,
-            28961.8464,
-            28288.5267
+            1793739000,
+            28529.0444,
+            27875.4037
           ],
           [
-            1793652900,
-            28938.6096,
-            28311.6067
+            1793739300,
+            28508.0217,
+            27896.3307
           ],
           [
-            1793653200,
-            28938.4304,
-            28311.7847
+            1793739600,
+            28509.6079,
+            27894.7517
           ]
         ]
       }
@@ -23177,7 +23143,7 @@
         }
       ],
       "live": true,
-      "checked_hour": "2026-11-03T14:15:00Z",
+      "checked_hour": "2026-11-03T14:30:00Z",
       "n": 11,
       "mean_r": -0.5483,
       "levels": {
