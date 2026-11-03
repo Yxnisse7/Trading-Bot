@@ -84,7 +84,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1793700300
+        "last_ts": 1793700600
       }
     }
   },
@@ -184,7 +184,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1793700300
+        "last_ts": 1793700600
       }
     }
   },
@@ -284,7 +284,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1793700300
+        "last_ts": 1793700600
       }
     }
   },
@@ -384,7 +384,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1793700300
+        "last_ts": 1793700600
       }
     }
   },
@@ -484,7 +484,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1793700300
+        "last_ts": 1793700600
       }
     }
   },
@@ -572,8 +572,8 @@
       "filters_checked": true,
       "variant": "modele_arbres",
       "exc": {
-        "mfe": 0.0164,
-        "mae": 0.0328,
+        "mfe": 0.2131,
+        "mae": 0.0984,
         "armed": {
           "0.5": false,
           "0.8": false,
@@ -584,7 +584,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": null
+        "last_ts": 1793700600
       }
     }
   },
@@ -660,6 +660,106 @@
         "weekday": 1
       },
       "price_time": "2026-11-03T10:10:00Z",
+      "ctx_avoid": [
+        "minutes depuis l'ouverture américaine : plus de 30 min avant l'ouverture US"
+      ],
+      "model_r": -0.0217,
+      "filters": [
+        "filtre_contexte",
+        "modele_arbres",
+        "bot_en_ombre"
+      ],
+      "filters_checked": true,
+      "variant": "modele_arbres",
+      "exc": {
+        "mfe": 0.0,
+        "mae": 0.0,
+        "armed": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "be": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "last_ts": null
+      }
+    }
+  },
+  {
+    "id": "94645c10de",
+    "asset": "gold",
+    "asset_label": "Or (XAU/USD)",
+    "direction": "short",
+    "entry": 3917.1,
+    "take_profit": 3907.8,
+    "stop_loss": 3923.3,
+    "risk_reward": 1.5,
+    "confidence": "fort",
+    "score": 5.12,
+    "criteria": [
+      "adx",
+      "level",
+      "trend_15m",
+      "trend_1h",
+      "vwap"
+    ],
+    "rationale": "Vente : tendance forte (ADX), niveau clé favorable, tendance 15 min, tendance 1 h, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 15.46 (0.39 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 55%.",
+    "news_context": "actualité calme sur les 2 dernières heures",
+    "created_at": "2026-11-03T10:20:50Z",
+    "expires_at": "2026-11-03T11:20:50Z",
+    "status": "open",
+    "closed_at": null,
+    "close_price": null,
+    "pnl_pct": null,
+    "pnl_gross_pct": null,
+    "duration_minutes": null,
+    "hourly_range": 15.460884,
+    "source": "shadow",
+    "horizon": "1h",
+    "horizon_minutes": 60,
+    "meta": {
+      "tick": 0.1,
+      "details": {
+        "trend_5m": "EMA20 3915.80 / EMA50 3919.80 (5 min)",
+        "trend_15m": "EMA20 3921.54 / EMA50 3932.76",
+        "trend_1h": "prix vs EMA20 1 h 3933.70",
+        "adx": "ADX15 33.9 (+DI 13.8 / -DI 25.5)",
+        "vwap": "VWAP jour 3934.50",
+        "rsi": "RSI14 5 min 52.0",
+        "macd": "histogramme MACD 1.0055",
+        "level": "support 3906.80 / résistance 3918.30",
+        "volume": "z-score volume -2.02",
+        "pdhl": "veille : haut 3980.80 / bas 3900.00",
+        "activity": "activité de l'heure 0.77× la moyenne",
+        "corr": "DXY +0.03 % sur 1 h"
+      },
+      "support": 3906.800048828125,
+      "resistance": 3918.300048828125,
+      "atr_5m": 3.2026843594553935,
+      "atr_ratio": 0.7573421090795166,
+      "hourly_range_pct": 0.3947,
+      "adx_15m": 33.92301527241984,
+      "sigma_5m": 0.0006002974892880743,
+      "p_resolution": 0.5516666666666666,
+      "p_tp_neutral": 0.19833333333333333,
+      "activity_ratio": 0.767,
+      "base_minutes": 5,
+      "ctx": {
+        "adx": 33.92,
+        "rsi_dir": 47.97,
+        "vwap_ext": 1.1251,
+        "ema_ext": -0.0843,
+        "atr_ratio": 0.757,
+        "activity": 0.767,
+        "range_pct": 0.3947,
+        "cost_r": 0.1264,
+        "us_open_min": -249.2,
+        "weekday": 1
+      },
+      "price_time": "2026-11-03T10:15:00Z",
       "ctx_avoid": [
         "minutes depuis l'ouverture américaine : plus de 30 min avant l'ouverture US"
       ],
