@@ -92,7 +92,7 @@
           "0.8": true,
           "1.0": true
         },
-        "last_ts": 1793728560
+        "last_ts": 1793728860
       }
     }
   },
@@ -188,7 +188,7 @@
           "0.8": true,
           "1.0": true
         },
-        "last_ts": 1793728560
+        "last_ts": 1793728860
       }
     }
   },
@@ -285,7 +285,7 @@
           "0.8": true,
           "1.0": true
         },
-        "last_ts": 1793728560
+        "last_ts": 1793728860
       }
     }
   },
@@ -381,7 +381,7 @@
           "0.8": true,
           "1.0": true
         },
-        "last_ts": 1793728560
+        "last_ts": 1793728860
       }
     }
   },
@@ -485,7 +485,7 @@
           "0.8": true,
           "1.0": true
         },
-        "last_ts": 1793728560
+        "last_ts": 1793728860
       }
     }
   },
@@ -588,7 +588,7 @@
           "0.8": true,
           "1.0": true
         },
-        "last_ts": 1793728560
+        "last_ts": 1793728860
       }
     }
   },
@@ -692,7 +692,7 @@
           "0.8": true,
           "1.0": true
         },
-        "last_ts": 1793728560
+        "last_ts": 1793728860
       }
     }
   },
@@ -783,7 +783,7 @@
       "variant": "modele_arbres",
       "exc": {
         "mfe": 0.0045,
-        "mae": 0.0,
+        "mae": 0.3198,
         "armed": {
           "0.5": false,
           "0.8": false,
@@ -796,6 +796,93 @@
         },
         "last_ts": null
       }
+    }
+  },
+  {
+    "id": "b02376f139",
+    "asset": "nasdaq",
+    "asset_label": "Nasdaq 100 (NQ)",
+    "direction": "long",
+    "entry": 28375.0,
+    "take_profit": 28548.25,
+    "stop_loss": 28317.25,
+    "risk_reward": 3.0,
+    "confidence": "fort",
+    "score": 8.29,
+    "criteria": [
+      "adx",
+      "rsi",
+      "trend_15m",
+      "trend_1h",
+      "trend_5m",
+      "vwap"
+    ],
+    "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 147.17 (0.52 %), TP = 31 % du range, SL = 26 % du range, probabilité de résolution sous 1 h ≈ 97%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+    "news_context": "actualité calme sur les 2 dernières heures",
+    "created_at": "2026-11-03T18:11:30Z",
+    "expires_at": "2026-11-04T18:11:30Z",
+    "status": "open",
+    "closed_at": null,
+    "close_price": null,
+    "pnl_pct": null,
+    "pnl_gross_pct": null,
+    "duration_minutes": null,
+    "hourly_range": 147.166667,
+    "source": "shadow",
+    "horizon": "24h",
+    "horizon_minutes": 1440,
+    "meta": {
+      "tick": 0.25,
+      "details": {
+        "trend_5m": "EMA20 28360.99 / EMA50 28336.46 (5 min)",
+        "trend_15m": "EMA20 28336.53 / EMA50 28293.25",
+        "trend_1h": "prix vs EMA20 1 h 28316.17",
+        "adx": "ADX15 20.4 (+DI 19.6 / -DI 15.7)",
+        "vwap": "VWAP jour 28293.16",
+        "rsi": "RSI14 5 min 53.8",
+        "macd": "histogramme MACD -0.3606",
+        "level": "support 28282.75 / résistance 28426.50",
+        "volume": "z-score volume -2.64",
+        "pdhl": "veille : haut 28891.25 / bas 28101.75",
+        "activity": "activité de l'heure 1.07× la moyenne",
+        "corr": "VIX -0.7 % sur 15 min"
+      },
+      "support": 28282.75,
+      "resistance": 28426.5,
+      "atr_5m": 39.18019479113628,
+      "atr_ratio": 1.0505475291606212,
+      "hourly_range_pct": 0.5186,
+      "adx_15m": 20.42696265566912,
+      "sigma_5m": 0.0010618657259371816,
+      "p_resolution": 0.971,
+      "p_tp_neutral": 0.4483333333333333,
+      "activity_ratio": 1.067,
+      "base_minutes": 5,
+      "ctx": {
+        "adx": 20.43,
+        "rsi_dir": 53.83,
+        "vwap_ext": 0.5561,
+        "ema_ext": 0.0952,
+        "atr_ratio": 1.051,
+        "activity": 1.067,
+        "range_pct": 0.5186,
+        "cost_r": 0.0737,
+        "us_open_min": 221.5,
+        "weekday": 1
+      },
+      "exit_override": {
+        "stop_x": 1.5,
+        "target_x": 3.0,
+        "minutes": 1440,
+        "source": "essai 29"
+      },
+      "price_time": "2026-11-03T18:05:00Z",
+      "model_r": -0.0052,
+      "filters": [
+        "modele_arbres"
+      ],
+      "filters_checked": true,
+      "variant": "modele_arbres"
     }
   }
 ]
