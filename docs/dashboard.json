@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-04T20:26:07.164690+01:00",
+  "updated_at": "2026-11-04T20:31:24.911578+01:00",
   "timezone": "Europe/Paris",
   "equity_curve": [
     {
@@ -1842,18 +1842,18 @@
       "avg_pnl_pct": -0.0021
     },
     "shadow": {
-      "n": 1226,
+      "n": 1227,
       "tp": 390,
       "sl": 598,
-      "expired": 238,
+      "expired": 239,
       "win_rate": 0.39473684210526316,
       "neutral_win_rate": 0.3661,
       "edge": 0.0286,
-      "pnl_pct": 26.622,
-      "avg_pnl_pct": 0.0217
+      "pnl_pct": 26.5088,
+      "avg_pnl_pct": 0.0216
     },
     "open": 0,
-    "open_shadow": 20
+    "open_shadow": 19
   },
   "by_source": {
     "bot": {
@@ -1890,15 +1890,15 @@
       "avg_pnl_pct": 0.0
     },
     "shadow": {
-      "n": 1226,
+      "n": 1227,
       "tp": 390,
       "sl": 598,
-      "expired": 238,
+      "expired": 239,
       "win_rate": 0.39473684210526316,
       "neutral_win_rate": 0.3661,
       "edge": 0.0286,
-      "pnl_pct": 26.622,
-      "avg_pnl_pct": 0.0217
+      "pnl_pct": 26.5088,
+      "avg_pnl_pct": 0.0216
     }
   },
   "by_horizon": {
@@ -2115,15 +2115,15 @@
         "avg_pnl_pct": -0.0342
       },
       "shadow": {
-        "n": 425,
+        "n": 426,
         "tp": 145,
         "sl": 174,
-        "expired": 106,
+        "expired": 107,
         "win_rate": 0.45454545454545453,
-        "neutral_win_rate": 0.4111,
-        "edge": 0.0434,
-        "pnl_pct": 4.3383,
-        "avg_pnl_pct": 0.0102
+        "neutral_win_rate": 0.411,
+        "edge": 0.0435,
+        "pnl_pct": 4.2251,
+        "avg_pnl_pct": 0.0099
       },
       "open": 0,
       "session_utc": [
@@ -2228,17 +2228,17 @@
     {
       "key": "trend_5m",
       "label": "Tendance 5 min",
-      "weight": 1.146,
+      "weight": 1.145,
       "stats": {
-        "n": 1245,
+        "n": 1246,
         "tp": 412,
         "sl": 606,
-        "expired": 227,
+        "expired": 228,
         "win_rate": 0.40471512770137524,
         "neutral_win_rate": 0.3666,
         "edge": 0.0381,
-        "pnl_pct": 30.3619,
-        "avg_pnl_pct": 0.0244
+        "pnl_pct": 30.2487,
+        "avg_pnl_pct": 0.0243
       },
       "by_source": {
         "bot": {
@@ -2275,18 +2275,52 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 1096,
+          "n": 1097,
           "tp": 358,
           "sl": 542,
-          "expired": 196,
+          "expired": 197,
           "win_rate": 0.3977777777777778,
-          "neutral_win_rate": 0.3626,
-          "edge": 0.0352,
-          "pnl_pct": 28.6875,
-          "avg_pnl_pct": 0.0262
+          "neutral_win_rate": 0.3627,
+          "edge": 0.0351,
+          "pnl_pct": 28.5743,
+          "avg_pnl_pct": 0.026
         }
       },
       "last_trades": [
+        {
+          "id": "dff07fff09",
+          "asset": "gold",
+          "asset_label": "Or (XAU/USD)",
+          "direction": "long",
+          "horizon": "1h",
+          "entry": 4076.5,
+          "take_profit": 4088.2,
+          "stop_loss": 4068.7,
+          "risk_reward": 1.5,
+          "confidence": "fort",
+          "score": 6.76,
+          "criteria": [
+            "adx",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "expired",
+          "pnl_pct": -0.1132,
+          "pnl_gross_pct": -0.0932,
+          "duration_minutes": 60,
+          "close_price": 4072.7,
+          "created_at": "2026-11-04T18:31:06Z",
+          "closed_at": "2026-11-04T19:31:16Z",
+          "created_local": "04/11 19:31",
+          "expires_at": "2026-11-04T19:31:06Z",
+          "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 19.55 (0.48 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 67%.",
+          "news_context": "actualité à surveiller (score 1) : Dow Skyrockets 1,500 Points in Best Day Since Trump's Tariff Pause",
+          "manual_exit": null
+        },
         {
           "id": "5b81888495",
           "asset": "gold",
@@ -2524,41 +2558,6 @@
           "created_local": "04/11 19:05",
           "expires_at": "2026-11-04T19:05:56Z",
           "rationale": "Achat : tendance forte (ADX), marché meneur favorable, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 19.08 (0.47 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 71%.",
-          "news_context": "actualité à surveiller (score 1) : Dow Skyrockets 1,500 Points in Best Day Since Trump's Tariff Pause",
-          "manual_exit": null
-        },
-        {
-          "id": "cdc953d89e",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "long",
-          "horizon": "1h",
-          "entry": 4078.6,
-          "take_profit": 4090.0,
-          "stop_loss": 4071.0,
-          "risk_reward": 1.5,
-          "confidence": "fort",
-          "score": 7.22,
-          "criteria": [
-            "adx",
-            "corr",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.2063,
-          "pnl_gross_pct": -0.1863,
-          "duration_minutes": 37,
-          "close_price": 4071.0,
-          "created_at": "2026-11-04T18:01:33Z",
-          "closed_at": "2026-11-04T18:39:00Z",
-          "created_local": "04/11 19:01",
-          "expires_at": "2026-11-04T19:01:33Z",
-          "rationale": "Achat : tendance forte (ADX), marché meneur favorable, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 19.04 (0.47 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 69%.",
           "news_context": "actualité à surveiller (score 1) : Dow Skyrockets 1,500 Points in Best Day Since Trump's Tariff Pause",
           "manual_exit": null
         }
@@ -2567,17 +2566,17 @@
     {
       "key": "trend_15m",
       "label": "Tendance 15 min",
-      "weight": 1.146,
+      "weight": 1.145,
       "stats": {
-        "n": 1393,
+        "n": 1394,
         "tp": 448,
         "sl": 673,
-        "expired": 272,
+        "expired": 273,
         "win_rate": 0.39964317573595004,
         "neutral_win_rate": 0.3696,
         "edge": 0.03,
-        "pnl_pct": 26.4201,
-        "avg_pnl_pct": 0.019
+        "pnl_pct": 26.3069,
+        "avg_pnl_pct": 0.0189
       },
       "by_source": {
         "bot": {
@@ -2614,18 +2613,52 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 1226,
+          "n": 1227,
           "tp": 390,
           "sl": 598,
-          "expired": 238,
+          "expired": 239,
           "win_rate": 0.39473684210526316,
           "neutral_win_rate": 0.3661,
           "edge": 0.0286,
-          "pnl_pct": 26.622,
-          "avg_pnl_pct": 0.0217
+          "pnl_pct": 26.5088,
+          "avg_pnl_pct": 0.0216
         }
       },
       "last_trades": [
+        {
+          "id": "dff07fff09",
+          "asset": "gold",
+          "asset_label": "Or (XAU/USD)",
+          "direction": "long",
+          "horizon": "1h",
+          "entry": 4076.5,
+          "take_profit": 4088.2,
+          "stop_loss": 4068.7,
+          "risk_reward": 1.5,
+          "confidence": "fort",
+          "score": 6.76,
+          "criteria": [
+            "adx",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "expired",
+          "pnl_pct": -0.1132,
+          "pnl_gross_pct": -0.0932,
+          "duration_minutes": 60,
+          "close_price": 4072.7,
+          "created_at": "2026-11-04T18:31:06Z",
+          "closed_at": "2026-11-04T19:31:16Z",
+          "created_local": "04/11 19:31",
+          "expires_at": "2026-11-04T19:31:06Z",
+          "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 19.55 (0.48 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 67%.",
+          "news_context": "actualité à surveiller (score 1) : Dow Skyrockets 1,500 Points in Best Day Since Trump's Tariff Pause",
+          "manual_exit": null
+        },
         {
           "id": "5b81888495",
           "asset": "gold",
@@ -2861,41 +2894,6 @@
           "created_local": "04/11 19:05",
           "expires_at": "2026-11-04T19:05:56Z",
           "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 606.6 (0.75 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 98%.",
-          "news_context": "actualité à surveiller (score 1) : Dow Skyrockets 1,500 Points in Best Day Since Trump's Tariff Pause",
-          "manual_exit": null
-        },
-        {
-          "id": "3b2e29c76f",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "long",
-          "horizon": "1h",
-          "entry": 4075.9,
-          "take_profit": 4087.3,
-          "stop_loss": 4068.3,
-          "risk_reward": 1.5,
-          "confidence": "fort",
-          "score": 7.24,
-          "criteria": [
-            "adx",
-            "corr",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "expired",
-          "pnl_pct": -0.1181,
-          "pnl_gross_pct": -0.0981,
-          "duration_minutes": 65,
-          "close_price": 4071.9,
-          "created_at": "2026-11-04T18:05:56Z",
-          "closed_at": "2026-11-04T19:11:05Z",
-          "created_local": "04/11 19:05",
-          "expires_at": "2026-11-04T19:05:56Z",
-          "rationale": "Achat : tendance forte (ADX), marché meneur favorable, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 19.08 (0.47 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 71%.",
           "news_context": "actualité à surveiller (score 1) : Dow Skyrockets 1,500 Points in Best Day Since Trump's Tariff Pause",
           "manual_exit": null
         }
@@ -2904,17 +2902,17 @@
     {
       "key": "trend_1h",
       "label": "Tendance 1 h",
-      "weight": 1.146,
+      "weight": 1.145,
       "stats": {
-        "n": 1374,
+        "n": 1375,
         "tp": 440,
         "sl": 666,
-        "expired": 268,
+        "expired": 269,
         "win_rate": 0.39783001808318263,
         "neutral_win_rate": 0.3696,
         "edge": 0.0282,
-        "pnl_pct": 27.2076,
-        "avg_pnl_pct": 0.0198
+        "pnl_pct": 27.0944,
+        "avg_pnl_pct": 0.0197
       },
       "by_source": {
         "bot": {
@@ -2951,18 +2949,52 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 1207,
+          "n": 1208,
           "tp": 382,
           "sl": 591,
-          "expired": 234,
+          "expired": 235,
           "win_rate": 0.3926002055498458,
           "neutral_win_rate": 0.366,
           "edge": 0.0266,
-          "pnl_pct": 27.4095,
-          "avg_pnl_pct": 0.0227
+          "pnl_pct": 27.2963,
+          "avg_pnl_pct": 0.0226
         }
       },
       "last_trades": [
+        {
+          "id": "dff07fff09",
+          "asset": "gold",
+          "asset_label": "Or (XAU/USD)",
+          "direction": "long",
+          "horizon": "1h",
+          "entry": 4076.5,
+          "take_profit": 4088.2,
+          "stop_loss": 4068.7,
+          "risk_reward": 1.5,
+          "confidence": "fort",
+          "score": 6.76,
+          "criteria": [
+            "adx",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "expired",
+          "pnl_pct": -0.1132,
+          "pnl_gross_pct": -0.0932,
+          "duration_minutes": 60,
+          "close_price": 4072.7,
+          "created_at": "2026-11-04T18:31:06Z",
+          "closed_at": "2026-11-04T19:31:16Z",
+          "created_local": "04/11 19:31",
+          "expires_at": "2026-11-04T19:31:06Z",
+          "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 19.55 (0.48 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 67%.",
+          "news_context": "actualité à surveiller (score 1) : Dow Skyrockets 1,500 Points in Best Day Since Trump's Tariff Pause",
+          "manual_exit": null
+        },
         {
           "id": "5b81888495",
           "asset": "gold",
@@ -3198,41 +3230,6 @@
           "created_local": "04/11 19:05",
           "expires_at": "2026-11-04T19:05:56Z",
           "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 606.6 (0.75 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 98%.",
-          "news_context": "actualité à surveiller (score 1) : Dow Skyrockets 1,500 Points in Best Day Since Trump's Tariff Pause",
-          "manual_exit": null
-        },
-        {
-          "id": "3b2e29c76f",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "long",
-          "horizon": "1h",
-          "entry": 4075.9,
-          "take_profit": 4087.3,
-          "stop_loss": 4068.3,
-          "risk_reward": 1.5,
-          "confidence": "fort",
-          "score": 7.24,
-          "criteria": [
-            "adx",
-            "corr",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "expired",
-          "pnl_pct": -0.1181,
-          "pnl_gross_pct": -0.0981,
-          "duration_minutes": 65,
-          "close_price": 4071.9,
-          "created_at": "2026-11-04T18:05:56Z",
-          "closed_at": "2026-11-04T19:11:05Z",
-          "created_local": "04/11 19:05",
-          "expires_at": "2026-11-04T19:05:56Z",
-          "rationale": "Achat : tendance forte (ADX), marché meneur favorable, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 19.08 (0.47 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 71%.",
           "news_context": "actualité à surveiller (score 1) : Dow Skyrockets 1,500 Points in Best Day Since Trump's Tariff Pause",
           "manual_exit": null
         }
@@ -3241,17 +3238,17 @@
     {
       "key": "adx",
       "label": "Force de tendance (ADX)",
-      "weight": 1.146,
+      "weight": 1.145,
       "stats": {
-        "n": 1393,
+        "n": 1394,
         "tp": 448,
         "sl": 673,
-        "expired": 272,
+        "expired": 273,
         "win_rate": 0.39964317573595004,
         "neutral_win_rate": 0.3696,
         "edge": 0.03,
-        "pnl_pct": 26.4201,
-        "avg_pnl_pct": 0.019
+        "pnl_pct": 26.3069,
+        "avg_pnl_pct": 0.0189
       },
       "by_source": {
         "bot": {
@@ -3288,18 +3285,52 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 1226,
+          "n": 1227,
           "tp": 390,
           "sl": 598,
-          "expired": 238,
+          "expired": 239,
           "win_rate": 0.39473684210526316,
           "neutral_win_rate": 0.3661,
           "edge": 0.0286,
-          "pnl_pct": 26.622,
-          "avg_pnl_pct": 0.0217
+          "pnl_pct": 26.5088,
+          "avg_pnl_pct": 0.0216
         }
       },
       "last_trades": [
+        {
+          "id": "dff07fff09",
+          "asset": "gold",
+          "asset_label": "Or (XAU/USD)",
+          "direction": "long",
+          "horizon": "1h",
+          "entry": 4076.5,
+          "take_profit": 4088.2,
+          "stop_loss": 4068.7,
+          "risk_reward": 1.5,
+          "confidence": "fort",
+          "score": 6.76,
+          "criteria": [
+            "adx",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "expired",
+          "pnl_pct": -0.1132,
+          "pnl_gross_pct": -0.0932,
+          "duration_minutes": 60,
+          "close_price": 4072.7,
+          "created_at": "2026-11-04T18:31:06Z",
+          "closed_at": "2026-11-04T19:31:16Z",
+          "created_local": "04/11 19:31",
+          "expires_at": "2026-11-04T19:31:06Z",
+          "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 19.55 (0.48 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 67%.",
+          "news_context": "actualité à surveiller (score 1) : Dow Skyrockets 1,500 Points in Best Day Since Trump's Tariff Pause",
+          "manual_exit": null
+        },
         {
           "id": "5b81888495",
           "asset": "gold",
@@ -3535,41 +3566,6 @@
           "created_local": "04/11 19:05",
           "expires_at": "2026-11-04T19:05:56Z",
           "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 606.6 (0.75 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 98%.",
-          "news_context": "actualité à surveiller (score 1) : Dow Skyrockets 1,500 Points in Best Day Since Trump's Tariff Pause",
-          "manual_exit": null
-        },
-        {
-          "id": "3b2e29c76f",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "long",
-          "horizon": "1h",
-          "entry": 4075.9,
-          "take_profit": 4087.3,
-          "stop_loss": 4068.3,
-          "risk_reward": 1.5,
-          "confidence": "fort",
-          "score": 7.24,
-          "criteria": [
-            "adx",
-            "corr",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "expired",
-          "pnl_pct": -0.1181,
-          "pnl_gross_pct": -0.0981,
-          "duration_minutes": 65,
-          "close_price": 4071.9,
-          "created_at": "2026-11-04T18:05:56Z",
-          "closed_at": "2026-11-04T19:11:05Z",
-          "created_local": "04/11 19:05",
-          "expires_at": "2026-11-04T19:05:56Z",
-          "rationale": "Achat : tendance forte (ADX), marché meneur favorable, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 19.08 (0.47 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 71%.",
           "news_context": "actualité à surveiller (score 1) : Dow Skyrockets 1,500 Points in Best Day Since Trump's Tariff Pause",
           "manual_exit": null
         }
@@ -3580,15 +3576,15 @@
       "label": "VWAP",
       "weight": 0.872,
       "stats": {
-        "n": 1367,
+        "n": 1368,
         "tp": 443,
         "sl": 658,
-        "expired": 266,
+        "expired": 267,
         "win_rate": 0.40236148955495005,
         "neutral_win_rate": 0.3688,
         "edge": 0.0336,
-        "pnl_pct": 28.3434,
-        "avg_pnl_pct": 0.0207
+        "pnl_pct": 28.2302,
+        "avg_pnl_pct": 0.0206
       },
       "by_source": {
         "bot": {
@@ -3625,18 +3621,52 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 1202,
+          "n": 1203,
           "tp": 385,
           "sl": 585,
-          "expired": 232,
+          "expired": 233,
           "win_rate": 0.39690721649484534,
-          "neutral_win_rate": 0.3651,
-          "edge": 0.0318,
-          "pnl_pct": 27.9289,
-          "avg_pnl_pct": 0.0232
+          "neutral_win_rate": 0.3652,
+          "edge": 0.0317,
+          "pnl_pct": 27.8157,
+          "avg_pnl_pct": 0.0231
         }
       },
       "last_trades": [
+        {
+          "id": "dff07fff09",
+          "asset": "gold",
+          "asset_label": "Or (XAU/USD)",
+          "direction": "long",
+          "horizon": "1h",
+          "entry": 4076.5,
+          "take_profit": 4088.2,
+          "stop_loss": 4068.7,
+          "risk_reward": 1.5,
+          "confidence": "fort",
+          "score": 6.76,
+          "criteria": [
+            "adx",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "expired",
+          "pnl_pct": -0.1132,
+          "pnl_gross_pct": -0.0932,
+          "duration_minutes": 60,
+          "close_price": 4072.7,
+          "created_at": "2026-11-04T18:31:06Z",
+          "closed_at": "2026-11-04T19:31:16Z",
+          "created_local": "04/11 19:31",
+          "expires_at": "2026-11-04T19:31:06Z",
+          "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 19.55 (0.48 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 67%.",
+          "news_context": "actualité à surveiller (score 1) : Dow Skyrockets 1,500 Points in Best Day Since Trump's Tariff Pause",
+          "manual_exit": null
+        },
         {
           "id": "5b81888495",
           "asset": "gold",
@@ -3874,58 +3904,23 @@
           "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 606.6 (0.75 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 98%.",
           "news_context": "actualité à surveiller (score 1) : Dow Skyrockets 1,500 Points in Best Day Since Trump's Tariff Pause",
           "manual_exit": null
-        },
-        {
-          "id": "3b2e29c76f",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "long",
-          "horizon": "1h",
-          "entry": 4075.9,
-          "take_profit": 4087.3,
-          "stop_loss": 4068.3,
-          "risk_reward": 1.5,
-          "confidence": "fort",
-          "score": 7.24,
-          "criteria": [
-            "adx",
-            "corr",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "expired",
-          "pnl_pct": -0.1181,
-          "pnl_gross_pct": -0.0981,
-          "duration_minutes": 65,
-          "close_price": 4071.9,
-          "created_at": "2026-11-04T18:05:56Z",
-          "closed_at": "2026-11-04T19:11:05Z",
-          "created_local": "04/11 19:05",
-          "expires_at": "2026-11-04T19:05:56Z",
-          "rationale": "Achat : tendance forte (ADX), marché meneur favorable, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 19.08 (0.47 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 71%.",
-          "news_context": "actualité à surveiller (score 1) : Dow Skyrockets 1,500 Points in Best Day Since Trump's Tariff Pause",
-          "manual_exit": null
         }
       ]
     },
     {
       "key": "rsi",
       "label": "RSI",
-      "weight": 1.202,
+      "weight": 1.201,
       "stats": {
-        "n": 1077,
+        "n": 1078,
         "tp": 364,
         "sl": 514,
-        "expired": 199,
+        "expired": 200,
         "win_rate": 0.4145785876993166,
         "neutral_win_rate": 0.3679,
         "edge": 0.0467,
-        "pnl_pct": 31.8898,
-        "avg_pnl_pct": 0.0296
+        "pnl_pct": 31.7766,
+        "avg_pnl_pct": 0.0295
       },
       "by_source": {
         "bot": {
@@ -3962,18 +3957,52 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 933,
+          "n": 934,
           "tp": 311,
           "sl": 454,
-          "expired": 168,
+          "expired": 169,
           "win_rate": 0.4065359477124183,
-          "neutral_win_rate": 0.3637,
-          "edge": 0.0428,
-          "pnl_pct": 29.5314,
-          "avg_pnl_pct": 0.0317
+          "neutral_win_rate": 0.3638,
+          "edge": 0.0427,
+          "pnl_pct": 29.4182,
+          "avg_pnl_pct": 0.0315
         }
       },
       "last_trades": [
+        {
+          "id": "dff07fff09",
+          "asset": "gold",
+          "asset_label": "Or (XAU/USD)",
+          "direction": "long",
+          "horizon": "1h",
+          "entry": 4076.5,
+          "take_profit": 4088.2,
+          "stop_loss": 4068.7,
+          "risk_reward": 1.5,
+          "confidence": "fort",
+          "score": 6.76,
+          "criteria": [
+            "adx",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "expired",
+          "pnl_pct": -0.1132,
+          "pnl_gross_pct": -0.0932,
+          "duration_minutes": 60,
+          "close_price": 4072.7,
+          "created_at": "2026-11-04T18:31:06Z",
+          "closed_at": "2026-11-04T19:31:16Z",
+          "created_local": "04/11 19:31",
+          "expires_at": "2026-11-04T19:31:06Z",
+          "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 19.55 (0.48 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 67%.",
+          "news_context": "actualité à surveiller (score 1) : Dow Skyrockets 1,500 Points in Best Day Since Trump's Tariff Pause",
+          "manual_exit": null
+        },
         {
           "id": "5b81888495",
           "asset": "gold",
@@ -4209,41 +4238,6 @@
           "created_local": "04/11 19:05",
           "expires_at": "2026-11-04T19:05:56Z",
           "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 606.6 (0.75 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 98%.",
-          "news_context": "actualité à surveiller (score 1) : Dow Skyrockets 1,500 Points in Best Day Since Trump's Tariff Pause",
-          "manual_exit": null
-        },
-        {
-          "id": "3b2e29c76f",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "long",
-          "horizon": "1h",
-          "entry": 4075.9,
-          "take_profit": 4087.3,
-          "stop_loss": 4068.3,
-          "risk_reward": 1.5,
-          "confidence": "fort",
-          "score": 7.24,
-          "criteria": [
-            "adx",
-            "corr",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "expired",
-          "pnl_pct": -0.1181,
-          "pnl_gross_pct": -0.0981,
-          "duration_minutes": 65,
-          "close_price": 4071.9,
-          "created_at": "2026-11-04T18:05:56Z",
-          "closed_at": "2026-11-04T19:11:05Z",
-          "created_local": "04/11 19:05",
-          "expires_at": "2026-11-04T19:05:56Z",
-          "rationale": "Achat : tendance forte (ADX), marché meneur favorable, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 19.08 (0.47 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 71%.",
           "news_context": "actualité à surveiller (score 1) : Dow Skyrockets 1,500 Points in Best Day Since Trump's Tariff Pause",
           "manual_exit": null
         }
@@ -5606,40 +5600,6 @@
       "created_local": "04/11 19:31",
       "expires_at": "2026-11-05T18:31:06Z",
       "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 310.88 (1.08 %), TP = 35 % du range, SL = 29 % du range, probabilité de résolution sous 3 h ≈ 99%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
-      "news_context": "actualité à surveiller (score 1) : Dow Skyrockets 1,500 Points in Best Day Since Trump's Tariff Pause",
-      "manual_exit": null
-    },
-    {
-      "id": "dff07fff09",
-      "asset": "gold",
-      "asset_label": "Or (XAU/USD)",
-      "direction": "long",
-      "horizon": "1h",
-      "entry": 4076.5,
-      "take_profit": 4088.2,
-      "stop_loss": 4068.7,
-      "risk_reward": 1.5,
-      "confidence": "fort",
-      "score": 6.76,
-      "criteria": [
-        "adx",
-        "rsi",
-        "trend_15m",
-        "trend_1h",
-        "trend_5m",
-        "vwap"
-      ],
-      "source": "shadow",
-      "status": "open",
-      "pnl_pct": null,
-      "pnl_gross_pct": null,
-      "duration_minutes": null,
-      "close_price": null,
-      "created_at": "2026-11-04T18:31:06Z",
-      "closed_at": null,
-      "created_local": "04/11 19:31",
-      "expires_at": "2026-11-04T19:31:06Z",
-      "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 19.55 (0.48 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 67%.",
       "news_context": "actualité à surveiller (score 1) : Dow Skyrockets 1,500 Points in Best Day Since Trump's Tariff Pause",
       "manual_exit": null
     },
@@ -7552,9 +7512,9 @@
   "adjustments": {
     "notes": [
       "trades réels : +0,15 R ± 0,20 R par trade avant frais sur 168 trades (0 R = hasard)",
-      "tendance (trend_5m, trend_15m, trend_1h, adx) : +0,12 R ± 0,06 R sur 1771 trades éq. → poids ×1,15",
-      "vwap : +0,13 R ± 0,06 R sur 1668 trades éq. → poids ×1,16",
-      "rsi : +0,15 R ± 0,07 R sur 1393 trades éq. → poids ×1,20",
+      "tendance (trend_5m, trend_15m, trend_1h, adx) : +0,12 R ± 0,06 R sur 1772 trades éq. → poids ×1,14",
+      "vwap : +0,13 R ± 0,06 R sur 1669 trades éq. → poids ×1,16",
+      "rsi : +0,15 R ± 0,07 R sur 1394 trades éq. → poids ×1,20",
       "orb : +0,30 R ± 0,25 R sur 113 trades éq. → poids ×1,11",
       "pdhl : +0,29 R ± 0,20 R sur 205 trades éq. → poids ×1,23",
       "tranche 11h UTC : -0,31 R sur 77 trades éq. → évitée",
@@ -7564,7 +7524,7 @@
       "ethereum, rsi : -0,21 R contre +0,15 R en global sur 62 trades éq. → poids ×0,73 sur cet actif",
       "euro, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,26 R contre +0,12 R en global sur 70 trades éq. → poids ×0,77 sur cet actif",
       "euro, vwap : -0,24 R contre +0,13 R en global sur 67 trades éq. → poids ×0,81 sur cet actif",
-      "euro, rsi : -0,23 R contre +0,15 R en global sur 58 trades éq. → poids ×0,85 sur cet actif",
+      "euro, rsi : -0,23 R contre +0,15 R en global sur 58 trades éq. → poids ×0,86 sur cet actif",
       "nasdaq, tendance (trend_5m, trend_15m, trend_1h, adx) : +0,36 R contre +0,12 R en global sur 531 trades éq. → poids ×1,25 sur cet actif",
       "nasdaq, vwap : +0,37 R contre +0,13 R en global sur 523 trades éq. → poids ×1,23 sur cet actif",
       "nasdaq, rsi : +0,45 R contre +0,15 R en global sur 417 trades éq. → poids ×1,33 sur cet actif",
@@ -7577,21 +7537,21 @@
       12,
       19
     ],
-    "sample": 2079,
+    "sample": 2080,
     "sample_by_source": {
       "bot": 167,
-      "shadow": 1226,
+      "shadow": 1227,
       "manual": 1,
       "backtest": 685
     },
     "method": "v2 : recalcul complet, marge de sécurité, résultats en R, sources pondérées",
     "weights": {
-      "trend_5m": 1.146,
-      "trend_15m": 1.146,
-      "trend_1h": 1.146,
-      "adx": 1.146,
+      "trend_5m": 1.145,
+      "trend_15m": 1.145,
+      "trend_1h": 1.145,
+      "adx": 1.145,
       "vwap": 0.872,
-      "rsi": 1.202,
+      "rsi": 1.201,
       "macd": 1.0,
       "level": 1.0,
       "volume": 0.75,
@@ -7601,12 +7561,12 @@
     },
     "weights_by_asset": {
       "bitcoin": {
-        "trend_5m": 1.146,
-        "trend_15m": 1.146,
-        "trend_1h": 1.146,
-        "adx": 1.146,
+        "trend_5m": 1.145,
+        "trend_15m": 1.145,
+        "trend_1h": 1.145,
+        "adx": 1.145,
         "vwap": 0.872,
-        "rsi": 1.202,
+        "rsi": 1.201,
         "macd": 1.0,
         "level": 1.0,
         "volume": 0.75,
@@ -7620,7 +7580,7 @@
         "trend_1h": 1.0,
         "adx": 1.0,
         "vwap": 0.872,
-        "rsi": 0.879,
+        "rsi": 0.88,
         "macd": 1.0,
         "level": 1.0,
         "volume": 0.75,
@@ -7633,7 +7593,7 @@
         "trend_15m": 0.883,
         "trend_1h": 0.883,
         "adx": 0.883,
-        "vwap": 0.707,
+        "vwap": 0.708,
         "rsi": 1.028,
         "macd": 1.0,
         "level": 1.0,
@@ -7643,12 +7603,12 @@
         "corr": 0.5
       },
       "gold": {
-        "trend_5m": 1.146,
-        "trend_15m": 1.146,
-        "trend_1h": 1.146,
-        "adx": 1.146,
+        "trend_5m": 1.145,
+        "trend_15m": 1.145,
+        "trend_1h": 1.145,
+        "adx": 1.145,
         "vwap": 0.872,
-        "rsi": 1.202,
+        "rsi": 1.201,
         "macd": 1.0,
         "level": 1.0,
         "volume": 0.75,
@@ -7661,7 +7621,7 @@
         "trend_15m": 1.431,
         "trend_1h": 1.431,
         "adx": 1.431,
-        "vwap": 1.075,
+        "vwap": 1.076,
         "rsi": 1.5,
         "macd": 1.0,
         "level": 1.0,
@@ -7671,10 +7631,10 @@
         "corr": 0.5
       },
       "oil": {
-        "trend_5m": 1.146,
-        "trend_15m": 1.146,
-        "trend_1h": 1.146,
-        "adx": 1.146,
+        "trend_5m": 1.145,
+        "trend_15m": 1.145,
+        "trend_1h": 1.145,
+        "adx": 1.145,
         "vwap": 0.872,
         "rsi": 1.18,
         "macd": 1.0,
@@ -7689,8 +7649,8 @@
         "trend_15m": 0.719,
         "trend_1h": 0.719,
         "adx": 0.719,
-        "vwap": 0.542,
-        "rsi": 0.815,
+        "vwap": 0.543,
+        "rsi": 0.816,
         "macd": 1.0,
         "level": 1.0,
         "volume": 0.75,
@@ -7707,31 +7667,31 @@
           "trend_1h",
           "adx"
         ],
-        "n": 2078,
-        "n_eff": 1770.9,
-        "mean_r": 0.1203,
+        "n": 2079,
+        "n_eff": 1771.9,
+        "mean_r": 0.1199,
         "margin_r": 0.062,
-        "multiplier": 1.146
+        "multiplier": 1.145
       },
       "vwap": {
         "members": [
           "vwap"
         ],
-        "n": 1933,
-        "n_eff": 1668.3,
-        "mean_r": 0.1296,
-        "margin_r": 0.0644,
-        "multiplier": 1.163
+        "n": 1934,
+        "n_eff": 1669.3,
+        "mean_r": 0.1292,
+        "margin_r": 0.0643,
+        "multiplier": 1.162
       },
       "rsi": {
         "members": [
           "rsi"
         ],
-        "n": 1653,
-        "n_eff": 1393.3,
-        "mean_r": 0.1518,
+        "n": 1654,
+        "n_eff": 1394.3,
+        "mean_r": 0.1513,
         "margin_r": 0.0709,
-        "multiplier": 1.202
+        "multiplier": 1.201
       },
       "macd": {
         "members": [
@@ -7801,8 +7761,8 @@
         "margin_r": 0.1955
       },
       "fantômes": {
-        "n": 1226,
-        "mean_r": 0.1465,
+        "n": 1227,
+        "mean_r": 0.146,
         "margin_r": 0.0769
       },
       "backtest": {
@@ -7907,9 +7867,9 @@
     },
     "variants_z": 2.73,
     "promoted_variants": [],
-    "updated_at": "2026-11-04T19:21:11.238263+00:00",
+    "updated_at": "2026-11-04T19:31:21.129295+00:00",
     "context": {
-      "n": 1847,
+      "n": 1848,
       "features": {
         "adx": {
           "label": "force de tendance (ADX 15 min)",
@@ -7917,31 +7877,31 @@
             {
               "label": "bas (< 28)",
               "lo": -1000000000.0,
-              "hi": 27.62,
-              "n": 615,
-              "n_eff": 514.3,
-              "mean_r": 0.0284,
-              "margin_r": 0.1409,
+              "hi": 27.63,
+              "n": 616,
+              "n_eff": 515.3,
+              "mean_r": 0.0263,
+              "margin_r": 0.1407,
               "avoid": false
             },
             {
               "label": "milieu (28 à 39)",
-              "lo": 27.62,
-              "hi": 38.58,
+              "lo": 27.63,
+              "hi": 38.59,
               "n": 616,
-              "n_eff": 523.3,
-              "mean_r": 0.2251,
-              "margin_r": 0.1506,
+              "n_eff": 523.0,
+              "mean_r": 0.2284,
+              "margin_r": 0.1507,
               "avoid": false
             },
             {
               "label": "haut (≥ 39)",
-              "lo": 38.58,
+              "lo": 38.59,
               "hi": 1000000000.0,
               "n": 616,
-              "n_eff": 545.4,
-              "mean_r": 0.1584,
-              "margin_r": 0.1508,
+              "n_eff": 545.7,
+              "mean_r": 0.1562,
+              "margin_r": 0.1507,
               "avoid": false
             }
           ]
@@ -7963,10 +7923,10 @@
               "label": "milieu (59 à 66)",
               "lo": 59.26,
               "hi": 66.33,
-              "n": 616,
-              "n_eff": 523.1,
-              "mean_r": 0.2152,
-              "margin_r": 0.1609,
+              "n": 617,
+              "n_eff": 524.1,
+              "mean_r": 0.2138,
+              "margin_r": 0.1607,
               "avoid": false
             },
             {
@@ -8008,10 +7968,10 @@
               "label": "haut (≥ 1,60)",
               "lo": 1.6008,
               "hi": 1000000000.0,
-              "n": 581,
-              "n_eff": 512.0,
-              "mean_r": 0.3387,
-              "margin_r": 0.164,
+              "n": 582,
+              "n_eff": 513.0,
+              "mean_r": 0.337,
+              "margin_r": 0.1637,
               "avoid": false
             }
           ]
@@ -8023,10 +7983,10 @@
               "label": "bas (< 0,23)",
               "lo": -1000000000.0,
               "hi": 0.2339,
-              "n": 615,
-              "n_eff": 531.0,
-              "mean_r": 0.1353,
-              "margin_r": 0.1343,
+              "n": 616,
+              "n_eff": 532.0,
+              "mean_r": 0.1341,
+              "margin_r": 0.1341,
               "avoid": false
             },
             {
@@ -8058,10 +8018,10 @@
               "label": "bas (< 1,09)",
               "lo": -1000000000.0,
               "hi": 1.087,
-              "n": 615,
-              "n_eff": 541.4,
-              "mean_r": -0.0703,
-              "margin_r": 0.1183,
+              "n": 616,
+              "n_eff": 542.4,
+              "mean_r": -0.0711,
+              "margin_r": 0.1181,
               "avoid": false
             },
             {
@@ -8093,10 +8053,10 @@
               "label": "bas (< 0,99)",
               "lo": -1000000000.0,
               "hi": 0.994,
-              "n": 554,
-              "n_eff": 490.5,
-              "mean_r": 0.0777,
-              "margin_r": 0.1429,
+              "n": 555,
+              "n_eff": 491.5,
+              "mean_r": 0.0765,
+              "margin_r": 0.1427,
               "avoid": false
             },
             {
@@ -8127,21 +8087,21 @@
             {
               "label": "bas (< 0,38)",
               "lo": -1000000000.0,
-              "hi": 0.3824,
-              "n": 615,
-              "n_eff": 529.3,
-              "mean_r": 0.1403,
-              "margin_r": 0.1578,
+              "hi": 0.3825,
+              "n": 616,
+              "n_eff": 530.3,
+              "mean_r": 0.1376,
+              "margin_r": 0.1576,
               "avoid": false
             },
             {
               "label": "milieu (0,38 à 0,62)",
-              "lo": 0.3824,
+              "lo": 0.3825,
               "hi": 0.618,
               "n": 616,
               "n_eff": 549.0,
-              "mean_r": 0.1801,
-              "margin_r": 0.1466,
+              "mean_r": 0.1814,
+              "margin_r": 0.1464,
               "avoid": false
             },
             {
@@ -8173,10 +8133,10 @@
               "label": "milieu (0,08 à 0,12)",
               "lo": 0.0797,
               "hi": 0.1228,
-              "n": 615,
-              "n_eff": 530.3,
-              "mean_r": 0.15,
-              "margin_r": 0.1359,
+              "n": 616,
+              "n_eff": 531.3,
+              "mean_r": 0.1487,
+              "margin_r": 0.1356,
               "avoid": false
             },
             {
@@ -8218,10 +8178,10 @@
               "label": "plus de 1 h 30 après l'ouverture US",
               "lo": 90.0,
               "hi": 1000000000.0,
-              "n": 863,
-              "n_eff": 734.7,
-              "mean_r": 0.2754,
-              "margin_r": 0.1333,
+              "n": 864,
+              "n_eff": 735.7,
+              "mean_r": 0.2744,
+              "margin_r": 0.1331,
               "avoid": false
             }
           ]
@@ -8253,10 +8213,10 @@
               "label": "mercredi",
               "lo": 2,
               "hi": 3,
-              "n": 416,
-              "n_eff": 370.7,
-              "mean_r": 0.3699,
-              "margin_r": 0.2019,
+              "n": 417,
+              "n_eff": 371.7,
+              "mean_r": 0.3675,
+              "margin_r": 0.2014,
               "avoid": false
             },
             {
@@ -8315,8 +8275,8 @@
     },
     "exits": {
       "réels et en ombre": {
-        "n": 1163,
-        "current_net_r": 0.0773,
+        "n": 1164,
+        "current_net_r": 0.0768,
         "mfe_median": 0.949,
         "sl_reached": {
           "0.5": 205,
@@ -8326,19 +8286,19 @@
         "n_sl": 561,
         "rules": {
           "0.5": {
-            "net_r": 0.0307,
+            "net_r": 0.0302,
             "diff_r": -0.0466,
             "margin_r": 0.0474,
             "better": false
           },
           "0.8": {
-            "net_r": 0.0396,
-            "diff_r": -0.0378,
+            "net_r": 0.039,
+            "diff_r": -0.0377,
             "margin_r": 0.0373,
             "better": false
           },
           "1.0": {
-            "net_r": 0.0415,
+            "net_r": 0.0409,
             "diff_r": -0.0359,
             "margin_r": 0.033,
             "better": false
@@ -8445,10 +8405,10 @@
     }
   },
   "state": {
-    "last_scan": "2026-11-04T19:25:58Z",
+    "last_scan": "2026-11-04T19:31:16Z",
     "last_scan_note": "tranche évitée",
     "last_summary": "2026-11-03T23:05:51Z",
-    "last_track": "2026-11-04T19:25:58Z",
+    "last_track": "2026-11-04T19:31:16Z",
     "last_summary_day": "2026-11-03"
   },
   "limits": {
@@ -24205,7 +24165,7 @@
       "since": "2026-10-26T12:00:00Z",
       "trades": [],
       "live": true,
-      "checked_hour": "2026-11-04T19:15:00Z",
+      "checked_hour": "2026-11-04T19:30:00Z",
       "n": 0,
       "mean_r": null
     }
