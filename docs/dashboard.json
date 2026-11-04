@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-04T22:06:10.631496+01:00",
+  "updated_at": "2026-11-04T22:11:17.261110+01:00",
   "timezone": "Europe/Paris",
   "equity_curve": [
     {
@@ -1842,15 +1842,15 @@
       "avg_pnl_pct": -0.0021
     },
     "shadow": {
-      "n": 1242,
+      "n": 1243,
       "tp": 390,
       "sl": 609,
-      "expired": 243,
+      "expired": 244,
       "win_rate": 0.39039039039039036,
       "neutral_win_rate": 0.3656,
       "edge": 0.0248,
-      "pnl_pct": 20.8479,
-      "avg_pnl_pct": 0.0168
+      "pnl_pct": 21.035,
+      "avg_pnl_pct": 0.0169
     },
     "open": 0,
     "open_shadow": 6
@@ -1890,15 +1890,15 @@
       "avg_pnl_pct": 0.0
     },
     "shadow": {
-      "n": 1242,
+      "n": 1243,
       "tp": 390,
       "sl": 609,
-      "expired": 243,
+      "expired": 244,
       "win_rate": 0.39039039039039036,
       "neutral_win_rate": 0.3656,
       "edge": 0.0248,
-      "pnl_pct": 20.8479,
-      "avg_pnl_pct": 0.0168
+      "pnl_pct": 21.035,
+      "avg_pnl_pct": 0.0169
     }
   },
   "by_horizon": {
@@ -2039,15 +2039,15 @@
         "avg_pnl_pct": -0.0503
       },
       "shadow": {
-        "n": 37,
+        "n": 38,
         "tp": 12,
         "sl": 13,
-        "expired": 12,
+        "expired": 13,
         "win_rate": 0.48,
-        "neutral_win_rate": 0.405,
-        "edge": 0.075,
-        "pnl_pct": -1.1287,
-        "avg_pnl_pct": -0.0305
+        "neutral_win_rate": 0.4049,
+        "edge": 0.0751,
+        "pnl_pct": -0.9416,
+        "avg_pnl_pct": -0.0248
       },
       "open": 0,
       "session_utc": null,
@@ -2228,7 +2228,7 @@
     {
       "key": "trend_5m",
       "label": "Tendance 5 min",
-      "weight": 1.126,
+      "weight": 1.127,
       "stats": {
         "n": 1259,
         "tp": 412,
@@ -2564,17 +2564,17 @@
     {
       "key": "trend_15m",
       "label": "Tendance 15 min",
-      "weight": 1.126,
+      "weight": 1.127,
       "stats": {
-        "n": 1409,
+        "n": 1410,
         "tp": 448,
         "sl": 684,
-        "expired": 277,
+        "expired": 278,
         "win_rate": 0.3957597173144876,
         "neutral_win_rate": 0.3691,
         "edge": 0.0267,
-        "pnl_pct": 20.646,
-        "avg_pnl_pct": 0.0147
+        "pnl_pct": 20.8331,
+        "avg_pnl_pct": 0.0148
       },
       "by_source": {
         "bot": {
@@ -2611,18 +2611,51 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 1242,
+          "n": 1243,
           "tp": 390,
           "sl": 609,
-          "expired": 243,
+          "expired": 244,
           "win_rate": 0.39039039039039036,
           "neutral_win_rate": 0.3656,
           "edge": 0.0248,
-          "pnl_pct": 20.8479,
-          "avg_pnl_pct": 0.0168
+          "pnl_pct": 21.035,
+          "avg_pnl_pct": 0.0169
         }
       },
       "last_trades": [
+        {
+          "id": "85d5162dba",
+          "asset": "bitcoin",
+          "asset_label": "Bitcoin (BTC/USD)",
+          "direction": "long",
+          "horizon": "1h",
+          "entry": 80095.0,
+          "take_profit": 80468.0,
+          "stop_loss": 79846.0,
+          "risk_reward": 1.5,
+          "confidence": "fort",
+          "score": 5.01,
+          "criteria": [
+            "adx",
+            "trend_15m",
+            "trend_1h",
+            "volume",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "expired",
+          "pnl_pct": 0.1871,
+          "pnl_gross_pct": 0.2471,
+          "duration_minutes": 60,
+          "close_price": 80292.95,
+          "created_at": "2026-11-04T20:11:04Z",
+          "closed_at": "2026-11-04T21:11:04Z",
+          "created_local": "04/11 21:11",
+          "expires_at": "2026-11-04T21:11:04Z",
+          "rationale": "Achat : tendance forte (ADX), tendance 15 min, tendance 1 h, volume anormal, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 622.4 (0.78 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 69%.",
+          "news_context": "actualité calme sur les 2 dernières heures",
+          "manual_exit": null
+        },
         {
           "id": "fea05b1dee",
           "asset": "ethereum",
@@ -2857,40 +2890,6 @@
           "created_local": "04/11 19:41",
           "expires_at": "2026-11-05T18:41:05Z",
           "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 310.88 (1.08 %), TP = 42 % du range, SL = 35 % du range, probabilité de résolution sous 3 h ≈ 97%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
-          "news_context": "actualité à surveiller (score 1) : Dow Skyrockets 1,500 Points in Best Day Since Trump's Tariff Pause",
-          "manual_exit": null
-        },
-        {
-          "id": "6f920cef1e",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "long",
-          "horizon": "1h",
-          "entry": 4075.5,
-          "take_profit": 4086.9,
-          "stop_loss": 4067.9,
-          "risk_reward": 1.5,
-          "confidence": "fort",
-          "score": 6.75,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "expired",
-          "pnl_pct": -0.1083,
-          "pnl_gross_pct": -0.0883,
-          "duration_minutes": 60,
-          "close_price": 4071.9,
-          "created_at": "2026-11-04T18:35:55Z",
-          "closed_at": "2026-11-04T19:35:56Z",
-          "created_local": "04/11 19:35",
-          "expires_at": "2026-11-04T19:35:55Z",
-          "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 19.03 (0.47 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 68%.",
           "news_context": "actualité à surveiller (score 1) : Dow Skyrockets 1,500 Points in Best Day Since Trump's Tariff Pause",
           "manual_exit": null
         }
@@ -2899,17 +2898,17 @@
     {
       "key": "trend_1h",
       "label": "Tendance 1 h",
-      "weight": 1.126,
+      "weight": 1.127,
       "stats": {
-        "n": 1390,
+        "n": 1391,
         "tp": 440,
         "sl": 677,
-        "expired": 273,
+        "expired": 274,
         "win_rate": 0.39391226499552373,
         "neutral_win_rate": 0.3691,
         "edge": 0.0248,
-        "pnl_pct": 21.4335,
-        "avg_pnl_pct": 0.0154
+        "pnl_pct": 21.6206,
+        "avg_pnl_pct": 0.0155
       },
       "by_source": {
         "bot": {
@@ -2946,18 +2945,51 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 1223,
+          "n": 1224,
           "tp": 382,
           "sl": 602,
-          "expired": 239,
+          "expired": 240,
           "win_rate": 0.3882113821138211,
           "neutral_win_rate": 0.3655,
           "edge": 0.0227,
-          "pnl_pct": 21.6354,
-          "avg_pnl_pct": 0.0177
+          "pnl_pct": 21.8225,
+          "avg_pnl_pct": 0.0178
         }
       },
       "last_trades": [
+        {
+          "id": "85d5162dba",
+          "asset": "bitcoin",
+          "asset_label": "Bitcoin (BTC/USD)",
+          "direction": "long",
+          "horizon": "1h",
+          "entry": 80095.0,
+          "take_profit": 80468.0,
+          "stop_loss": 79846.0,
+          "risk_reward": 1.5,
+          "confidence": "fort",
+          "score": 5.01,
+          "criteria": [
+            "adx",
+            "trend_15m",
+            "trend_1h",
+            "volume",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "expired",
+          "pnl_pct": 0.1871,
+          "pnl_gross_pct": 0.2471,
+          "duration_minutes": 60,
+          "close_price": 80292.95,
+          "created_at": "2026-11-04T20:11:04Z",
+          "closed_at": "2026-11-04T21:11:04Z",
+          "created_local": "04/11 21:11",
+          "expires_at": "2026-11-04T21:11:04Z",
+          "rationale": "Achat : tendance forte (ADX), tendance 15 min, tendance 1 h, volume anormal, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 622.4 (0.78 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 69%.",
+          "news_context": "actualité calme sur les 2 dernières heures",
+          "manual_exit": null
+        },
         {
           "id": "fea05b1dee",
           "asset": "ethereum",
@@ -3192,40 +3224,6 @@
           "created_local": "04/11 19:41",
           "expires_at": "2026-11-05T18:41:05Z",
           "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 310.88 (1.08 %), TP = 42 % du range, SL = 35 % du range, probabilité de résolution sous 3 h ≈ 97%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
-          "news_context": "actualité à surveiller (score 1) : Dow Skyrockets 1,500 Points in Best Day Since Trump's Tariff Pause",
-          "manual_exit": null
-        },
-        {
-          "id": "6f920cef1e",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "long",
-          "horizon": "1h",
-          "entry": 4075.5,
-          "take_profit": 4086.9,
-          "stop_loss": 4067.9,
-          "risk_reward": 1.5,
-          "confidence": "fort",
-          "score": 6.75,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "expired",
-          "pnl_pct": -0.1083,
-          "pnl_gross_pct": -0.0883,
-          "duration_minutes": 60,
-          "close_price": 4071.9,
-          "created_at": "2026-11-04T18:35:55Z",
-          "closed_at": "2026-11-04T19:35:56Z",
-          "created_local": "04/11 19:35",
-          "expires_at": "2026-11-04T19:35:55Z",
-          "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 19.03 (0.47 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 68%.",
           "news_context": "actualité à surveiller (score 1) : Dow Skyrockets 1,500 Points in Best Day Since Trump's Tariff Pause",
           "manual_exit": null
         }
@@ -3234,17 +3232,17 @@
     {
       "key": "adx",
       "label": "Force de tendance (ADX)",
-      "weight": 1.126,
+      "weight": 1.127,
       "stats": {
-        "n": 1409,
+        "n": 1410,
         "tp": 448,
         "sl": 684,
-        "expired": 277,
+        "expired": 278,
         "win_rate": 0.3957597173144876,
         "neutral_win_rate": 0.3691,
         "edge": 0.0267,
-        "pnl_pct": 20.646,
-        "avg_pnl_pct": 0.0147
+        "pnl_pct": 20.8331,
+        "avg_pnl_pct": 0.0148
       },
       "by_source": {
         "bot": {
@@ -3281,18 +3279,51 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 1242,
+          "n": 1243,
           "tp": 390,
           "sl": 609,
-          "expired": 243,
+          "expired": 244,
           "win_rate": 0.39039039039039036,
           "neutral_win_rate": 0.3656,
           "edge": 0.0248,
-          "pnl_pct": 20.8479,
-          "avg_pnl_pct": 0.0168
+          "pnl_pct": 21.035,
+          "avg_pnl_pct": 0.0169
         }
       },
       "last_trades": [
+        {
+          "id": "85d5162dba",
+          "asset": "bitcoin",
+          "asset_label": "Bitcoin (BTC/USD)",
+          "direction": "long",
+          "horizon": "1h",
+          "entry": 80095.0,
+          "take_profit": 80468.0,
+          "stop_loss": 79846.0,
+          "risk_reward": 1.5,
+          "confidence": "fort",
+          "score": 5.01,
+          "criteria": [
+            "adx",
+            "trend_15m",
+            "trend_1h",
+            "volume",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "expired",
+          "pnl_pct": 0.1871,
+          "pnl_gross_pct": 0.2471,
+          "duration_minutes": 60,
+          "close_price": 80292.95,
+          "created_at": "2026-11-04T20:11:04Z",
+          "closed_at": "2026-11-04T21:11:04Z",
+          "created_local": "04/11 21:11",
+          "expires_at": "2026-11-04T21:11:04Z",
+          "rationale": "Achat : tendance forte (ADX), tendance 15 min, tendance 1 h, volume anormal, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 622.4 (0.78 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 69%.",
+          "news_context": "actualité calme sur les 2 dernières heures",
+          "manual_exit": null
+        },
         {
           "id": "fea05b1dee",
           "asset": "ethereum",
@@ -3529,57 +3560,23 @@
           "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 310.88 (1.08 %), TP = 42 % du range, SL = 35 % du range, probabilité de résolution sous 3 h ≈ 97%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
           "news_context": "actualité à surveiller (score 1) : Dow Skyrockets 1,500 Points in Best Day Since Trump's Tariff Pause",
           "manual_exit": null
-        },
-        {
-          "id": "6f920cef1e",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "long",
-          "horizon": "1h",
-          "entry": 4075.5,
-          "take_profit": 4086.9,
-          "stop_loss": 4067.9,
-          "risk_reward": 1.5,
-          "confidence": "fort",
-          "score": 6.75,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "expired",
-          "pnl_pct": -0.1083,
-          "pnl_gross_pct": -0.0883,
-          "duration_minutes": 60,
-          "close_price": 4071.9,
-          "created_at": "2026-11-04T18:35:55Z",
-          "closed_at": "2026-11-04T19:35:56Z",
-          "created_local": "04/11 19:35",
-          "expires_at": "2026-11-04T19:35:55Z",
-          "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 19.03 (0.47 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 68%.",
-          "news_context": "actualité à surveiller (score 1) : Dow Skyrockets 1,500 Points in Best Day Since Trump's Tariff Pause",
-          "manual_exit": null
         }
       ]
     },
     {
       "key": "vwap",
       "label": "VWAP",
-      "weight": 0.856,
+      "weight": 0.857,
       "stats": {
-        "n": 1383,
+        "n": 1384,
         "tp": 443,
         "sl": 669,
-        "expired": 271,
+        "expired": 272,
         "win_rate": 0.3983812949640288,
         "neutral_win_rate": 0.3683,
         "edge": 0.0301,
-        "pnl_pct": 22.5693,
-        "avg_pnl_pct": 0.0163
+        "pnl_pct": 22.7564,
+        "avg_pnl_pct": 0.0164
       },
       "by_source": {
         "bot": {
@@ -3616,18 +3613,51 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 1218,
+          "n": 1219,
           "tp": 385,
           "sl": 596,
-          "expired": 237,
+          "expired": 238,
           "win_rate": 0.3924566768603466,
           "neutral_win_rate": 0.3646,
           "edge": 0.0279,
-          "pnl_pct": 22.1548,
-          "avg_pnl_pct": 0.0182
+          "pnl_pct": 22.3419,
+          "avg_pnl_pct": 0.0183
         }
       },
       "last_trades": [
+        {
+          "id": "85d5162dba",
+          "asset": "bitcoin",
+          "asset_label": "Bitcoin (BTC/USD)",
+          "direction": "long",
+          "horizon": "1h",
+          "entry": 80095.0,
+          "take_profit": 80468.0,
+          "stop_loss": 79846.0,
+          "risk_reward": 1.5,
+          "confidence": "fort",
+          "score": 5.01,
+          "criteria": [
+            "adx",
+            "trend_15m",
+            "trend_1h",
+            "volume",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "expired",
+          "pnl_pct": 0.1871,
+          "pnl_gross_pct": 0.2471,
+          "duration_minutes": 60,
+          "close_price": 80292.95,
+          "created_at": "2026-11-04T20:11:04Z",
+          "closed_at": "2026-11-04T21:11:04Z",
+          "created_local": "04/11 21:11",
+          "expires_at": "2026-11-04T21:11:04Z",
+          "rationale": "Achat : tendance forte (ADX), tendance 15 min, tendance 1 h, volume anormal, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 622.4 (0.78 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 69%.",
+          "news_context": "actualité calme sur les 2 dernières heures",
+          "manual_exit": null
+        },
         {
           "id": "fea05b1dee",
           "asset": "ethereum",
@@ -3862,40 +3892,6 @@
           "created_local": "04/11 19:41",
           "expires_at": "2026-11-05T18:41:05Z",
           "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 310.88 (1.08 %), TP = 42 % du range, SL = 35 % du range, probabilité de résolution sous 3 h ≈ 97%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
-          "news_context": "actualité à surveiller (score 1) : Dow Skyrockets 1,500 Points in Best Day Since Trump's Tariff Pause",
-          "manual_exit": null
-        },
-        {
-          "id": "6f920cef1e",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "long",
-          "horizon": "1h",
-          "entry": 4075.5,
-          "take_profit": 4086.9,
-          "stop_loss": 4067.9,
-          "risk_reward": 1.5,
-          "confidence": "fort",
-          "score": 6.75,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "expired",
-          "pnl_pct": -0.1083,
-          "pnl_gross_pct": -0.0883,
-          "duration_minutes": 60,
-          "close_price": 4071.9,
-          "created_at": "2026-11-04T18:35:55Z",
-          "closed_at": "2026-11-04T19:35:56Z",
-          "created_local": "04/11 19:35",
-          "expires_at": "2026-11-04T19:35:55Z",
-          "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 19.03 (0.47 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 68%.",
           "news_context": "actualité à surveiller (score 1) : Dow Skyrockets 1,500 Points in Best Day Since Trump's Tariff Pause",
           "manual_exit": null
         }
@@ -4917,15 +4913,15 @@
       "label": "Volume anormal",
       "weight": 0.75,
       "stats": {
-        "n": 20,
+        "n": 21,
         "tp": 5,
         "sl": 12,
-        "expired": 3,
+        "expired": 4,
         "win_rate": 0.29411764705882354,
-        "neutral_win_rate": 0.3675,
-        "edge": -0.0734,
-        "pnl_pct": -2.4941,
-        "avg_pnl_pct": -0.1247
+        "neutral_win_rate": 0.3691,
+        "edge": -0.075,
+        "pnl_pct": -2.307,
+        "avg_pnl_pct": -0.1099
       },
       "by_source": {
         "bot": {
@@ -4962,18 +4958,51 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 14,
+          "n": 15,
           "tp": 3,
           "sl": 9,
-          "expired": 2,
+          "expired": 3,
           "win_rate": 0.25,
-          "neutral_win_rate": 0.3509,
-          "edge": -0.1009,
-          "pnl_pct": -1.8091,
-          "avg_pnl_pct": -0.1292
+          "neutral_win_rate": 0.3542,
+          "edge": -0.1042,
+          "pnl_pct": -1.622,
+          "avg_pnl_pct": -0.1081
         }
       },
       "last_trades": [
+        {
+          "id": "85d5162dba",
+          "asset": "bitcoin",
+          "asset_label": "Bitcoin (BTC/USD)",
+          "direction": "long",
+          "horizon": "1h",
+          "entry": 80095.0,
+          "take_profit": 80468.0,
+          "stop_loss": 79846.0,
+          "risk_reward": 1.5,
+          "confidence": "fort",
+          "score": 5.01,
+          "criteria": [
+            "adx",
+            "trend_15m",
+            "trend_1h",
+            "volume",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "expired",
+          "pnl_pct": 0.1871,
+          "pnl_gross_pct": 0.2471,
+          "duration_minutes": 60,
+          "close_price": 80292.95,
+          "created_at": "2026-11-04T20:11:04Z",
+          "closed_at": "2026-11-04T21:11:04Z",
+          "created_local": "04/11 21:11",
+          "expires_at": "2026-11-04T21:11:04Z",
+          "rationale": "Achat : tendance forte (ADX), tendance 15 min, tendance 1 h, volume anormal, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 622.4 (0.78 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 69%.",
+          "news_context": "actualité calme sur les 2 dernières heures",
+          "manual_exit": null
+        },
         {
           "id": "0054cf2843",
           "asset": "ethereum",
@@ -5218,47 +5247,47 @@
           "rationale": "Achat : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, volume anormal, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 0.00133 (0.12 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 64%.",
           "news_context": "prudence post-USD Fed Chairman Warsh Speaks : critères renforcés · actualité calme sur les 2 dernières heures",
           "manual_exit": null
-        },
-        {
-          "id": "8ed507a11a",
-          "asset": "ethereum",
-          "asset_label": "Ethereum (ETH/USD)",
-          "direction": "long",
-          "horizon": "1h",
-          "entry": 2457.7,
-          "take_profit": 2475.1,
-          "stop_loss": 2446.1,
-          "risk_reward": 1.5,
-          "confidence": "fort",
-          "score": 6.38,
-          "criteria": [
-            "adx",
-            "corr",
-            "macd",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "volume",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "expired",
-          "pnl_pct": 0.0632,
-          "pnl_gross_pct": 0.1432,
-          "duration_minutes": 65,
-          "close_price": 2461.22,
-          "created_at": "2026-10-15T19:25:44Z",
-          "closed_at": "2026-10-15T20:30:59Z",
-          "created_local": "15/10 21:25",
-          "expires_at": "2026-10-15T20:25:44Z",
-          "rationale": "Achat : tendance forte (ADX), marché meneur favorable, MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, volume anormal, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 28.95 (1.18 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 42%.",
-          "news_context": "actualité calme sur les 2 dernières heures",
-          "manual_exit": null
         }
       ]
     }
   ],
   "open_signals": [
+    {
+      "id": "f89bf43830",
+      "asset": "bitcoin",
+      "asset_label": "Bitcoin (BTC/USD)",
+      "direction": "long",
+      "horizon": "1h",
+      "entry": 80196.0,
+      "take_profit": 80574.0,
+      "stop_loss": 79944.0,
+      "risk_reward": 1.5,
+      "confidence": "fort",
+      "score": 8.54,
+      "criteria": [
+        "adx",
+        "level",
+        "macd",
+        "rsi",
+        "trend_15m",
+        "trend_1h",
+        "trend_5m",
+        "vwap"
+      ],
+      "source": "shadow",
+      "status": "open",
+      "pnl_pct": null,
+      "pnl_gross_pct": null,
+      "duration_minutes": null,
+      "close_price": null,
+      "created_at": "2026-11-04T21:11:04Z",
+      "closed_at": null,
+      "created_local": "04/11 22:11",
+      "expires_at": "2026-11-04T22:11:04Z",
+      "rationale": "Achat : tendance forte (ADX), niveau clé favorable, MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 629.3 (0.78 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 57%.",
+      "news_context": "actualité calme sur les 2 dernières heures",
+      "manual_exit": null
+    },
     {
       "id": "7f657fd051",
       "asset": "ethereum",
@@ -5290,39 +5319,6 @@
       "created_local": "04/11 21:31",
       "expires_at": "2026-11-04T21:31:17Z",
       "rationale": "Achat : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 23.53 (0.97 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 70%.",
-      "news_context": "actualité calme sur les 2 dernières heures",
-      "manual_exit": null
-    },
-    {
-      "id": "85d5162dba",
-      "asset": "bitcoin",
-      "asset_label": "Bitcoin (BTC/USD)",
-      "direction": "long",
-      "horizon": "1h",
-      "entry": 80095.0,
-      "take_profit": 80468.0,
-      "stop_loss": 79846.0,
-      "risk_reward": 1.5,
-      "confidence": "fort",
-      "score": 5.01,
-      "criteria": [
-        "adx",
-        "trend_15m",
-        "trend_1h",
-        "volume",
-        "vwap"
-      ],
-      "source": "shadow",
-      "status": "open",
-      "pnl_pct": null,
-      "pnl_gross_pct": null,
-      "duration_minutes": null,
-      "close_price": null,
-      "created_at": "2026-11-04T20:11:04Z",
-      "closed_at": null,
-      "created_local": "04/11 21:11",
-      "expires_at": "2026-11-04T21:11:04Z",
-      "rationale": "Achat : tendance forte (ADX), tendance 15 min, tendance 1 h, volume anormal, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 622.4 (0.78 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 69%.",
       "news_context": "actualité calme sur les 2 dernières heures",
       "manual_exit": null
     },
@@ -7063,8 +7059,8 @@
   "adjustments": {
     "notes": [
       "trades réels : +0,15 R ± 0,20 R par trade avant frais sur 168 trades (0 R = hasard)",
-      "tendance (trend_5m, trend_15m, trend_1h, adx) : +0,11 R ± 0,06 R sur 1787 trades éq. → poids ×1,13",
-      "vwap : +0,12 R ± 0,06 R sur 1684 trades éq. → poids ×1,14",
+      "tendance (trend_5m, trend_15m, trend_1h, adx) : +0,11 R ± 0,06 R sur 1788 trades éq. → poids ×1,13",
+      "vwap : +0,12 R ± 0,06 R sur 1685 trades éq. → poids ×1,14",
       "rsi : +0,14 R ± 0,07 R sur 1407 trades éq. → poids ×1,18",
       "orb : +0,30 R ± 0,25 R sur 114 trades éq. → poids ×1,11",
       "pdhl : +0,29 R ± 0,20 R sur 205 trades éq. → poids ×1,23",
@@ -7088,20 +7084,20 @@
       12,
       19
     ],
-    "sample": 2095,
+    "sample": 2096,
     "sample_by_source": {
       "bot": 167,
-      "shadow": 1242,
+      "shadow": 1243,
       "manual": 1,
       "backtest": 685
     },
     "method": "v2 : recalcul complet, marge de sécurité, résultats en R, sources pondérées",
     "weights": {
-      "trend_5m": 1.126,
-      "trend_15m": 1.126,
-      "trend_1h": 1.126,
-      "adx": 1.126,
-      "vwap": 0.856,
+      "trend_5m": 1.127,
+      "trend_15m": 1.127,
+      "trend_1h": 1.127,
+      "adx": 1.127,
+      "vwap": 0.857,
       "rsi": 1.18,
       "macd": 1.0,
       "level": 1.0,
@@ -7112,11 +7108,11 @@
     },
     "weights_by_asset": {
       "bitcoin": {
-        "trend_5m": 1.126,
-        "trend_15m": 1.126,
-        "trend_1h": 1.126,
-        "adx": 1.126,
-        "vwap": 0.856,
+        "trend_5m": 1.127,
+        "trend_15m": 1.127,
+        "trend_1h": 1.127,
+        "adx": 1.127,
+        "vwap": 0.857,
         "rsi": 1.18,
         "macd": 1.0,
         "level": 1.0,
@@ -7130,7 +7126,7 @@
         "trend_15m": 0.972,
         "trend_1h": 0.972,
         "adx": 0.972,
-        "vwap": 0.856,
+        "vwap": 0.857,
         "rsi": 0.891,
         "macd": 1.0,
         "level": 1.0,
@@ -7154,11 +7150,11 @@
         "corr": 0.5
       },
       "gold": {
-        "trend_5m": 1.126,
-        "trend_15m": 1.126,
-        "trend_1h": 1.126,
-        "adx": 1.126,
-        "vwap": 0.856,
+        "trend_5m": 1.127,
+        "trend_15m": 1.127,
+        "trend_1h": 1.127,
+        "adx": 1.127,
+        "vwap": 0.857,
         "rsi": 1.18,
         "macd": 1.0,
         "level": 1.0,
@@ -7168,10 +7164,10 @@
         "corr": 0.5
       },
       "nasdaq": {
-        "trend_5m": 1.381,
-        "trend_15m": 1.381,
-        "trend_1h": 1.381,
-        "adx": 1.381,
+        "trend_5m": 1.382,
+        "trend_15m": 1.382,
+        "trend_1h": 1.382,
+        "adx": 1.382,
         "vwap": 1.037,
         "rsi": 1.5,
         "macd": 1.0,
@@ -7182,11 +7178,11 @@
         "corr": 0.5
       },
       "oil": {
-        "trend_5m": 1.126,
-        "trend_15m": 1.126,
-        "trend_1h": 1.126,
-        "adx": 1.126,
-        "vwap": 0.856,
+        "trend_5m": 1.127,
+        "trend_15m": 1.127,
+        "trend_1h": 1.127,
+        "adx": 1.127,
+        "vwap": 0.857,
         "rsi": 1.177,
         "macd": 1.0,
         "level": 0.723,
@@ -7196,10 +7192,10 @@
         "corr": 0.5
       },
       "sp500": {
-        "trend_5m": 0.73,
-        "trend_15m": 0.73,
-        "trend_1h": 0.73,
-        "adx": 0.73,
+        "trend_5m": 0.729,
+        "trend_15m": 0.729,
+        "trend_1h": 0.729,
+        "adx": 0.729,
         "vwap": 0.551,
         "rsi": 0.828,
         "macd": 1.0,
@@ -7218,21 +7214,21 @@
           "trend_1h",
           "adx"
         ],
-        "n": 2094,
-        "n_eff": 1786.9,
-        "mean_r": 0.1119,
+        "n": 2095,
+        "n_eff": 1787.9,
+        "mean_r": 0.1122,
         "margin_r": 0.0616,
-        "multiplier": 1.126
+        "multiplier": 1.127
       },
       "vwap": {
         "members": [
           "vwap"
         ],
-        "n": 1949,
-        "n_eff": 1684.2,
-        "mean_r": 0.1207,
+        "n": 1950,
+        "n_eff": 1685.2,
+        "mean_r": 0.1211,
         "margin_r": 0.0639,
-        "multiplier": 1.142
+        "multiplier": 1.143
       },
       "rsi": {
         "members": [
@@ -7268,10 +7264,10 @@
         "members": [
           "volume"
         ],
-        "n": 84,
-        "n_eff": 61.4,
-        "mean_r": -0.1522,
-        "margin_r": 0.3097,
+        "n": 85,
+        "n_eff": 62.4,
+        "mean_r": -0.1339,
+        "margin_r": 0.306,
         "multiplier": 1.0
       },
       "orb": {
@@ -7312,9 +7308,9 @@
         "margin_r": 0.1955
       },
       "fantômes": {
-        "n": 1242,
-        "mean_r": 0.1339,
-        "margin_r": 0.0762
+        "n": 1243,
+        "mean_r": 0.1345,
+        "margin_r": 0.0761
       },
       "backtest": {
         "n": 685,
@@ -7373,11 +7369,11 @@
       },
       "essai_bitcoin": {
         "label": "nouvel actif : Bitcoin (BTC/USD)",
-        "n": 15,
-        "mean_net_r": -0.3757,
-        "lower_r": -1.2358,
+        "n": 16,
+        "mean_net_r": -0.3146,
+        "lower_r": -1.1363,
         "promoted": false,
-        "missing": 85
+        "missing": 84
       },
       "essai_ethereum": {
         "label": "nouvel actif : Ethereum (ETH/USD)",
@@ -7418,9 +7414,9 @@
     },
     "variants_z": 2.73,
     "promoted_variants": [],
-    "updated_at": "2026-11-04T21:06:06.020114+00:00",
+    "updated_at": "2026-11-04T21:11:07.928426+00:00",
     "context": {
-      "n": 1863,
+      "n": 1864,
       "features": {
         "adx": {
           "label": "force de tendance (ADX 15 min)",
@@ -7438,21 +7434,21 @@
             {
               "label": "milieu (28 à 39)",
               "lo": 27.61,
-              "hi": 38.6,
-              "n": 623,
-              "n_eff": 529.0,
-              "mean_r": 0.2208,
-              "margin_r": 0.1495,
+              "hi": 38.59,
+              "n": 622,
+              "n_eff": 528.3,
+              "mean_r": 0.2213,
+              "margin_r": 0.1496,
               "avoid": false
             },
             {
               "label": "haut (≥ 39)",
-              "lo": 38.6,
+              "lo": 38.59,
               "hi": 1000000000.0,
-              "n": 621,
-              "n_eff": 551.1,
-              "mean_r": 0.1444,
-              "margin_r": 0.1495,
+              "n": 623,
+              "n_eff": 552.7,
+              "mean_r": 0.1451,
+              "margin_r": 0.1491,
               "avoid": false
             }
           ]
@@ -7464,30 +7460,30 @@
               "label": "bas (< 59)",
               "lo": -1000000000.0,
               "hi": 59.15,
-              "n": 620,
-              "n_eff": 540.6,
-              "mean_r": 0.0889,
-              "margin_r": 0.1351,
+              "n": 621,
+              "n_eff": 541.6,
+              "mean_r": 0.0902,
+              "margin_r": 0.1349,
               "avoid": false
             },
             {
               "label": "milieu (59 à 66)",
               "lo": 59.15,
-              "hi": 66.26,
-              "n": 622,
-              "n_eff": 527.9,
-              "mean_r": 0.2048,
-              "margin_r": 0.1594,
+              "hi": 66.25,
+              "n": 619,
+              "n_eff": 525.5,
+              "mean_r": 0.2071,
+              "margin_r": 0.1599,
               "avoid": false
             },
             {
               "label": "haut (≥ 66)",
-              "lo": 66.26,
+              "lo": 66.25,
               "hi": 1000000000.0,
-              "n": 621,
-              "n_eff": 530.5,
-              "mean_r": 0.0967,
-              "margin_r": 0.146,
+              "n": 624,
+              "n_eff": 532.9,
+              "mean_r": 0.0948,
+              "margin_r": 0.1457,
               "avoid": false
             }
           ]
@@ -7508,21 +7504,21 @@
             {
               "label": "milieu (0,92 à 1,60)",
               "lo": 0.9163,
-              "hi": 1.6026,
-              "n": 586,
-              "n_eff": 506.8,
-              "mean_r": 0.0354,
-              "margin_r": 0.1492,
+              "hi": 1.6027,
+              "n": 587,
+              "n_eff": 507.8,
+              "mean_r": 0.0333,
+              "margin_r": 0.149,
               "avoid": false
             },
             {
               "label": "haut (≥ 1,60)",
-              "lo": 1.6026,
+              "lo": 1.6027,
               "hi": 1000000000.0,
               "n": 587,
               "n_eff": 518.0,
-              "mean_r": 0.3217,
-              "margin_r": 0.1626,
+              "mean_r": 0.3253,
+              "margin_r": 0.1624,
               "avoid": false
             }
           ]
@@ -7533,31 +7529,31 @@
             {
               "label": "bas (< 0,23)",
               "lo": -1000000000.0,
-              "hi": 0.2322,
+              "hi": 0.2319,
               "n": 621,
               "n_eff": 537.3,
-              "mean_r": 0.1232,
-              "margin_r": 0.1332,
+              "mean_r": 0.1212,
+              "margin_r": 0.133,
               "avoid": false
             },
             {
               "label": "milieu (0,23 à 0,54)",
-              "lo": 0.2322,
-              "hi": 0.5407,
+              "lo": 0.2319,
+              "hi": 0.5405,
               "n": 621,
               "n_eff": 532.6,
-              "mean_r": 0.0756,
-              "margin_r": 0.1485,
+              "mean_r": 0.0788,
+              "margin_r": 0.1488,
               "avoid": false
             },
             {
               "label": "haut (≥ 0,54)",
-              "lo": 0.5407,
+              "lo": 0.5405,
               "hi": 1000000000.0,
-              "n": 621,
-              "n_eff": 530.0,
+              "n": 622,
+              "n_eff": 531.0,
               "mean_r": 0.1934,
-              "margin_r": 0.1588,
+              "margin_r": 0.1585,
               "avoid": false
             }
           ]
@@ -7568,31 +7564,31 @@
             {
               "label": "bas (< 1,09)",
               "lo": -1000000000.0,
-              "hi": 1.087,
-              "n": 621,
-              "n_eff": 547.4,
-              "mean_r": -0.0783,
-              "margin_r": 0.1173,
+              "hi": 1.086,
+              "n": 619,
+              "n_eff": 546.4,
+              "mean_r": -0.0763,
+              "margin_r": 0.1174,
               "avoid": false
             },
             {
               "label": "milieu (1,09 à 1,43)",
-              "lo": 1.087,
-              "hi": 1.434,
-              "n": 621,
-              "n_eff": 525.2,
-              "mean_r": 0.1272,
-              "margin_r": 0.145,
+              "lo": 1.086,
+              "hi": 1.433,
+              "n": 623,
+              "n_eff": 526.8,
+              "mean_r": 0.1226,
+              "margin_r": 0.1448,
               "avoid": false
             },
             {
               "label": "haut (≥ 1,43)",
-              "lo": 1.434,
+              "lo": 1.433,
               "hi": 1000000000.0,
-              "n": 621,
-              "n_eff": 526.0,
-              "mean_r": 0.351,
-              "margin_r": 0.1723,
+              "n": 622,
+              "n_eff": 526.4,
+              "mean_r": 0.3539,
+              "margin_r": 0.1721,
               "avoid": false
             }
           ]
@@ -7603,21 +7599,21 @@
             {
               "label": "bas (< 0,99)",
               "lo": -1000000000.0,
-              "hi": 0.992,
+              "hi": 0.991,
               "n": 559,
               "n_eff": 495.8,
-              "mean_r": 0.0678,
-              "margin_r": 0.1417,
+              "mean_r": 0.0631,
+              "margin_r": 0.141,
               "avoid": false
             },
             {
               "label": "milieu (0,99 à 1,29)",
-              "lo": 0.992,
+              "lo": 0.991,
               "hi": 1.289,
-              "n": 558,
-              "n_eff": 469.7,
-              "mean_r": 0.0278,
-              "margin_r": 0.1464,
+              "n": 559,
+              "n_eff": 470.7,
+              "mean_r": 0.0347,
+              "margin_r": 0.147,
               "avoid": false
             },
             {
@@ -7659,10 +7655,10 @@
               "label": "haut (≥ 0,62)",
               "lo": 0.62,
               "hi": 1000000000.0,
-              "n": 621,
-              "n_eff": 517.7,
-              "mean_r": 0.0681,
-              "margin_r": 0.1338,
+              "n": 622,
+              "n_eff": 518.7,
+              "mean_r": 0.0697,
+              "margin_r": 0.1336,
               "avoid": false
             }
           ]
@@ -7694,10 +7690,10 @@
               "label": "haut (≥ 0,12)",
               "lo": 0.1225,
               "hi": 1000000000.0,
-              "n": 623,
-              "n_eff": 518.4,
-              "mean_r": 0.0141,
-              "margin_r": 0.1272,
+              "n": 624,
+              "n_eff": 519.4,
+              "mean_r": 0.0158,
+              "margin_r": 0.127,
               "avoid": false
             }
           ]
@@ -7729,10 +7725,10 @@
               "label": "plus de 1 h 30 après l'ouverture US",
               "lo": 90.0,
               "hi": 1000000000.0,
-              "n": 879,
-              "n_eff": 750.7,
-              "mean_r": 0.2515,
-              "margin_r": 0.1313,
+              "n": 880,
+              "n_eff": 751.7,
+              "mean_r": 0.2522,
+              "margin_r": 0.1311,
               "avoid": false
             }
           ]
@@ -7764,10 +7760,10 @@
               "label": "mercredi",
               "lo": 2,
               "hi": 3,
-              "n": 432,
-              "n_eff": 386.6,
-              "mean_r": 0.3184,
-              "margin_r": 0.1959,
+              "n": 433,
+              "n_eff": 387.6,
+              "mean_r": 0.3196,
+              "margin_r": 0.1955,
               "avoid": false
             },
             {
@@ -7826,9 +7822,9 @@
     },
     "exits": {
       "réels et en ombre": {
-        "n": 1179,
-        "current_net_r": 0.0641,
-        "mfe_median": 0.925,
+        "n": 1180,
+        "current_net_r": 0.0646,
+        "mfe_median": 0.933,
         "sl_reached": {
           "0.5": 209,
           "0.8": 119,
@@ -7837,20 +7833,20 @@
         "n_sl": 572,
         "rules": {
           "0.5": {
-            "net_r": 0.0218,
-            "diff_r": -0.0423,
+            "net_r": 0.0216,
+            "diff_r": -0.0429,
             "margin_r": 0.0469,
             "better": false
           },
           "0.8": {
-            "net_r": 0.028,
-            "diff_r": -0.0361,
+            "net_r": 0.0278,
+            "diff_r": -0.0368,
             "margin_r": 0.0369,
             "better": false
           },
           "1.0": {
-            "net_r": 0.0299,
-            "diff_r": -0.0342,
+            "net_r": 0.0297,
+            "diff_r": -0.0349,
             "margin_r": 0.0327,
             "better": false
           }
@@ -7956,10 +7952,10 @@
     }
   },
   "state": {
-    "last_scan": "2026-11-04T21:06:01Z",
+    "last_scan": "2026-11-04T21:11:04Z",
     "last_scan_note": "0 signal(aux)",
     "last_summary": "2026-11-03T23:05:51Z",
-    "last_track": "2026-11-04T21:06:01Z",
+    "last_track": "2026-11-04T21:11:04Z",
     "last_summary_day": "2026-11-03"
   },
   "limits": {
@@ -21143,20 +21139,20 @@
           "entry_at": "2026-11-04T06:00:00Z",
           "direction": "long",
           "entry": 4008.5,
-          "risk": 41.75012,
-          "stop": 3966.74988,
-          "status": "open",
-          "reason": null,
-          "exit_ts": null,
-          "exit": null,
-          "last": 4071.60009765625,
-          "r_topstep": null,
-          "r_bot": null
+          "risk": 41.743007,
+          "stop": 3966.756993,
+          "status": "closed",
+          "reason": "heure",
+          "exit_ts": 1793826000,
+          "exit": 4074.300048828125,
+          "last": null,
+          "r_topstep": 1.5693,
+          "r_bot": 1.5571
         }
       ],
-      "checked_hour": "2026-11-04T20:00:00Z",
-      "n": 15,
-      "mean_r": 0.2166,
+      "checked_hour": "2026-11-04T21:00:00Z",
+      "n": 16,
+      "mean_r": 0.3011,
       "live": false
     },
     "creux_repris_15m:nasdaq": {
@@ -21557,12 +21553,27 @@
           "last": null,
           "r_topstep": 2.9922,
           "r_bot": 2.9742
+        },
+        {
+          "entry_ts": 1793824200,
+          "entry_at": "2026-11-04T20:30:00Z",
+          "direction": "long",
+          "entry": 28612.25,
+          "risk": 49.00073,
+          "stop": 28563.24927,
+          "status": "closed",
+          "reason": "stop",
+          "exit_ts": 1793825100,
+          "exit": 28563.249270163575,
+          "last": null,
+          "r_topstep": -1.0176,
+          "r_bot": -1.0584
         }
       ],
       "live": false,
-      "checked_hour": "2026-11-04T20:00:00Z",
-      "n": 26,
-      "mean_r": -0.2709
+      "checked_hour": "2026-11-04T21:00:00Z",
+      "n": 27,
+      "mean_r": -0.2985
     },
     "noise_area:nasdaq": {
       "strategy": "noise_area",
@@ -21868,404 +21879,404 @@
         }
       ],
       "live": false,
-      "checked_hour": "2026-11-04T20:00:00Z",
+      "checked_hour": "2026-11-04T21:00:00Z",
       "n": 19,
       "mean_r": -0.0829,
       "levels": {
         "kind": "bands",
         "open_ts": 1793802600,
-        "open": 28430.25,
+        "open": 28431.5,
         "prev_close": 28300.75,
         "points": [
           [
             1793802900,
-            28472.3221,
-            28258.8695
+            28473.6061,
+            28258.8375
           ],
           [
             1793803200,
-            28486.8398,
-            28244.418
+            28488.1549,
+            28244.3556
           ],
           [
             1793803500,
-            28491.7116,
-            28239.5684
+            28492.8731,
+            28239.6591
           ],
           [
             1793803800,
-            28488.0431,
-            28243.2201
+            28489.7677,
+            28242.7502
           ],
           [
             1793804100,
-            28488.7882,
-            28242.4784
+            28490.7459,
+            28241.7765
           ],
           [
             1793804400,
-            28484.1426,
-            28247.1029
+            28485.8156,
+            28246.6842
           ],
           [
             1793804700,
-            28478.2032,
-            28253.0152
+            28479.9509,
+            28252.5219
           ],
           [
             1793805000,
-            28494.9445,
-            28236.3502
+            28496.5878,
+            28235.9615
           ],
           [
             1793805300,
-            28508.5558,
-            28222.8009
+            28510.3031,
+            28222.3093
           ],
           [
             1793805600,
-            28516.1129,
-            28215.2782
+            28518.0857,
+            28214.5625
           ],
           [
             1793805900,
-            28524.2272,
-            28207.2009
+            28525.6654,
+            28207.0177
           ],
           [
             1793806200,
-            28538.3275,
-            28193.1648
+            28539.7498,
+            28192.998
           ],
           [
             1793806500,
-            28525.7322,
-            28205.7027
+            28527.0008,
+            28205.6884
           ],
           [
             1793806800,
-            28530.2821,
-            28201.1736
+            28531.6863,
+            28201.0245
           ],
           [
             1793807100,
-            28542.4162,
-            28189.0947
+            28543.6349,
+            28189.1308
           ],
           [
             1793807400,
-            28557.1922,
-            28174.386
+            28558.4932,
+            28174.3408
           ],
           [
             1793807700,
-            28567.0644,
-            28164.5588
+            28568.2481,
+            28164.6308
           ],
           [
             1793808000,
-            28573.1343,
-            28158.5166
+            28574.4355,
+            28158.4718
           ],
           [
             1793808300,
-            28582.1716,
-            28149.5204
+            28583.7351,
+            28149.215
           ],
           [
             1793808600,
-            28580.6914,
-            28150.9939
+            28582.0303,
+            28150.9119
           ],
           [
             1793808900,
-            28583.1891,
-            28148.5075
+            28584.7026,
+            28148.252
           ],
           [
             1793809200,
-            28583.3986,
-            28148.299
+            28584.806,
+            28148.149
           ],
           [
             1793809500,
-            28585.3435,
-            28146.3629
+            28586.7337,
+            28146.2302
           ],
           [
             1793809800,
-            28592.49,
-            28139.249
+            28593.9152,
+            28139.0817
           ],
           [
             1793810100,
-            28584.6238,
-            28147.0794
+            28585.8775,
+            28147.0825
           ],
           [
             1793810400,
-            28590.7723,
-            28140.9589
+            28592.1459,
+            28140.8429
           ],
           [
             1793810700,
-            28596.5097,
-            28135.2476
+            28597.8286,
+            28135.1863
           ],
           [
             1793811000,
-            28596.6977,
-            28135.0605
+            28598.1949,
+            28134.8217
           ],
           [
             1793811300,
-            28599.829,
-            28131.9435
+            28601.2031,
+            28131.8273
           ],
           [
             1793811600,
-            28603.1608,
-            28128.6268
+            28604.5344,
+            28128.5114
           ],
           [
             1793811900,
-            28596.6039,
-            28135.1538
+            28597.9221,
+            28135.0932
           ],
           [
             1793812200,
-            28600.9627,
-            28130.8149
+            28602.4056,
+            28130.6304
           ],
           [
             1793812500,
-            28595.1667,
-            28136.5845
+            28596.7114,
+            28136.2983
           ],
           [
             1793812800,
-            28589.7141,
-            28142.0123
+            28591.1371,
+            28141.8471
           ],
           [
             1793813100,
-            28593.2792,
-            28138.4634
+            28594.7022,
+            28138.2983
           ],
           [
             1793813400,
-            28592.1418,
-            28139.5956
+            28593.4824,
+            28139.5126
           ],
           [
             1793813700,
-            28603.828,
-            28127.9626
+            28605.1319,
+            28127.9166
           ],
           [
             1793814000,
-            28606.2794,
-            28125.5224
+            28607.6518,
+            28125.4082
           ],
           [
             1793814300,
-            28607.3592,
-            28124.4475
+            28608.5104,
+            28124.5537
           ],
           [
             1793814600,
-            28616.6005,
-            28115.2484
+            28617.9919,
+            28115.1157
           ],
           [
             1793814900,
-            28605.1724,
-            28126.6244
+            28606.4597,
+            28126.5949
           ],
           [
             1793815200,
-            28603.3238,
-            28128.4646
+            28604.7832,
+            28128.2637
           ],
           [
             1793815500,
-            28616.851,
-            28114.9989
+            28618.3457,
+            28114.7635
           ],
           [
             1793815800,
-            28627.4842,
-            28104.4142
+            28628.8581,
+            28104.2995
           ],
           [
             1793816100,
-            28634.4147,
-            28097.5153
+            28635.8588,
+            28097.331
           ],
           [
             1793816400,
-            28635.2769,
-            28096.657
+            28636.908,
+            28096.2866
           ],
           [
             1793816700,
-            28630.1875,
-            28101.7233
+            28631.6162,
+            28101.5541
           ],
           [
             1793817000,
-            28630.5182,
-            28101.394
+            28632.0118,
+            28101.1604
           ],
           [
             1793817300,
-            28633.9966,
-            28097.9314
+            28635.3179,
+            28097.8694
           ],
           [
             1793817600,
-            28634.6278,
-            28097.3031
+            28635.899,
+            28097.291
           ],
           [
             1793817900,
-            28635.7625,
-            28096.1736
+            28637.0162,
+            28096.179
           ],
           [
             1793818200,
-            28646.2557,
-            28085.7282
+            28647.5615,
+            28085.6821
           ],
           [
             1793818500,
-            28653.0568,
-            28078.9581
+            28654.3648,
+            28078.9101
           ],
           [
             1793818800,
-            28658.658,
-            28073.3824
+            28660.0323,
+            28073.2687
           ],
           [
             1793819100,
-            28663.4122,
-            28068.6499
+            28664.7701,
+            28068.5527
           ],
           [
             1793819400,
-            28659.2966,
-            28072.7467
+            28660.6704,
+            28072.6335
           ],
           [
             1793819700,
-            28655.5325,
-            28076.4936
+            28656.8895,
+            28076.397
           ],
           [
             1793820000,
-            28663.0818,
-            28068.9788
+            28664.4732,
+            28068.8482
           ],
           [
             1793820300,
-            28661.2783,
-            28070.7741
+            28662.6332,
+            28070.6798
           ],
           [
             1793820600,
-            28665.1268,
-            28066.9431
+            28666.5512,
+            28066.7798
           ],
           [
             1793820900,
-            28671.1039,
-            28060.9931
+            28672.7935,
+            28060.5661
           ],
           [
             1793821200,
-            28667.3705,
-            28064.7096
+            28668.6923,
+            28064.6485
           ],
           [
             1793821500,
-            28661.1198,
-            28070.9318
+            28662.3537,
+            28070.958
           ],
           [
             1793821800,
-            28668.2114,
-            28063.8725
+            28669.5011,
+            28063.8434
           ],
           [
             1793822100,
-            28669.905,
-            28062.1866
+            28671.2592,
+            28062.0933
           ],
           [
             1793822400,
-            28637.1193,
-            28094.8229
+            28638.3866,
+            28094.8149
           ],
           [
             1793822700,
-            28657.5349,
-            28074.5004
+            28658.8222,
+            28074.4732
           ],
           [
             1793823000,
-            28663.3937,
-            28068.6683
+            28664.7824,
+            28068.5404
           ],
           [
             1793823300,
-            28660.7785,
-            28071.2715
+            28662.0491,
+            28071.2612
           ],
           [
             1793823600,
-            28669.9069,
-            28062.1848
+            28671.1591,
+            28062.193
           ],
           [
             1793823900,
-            28665.108,
-            28066.9618
+            28666.6043,
+            28066.7269
           ],
           [
             1793824200,
-            28659.8278,
-            28072.2179
+            28661.2022,
+            28072.1041
           ],
           [
             1793824500,
-            28674.4192,
-            28057.693
+            28675.6198,
+            28057.7528
           ],
           [
             1793824800,
-            28682.6119,
-            28049.5376
+            28683.9336,
+            28049.4773
           ],
           [
             1793825100,
-            28684.4316,
-            28047.7262
+            28685.7887,
+            28047.6307
           ],
           [
             1793825400,
-            28674.7803,
-            28057.3335
+            28676.4008,
+            28056.9754
           ],
           [
             1793825700,
-            28652.5431,
-            28079.4694
+            28653.767,
+            28079.5051
           ],
           [
             1793826000,
-            28653.3233,
-            28078.6928
+            28654.7186,
+            28078.5579
           ]
         ]
       }
@@ -22692,7 +22703,7 @@
         }
       ],
       "live": true,
-      "checked_hour": "2026-11-04T20:30:00Z",
+      "checked_hour": "2026-11-04T21:00:00Z",
       "n": 21,
       "mean_r": 0.1265,
       "levels": {
@@ -23466,7 +23477,7 @@
         }
       ],
       "live": true,
-      "checked_hour": "2026-11-04T20:45:00Z",
+      "checked_hour": "2026-11-04T21:00:00Z",
       "n": 12,
       "mean_r": -0.3101,
       "levels": {
@@ -23722,7 +23733,7 @@
     }
   },
   "drift": {
-    "updated_at": "2026-11-04T20:11:04Z",
+    "updated_at": "2026-11-04T21:11:04Z",
     "cells": {
       "donchian_1h:bitcoin": {
         "n": 25,
@@ -23769,19 +23780,19 @@
         "since_status": "2026-10-13T14:01:13Z"
       },
       "donchian_day:gold": {
-        "n": 15,
-        "cum_r": 3.2488,
+        "n": 16,
+        "cum_r": 4.8181,
         "dd_r": 2.8658,
         "ref_n": 482,
         "ref_mean_r": 0.0882,
-        "cum_pct": 0.6896,
-        "dd_pct": 0.42,
+        "cum_pct": 0.7854,
+        "dd_pct": 0.378,
         "status": "dans la norme",
         "band": {
-          "cum_p5": -5.203,
-          "cum_p50": 1.188,
-          "cum_p95": 8.747,
-          "dd_p95": 6.62
+          "cum_p5": -5.345,
+          "cum_p50": 1.195,
+          "cum_p95": 8.597,
+          "dd_p95": 6.979
         },
         "label": "Donchian fermé chaque soir · or",
         "ref_period": [
@@ -23791,19 +23802,19 @@
         "since_status": "2026-10-13T20:10:37Z"
       },
       "creux_repris_15m:nasdaq": {
-        "n": 26,
-        "cum_r": -7.0426,
+        "n": 27,
+        "cum_r": -8.0602,
         "dd_r": 16.6862,
         "ref_n": 661,
         "ref_mean_r": 0.0933,
-        "cum_pct": 0.122,
-        "dd_pct": 0.9832,
+        "cum_pct": 0.101,
+        "dd_pct": 0.981,
         "status": "à surveiller",
         "band": {
-          "cum_p5": -10.425,
-          "cum_p50": 2.214,
-          "cum_p95": 17.029,
-          "dd_p95": 13.951
+          "cum_p5": -10.963,
+          "cum_p50": 2.345,
+          "cum_p95": 17.034,
+          "dd_p95": 14.391
         },
         "label": "creux_repris_15m:nasdaq",
         "ref_period": [
