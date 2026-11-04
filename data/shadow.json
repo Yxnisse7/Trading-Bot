@@ -96,7 +96,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1793776200
+        "last_ts": 1793776500
       }
     }
   },
@@ -184,7 +184,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": null
+        "last_ts": 1793776500
       }
     }
   },
@@ -273,7 +273,7 @@
       "filters_checked": true,
       "variant": "modele_arbres",
       "exc": {
-        "mfe": 0.0123,
+        "mfe": 0.4074,
         "mae": 0.0,
         "armed": {
           "0.5": false,
@@ -362,6 +362,107 @@
         "weekday": 2
       },
       "price_time": "2026-11-04T07:15:00Z",
+      "ctx_avoid": [
+        "minutes depuis l'ouverture américaine : plus de 30 min avant l'ouverture US"
+      ],
+      "model_r": -0.0536,
+      "filters": [
+        "filtre_contexte",
+        "modele_arbres",
+        "bot_en_ombre"
+      ],
+      "filters_checked": true,
+      "variant": "modele_arbres",
+      "exc": {
+        "mfe": 0.1728,
+        "mae": 0.0,
+        "armed": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "be": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "last_ts": null
+      }
+    }
+  },
+  {
+    "id": "257aff179a",
+    "asset": "gold",
+    "asset_label": "Or (XAU/USD)",
+    "direction": "long",
+    "entry": 4030.5,
+    "take_profit": 4042.6,
+    "stop_loss": 4022.4,
+    "risk_reward": 1.49,
+    "confidence": "fort",
+    "score": 6.22,
+    "criteria": [
+      "adx",
+      "rsi",
+      "trend_15m",
+      "trend_1h",
+      "trend_5m",
+      "vwap"
+    ],
+    "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 20.15 (0.50 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 91%.",
+    "news_context": "actualité à surveiller (score 1) : Asia stocks tumble as tech shares slide on U.S. election results",
+    "created_at": "2026-11-04T07:25:47Z",
+    "expires_at": "2026-11-04T08:25:47Z",
+    "status": "open",
+    "closed_at": null,
+    "close_price": null,
+    "pnl_pct": null,
+    "pnl_gross_pct": null,
+    "duration_minutes": null,
+    "hourly_range": 20.147854,
+    "source": "shadow",
+    "horizon": "1h",
+    "horizon_minutes": 60,
+    "meta": {
+      "tick": 0.1,
+      "details": {
+        "trend_5m": "EMA20 4018.32 / EMA50 3993.74 (5 min)",
+        "trend_15m": "EMA20 3992.07 / EMA50 3967.39",
+        "trend_1h": "prix vs EMA20 1 h 3965.18",
+        "adx": "ADX15 41.3 (+DI 37.4 / -DI 5.6)",
+        "vwap": "VWAP jour 3980.07",
+        "rsi": "RSI14 5 min 67.4",
+        "macd": "histogramme MACD -1.5927",
+        "level": "support 3974.70 / résistance -",
+        "volume": "z-score volume -2.11",
+        "pdhl": "veille : haut 3981.70 / bas 3904.10",
+        "activity": "activité de l'heure 0.91× la moyenne",
+        "corr": "DXY +0.06 % sur 1 h"
+      },
+      "support": 3974.699951171875,
+      "resistance": null,
+      "atr_5m": 8.19578333733651,
+      "atr_ratio": 1.700428935319412,
+      "hourly_range_pct": 0.4999,
+      "adx_15m": 41.26066416765481,
+      "sigma_5m": 0.0013831940020946126,
+      "p_resolution": 0.9096666666666666,
+      "p_tp_neutral": 0.379,
+      "activity_ratio": 0.911,
+      "base_minutes": 5,
+      "ctx": {
+        "adx": 41.26,
+        "rsi_dir": 67.38,
+        "vwap_ext": 2.5029,
+        "ema_ext": 0.6045,
+        "atr_ratio": 1.7,
+        "activity": 0.911,
+        "range_pct": 0.4999,
+        "cost_r": 0.0995,
+        "us_open_min": -424.2,
+        "weekday": 2
+      },
+      "price_time": "2026-11-04T07:20:00Z",
       "ctx_avoid": [
         "minutes depuis l'ouverture américaine : plus de 30 min avant l'ouverture US"
       ],
