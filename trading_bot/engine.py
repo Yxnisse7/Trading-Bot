@@ -307,7 +307,8 @@ class Engine:
                 all_sigs.append(sig)
                 sizing = None
                 if not dry_run:
-                    sizing = self.portfolio.on_open(sig, asset)
+                    # même idée déjà calculée par le PC : la Simulation prend le trade du PC (PC_TRADES), pas les deux
+                    sizing = None if owner == "pc" else self.portfolio.on_open(sig, asset)
                     sig.meta["sim"] = sizing
                     self.store.add_signal(sig)
                 if owner != "pc":                     # « wait » : le PC ne calcule pas le bot, on n'attend pas
