@@ -1,6 +1,6 @@
 # Trading-Bot — rapport
 
-_Mis à jour le 04/11/2026 à 08:56 (Europe/Paris)._
+_Mis à jour le 04/11/2026 à 09:01 (Europe/Paris)._
 
 ## Vue d'ensemble
 
@@ -8,7 +8,7 @@ _Mis à jour le 04/11/2026 à 08:56 (Europe/Paris)._
 - Taux de réussite cumulé (TP / (TP+SL)) : **44%** — hasard attendu 40%, avantage **+4%**
 - P&L théorique cumulé, net des coûts estimés (somme des % par trade, sans levier) : **-0.36 %** (brut +3.68 %)
 - Signaux ouverts : **0**
-- Signaux fantômes (suivis en silence pour l'apprentissage) : **1123** clôturés, 12 ouverts, taux de réussite 38% (hasard attendu 36%)
+- Signaux fantômes (suivis en silence pour l'apprentissage) : **1124** clôturés, 12 ouverts, taux de réussite 38% (hasard attendu 36%)
 
 ## Statistiques
 
@@ -114,18 +114,18 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 
 | Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
 |---|---:|---:|---:|---:|---:|---:|
-| adx | 1123 | 344 | 573 | 206 | 38% | +0.011 % |
+| adx | 1124 | 344 | 573 | 207 | 38% | +0.012 % |
 | corr | 86 | 20 | 50 | 16 | 29% | -0.037 % |
 | level | 119 | 45 | 43 | 31 | 51% | +0.059 % |
 | macd | 279 | 67 | 157 | 55 | 30% | -0.030 % |
 | orb | 71 | 26 | 26 | 19 | 50% | +0.067 % |
 | pdhl | 127 | 54 | 60 | 13 | 47% | +0.134 % |
 | rsi | 857 | 276 | 437 | 144 | 39% | +0.021 % |
-| trend_15m | 1123 | 344 | 573 | 206 | 38% | +0.011 % |
-| trend_1h | 1104 | 336 | 566 | 202 | 37% | +0.013 % |
-| trend_5m | 1003 | 319 | 520 | 164 | 38% | +0.017 % |
+| trend_15m | 1124 | 344 | 573 | 207 | 38% | +0.012 % |
+| trend_1h | 1105 | 336 | 566 | 203 | 37% | +0.013 % |
+| trend_5m | 1004 | 319 | 520 | 165 | 38% | +0.017 % |
 | volume | 12 | 3 | 7 | 2 | 30% | -0.074 % |
-| vwap | 1099 | 339 | 560 | 200 | 38% | +0.013 % |
+| vwap | 1100 | 339 | 560 | 201 | 38% | +0.013 % |
 
 ### Fantômes par actif
 
@@ -134,7 +134,7 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 | bitcoin | 30 | 9 | 9 | 12 | 50% | -0.028 % |
 | ethereum | 29 | 5 | 17 | 7 | 23% | -0.197 % |
 | euro | 43 | 14 | 28 | 1 | 33% | -0.025 % |
-| gold | 358 | 119 | 164 | 75 | 42% | -0.001 % |
+| gold | 359 | 119 | 164 | 76 | 42% | -0.001 % |
 | nasdaq | 434 | 135 | 229 | 70 | 37% | +0.075 % |
 | oil | 114 | 32 | 56 | 26 | 36% | -0.057 % |
 | sp500 | 115 | 30 | 70 | 15 | 30% | -0.042 % |
@@ -178,11 +178,11 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 
 | Critère | Poids actuel |
 |---|---:|
-| trend_5m | 1.07 |
-| trend_15m | 1.07 |
-| trend_1h | 1.07 |
-| adx | 1.07 |
-| vwap | 0.814 |
+| trend_5m | 1.071 |
+| trend_15m | 1.071 |
+| trend_1h | 1.071 |
+| adx | 1.071 |
+| vwap | 0.815 |
 | rsi | 1.128 |
 | macd | 1.0 |
 | level | 1.0 |
@@ -197,7 +197,7 @@ Corrections par actif :
 
 - ethereum : {'trend_5m': 0.849, 'trend_15m': 0.849, 'trend_1h': 0.849, 'adx': 0.849, 'rsi': 0.843}
 - euro : {'trend_5m': 0.946, 'trend_15m': 0.946, 'trend_1h': 0.946, 'adx': 0.946, 'vwap': 0.758, 'rsi': 1.109}
-- nasdaq : {'trend_5m': 1.35, 'trend_15m': 1.35, 'trend_1h': 1.35, 'adx': 1.35, 'vwap': 1.015, 'rsi': 1.5, 'pdhl': 1.279}
+- nasdaq : {'trend_5m': 1.35, 'trend_15m': 1.35, 'trend_1h': 1.35, 'adx': 1.35, 'vwap': 1.016, 'rsi': 1.5, 'pdhl': 1.279}
 - oil : {'trend_5m': 1.052, 'trend_15m': 1.052, 'trend_1h': 1.052, 'adx': 1.052, 'vwap': 0.774, 'rsi': 1.001, 'level': 0.748}
 - sp500 : {'trend_5m': 0.747, 'trend_15m': 0.747, 'trend_1h': 0.747, 'adx': 0.747, 'vwap': 0.565, 'rsi': 0.844}
 
@@ -218,8 +218,8 @@ Corrections par actif :
 Notes :
 
 - trades réels : +0,15 R ± 0,20 R par trade avant frais sur 168 trades (0 R = hasard)
-- tendance (trend_5m, trend_15m, trend_1h, adx) : +0,09 R ± 0,06 R sur 1668 trades éq. → poids ×1,07
-- vwap : +0,10 R ± 0,07 R sur 1565 trades éq. → poids ×1,08
+- tendance (trend_5m, trend_15m, trend_1h, adx) : +0,09 R ± 0,06 R sur 1669 trades éq. → poids ×1,07
+- vwap : +0,10 R ± 0,07 R sur 1566 trades éq. → poids ×1,09
 - rsi : +0,12 R ± 0,07 R sur 1317 trades éq. → poids ×1,13
 - orb : +0,30 R ± 0,26 R sur 110 trades éq. → poids ×1,10
 - pdhl : +0,29 R ± 0,20 R sur 202 trades éq. → poids ×1,22
