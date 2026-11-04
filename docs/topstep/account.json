@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-04T08:56:10Z",
+  "updated_at": "2026-11-04T09:01:44Z",
   "rules": {
     "account": "50K",
     "start_balance": 50000.0,
@@ -57,10 +57,10 @@
       "file": "history/3.json"
     }
   ],
-  "balance": 48531.04,
-  "profit": -1468.96,
+  "balance": 48798.98,
+  "profit": -1201.02,
   "mll": 48552.33,
-  "room_to_mll": -21.29,
+  "room_to_mll": 246.65,
   "peak_eod": 50552.33,
   "target_balance": 53000.0,
   "needed_profit": 3000.0,
@@ -71,8 +71,8 @@
   "room_today": 907.96,
   "status": "échoué",
   "failed": {
-    "at": "2026-11-03T19:35:00Z",
-    "balance": 48483.18,
+    "at": "2026-11-03T19:50:00Z",
+    "balance": 48438.68,
     "mll": 48552.33
   },
   "violations": [
@@ -117,7 +117,7 @@
     },
     {
       "day": "2026-11-03",
-      "pnl": -137.88
+      "pnl": 130.06
     },
     {
       "day": "2026-11-04",
@@ -1040,50 +1040,6 @@
       "balance_after": 48621.9
     },
     {
-      "id": "95119093fa",
-      "asset": "nasdaq",
-      "asset_label": "Nasdaq 100 (NQ)",
-      "symbol": "MNQ",
-      "direction": "long",
-      "entry": 28365.5,
-      "exit": 28297.0,
-      "contracts": 1,
-      "status": "sl",
-      "origin": "bot",
-      "opened_at": "2026-11-03T17:16:19Z",
-      "closed_at": "2026-11-03T19:35:00Z",
-      "day": "2026-11-03",
-      "pnl_gross": -137.0,
-      "fees": 1.22,
-      "slippage": 0.5,
-      "cost": 1.72,
-      "pnl": -138.72,
-      "past_flat_time": false,
-      "balance_after": 48483.18
-    },
-    {
-      "id": "2e7cf10262",
-      "asset": "nasdaq",
-      "asset_label": "Nasdaq 100 (NQ)",
-      "symbol": "MNQ",
-      "direction": "long",
-      "entry": 28369.75,
-      "exit": 28306.0,
-      "contracts": 1,
-      "status": "sl",
-      "origin": "bot",
-      "opened_at": "2026-11-03T17:26:10Z",
-      "closed_at": "2026-11-03T19:35:00Z",
-      "day": "2026-11-03",
-      "pnl_gross": -127.5,
-      "fees": 1.22,
-      "slippage": 0.5,
-      "cost": 1.72,
-      "pnl": -129.22,
-      "past_flat_time": false,
-      "balance_after": 48353.96
-    },
-    {
       "id": "j11031705nasbo",
       "asset": "nasdaq",
       "asset_label": "Nasdaq 100 (NQ)",
@@ -1104,7 +1060,7 @@
       "pnl": -183.22,
       "past_flat_time": false,
       "note": "signal du bot classique (PC)",
-      "balance_after": 48170.74
+      "balance_after": 48438.68
     },
     {
       "id": "j11031755nasbo",
@@ -1127,7 +1083,7 @@
       "pnl": -144.22,
       "past_flat_time": false,
       "note": "signal du bot classique (PC)",
-      "balance_after": 48026.52
+      "balance_after": 48294.46
     },
     {
       "id": "j11031559nasag",
@@ -1150,7 +1106,7 @@
       "pnl": 596.56,
       "past_flat_time": false,
       "note": "trade de l'agent IA (chasse)",
-      "balance_after": 48623.08
+      "balance_after": 48891.02
     },
     {
       "id": "j11031830bit",
@@ -1173,7 +1129,7 @@
       "pnl": -92.04,
       "past_flat_time": false,
       "note": "signal réel cassure_williams:bitcoin",
-      "balance_after": 48531.04
+      "balance_after": 48798.98
     }
   ],
   "open": [
@@ -1199,17 +1155,36 @@
   ],
   "journal_count": 38,
   "daily_target": 1200.0,
-  "skipped": [
+  "skipped": [],
+  "day_closed": null,
+  "candidates": [
     {
-      "id": "830d7da676",
+      "id": "2e7cf10262",
       "asset": "nasdaq",
       "asset_label": "Nasdaq 100 (NQ)",
       "symbol": "MNQ",
-      "direction": "short",
-      "opened_at": "2026-11-02T15:15:59Z",
+      "direction": "long",
+      "entry": 28369.75,
+      "take_profit": 28561.0,
+      "stop_loss": 28306.0,
+      "created_at": "2026-11-03T17:26:10Z",
       "status": "sl",
-      "pnl_pct": -0.3253,
-      "reason": "limite journalière atteinte (-1089 $) : Topstep bloque le compte jusqu'au lendemain"
+      "pnl_pct": -0.2347,
+      "contracts": 1
+    },
+    {
+      "id": "95119093fa",
+      "asset": "nasdaq",
+      "asset_label": "Nasdaq 100 (NQ)",
+      "symbol": "MNQ",
+      "direction": "long",
+      "entry": 28365.5,
+      "take_profit": 28571.5,
+      "stop_loss": 28297.0,
+      "created_at": "2026-11-03T17:16:19Z",
+      "status": "sl",
+      "pnl_pct": -0.2515,
+      "contracts": 1
     },
     {
       "id": "9209a7f6ca",
@@ -1217,12 +1192,27 @@
       "asset_label": "Nasdaq 100 (NQ)",
       "symbol": "MNQ",
       "direction": "short",
-      "opened_at": "2026-11-02T15:20:58Z",
+      "entry": 28704.0,
+      "take_profit": 28462.0,
+      "stop_loss": 28784.5,
+      "created_at": "2026-11-02T15:20:58Z",
       "status": "sl",
       "pnl_pct": -0.3244,
-      "reason": "limite journalière atteinte (-1089 $) : Topstep bloque le compte jusqu'au lendemain"
+      "contracts": 1
+    },
+    {
+      "id": "830d7da676",
+      "asset": "nasdaq",
+      "asset_label": "Nasdaq 100 (NQ)",
+      "symbol": "MNQ",
+      "direction": "short",
+      "entry": 28699.0,
+      "take_profit": 28428.0,
+      "stop_loss": 28789.5,
+      "created_at": "2026-11-02T15:15:59Z",
+      "status": "sl",
+      "pnl_pct": -0.3253,
+      "contracts": 1
     }
-  ],
-  "day_closed": null,
-  "candidates": []
+  ]
 }
