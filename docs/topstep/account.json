@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-04T00:01:27Z",
+  "updated_at": "2026-11-04T00:06:04Z",
   "rules": {
     "account": "50K",
     "start_balance": 50000.0,
@@ -57,18 +57,18 @@
       "file": "history/3.json"
     }
   ],
-  "balance": 48623.08,
-  "profit": -1376.92,
+  "balance": 48531.04,
+  "profit": -1468.96,
   "mll": 48552.33,
-  "room_to_mll": 70.75,
+  "room_to_mll": -21.29,
   "peak_eod": 50552.33,
   "target_balance": 53000.0,
   "needed_profit": 3000.0,
   "best_day": 1422.42,
   "consistency_ok": true,
   "today": "2026-11-04",
-  "today_pnl": 0.0,
-  "room_today": 1000.0,
+  "today_pnl": -92.04,
+  "room_today": 907.96,
   "status": "échoué",
   "failed": {
     "at": "2026-11-03T19:35:00Z",
@@ -118,6 +118,10 @@
     {
       "day": "2026-11-03",
       "pnl": -137.88
+    },
+    {
+      "day": "2026-11-04",
+      "pnl": -92.04
     }
   ],
   "trades": [
@@ -1147,30 +1151,33 @@
       "past_flat_time": false,
       "note": "trade de l'agent IA (chasse)",
       "balance_after": 48623.08
-    }
-  ],
-  "open": [
+    },
     {
       "id": "j11031830bit",
       "asset": "bitcoin",
       "asset_label": "Bitcoin (BTC/USD)",
       "symbol": "MBT",
       "direction": "long",
-      "entry": 77771.5625,
-      "take_profit": null,
-      "stop_loss": 76680.757812,
+      "entry": 77769.3828125,
+      "exit": 77342.390625,
       "contracts": 2,
-      "multiplier": 0.1,
-      "origin": "stratégie",
+      "status": "journal",
+      "origin": "journal",
       "opened_at": "2026-11-03T18:30:00Z",
-      "expires_at": "2026-11-04T18:30:00Z",
-      "risk": 218.16,
-      "notional": 15554.31,
-      "cost_pct": 0.0,
-      "fee_per_order": 3.32
+      "closed_at": "2026-11-04T00:00:00Z",
+      "day": "2026-11-04",
+      "pnl_gross": -85.4,
+      "fees": 5.64,
+      "slippage": 1.0,
+      "cost": 6.64,
+      "pnl": -92.04,
+      "past_flat_time": false,
+      "note": "signal réel cassure_williams:bitcoin",
+      "balance_after": 48531.04
     }
   ],
-  "journal_count": 37,
+  "open": [],
+  "journal_count": 38,
   "daily_target": 1200.0,
   "skipped": [
     {
