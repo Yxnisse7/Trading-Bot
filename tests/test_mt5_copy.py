@@ -151,6 +151,17 @@ def test_lab_signal_age_counts_from_the_telegram_announcement(tmp_path):
     assert len(mt5.sent) == 1
 
 
+def test_asian_night_is_copied_at_the_min_lot_on_a_small_balance():
+    """5/11 : 0,01 lot d'or au stop de 40 $ sur 172 $ (23 %) passe pour la nuit asiatique, pas pour les autres."""
+    from types import SimpleNamespace
+    info = SimpleNamespace(trade_contract_size=100.0, volume_step=0.01, volume_min=0.01, volume_max=1.0)
+    risk = mc.MIN_LOT_MAX_RISK.get("nuit_asie")
+    assert mc.lot_for(172.54, 40.0, info, risk) == 0.01
+    assert mc.lot_for(172.54, 40.0, info) == 0.0
+    assert mc.lot_for(100, 40.0, info, risk) == 0.0                 # 40 % : toujours refusé
+    assert mc.solo_floor(0.01, 300, 40.0, info, None) == 0.01        # pas remonté à 0,02 lot (27 % du solde)
+
+
 def test_too_short_stop_is_widened_to_the_broker_minimum(tmp_path):
     """Un SL plus court que le minimum du courtier (écart compris) est élargi au lieu d'être rejeté (code 10016)."""
     mt5 = FakeMT5()

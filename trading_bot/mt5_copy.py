@@ -33,7 +33,8 @@ MIN_LOT_CAP = 0.15
 SOLO_MIN_LOT = {"XAUUSD+": 0.02}   # 28/10 (choix de Yanisse) : sur l'or, un trade du bot pris seul fait 0,02 lot au moins
 #                      (0,01 reste pour les trades Telegram, 3 ordres à la fois) ; les autres marchés comme avant.
 #                      Si 0,02 risque plus que MIN_LOT_CAP, le lot calculé est gardé.
-MIN_LOT_MAX_RISK: dict[str, float] = {}
+MIN_LOT_MAX_RISK: dict[str, float] = {"nuit_asie": 0.30}   # 5/11 (choix de Yanisse) : la nuit asiatique est copiée
+#                      au lot minimum même sur un petit solde (0,01 lot d'or ≈ 40 $ au stop), jusqu'à 30 % du solde
 MIN_LOT: dict[str, float] = {}
 MIN_POINT_VALUE: dict[str, float] = {}
 FLOOR_MAX_RISK = 0.10
@@ -313,7 +314,7 @@ class Copier:
             return {"status": late}
         strat = s["key"].split(":")[1] if s["key"].startswith("lab:") else None
         lot = lot_for(balance, s["stop"], info, MIN_LOT_MAX_RISK.get(strat))
-        lot = solo_floor(lot, balance, s["stop"], info, MIN_LOT_MAX_RISK.get(strat), sym)
+        lot = solo_floor(lot, balance, s["stop"], info, None, sym)   # l'exception ne vaut que pour le lot minimum
         lot = floor_lot(lot, balance, s["stop"], info, MIN_POINT_VALUE.get(sym))
         if strat in MIN_LOT:
             lot = round(min(max(lot, MIN_LOT[strat]), float(info.volume_max)), 2)
