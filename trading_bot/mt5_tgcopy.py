@@ -433,17 +433,32 @@ class TgCopier:
             return
         pos, orders = self._live(s)
         m = self.mt5
+        ok = (getattr(m, "TRADE_RETCODE_DONE", 10009), getattr(m, "TRADE_RETCODE_PLACED", 10008),
+              getattr(m, "TRADE_RETCODE_NO_CHANGES", 10025))
+        refused = []
         for p in pos:
-            m.order_send({"action": m.TRADE_ACTION_SLTP, "symbol": s["sym"], "position": p.ticket, "sl": new,
-                          "tp": getattr(p, "tp", 0.0)})
+            res = m.order_send({"action": m.TRADE_ACTION_SLTP, "symbol": s["sym"], "position": p.ticket, "sl": new,
+                                "tp": getattr(p, "tp", 0.0)})
+            if getattr(res, "retcode", None) not in ok:
+                refused.append(getattr(res, "retcode", None))
         for o in orders:
-            m.order_send({"action": m.TRADE_ACTION_MODIFY, "order": o.ticket, "price": o.price_open, "sl": new,
-                          "tp": getattr(o, "tp", 0.0)})
+            res = m.order_send({"action": m.TRADE_ACTION_MODIFY, "order": o.ticket, "price": o.price_open, "sl": new,
+                                "tp": getattr(o, "tp", 0.0)})
+            if getattr(res, "retcode", None) not in ok:
+                refused.append(getattr(res, "retcode", None))
+        total = len(pos) + len(orders)
+        codes = ", ".join(str(c) for c in sorted(set(refused), key=str))
+        if total and len(refused) == total:   # rien n'a été accepté par MT5 : on ne l'annonce pas comme fait
+            log.warning("copie Telegram : stop %s refusé par MT5 (code %s)", new, codes)
+            self._post(f"📡 Stop à {msg.num(new, s['digits'])} demandé par le canal, <b>refusé par MT5</b> "
+                       f"(code {codes}) : l'ancien stop reste en place.", reply=s["msg"])
+            return
         be = abs(new - s["entry"]) < 10 ** -s["digits"] * 5
         s["stop"] = new
         self._save()
-        self._post(f"📡 Stop déplacé à {msg.code_price(new, s['digits'])}{' (BE)' if be else ''}, demandé par le canal.",
-                   reply=s["msg"])
+        part = f" ({total - len(refused)}/{total} ordres, refus MT5 code {codes})" if refused else ""
+        self._post(f"📡 Stop déplacé à {msg.code_price(new, s['digits'])}{' (BE)' if be else ''}, demandé par le "
+                   f"canal{part}.", reply=s["msg"])
 
     def _close_signal(self, sid: str, why: str, partial: bool = False) -> None:
         s = self.state["signals"].get(sid)

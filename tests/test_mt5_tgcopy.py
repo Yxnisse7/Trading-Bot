@@ -299,3 +299,26 @@ def test_rtz_format_tp1_only_and_resent(tmp_path):
     tg_listen.record(tmp_path, -100555, "RTZ ACADEMY", 73, "✅ FERMER LES POSITIONS", 70, now[0], False)
     c.step()
     assert len(mt5.sent) == 1
+
+
+def test_refused_stop_move_is_not_announced_as_done(tmp_path):
+    """7/11 : MT5 refuse le nouveau stop (10016) → on le dit, l'ancien stop reste noté."""
+    now = [T0]
+    ans = [{"type": "ouverture", "marche": "gold", "sens": "achat", "entree": 4110.5, "stop": 4101.0,
+            "objectifs": [4115.0, 4120.0, 4130.0], "signal": None, "raison": "achat or"},
+           {"type": "stop", "marche": None, "sens": None, "entree": None, "stop": 4110.1, "objectifs": [],
+            "signal": "100123-7", "raison": "BE"}]
+    c, mt5, sent = make(tmp_path, ans, now)
+    post(tmp_path, 7, "GOLD BUY NOW 4110 SL 4101 TP1 4115 TP2 4120 TP3 4130", now[0])
+    c.step()
+    c.step()
+    tickets = c.state["signals"]["100123-7"]["tickets"]
+    mt5.positions = [NS(magic=tc.MAGIC, ticket=t, type=0, volume=0.01, tp=0.0) for t in tickets]
+    real = mt5.order_send
+    mt5.order_send = lambda req: NS(retcode=10016) if req["action"] == mt5.TRADE_ACTION_SLTP else real(req)
+    mt5.bid = 4114.0
+    post(tmp_path, 9, "SL au BE !", now[0], reply_to=7)
+    c.step()
+    c.step()
+    assert "refusé par MT5" in sent[-1][0] and "10016" in sent[-1][0] and "déplacé" not in sent[-1][0]
+    assert c.state["signals"]["100123-7"]["stop"] == 4101.0

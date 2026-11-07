@@ -238,3 +238,20 @@ def test_past_of_a_trade_from_the_table():
     assert ht.atr([2, 3], [1, 1]) == 1.5
     real = ht.load_table()
     assert set(real) >= {"gold", "nasdaq"} and len(real["gold"]) == 48
+
+
+def test_limit_order_placed_code_is_a_success_sent_once(tmp_path):
+    """7/11 : MT5 répond 10008 (ordre placé) à un ordre limite → un seul envoi, pas de doublon."""
+    now, sent = [T0 + 30], []
+    mt5 = FakeMT5(now)
+    real = mt5.order_send
+
+    def placed(req):
+        res = real(req)
+        return NS(retcode=10008, price=res.price, order=res.order) if req["action"] == mt5.TRADE_ACTION_PENDING else res
+    mt5.order_send = placed
+    h = _limit_hunter(tmp_path, mt5, now, sent)
+    h.step()
+    h.step()
+    assert len([o for o in mt5.orders if o["action"] == mt5.TRADE_ACTION_PENDING]) == 1
+    assert h.state["trades"]["gold"]["pending"] and "LIMITE" in sent[0][0]

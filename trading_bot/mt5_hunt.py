@@ -290,11 +290,11 @@ class Hunter:
             req.pop("deviation")
             for fill in (m.ORDER_FILLING_RETURN, req["type_filling"]):      # les ordres en attente veulent souvent RETURN
                 res = m.order_send({**req, "type_filling": fill})
-                if getattr(res, "retcode", None) == m.TRADE_RETCODE_DONE:
-                    break
+                if getattr(res, "retcode", None) in self._ok():
+                    break                       # « placé » (10008) compte aussi : sinon l'ordre partait deux fois
         else:
             res = m.order_send(req)
-        if getattr(res, "retcode", None) != self.mt5.TRADE_RETCODE_DONE:
+        if getattr(res, "retcode", None) not in self._ok():
             log.warning("chasse : ordre rejeté (code %s)", getattr(res, "retcode", None))
             return
         entry = px if limit else float(getattr(res, "price", px) or px)
@@ -356,6 +356,10 @@ class Hunter:
                              "price": tick.bid if long else tick.ask, "deviation": 30, "magic": self.MAGIC,
                              "comment": f"{self.COMMENT} fin", "type_time": self.mt5.ORDER_TIME_GTC,
                              "type_filling": self._filling(self.mt5.symbol_info(sym))})
+
+    def _ok(self) -> tuple:
+        """Codes MT5 de réussite : exécuté (10009) ou ordre en attente placé (10008)."""
+        return (getattr(self.mt5, "TRADE_RETCODE_DONE", 10009), getattr(self.mt5, "TRADE_RETCODE_PLACED", 10008))
 
     def _pending(self, asset: str, sym: str, t: dict[str, Any], open_: list) -> bool:
         """Ordre limite : False tant qu'il attend (ou s'il vient d'être annulé), True une fois exécuté."""
