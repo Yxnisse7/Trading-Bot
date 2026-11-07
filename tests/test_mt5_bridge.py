@@ -182,3 +182,15 @@ def test_telegram_token_is_hidden_in_the_log():
                             ("409 for url: https://api.telegram.org/bot123456:AAH-x_y9/getUpdates",), None)
     assert mb.HideTokens().filter(rec)
     assert "123456" not in rec.getMessage() and "bot***/getUpdates" in rec.getMessage()
+
+
+def test_telegram_token_is_hidden_in_an_exception_trace():
+    import logging
+    import sys
+    try:
+        raise RuntimeError("409 for url: https://api.telegram.org/bot123456:AAH-x_y9/getUpdates")
+    except RuntimeError:
+        rec = logging.LogRecord("x", logging.ERROR, "", 0, "hugo : erreur", (), sys.exc_info())
+    assert mb.HideTokens().filter(rec)
+    out = logging.Formatter("%(message)s").format(rec)
+    assert "123456" not in out and "RuntimeError" in out and "bot***" in out

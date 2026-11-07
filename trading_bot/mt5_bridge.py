@@ -473,8 +473,11 @@ class HideTokens(logging.Filter):
 
     def filter(self, record: logging.LogRecord) -> bool:
         msg = record.getMessage()
+        if record.exc_info:                      # la trace d'une exception peut aussi contenir l'adresse
+            msg += "\n" + logging.Formatter().formatException(record.exc_info)
+            record.exc_info, record.exc_text = None, None
         clean = TOKEN_RE.sub("bot***", msg)
-        if clean != msg:
+        if clean != record.msg or record.args:
             record.msg, record.args = clean, None
         return True
 
