@@ -174,3 +174,11 @@ def test_history_uses_the_fixed_server_offset_when_the_market_is_closed(tmp_path
     assert b.server_offset() == OFFSET and b.account_summary()["d"][0][0] == NOW - 600
     b.clock = lambda: NOW + 30 * 86400                                           # novembre : heure d'hiver, UTC+2
     assert b.server_offset() == 2 * 3600
+
+
+def test_telegram_token_is_hidden_in_the_log():
+    import logging
+    rec = logging.LogRecord("x", logging.WARNING, "", 0, "hugo : lecture Telegram impossible (%s)",
+                            ("409 for url: https://api.telegram.org/bot123456:AAH-x_y9/getUpdates",), None)
+    assert mb.HideTokens().filter(rec)
+    assert "123456" not in rec.getMessage() and "bot***/getUpdates" in rec.getMessage()

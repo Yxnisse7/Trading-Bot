@@ -11,6 +11,7 @@ from __future__ import annotations
 import csv
 import json
 import logging
+import re
 import sys
 import time
 from datetime import datetime, timezone
@@ -464,6 +465,20 @@ class Bridge:
         return "entrée" if ok else "ordre rejeté"
 
 
+TOKEN_RE = re.compile(r"bot\d+:[A-Za-z0-9_-]+")
+
+
+class HideTokens(logging.Filter):
+    """Masque le jeton du bot Telegram dans pont.log et la fenêtre (une erreur réseau recopie l'adresse avec le jeton)."""
+
+    def filter(self, record: logging.LogRecord) -> bool:
+        msg = record.getMessage()
+        clean = TOKEN_RE.sub("bot***", msg)
+        if clean != msg:
+            record.msg, record.args = clean, None
+        return True
+
+
 def main(argv: list[str]) -> int:
     import MetaTrader5 as mt5                     # module officiel, Windows seulement
 
@@ -471,6 +486,8 @@ def main(argv: list[str]) -> int:
     root = Path(argv[1]) if len(argv) > 1 else Path.cwd()
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(message)s",
                         handlers=[logging.StreamHandler(), logging.FileHandler(root / "pont.log", encoding="utf-8")])
+    for h in logging.getLogger().handlers:
+        h.addFilter(HideTokens())
     cfg = load_config(root)
     if not mt5.initialize():
         log.error("MetaTrader 5 injoignable (%s) : ouvre le terminal et connecte-toi", mt5.last_error())
