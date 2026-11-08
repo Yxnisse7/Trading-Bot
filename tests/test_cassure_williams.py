@@ -33,3 +33,30 @@ def test_stop_at_day_open_and_open_position():
 
 def test_no_breakout_no_trade():
     assert sl.cassure_williams(sl._Series(_candles([1000.0] * 288)), "bitcoin") == []
+
+
+def test_crabel_nr4_trades_breakout_after_inside_narrow_day():
+    """Veille ID/NR4 → achat à ouverture + marge, sortie à la clôture de la séance CME (17:00 New York)."""
+    from datetime import datetime, timedelta
+    from zoneinfo import ZoneInfo
+    from trading_bot import strategies as sl
+    from trading_bot.models import Candle
+    ny = ZoneInfo("America/New_York")
+    candles = []
+    start = datetime(2026, 9, 1, 18, 0, tzinfo=ny)          # mardi 18:00 → séance du mercredi
+    ranges = [10, 10, 10, 10, 10, 10, 10, 10, 10, 9, 8, 4, 10]   # avant-dernière séance contenue et la plus étroite
+    day = start
+    for n, rg in enumerate(ranges):
+        while day.weekday() in (4, 5) and day.hour == 18:     # pas de séance démarrant vendredi/samedi soir
+            day += timedelta(days=1)
+        for k in range(276):                                   # 23 h de bougies 5 min
+            t = int((day + timedelta(minutes=5 * k)).timestamp())
+            o = 100.0
+            if n == len(ranges) - 1 and k >= 10:               # dernière séance : monte franchement
+                o = 100.0 + k * 0.05
+            half = rg / 2 if k == 1 and n < len(ranges) - 1 else 0.5
+            candles.append(Candle(t, o, o + half, o - half, o))
+        day += timedelta(days=1)
+    tr = sl.crabel_nr4(sl._Series(candles), "gold")
+    assert len(tr) == 1
+    assert tr[0].direction == "long" and tr[0].exit > tr[0].entry

@@ -42,6 +42,7 @@ STRATEGIES = {
     "noise_area_v2": "Zone de bruit avec un stop réaliste, au moins 1 ATR 15 min (essai 5)",
     "swing_w3": "Swing de 2 à 5 jours dans la tendance, stop suiveur sous les creux 1 h (essai 16, W3)",
     "nuit_asie": "Achat de l'or pendant les heures asiatiques, 18:00 → 03:00 New York (essai 27)",
+    "crabel_nr4": "Cassure de l'ouverture après une veille calme ID/NR4 (Toby Crabel, essai 72)",
 }
 INFO_ONLY = {"pre_fomc"}
 ROBUST_ONLY = {"noise_area_v2"}   # plus de données vierges : critères de l'essai 5 sur les 24 mois
@@ -56,7 +57,8 @@ SHADOW = {("donchian_1h", "bitcoin"): "2026-10-05T19:00:00Z",
           ("swing_w3", "bitcoin"): "2026-10-14T08:00:00Z",
           ("nuit_asie", "gold"): "2026-10-14T12:00:00Z",      # prouvée à l'essai 27
           ("cassure_williams", "bitcoin"): "2026-10-14T14:00:00Z",  # prouvée à l'essai 30
-          ("double7", "nasdaq"): "2026-10-26T12:00:00Z"}      # essai 52 (seule cellule qui passe, de justesse)
+          ("double7", "nasdaq"): "2026-10-26T12:00:00Z",      # essai 52 (seule cellule qui passe, de justesse)
+          ("crabel_nr4", "gold"): "2026-11-09T00:00:00Z"}     # essai 72 (robuste, non prouvé), choix de Yanisse
 # Envoyées en signaux réels sur Telegram (entrée, stop, sortie), en plus du suivi : (stratégie, actif) → date de début.
 # Le 14/10/2026, choix de Yanisse : les 4 stratégies prouvées à l'essai 24 (2014-2026, tous les contrôles, singes
 # compris). Le bot ne passe aucun ordre.
@@ -81,12 +83,12 @@ LIVE_END = {("donchian_day", "gold"): "2026-10-13T19:30:00Z",
             ("creux_repris_15m", "nasdaq"): "2026-10-14T08:00:00Z",
             ("noise_area", "nasdaq"): "2026-10-19T20:20:00Z"}
 # Jours de bougies rechargés pour le suivi, quand il en faut plus que les 8 jours habituels
-LAB_DAYS = {"noise_area": 30, "noise_area_v2": 30, "swing_w3": 45, "double7": 300}
+LAB_DAYS = {"noise_area": 30, "noise_area_v2": 30, "swing_w3": 45, "double7": 300, "crabel_nr4": 25}
 # Stratégies jour (moyenne 200 jours) : sur GitHub, bougies 1 h Yahoo sur 2 ans au lieu des bougies 5 min (60 jours max)
 DAILY_1H = {"double7"}
 # Positions gardées la nuit (pas de sortie forcée en fin de séance) : durée maximale en secondes, None si aucune
 OVERNIGHT = {"donchian_1h": None, "swing_w3": 5 * 86400, "nuit_asie": 9 * 3600, "cassure_williams": 86400,
-             "double7": 15 * 86400}
+             "double7": 15 * 86400, "crabel_nr4": 23 * 3600}
 MIN_TRADES = {"news_breakout": 20}
 
 
@@ -656,10 +658,66 @@ def cassure_williams(s: _Series, asset: str) -> list[Trade]:
     return out
 
 
+def crabel_nr4(s: _Series, asset: str, stretch_n: int = 10) -> list[Trade]:
+    """Essai 72 (Toby Crabel) : journée CME 18:00 → 17:00 New York. Si la veille est ID/NR4 (contenue dans
+    l'avant-veille, plus petite amplitude des 4 dernières séances) : achat à ouverture + marge, vente à ouverture
+    − marge (marge = moyenne 10 séances de min(haut − ouverture, ouverture − bas)), le premier touché ; stop =
+    l'autre niveau ; sortie à la clôture de la séance. Les deux niveaux dans la même bougie = perte de 1 R."""
+    keys = [datetime.fromtimestamp(t + 6 * 3600, NY) for t in s.ts]
+    sess: list[dict[str, Any]] = []
+    for j, d in enumerate(keys):
+        if d.hour >= 23 or d.weekday() >= 5:
+            continue
+        day = d.date()
+        if not sess or sess[-1]["day"] != day:
+            sess.append({"day": day, "a": j, "z": j + 1})
+        else:
+            sess[-1]["z"] = j + 1
+    for x in sess:
+        bars = s.c[x["a"]:x["z"]]
+        x.update(o=bars[0].open, h=max(b.high for b in bars), l=min(b.low for b in bars), n=len(bars))
+    out = []
+    for k in range(stretch_n, len(sess)):
+        cur, p1, p2 = sess[k], sess[k - 1], sess[k - 2]
+        if (cur["day"] - p1["day"]).days > 5 or p1["n"] < 150 or p2["n"] < 150:
+            continue
+        ranges = [x["h"] - x["l"] for x in sess[k - 4:k]]
+        if not (p1["h"] <= p2["h"] and p1["l"] >= p2["l"] and ranges[-1] <= min(ranges)):
+            continue
+        stretch = sum(min(x["h"] - x["o"], x["o"] - x["l"]) for x in sess[k - stretch_n:k]) / stretch_n
+        if stretch <= 0:
+            continue
+        up, dn = cur["o"] + stretch, cur["o"] - stretch
+        k0 = next((j for j in range(cur["a"], cur["z"]) if s.c[j].high >= up or s.c[j].low <= dn), None)
+        if k0 is None:
+            continue
+        bar = s.c[k0]
+        if bar.high >= up and bar.low <= dn:
+            out.append(Trade("crabel_nr4", asset, "long", s.ts[k0], s.ts[k0], up, dn, 2 * stretch, "stop"))
+            continue
+        long = bar.high >= up
+        entry = max(up, bar.open) if long else min(dn, bar.open)
+        stop = dn if long else up
+        px, j, why = None, k0, "fin des données"
+        for j in range(k0 + 1, cur["z"]):
+            b = s.c[j]
+            if (long and b.low <= stop) or (not long and b.high >= stop):
+                px, why = (min(b.open, stop) if long else max(b.open, stop)), "stop"
+                break
+        if px is None:
+            j = cur["z"] - 1
+            px = s.c[j].close
+            if cur["z"] < len(s.c):
+                why = "clôture"
+        out.append(Trade("crabel_nr4", asset, "long" if long else "short", s.ts[k0], s.ts[j], entry, px,
+                         2 * stretch, why))
+    return out
+
+
 RUNNERS_5M = {"orb5": orb5, "orb30": orb30, "intraday_mom": intraday_mom, "noise_area": noise_area,
               "gap_fade": gap_fade, "london_breakout": london_breakout, "news_breakout": news_breakout,
               "noise_area_v2": noise_area_v2, "comex_orb": comex_orb, "nuit_asie": nuit_asie,
-              "cassure_williams": cassure_williams}
+              "cassure_williams": cassure_williams, "crabel_nr4": crabel_nr4}
 def creux_repris_15m(candles: list[Candle], asset: str) -> list[Trade]:
     """Essai 15, S25 : creux cassé puis repris en 2 bougies 15 min, dans la tendance 1 h (règle de essai15.py)."""
     from . import essai15

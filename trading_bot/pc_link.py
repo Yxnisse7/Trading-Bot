@@ -30,7 +30,7 @@ PROPOSE_ASSETS = ("gold", "nasdaq", "bitcoin", "sp500", "ethereum")
 LABELS = {"creux_repris_15m": "Creux repris", "noise_area": "Zone de bruit", "noise_area_v2": "Zone de bruit v2",
           "swing_w3": "Swing W3", "nuit_asie": "Nuit asiatique", "donchian_1h": "Donchian 1 h",
           "cassure_williams": "Cassure Williams", "donchian_day": "Donchian or", "bot": "Bot classique",
-          "double7": "Double 7"}
+          "double7": "Double 7", "crabel_nr4": "Crabel NR4"}
 
 
 def encode(ts: float, sent: list[dict[str, Any]], ok: Any = ()) -> str:
