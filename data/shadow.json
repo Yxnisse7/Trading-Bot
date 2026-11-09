@@ -73,7 +73,7 @@
       "variant": "essai_bitcoin",
       "exc": {
         "mfe": 0.4793,
-        "mae": 0.1917,
+        "mae": 0.9019,
         "armed": {
           "0.5": false,
           "0.8": false,
@@ -84,8 +84,89 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1794241500
+        "last_ts": 1794241860
       }
+    }
+  },
+  {
+    "id": "54ce34c188",
+    "asset": "nasdaq",
+    "asset_label": "Nasdaq 100 (NQ)",
+    "direction": "long",
+    "entry": 27891.75,
+    "take_profit": 28517.25,
+    "stop_loss": 27683.25,
+    "risk_reward": 3.0,
+    "confidence": "fort",
+    "score": 7.51,
+    "criteria": [
+      "adx",
+      "orb",
+      "trend_15m",
+      "trend_1h",
+      "trend_5m",
+      "vwap"
+    ],
+    "rationale": "Achat : tendance forte (ADX), cassure du range d'ouverture, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 347.42 (1.25 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 76%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+    "news_context": "actualité à surveiller (score 2) : Risk-On: S&P 500 Surges Out of the Gate, Adds $1 Trillion in Market Value",
+    "created_at": "2026-11-09T16:31:21Z",
+    "expires_at": "2026-11-10T16:31:21Z",
+    "status": "open",
+    "closed_at": null,
+    "close_price": null,
+    "pnl_pct": null,
+    "pnl_gross_pct": null,
+    "duration_minutes": null,
+    "hourly_range": 347.423077,
+    "source": "shadow",
+    "horizon": "24h",
+    "horizon_minutes": 1440,
+    "meta": {
+      "tick": 0.25,
+      "details": {
+        "trend_5m": "EMA20 27578.41 / EMA50 27359.48 (15 min)",
+        "trend_15m": "EMA20 27338.75 / EMA50 27297.92",
+        "trend_1h": "prix vs EMA20 1 h 27508.89",
+        "adx": "ADX15 19.8 (+DI 39.2 / -DI 12.6)",
+        "vwap": "VWAP jour 27478.72",
+        "rsi": "RSI14 5 min 77.3",
+        "macd": "histogramme MACD 47.6721",
+        "level": "support 26988.50 / résistance 28465.00",
+        "volume": "z-score volume -0.44",
+        "orb": "range d'ouverture 27316.25 – 27797.50",
+        "pdhl": "veille : haut 27199.00 / bas 26910.50",
+        "corr": "VIX +0.8 % sur 15 min"
+      },
+      "support": 26988.5,
+      "resistance": 28465.0,
+      "atr_5m": 97.07521278210605,
+      "atr_ratio": 0.9689219979009468,
+      "hourly_range_pct": 1.2456,
+      "adx_15m": 19.80900088526594,
+      "sigma_5m": 0.002524550883821463,
+      "p_resolution": 0.7636666666666667,
+      "p_tp_neutral": 0.29933333333333334,
+      "activity_ratio": null,
+      "base_minutes": 15,
+      "ctx": {
+        "adx": 19.81,
+        "rsi_dir": 77.25,
+        "vwap_ext": 1.1888,
+        "ema_ext": 0.9019,
+        "atr_ratio": 0.969,
+        "range_pct": 1.2456,
+        "cost_r": 0.0201,
+        "us_open_min": 121.3,
+        "weekday": 0
+      },
+      "exit_override": {
+        "stop_x": 1.5,
+        "target_x": 3.0,
+        "minutes": 1440,
+        "source": "essai 29"
+      },
+      "price_time": "2026-11-09T16:25:00Z",
+      "variant": "horizon_3h"
     }
   }
 ]

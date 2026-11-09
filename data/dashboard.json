@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-09T17:26:06.795633+01:00",
+  "updated_at": "2026-11-09T17:31:35.116057+01:00",
   "timezone": "Europe/Paris",
   "equity_curve": [
     {
@@ -1852,8 +1852,8 @@
       "pnl_pct": 9.6372,
       "avg_pnl_pct": 0.0073
     },
-    "open": 3,
-    "open_shadow": 1
+    "open": 4,
+    "open_shadow": 2
   },
   "by_source": {
     "bot": {
@@ -1967,7 +1967,7 @@
         "pnl_pct": 30.6965,
         "avg_pnl_pct": 0.0667
       },
-      "open": 3,
+      "open": 4,
       "session_utc": [
         13,
         20
@@ -5274,6 +5274,75 @@
   ],
   "open_signals": [
     {
+      "id": "667dc62648",
+      "asset": "nasdaq",
+      "asset_label": "Nasdaq 100 (NQ)",
+      "direction": "long",
+      "horizon": "24h",
+      "entry": 27891.75,
+      "take_profit": 28379.0,
+      "stop_loss": 27729.5,
+      "risk_reward": 3.0,
+      "confidence": "fort",
+      "score": 9.01,
+      "criteria": [
+        "adx",
+        "orb",
+        "rsi",
+        "trend_15m",
+        "trend_1h",
+        "trend_5m",
+        "vwap"
+      ],
+      "source": "bot",
+      "status": "open",
+      "pnl_pct": null,
+      "pnl_gross_pct": null,
+      "duration_minutes": null,
+      "close_price": null,
+      "created_at": "2026-11-09T16:31:21Z",
+      "closed_at": null,
+      "created_local": "09/11 17:31",
+      "expires_at": "2026-11-10T16:31:21Z",
+      "rationale": "Achat : tendance forte (ADX), cassure du range d'ouverture, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 270.67 (0.97 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 50%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+      "news_context": "actualité à surveiller (score 2) : Risk-On: S&P 500 Surges Out of the Gate, Adds $1 Trillion in Market Value",
+      "manual_exit": null
+    },
+    {
+      "id": "54ce34c188",
+      "asset": "nasdaq",
+      "asset_label": "Nasdaq 100 (NQ)",
+      "direction": "long",
+      "horizon": "24h",
+      "entry": 27891.75,
+      "take_profit": 28517.25,
+      "stop_loss": 27683.25,
+      "risk_reward": 3.0,
+      "confidence": "fort",
+      "score": 7.51,
+      "criteria": [
+        "adx",
+        "orb",
+        "trend_15m",
+        "trend_1h",
+        "trend_5m",
+        "vwap"
+      ],
+      "source": "shadow",
+      "status": "open",
+      "pnl_pct": null,
+      "pnl_gross_pct": null,
+      "duration_minutes": null,
+      "close_price": null,
+      "created_at": "2026-11-09T16:31:21Z",
+      "closed_at": null,
+      "created_local": "09/11 17:31",
+      "expires_at": "2026-11-10T16:31:21Z",
+      "rationale": "Achat : tendance forte (ADX), cassure du range d'ouverture, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 347.42 (1.25 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 76%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+      "news_context": "actualité à surveiller (score 2) : Risk-On: S&P 500 Surges Out of the Gate, Adds $1 Trillion in Market Value",
+      "manual_exit": null
+    },
+    {
       "id": "1b083fa758",
       "asset": "nasdaq",
       "asset_label": "Nasdaq 100 (NQ)",
@@ -7903,10 +7972,10 @@
     }
   },
   "state": {
-    "last_scan": "2026-11-09T16:25:44Z",
+    "last_scan": "2026-11-09T16:31:21Z",
     "last_scan_note": "1 signal(aux)",
     "last_summary": "2026-11-08T23:05:41Z",
-    "last_track": "2026-11-09T16:25:44Z",
+    "last_track": "2026-11-09T16:31:21Z",
     "last_summary_day": "2026-11-08"
   },
   "limits": {
@@ -24094,7 +24163,7 @@
       "since": "2026-10-26T12:00:00Z",
       "trades": [],
       "live": true,
-      "checked_hour": "2026-11-09T16:15:00Z",
+      "checked_hour": "2026-11-09T16:30:00Z",
       "n": 0,
       "mean_r": null
     },
