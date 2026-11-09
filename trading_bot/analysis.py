@@ -113,11 +113,12 @@ def key_levels(c15: list[Candle], c60: list[Candle], price: float, hourly_range:
 
 def assess(asset: AssetConfig, candles_5m: list[Candle], cfg: Config,
            weights: dict[str, float] | None = None, *, base_minutes: int = 5,
-           context: dict[str, float | str | None] | None = None) -> Assessment:
+           context: dict[str, float | str | None] | None = None, trace: dict | None = None) -> Assessment:
     """Évalue l'actif : direction dominante, critères alignés, score pondéré.
 
     `base_minutes` : 5 (horizon ~1 h) ou 15 (horizon ~3 h). `context` : mesures des marchés
-    meneurs (vix_ret15, dxy_ret60, tnx_ret60, btc_dir) pour le critère de corrélation.
+    meneurs (vix_ret15, dxy_ret60, tnx_ret60, btc_dir) pour le critère de corrélation. `trace` (essai 74) :
+    reçoit les votes et les raisons avant la décision, pour la rejouer sans une règle.
     """
     w = dict(DEFAULT_WEIGHTS)
     if weights:
@@ -339,42 +340,13 @@ def assess(asset: AssetConfig, candles_5m: list[Candle], cfg: Config,
             votes[btc_dir]["corr"] = w["corr"]
             corr_veto["short" if btc_dir == "long" else "long"] = "Bitcoin en tendance contraire"
 
-    # --- Direction retenue : score dominant, sans ambiguïté ni contradiction majeure
+    if trace is not None:
+        trace.update(votes={d: dict(v) for d, v in votes.items()}, reasons=list(reasons), corr_veto=dict(corr_veto),
+                     e20=e20[-1])
+    direction, reasons = decide(votes, reasons, corr_veto, price, e20[-1], hourly_range, cfg)
+
     def total(d: str) -> float:
         return sum(votes[d].values())
-
-    sl, ss = total("long"), total("short")
-    direction: str | None
-    if sl == ss:
-        direction = None
-        reasons.append("marché indécis (signaux long / short équilibrés)")
-    elif sl > ss:
-        direction = "long"
-    else:
-        direction = "short"
-
-    if direction:
-        opposite = "short" if direction == "long" else "long"
-        if "trend_15m" in votes[opposite]:
-            reasons.append("tendance 15 min opposée à la direction envisagée")
-            direction = None
-        elif "adx" in votes[opposite]:
-            reasons.append("directionnel ADX (+DI / -DI) opposé à la direction envisagée")
-            direction = None
-        elif total(opposite) >= 0.5 * total(direction):
-            reasons.append("trop de critères contradictoires")
-            direction = None
-    if direction and direction in corr_veto:
-        reasons.append(f"veto corrélation : {corr_veto[direction]}")
-        direction = None
-    if direction and any(r.startswith(("pas de tendance", "RSI extrême", "heure creuse")) for r in reasons):
-        direction = None
-    # Entrée trop étendue par rapport à l'EMA20 5 min : on ne court pas après le mouvement
-    if direction and cfg.max_extension is not None and hourly_range and e20[-1] is not None:
-        ext = abs(price - e20[-1]) / hourly_range
-        if ext > cfg.max_extension:
-            reasons.append(f"prix trop éloigné de l'EMA20 ({ext:.2f} range horaire) : mouvement déjà étendu")
-            direction = None
 
     score = round(total(direction), 2) if direction else 0.0
     criteria = sorted(votes[direction]) if direction else []
@@ -396,6 +368,65 @@ def assess(asset: AssetConfig, candles_5m: list[Candle], cfg: Config,
                       hourly_range, atr_v, support, resistance, sigma, adx_last, atr_ratio, reasons,
                       horizon_minutes=horizon_minutes, base_minutes=base_minutes, activity_ratio=activity,
                       features=features)
+
+
+# Règles de décision qu'on peut retirer une à une (essai 74), en plus des critères eux-mêmes
+DECISION_RULES = ("adx_min", "rsi_extreme", "activity", "extension", "opposite", "contradiction")
+
+
+def decide(votes: dict[str, dict[str, float]], reasons: list[str], corr_veto: dict[str, str], price: float,
+           e20_last: float | None, hourly_range: float | None, cfg: Config,
+           disabled: frozenset[str] = frozenset()) -> tuple[str | None, list[str]]:
+    """Direction retenue : score dominant, sans ambiguïté ni contradiction majeure. `disabled` retire des critères
+    (noms de DEFAULT_WEIGHTS) ou des règles (DECISION_RULES) ; vide en production."""
+    if disabled:
+        votes = {d: {k: v for k, v in vs.items() if k not in disabled} for d, vs in votes.items()}
+        drop = tuple(p for k, p in (("adx_min", "pas de tendance"), ("rsi_extreme", "RSI extrême"),
+                                     ("activity", "heure creuse")) if k in disabled)
+        if drop:
+            reasons = [r for r in reasons if not r.startswith(drop)]
+    reasons = list(reasons)
+
+    def total(d: str) -> float:
+        return sum(votes[d].values())
+
+    sl, ss = total("long"), total("short")
+    direction: str | None
+    if sl == ss:
+        direction = None
+        reasons.append("marché indécis (signaux long / short équilibrés)")
+    elif sl > ss:
+        direction = "long"
+    else:
+        direction = "short"
+
+    if direction:
+        opposite = "short" if direction == "long" else "long"
+        if "opposite" in disabled:
+            pass
+        elif "trend_15m" in votes[opposite]:
+            reasons.append("tendance 15 min opposée à la direction envisagée")
+            direction = None
+        elif "adx" in votes[opposite]:
+            reasons.append("directionnel ADX (+DI / -DI) opposé à la direction envisagée")
+            direction = None
+        if direction and "contradiction" not in disabled and total(opposite) >= 0.5 * total(direction):
+            reasons.append("trop de critères contradictoires")
+            direction = None
+    if direction and direction in corr_veto:
+        reasons.append(f"veto corrélation : {corr_veto[direction]}")
+        direction = None
+    if direction and any(r.startswith(("pas de tendance", "RSI extrême", "heure creuse")) for r in reasons):
+        direction = None
+    # Entrée trop étendue par rapport à l'EMA20 5 min : on ne court pas après le mouvement
+    if direction and "extension" not in disabled and cfg.max_extension is not None and hourly_range \
+            and e20_last is not None:
+        ext = abs(price - e20_last) / hourly_range
+        if ext > cfg.max_extension:
+            reasons.append(f"prix trop éloigné de l'EMA20 ({ext:.2f} range horaire) : mouvement déjà étendu")
+            direction = None
+
+    return direction, reasons
 
 
 def confidence_label(score: float, n_criteria: int, cfg: Config) -> str | None:
