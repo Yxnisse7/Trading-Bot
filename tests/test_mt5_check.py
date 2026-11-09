@@ -45,3 +45,16 @@ def test_daily_check_is_sent_once_after_23h30_on_weekdays(tmp_path):
     assert d2.step() == "" and len(sent) == 1                                       # même après un redémarrage
     now[0] = datetime(2026, 10, 31, 22, 40, tzinfo=timezone.utc).timestamp()        # samedi
     assert d2.step() == ""
+
+
+def test_github_twins_of_pc_signals_are_not_missed():
+    from datetime import datetime
+    from trading_bot import mt5_check as mk
+    t = datetime(2026, 11, 9, 17, 10, tzinfo=mk.PARIS).timestamp()
+    state = {"lab:bot:1": {"asset": "nasdaq", "direction": "long", "source": "local", "status": "ouvert", "seen": t},
+             "bot:abc": {"asset": "nasdaq", "direction": "long", "source": "github", "seen": t + 840,
+                         "status": "pas de signal sur les prix MT5"},
+             "bot:def": {"asset": "nasdaq", "direction": "short", "source": "github", "seen": t + 900,
+                         "status": "pas de signal sur les prix MT5"}}
+    text = mk.report(state, t + 3600)
+    assert "1 pris sur MT5" in text and "1 raté" in text and "1 doublon" in text

@@ -26,6 +26,9 @@ ASSETS = {"nasdaq": "Nasdaq", "gold": "Or", "bitcoin": "Bitcoin", "ethereum": "E
           "oil": "Pétrole", "euro": "Euro"}
 
 
+TWIN_WINDOW = 30 * 60
+
+
 def reason(status: str) -> str:
     """Raison d'un signal raté, en français simple."""
     if status.startswith("agent : "):
@@ -58,12 +61,24 @@ def label(key: str, rec: dict[str, Any]) -> str:
     return f"{strat} · {ASSETS.get(rec.get('asset'), rec.get('asset'))} · {sens}"
 
 
+def _pc_twin(rec: dict[str, Any], todays: dict[str, Any]) -> bool:
+    """Signal de GitHub écarté parce que le PC calcule cette stratégie lui-même : c'est un doublon (pas un raté) si
+    le PC a eu un signal du même marché et du même sens à 30 min près (09/11 : 4 achats du bot Nasdaq pris par le
+    PC, leurs 4 jumeaux de GitHub comptés à tort comme ratés)."""
+    if not str(rec.get("status", "")).startswith("pas de signal sur les prix MT5"):
+        return False
+    seen = float(rec.get("seen") or 0)
+    return any(r.get("source") == "local" and r.get("asset") == rec.get("asset")
+               and r.get("direction") == rec.get("direction") and abs(float(r.get("seen") or 0) - seen) <= TWIN_WINDOW
+               for r in todays.values())
+
+
 def report(state: dict[str, Any], now: float) -> str:
     """Texte HTML du contrôle pour la journée de Paris qui contient `now`."""
     day = datetime.fromtimestamp(now, PARIS).date()
     start = datetime(day.year, day.month, day.day, tzinfo=PARIS).timestamp()
     todays = {k: r for k, r in state.items() if start <= float(r.get("seen") or 0) <= now}
-    twins = [k for k, r in todays.items() if str(r.get("status", "")).startswith("même signal")]
+    twins = [k for k, r in todays.items() if str(r.get("status", "")).startswith("même signal") or _pc_twin(r, todays)]
     real = {k: r for k, r in todays.items() if k not in twins}
     taken = [k for k, r in real.items() if r.get("status") in ("ouvert", "fermé")]
     agent = {k: r for k, r in real.items() if k not in taken and (r.get("agent") or str(r.get("status", "")).startswith(
