@@ -34,6 +34,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Callable
 
+from . import decideur as dc
 from . import demo_rules
 from . import messages as msg
 from .mt5_copy import COMMENT_MAX, SYMBOLS
@@ -109,8 +110,11 @@ def parse(text: str, reply_to: int | None, opened: list[dict[str, Any]]) -> dict
 
 class TgCopier:
     def __init__(self, mt5, root: Path, clock: Callable[[], float], relay=None, cfg: dict[str, Any] | None = None,
-                 spawn: Callable[..., Any] = subprocess.Popen):
+                 spawn: Callable[..., Any] = subprocess.Popen, decider=None):
         self.mt5, self.root, self.clock, self.relay, self.spawn = mt5, Path(root), clock, relay, spawn
+        # 09/11/2026 : l'agent IA décide de chaque signal du canal avant l'ordre (decideur.py)
+        self.decider = decider
+        self.waiting: dict[str, tuple[dict[str, Any], dict[str, Any]]] = {}
         self.cfg = {**DEFAULTS, **(cfg or {})}
         self.file = self.root / "journal" / "tg_copy.json"
         self.folder = self.root / "journal" / "tg_copy"
@@ -159,6 +163,8 @@ class TgCopier:
             return ""
         said = self._listen()
         self._reap()
+        if self.waiting:
+            said = self._decisions() or said
         for sid in list(self.state["signals"]):
             self._follow(sid)
         if self.proc is None:
@@ -259,7 +265,10 @@ class TgCopier:
         self._journal({"canal": data.get("chat"), "action": d.get("type"), "detail": json.dumps(d, ensure_ascii=False)})
         try:
             if d.get("type") == "ouverture":
-                self._open(d, data)
+                if self.decider is not None and self.decider.available():
+                    self._consult(d, data)
+                else:
+                    self._open(d, data)
             elif d.get("type") == "stop":
                 self._move(d, data)
             elif d.get("type") == "fermer":
@@ -335,7 +344,7 @@ class TgCopier:
             return self._refuse(data, d, "stop du mauvais côté de l'entrée")
         if (now_px - stop) * s <= lvl:
             return self._refuse(data, d, "le prix a déjà atteint le stop")
-        limit = (now_px - entry) * s > CHASE * dist
+        limit = (now_px - entry) * s > CHASE * dist or bool(d.get("force_limit"))
         px = entry if limit else now_px
         targets = [float(x) for x in d.get("objectifs") or [] if (float(x) - px) * s > lvl][:self._tp_max(data)]
         if d.get("objectifs") and not targets:
@@ -378,7 +387,89 @@ class TgCopier:
         sig["msg"] = self._announce(sig, d)
         self.state["signals"][sid] = sig
         self._save()
-        self._review(sid, sig)
+        if not d.get("agent"):                 # l'agent a déjà décidé avant l'ordre
+            self._review(sid, sig)
+
+    # ------------------------------------------------------------------ décision de l'agent IA (09/11/2026)
+    def _consult(self, d: dict[str, Any], data: dict[str, Any]) -> None:
+        key = f"{data['chat_id']}:{data['msg_id']}"
+        if key in self.waiting or any(s["key"] == key for s in self.state["signals"].values()):
+            return
+        if len(self.state["signals"]) >= MAX_OPEN:
+            return self._refuse(data, d, f"déjà {MAX_OPEN} signaux ouverts")
+        why = demo_rules.check(self.mt5, MAGIC)
+        if why:
+            return self._refuse(data, d, f"règle d'arrêt ({why})")
+        buy = d["sens"] == "achat"
+        sym = SYMBOLS[d["marche"]]
+        self.mt5.symbol_select(sym, True)
+        tick = self.mt5.symbol_info_tick(sym)
+        if tick is None or not tick.bid:
+            return self._refuse(data, d, "marché fermé")
+        now_px = tick.ask if buy else tick.bid
+        zone = d.get("zone")
+        entry = min(max(now_px, zone[0]), zone[1]) if zone else float(d["entree"]) if d.get("entree") is not None \
+            else now_px
+        targets = [float(x) for x in d.get("objectifs") or []]
+        get = getattr(self.relay, "_candles", None)
+        candles = (lambda tf, n: get(sym, tf, n, None) or []) if get else (lambda tf, n: [])  # noqa: E731
+        now = self.clock()
+        iso = lambda x: datetime.fromtimestamp(x, timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")  # noqa: E731
+        tps = " / ".join(f"{x:g}" for x in targets)
+        info = {"id": f"tg-{abs(data['chat_id'])}-{data['msg_id']}", "strategie": "copie_telegram",
+                "asset": d["marche"], "asset_label": LABELS.get(d["marche"], d["marche"]),
+                "direction": "long" if buy else "short", "entry": entry, "stop_loss": float(d["stop"]),
+                "take_profit": targets[0] if targets else None, "objectifs": targets,
+                "sortie": f"signal du canal {data.get('chat')} : un ordre par objectif ({tps or 'aucun'}), "
+                          f"fermé au bout de {MAX_HOLD // 3600} h au plus",
+                "message_du_canal": str(data.get("text", ""))[:1500],
+                "created_at": iso(float(data.get("date") or now)), "maintenant": iso(now),
+                "bid": tick.bid, "ask": tick.ask, "attente_max_min": dc.WAIT_MAX // 60,
+                "telegram_message_ids": {}, "ticket_mt5": None,
+                "candles_5m": candles("TIMEFRAME_M5", 288), "candles_1h": candles("TIMEFRAME_H1", 48),
+                "candles_1d": candles("TIMEFRAME_D1", 20)}
+        if not self.decider.ask(f"tg:{key}", info):
+            return self._refuse(data, d, "agent IA : il n'a pas pu être lancé")
+        self.waiting[key] = (d, data)
+
+    def _decisions(self) -> str:
+        said = ""
+        for key in list(self.waiting):
+            dec = self.decider.poll(f"tg:{key}")
+            if dec is None:
+                continue
+            d, data = self.waiting.pop(key)
+            self._journal({"canal": data.get("chat"), "action": f"agent : {dec['action']}",
+                           "detail": json.dumps(dec, ensure_ascii=False)})
+            said = f"copie Telegram : agent {dec['action']} ({data.get('chat')} n°{data['msg_id']})"
+            if dec["action"] not in ("prendre", "attendre"):
+                self._refuse(data, d, f"agent IA {dc.line(dec)[len('Agent IA : '):]}")
+                continue
+            buy = d["sens"] == "achat"
+            sg = 1 if buy else -1
+            sym = SYMBOLS[d["marche"]]
+            tick, info = self.mt5.symbol_info_tick(sym), self.mt5.symbol_info(sym)
+            if tick is None or info is None or not tick.bid:
+                self._refuse(data, d, "marché fermé après la décision de l'agent")
+                continue
+            now_px = tick.ask if buy else tick.bid
+            gap = getattr(info, "trade_stops_level", 0) * getattr(info, "point", 0.01) + abs(tick.ask - tick.bid)
+            stop = float(d["stop"])
+            p = dc.plan(dec, buy, now_px, abs(now_px - stop) or gap, None, gap)
+            if p["action"] == "refuser":
+                self._refuse(data, d, f"agent IA : {'; '.join(p['notes'])}")
+                continue
+            ref = p["entry"] or now_px
+            d2 = dict(d, agent=dict(dec, notes=p["notes"]))
+            if p["entry"]:
+                d2.update(zone=None, entree=p["entry"], force_limit=True)
+            if dec.get("stop") is not None and not any(n.startswith("SL") for n in p["notes"]):
+                d2["stop"] = ref - sg * p["stop"]
+            if p["target"]:
+                obj = ref + sg * p["target"]
+                d2["objectifs"] = [x for x in d.get("objectifs") or [] if (obj - float(x)) * sg > 0] + [obj]
+            self._open(d2, data)
+        return said
 
     def _review(self, sid: str, s: dict[str, Any]) -> None:
         """Avis de l'agent IA sous l'annonce, comme pour les signaux du bot (demandé par Yanisse le 23/10/2026)."""
@@ -408,6 +499,8 @@ class TgCopier:
                  f"Entrée {msg.code_price(s['entry'], dg)}" + (f"  (en attente jusqu'à {wait})" if wait else ""),
                  f"SL     {msg.code_price(s['stop'], dg)}"]
         lines += [f"TP{i + 1}    {msg.code_price(t, dg)}" for i, t in enumerate(s["targets"])] or ["TP     aucun"]
+        if d.get("agent"):
+            lines.append(msg.esc(dc.line(d["agent"], d["agent"].get("notes"))))
         lines += ["", f"MT5 démo : {len(s['lots'])} × {msg.num(s['lots'][0], 2)} lot "
                       f"(risque {msg.num(s['risk_usd'], 2)} $ si tout touche le SL), "
                       f"fermé au bout de {MAX_HOLD // 3600} h au plus.",

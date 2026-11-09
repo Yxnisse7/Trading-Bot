@@ -18,6 +18,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Callable
 
+from . import decideur as dc
 from . import demo_rules
 from .mt5_local import LocalEngine, same_signal, server_offset
 
@@ -144,8 +145,12 @@ def floor_lot(lot: float, balance: float, dist: float, info, point_value: float 
 
 class Copier:
     def __init__(self, mt5, root: Path, journal: Callable[..., None], clock: Callable[[], float],
-                 get: Callable[[str], Any] = _get, local: bool = False, relay=None, bot=None):
+                 get: Callable[[str], Any] = _get, local: bool = False, relay=None, bot=None, decider=None):
         self.mt5, self.root, self.journal, self.clock, self.get = mt5, root, journal, clock, get
+        # 09/11/2026 : l'agent IA décide de chaque copie avant l'ordre (decideur.py) ; None = copie automatique
+        self.decider = decider
+        self.waiting: dict[str, dict[str, Any]] = {}
+        self.known: tuple[set[str], set[str], set[str]] = (set(), set(), set())
         # annonces Telegram et avis de l'agent depuis le PC (pc_relay, 19/10/2026)
         self.relay = relay
         # stratégies recalculées sur le PC avec les prix MT5 (16/10/2026) ; GitHub reste la source de secours
@@ -158,6 +163,9 @@ class Copier:
             self.state: dict[str, Any] = json.loads(self.state_file.read_text(encoding="utf-8"))
         except (OSError, ValueError):
             self.state = {}
+        for rec in self.state.values():               # pont relancé pendant que l'agent réfléchissait
+            if rec.get("status") == "agent : en réflexion":
+                rec["status"] = "agent : interrompu (pont relancé)"
 
     def _save(self) -> None:
         self.state_file.parent.mkdir(parents=True, exist_ok=True)
@@ -183,6 +191,8 @@ class Copier:
 
     def step(self) -> str:
         now = self.clock()
+        if self.waiting:
+            self._decisions()                         # à chaque tour du pont, pas toutes les 30 s
         if now - self.last < EVERY:
             return ""
         self.last = now
@@ -210,6 +220,7 @@ class Copier:
             if self.relay is not None:
                 self.relay.local_ok = {k.split(":", 1)[1] for k in lok}
         github_keys = {s["key"] for s in signals}
+        self.known = (ok, local_keys, github_keys)
         live: dict[str, dict[str, Any]] = {}
         for s in local + signals:                    # le calcul local passe en premier
             live.setdefault(s["key"], s)
@@ -217,19 +228,20 @@ class Copier:
         # sorties : signal expiré, ou fermé par le bot (seulement si sa source a bien été lue)
         for key, rec in list(self.state.items()):
             p = pos.get(rec.get("ticket"))
+            if rec.get("status") == "limite":
+                if p is None:
+                    self._limit(key, rec, now)
+                    continue
+                rec["status"] = "ouvert"              # ordre limite de l'agent touché
+                if self.relay is not None:
+                    self.relay.reply_to(key, "⏳→✅ Ordre limite de l'agent exécuté sur MT5.")
             if p is None:
                 if rec.get("ticket") and rec.get("status") == "ouvert":
                     rec["status"] = "fermé"
                 continue
-            if rec.get("source") == "local":
-                source, known = f"local:{key.split(':')[1]}", local_keys
-            else:
-                # 16/10 : comparé à tous les signaux moins ceux du PC, un trade GitHub que le PC voyait aussi
-                # était fermé au redémarrage du pont ; seuls comptent les signaux de GitHub
-                source, known = ("lab" if key.startswith("lab:") else rec["asset"]), github_keys
             if rec.get("expires") and now >= rec["expires"]:
                 self._close(p, "expiration")
-            elif source in ok and key not in known:
+            elif self._ended(key, rec):
                 self._close(p, "fermé par la règle" if rec.get("source") == "local" else "fermé par le bot")
         # entrées
         why = demo_rules.check(self.mt5, MAGIC)
@@ -259,6 +271,9 @@ class Copier:
             if not s["created"] or now - s["created"] > MAX_AGE:
                 self.state[key]["status"] = "trop ancien"
                 continue
+            if self.decider is not None and self.decider.available():
+                self._ask(key, s)
+                continue
             self.state[key].update(self._open(s, acc.balance))
             if self.state[key]["status"] == "pas de prix":
                 del self.state[key]                 # pas encore de cotation : on réessaie au passage suivant
@@ -268,6 +283,131 @@ class Copier:
         if self.relay is not None and self.mt5.positions_get() is not None:   # terminal muet : on ne conclut rien
             self.relay.step(self._positions(), local_keys, ok)
         return f"copie : {sum(1 for r in self.state.values() if r.get('status') == 'ouvert')} position(s)"
+
+    # ------------------------------------------------------------------ décision de l'agent IA (09/11/2026)
+    def _ended(self, key: str, rec: dict[str, Any]) -> bool:
+        """Signal fermé par sa source (seulement si cette source a bien été lue au dernier passage)."""
+        ok, local_keys, github_keys = self.known
+        if rec.get("source") == "local":
+            source, known = f"local:{key.split(':')[1]}", local_keys
+        else:
+            # 16/10 : comparé à tous les signaux moins ceux du PC, un trade GitHub que le PC voyait aussi
+            # était fermé au redémarrage du pont ; seuls comptent les signaux de GitHub
+            source, known = ("lab" if key.startswith("lab:") else rec["asset"]), github_keys
+        return source in ok and key not in known
+
+    @staticmethod
+    def _strategy(key: str) -> str:
+        return key.split(":")[1] if key.startswith("lab:") else "bot"
+
+    def _ask(self, key: str, s: dict[str, Any]) -> None:
+        """Envoie le signal à l'agent ; la décision est lue par _decisions aux tours suivants."""
+        from .pc_relay import ASSETS, EXITS
+        sym = SYMBOLS[s["asset"]]
+        long = s["direction"] == "long"
+        sg = 1 if long else -1
+        tick = self.mt5.symbol_info_tick(sym) if self.mt5.symbol_select(sym, True) else None
+        px = (tick.ask if long else tick.bid) if tick is not None else 0.0
+        if px <= 0:
+            del self.state[key]                     # pas encore de cotation : on réessaie au passage suivant
+            return
+        late = self._already_gone(s, sym, px, sg)
+        if late:
+            self.state[key]["status"] = late
+            return
+        strat = self._strategy(key)
+        get = getattr(self.relay, "_candles", None)
+        candles = (lambda tf, n: get(sym, tf, n, None) or []) if get else (lambda tf, n: [])  # noqa: E731
+        now = self.clock()
+        iso = lambda x: datetime.fromtimestamp(x, timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")  # noqa: E731
+        data = {"id": key.replace(":", "-"), "strategie": strat, "asset": s["asset"],
+                "asset_label": ASSETS.get(s["asset"], s["asset"]), "direction": s["direction"],
+                "entry": px, "stop_loss": px - sg * s["stop"],
+                "take_profit": px + sg * s["target"] if s.get("target") else None,
+                "sortie": EXITS.get(strat, "selon la règle de la stratégie"),
+                "created_at": iso(s.get("created") or now), "maintenant": iso(now),
+                "bid": tick.bid, "ask": tick.ask, "attente_max_min": dc.WAIT_MAX // 60,
+                "telegram_message_ids": {}, "ticket_mt5": None,
+                "candles_5m": candles("TIMEFRAME_M5", 288), "candles_1h": candles("TIMEFRAME_H1", 48),
+                "candles_1d": candles("TIMEFRAME_D1", 20)}
+        if not self.decider.ask(key, data):
+            self.state[key]["status"] = "agent : pas de réponse"
+            self.state[key]["agent"] = dc.normalize({"raison": "L'agent n'a pas pu être lancé."})
+            self._announce(key, s, self.state[key])
+            return
+        self.state[key]["status"] = "agent : en réflexion"
+        self.waiting[key] = s
+
+    def _decisions(self) -> None:
+        acc = self.mt5.account_info()
+        if acc is None or acc.trade_mode != self.mt5.ACCOUNT_TRADE_MODE_DEMO:
+            return
+        now = self.clock()
+        for key in list(self.waiting):
+            dec = self.decider.poll(key)
+            if dec is None:
+                continue
+            s = self.waiting.pop(key)
+            rec = self.state.get(key)
+            if rec is None or rec.get("status") != "agent : en réflexion":
+                continue
+            rec["agent"] = dict(dec, notes=[])
+            shown = s
+            self.journal("décision de l'agent", sens="achat" if s["direction"] == "long" else "vente",
+                         note=f"{key} {dec['action']} ({dec['confiance']}/5) : {dec['raison']}"[:300])
+            if (s.get("expires") and now >= s["expires"]) or self._ended(key, rec):
+                rec["status"] = "agent : signal fini avant la décision"
+            elif dec["action"] not in ("prendre", "attendre"):
+                rec["status"] = "agent : refusé" if dec["action"] == "refuser" else "agent : pas de réponse"
+            else:
+                sym = SYMBOLS[s["asset"]]
+                long = s["direction"] == "long"
+                info, tick = self.mt5.symbol_info(sym), self.mt5.symbol_info_tick(sym)
+                px = (tick.ask if long else tick.bid) if tick is not None else 0.0
+                if info is None or px <= 0:
+                    rec["status"] = "agent : pas de prix après la décision"
+                else:
+                    gap = (info.trade_stops_level + 5) * info.point + abs(tick.ask - tick.bid)
+                    p = dc.plan(dec, long, px, s["stop"], s.get("target"), gap)
+                    rec["agent"]["notes"] = p["notes"]
+                    if p["action"] == "refuser":
+                        rec["status"] = "agent : refusé"
+                    else:
+                        shown = dict(s, stop=p["stop"], target=p["target"])
+                        rec.update(self._open(shown, acc.balance, limit=p["entry"]))
+                        if rec["status"] == "pas de prix":
+                            rec["status"] = "agent : pas de prix après la décision"
+                        shown["entry"] = rec.get("price") or p["entry"] or px
+            self._announce(key, shown, rec)
+        self._save()
+
+    def _announce(self, key: str, s: dict[str, Any], rec: dict[str, Any]) -> None:
+        if self.relay is None:
+            return
+        if s.get("source") == "local":
+            self.relay.entry(key, s, rec)
+        else:
+            self.relay.note(key, s, rec)            # signal du site : déjà annoncé par GitHub
+
+    def _limit(self, key: str, rec: dict[str, Any], now: float) -> None:
+        """Ordre limite « attendre » pas encore touché : annulé à l'heure prévue ou si le signal est fini."""
+        t = rec.get("ticket")
+        if not any(o.ticket == t for o in (self.mt5.orders_get() or [])):
+            deals = (self.mt5.history_deals_get(position=t) or []) if t else []
+            rec["status"] = "fermé" if deals else "limite annulée"
+            return
+        why = ("pas touché à temps" if now >= float(rec.get("limit_until") or 0)
+               else "fin du signal" if rec.get("expires") and now >= rec["expires"]
+               else "signal fermé par la règle" if self._ended(key, rec) else "")
+        if not why:
+            return
+        res = self.mt5.order_send({"action": self.mt5.TRADE_ACTION_REMOVE, "order": t})
+        if getattr(res, "retcode", None) != self.mt5.TRADE_RETCODE_DONE:
+            return                                  # on réessaie au passage suivant
+        rec["status"] = f"limite annulée ({why})"
+        self.journal("copie limite annulée", note=f"{key} {why}")
+        if self.relay is not None:
+            self.relay.cancelled(key, f"Ordre limite de l'agent annulé : {why}. Pas de trade.")
 
     def _already_gone(self, s: dict[str, Any], sym: str, px: float, sg: int) -> str:
         """Signal de GitHub copié en retard : si le prix du CFD a déjà fait plus de CHASE_MAX fois la distance du
@@ -288,7 +428,7 @@ class Copier:
             return f"prix déjà parti ({moved:.2f} depuis l'annonce)"
         return ""
 
-    def _open(self, s: dict[str, Any], balance: float) -> dict[str, Any]:
+    def _open(self, s: dict[str, Any], balance: float, limit: float | None = None) -> dict[str, Any]:
         sym = SYMBOLS[s["asset"]]
         if not self.mt5.symbol_select(sym, True):
             return {"status": f"symbole {sym} indisponible"}
@@ -307,9 +447,11 @@ class Copier:
         # du courtier plutôt que refusé (code 10016), et la taille suit la distance élargie
         spread = abs(tick.ask - tick.bid) if tick is not None else 0.0
         s = dict(s, stop=max(s["stop"], (info.trade_stops_level + 5) * info.point + spread))
+        if limit:                                   # ordre limite de l'agent (« attendre ») : niveaux autour du prix visé
+            px = round(limit, info.digits)
         sl = round(px - sg * s["stop"], info.digits)
-        tp = round(px + sg * s["target"], info.digits) if s["target"] else 0.0
-        late = self._already_gone(s, sym, px, sg)
+        tp = round(px + sg * s["target"], info.digits) if s.get("target") else 0.0
+        late = "" if limit else self._already_gone(s, sym, px, sg)
         if late:
             return {"status": late}
         strat = s["key"].split(":")[1] if s["key"].startswith("lab:") else None
@@ -320,17 +462,27 @@ class Copier:
             lot = round(min(max(lot, MIN_LOT[strat]), float(info.volume_max)), 2)
         if lot <= 0:
             return {"status": "taille minimale trop risquée"}
-        res = self.mt5.order_send({
-            "action": self.mt5.TRADE_ACTION_DEAL, "symbol": sym, "volume": lot,
-            "type": self.mt5.ORDER_TYPE_BUY if long else self.mt5.ORDER_TYPE_SELL, "price": px, "sl": sl, "tp": tp,
-            "deviation": 50, "magic": MAGIC, "comment": s["key"][:COMMENT_MAX], "type_time": self.mt5.ORDER_TIME_GTC,
-            "type_filling": self._filling(sym)})
+        req = {"action": self.mt5.TRADE_ACTION_DEAL, "symbol": sym, "volume": lot,
+               "type": self.mt5.ORDER_TYPE_BUY if long else self.mt5.ORDER_TYPE_SELL, "price": px, "sl": sl, "tp": tp,
+               "deviation": 50, "magic": MAGIC, "comment": s["key"][:COMMENT_MAX], "type_time": self.mt5.ORDER_TIME_GTC,
+               "type_filling": self._filling(sym)}
+        if limit:
+            req.update(action=self.mt5.TRADE_ACTION_PENDING, type_filling=self.mt5.ORDER_FILLING_RETURN,
+                       type=self.mt5.ORDER_TYPE_BUY_LIMIT if long else self.mt5.ORDER_TYPE_SELL_LIMIT)
+            req.pop("deviation")
+        res = self.mt5.order_send(req)
         code = getattr(res, "retcode", None)
         ok = code == self.mt5.TRADE_RETCODE_DONE
-        self.journal("copie entrée" if ok else "copie rejetée", sens="achat" if long else "vente",
+        self.journal(("copie limite" if limit else "copie entrée") if ok else "copie rejetée",
+                     sens="achat" if long else "vente",
                      prix=getattr(res, "price", px) or px, stop=sl, objectif=tp or "", lot=lot,
                      note=f"{sym} {s['key']} (code {code})")
         if not ok:
             return {"status": f"rejeté (code {code})"}
-        return {"status": "ouvert", "ticket": getattr(res, "order", None) or getattr(res, "deal", None), "symbol": sym,
-                "lot": lot}
+        ticket = getattr(res, "order", None) or getattr(res, "deal", None)
+        if limit:
+            until = self.clock() + dc.WAIT_MAX
+            return {"status": "limite", "ticket": ticket, "symbol": sym, "lot": lot, "price": px,
+                    "limit_until": min(until, s["expires"]) if s.get("expires") else until}
+        return {"status": "ouvert", "ticket": ticket, "symbol": sym, "lot": lot,
+                "price": float(getattr(res, "price", px) or px)}

@@ -40,8 +40,10 @@ DEFAULTS: dict[str, Any] = {
     "agent": {"enabled": False, "model": "", "library": ""},
     # avis de l'agent IA après chaque entrée annoncée par le PC (pc_relay.py), lancé en arrière-plan ;
     # rien ne se passe tant que le dossier de l'agent n'existe pas
+    # 09/11/2026 (demande de Yanisse) : « decide » = l'agent décide de chaque copie AVANT l'ordre (decideur.py) ;
+    # false = copie automatique comme avant
     "avis": {"command": r"E:\TradingBot\venv\Scripts\python.exe E:\TradingBot\agent\agent\avis_direct.py",
-             "dir": r"E:\TradingBot\agent", "timeout": 90},
+             "dir": r"E:\TradingBot\agent", "timeout": 90, "decide": True, "decide_timeout": 150},
 }
 
 
@@ -87,8 +89,10 @@ class Bridge:
             if relay.enabled():                  # menu des commandes quand on tape « / » dans Telegram
                 from .notify import telegram_set_menu
                 telegram_set_menu()
+            from .decideur import Decideur
+            decider = Decideur(root, clock, cfg["avis"])
             self.copier = Copier(mt5, root, self.journal, clock, local=bool(cfg.get("local_strategies", True)),
-                                 relay=relay, bot=bot)
+                                 relay=relay, bot=bot, decider=decider)
             if cfg.get("hunt", True):            # l'agent IA cherche des trades sur l'or à heures fixes (mt5_hunt.py)
                 from .mt5_hunt import Hunter
                 self.hunter = Hunter(mt5, root, clock, relay=relay, cfg=cfg.get("chasse"))
@@ -103,7 +107,7 @@ class Bridge:
                 self.check = DailyCheck(self.copier, relay, root, clock)
             if (cfg.get("tg_copy") or {}).get("channels"):   # copie des canaux Telegram de signaleurs (mt5_tgcopy.py)
                 from .mt5_tgcopy import TgCopier
-                self.tgcopy = TgCopier(mt5, root, clock, relay=relay, cfg=cfg["tg_copy"])
+                self.tgcopy = TgCopier(mt5, root, clock, relay=relay, cfg=cfg["tg_copy"], decider=decider)
         self.tick_from: int | None = None
         if cfg["exit"] != "X1":
             raise ValueError("seule la sortie X1 est branchée en direct pour l'instant")

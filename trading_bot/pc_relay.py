@@ -22,6 +22,7 @@ import time
 from pathlib import Path
 from typing import Any, Callable
 
+from . import decideur as dc
 from . import messages as msg
 from . import pc_link
 from . import taille
@@ -183,8 +184,7 @@ class Relay:
         stop = s["entry"] - sg * s["stop"]
         target = s["entry"] + sg * s["target"] if s.get("target") else None
         chg = lambda v: msg.pct((v / s["entry"] - 1) * 100.0)  # noqa: E731
-        copy = (f"copié, {msg.num(rec.get('lot'), 2)} lot" if rec.get("status") == "ouvert"
-                else f"pas copié ({rec.get('status')})")
+        copy = self._copy_text(rec)
         lines = [f"<b>{'↗️ ACHAT' if long else '↘️ VENTE'} · {msg.esc(ASSETS.get(s['asset'], s['asset']))}</b>"
                  f" · {msg.esc(pc_link.LABELS.get(strat, strat))}",
                  f"Entrée {msg.code_price(s['entry'], digits)}",
@@ -193,6 +193,7 @@ class Relay:
                  f"Sortie : {EXITS.get(strat, 'selon la règle de la stratégie')}.",
                  "",
                  f"MT5 démo : {msg.esc(copy)}",
+                 *([msg.esc(dc.line(rec["agent"], rec["agent"].get("notes")))] if rec.get("agent") else []),
                  *([taille.line(k)] if (k := self._taille(strat, sym, s)) is not None else []),
                  "Topstep et Simulation : calculés par le bot en ligne (voir le site).",
                  "<i>Annoncé par ton PC, prix MetaTrader 5. Le bot ne passe aucun ordre réel.</i>"]
@@ -205,7 +206,46 @@ class Relay:
         self._save()
         self.last_beat = 0.0                          # GitHub doit l'apprendre tout de suite
         self.beat()
-        self._agent(key, s, sym, stop, target, ids)
+        if not rec.get("agent"):                      # l'agent a déjà décidé avant l'ordre (decideur.py)
+            self._agent(key, s, sym, stop, target, ids)
+
+    def _copy_text(self, rec: dict[str, Any]) -> str:
+        status = str(rec.get("status") or "")
+        if status == "ouvert":
+            return f"copié, {msg.num(rec.get('lot'), 2)} lot"
+        if status == "limite":
+            until = time.strftime("%H:%M", time.localtime(float(rec.get("limit_until") or 0)))
+            return (f"ordre limite à {msg.num(rec.get('price'), 2)}, {msg.num(rec.get('lot'), 2)} lot, "
+                    f"annulé à {until} s'il n'est pas touché")
+        if status.startswith("agent : "):
+            return "pas de trade"
+        return f"pas copié ({status})"
+
+    def note(self, key: str, s: dict[str, Any], rec: dict[str, Any]) -> None:
+        """Décision de l'agent sur un signal du site (déjà annoncé par GitHub) : message court, à part."""
+        if not self.enabled() or not rec.get("agent"):
+            return
+        strat = key.split(":")[1] if key.startswith("lab:") else "bot"
+        long = s["direction"] == "long"
+        self._post("\n".join([
+            f"<b>🤖 {'Achat' if long else 'Vente'} · {msg.esc(ASSETS.get(s['asset'], s['asset']))}</b>"
+            f" · {msg.esc(pc_link.LABELS.get(strat, strat))} (signal du site)",
+            msg.esc(dc.line(rec["agent"], rec["agent"].get("notes"))),
+            f"MT5 démo : {msg.esc(self._copy_text(rec))}"]))
+
+    def reply_to(self, key: str, text: str) -> None:
+        """Petit message en réponse à l'annonce d'entrée (ordre limite touché, annulé…)."""
+        r = self.state.get(key)
+        if not self.enabled() or r is None:
+            return
+        self._post(msg.esc(text), reply=r.get("msg"))
+
+    def cancelled(self, key: str, text: str) -> None:
+        """Ordre limite jamais touché : on le dit, et il n'y aura pas de message de sortie."""
+        self.reply_to(key, text)
+        if key in self.state:
+            self.state[key]["exit_sent"] = True
+            self._save()
 
     # ------------------------------------------------------------------ sortie
     def step(self, positions: dict[int, Any], local_keys: set[str], local_ok: set[str]) -> None:

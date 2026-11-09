@@ -28,6 +28,10 @@ ASSETS = {"nasdaq": "Nasdaq", "gold": "Or", "bitcoin": "Bitcoin", "ethereum": "E
 
 def reason(status: str) -> str:
     """Raison d'un signal raté, en français simple."""
+    if status.startswith("agent : "):
+        return "l'agent IA : " + status.split(":", 1)[-1].strip()
+    if status.startswith("limite annulée"):
+        return "ordre limite de l'agent jamais touché"
     if status.startswith("taille minimale"):
         return "le lot minimum risquait trop pour ton solde"
     if status.startswith("rejeté"):
@@ -62,11 +66,17 @@ def report(state: dict[str, Any], now: float) -> str:
     twins = [k for k, r in todays.items() if str(r.get("status", "")).startswith("même signal")]
     real = {k: r for k, r in todays.items() if k not in twins}
     taken = [k for k, r in real.items() if r.get("status") in ("ouvert", "fermé")]
-    missed = {k: r for k, r in real.items() if k not in taken}
+    agent = {k: r for k, r in real.items() if k not in taken and (r.get("agent") or str(r.get("status", "")).startswith(
+        ("agent : ", "limite")))}                    # décidé par l'agent IA (09/11/2026) : pas un raté
+    missed = {k: r for k, r in real.items() if k not in taken and k not in agent}
     head = f"<b>🔍 Contrôle du soir · {day:%d/%m}</b>"
     if not real:
         return head + "\nAucun signal vu par la copie aujourd'hui."
-    lines = [head, f"{len(real)} signal(aux) annoncé(s) · <b>{len(taken)} pris sur MT5</b> · {len(missed)} raté(s)"]
+    lines = [head, f"{len(real)} signal(aux) annoncé(s) · <b>{len(taken)} pris sur MT5</b> · {len(missed)} raté(s)"
+             + (f" · {len(agent)} laissé(s) de côté par l'agent" if agent else "")]
+    for k, r in sorted(agent.items(), key=lambda kv: kv[1].get("seen") or 0):
+        at = datetime.fromtimestamp(float(r.get("seen") or 0), PARIS)
+        lines.append(f"🤖 {at:%H:%M} {msg.esc(label(k, r))} : {msg.esc(reason(str(r.get('status', ''))))}")
     if twins:
         lines.append(f"<i>({len(twins)} doublon(s) PC/GitHub non comptés)</i>")
     for k, r in sorted(missed.items(), key=lambda kv: kv[1].get("seen") or 0):
