@@ -322,3 +322,113 @@ def test_refused_stop_move_is_not_announced_as_done(tmp_path):
     c.step()
     assert "refusé par MT5" in sent[-1][0] and "10016" in sent[-1][0] and "déplacé" not in sent[-1][0]
     assert c.state["signals"]["100123-7"]["stop"] == 4101.0
+
+
+def test_gestion_rtz_phrases():
+    """10/11 : consignes de gestion relevées dans l'historique du canal RTZ ACADEMY."""
+    g = tc.gestion
+    assert g("✅ MODIFIER TP1 A 5199")["tp"] == {1: 5199.0}
+    assert g("✅ MODIFIER TP A 5015")["tp"] == {0: 5015.0}
+    assert g("MODIFIEZ LE TP A 5085 ✅")["tp"] == {0: 5085.0}
+    assert g("✅ MODIFIER TP1 À 4406")["tp"] == {1: 4406.0} and g("✅ TP MODIFIER A 5010")["tp"] == {0: 5010.0}
+    assert g("❌ MODIFIER SL A 5126.80")["stop"] == 5126.8 and g("❌ MODIFIER LE SL À 5059")["stop"] == 5059.0
+    assert g("❌ DÉPLACEZ SL A 4551.50")["stop"] == 4551.5 and g("MODIFIER LE STOP LOSS A 4879")["stop"] == 4879.0
+    assert g("❌ SL MODIFIER 5061")["stop"] == 5061.0
+    assert g("METTEZ VOUS BE ✅")["be"] and g("✅ SÉCURISEZ")["be"] and g("BE NOW ✅")["be"]
+    assert g("🔒 Déplacez votre stop loss au point d’entrée sur votre TP2. ✅")["be"]
+    assert g("TP1 HIT ✅ +40 PIPS\n\n🔒CLÔTUREZ 50% ET METTEZ VOS STOPLOSS AU BREAKEVEN ( POINT D’ENTRÉE)")["be"]
+    assert g("✅ SÉCURISEZ 75% ET BE LE RESTE !")["be"]
+    x = g("✅ SÉCURISEZ 75% ET METTEZ VOUS BE")
+    assert x["close"] == 0.75 and x["be"]
+    assert g("CLÔTUREZ 75% DES PROFITS ET METTEZ VOUS BE ✅")["close"] == 0.75
+    for t in ("❌ OUT", "✅ ON CLÔTURE", "TRADE ANNULER ⚠️", "CLÔTUREZ AU BE", "⚠️ OUT ON ATTEND",
+              "🔥 CLÔTUREZ MANUELLEMENT TP1 POUR CEUX QUI SONT ENCORE DEDANS : +70 PIPS"):
+        assert g(t)["close"] == 1.0, t
+    for t in ("🟰 BE HIT", "SL HIT ❌", "✅ TRADE MODIFIER", "⚠️ ATTENDEZ", "🧨 ON EST DANS LA ZONE DE PROFIT",
+              "On approche du TP ! 🎯N’hésitez pas à clôturer manuellement pour éviter de vous faire avoir par le spread.",
+              "VOUS POUVEZ SÉCURISEZ ET CLÔTURER LE TOUT, ON EST À 10pips DU TP ✅", "LE MARCHÉ FAKEOUT",
+              "✅ MEILLEUR PE 30 PIPS DE SL", "ALL TP HIT ✅", "ON SCALP QUAND JE DIS DE CLÔTURER ON CLÔTURE EN PROFIT OK ?",
+              "📊 TUTO CLÔTURER MANUELLEMENT UN TRADE 📊", "🟰 BE HIT SUR TP2 !"):
+        assert g(t) is None, t
+
+
+class NoDecider:
+    def available(self):
+        return True
+
+    def ask(self, *a):
+        raise AssertionError("l'agent ne doit pas être consulté pour ce canal")
+
+
+def rtz(tmp_path, msg_id, text, now, reply_to=None, edited=False):
+    tg_listen.record(tmp_path, -100555, "RTZ ACADEMY", msg_id, text, reply_to, now, edited)
+
+
+def test_rtz_no_agent_and_follows_instructions(tmp_path):
+    now = [T0]
+    c, mt5, sent = make(tmp_path, [], now, claude=False)
+    c.cfg.update(tp_max={"RTZ ACADEMY": 1}, no_agent=["RTZ ACADEMY"], manage=["RTZ ACADEMY"])
+    c.decider = NoDecider()
+    mt5.bid = 4141.0
+    rtz(tmp_path, 70, RTZ, now[0])
+    assert "ouverture" in c.step() and c.reviews == []                # ouvert sans l'agent, sans son avis
+    s = c.state["signals"]["100555-70"]
+    mt5.positions = [NS(magic=tc.MAGIC, ticket=s["tickets"][0], type=1, volume=0.01, tp=4132.0, sl=4148.0)]
+    n = len(mt5.sent)
+    rtz(tmp_path, 71, "✅ MODIFIER TP1 A 4130", now[0], reply_to=70)
+    c.step()
+    r = mt5.sent[-1]
+    assert r["action"] == mt5.TRADE_ACTION_SLTP and r["tp"] == 4130.0 and r["sl"] == 4148.0
+    assert s["targets"] == [4130.0] and "TP1 déplacé" in sent[-1][0]
+    rtz(tmp_path, 72, "❌ MODIFIER SL A 4146", now[0], reply_to=70)
+    c.step()
+    assert mt5.sent[-1]["sl"] == 4146.0 and s["stop"] == 4146.0
+    rtz(tmp_path, 73, "✅ MODIFIER SL A 4100", now[0], reply_to=99)    # réponse à un signal pas copié : rien
+    c.step()
+    assert len(mt5.sent) == n + 2
+    mt5.bid = 4136.0
+    rtz(tmp_path, 74, "METTEZ VOUS BE ✅", now[0], reply_to=70)
+    c.step()
+    assert mt5.sent[-1]["sl"] == s["entry"] and "(BE)" in sent[-1][0]
+    rtz(tmp_path, 75, "✅ SÉCURISEZ 75% ET METTEZ VOUS BE", now[0], reply_to=70)
+    c.step()
+    closes = [x for x in mt5.sent if x["action"] == mt5.TRADE_ACTION_DEAL and x.get("position")]
+    assert len(closes) == 1 and closes[0]["volume"] == 0.01           # 0,01 lot ne se coupe pas : tout fermé
+
+
+def test_rtz_out_and_corrected_signal(tmp_path):
+    now = [T0]
+    c, mt5, sent = make(tmp_path, [], now, claude=False)
+    c.cfg.update(tp_max={"RTZ ACADEMY": 1}, no_agent=["RTZ ACADEMY"], manage=["RTZ ACADEMY"])
+    mt5.bid = 4141.0
+    rtz(tmp_path, 80, RTZ, now[0])
+    c.step()
+    s = c.state["signals"]["100555-80"]
+    mt5.positions = [NS(magic=tc.MAGIC, ticket=s["tickets"][0], type=1, volume=0.01, tp=4132.0, sl=4148.0)]
+    now[0] += 20 * 60                                                 # corrigé 20 min après : compte quand même
+    rtz(tmp_path, 80, RTZ.replace("SL : 4148", "SL : 4150").replace("TP1: 4132", "TP1: 4134"), T0, edited=True)
+    assert "corrigé" in c.step()
+    sltp = [x for x in mt5.sent if x["action"] == mt5.TRADE_ACTION_SLTP]
+    assert sltp[0]["sl"] == 4150.0 and sltp[1]["tp"] == 4134.0 and s["stop"] == 4150.0 and s["targets"] == [4134.0]
+    rtz(tmp_path, 81, RTZ + "\n\nTP1 ✅", T0, edited=True)              # simple « ✅ » ajouté : rien ne bouge
+    rtz(tmp_path, 80, RTZ.replace("SL : 4148", "SL : 4150").replace("TP1: 4132", "TP1: 4134") + "\nTP1 ✅", T0,
+        edited=True)
+    n = len(mt5.sent)
+    c.step()
+    assert len(mt5.sent) == n
+    rtz(tmp_path, 84, "✅ MODIFIER TP1 A 4136", now[0], reply_to=80)
+    c.step()
+    assert s["targets"] == [4136.0]
+    rtz(tmp_path, 80, RTZ.replace("SL : 4148", "SL : 4150").replace("TP1: 4132", "TP1: 4134") + "\nTP1 🔥", T0,
+        edited=True)                                                  # ancien TP1 toujours écrit : pas remis
+    n = len(mt5.sent)
+    c.step()
+    assert len(mt5.sent) == n and s["targets"] == [4136.0]
+    rtz(tmp_path, 82, "📊 Bilan de la journée\n\nOn clôture une session propre ✅", now[0])   # long, sans réponse : rien
+    n = len(mt5.sent)
+    c.step()
+    assert len(mt5.sent) == n
+    rtz(tmp_path, 83, "❌ OUT", now[0])                                  # court, sans réponse : le dernier signal copié
+    c.step()
+    assert mt5.sent[-1]["action"] == mt5.TRADE_ACTION_DEAL and mt5.sent[-1]["position"] == s["tickets"][0]
+    assert s["why"] == "demandé par le canal"

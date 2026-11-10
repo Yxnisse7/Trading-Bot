@@ -22,6 +22,14 @@ place du calcul au risque. "tp_max": {"RTZ ACADEMY": 1} : au plus ce nombre d'ob
 seul, c'est ce qui a été rejoué le 28/10/2026 : +0,18 R par trade contre +0,05 R avec tous les TP). "opens_only":
 ["RTZ ACADEMY"] : on ne copie que les ouvertures de ce canal, sans « sécurisez / BE / clôturez » (RTZ en parle dans
 presque chaque message, souvent avant d'avoir à le faire ; le rejeu est fait sans).
+10/11/2026 (demande de Yanisse) : "no_agent": ["RTZ ACADEMY"] copie ce canal sans demander l'agent IA (ni décision, ni
+avis), et "manage": ["RTZ ACADEMY"] suit ses consignes de gestion (lues sur 6 243 messages du canal, `gestion`) :
+« MODIFIER TP1 A x » / « MODIFIER SL A x » / « DÉPLACEZ SL A x » changent l'objectif ou le stop, « METTEZ VOUS BE » /
+« SÉCURISEZ » mettent le stop au prix d'entrée, « CLÔTUREZ 75 % » ferme 75 % du lot (tout, si le lot est trop petit
+pour être coupé), « OUT » / « ON CLÔTURE » / « TRADE ANNULER » ferment tout ; quand RTZ corrige son message de signal
+(« TRADE MODIFIER »), le nouveau stop, les nouveaux objectifs et, pour un ordre en attente, la nouvelle entrée sont
+appliqués. Les conseils au choix (« vous pouvez », « n'hésitez pas ») ne déclenchent rien. Une consigne en réponse à
+un signal qu'on n'a pas copié est ignorée ; sans réponse, elle vise le dernier signal copié du canal.
 """
 from __future__ import annotations
 
@@ -73,6 +81,17 @@ SECURE = re.compile(r"s[ée]curis|break\s*even|\bBE\b", re.I)
 PARTIAL = re.compile(r"cl[oô]ture\s+partielle|cl[oô]tur\w*\s+(?:encore\s+)?une\s+partie", re.I)
 CLOSE = re.compile(r"\bclose\s+now\b|cl[oô]tur\w*\s+(?:toute\s+)?(?:la|ma|les|vos|toute)\s+positions?|"
                    r"ferme[rz]?\s+(?:toute\s+)?(?:la|les|vos|ta|ma)\s+positions?|^\W*cl[oô]ture\b", re.I | re.M)
+# Consignes de gestion d'un canal suivi ("manage"), d'après les messages de RTZ ACADEMY (10/11/2026)
+G_OPTION = re.compile(r"pouvez|h[ée]sit|si\s+(?:les|vos)\s+profits|veut\s+dire|convien|quand\s+je\s+dis|tuto|"
+                      r"comment\s+cl", re.I)
+G_OUT = re.compile(r"\bout\b|\bon\s+cl[oô]ture\b|annul|cl[oô]tur\w*\s+(?:au\s+be\b|manuellement|le\s+tout|tout\b)|"
+                   r"\bclose\s+now\b", re.I)
+G_PART = re.compile(r"(?:cl[oô]tur|s[ée]curis)\w*\s+(\d{1,3})\s*%", re.I)
+G_BE = re.compile(r"\bbe\b(?!\s*hit)|break\s*even|s[ée]curis|stop\s*loss\s+au\s+point\s+d.entr", re.I)
+G_TP = re.compile(r"(?:modifi\w*|d[ée]place\w*)\s+(?:le\s+|votre\s+)?tp\s*(\d)?\s*(?:[aà]\s+)?:?\s*" + NUM +
+                  r"|\btp\s*(\d)?\s+modifi\w*\s+(?:[aà]\s+)?" + NUM, re.I)
+G_SL = re.compile(r"(?:modifi\w*|d[ée]place\w*)\s+(?:le\s+|votre\s+)?(?:sl|stop(?:\s*loss)?)\s*(?:[aà]\s+)?:?\s*" + NUM +
+                  r"|\b(?:sl|stop)\s+modifi\w*\s+(?:[aà]\s+)?" + NUM, re.I)
 DEFAULTS = {"command": r"E:\TradingBot\venv\Scripts\python.exe -m trading_bot.tg_parse",
             "listen": r"E:\TradingBot\venv\Scripts\python.exe -m trading_bot.tg_listen run",
             "dir": r"E:\TradingBot\bot", "agent_dir": r"E:\TradingBot\agent\agent", "session_dir": str(SESSION_DIR)}
@@ -106,6 +125,36 @@ def parse(text: str, reply_to: int | None, opened: list[dict[str, Any]]) -> dict
             "partiel": partial and kind == "fermer",
             "raison": "sécurisez : stop au prix d'entrée" if kind == "stop" else
             "clôture partielle" if partial else "fermeture demandée"}
+
+
+def gestion(text: str) -> dict[str, Any] | None:
+    """Consigne de gestion d'un canal suivi → {"close": part à fermer (1 = tout) ou None, "be": bool, "stop": prix ou
+    None, "tp": {numéro de l'objectif (0 = tous): prix}} ; None si le message ne demande rien."""
+    if G_OPTION.search(text):
+        return None
+    if G_OUT.search(text):
+        return {"close": 1.0, "be": False, "stop": None, "tp": {}}
+    part = G_PART.search(text)
+    close = min(1.0, int(part.group(1)) / 100) if part else None
+    sl = G_SL.search(text)
+    stop = _num(sl.group(1) or sl.group(2)) if sl else None
+    tp = {}
+    for a, b, c, d in G_TP.findall(text):
+        tp[int(a or c or 0)] = _num(b or d)
+    be = bool(G_BE.search(text)) and stop is None
+    if close is None and not be and stop is None and not tp:
+        return None
+    return {"close": close, "be": be, "stop": stop, "tp": tp}
+
+
+def levels(text: str) -> dict[str, Any] | None:
+    """Niveaux d'un message de signal (pour un signal corrigé par le canal) : sens, zone, stop, objectifs."""
+    m, stop = MARKET.search(text), STOP.search(text)
+    if not (m and stop):
+        return None
+    e = ENTRY.search(text)
+    return {"buy": m.group(1).lower() in ("buy", "achat"), "zone": sorted(_num(x) for x in e.groups() if x) if e else [],
+            "stop": _num(stop.group(1)), "targets": [_num(x) for x in TARGET.findall(text)]}
 
 
 class TgCopier:
@@ -198,15 +247,35 @@ class TgCopier:
                 continue
             f.unlink(missing_ok=True)
             key = f"{m['chat_id']}:{m['msg_id']}"
+            before = self.state["texts"].get(key)
             reply = self.state["texts"].get(f"{m['chat_id']}:{m.get('reply_to')}") if m.get("reply_to") else None
             self.state["texts"][key] = m["text"][:1500]
             self._save()
-            if self.clock() - float(m.get("date") or 0) > MAX_AGE:
+            try:                               # message modifié : son âge compte depuis la modification
+                got = int(f.name.split("_")[0]) / 1000 if m.get("edited") else float(m.get("date") or 0)
+            except ValueError:
+                got = float(m.get("date") or 0)
+            if self.clock() - got > MAX_AGE:
                 continue
             if not self.cfg.get("claude"):
+                manage = self._in(m, "manage")
                 if m.get("edited"):
+                    if manage:                 # signal corrigé par le canal (« TRADE MODIFIER »)
+                        said = self._edited(m, before)
+                        if said:
+                            return said
                     continue                   # un message modifié (« TP1 ✅ » ajouté…) ne rouvre rien
-                d = parse(m["text"], m.get("reply_to"), self._opened(m["chat_id"]))
+                opened = self._opened(m["chat_id"])
+                d = parse(m["text"], m.get("reply_to"), opened)
+                if manage and (d is None or d["type"] != "ouverture"):
+                    g = gestion(m["text"])
+                    sid = self._target(m, opened) if g else None
+                    if sid is None:
+                        continue
+                    self._journal({"canal": m.get("chat"), "action": "gestion",
+                                   "detail": json.dumps({"signal": sid, **g}, ensure_ascii=False)})
+                    self._manage(sid, g)
+                    return f"copie Telegram : gestion ({m.get('chat')} n°{m['msg_id']})"
                 if d is None or (d["type"] != "ouverture" and self._in(m, "opens_only")):
                     continue
                 self._act(d, m)
@@ -265,7 +334,7 @@ class TgCopier:
         self._journal({"canal": data.get("chat"), "action": d.get("type"), "detail": json.dumps(d, ensure_ascii=False)})
         try:
             if d.get("type") == "ouverture":
-                if self.decider is not None and self.decider.available():
+                if self.decider is not None and self.decider.available() and not self._in(data, "no_agent"):
                     self._consult(d, data)
                 else:
                     self._open(d, data)
@@ -387,7 +456,7 @@ class TgCopier:
         sig["msg"] = self._announce(sig, d)
         self.state["signals"][sid] = sig
         self._save()
-        if not d.get("agent"):                 # l'agent a déjà décidé avant l'ordre
+        if not d.get("agent") and not self._in(data, "no_agent"):   # l'agent a déjà décidé avant l'ordre
             self._review(sid, sig)
 
     # ------------------------------------------------------------------ décision de l'agent IA (09/11/2026)
@@ -513,7 +582,7 @@ class TgCopier:
         orders = [o for o in (self.mt5.orders_get(symbol=s["sym"]) or []) if o.ticket in s["tickets"]]
         return pos, orders
 
-    def _move(self, d: dict[str, Any], data: dict[str, Any]) -> None:
+    def _move(self, d: dict[str, Any], data: dict[str, Any], why: str = "demandé par le canal") -> None:
         s = self.state["signals"].get(d["signal"])
         if not s:
             return
@@ -521,7 +590,7 @@ class TgCopier:
         tick = self.mt5.symbol_info_tick(s["sym"])
         sgn = 1 if s["buy"] else -1
         if tick is None or ((tick.bid if s["buy"] else tick.ask) - new) * sgn <= 0:
-            self._post(f"📡 Stop à {msg.num(new, s['digits'])} demandé par le canal, <b>pas appliqué</b> : le prix "
+            self._post(f"📡 Stop à {msg.num(new, s['digits'])} ({why}) <b>pas appliqué</b> : le prix "
                        f"est déjà de l'autre côté.", reply=s["msg"])
             return
         pos, orders = self._live(s)
@@ -543,15 +612,145 @@ class TgCopier:
         codes = ", ".join(str(c) for c in sorted(set(refused), key=str))
         if total and len(refused) == total:   # rien n'a été accepté par MT5 : on ne l'annonce pas comme fait
             log.warning("copie Telegram : stop %s refusé par MT5 (code %s)", new, codes)
-            self._post(f"📡 Stop à {msg.num(new, s['digits'])} demandé par le canal, <b>refusé par MT5</b> "
+            self._post(f"📡 Stop à {msg.num(new, s['digits'])} ({why}) <b>refusé par MT5</b> "
                        f"(code {codes}) : l'ancien stop reste en place.", reply=s["msg"])
             return
         be = abs(new - s["entry"]) < 10 ** -s["digits"] * 5
         s["stop"] = new
         self._save()
         part = f" ({total - len(refused)}/{total} ordres, refus MT5 code {codes})" if refused else ""
-        self._post(f"📡 Stop déplacé à {msg.code_price(new, s['digits'])}{' (BE)' if be else ''}, demandé par le "
-                   f"canal{part}.", reply=s["msg"])
+        self._post(f"📡 Stop déplacé à {msg.code_price(new, s['digits'])}{' (BE)' if be else ''}, {why}{part}.",
+                   reply=s["msg"])
+
+    # ------------------------------------------------------------------ consignes d'un canal suivi (10/11/2026)
+    def _target(self, m: dict[str, Any], opened: list[dict[str, Any]]) -> str | None:
+        """Signal visé : celui auquel le message répond (rien s'il n'a pas été copié), sinon le dernier copié."""
+        if m.get("reply_to"):
+            return next((o["id"] for o in opened if o["msg_id"] == m["reply_to"]), None)
+        text = str(m.get("text", "")).strip()          # sans réponse : seulement une consigne courte, sur un signal
+        if not opened or len(text) > 80 or "\n" in text:   # récent (les bilans et tutos du canal en parlent aussi)
+            return None
+        s = self.state["signals"].get(opened[-1]["id"]) or {}
+        return opened[-1]["id"] if self.clock() - float(s.get("placed") or 0) <= 3 * 3600 else None
+
+    def _manage(self, sid: str, g: dict[str, Any], why: str = "demandé par le canal") -> None:
+        s = self.state["signals"].get(sid)
+        if not s:
+            return
+        if g.get("close") is not None and g["close"] >= 1:
+            return self._close_signal(sid, why)
+        if g.get("close") and not s["pending"]:
+            self._close_part(s, g["close"], why)
+        if g.get("stop") is not None:
+            self._move({"signal": sid, "stop": g["stop"]}, {}, why)
+        elif g.get("be") and not s["pending"]:
+            self._move({"signal": sid, "stop": s["entry"]}, {}, why)
+        for n, px in (g.get("tp") or {}).items():
+            self._set_tp(s, int(n), float(px), why)
+
+    def _close_part(self, s: dict[str, Any], frac: float, why: str) -> None:
+        """Ferme `frac` du lot de chaque position (arrondi au pas du courtier ; tout si le reste serait trop petit)."""
+        pos, _ = self._live(s)
+        m = self.mt5
+        info = m.symbol_info(s["sym"])
+        step = getattr(info, "volume_step", 0.01) or 0.01
+        vmin = getattr(info, "volume_min", 0.01) or 0.01
+        tick = m.symbol_info_tick(s["sym"])
+        done = 0.0
+        for p in pos:
+            vol = round(int(p.volume * frac / step + 0.5 + 1e-9) * step, 2)     # au plus proche, moitié vers le haut
+            if vol <= 0:
+                continue
+            if p.volume - vol < vmin - 1e-9:
+                vol = p.volume
+            long = p.type == m.POSITION_TYPE_BUY
+            res = m.order_send({"action": m.TRADE_ACTION_DEAL, "symbol": s["sym"], "volume": vol, "position": p.ticket,
+                                "type": m.ORDER_TYPE_SELL if long else m.ORDER_TYPE_BUY,
+                                "price": tick.bid if long else tick.ask, "deviation": 30, "magic": MAGIC,
+                                "comment": "tg part", "type_time": m.ORDER_TIME_GTC, "type_filling": self._filling(info)})
+            if getattr(res, "retcode", None) == m.TRADE_RETCODE_DONE:
+                done += vol
+        if done:
+            total = sum(p.volume for p in pos)
+            self._post(f"📡 Clôture de {frac:.0%} ({why}) : {msg.num(done, 2)} lot sur {msg.num(total, 2)} fermé"
+                       f"{' (le lot ne se coupe pas plus finement)' if done >= total - 1e-9 else ''}.", reply=s["msg"])
+
+    def _set_tp(self, s: dict[str, Any], n: int, px: float, why: str) -> None:
+        """Nouvel objectif pour l'ordre n° n (1 = TP1 ; 0 = tous les ordres)."""
+        m = self.mt5
+        pos, orders = self._live(s)
+        idx = {t: i for i, t in enumerate(s["tickets"])}
+        mine = [x for x in pos + orders if n == 0 or idx.get(x.ticket) == n - 1]
+        if not mine:
+            return
+        info, tick = m.symbol_info(s["sym"]), m.symbol_info_tick(s["sym"])
+        sg = 1 if s["buy"] else -1
+        lvl = getattr(info, "trade_stops_level", 0) * getattr(info, "point", 0.01)
+        new = round(px, s["digits"])
+        ok = (getattr(m, "TRADE_RETCODE_DONE", 10009), getattr(m, "TRADE_RETCODE_PLACED", 10008),
+              getattr(m, "TRADE_RETCODE_NO_CHANGES", 10025))
+        done = 0
+        for x in mine:
+            ref = (tick.bid if s["buy"] else tick.ask) if x in pos else x.price_open
+            if tick is None or (new - ref) * sg <= lvl:
+                continue
+            if x in pos:
+                req = {"action": m.TRADE_ACTION_SLTP, "symbol": s["sym"], "position": x.ticket,
+                       "sl": getattr(x, "sl", s["stop"]) or s["stop"], "tp": new}
+            else:
+                req = {"action": m.TRADE_ACTION_MODIFY, "order": x.ticket, "price": x.price_open,
+                       "sl": getattr(x, "sl", s["stop"]) or s["stop"], "tp": new}
+            if getattr(m.order_send(req), "retcode", None) in ok:
+                done += 1
+                i = idx.get(x.ticket)
+                if i is not None and i < len(s["targets"]):
+                    s["targets"][i] = new
+        self._save()
+        name = "TP" if n == 0 else f"TP{n}"
+        if done:
+            self._post(f"🎯 {name} déplacé à {msg.code_price(new, s['digits'])}, {why}.", reply=s["msg"])
+        else:
+            self._post(f"🎯 {name} à {msg.num(new, s['digits'])} ({why}) <b>pas appliqué</b> : le prix est déjà "
+                       f"au-delà ou MT5 l'a refusé.", reply=s["msg"])
+
+    def _edited(self, m: dict[str, Any], before: str | None) -> str:
+        """Le canal a corrigé le message d'un signal copié : nouveau stop, nouveaux objectifs, nouvelle entrée. Seuls
+        les niveaux qui ont changé depuis la version précédente du message comptent (un « ✅ » ajouté après une
+        consigne « MODIFIER TP1 » ne doit pas remettre l'ancien objectif)."""
+        sid = f"{abs(m['chat_id'])}-{m['msg_id']}"
+        s = self.state["signals"].get(sid)
+        lv = levels(m["text"]) if s else None
+        if not s or not lv or lv["buy"] != s["buy"]:
+            return ""
+        old = levels(before or "")
+        if old and old["buy"] == lv["buy"]:
+            same = lambda a, b: abs(a - b) < 10 ** -s["digits"]  # noqa: E731
+            if same(old["stop"], lv["stop"]):
+                lv["stop"] = s["stop"]
+            lv["targets"] = [s["targets"][i] if i < len(old["targets"]) and i < len(s["targets"])
+                             and same(old["targets"][i], t) else t for i, t in enumerate(lv["targets"])]
+            if old["zone"] == lv["zone"]:
+                lv["zone"] = []
+        why, dg, did = "message du signal corrigé par le canal", s["digits"], False
+        if s["pending"] and lv["zone"] and not lv["zone"][0] - 1e-9 <= s["entry"] <= lv["zone"][-1] + 1e-9:
+            new = round(lv["zone"][-1] if s["buy"] else lv["zone"][0], dg)   # bord de zone le plus proche du prix
+            _, orders = self._live(s)
+            for o in orders:
+                self.mt5.order_send({"action": self.mt5.TRADE_ACTION_MODIFY, "order": o.ticket, "price": new,
+                                     "sl": round(lv["stop"], dg), "tp": getattr(o, "tp", 0.0)})
+            if orders:
+                s["entry"], did = new, True
+                self._post(f"📡 Entrée de l'ordre en attente déplacée à {msg.code_price(new, dg)}, {why}.",
+                           reply=s["msg"])
+        if abs(lv["stop"] - s["stop"]) >= 10 ** -dg:
+            self._move({"signal": sid, "stop": lv["stop"]}, {}, why)
+            did = True
+        for i, t in enumerate(lv["targets"][:len(s["targets"])]):
+            if abs(t - s["targets"][i]) >= 10 ** -dg:
+                self._set_tp(s, i + 1, t, why)
+                did = True
+        self._save()
+        return f"copie Telegram : signal corrigé ({m.get('chat')} n°{m['msg_id']})" if did else ""
 
     def _close_signal(self, sid: str, why: str, partial: bool = False) -> None:
         s = self.state["signals"].get(sid)
