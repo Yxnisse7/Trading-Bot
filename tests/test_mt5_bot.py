@@ -83,6 +83,7 @@ def test_github_bot_stays_silent_when_the_pc_computes_it():
 
 def test_pc_bot_hands_over_to_github_without_the_learned_model(tmp_path, monkeypatch):
     monkeypatch.setattr(mb.bot_model, "load", lambda path: None)
+    monkeypatch.setattr(mb.bot_model, "APPLIED", {"gold", "nasdaq"})     # seulement quand le Nasdaq est filtré
     now = [NOW]
     bot = _bot(tmp_path, NasMT5(now[0]), now, [[_signal(NOW - 60)]])
     assert bot.signals() == ([], set())

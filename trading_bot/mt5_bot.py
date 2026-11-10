@@ -134,7 +134,7 @@ class LocalBot:
     def signals(self) -> tuple[list[dict[str, Any]], set[str]]:
         """Signaux du bot ouverts sur le PC (format mt5_local) et {« local:bot »} si le calcul a marché."""
         now = self.clock()
-        if bot_model.load(bot_model.MODELS[ASSET][0]) is None:
+        if ASSET in bot_model.APPLIED and bot_model.load(bot_model.MODELS[ASSET][0]) is None:
             return [], set()                           # bot appris illisible (scikit-learn ?) : GitHub garde la main
         try:
             bars = self._candles(now)
