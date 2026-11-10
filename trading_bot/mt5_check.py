@@ -103,6 +103,17 @@ def report(state: dict[str, Any], now: float) -> str:
 
 
 class DailyCheck:
+    def _stop_rules(self) -> str:
+        """Règles d'arrêt (arret.py) : stratégies à surveiller ou à mettre en ombre, d'après leurs 20 derniers trades."""
+        try:
+            from . import arret
+            from .mt5_copy import LAB
+            rows = arret.lines(arret.from_lab(self.copier.get(LAB)))
+        except Exception:                                 # jamais bloquant pour le contrôle
+            log.exception("règles d'arrêt illisibles")
+            return ""
+        return "\n\n<b>Règles d'arrêt</b>\n" + "\n".join(msg.esc(x) for x in rows) if rows else ""
+
     def __init__(self, copier, relay, root: Path, clock: Callable[[], float]):
         self.copier, self.relay, self.clock = copier, relay, clock
         self.file = Path(root) / "journal" / "controle.json"
@@ -118,7 +129,7 @@ class DailyCheck:
             return ""
         if self.relay is None or not self.relay.enabled():
             return ""
-        self.relay._post(report(self.copier.state, now))
+        self.relay._post(report(self.copier.state, now) + self._stop_rules())
         self.state["last"] = t.date().isoformat()
         self.file.parent.mkdir(parents=True, exist_ok=True)
         self.file.write_text(json.dumps(self.state), encoding="utf-8")
