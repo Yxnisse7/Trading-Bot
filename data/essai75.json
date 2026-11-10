@@ -1,0 +1,539 @@
+{
+ "essai": 75,
+ "n_trades": 11924,
+ "par_stratégie": {
+  "W3": 871,
+  "bot": 2969,
+  "cassure_williams": 1266,
+  "crabel_nr4": 300,
+  "donchian_1h": 2057,
+  "noise_area_v2": 3211,
+  "nuit_asie": 1250
+ },
+ "z_seuil": 2.39,
+ "R_moyen_global": 0.108,
+ "objections": {
+  "O1": {
+   "objection": "RSI étiré",
+   "n_signalés": 3384,
+   "n_autres": 8540,
+   "R_signalés": 0.12,
+   "R_autres": 0.104,
+   "moitiés": [
+    [
+     0.071,
+     0.107
+    ],
+    [
+     0.148,
+     0.101
+    ]
+   ],
+   "R_signalés_frais_x2": 0.067,
+   "hasard_battu": 228,
+   "z": -0.4,
+   "checks": {
+    "≥ 200 signalés": true,
+    "signalés < 0 et < autres": false,
+    "deux moitiés": false,
+    "frais × 2 < 0": false,
+    "hasard (950/1000)": false,
+    "z corrigé": false
+   },
+   "statut": "à oublier",
+   "par_stratégie": {
+    "W3": {
+     "n": 871,
+     "signalés": 3,
+     "R signalés": -0.893,
+     "R autres": 0.355,
+     "total sans eux": 308.2,
+     "total": 305.5
+    },
+    "bot": {
+     "n": 2969,
+     "signalés": 535,
+     "R signalés": 0.108,
+     "R autres": 0.09,
+     "total sans eux": 218.0,
+     "total": 275.5
+    },
+    "cassure_williams": {
+     "n": 1266,
+     "signalés": 580,
+     "R signalés": 0.229,
+     "R autres": 0.191,
+     "total sans eux": 131.0,
+     "total": 264.0
+    },
+    "crabel_nr4": {
+     "n": 300,
+     "signalés": 90,
+     "R signalés": 0.147,
+     "R autres": 0.124,
+     "total sans eux": 26.1,
+     "total": 39.4
+    },
+    "donchian_1h": {
+     "n": 2057,
+     "signalés": 968,
+     "R signalés": 0.152,
+     "R autres": 0.124,
+     "total sans eux": 135.4,
+     "total": 282.1
+    },
+    "noise_area_v2": {
+     "n": 3211,
+     "signalés": 1197,
+     "R signalés": 0.048,
+     "R autres": 0.005,
+     "total sans eux": 10.4,
+     "total": 67.6
+    },
+    "nuit_asie": {
+     "n": 1250,
+     "signalés": 11,
+     "R signalés": 0.187,
+     "R autres": 0.045,
+     "total sans eux": 55.5,
+     "total": 57.6
+    }
+   }
+  },
+  "O2": {
+   "objection": "loin de la moyenne 20",
+   "n_signalés": 5478,
+   "n_autres": 6446,
+   "R_signalés": 0.099,
+   "R_autres": 0.116,
+   "moitiés": [
+    [
+     0.046,
+     0.135
+    ],
+    [
+     0.129,
+     0.103
+    ]
+   ],
+   "R_signalés_frais_x2": 0.043,
+   "hasard_battu": 555,
+   "z": 0.422,
+   "checks": {
+    "≥ 200 signalés": true,
+    "signalés < 0 et < autres": false,
+    "deux moitiés": false,
+    "frais × 2 < 0": false,
+    "hasard (950/1000)": false,
+    "z corrigé": false
+   },
+   "statut": "pas prouvée",
+   "par_stratégie": {
+    "W3": {
+     "n": 871,
+     "signalés": 38,
+     "R signalés": -0.197,
+     "R autres": 0.376,
+     "total sans eux": 313.0,
+     "total": 305.5
+    },
+    "bot": {
+     "n": 2969,
+     "signalés": 1164,
+     "R signalés": 0.082,
+     "R autres": 0.1,
+     "total sans eux": 179.7,
+     "total": 275.5
+    },
+    "cassure_williams": {
+     "n": 1266,
+     "signalés": 846,
+     "R signalés": 0.226,
+     "R autres": 0.173,
+     "total sans eux": 72.5,
+     "total": 264.0
+    },
+    "crabel_nr4": {
+     "n": 300,
+     "signalés": 163,
+     "R signalés": 0.263,
+     "R autres": -0.026,
+     "total sans eux": -3.6,
+     "total": 39.4
+    },
+    "donchian_1h": {
+     "n": 2057,
+     "signalés": 1392,
+     "R signalés": 0.112,
+     "R autres": 0.191,
+     "total sans eux": 126.8,
+     "total": 282.1
+    },
+    "noise_area_v2": {
+     "n": 3211,
+     "signalés": 1833,
+     "R signalés": 0.034,
+     "R autres": 0.003,
+     "total sans eux": 4.5,
+     "total": 67.6
+    },
+    "nuit_asie": {
+     "n": 1250,
+     "signalés": 42,
+     "R signalés": 0.011,
+     "R autres": 0.047,
+     "total sans eux": 57.1,
+     "total": 57.6
+    }
+   }
+  },
+  "O3": {
+   "objection": "accélération en 30 min",
+   "n_signalés": 2459,
+   "n_autres": 9465,
+   "R_signalés": 0.124,
+   "R_autres": 0.104,
+   "moitiés": [
+    [
+     0.052,
+     0.108
+    ],
+    [
+     0.162,
+     0.102
+    ]
+   ],
+   "R_signalés_frais_x2": 0.067,
+   "hasard_battu": 217,
+   "z": -0.412,
+   "checks": {
+    "≥ 200 signalés": true,
+    "signalés < 0 et < autres": false,
+    "deux moitiés": false,
+    "frais × 2 < 0": false,
+    "hasard (950/1000)": false,
+    "z corrigé": false
+   },
+   "statut": "à oublier",
+   "par_stratégie": {
+    "W3": {
+     "n": 871,
+     "signalés": 33,
+     "R signalés": -0.385,
+     "R autres": 0.38,
+     "total sans eux": 318.2,
+     "total": 305.5
+    },
+    "bot": {
+     "n": 2969,
+     "signalés": 324,
+     "R signalés": 0.193,
+     "R autres": 0.081,
+     "total sans eux": 213.0,
+     "total": 275.5
+    },
+    "cassure_williams": {
+     "n": 1266,
+     "signalés": 418,
+     "R signalés": 0.178,
+     "R autres": 0.224,
+     "total sans eux": 189.6,
+     "total": 264.0
+    },
+    "crabel_nr4": {
+     "n": 300,
+     "signalés": 70,
+     "R signalés": 0.202,
+     "R autres": 0.11,
+     "total sans eux": 25.2,
+     "total": 39.4
+    },
+    "donchian_1h": {
+     "n": 2057,
+     "signalés": 573,
+     "R signalés": 0.147,
+     "R autres": 0.133,
+     "total sans eux": 198.0,
+     "total": 282.1
+    },
+    "noise_area_v2": {
+     "n": 3211,
+     "signalés": 1036,
+     "R signalés": 0.079,
+     "R autres": -0.006,
+     "total sans eux": -13.9,
+     "total": 67.6
+    },
+    "nuit_asie": {
+     "n": 1250,
+     "signalés": 5,
+     "R signalés": -0.061,
+     "R autres": 0.046,
+     "total sans eux": 57.9,
+     "total": 57.6
+    }
+   }
+  },
+  "O4": {
+   "objection": "sommet/creux 24 h devant (< 1 R)",
+   "n_signalés": 7232,
+   "n_autres": 4692,
+   "R_signalés": 0.105,
+   "R_autres": 0.113,
+   "moitiés": [
+    [
+     0.105,
+     0.086
+    ],
+    [
+     0.106,
+     0.131
+    ]
+   ],
+   "R_signalés_frais_x2": 0.055,
+   "hasard_battu": 173,
+   "z": 0.161,
+   "checks": {
+    "≥ 200 signalés": true,
+    "signalés < 0 et < autres": false,
+    "deux moitiés": false,
+    "frais × 2 < 0": false,
+    "hasard (950/1000)": false,
+    "z corrigé": false
+   },
+   "statut": "pas prouvée",
+   "par_stratégie": {
+    "W3": {
+     "n": 871,
+     "signalés": 160,
+     "R signalés": 0.155,
+     "R autres": 0.395,
+     "total sans eux": 280.6,
+     "total": 305.5
+    },
+    "bot": {
+     "n": 2969,
+     "signalés": 1699,
+     "R signalés": 0.12,
+     "R autres": 0.057,
+     "total sans eux": 72.0,
+     "total": 275.5
+    },
+    "cassure_williams": {
+     "n": 1266,
+     "signalés": 327,
+     "R signalés": 0.253,
+     "R autres": 0.193,
+     "total sans eux": 181.1,
+     "total": 264.0
+    },
+    "crabel_nr4": {
+     "n": 300,
+     "signalés": 121,
+     "R signalés": 0.128,
+     "R autres": 0.133,
+     "total sans eux": 23.8,
+     "total": 39.4
+    },
+    "donchian_1h": {
+     "n": 2057,
+     "signalés": 2003,
+     "R signalés": 0.146,
+     "R autres": -0.176,
+     "total sans eux": -9.5,
+     "total": 282.1
+    },
+    "noise_area_v2": {
+     "n": 3211,
+     "signalés": 1947,
+     "R signalés": 0.054,
+     "R autres": -0.03,
+     "total sans eux": -37.8,
+     "total": 67.6
+    },
+    "nuit_asie": {
+     "n": 1250,
+     "signalés": 975,
+     "R signalés": 0.039,
+     "R autres": 0.072,
+     "total sans eux": 19.9,
+     "total": 57.6
+    }
+   }
+  },
+  "O5": {
+   "objection": "chiffre rond devant (< 0,5 R)",
+   "n_signalés": 3306,
+   "n_autres": 8618,
+   "R_signalés": 0.061,
+   "R_autres": 0.127,
+   "moitiés": [
+    [
+     -0.019,
+     0.119
+    ],
+    [
+     0.084,
+     0.133
+    ]
+   ],
+   "R_signalés_frais_x2": 0.029,
+   "hasard_battu": 936,
+   "z": 1.729,
+   "checks": {
+    "≥ 200 signalés": true,
+    "signalés < 0 et < autres": false,
+    "deux moitiés": true,
+    "frais × 2 < 0": false,
+    "hasard (950/1000)": false,
+    "z corrigé": false
+   },
+   "statut": "pas prouvée",
+   "par_stratégie": {
+    "W3": {
+     "n": 871,
+     "signalés": 141,
+     "R signalés": 0.066,
+     "R autres": 0.406,
+     "total sans eux": 296.1,
+     "total": 305.5
+    },
+    "bot": {
+     "n": 2969,
+     "signalés": 493,
+     "R signalés": 0.118,
+     "R autres": 0.088,
+     "total sans eux": 217.5,
+     "total": 275.5
+    },
+    "cassure_williams": {
+     "n": 1266,
+     "signalés": 408,
+     "R signalés": 0.06,
+     "R autres": 0.279,
+     "total sans eux": 239.5,
+     "total": 264.0
+    },
+    "crabel_nr4": {
+     "n": 300,
+     "signalés": 154,
+     "R signalés": 0.226,
+     "R autres": 0.031,
+     "total sans eux": 4.5,
+     "total": 39.4
+    },
+    "donchian_1h": {
+     "n": 2057,
+     "signalés": 697,
+     "R signalés": 0.049,
+     "R autres": 0.182,
+     "total sans eux": 248.1,
+     "total": 282.1
+    },
+    "noise_area_v2": {
+     "n": 3211,
+     "signalés": 461,
+     "R signalés": -0.031,
+     "R autres": 0.03,
+     "total sans eux": 82.1,
+     "total": 67.6
+    },
+    "nuit_asie": {
+     "n": 1250,
+     "signalés": 952,
+     "R signalés": 0.057,
+     "R autres": 0.01,
+     "total sans eux": 3.0,
+     "total": 57.6
+    }
+   }
+  },
+  "O6": {
+   "objection": "contre la tendance 15 min",
+   "n_signalés": 1564,
+   "n_autres": 10360,
+   "R_signalés": 0.233,
+   "R_autres": 0.089,
+   "moitiés": [
+    [
+     0.325,
+     0.059
+    ],
+    [
+     0.164,
+     0.109
+    ]
+   ],
+   "R_signalés_frais_x2": 0.164,
+   "hasard_battu": 107,
+   "z": -1.331,
+   "checks": {
+    "≥ 200 signalés": true,
+    "signalés < 0 et < autres": false,
+    "deux moitiés": false,
+    "frais × 2 < 0": false,
+    "hasard (950/1000)": false,
+    "z corrigé": false
+   },
+   "statut": "à oublier",
+   "par_stratégie": {
+    "W3": {
+     "n": 871,
+     "signalés": 566,
+     "R signalés": 0.513,
+     "R autres": 0.05,
+     "total sans eux": 15.2,
+     "total": 305.5
+    },
+    "bot": {
+     "n": 2969,
+     "signalés": 123,
+     "R signalés": 0.053,
+     "R autres": 0.095,
+     "total sans eux": 269.0,
+     "total": 275.5
+    },
+    "cassure_williams": {
+     "n": 1266,
+     "signalés": 48,
+     "R signalés": 0.178,
+     "R autres": 0.21,
+     "total sans eux": 255.4,
+     "total": 264.0
+    },
+    "crabel_nr4": {
+     "n": 300,
+     "signalés": 27,
+     "R signalés": 0.461,
+     "R autres": 0.099,
+     "total sans eux": 26.9,
+     "total": 39.4
+    },
+    "donchian_1h": {
+     "n": 2057,
+     "signalés": 0,
+     "R signalés": null,
+     "R autres": 0.137,
+     "total sans eux": 282.1,
+     "total": 282.1
+    },
+    "noise_area_v2": {
+     "n": 3211,
+     "signalés": 110,
+     "R signalés": 0.159,
+     "R autres": 0.016,
+     "total sans eux": 50.1,
+     "total": 67.6
+    },
+    "nuit_asie": {
+     "n": 1250,
+     "signalés": 690,
+     "R signalés": 0.042,
+     "R autres": 0.051,
+     "total sans eux": 28.4,
+     "total": 57.6
+    }
+   }
+  }
+ }
+}
