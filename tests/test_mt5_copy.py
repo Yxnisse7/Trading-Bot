@@ -265,3 +265,20 @@ def test_solo_trade_is_taken_at_two_hundredths_when_the_cap_allows_it():
     assert mc.solo_floor(0.05, 1000, 100.0, info) == 0.05 and mc.solo_floor(0.0, 1000, 100.0, info) == 0.0
     gold = NS(trade_contract_size=100.0, volume_step=0.01, volume_min=0.01, volume_max=100.0)
     assert mc.solo_floor(0.01, 190, 40.0, gold) == 0.01            # or à 190 $ : 0,02 lot = 80 $ (42 %) > 15 %
+
+
+def test_crypto_copy_from_the_pc_is_closed_when_github_closed_it(tmp_path):
+    """10/11 : Donchian 1 h Bitcoin sorti par GitHub un week-end, resté ouvert sur MT5 (prix Vantage différents)."""
+    t0 = 1_793_000_000
+    lab = {"donchian_1h:bitcoin": {"strategy": "donchian_1h", "asset": "bitcoin", "trades": [
+        {"status": "closed", "notified_entry": "2026-11-05T15:05:00Z", "direction": "short", "entry": 77810.0,
+         "risk": 900.0, "entry_ts": t0}]}}
+    closed: set = set()
+    mc.read_signals(lambda url: lab if "lab_shadow" in url else {"open_signals": []}, closed)
+    assert closed == {f"lab:donchian_1h:{t0}"}
+    c = mc.Copier(FakeMT5(), tmp_path, lambda *a, **k: None, lambda: t0, get=site([]))
+    c.known = ({"local:donchian_1h", "lab"}, {f"lab:donchian_1h:{t0}"}, set())
+    c.github_closed = closed
+    rec = {"asset": "bitcoin", "source": "local", "status": "ouvert"}
+    assert c._ended(f"lab:donchian_1h:{t0}", rec)                  # GitHub l'a fermé : on ferme aussi
+    assert not c._ended(f"lab:donchian_1h:{t0}", {**rec, "asset": "gold"})   # hors crypto : le PC décide

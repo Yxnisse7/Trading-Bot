@@ -53,6 +53,9 @@ LAB = "https://raw.githubusercontent.com/Yxnisse7/Trading-Bot/main/data/lab_shad
 LAB_TARGET_R = {"creux_repris_15m": 3.0}
 
 
+CRYPTO = {"bitcoin", "ethereum"}
+
+
 def _ts(s: str | None) -> int | None:
     if not s:
         return None
@@ -65,8 +68,9 @@ def _get(url: str) -> Any:
         return json.loads(r.read().decode("utf-8"))
 
 
-def read_signals(get: Callable[[str], Any] = _get) -> tuple[list[dict[str, Any]], set[str]]:
-    """Signaux ouverts à copier, et les actifs (ou « lab ») lus sans erreur."""
+def read_signals(get: Callable[[str], Any] = _get, closed: set[str] | None = None) -> tuple[list[dict[str, Any]], set[str]]:
+    """Signaux ouverts à copier, et les actifs (ou « lab ») lus sans erreur. `closed` reçoit les clés des trades
+    des stratégies annoncés puis fermés sur GitHub."""
     out, ok = [], set()
     for asset in SYMBOLS:
         try:
@@ -89,6 +93,8 @@ def read_signals(get: Callable[[str], Any] = _get) -> tuple[list[dict[str, Any]]
             if rec.get("asset") not in SYMBOLS:         # seuls les signaux réels sont annoncés (notified_entry)
                 continue
             for t in rec.get("trades") or []:
+                if closed is not None and t.get("status") == "closed":
+                    closed.add(f"lab:{rec.get('strategy')}:{t.get('entry_ts')}")
                 if t.get("status") != "open" or not t.get("notified_entry") or t.get("pc_absent"):
                     continue                                 # pc_absent : pas de signal sur les prix MT5
                 k = LAB_TARGET_R.get(rec.get("strategy"))
@@ -201,7 +207,8 @@ class Copier:
             return "copie : compte réel refusé"
         if self.relay is not None:
             self.relay.beat()
-        signals, ok = read_signals(self.get)
+        self.github_closed: set[str] = set()
+        signals, ok = read_signals(self.get, self.github_closed)
         local, local_keys = [], set()
         if self.local is not None:
             local, lok = self.local.signals()
@@ -289,6 +296,11 @@ class Copier:
         """Signal fermé par sa source (seulement si cette source a bien été lue au dernier passage)."""
         ok, local_keys, github_keys = self.known
         if rec.get("source") == "local":
+            # 10/11/2026 : Donchian 1 h Bitcoin des 29/10 et 05/11 restés ouverts sur MT5 alors que GitHub les avait
+            # sortis un week-end (prix Vantage du week-end différents de ceux de GitHub, qui cote 24 h/24) :
+            # pour les cryptos, une sortie vue sur GitHub ferme aussi la copie
+            if rec.get("asset") in CRYPTO and key in getattr(self, "github_closed", set()):
+                return True
             source, known = f"local:{key.split(':')[1]}", local_keys
         else:
             # 16/10 : comparé à tous les signaux moins ceux du PC, un trade GitHub que le PC voyait aussi
