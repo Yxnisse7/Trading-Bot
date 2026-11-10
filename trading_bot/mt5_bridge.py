@@ -43,7 +43,11 @@ DEFAULTS: dict[str, Any] = {
     # 09/11/2026 (demande de Yanisse) : « decide » = l'agent décide de chaque copie AVANT l'ordre (decideur.py) ;
     # false = copie automatique comme avant
     "avis": {"command": r"E:\TradingBot\venv\Scripts\python.exe E:\TradingBot\agent\agent\avis_direct.py",
-             "dir": r"E:\TradingBot\agent", "timeout": 90, "decide": True, "decide_timeout": 150},
+             "dir": r"E:\TradingBot\agent", "timeout": 90, "decide": True, "decide_timeout": 150,
+             # 10/11/2026 (choix de Yanisse) : l'agent ne décide plus pour le bot et les stratégies prouvées (son
+             # avis ne prédit pas leur résultat : rétro du 10/11, essai 75) ; l'ordre part tout de suite et l'avis
+             # arrive après. Il décide toujours pour les canaux Telegram. true = comme du 09/11 au 10/11.
+             "decide_copy": False},
 }
 
 
@@ -92,7 +96,8 @@ class Bridge:
             from .decideur import Decideur
             decider = Decideur(root, clock, cfg["avis"])
             self.copier = Copier(mt5, root, self.journal, clock, local=bool(cfg.get("local_strategies", True)),
-                                 relay=relay, bot=bot, decider=decider)
+                                 relay=relay, bot=bot,
+                                 decider=decider if cfg["avis"].get("decide_copy") else None)
             if cfg.get("hunt", True):            # l'agent IA cherche des trades sur l'or à heures fixes (mt5_hunt.py)
                 from .mt5_hunt import Hunter
                 self.hunter = Hunter(mt5, root, clock, relay=relay, cfg=cfg.get("chasse"))
