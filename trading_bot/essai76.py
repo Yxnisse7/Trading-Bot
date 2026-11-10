@@ -297,9 +297,12 @@ def run() -> dict:
                 row["trades_par_mois"] = round(len(days) and sum(1 for _ in pnl_events(tr, dollars)) / (12.8 * 12), 1)
                 res["T"][f"{pname} | {size} | {b} $/trade"] = row
                 print(pname, size, b, row["réussite"], row["jouable"], flush=True)
-    portfolios_f = {"F-A toutes en réel": ("noise_area_v2", "double7", "bot", "donchian_1h", "swing_w3",
+    # W3 porte le nom « W3 » dans les trades (corrigé le 10/11 : la 1re version l'oubliait dans F-A)
+    portfolios_f = {"F-A toutes en réel": ("noise_area_v2", "double7", "bot", "donchian_1h", "W3",
                                            "cassure_williams", "nuit_asie"),
-                    "F-B Nasdaq seul": ("noise_area_v2", "double7", "bot")}
+                    "F-B Nasdaq seul": ("noise_area_v2", "double7", "bot"),
+                    "F-C sans W3 (complément, hors pré-enregistrement)": ("noise_area_v2", "bot", "donchian_1h",
+                                                                          "cassure_williams", "nuit_asie")}
     cap = 100_000
     for pname, strats in portfolios_f.items():
         tr = [r for r in rows if r["strat"] in strats]
