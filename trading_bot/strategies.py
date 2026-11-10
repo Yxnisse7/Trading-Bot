@@ -58,7 +58,8 @@ SHADOW = {("donchian_1h", "bitcoin"): "2026-10-05T19:00:00Z",
           ("nuit_asie", "gold"): "2026-10-14T12:00:00Z",      # prouvée à l'essai 27
           ("cassure_williams", "bitcoin"): "2026-10-14T14:00:00Z",  # prouvée à l'essai 30
           ("double7", "nasdaq"): "2026-10-26T12:00:00Z",      # essai 52 (seule cellule qui passe, de justesse)
-          ("crabel_nr4", "gold"): "2026-11-09T00:00:00Z"}     # essai 72 (robuste, non prouvé), choix de Yanisse
+          ("crabel_nr4", "gold"): "2026-11-09T00:00:00Z",     # essai 72 (robuste, non prouvé), choix de Yanisse
+          ("cassure_williams", "ethereum"): "2026-11-11T00:00:00Z"}  # essai 78 (passe, mais copie surtout le Bitcoin), choix de Yanisse
 # Envoyées en signaux réels sur Telegram (entrée, stop, sortie), en plus du suivi : (stratégie, actif) → date de début.
 # Le 14/10/2026, choix de Yanisse : les 4 stratégies prouvées à l'essai 24 (2014-2026, tous les contrôles, singes
 # compris). Le bot ne passe aucun ordre.
