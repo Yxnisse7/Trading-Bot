@@ -81,7 +81,11 @@ LIVE_SLOT = {"creux_repris_15m": 900, "noise_area": 1800, "noise_area_v2": 1800,
 # (pire mois −53 R sur 2014-2026) ; la v2 reste en réel.
 LIVE_END = {("donchian_day", "gold"): "2026-10-13T19:30:00Z",
             ("creux_repris_15m", "nasdaq"): "2026-10-14T08:00:00Z",
-            ("noise_area", "nasdaq"): "2026-10-19T20:20:00Z"}
+            ("noise_area", "nasdaq"): "2026-10-19T20:20:00Z",
+            # 10/11/2026, choix de Yanisse après la revue : W3 creuse le plus les baisses du portefeuille (21 % de
+            # gagnants), la nuit asiatique rapporte presque rien et son lot minimum est trop gros pour un petit compte
+            ("swing_w3", "bitcoin"): "2026-11-10T23:25:00Z",
+            ("nuit_asie", "gold"): "2026-11-10T23:25:00Z"}
 # Jours de bougies rechargés pour le suivi, quand il en faut plus que les 8 jours habituels
 LAB_DAYS = {"noise_area": 30, "noise_area_v2": 30, "swing_w3": 45, "double7": 300, "crabel_nr4": 25}
 # Stratégies jour (moyenne 200 jours) : sur GitHub, bougies 1 h Yahoo sur 2 ans au lieu des bougies 5 min (60 jours max)
