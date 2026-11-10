@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-10T14:55:58Z",
+  "updated_at": "2026-11-10T15:01:45Z",
   "rules": {
     "account": "50K",
     "start_balance": 50000.0,
@@ -71,22 +71,26 @@
       "file": "history/4.json"
     }
   ],
-  "balance": 49515.67,
-  "profit": -484.33,
+  "balance": 49363.95,
+  "profit": -636.05,
   "mll": 49511.07,
-  "room_to_mll": 4.6,
+  "room_to_mll": -147.12,
   "peak_eod": 51511.07,
   "target_balance": 53377.76,
   "needed_profit": 3377.76,
   "best_day": 1688.88,
   "consistency_ok": true,
   "today": "2026-11-10",
-  "today_pnl": -1995.4,
-  "room_today": -995.4,
-  "status": "en cours",
-  "failed": null,
+  "today_pnl": -2147.12,
+  "room_today": -1147.12,
+  "status": "échoué",
+  "failed": {
+    "at": "2026-11-10T14:58:28Z",
+    "balance": 49363.95,
+    "mll": 49511.07
+  },
   "violations": [
-    "journée du 10/11 : -1995 $, limite journalière de 1000 $ atteinte"
+    "journée du 10/11 : -2147 $, limite journalière de 1000 $ atteinte"
   ],
   "days": [
     {
@@ -111,7 +115,7 @@
     },
     {
       "day": "2026-11-10",
-      "pnl": -1995.4
+      "pnl": -2147.12
     }
   ],
   "trades": [
@@ -643,13 +647,36 @@
       "past_flat_time": false,
       "note": "trade de l'agent IA (chasse)",
       "balance_after": 49515.67
+    },
+    {
+      "id": "j11101455nasag",
+      "asset": "nasdaq",
+      "asset_label": "Nasdaq 100 (NQ)",
+      "symbol": "MNQ",
+      "direction": "short",
+      "entry": 27810.0,
+      "exit": 27885.0,
+      "contracts": 1,
+      "status": "journal",
+      "origin": "journal",
+      "opened_at": "2026-11-10T14:55:14Z",
+      "closed_at": "2026-11-10T14:58:28Z",
+      "day": "2026-11-10",
+      "pnl_gross": -150.0,
+      "fees": 1.22,
+      "slippage": 0.5,
+      "cost": 1.72,
+      "pnl": -151.72,
+      "past_flat_time": false,
+      "note": "trade de l'agent IA (chasse)",
+      "balance_after": 49363.95
     }
   ],
   "open": [],
-  "journal_count": 36,
+  "journal_count": 37,
   "daily_target": 1200.0,
   "skipped": [],
-  "day_closed": "limite journalière atteinte (-1995 $) : Topstep bloque le compte jusqu'au lendemain",
+  "day_closed": "limite journalière atteinte (-2147 $) : Topstep bloque le compte jusqu'au lendemain",
   "candidates": [
     {
       "id": "667dc62648",
