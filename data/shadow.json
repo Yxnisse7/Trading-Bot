@@ -85,7 +85,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1794413700
+        "last_ts": 1794414060
       }
     }
   },
@@ -176,7 +176,7 @@
           "0.8": true,
           "1.0": true
         },
-        "last_ts": 1794413700
+        "last_ts": 1794414060
       }
     }
   },
@@ -266,7 +266,7 @@
       "variant": "modele_arbres",
       "exc": {
         "mfe": 0.3258,
-        "mae": 0.427,
+        "mae": 0.4832,
         "armed": {
           "0.5": false,
           "0.8": false,
@@ -277,7 +277,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1794413700
+        "last_ts": 1794414060
       }
     }
   },
@@ -357,10 +357,10 @@
       "price_time": "2026-11-11T16:10:00Z",
       "variant": "essai_oil",
       "exc": {
-        "mfe": 0.2308,
+        "mfe": 0.6154,
         "mae": 0.1282,
         "armed": {
-          "0.5": false,
+          "0.5": true,
           "0.8": false,
           "1.0": false
         },
@@ -369,7 +369,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": null
+        "last_ts": 1794414060
       }
     }
   },
@@ -457,7 +457,7 @@
       "filters_checked": true,
       "variant": "modele_arbres",
       "exc": {
-        "mfe": 0.0353,
+        "mfe": 0.1529,
         "mae": 0.0,
         "armed": {
           "0.5": false,
@@ -469,7 +469,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": null
+        "last_ts": 1794414060
       }
     }
   },
@@ -553,7 +553,22 @@
         "source": "essai 29"
       },
       "price_time": "2026-11-11T16:20:00Z",
-      "variant": "horizon_3h"
+      "variant": "horizon_3h",
+      "exc": {
+        "mfe": 0.1989,
+        "mae": 0.0,
+        "armed": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "be": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "last_ts": null
+      }
     }
   },
   {
@@ -633,6 +648,266 @@
       },
       "price_time": "2026-11-11T16:20:00Z",
       "model_r": -0.084,
+      "filters": [
+        "modele_arbres",
+        "bot_en_ombre"
+      ],
+      "filters_checked": true,
+      "variant": "modele_arbres",
+      "exc": {
+        "mfe": 0.1333,
+        "mae": 0.0,
+        "armed": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "be": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "last_ts": null
+      }
+    }
+  },
+  {
+    "id": "183fabefc5",
+    "asset": "nasdaq",
+    "asset_label": "Nasdaq 100 (NQ)",
+    "direction": "long",
+    "entry": 28526.0,
+    "take_profit": 28930.0,
+    "stop_loss": 28391.5,
+    "risk_reward": 3.0,
+    "confidence": "fort",
+    "score": 9.37,
+    "criteria": [
+      "adx",
+      "macd",
+      "orb",
+      "rsi",
+      "trend_15m",
+      "trend_1h",
+      "trend_5m",
+      "vwap"
+    ],
+    "rationale": "Achat : tendance forte (ADX), MACD en expansion, cassure du range d'ouverture, RSI en momentum, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 224.62 (0.79 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 50%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+    "news_context": "actualité à surveiller (score 2) : Stock Market Today: Nasdaq Jumps As CoreWeave Surges On Earnings; Nvidia, AMD Shares Bounce (Live Coverage)",
+    "created_at": "2026-11-11T16:31:18Z",
+    "expires_at": "2026-11-12T16:31:18Z",
+    "status": "open",
+    "closed_at": null,
+    "close_price": null,
+    "pnl_pct": null,
+    "pnl_gross_pct": null,
+    "duration_minutes": null,
+    "hourly_range": 224.616667,
+    "source": "shadow",
+    "horizon": "24h",
+    "horizon_minutes": 1440,
+    "meta": {
+      "tick": 0.25,
+      "details": {
+        "trend_5m": "EMA20 28388.16 / EMA50 28294.76 (15 min)",
+        "trend_15m": "EMA20 28277.70 / EMA50 28067.78",
+        "trend_1h": "prix vs EMA20 1 h 27920.79",
+        "adx": "ADX15 23.9 (+DI 25.4 / -DI 18.0)",
+        "vwap": "VWAP jour 28307.57",
+        "rsi": "RSI14 5 min 68.3",
+        "macd": "histogramme MACD 15.1889",
+        "level": "support 28178.00 / résistance -",
+        "volume": "z-score volume -0.58",
+        "orb": "range d'ouverture 28199.00 – 28426.00",
+        "pdhl": "veille : haut 28109.00 / bas 27516.00",
+        "corr": "VIX +0.1 % sur 15 min"
+      },
+      "support": 28178.0,
+      "resistance": null,
+      "atr_5m": 70.5550363412614,
+      "atr_ratio": 0.9376717854001598,
+      "hourly_range_pct": 0.7874,
+      "adx_15m": 23.946459590666876,
+      "sigma_5m": 0.0011238265111535323,
+      "p_resolution": 0.5043333333333333,
+      "p_tp_neutral": 0.16566666666666666,
+      "activity_ratio": null,
+      "base_minutes": 15,
+      "ctx": {
+        "adx": 23.95,
+        "rsi_dir": 68.3,
+        "vwap_ext": 0.9724,
+        "ema_ext": 0.6137,
+        "atr_ratio": 0.938,
+        "range_pct": 0.7874,
+        "cost_r": 0.0318,
+        "us_open_min": 121.3,
+        "weekday": 2
+      },
+      "exit_override": {
+        "stop_x": 1.5,
+        "target_x": 3.0,
+        "minutes": 1440,
+        "source": "essai 29"
+      },
+      "price_time": "2026-11-11T16:25:00Z",
+      "variant": "horizon_3h"
+    }
+  },
+  {
+    "id": "37da72cf71",
+    "asset": "sp500",
+    "asset_label": "S&P 500 (ES)",
+    "direction": "long",
+    "entry": 7632.5,
+    "take_profit": 7650.25,
+    "stop_loss": 7620.75,
+    "risk_reward": 1.51,
+    "confidence": "fort",
+    "score": 5.97,
+    "criteria": [
+      "adx",
+      "orb",
+      "rsi",
+      "trend_15m",
+      "trend_1h",
+      "trend_5m",
+      "vwap"
+    ],
+    "rationale": "Achat : tendance forte (ADX), cassure du range d'ouverture, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 29.58 (0.39 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 40%.",
+    "news_context": "actualité à surveiller (score 2) : Stock Market Today: Nasdaq Jumps As CoreWeave Surges On Earnings; Nvidia, AMD Shares Bounce (Live Coverage)",
+    "created_at": "2026-11-11T16:31:18Z",
+    "expires_at": "2026-11-11T17:31:18Z",
+    "status": "open",
+    "closed_at": null,
+    "close_price": null,
+    "pnl_pct": null,
+    "pnl_gross_pct": null,
+    "duration_minutes": null,
+    "hourly_range": 29.583333,
+    "source": "shadow",
+    "horizon": "1h",
+    "horizon_minutes": 60,
+    "meta": {
+      "tick": 0.25,
+      "details": {
+        "trend_5m": "EMA20 7620.30 / EMA50 7614.42 (5 min)",
+        "trend_15m": "EMA20 7614.95 / EMA50 7602.17",
+        "trend_1h": "prix vs EMA20 1 h 7596.12",
+        "adx": "ADX15 26.5 (+DI 18.8 / -DI 12.1)",
+        "vwap": "VWAP jour 7607.86",
+        "rsi": "RSI14 5 min 64.8",
+        "macd": "histogramme MACD 1.9479",
+        "level": "support 7604.75 / résistance -",
+        "volume": "z-score volume -4.20",
+        "orb": "range d'ouverture 7593.25 – 7624.75",
+        "pdhl": "veille : haut 7598.75 / bas 7493.00",
+        "activity": "activité de l'heure 1.58× la moyenne",
+        "corr": "VIX +0.1 % sur 15 min"
+      },
+      "support": 7604.75,
+      "resistance": null,
+      "atr_5m": 7.086904000134451,
+      "atr_ratio": 1.260737421722387,
+      "hourly_range_pct": 0.3876,
+      "adx_15m": 26.49096758642998,
+      "sigma_5m": 0.0004765027041479242,
+      "p_resolution": 0.39766666666666667,
+      "p_tp_neutral": 0.121,
+      "activity_ratio": 1.583,
+      "base_minutes": 5,
+      "ctx": {
+        "adx": 26.49,
+        "rsi_dir": 64.84,
+        "vwap_ext": 0.8329,
+        "ema_ext": 0.4124,
+        "atr_ratio": 1.261,
+        "activity": 1.583,
+        "range_pct": 0.3876,
+        "cost_r": 0.065,
+        "us_open_min": 121.3,
+        "weekday": 2
+      },
+      "price_time": "2026-11-11T16:25:00Z",
+      "variant": "essai_sp500"
+    }
+  },
+  {
+    "id": "8094636ad4",
+    "asset": "gold",
+    "asset_label": "Or (XAU/USD)",
+    "direction": "short",
+    "entry": 4012.5,
+    "take_profit": 4003.7,
+    "stop_loss": 4018.4,
+    "risk_reward": 1.49,
+    "confidence": "fort",
+    "score": 7.11,
+    "criteria": [
+      "adx",
+      "orb",
+      "rsi",
+      "trend_15m",
+      "trend_1h",
+      "trend_5m",
+      "vwap"
+    ],
+    "rationale": "Vente : tendance forte (ADX), cassure du range d'ouverture, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 14.67 (0.37 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 66%.",
+    "news_context": "actualité calme sur les 2 dernières heures",
+    "created_at": "2026-11-11T16:31:18Z",
+    "expires_at": "2026-11-11T17:31:18Z",
+    "status": "open",
+    "closed_at": null,
+    "close_price": null,
+    "pnl_pct": null,
+    "pnl_gross_pct": null,
+    "duration_minutes": null,
+    "hourly_range": 14.666667,
+    "source": "shadow",
+    "horizon": "1h",
+    "horizon_minutes": 60,
+    "meta": {
+      "tick": 0.1,
+      "details": {
+        "trend_5m": "EMA20 4017.51 / EMA50 4029.45 (5 min)",
+        "trend_15m": "EMA20 4031.47 / EMA50 4044.25",
+        "trend_1h": "prix vs EMA20 1 h 4047.61",
+        "adx": "ADX15 47.4 (+DI 5.7 / -DI 32.4)",
+        "vwap": "VWAP jour 4044.69",
+        "rsi": "RSI14 5 min 32.8",
+        "macd": "histogramme MACD 0.8296",
+        "level": "support - / résistance 4041.10",
+        "volume": "z-score volume -1.66",
+        "orb": "range d'ouverture 4018.00 – 4038.80",
+        "pdhl": "veille : haut 4150.70 / bas 4020.80",
+        "activity": "activité de l'heure 1.17× la moyenne",
+        "corr": "DXY -0.00 % sur 1 h, taux 10 ans +0.0 % sur 1 h"
+      },
+      "support": null,
+      "resistance": 4041.10009765625,
+      "atr_5m": 4.179712306159863,
+      "atr_ratio": 1.0992030279767546,
+      "hourly_range_pct": 0.3655,
+      "adx_15m": 47.42198593103838,
+      "sigma_5m": 0.00064901494769469,
+      "p_resolution": 0.659,
+      "p_tp_neutral": 0.25633333333333336,
+      "activity_ratio": 1.173,
+      "base_minutes": 5,
+      "ctx": {
+        "adx": 47.42,
+        "rsi_dir": 67.23,
+        "vwap_ext": 2.195,
+        "ema_ext": 0.3417,
+        "atr_ratio": 1.099,
+        "activity": 1.173,
+        "range_pct": 0.3655,
+        "cost_r": 0.136,
+        "us_open_min": 121.3,
+        "weekday": 2
+      },
+      "price_time": "2026-11-11T16:25:00Z",
+      "model_r": -0.0228,
       "filters": [
         "modele_arbres",
         "bot_en_ombre"
