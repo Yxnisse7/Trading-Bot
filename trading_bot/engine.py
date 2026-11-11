@@ -1967,6 +1967,24 @@ class Engine:
         return written
 
     # ------------------------------------------------------------------ tick
+    def check_pc(self, now: datetime) -> str | None:
+        """Prévient sur Telegram quand le PC (pont MT5) ne donne plus signe de vie, puis quand il revient."""
+        raw = os.environ.get(pc_link.VAR)
+        st = self.store.state()
+        event, down = pc_link.watch(raw, now.timestamp(), st.get("pc_down"))
+        if down != st.get("pc_down"):
+            st["pc_down"] = down
+            self.store.save_state(st)
+        if event == "down":
+            since = datetime.fromtimestamp(down, ZoneInfo("Europe/Paris")).strftime("%H:%M")
+            notify(f"⚠️ <b>Le PC ne répond plus</b> depuis {since} (heure de Paris).\n"
+                   "Le pont MT5 est arrêté : les trades démo ne sont plus copiés ni fermés par les règles. "
+                   "Telegram, Topstep et la Simulation continuent depuis GitHub.\n"
+                   "À faire : rallumer le PC, ouvrir MetaTrader 5 puis l'icône TradingBot.", html=True)
+        elif event == "up":
+            notify("✅ <b>Le PC est revenu</b> : le pont MT5 tourne de nouveau.", html=True, silent=True)
+        return event
+
     def tick(self, now: datetime | None = None) -> dict[str, Any]:
         """Un passage complet : commandes reçues, suivi des signaux ouverts, puis scan si l'intervalle est écoulé."""
         now = now or utcnow()
@@ -1995,6 +2013,10 @@ class Engine:
             self.check_drift(now)
         except Exception:  # noqa: BLE001 — l'alerte de décrochage ne doit jamais casser un passage
             log.exception("alerte de décrochage")
+        try:
+            self.check_pc(now)
+        except Exception:  # noqa: BLE001 — l'alerte de panne du PC ne doit jamais casser un passage
+            log.exception("alerte de panne du PC")
         st = self.store.state()
         last_scan = parse_iso(st["last_scan"]) if st.get("last_scan") else None
         new: list[Signal] = []

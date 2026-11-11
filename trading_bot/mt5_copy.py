@@ -20,6 +20,7 @@ from typing import Any, Callable
 
 from . import decideur as dc
 from . import demo_rules
+from . import gardien
 from .mt5_local import LocalEngine, same_signal, server_offset
 
 log = logging.getLogger("mt5_copy")
@@ -474,6 +475,12 @@ class Copier:
             lot = round(min(max(lot, MIN_LOT[strat]), float(info.volume_max)), 2)
         if lot <= 0:
             return {"status": "taille minimale trop risquée"}
+        blocked = gardien.check(self.mt5, sym, tick, info, s["stop"], lot, balance, self.clock())
+        if blocked:                                  # 11/11/2026 : raison concrète et vérifiable, voir gardien.py
+            self.journal("copie bloquée par le gardien", sens="achat" if long else "vente", prix=px, lot=lot,
+                         note=f"{sym} {s['key']} : {blocked}")
+            return {"status": f"gardien : {blocked}"}
+        warn = gardien.news(gardien.events(self.root), s["asset"], self.clock())
         req = {"action": self.mt5.TRADE_ACTION_DEAL, "symbol": sym, "volume": lot,
                "type": self.mt5.ORDER_TYPE_BUY if long else self.mt5.ORDER_TYPE_SELL, "price": px, "sl": sl, "tp": tp,
                "deviation": 50, "magic": MAGIC, "comment": s["key"][:COMMENT_MAX], "type_time": self.mt5.ORDER_TIME_GTC,
@@ -497,4 +504,4 @@ class Copier:
             return {"status": "limite", "ticket": ticket, "symbol": sym, "lot": lot, "price": px,
                     "limit_until": min(until, s["expires"]) if s.get("expires") else until}
         return {"status": "ouvert", "ticket": ticket, "symbol": sym, "lot": lot,
-                "price": float(getattr(res, "price", px) or px)}
+                "price": float(getattr(res, "price", px) or px), **({"alerte": warn} if warn else {})}

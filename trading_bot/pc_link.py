@@ -23,6 +23,8 @@ TRADES = "PC_TRADES"  # trades du bot classique calculés sur le PC (3 derniers 
 FRESH = 600          # s : au-delà, le PC est considéré éteint (la variable est lue au début du passage GitHub,
                      # qui peut durer quelques minutes : 3 min de marge feraient des doublons)
 WAIT = 15 * 60       # s après la bougie d'entrée : délai laissé au PC avant que GitHub annonce lui-même
+DOWN = 15 * 60       # s sans nouvelle du PC avant l'alerte « le PC ne répond plus » (11/11/2026 : mise à jour Windows
+                     # la nuit, pont coupé 9 h sans que personne le sache)
 KEEP = 2 * 86400     # s : durée de vie des clés annoncées dans la variable
 # /propose : PC allumé, l'agent IA (Claude) du PC répond pour ces marchés (mt5_ask.py) et GitHub se tait (29/10/2026)
 PROPOSE_ASSETS = ("gold", "nasdaq", "bitcoin", "sp500", "ethereum")
@@ -80,3 +82,17 @@ def trades(raw: str | None) -> list[dict[str, Any]] | None:
     except (ValueError, TypeError):
         return None
     return d if isinstance(d, list) else None
+
+
+def watch(raw: str | None, now: float, down: int | None) -> tuple[str | None, int | None]:
+    """Alerte de panne. `down` = heure du dernier signe de vie pour laquelle on a déjà prévenu (ou None).
+    Renvoie (événement, nouveau down) : « down » une seule fois par coupure, « up » au retour, sinon None."""
+    ts, _ = decode(raw)
+    if not ts:
+        return None, down
+    age = now - ts
+    if 0 <= age <= FRESH:
+        return ("up", None) if down else (None, None)
+    if DOWN <= age <= KEEP and down != ts:
+        return "down", ts
+    return None, down

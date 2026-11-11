@@ -194,6 +194,7 @@ class Relay:
                  "",
                  f"MT5 démo : {msg.esc(copy)}",
                  *([msg.esc(dc.line(rec["agent"], rec["agent"].get("notes")))] if rec.get("agent") else []),
+                 *([f"⚠️ Gardien : {msg.esc(rec['alerte'])}."] if rec.get("alerte") else []),
                  *([taille.line(k)] if (k := self._taille(strat, sym, s)) is not None else []),
                  "Topstep et Simulation : calculés par le bot en ligne (voir le site).",
                  "<i>Annoncé par ton PC, prix MetaTrader 5. Le bot ne passe aucun ordre réel.</i>"]

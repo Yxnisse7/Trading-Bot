@@ -162,8 +162,9 @@ def test_asian_night_is_copied_at_the_min_lot_on_a_small_balance():
     assert mc.solo_floor(0.01, 300, 40.0, info, None) == 0.01        # pas remonté à 0,02 lot (27 % du solde)
 
 
-def test_too_short_stop_is_widened_to_the_broker_minimum(tmp_path):
+def test_too_short_stop_is_widened_to_the_broker_minimum(tmp_path, monkeypatch):
     """Un SL plus court que le minimum du courtier (écart compris) est élargi au lieu d'être rejeté (code 10016)."""
+    monkeypatch.setattr(mc.gardien, "SPREAD_MAX", 1.0)   # ici l'écart vaut 44 % du stop élargi : le gardien bloquerait
     mt5 = FakeMT5()
     created = mc._ts("2026-10-14T13:50:00Z")
     c = mc.Copier(mt5, tmp_path, lambda *a, **k: None, lambda: created + 60,
@@ -282,3 +283,14 @@ def test_crypto_copy_from_the_pc_is_closed_when_github_closed_it(tmp_path):
     rec = {"asset": "bitcoin", "source": "local", "status": "ouvert"}
     assert c._ended(f"lab:donchian_1h:{t0}", rec)                  # GitHub l'a fermé : on ferme aussi
     assert not c._ended(f"lab:donchian_1h:{t0}", {**rec, "asset": "gold"})   # hors crypto : le PC décide
+
+
+def test_guardian_blocks_an_abnormal_spread(tmp_path):
+    """11/11 : écart du courtier supérieur au quart du stop → pas d'ordre, raison écrite dans le statut."""
+    mt5 = FakeMT5()
+    mt5.symbol_info_tick = lambda sym: NS(bid=4200.0, ask=4203.0)
+    created = mc._ts("2026-10-14T13:50:00Z")
+    c = mc.Copier(mt5, tmp_path, lambda *a, **k: None, lambda: created + 60, get=site([sig()]))
+    c.step()
+    assert mt5.sent == []
+    assert next(iter(c.state.values()))["status"].startswith("gardien : écart")
