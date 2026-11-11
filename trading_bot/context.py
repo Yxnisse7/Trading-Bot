@@ -240,6 +240,7 @@ FILTERS = {
     "sans_etirement_or": "or : pas d'entrée à plus de 1,5 ATR de la moyenne 20 en 5 min (essai 14)",
     "limites_jour_or": "or : 3 trades par jour au plus, arrêt après 2 pertes (essai 15)",
     "modele_arbres": "or et Nasdaq : bot appris (arbres), R prévu ≤ 0 (essai 25)",
+    "vix_bond": "Nasdaq : pas de trade du bot le lendemain d'un bond du VIX de 10 % ou plus (essai 81)",
 }
 
 
