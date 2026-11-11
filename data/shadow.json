@@ -82,7 +82,7 @@
       "variant": "hors_session",
       "exc": {
         "mfe": 0.3391,
-        "mae": 0.3623,
+        "mae": 0.6551,
         "armed": {
           "0.5": false,
           "0.8": false,
@@ -93,7 +93,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1794402000
+        "last_ts": 1794402360
       }
     }
   },
@@ -174,7 +174,7 @@
       "variant": "essai_oil",
       "exc": {
         "mfe": 0.0,
-        "mae": 0.2308,
+        "mae": 0.3654,
         "armed": {
           "0.5": false,
           "0.8": false,
@@ -185,8 +185,84 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": null
+        "last_ts": 1794402360
       }
+    }
+  },
+  {
+    "id": "5ab84926fe",
+    "asset": "euro",
+    "asset_label": "Euro / dollar (6E)",
+    "direction": "short",
+    "entry": 1.11425,
+    "take_profit": 1.11355,
+    "stop_loss": 1.11475,
+    "risk_reward": 1.4,
+    "confidence": "fort",
+    "score": 6.31,
+    "criteria": [
+      "adx",
+      "macd",
+      "rsi",
+      "trend_15m",
+      "trend_1h",
+      "trend_5m",
+      "vwap"
+    ],
+    "rationale": "Vente : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 0.00120 (0.11 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 64%.",
+    "news_context": "prudence post-CPI US (données oct. 2026) : critères renforcés · actualité à surveiller (score 2) : Goldman adds another rate hike to Fed outlook after hot inflation data",
+    "created_at": "2026-11-11T13:16:06Z",
+    "expires_at": "2026-11-11T14:16:06Z",
+    "status": "open",
+    "closed_at": null,
+    "close_price": null,
+    "pnl_pct": null,
+    "pnl_gross_pct": null,
+    "duration_minutes": null,
+    "hourly_range": 0.0012,
+    "source": "shadow",
+    "horizon": "1h",
+    "horizon_minutes": 60,
+    "meta": {
+      "tick": 5e-05,
+      "details": {
+        "trend_5m": "EMA20 1.11 / EMA50 1.12 (5 min)",
+        "trend_15m": "EMA20 1.12 / EMA50 1.12",
+        "trend_1h": "prix vs EMA20 1 h 1.12",
+        "adx": "ADX15 52.1 (+DI 7.3 / -DI 33.3)",
+        "vwap": "VWAP jour 1.12",
+        "rsi": "RSI14 5 min 32.7",
+        "macd": "histogramme MACD -0.0001",
+        "level": "support - / résistance 1.11580",
+        "volume": "z-score volume -1.31",
+        "pdhl": "veille : haut 1.12670 / bas 1.11595",
+        "activity": "activité de l'heure 2.27× la moyenne"
+      },
+      "support": null,
+      "resistance": 1.1158000230789185,
+      "atr_5m": 0.0002746662737614921,
+      "atr_ratio": 0.9442029070042743,
+      "hourly_range_pct": 0.1077,
+      "adx_15m": 52.13390421499336,
+      "sigma_5m": 0.00018526281836252892,
+      "p_resolution": 0.635,
+      "p_tp_neutral": 0.25333333333333335,
+      "activity_ratio": 2.267,
+      "base_minutes": 5,
+      "ctx": {
+        "adx": 52.13,
+        "rsi_dir": 67.27,
+        "vwap_ext": 1.516,
+        "ema_ext": 0.5562,
+        "atr_ratio": 0.944,
+        "activity": 2.267,
+        "range_pct": 0.1077,
+        "cost_r": 0.2229,
+        "us_open_min": -73.9,
+        "weekday": 2
+      },
+      "price_time": "2026-11-11T13:10:00Z",
+      "variant": "essai_euro"
     }
   }
 ]
