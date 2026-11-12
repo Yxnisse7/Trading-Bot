@@ -1,96 +1,5 @@
 [
   {
-    "id": "6d2ec98005",
-    "asset": "euro",
-    "asset_label": "Euro / dollar (6E)",
-    "direction": "short",
-    "entry": 1.10915,
-    "take_profit": 1.10845,
-    "stop_loss": 1.1096,
-    "risk_reward": 1.56,
-    "confidence": "fort",
-    "score": 7.01,
-    "criteria": [
-      "adx",
-      "macd",
-      "pdhl",
-      "rsi",
-      "trend_15m",
-      "trend_1h",
-      "trend_5m"
-    ],
-    "rationale": "Vente : tendance forte (ADX), MACD en expansion, cassure des extrêmes de la veille, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min. Range moyen sur 1 h ≈ 0.00117 (0.11 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 85%.",
-    "news_context": "actualité à surveiller (score 1) : EU, UK weigh delay to 10% EV tariff from Jan 1 - report",
-    "created_at": "2026-11-12T06:25:52Z",
-    "expires_at": "2026-11-12T07:25:52Z",
-    "status": "open",
-    "closed_at": null,
-    "close_price": null,
-    "pnl_pct": null,
-    "pnl_gross_pct": null,
-    "duration_minutes": null,
-    "hourly_range": 0.001167,
-    "source": "shadow",
-    "horizon": "1h",
-    "horizon_minutes": 60,
-    "meta": {
-      "tick": 5e-05,
-      "details": {
-        "trend_5m": "EMA20 1.11 / EMA50 1.11 (5 min)",
-        "trend_15m": "EMA20 1.11 / EMA50 1.11",
-        "trend_1h": "prix vs EMA20 1 h 1.11",
-        "adx": "ADX15 40.2 (+DI 12.0 / -DI 29.7)",
-        "vwap": "VWAP jour 1.11",
-        "rsi": "RSI14 5 min 46.6",
-        "macd": "histogramme MACD -0.0000",
-        "level": "support 1.10805 / résistance 1.11090",
-        "volume": "z-score volume -1.80",
-        "pdhl": "veille : haut 1.11855 / bas 1.10970",
-        "activity": "activité de l'heure 0.66× la moyenne"
-      },
-      "support": 1.108049988746643,
-      "resistance": 1.1109000444412231,
-      "atr_5m": 0.00024237366996052154,
-      "atr_ratio": 0.8387689339632688,
-      "hourly_range_pct": 0.1053,
-      "adx_15m": 40.187180003896984,
-      "sigma_5m": 0.0002466767898166725,
-      "p_resolution": 0.8473333333333334,
-      "p_tp_neutral": 0.3363333333333333,
-      "activity_ratio": 0.663,
-      "base_minutes": 5,
-      "ctx": {
-        "adx": 40.19,
-        "rsi_dir": 53.41,
-        "vwap_ext": 0.2776,
-        "ema_ext": 0.1105,
-        "atr_ratio": 0.839,
-        "activity": 0.663,
-        "range_pct": 0.1053,
-        "cost_r": 0.2465,
-        "us_open_min": -484.1,
-        "weekday": 3
-      },
-      "price_time": "2026-11-12T06:20:00Z",
-      "variant": "essai_euro",
-      "exc": {
-        "mfe": 1.4444,
-        "mae": 0.4444,
-        "armed": {
-          "0.5": true,
-          "0.8": true,
-          "1.0": true
-        },
-        "be": {
-          "0.5": true,
-          "0.8": true,
-          "1.0": true
-        },
-        "last_ts": 1794467700
-      }
-    }
-  },
-  {
     "id": "e22379c2f7",
     "asset": "gold",
     "asset_label": "Or (XAU/USD)",
@@ -189,7 +98,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1794467700
+        "last_ts": 1794468060
       }
     }
   },
@@ -280,7 +189,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1794467700
+        "last_ts": 1794468060
       }
     }
   },
@@ -379,11 +288,11 @@
           "1.0": false
         },
         "be": {
-          "0.5": false,
-          "0.8": false,
+          "0.5": true,
+          "0.8": true,
           "1.0": false
         },
-        "last_ts": 1794467700
+        "last_ts": 1794468060
       }
     }
   },
@@ -475,18 +384,18 @@
       "variant": "modele_arbres",
       "exc": {
         "mfe": 0.5283,
-        "mae": 0.0,
+        "mae": 0.2075,
         "armed": {
           "0.5": true,
           "0.8": false,
           "1.0": false
         },
         "be": {
-          "0.5": false,
+          "0.5": true,
           "0.8": false,
           "1.0": false
         },
-        "last_ts": null
+        "last_ts": 1794468060
       }
     }
   },
@@ -568,6 +477,108 @@
         "jour de la semaine : jeudi"
       ],
       "model_r": -0.1189,
+      "filters": [
+        "filtre_contexte",
+        "sans_etirement_or",
+        "modele_arbres",
+        "bot_en_ombre"
+      ],
+      "filters_checked": true,
+      "variant": "modele_arbres",
+      "exc": {
+        "mfe": 0.0,
+        "mae": 0.4038,
+        "armed": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "be": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "last_ts": null
+      }
+    }
+  },
+  {
+    "id": "33a87e85a4",
+    "asset": "gold",
+    "asset_label": "Or (XAU/USD)",
+    "direction": "short",
+    "entry": 3968.6,
+    "take_profit": 3960.7,
+    "stop_loss": 3973.9,
+    "risk_reward": 1.49,
+    "confidence": "fort",
+    "score": 5.98,
+    "criteria": [
+      "adx",
+      "rsi",
+      "trend_15m",
+      "trend_1h",
+      "trend_5m",
+      "vwap"
+    ],
+    "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 13.13 (0.33 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 79%.",
+    "news_context": "actualité à surveiller (score 1) : Asian stocks tumble, Nvidia stings as board to decide CEO’s fate",
+    "created_at": "2026-11-12T07:31:25Z",
+    "expires_at": "2026-11-12T08:31:25Z",
+    "status": "open",
+    "closed_at": null,
+    "close_price": null,
+    "pnl_pct": null,
+    "pnl_gross_pct": null,
+    "duration_minutes": null,
+    "hourly_range": 13.133382,
+    "source": "shadow",
+    "horizon": "1h",
+    "horizon_minutes": 60,
+    "meta": {
+      "tick": 0.1,
+      "details": {
+        "trend_5m": "EMA20 3975.78 / EMA50 3980.37 (5 min)",
+        "trend_15m": "EMA20 3980.11 / EMA50 3991.30",
+        "trend_1h": "prix vs EMA20 1 h 4000.18",
+        "adx": "ADX15 27.8 (+DI 11.9 / -DI 27.6)",
+        "vwap": "VWAP jour 3985.33",
+        "rsi": "RSI14 5 min 38.2",
+        "macd": "histogramme MACD -1.1111",
+        "level": "support - / résistance 3988.20",
+        "volume": "z-score volume -1.33",
+        "pdhl": "veille : haut 4074.70 / bas 3983.00",
+        "activity": "activité de l'heure 1.02× la moyenne",
+        "corr": "DXY +0.02 % sur 1 h"
+      },
+      "support": null,
+      "resistance": 3988.199951171875,
+      "atr_5m": 5.039426711490607,
+      "atr_ratio": 1.3773939450735175,
+      "hourly_range_pct": 0.3309,
+      "adx_15m": 27.780881367937614,
+      "sigma_5m": 0.0007310387945574813,
+      "p_resolution": 0.7946666666666666,
+      "p_tp_neutral": 0.31866666666666665,
+      "activity_ratio": 1.025,
+      "base_minutes": 5,
+      "ctx": {
+        "adx": 27.78,
+        "rsi_dir": 61.84,
+        "vwap_ext": 1.2736,
+        "ema_ext": 0.547,
+        "atr_ratio": 1.377,
+        "activity": 1.025,
+        "range_pct": 0.3309,
+        "cost_r": 0.1498,
+        "us_open_min": -418.6,
+        "weekday": 3
+      },
+      "price_time": "2026-11-12T07:25:00Z",
+      "ctx_avoid": [
+        "jour de la semaine : jeudi"
+      ],
+      "model_r": -0.0984,
       "filters": [
         "filtre_contexte",
         "sans_etirement_or",
