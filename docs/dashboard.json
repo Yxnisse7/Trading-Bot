@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-12T16:26:11.969216+01:00",
+  "updated_at": "2026-11-12T16:31:31.723851+01:00",
   "timezone": "Europe/Paris",
   "equity_curve": [
     {
@@ -1914,18 +1914,18 @@
       "avg_pnl_pct": -0.0298
     },
     "shadow": {
-      "n": 1433,
-      "tp": 440,
+      "n": 1434,
+      "tp": 441,
       "sl": 708,
       "expired": 285,
-      "win_rate": 0.3832752613240418,
+      "win_rate": 0.3838120104438642,
       "neutral_win_rate": 0.3682,
-      "edge": 0.0151,
-      "pnl_pct": -0.6142,
+      "edge": 0.0156,
+      "pnl_pct": -0.5565,
       "avg_pnl_pct": -0.0004
     },
     "open": 0,
-    "open_shadow": 2
+    "open_shadow": 1
   },
   "by_source": {
     "bot": {
@@ -1962,14 +1962,14 @@
       "avg_pnl_pct": 0.0
     },
     "shadow": {
-      "n": 1433,
-      "tp": 440,
+      "n": 1434,
+      "tp": 441,
       "sl": 708,
       "expired": 285,
-      "win_rate": 0.3832752613240418,
+      "win_rate": 0.3838120104438642,
       "neutral_win_rate": 0.3682,
-      "edge": 0.0151,
-      "pnl_pct": -0.6142,
+      "edge": 0.0156,
+      "pnl_pct": -0.5565,
       "avg_pnl_pct": -0.0004
     }
   },
@@ -2269,15 +2269,15 @@
         "avg_pnl_pct": 0.0
       },
       "shadow": {
-        "n": 58,
-        "tp": 18,
+        "n": 59,
+        "tp": 19,
         "sl": 35,
         "expired": 5,
-        "win_rate": 0.33962264150943394,
-        "neutral_win_rate": 0.402,
-        "edge": -0.0624,
-        "pnl_pct": -1.4321,
-        "avg_pnl_pct": -0.0247
+        "win_rate": 0.35185185185185186,
+        "neutral_win_rate": 0.4019,
+        "edge": -0.05,
+        "pnl_pct": -1.3744,
+        "avg_pnl_pct": -0.0233
       },
       "open": 0,
       "session_utc": [
@@ -2300,17 +2300,17 @@
     {
       "key": "trend_5m",
       "label": "Tendance 5 min",
-      "weight": 1.053,
+      "weight": 1.055,
       "stats": {
-        "n": 1437,
-        "tp": 461,
+        "n": 1438,
+        "tp": 462,
         "sl": 708,
         "expired": 268,
-        "win_rate": 0.3943541488451668,
+        "win_rate": 0.39487179487179486,
         "neutral_win_rate": 0.3674,
-        "edge": 0.027,
-        "pnl_pct": 1.4775,
-        "avg_pnl_pct": 0.001
+        "edge": 0.0275,
+        "pnl_pct": 1.5352,
+        "avg_pnl_pct": 0.0011
       },
       "by_source": {
         "bot": {
@@ -2347,18 +2347,52 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 1280,
-          "tp": 407,
+          "n": 1281,
+          "tp": 408,
           "sl": 636,
           "expired": 237,
-          "win_rate": 0.39022051773729627,
+          "win_rate": 0.39080459770114945,
           "neutral_win_rate": 0.3648,
-          "edge": 0.0254,
-          "pnl_pct": 4.6821,
+          "edge": 0.026,
+          "pnl_pct": 4.7398,
           "avg_pnl_pct": 0.0037
         }
       },
       "last_trades": [
+        {
+          "id": "29f6276a81",
+          "asset": "euro",
+          "asset_label": "Euro / dollar (6E)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 1.10765,
+          "take_profit": 1.10695,
+          "stop_loss": 1.1081,
+          "risk_reward": 1.56,
+          "confidence": "fort",
+          "score": 5.08,
+          "criteria": [
+            "adx",
+            "macd",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "tp",
+          "pnl_pct": 0.0577,
+          "pnl_gross_pct": 0.0677,
+          "duration_minutes": 5,
+          "close_price": 1.1069,
+          "created_at": "2026-11-12T15:25:58Z",
+          "closed_at": "2026-11-12T15:31:20Z",
+          "created_local": "12/11 16:25",
+          "expires_at": "2026-11-12T16:25:58Z",
+          "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 0.00114 (0.10 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 91%.",
+          "news_context": "actualité à surveiller (score 3) : 10-year Treasury yield jumps back above 5% as oil gains and more Fed rate hikes expected | Canada’s ambassador warns Trump tariffs are driving up costs, threatening U.S. investment",
+          "manual_exit": null
+        },
         {
           "id": "5ee2388070",
           "asset": "gold",
@@ -2599,56 +2633,22 @@
           "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 18.53 (0.48 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 81%.",
           "news_context": "actualité à surveiller (score 3) : 10-year Treasury yield jumps back above 5% as oil gains and more Fed rate hikes expected | Canada’s ambassador warns Trump tariffs are driving up costs, threatening U.S. investment",
           "manual_exit": null
-        },
-        {
-          "id": "be3df025d5",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 3905.5,
-          "take_profit": 3894.2,
-          "stop_loss": 3913.0,
-          "risk_reward": 1.51,
-          "confidence": "fort",
-          "score": 6.07,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "tp",
-          "pnl_pct": 0.2693,
-          "pnl_gross_pct": 0.2893,
-          "duration_minutes": 0,
-          "close_price": 3894.2,
-          "created_at": "2026-11-12T14:41:05Z",
-          "closed_at": "2026-11-12T14:42:00Z",
-          "created_local": "12/11 15:41",
-          "expires_at": "2026-11-12T15:41:05Z",
-          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 18.77 (0.48 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 80%.",
-          "news_context": "actualité à surveiller (score 3) : 10-year Treasury yield jumps back above 5% as oil gains and more Fed rate hikes expected | Canada’s ambassador warns Trump tariffs are driving up costs, threatening U.S. investment",
-          "manual_exit": null
         }
       ]
     },
     {
       "key": "trend_15m",
       "label": "Tendance 15 min",
-      "weight": 1.053,
+      "weight": 1.055,
       "stats": {
-        "n": 1608,
-        "tp": 498,
+        "n": 1609,
+        "tp": 499,
         "sl": 791,
         "expired": 319,
-        "win_rate": 0.38634600465477115,
+        "win_rate": 0.3868217054263566,
         "neutral_win_rate": 0.3704,
-        "edge": 0.0159,
-        "pnl_pct": -5.6951,
+        "edge": 0.0164,
+        "pnl_pct": -5.6374,
         "avg_pnl_pct": -0.0035
       },
       "by_source": {
@@ -2686,18 +2686,52 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 1433,
-          "tp": 440,
+          "n": 1434,
+          "tp": 441,
           "sl": 708,
           "expired": 285,
-          "win_rate": 0.3832752613240418,
+          "win_rate": 0.3838120104438642,
           "neutral_win_rate": 0.3682,
-          "edge": 0.0151,
-          "pnl_pct": -0.6142,
+          "edge": 0.0156,
+          "pnl_pct": -0.5565,
           "avg_pnl_pct": -0.0004
         }
       },
       "last_trades": [
+        {
+          "id": "29f6276a81",
+          "asset": "euro",
+          "asset_label": "Euro / dollar (6E)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 1.10765,
+          "take_profit": 1.10695,
+          "stop_loss": 1.1081,
+          "risk_reward": 1.56,
+          "confidence": "fort",
+          "score": 5.08,
+          "criteria": [
+            "adx",
+            "macd",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "tp",
+          "pnl_pct": 0.0577,
+          "pnl_gross_pct": 0.0677,
+          "duration_minutes": 5,
+          "close_price": 1.1069,
+          "created_at": "2026-11-12T15:25:58Z",
+          "closed_at": "2026-11-12T15:31:20Z",
+          "created_local": "12/11 16:25",
+          "expires_at": "2026-11-12T16:25:58Z",
+          "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 0.00114 (0.10 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 91%.",
+          "news_context": "actualité à surveiller (score 3) : 10-year Treasury yield jumps back above 5% as oil gains and more Fed rate hikes expected | Canada’s ambassador warns Trump tariffs are driving up costs, threatening U.S. investment",
+          "manual_exit": null
+        },
         {
           "id": "5ee2388070",
           "asset": "gold",
@@ -2938,56 +2972,22 @@
           "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 18.53 (0.48 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 81%.",
           "news_context": "actualité à surveiller (score 3) : 10-year Treasury yield jumps back above 5% as oil gains and more Fed rate hikes expected | Canada’s ambassador warns Trump tariffs are driving up costs, threatening U.S. investment",
           "manual_exit": null
-        },
-        {
-          "id": "be3df025d5",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 3905.5,
-          "take_profit": 3894.2,
-          "stop_loss": 3913.0,
-          "risk_reward": 1.51,
-          "confidence": "fort",
-          "score": 6.07,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "tp",
-          "pnl_pct": 0.2693,
-          "pnl_gross_pct": 0.2893,
-          "duration_minutes": 0,
-          "close_price": 3894.2,
-          "created_at": "2026-11-12T14:41:05Z",
-          "closed_at": "2026-11-12T14:42:00Z",
-          "created_local": "12/11 15:41",
-          "expires_at": "2026-11-12T15:41:05Z",
-          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 18.77 (0.48 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 80%.",
-          "news_context": "actualité à surveiller (score 3) : 10-year Treasury yield jumps back above 5% as oil gains and more Fed rate hikes expected | Canada’s ambassador warns Trump tariffs are driving up costs, threatening U.S. investment",
-          "manual_exit": null
         }
       ]
     },
     {
       "key": "trend_1h",
       "label": "Tendance 1 h",
-      "weight": 1.053,
+      "weight": 1.055,
       "stats": {
-        "n": 1582,
-        "tp": 490,
+        "n": 1583,
+        "tp": 491,
         "sl": 779,
         "expired": 313,
-        "win_rate": 0.38613081166272656,
+        "win_rate": 0.38661417322834646,
         "neutral_win_rate": 0.3703,
-        "edge": 0.0158,
-        "pnl_pct": -3.8749,
+        "edge": 0.0163,
+        "pnl_pct": -3.8172,
         "avg_pnl_pct": -0.0024
       },
       "by_source": {
@@ -3025,18 +3025,52 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 1407,
-          "tp": 432,
+          "n": 1408,
+          "tp": 433,
           "sl": 696,
           "expired": 279,
-          "win_rate": 0.3829787234042553,
+          "win_rate": 0.38352524357838796,
           "neutral_win_rate": 0.368,
-          "edge": 0.015,
-          "pnl_pct": 1.206,
+          "edge": 0.0155,
+          "pnl_pct": 1.2637,
           "avg_pnl_pct": 0.0009
         }
       },
       "last_trades": [
+        {
+          "id": "29f6276a81",
+          "asset": "euro",
+          "asset_label": "Euro / dollar (6E)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 1.10765,
+          "take_profit": 1.10695,
+          "stop_loss": 1.1081,
+          "risk_reward": 1.56,
+          "confidence": "fort",
+          "score": 5.08,
+          "criteria": [
+            "adx",
+            "macd",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "tp",
+          "pnl_pct": 0.0577,
+          "pnl_gross_pct": 0.0677,
+          "duration_minutes": 5,
+          "close_price": 1.1069,
+          "created_at": "2026-11-12T15:25:58Z",
+          "closed_at": "2026-11-12T15:31:20Z",
+          "created_local": "12/11 16:25",
+          "expires_at": "2026-11-12T16:25:58Z",
+          "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 0.00114 (0.10 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 91%.",
+          "news_context": "actualité à surveiller (score 3) : 10-year Treasury yield jumps back above 5% as oil gains and more Fed rate hikes expected | Canada’s ambassador warns Trump tariffs are driving up costs, threatening U.S. investment",
+          "manual_exit": null
+        },
         {
           "id": "5ee2388070",
           "asset": "gold",
@@ -3277,56 +3311,22 @@
           "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 18.53 (0.48 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 81%.",
           "news_context": "actualité à surveiller (score 3) : 10-year Treasury yield jumps back above 5% as oil gains and more Fed rate hikes expected | Canada’s ambassador warns Trump tariffs are driving up costs, threatening U.S. investment",
           "manual_exit": null
-        },
-        {
-          "id": "be3df025d5",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 3905.5,
-          "take_profit": 3894.2,
-          "stop_loss": 3913.0,
-          "risk_reward": 1.51,
-          "confidence": "fort",
-          "score": 6.07,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "tp",
-          "pnl_pct": 0.2693,
-          "pnl_gross_pct": 0.2893,
-          "duration_minutes": 0,
-          "close_price": 3894.2,
-          "created_at": "2026-11-12T14:41:05Z",
-          "closed_at": "2026-11-12T14:42:00Z",
-          "created_local": "12/11 15:41",
-          "expires_at": "2026-11-12T15:41:05Z",
-          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 18.77 (0.48 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 80%.",
-          "news_context": "actualité à surveiller (score 3) : 10-year Treasury yield jumps back above 5% as oil gains and more Fed rate hikes expected | Canada’s ambassador warns Trump tariffs are driving up costs, threatening U.S. investment",
-          "manual_exit": null
         }
       ]
     },
     {
       "key": "adx",
       "label": "Force de tendance (ADX)",
-      "weight": 1.053,
+      "weight": 1.055,
       "stats": {
-        "n": 1608,
-        "tp": 498,
+        "n": 1609,
+        "tp": 499,
         "sl": 791,
         "expired": 319,
-        "win_rate": 0.38634600465477115,
+        "win_rate": 0.3868217054263566,
         "neutral_win_rate": 0.3704,
-        "edge": 0.0159,
-        "pnl_pct": -5.6951,
+        "edge": 0.0164,
+        "pnl_pct": -5.6374,
         "avg_pnl_pct": -0.0035
       },
       "by_source": {
@@ -3364,18 +3364,52 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 1433,
-          "tp": 440,
+          "n": 1434,
+          "tp": 441,
           "sl": 708,
           "expired": 285,
-          "win_rate": 0.3832752613240418,
+          "win_rate": 0.3838120104438642,
           "neutral_win_rate": 0.3682,
-          "edge": 0.0151,
-          "pnl_pct": -0.6142,
+          "edge": 0.0156,
+          "pnl_pct": -0.5565,
           "avg_pnl_pct": -0.0004
         }
       },
       "last_trades": [
+        {
+          "id": "29f6276a81",
+          "asset": "euro",
+          "asset_label": "Euro / dollar (6E)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 1.10765,
+          "take_profit": 1.10695,
+          "stop_loss": 1.1081,
+          "risk_reward": 1.56,
+          "confidence": "fort",
+          "score": 5.08,
+          "criteria": [
+            "adx",
+            "macd",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "tp",
+          "pnl_pct": 0.0577,
+          "pnl_gross_pct": 0.0677,
+          "duration_minutes": 5,
+          "close_price": 1.1069,
+          "created_at": "2026-11-12T15:25:58Z",
+          "closed_at": "2026-11-12T15:31:20Z",
+          "created_local": "12/11 16:25",
+          "expires_at": "2026-11-12T16:25:58Z",
+          "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 0.00114 (0.10 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 91%.",
+          "news_context": "actualité à surveiller (score 3) : 10-year Treasury yield jumps back above 5% as oil gains and more Fed rate hikes expected | Canada’s ambassador warns Trump tariffs are driving up costs, threatening U.S. investment",
+          "manual_exit": null
+        },
         {
           "id": "5ee2388070",
           "asset": "gold",
@@ -3616,57 +3650,23 @@
           "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 18.53 (0.48 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 81%.",
           "news_context": "actualité à surveiller (score 3) : 10-year Treasury yield jumps back above 5% as oil gains and more Fed rate hikes expected | Canada’s ambassador warns Trump tariffs are driving up costs, threatening U.S. investment",
           "manual_exit": null
-        },
-        {
-          "id": "be3df025d5",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 3905.5,
-          "take_profit": 3894.2,
-          "stop_loss": 3913.0,
-          "risk_reward": 1.51,
-          "confidence": "fort",
-          "score": 6.07,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "tp",
-          "pnl_pct": 0.2693,
-          "pnl_gross_pct": 0.2893,
-          "duration_minutes": 0,
-          "close_price": 3894.2,
-          "created_at": "2026-11-12T14:41:05Z",
-          "closed_at": "2026-11-12T14:42:00Z",
-          "created_local": "12/11 15:41",
-          "expires_at": "2026-11-12T15:41:05Z",
-          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 18.77 (0.48 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 80%.",
-          "news_context": "actualité à surveiller (score 3) : 10-year Treasury yield jumps back above 5% as oil gains and more Fed rate hikes expected | Canada’s ambassador warns Trump tariffs are driving up costs, threatening U.S. investment",
-          "manual_exit": null
         }
       ]
     },
     {
       "key": "vwap",
       "label": "VWAP",
-      "weight": 0.802,
+      "weight": 0.804,
       "stats": {
-        "n": 1579,
-        "tp": 493,
+        "n": 1580,
+        "tp": 494,
         "sl": 775,
         "expired": 311,
-        "win_rate": 0.388801261829653,
+        "win_rate": 0.3892828999211978,
         "neutral_win_rate": 0.3697,
-        "edge": 0.0191,
-        "pnl_pct": -3.6079,
-        "avg_pnl_pct": -0.0023
+        "edge": 0.0196,
+        "pnl_pct": -3.5502,
+        "avg_pnl_pct": -0.0022
       },
       "by_source": {
         "bot": {
@@ -3703,18 +3703,52 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 1406,
-          "tp": 435,
+          "n": 1407,
+          "tp": 436,
           "sl": 694,
           "expired": 277,
-          "win_rate": 0.3852967227635075,
-          "neutral_win_rate": 0.3673,
-          "edge": 0.018,
-          "pnl_pct": 0.8566,
+          "win_rate": 0.3858407079646018,
+          "neutral_win_rate": 0.3674,
+          "edge": 0.0184,
+          "pnl_pct": 0.9143,
           "avg_pnl_pct": 0.0006
         }
       },
       "last_trades": [
+        {
+          "id": "29f6276a81",
+          "asset": "euro",
+          "asset_label": "Euro / dollar (6E)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 1.10765,
+          "take_profit": 1.10695,
+          "stop_loss": 1.1081,
+          "risk_reward": 1.56,
+          "confidence": "fort",
+          "score": 5.08,
+          "criteria": [
+            "adx",
+            "macd",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "tp",
+          "pnl_pct": 0.0577,
+          "pnl_gross_pct": 0.0677,
+          "duration_minutes": 5,
+          "close_price": 1.1069,
+          "created_at": "2026-11-12T15:25:58Z",
+          "closed_at": "2026-11-12T15:31:20Z",
+          "created_local": "12/11 16:25",
+          "expires_at": "2026-11-12T16:25:58Z",
+          "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 0.00114 (0.10 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 91%.",
+          "news_context": "actualité à surveiller (score 3) : 10-year Treasury yield jumps back above 5% as oil gains and more Fed rate hikes expected | Canada’s ambassador warns Trump tariffs are driving up costs, threatening U.S. investment",
+          "manual_exit": null
+        },
         {
           "id": "5ee2388070",
           "asset": "gold",
@@ -3953,40 +3987,6 @@
           "created_local": "12/11 15:46",
           "expires_at": "2026-11-12T15:46:08Z",
           "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 18.53 (0.48 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 81%.",
-          "news_context": "actualité à surveiller (score 3) : 10-year Treasury yield jumps back above 5% as oil gains and more Fed rate hikes expected | Canada’s ambassador warns Trump tariffs are driving up costs, threatening U.S. investment",
-          "manual_exit": null
-        },
-        {
-          "id": "be3df025d5",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 3905.5,
-          "take_profit": 3894.2,
-          "stop_loss": 3913.0,
-          "risk_reward": 1.51,
-          "confidence": "fort",
-          "score": 6.07,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "tp",
-          "pnl_pct": 0.2693,
-          "pnl_gross_pct": 0.2893,
-          "duration_minutes": 0,
-          "close_price": 3894.2,
-          "created_at": "2026-11-12T14:41:05Z",
-          "closed_at": "2026-11-12T14:42:00Z",
-          "created_local": "12/11 15:41",
-          "expires_at": "2026-11-12T15:41:05Z",
-          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 18.77 (0.48 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 80%.",
           "news_context": "actualité à surveiller (score 3) : 10-year Treasury yield jumps back above 5% as oil gains and more Fed rate hikes expected | Canada’s ambassador warns Trump tariffs are driving up costs, threatening U.S. investment",
           "manual_exit": null
         }
@@ -4335,15 +4335,15 @@
       "label": "MACD",
       "weight": 1.0,
       "stats": {
-        "n": 413,
-        "tp": 108,
+        "n": 414,
+        "tp": 109,
         "sl": 220,
         "expired": 85,
-        "win_rate": 0.32926829268292684,
-        "neutral_win_rate": 0.3732,
-        "edge": -0.0439,
-        "pnl_pct": -14.3097,
-        "avg_pnl_pct": -0.0346
+        "win_rate": 0.331306990881459,
+        "neutral_win_rate": 0.3733,
+        "edge": -0.042,
+        "pnl_pct": -14.252,
+        "avg_pnl_pct": -0.0344
       },
       "by_source": {
         "bot": {
@@ -4380,18 +4380,52 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 362,
-          "tp": 94,
+          "n": 363,
+          "tp": 95,
           "sl": 194,
           "expired": 74,
-          "win_rate": 0.3263888888888889,
-          "neutral_win_rate": 0.3703,
-          "edge": -0.0439,
-          "pnl_pct": -12.6323,
-          "avg_pnl_pct": -0.0349
+          "win_rate": 0.328719723183391,
+          "neutral_win_rate": 0.3704,
+          "edge": -0.0417,
+          "pnl_pct": -12.5746,
+          "avg_pnl_pct": -0.0346
         }
       },
       "last_trades": [
+        {
+          "id": "29f6276a81",
+          "asset": "euro",
+          "asset_label": "Euro / dollar (6E)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 1.10765,
+          "take_profit": 1.10695,
+          "stop_loss": 1.1081,
+          "risk_reward": 1.56,
+          "confidence": "fort",
+          "score": 5.08,
+          "criteria": [
+            "adx",
+            "macd",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "tp",
+          "pnl_pct": 0.0577,
+          "pnl_gross_pct": 0.0677,
+          "duration_minutes": 5,
+          "close_price": 1.1069,
+          "created_at": "2026-11-12T15:25:58Z",
+          "closed_at": "2026-11-12T15:31:20Z",
+          "created_local": "12/11 16:25",
+          "expires_at": "2026-11-12T16:25:58Z",
+          "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 0.00114 (0.10 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 91%.",
+          "news_context": "actualité à surveiller (score 3) : 10-year Treasury yield jumps back above 5% as oil gains and more Fed rate hikes expected | Canada’s ambassador warns Trump tariffs are driving up costs, threatening U.S. investment",
+          "manual_exit": null
+        },
         {
           "id": "5ee2388070",
           "asset": "gold",
@@ -4633,41 +4667,6 @@
           "created_local": "12/11 12:55",
           "expires_at": "2026-11-12T12:55:51Z",
           "rationale": "Vente : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 14.98 (0.38 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 74%.",
-          "news_context": "actualité à surveiller (score 3) : ECB set for last rate hike in December but inflation risks keep door open for one more: Reuters poll | UK growth surprise raises prospect of another BoE rate hike in December",
-          "manual_exit": null
-        },
-        {
-          "id": "1807b42d66",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 3951.4,
-          "take_profit": 3942.3,
-          "stop_loss": 3957.5,
-          "risk_reward": 1.49,
-          "confidence": "fort",
-          "score": 7.04,
-          "criteria": [
-            "adx",
-            "macd",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "tp",
-          "pnl_pct": 0.2103,
-          "pnl_gross_pct": 0.2303,
-          "duration_minutes": 43,
-          "close_price": 3942.3,
-          "created_at": "2026-11-12T11:50:55Z",
-          "closed_at": "2026-11-12T12:34:00Z",
-          "created_local": "12/11 12:50",
-          "expires_at": "2026-11-12T12:50:55Z",
-          "rationale": "Vente : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 15.17 (0.38 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 73%.",
           "news_context": "actualité à surveiller (score 3) : ECB set for last rate hike in December but inflation risks keep door open for one more: Reuters poll | UK growth surprise raises prospect of another BoE rate hike in December",
           "manual_exit": null
         }
@@ -5390,40 +5389,6 @@
       "created_local": "12/11 16:25",
       "expires_at": "2026-11-12T16:25:58Z",
       "rationale": "Vente : tendance forte (ADX), marché meneur favorable, cassure du range d'ouverture, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 18.65 (0.48 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 88%.",
-      "news_context": "actualité à surveiller (score 3) : 10-year Treasury yield jumps back above 5% as oil gains and more Fed rate hikes expected | Canada’s ambassador warns Trump tariffs are driving up costs, threatening U.S. investment",
-      "manual_exit": null
-    },
-    {
-      "id": "29f6276a81",
-      "asset": "euro",
-      "asset_label": "Euro / dollar (6E)",
-      "direction": "short",
-      "horizon": "1h",
-      "entry": 1.10765,
-      "take_profit": 1.10695,
-      "stop_loss": 1.1081,
-      "risk_reward": 1.56,
-      "confidence": "fort",
-      "score": 5.08,
-      "criteria": [
-        "adx",
-        "macd",
-        "trend_15m",
-        "trend_1h",
-        "trend_5m",
-        "vwap"
-      ],
-      "source": "shadow",
-      "status": "open",
-      "pnl_pct": null,
-      "pnl_gross_pct": null,
-      "duration_minutes": null,
-      "close_price": null,
-      "created_at": "2026-11-12T15:25:58Z",
-      "closed_at": null,
-      "created_local": "12/11 16:25",
-      "expires_at": "2026-11-12T16:25:58Z",
-      "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 0.00114 (0.10 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 91%.",
       "news_context": "actualité à surveiller (score 3) : 10-year Treasury yield jumps back above 5% as oil gains and more Fed rate hikes expected | Canada’s ambassador warns Trump tariffs are driving up costs, threatening U.S. investment",
       "manual_exit": null
     }
@@ -7029,8 +6994,8 @@
   "adjustments": {
     "notes": [
       "trades réels : +0,09 R ± 0,19 R par trade avant frais sur 176 trades (0 R = hasard)",
-      "tendance (trend_5m, trend_15m, trend_1h, adx) : +0,08 R ± 0,06 R sur 2032 trades éq. → poids ×1,05",
-      "vwap : +0,09 R ± 0,06 R sur 1915 trades éq. → poids ×1,07",
+      "tendance (trend_5m, trend_15m, trend_1h, adx) : +0,08 R ± 0,06 R sur 2033 trades éq. → poids ×1,05",
+      "vwap : +0,09 R ± 0,06 R sur 1916 trades éq. → poids ×1,07",
       "rsi : +0,12 R ± 0,07 R sur 1570 trades éq. → poids ×1,13",
       "pdhl : +0,25 R ± 0,18 R sur 231 trades éq. → poids ×1,17",
       "tranche 10h UTC : -0,26 R sur 107 trades éq. → évitée",
@@ -7038,14 +7003,14 @@
       "tranche 19h UTC : -0,30 R sur 86 trades éq. → évitée",
       "ethereum, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,18 R contre +0,08 R en global sur 99 trades éq. → poids ×0,87 sur cet actif",
       "ethereum, rsi : -0,23 R contre +0,12 R en global sur 71 trades éq. → poids ×0,74 sur cet actif",
-      "euro, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,25 R contre +0,08 R en global sur 90 trades éq. → poids ×0,81 sur cet actif",
-      "euro, vwap : -0,24 R contre +0,09 R en global sur 85 trades éq. → poids ×0,84 sur cet actif",
+      "euro, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,22 R contre +0,08 R en global sur 91 trades éq. → poids ×0,87 sur cet actif",
+      "euro, vwap : -0,21 R contre +0,09 R en global sur 86 trades éq. → poids ×0,90 sur cet actif",
       "euro, rsi : -0,22 R contre +0,12 R en global sur 76 trades éq. → poids ×0,84 sur cet actif",
       "nasdaq, tendance (trend_5m, trend_15m, trend_1h, adx) : +0,24 R contre +0,08 R en global sur 573 trades éq. → poids ×1,08 sur cet actif",
       "nasdaq, vwap : +0,25 R contre +0,09 R en global sur 566 trades éq. → poids ×1,06 sur cet actif",
       "nasdaq, rsi : +0,35 R contre +0,12 R en global sur 442 trades éq. → poids ×1,18 sur cet actif",
       "oil, rsi : -0,05 R contre +0,12 R en global sur 234 trades éq. → poids ×0,95 sur cet actif",
-      "sp500, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,14 R contre +0,08 R en global sur 221 trades éq. → poids ×0,83 sur cet actif",
+      "sp500, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,14 R contre +0,08 R en global sur 221 trades éq. → poids ×0,82 sur cet actif",
       "sp500, vwap : -0,14 R contre +0,09 R en global sur 216 trades éq. → poids ×0,82 sur cet actif",
       "sp500, rsi : -0,10 R contre +0,12 R en global sur 181 trades éq. → poids ×0,89 sur cet actif"
     ],
@@ -7054,20 +7019,20 @@
       12,
       19
     ],
-    "sample": 2370,
+    "sample": 2371,
     "sample_by_source": {
       "bot": 175,
-      "shadow": 1433,
+      "shadow": 1434,
       "manual": 1,
       "backtest": 761
     },
     "method": "v2 : recalcul complet, marge de sécurité, résultats en R, sources pondérées",
     "weights": {
-      "trend_5m": 1.053,
-      "trend_15m": 1.053,
-      "trend_1h": 1.053,
-      "adx": 1.053,
-      "vwap": 0.802,
+      "trend_5m": 1.055,
+      "trend_15m": 1.055,
+      "trend_1h": 1.055,
+      "adx": 1.055,
+      "vwap": 0.804,
       "rsi": 1.128,
       "macd": 1.0,
       "level": 1.0,
@@ -7078,11 +7043,11 @@
     },
     "weights_by_asset": {
       "bitcoin": {
-        "trend_5m": 1.053,
-        "trend_15m": 1.053,
-        "trend_1h": 1.053,
-        "adx": 1.053,
-        "vwap": 0.802,
+        "trend_5m": 1.055,
+        "trend_15m": 1.055,
+        "trend_1h": 1.055,
+        "adx": 1.055,
+        "vwap": 0.804,
         "rsi": 1.128,
         "macd": 1.0,
         "level": 1.0,
@@ -7096,7 +7061,7 @@
         "trend_15m": 0.918,
         "trend_1h": 0.918,
         "adx": 0.918,
-        "vwap": 0.802,
+        "vwap": 0.804,
         "rsi": 0.84,
         "macd": 1.0,
         "level": 1.0,
@@ -7106,11 +7071,11 @@
         "corr": 0.5
       },
       "euro": {
-        "trend_5m": 0.851,
-        "trend_15m": 0.851,
-        "trend_1h": 0.851,
-        "adx": 0.851,
-        "vwap": 0.671,
+        "trend_5m": 0.918,
+        "trend_15m": 0.918,
+        "trend_1h": 0.918,
+        "adx": 0.918,
+        "vwap": 0.724,
         "rsi": 0.945,
         "macd": 1.0,
         "level": 1.0,
@@ -7120,11 +7085,11 @@
         "corr": 0.5
       },
       "gold": {
-        "trend_5m": 1.053,
-        "trend_15m": 1.053,
-        "trend_1h": 1.053,
-        "adx": 1.053,
-        "vwap": 0.802,
+        "trend_5m": 1.055,
+        "trend_15m": 1.055,
+        "trend_1h": 1.055,
+        "adx": 1.055,
+        "vwap": 0.804,
         "rsi": 1.128,
         "macd": 1.0,
         "level": 1.0,
@@ -7138,7 +7103,7 @@
         "trend_15m": 1.135,
         "trend_1h": 1.135,
         "adx": 1.135,
-        "vwap": 0.849,
+        "vwap": 0.85,
         "rsi": 1.332,
         "macd": 1.0,
         "level": 1.0,
@@ -7148,11 +7113,11 @@
         "corr": 0.5
       },
       "oil": {
-        "trend_5m": 1.053,
-        "trend_15m": 1.053,
-        "trend_1h": 1.053,
-        "adx": 1.053,
-        "vwap": 0.802,
+        "trend_5m": 1.055,
+        "trend_15m": 1.055,
+        "trend_1h": 1.055,
+        "adx": 1.055,
+        "vwap": 0.804,
         "rsi": 1.071,
         "macd": 1.0,
         "level": 1.0,
@@ -7168,7 +7133,7 @@
         "adx": 0.869,
         "vwap": 0.659,
         "rsi": 1.003,
-        "macd": 0.98,
+        "macd": 0.972,
         "level": 1.0,
         "volume": 0.75,
         "orb": 1.0,
@@ -7184,21 +7149,21 @@
           "trend_1h",
           "adx"
         ],
-        "n": 2369,
-        "n_eff": 2032.3,
-        "mean_r": 0.0782,
+        "n": 2370,
+        "n_eff": 2033.3,
+        "mean_r": 0.079,
         "margin_r": 0.057,
-        "multiplier": 1.053
+        "multiplier": 1.055
       },
       "vwap": {
         "members": [
           "vwap"
         ],
-        "n": 2203,
-        "n_eff": 1914.6,
-        "mean_r": 0.087,
-        "margin_r": 0.0592,
-        "multiplier": 1.07
+        "n": 2204,
+        "n_eff": 1915.6,
+        "mean_r": 0.0878,
+        "margin_r": 0.0591,
+        "multiplier": 1.072
       },
       "rsi": {
         "members": [
@@ -7214,9 +7179,9 @@
         "members": [
           "macd"
         ],
-        "n": 654,
-        "n_eff": 549.3,
-        "mean_r": -0.0194,
+        "n": 655,
+        "n_eff": 550.3,
+        "mean_r": -0.0163,
         "margin_r": 0.1068,
         "multiplier": 1.0
       },
@@ -7278,8 +7243,8 @@
         "margin_r": 0.1919
       },
       "fantômes": {
-        "n": 1433,
-        "mean_r": 0.1022,
+        "n": 1434,
+        "mean_r": 0.1033,
         "margin_r": 0.0696
       },
       "backtest": {
@@ -7371,11 +7336,11 @@
       },
       "essai_euro": {
         "label": "nouvel actif : Euro / dollar (6E)",
-        "n": 58,
-        "mean_net_r": -0.437,
-        "lower_r": -0.8877,
+        "n": 59,
+        "mean_net_r": -0.4056,
+        "lower_r": -0.857,
         "promoted": false,
-        "missing": 42
+        "missing": 41
       }
     },
     "baseline": {
@@ -7384,9 +7349,9 @@
     },
     "variants_z": 2.75,
     "promoted_variants": [],
-    "updated_at": "2026-11-12T15:26:00.107166+00:00",
+    "updated_at": "2026-11-12T15:31:21.881851+00:00",
     "context": {
-      "n": 2138,
+      "n": 2139,
       "features": {
         "adx": {
           "label": "force de tendance (ADX 15 min)",
@@ -7395,9 +7360,9 @@
               "label": "bas (< 27)",
               "lo": -1000000000.0,
               "hi": 27.46,
-              "n": 712,
-              "n_eff": 605.7,
-              "mean_r": -0.0339,
+              "n": 713,
+              "n_eff": 606.7,
+              "mean_r": -0.0308,
               "margin_r": 0.1291,
               "avoid": false
             },
@@ -7439,21 +7404,21 @@
             {
               "label": "milieu (59 à 66)",
               "lo": 58.92,
-              "hi": 66.24,
-              "n": 715,
-              "n_eff": 609.3,
-              "mean_r": 0.1436,
-              "margin_r": 0.1463,
+              "hi": 66.25,
+              "n": 716,
+              "n_eff": 610.3,
+              "mean_r": 0.146,
+              "margin_r": 0.1462,
               "avoid": false
             },
             {
               "label": "haut (≥ 66)",
-              "lo": 66.24,
+              "lo": 66.25,
               "hi": 1000000000.0,
               "n": 713,
               "n_eff": 614.0,
-              "mean_r": 0.0495,
-              "margin_r": 0.1341,
+              "mean_r": 0.0498,
+              "margin_r": 0.1342,
               "avoid": false
             }
           ]
@@ -7485,10 +7450,10 @@
               "label": "haut (≥ 1,56)",
               "lo": 1.558,
               "hi": 1000000000.0,
-              "n": 673,
-              "n_eff": 595.8,
-              "mean_r": 0.2523,
-              "margin_r": 0.1482,
+              "n": 674,
+              "n_eff": 596.8,
+              "mean_r": 0.2548,
+              "margin_r": 0.1481,
               "avoid": false
             }
           ]
@@ -7499,31 +7464,31 @@
             {
               "label": "bas (< 0,23)",
               "lo": -1000000000.0,
-              "hi": 0.2277,
-              "n": 711,
-              "n_eff": 620.6,
-              "mean_r": 0.0817,
-              "margin_r": 0.1202,
+              "hi": 0.2279,
+              "n": 713,
+              "n_eff": 622.3,
+              "mean_r": 0.08,
+              "margin_r": 0.12,
               "avoid": false
             },
             {
               "label": "milieu (0,23 à 0,54)",
-              "lo": 0.2277,
-              "hi": 0.5367,
-              "n": 714,
-              "n_eff": 612.4,
-              "mean_r": 0.0306,
-              "margin_r": 0.1364,
+              "lo": 0.2279,
+              "hi": 0.5369,
+              "n": 713,
+              "n_eff": 611.8,
+              "mean_r": 0.0321,
+              "margin_r": 0.1365,
               "avoid": false
             },
             {
               "label": "haut (≥ 0,54)",
-              "lo": 0.5367,
+              "lo": 0.5369,
               "hi": 1000000000.0,
               "n": 713,
               "n_eff": 612.7,
-              "mean_r": 0.155,
-              "margin_r": 0.146,
+              "mean_r": 0.1579,
+              "margin_r": 0.1461,
               "avoid": false
             }
           ]
@@ -7555,10 +7520,10 @@
               "label": "haut (≥ 1,41)",
               "lo": 1.41,
               "hi": 1000000000.0,
-              "n": 713,
-              "n_eff": 605.1,
-              "mean_r": 0.3184,
-              "margin_r": 0.1585,
+              "n": 714,
+              "n_eff": 606.1,
+              "mean_r": 0.3208,
+              "margin_r": 0.1583,
               "avoid": false
             }
           ]
@@ -7590,10 +7555,10 @@
               "label": "haut (≥ 1,28)",
               "lo": 1.279,
               "hi": 1000000000.0,
-              "n": 639,
-              "n_eff": 511.3,
-              "mean_r": 0.3004,
-              "margin_r": 0.1704,
+              "n": 640,
+              "n_eff": 512.3,
+              "mean_r": 0.3031,
+              "margin_r": 0.1702,
               "avoid": false
             }
           ]
@@ -7605,10 +7570,10 @@
               "label": "bas (< 0,39)",
               "lo": -1000000000.0,
               "hi": 0.3875,
-              "n": 712,
-              "n_eff": 617.3,
-              "mean_r": 0.1196,
-              "margin_r": 0.1432,
+              "n": 713,
+              "n_eff": 618.3,
+              "mean_r": 0.1222,
+              "margin_r": 0.1431,
               "avoid": false
             },
             {
@@ -7649,21 +7614,21 @@
             {
               "label": "milieu (0,08 à 0,12)",
               "lo": 0.0799,
-              "hi": 0.1245,
-              "n": 713,
-              "n_eff": 620.3,
-              "mean_r": 0.1531,
-              "margin_r": 0.1232,
+              "hi": 0.1246,
+              "n": 715,
+              "n_eff": 622.0,
+              "mean_r": 0.1563,
+              "margin_r": 0.123,
               "avoid": false
             },
             {
               "label": "haut (≥ 0,12)",
-              "lo": 0.1245,
+              "lo": 0.1246,
               "hi": 1000000000.0,
-              "n": 714,
-              "n_eff": 600.3,
-              "mean_r": -0.021,
-              "margin_r": 0.117,
+              "n": 713,
+              "n_eff": 599.6,
+              "mean_r": -0.0218,
+              "margin_r": 0.1171,
               "avoid": false
             }
           ]
@@ -7685,10 +7650,10 @@
               "label": "de 30 min avant à 1 h 30 après",
               "lo": -30.0,
               "hi": 90.0,
-              "n": 333,
-              "n_eff": 283.1,
-              "mean_r": 0.1663,
-              "margin_r": 0.2181,
+              "n": 334,
+              "n_eff": 284.1,
+              "mean_r": 0.1718,
+              "margin_r": 0.2177,
               "avoid": false
             },
             {
@@ -7740,10 +7705,10 @@
               "label": "jeudi",
               "lo": 3,
               "hi": 4,
-              "n": 645,
-              "n_eff": 569.0,
-              "mean_r": -0.1151,
-              "margin_r": 0.1274,
+              "n": 646,
+              "n_eff": 570.0,
+              "mean_r": -0.1118,
+              "margin_r": 0.1275,
               "avoid": false
             },
             {
@@ -7783,8 +7748,8 @@
     },
     "exits": {
       "réels et en ombre": {
-        "n": 1378,
-        "current_net_r": 0.0171,
+        "n": 1379,
+        "current_net_r": 0.0181,
         "mfe_median": 0.929,
         "sl_reached": {
           "0.5": 258,
@@ -7794,21 +7759,21 @@
         "n_sl": 679,
         "rules": {
           "0.5": {
-            "net_r": 0.0008,
+            "net_r": 0.0018,
             "diff_r": -0.0163,
             "margin_r": 0.0426,
             "better": false
           },
           "0.8": {
-            "net_r": 0.0022,
+            "net_r": 0.0032,
             "diff_r": -0.0149,
-            "margin_r": 0.0338,
+            "margin_r": 0.0337,
             "better": false
           },
           "1.0": {
-            "net_r": 0.006,
+            "net_r": 0.0071,
             "diff_r": -0.0111,
-            "margin_r": 0.0298,
+            "margin_r": 0.0297,
             "better": false
           }
         }
@@ -7923,10 +7888,10 @@
     }
   },
   "state": {
-    "last_scan": "2026-11-12T15:25:58Z",
+    "last_scan": "2026-11-12T15:31:20Z",
     "last_scan_note": "0 signal(aux)",
     "last_summary": "2026-11-11T23:06:02Z",
-    "last_track": "2026-11-12T15:25:58Z",
+    "last_track": "2026-11-12T15:31:20Z",
     "last_summary_day": "2026-11-11"
   },
   "limits": {
@@ -24486,7 +24451,7 @@
       "since": "2026-10-26T12:00:00Z",
       "trades": [],
       "live": true,
-      "checked_hour": "2026-11-12T15:15:00Z",
+      "checked_hour": "2026-11-12T15:30:00Z",
       "n": 0,
       "mean_r": null
     },
@@ -24635,13 +24600,6 @@
     }
   },
   "agenda": [
-    {
-      "name": "USD Unemployment Claims (prévu 194K, précédent 189K)",
-      "at": "2026-11-12T13:30:00Z",
-      "impact": "medium",
-      "assets": [],
-      "blackout": false
-    },
     {
       "name": "USD Crude Oil Inventories (prévu -0.6M, précédent -0.9M)",
       "at": "2026-11-12T17:00:00Z",
