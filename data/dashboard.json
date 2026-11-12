@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-12T10:01:41.689842+01:00",
+  "updated_at": "2026-11-12T10:06:06.147318+01:00",
   "timezone": "Europe/Paris",
   "equity_curve": [
     {
@@ -1914,18 +1914,18 @@
       "avg_pnl_pct": -0.0298
     },
     "shadow": {
-      "n": 1390,
-      "tp": 419,
+      "n": 1394,
+      "tp": 423,
       "sl": 688,
       "expired": 283,
-      "win_rate": 0.3785004516711834,
-      "neutral_win_rate": 0.3675,
-      "edge": 0.011,
-      "pnl_pct": -1.7073,
-      "avg_pnl_pct": -0.0012
+      "win_rate": 0.38073807380738073,
+      "neutral_win_rate": 0.3676,
+      "edge": 0.0131,
+      "pnl_pct": -0.5047,
+      "avg_pnl_pct": -0.0004
     },
     "open": 0,
-    "open_shadow": 6
+    "open_shadow": 3
   },
   "by_source": {
     "bot": {
@@ -1962,15 +1962,15 @@
       "avg_pnl_pct": 0.0
     },
     "shadow": {
-      "n": 1390,
-      "tp": 419,
+      "n": 1394,
+      "tp": 423,
       "sl": 688,
       "expired": 283,
-      "win_rate": 0.3785004516711834,
-      "neutral_win_rate": 0.3675,
-      "edge": 0.011,
-      "pnl_pct": -1.7073,
-      "avg_pnl_pct": -0.0012
+      "win_rate": 0.38073807380738073,
+      "neutral_win_rate": 0.3676,
+      "edge": 0.0131,
+      "pnl_pct": -0.5047,
+      "avg_pnl_pct": -0.0004
     }
   },
   "by_horizon": {
@@ -2187,15 +2187,15 @@
         "avg_pnl_pct": -0.0342
       },
       "shadow": {
-        "n": 503,
-        "tp": 163,
+        "n": 507,
+        "tp": 167,
         "sl": 205,
         "expired": 135,
-        "win_rate": 0.4429347826086957,
+        "win_rate": 0.4489247311827957,
         "neutral_win_rate": 0.4106,
-        "edge": 0.0323,
-        "pnl_pct": 1.8208,
-        "avg_pnl_pct": 0.0036
+        "edge": 0.0383,
+        "pnl_pct": 3.0234,
+        "avg_pnl_pct": 0.006
       },
       "open": 0,
       "session_utc": [
@@ -2300,17 +2300,17 @@
     {
       "key": "trend_5m",
       "label": "Tendance 5 min",
-      "weight": 1.041,
+      "weight": 1.048,
       "stats": {
-        "n": 1396,
-        "tp": 441,
+        "n": 1400,
+        "tp": 445,
         "sl": 689,
         "expired": 266,
-        "win_rate": 0.3902654867256637,
-        "neutral_win_rate": 0.3667,
-        "edge": 0.0236,
-        "pnl_pct": 0.5965,
-        "avg_pnl_pct": 0.0004
+        "win_rate": 0.3924162257495591,
+        "neutral_win_rate": 0.3668,
+        "edge": 0.0256,
+        "pnl_pct": 1.7991,
+        "avg_pnl_pct": 0.0013
       },
       "by_source": {
         "bot": {
@@ -2347,18 +2347,87 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 1239,
-          "tp": 387,
+          "n": 1243,
+          "tp": 391,
           "sl": 617,
           "expired": 235,
-          "win_rate": 0.3854581673306773,
-          "neutral_win_rate": 0.364,
-          "edge": 0.0215,
-          "pnl_pct": 3.8011,
-          "avg_pnl_pct": 0.0031
+          "win_rate": 0.3878968253968254,
+          "neutral_win_rate": 0.3641,
+          "edge": 0.0238,
+          "pnl_pct": 5.0037,
+          "avg_pnl_pct": 0.004
         }
       },
       "last_trades": [
+        {
+          "id": "373b193da0",
+          "asset": "gold",
+          "asset_label": "Or (XAU/USD)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 3950.6,
+          "take_profit": 3938.5,
+          "stop_loss": 3958.7,
+          "risk_reward": 1.49,
+          "confidence": "fort",
+          "score": 7.05,
+          "criteria": [
+            "adx",
+            "macd",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "tp",
+          "pnl_pct": 0.2863,
+          "pnl_gross_pct": 0.3063,
+          "duration_minutes": 3,
+          "close_price": 3938.5,
+          "created_at": "2026-11-12T08:51:07Z",
+          "closed_at": "2026-11-12T08:55:00Z",
+          "created_local": "12/11 09:51",
+          "expires_at": "2026-11-12T09:51:07Z",
+          "rationale": "Vente : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 20.20 (0.51 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 62%.",
+          "news_context": "actualité à surveiller (score 1) : Asian stocks tumble, Nvidia stings as board to decide CEO’s fate",
+          "manual_exit": null
+        },
+        {
+          "id": "33ba838509",
+          "asset": "gold",
+          "asset_label": "Or (XAU/USD)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 3954.6,
+          "take_profit": 3942.4,
+          "stop_loss": 3962.8,
+          "risk_reward": 1.49,
+          "confidence": "fort",
+          "score": 6.05,
+          "criteria": [
+            "adx",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "tp",
+          "pnl_pct": 0.2885,
+          "pnl_gross_pct": 0.3085,
+          "duration_minutes": 6,
+          "close_price": 3942.4,
+          "created_at": "2026-11-12T08:46:04Z",
+          "closed_at": "2026-11-12T08:53:00Z",
+          "created_local": "12/11 09:46",
+          "expires_at": "2026-11-12T09:46:04Z",
+          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 20.40 (0.52 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 58%.",
+          "news_context": "actualité à surveiller (score 1) : Asian stocks tumble, Nvidia stings as board to decide CEO’s fate",
+          "manual_exit": null
+        },
         {
           "id": "d113384fa7",
           "asset": "gold",
@@ -2390,6 +2459,74 @@
           "created_local": "12/11 09:41",
           "expires_at": "2026-11-12T09:41:02Z",
           "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 18.50 (0.47 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 63%.",
+          "news_context": "actualité à surveiller (score 1) : Asian stocks tumble, Nvidia stings as board to decide CEO’s fate",
+          "manual_exit": null
+        },
+        {
+          "id": "b7dd2de4fd",
+          "asset": "gold",
+          "asset_label": "Or (XAU/USD)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 3953.4,
+          "take_profit": 3942.8,
+          "stop_loss": 3960.5,
+          "risk_reward": 1.49,
+          "confidence": "fort",
+          "score": 5.92,
+          "criteria": [
+            "adx",
+            "macd",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "tp",
+          "pnl_pct": 0.2481,
+          "pnl_gross_pct": 0.2681,
+          "duration_minutes": 17,
+          "close_price": 3942.8,
+          "created_at": "2026-11-12T08:35:57Z",
+          "closed_at": "2026-11-12T08:53:00Z",
+          "created_local": "12/11 09:35",
+          "expires_at": "2026-11-12T09:35:57Z",
+          "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 17.70 (0.45 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 64%.",
+          "news_context": "actualité à surveiller (score 1) : Asian stocks tumble, Nvidia stings as board to decide CEO’s fate",
+          "manual_exit": null
+        },
+        {
+          "id": "ce70b0f4de",
+          "asset": "gold",
+          "asset_label": "Or (XAU/USD)",
+          "direction": "short",
+          "horizon": "3h",
+          "entry": 3953.4,
+          "take_profit": 3937.6,
+          "stop_loss": 3963.9,
+          "risk_reward": 1.5,
+          "confidence": "fort",
+          "score": 5.92,
+          "criteria": [
+            "adx",
+            "macd",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "tp",
+          "pnl_pct": 0.3797,
+          "pnl_gross_pct": 0.3997,
+          "duration_minutes": 19,
+          "close_price": 3937.6,
+          "created_at": "2026-11-12T08:35:57Z",
+          "closed_at": "2026-11-12T08:55:00Z",
+          "created_local": "12/11 09:35",
+          "expires_at": "2026-11-12T11:35:57Z",
+          "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 26.33 (0.67 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 63%.",
           "news_context": "actualité à surveiller (score 1) : Asian stocks tumble, Nvidia stings as board to decide CEO’s fate",
           "manual_exit": null
         },
@@ -2493,142 +2630,6 @@
           "created_local": "12/11 09:21",
           "expires_at": "2026-11-12T09:21:04Z",
           "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 17.80 (0.45 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 62%.",
-          "news_context": "actualité à surveiller (score 1) : Asian stocks tumble, Nvidia stings as board to decide CEO’s fate",
-          "manual_exit": null
-        },
-        {
-          "id": "c4595e2262",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 3966.6,
-          "take_profit": 3956.5,
-          "stop_loss": 3973.3,
-          "risk_reward": 1.51,
-          "confidence": "fort",
-          "score": 5.97,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "tp",
-          "pnl_pct": 0.2346,
-          "pnl_gross_pct": 0.2546,
-          "duration_minutes": 8,
-          "close_price": 3956.5,
-          "created_at": "2026-11-12T08:15:52Z",
-          "closed_at": "2026-11-12T08:24:00Z",
-          "created_local": "12/11 09:15",
-          "expires_at": "2026-11-12T09:15:52Z",
-          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 16.83 (0.42 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 66%.",
-          "news_context": "actualité à surveiller (score 1) : Asian stocks tumble, Nvidia stings as board to decide CEO’s fate",
-          "manual_exit": null
-        },
-        {
-          "id": "efb2113e6e",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 3967.7,
-          "take_profit": 3957.6,
-          "stop_loss": 3974.4,
-          "risk_reward": 1.51,
-          "confidence": "fort",
-          "score": 5.97,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "tp",
-          "pnl_pct": 0.2346,
-          "pnl_gross_pct": 0.2546,
-          "duration_minutes": 12,
-          "close_price": 3957.6,
-          "created_at": "2026-11-12T08:11:10Z",
-          "closed_at": "2026-11-12T08:24:00Z",
-          "created_local": "12/11 09:11",
-          "expires_at": "2026-11-12T09:11:10Z",
-          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 16.77 (0.42 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 66%.",
-          "news_context": "actualité à surveiller (score 1) : Asian stocks tumble, Nvidia stings as board to decide CEO’s fate",
-          "manual_exit": null
-        },
-        {
-          "id": "be2863bb2e",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 3969.5,
-          "take_profit": 3961.5,
-          "stop_loss": 3974.8,
-          "risk_reward": 1.51,
-          "confidence": "fort",
-          "score": 5.97,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "tp",
-          "pnl_pct": 0.1815,
-          "pnl_gross_pct": 0.2015,
-          "duration_minutes": 12,
-          "close_price": 3961.5,
-          "created_at": "2026-11-12T08:05:59Z",
-          "closed_at": "2026-11-12T08:18:00Z",
-          "created_local": "12/11 09:05",
-          "expires_at": "2026-11-12T09:05:59Z",
-          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 13.35 (0.34 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 80%.",
-          "news_context": "actualité à surveiller (score 1) : Asian stocks tumble, Nvidia stings as board to decide CEO’s fate",
-          "manual_exit": null
-        },
-        {
-          "id": "be3a7fed89",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 3966.8,
-          "take_profit": 3958.8,
-          "stop_loss": 3972.1,
-          "risk_reward": 1.51,
-          "confidence": "fort",
-          "score": 6.02,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "tp",
-          "pnl_pct": 0.1817,
-          "pnl_gross_pct": 0.2017,
-          "duration_minutes": 19,
-          "close_price": 3958.8,
-          "created_at": "2026-11-12T08:01:21Z",
-          "closed_at": "2026-11-12T08:21:00Z",
-          "created_local": "12/11 09:01",
-          "expires_at": "2026-11-12T09:01:21Z",
-          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 13.35 (0.34 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 79%.",
           "news_context": "actualité à surveiller (score 1) : Asian stocks tumble, Nvidia stings as board to decide CEO’s fate",
           "manual_exit": null
         }
@@ -2637,17 +2638,17 @@
     {
       "key": "trend_15m",
       "label": "Tendance 15 min",
-      "weight": 1.041,
+      "weight": 1.048,
       "stats": {
-        "n": 1565,
-        "tp": 477,
+        "n": 1569,
+        "tp": 481,
         "sl": 771,
         "expired": 317,
-        "win_rate": 0.38221153846153844,
-        "neutral_win_rate": 0.3699,
-        "edge": 0.0123,
-        "pnl_pct": -6.7882,
-        "avg_pnl_pct": -0.0043
+        "win_rate": 0.384185303514377,
+        "neutral_win_rate": 0.37,
+        "edge": 0.0142,
+        "pnl_pct": -5.5856,
+        "avg_pnl_pct": -0.0036
       },
       "by_source": {
         "bot": {
@@ -2684,18 +2685,87 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 1390,
-          "tp": 419,
+          "n": 1394,
+          "tp": 423,
           "sl": 688,
           "expired": 283,
-          "win_rate": 0.3785004516711834,
-          "neutral_win_rate": 0.3675,
-          "edge": 0.011,
-          "pnl_pct": -1.7073,
-          "avg_pnl_pct": -0.0012
+          "win_rate": 0.38073807380738073,
+          "neutral_win_rate": 0.3676,
+          "edge": 0.0131,
+          "pnl_pct": -0.5047,
+          "avg_pnl_pct": -0.0004
         }
       },
       "last_trades": [
+        {
+          "id": "373b193da0",
+          "asset": "gold",
+          "asset_label": "Or (XAU/USD)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 3950.6,
+          "take_profit": 3938.5,
+          "stop_loss": 3958.7,
+          "risk_reward": 1.49,
+          "confidence": "fort",
+          "score": 7.05,
+          "criteria": [
+            "adx",
+            "macd",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "tp",
+          "pnl_pct": 0.2863,
+          "pnl_gross_pct": 0.3063,
+          "duration_minutes": 3,
+          "close_price": 3938.5,
+          "created_at": "2026-11-12T08:51:07Z",
+          "closed_at": "2026-11-12T08:55:00Z",
+          "created_local": "12/11 09:51",
+          "expires_at": "2026-11-12T09:51:07Z",
+          "rationale": "Vente : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 20.20 (0.51 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 62%.",
+          "news_context": "actualité à surveiller (score 1) : Asian stocks tumble, Nvidia stings as board to decide CEO’s fate",
+          "manual_exit": null
+        },
+        {
+          "id": "33ba838509",
+          "asset": "gold",
+          "asset_label": "Or (XAU/USD)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 3954.6,
+          "take_profit": 3942.4,
+          "stop_loss": 3962.8,
+          "risk_reward": 1.49,
+          "confidence": "fort",
+          "score": 6.05,
+          "criteria": [
+            "adx",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "tp",
+          "pnl_pct": 0.2885,
+          "pnl_gross_pct": 0.3085,
+          "duration_minutes": 6,
+          "close_price": 3942.4,
+          "created_at": "2026-11-12T08:46:04Z",
+          "closed_at": "2026-11-12T08:53:00Z",
+          "created_local": "12/11 09:46",
+          "expires_at": "2026-11-12T09:46:04Z",
+          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 20.40 (0.52 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 58%.",
+          "news_context": "actualité à surveiller (score 1) : Asian stocks tumble, Nvidia stings as board to decide CEO’s fate",
+          "manual_exit": null
+        },
         {
           "id": "d113384fa7",
           "asset": "gold",
@@ -2727,6 +2797,74 @@
           "created_local": "12/11 09:41",
           "expires_at": "2026-11-12T09:41:02Z",
           "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 18.50 (0.47 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 63%.",
+          "news_context": "actualité à surveiller (score 1) : Asian stocks tumble, Nvidia stings as board to decide CEO’s fate",
+          "manual_exit": null
+        },
+        {
+          "id": "b7dd2de4fd",
+          "asset": "gold",
+          "asset_label": "Or (XAU/USD)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 3953.4,
+          "take_profit": 3942.8,
+          "stop_loss": 3960.5,
+          "risk_reward": 1.49,
+          "confidence": "fort",
+          "score": 5.92,
+          "criteria": [
+            "adx",
+            "macd",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "tp",
+          "pnl_pct": 0.2481,
+          "pnl_gross_pct": 0.2681,
+          "duration_minutes": 17,
+          "close_price": 3942.8,
+          "created_at": "2026-11-12T08:35:57Z",
+          "closed_at": "2026-11-12T08:53:00Z",
+          "created_local": "12/11 09:35",
+          "expires_at": "2026-11-12T09:35:57Z",
+          "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 17.70 (0.45 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 64%.",
+          "news_context": "actualité à surveiller (score 1) : Asian stocks tumble, Nvidia stings as board to decide CEO’s fate",
+          "manual_exit": null
+        },
+        {
+          "id": "ce70b0f4de",
+          "asset": "gold",
+          "asset_label": "Or (XAU/USD)",
+          "direction": "short",
+          "horizon": "3h",
+          "entry": 3953.4,
+          "take_profit": 3937.6,
+          "stop_loss": 3963.9,
+          "risk_reward": 1.5,
+          "confidence": "fort",
+          "score": 5.92,
+          "criteria": [
+            "adx",
+            "macd",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "tp",
+          "pnl_pct": 0.3797,
+          "pnl_gross_pct": 0.3997,
+          "duration_minutes": 19,
+          "close_price": 3937.6,
+          "created_at": "2026-11-12T08:35:57Z",
+          "closed_at": "2026-11-12T08:55:00Z",
+          "created_local": "12/11 09:35",
+          "expires_at": "2026-11-12T11:35:57Z",
+          "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 26.33 (0.67 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 63%.",
           "news_context": "actualité à surveiller (score 1) : Asian stocks tumble, Nvidia stings as board to decide CEO’s fate",
           "manual_exit": null
         },
@@ -2830,142 +2968,6 @@
           "created_local": "12/11 09:21",
           "expires_at": "2026-11-12T09:21:04Z",
           "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 17.80 (0.45 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 62%.",
-          "news_context": "actualité à surveiller (score 1) : Asian stocks tumble, Nvidia stings as board to decide CEO’s fate",
-          "manual_exit": null
-        },
-        {
-          "id": "c4595e2262",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 3966.6,
-          "take_profit": 3956.5,
-          "stop_loss": 3973.3,
-          "risk_reward": 1.51,
-          "confidence": "fort",
-          "score": 5.97,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "tp",
-          "pnl_pct": 0.2346,
-          "pnl_gross_pct": 0.2546,
-          "duration_minutes": 8,
-          "close_price": 3956.5,
-          "created_at": "2026-11-12T08:15:52Z",
-          "closed_at": "2026-11-12T08:24:00Z",
-          "created_local": "12/11 09:15",
-          "expires_at": "2026-11-12T09:15:52Z",
-          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 16.83 (0.42 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 66%.",
-          "news_context": "actualité à surveiller (score 1) : Asian stocks tumble, Nvidia stings as board to decide CEO’s fate",
-          "manual_exit": null
-        },
-        {
-          "id": "efb2113e6e",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 3967.7,
-          "take_profit": 3957.6,
-          "stop_loss": 3974.4,
-          "risk_reward": 1.51,
-          "confidence": "fort",
-          "score": 5.97,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "tp",
-          "pnl_pct": 0.2346,
-          "pnl_gross_pct": 0.2546,
-          "duration_minutes": 12,
-          "close_price": 3957.6,
-          "created_at": "2026-11-12T08:11:10Z",
-          "closed_at": "2026-11-12T08:24:00Z",
-          "created_local": "12/11 09:11",
-          "expires_at": "2026-11-12T09:11:10Z",
-          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 16.77 (0.42 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 66%.",
-          "news_context": "actualité à surveiller (score 1) : Asian stocks tumble, Nvidia stings as board to decide CEO’s fate",
-          "manual_exit": null
-        },
-        {
-          "id": "be2863bb2e",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 3969.5,
-          "take_profit": 3961.5,
-          "stop_loss": 3974.8,
-          "risk_reward": 1.51,
-          "confidence": "fort",
-          "score": 5.97,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "tp",
-          "pnl_pct": 0.1815,
-          "pnl_gross_pct": 0.2015,
-          "duration_minutes": 12,
-          "close_price": 3961.5,
-          "created_at": "2026-11-12T08:05:59Z",
-          "closed_at": "2026-11-12T08:18:00Z",
-          "created_local": "12/11 09:05",
-          "expires_at": "2026-11-12T09:05:59Z",
-          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 13.35 (0.34 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 80%.",
-          "news_context": "actualité à surveiller (score 1) : Asian stocks tumble, Nvidia stings as board to decide CEO’s fate",
-          "manual_exit": null
-        },
-        {
-          "id": "be3a7fed89",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 3966.8,
-          "take_profit": 3958.8,
-          "stop_loss": 3972.1,
-          "risk_reward": 1.51,
-          "confidence": "fort",
-          "score": 6.02,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "tp",
-          "pnl_pct": 0.1817,
-          "pnl_gross_pct": 0.2017,
-          "duration_minutes": 19,
-          "close_price": 3958.8,
-          "created_at": "2026-11-12T08:01:21Z",
-          "closed_at": "2026-11-12T08:21:00Z",
-          "created_local": "12/11 09:01",
-          "expires_at": "2026-11-12T09:01:21Z",
-          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 13.35 (0.34 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 79%.",
           "news_context": "actualité à surveiller (score 1) : Asian stocks tumble, Nvidia stings as board to decide CEO’s fate",
           "manual_exit": null
         }
@@ -2974,17 +2976,17 @@
     {
       "key": "trend_1h",
       "label": "Tendance 1 h",
-      "weight": 1.041,
+      "weight": 1.048,
       "stats": {
-        "n": 1539,
-        "tp": 469,
+        "n": 1543,
+        "tp": 473,
         "sl": 759,
         "expired": 311,
-        "win_rate": 0.38192182410423453,
-        "neutral_win_rate": 0.3697,
-        "edge": 0.0122,
-        "pnl_pct": -4.968,
-        "avg_pnl_pct": -0.0032
+        "win_rate": 0.38392857142857145,
+        "neutral_win_rate": 0.3698,
+        "edge": 0.0141,
+        "pnl_pct": -3.7654,
+        "avg_pnl_pct": -0.0024
       },
       "by_source": {
         "bot": {
@@ -3021,18 +3023,87 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 1364,
-          "tp": 411,
+          "n": 1368,
+          "tp": 415,
           "sl": 676,
           "expired": 277,
-          "win_rate": 0.3781048758049678,
-          "neutral_win_rate": 0.3673,
-          "edge": 0.0108,
-          "pnl_pct": 0.1129,
-          "avg_pnl_pct": 0.0001
+          "win_rate": 0.38038496791934007,
+          "neutral_win_rate": 0.3674,
+          "edge": 0.013,
+          "pnl_pct": 1.3155,
+          "avg_pnl_pct": 0.001
         }
       },
       "last_trades": [
+        {
+          "id": "373b193da0",
+          "asset": "gold",
+          "asset_label": "Or (XAU/USD)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 3950.6,
+          "take_profit": 3938.5,
+          "stop_loss": 3958.7,
+          "risk_reward": 1.49,
+          "confidence": "fort",
+          "score": 7.05,
+          "criteria": [
+            "adx",
+            "macd",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "tp",
+          "pnl_pct": 0.2863,
+          "pnl_gross_pct": 0.3063,
+          "duration_minutes": 3,
+          "close_price": 3938.5,
+          "created_at": "2026-11-12T08:51:07Z",
+          "closed_at": "2026-11-12T08:55:00Z",
+          "created_local": "12/11 09:51",
+          "expires_at": "2026-11-12T09:51:07Z",
+          "rationale": "Vente : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 20.20 (0.51 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 62%.",
+          "news_context": "actualité à surveiller (score 1) : Asian stocks tumble, Nvidia stings as board to decide CEO’s fate",
+          "manual_exit": null
+        },
+        {
+          "id": "33ba838509",
+          "asset": "gold",
+          "asset_label": "Or (XAU/USD)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 3954.6,
+          "take_profit": 3942.4,
+          "stop_loss": 3962.8,
+          "risk_reward": 1.49,
+          "confidence": "fort",
+          "score": 6.05,
+          "criteria": [
+            "adx",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "tp",
+          "pnl_pct": 0.2885,
+          "pnl_gross_pct": 0.3085,
+          "duration_minutes": 6,
+          "close_price": 3942.4,
+          "created_at": "2026-11-12T08:46:04Z",
+          "closed_at": "2026-11-12T08:53:00Z",
+          "created_local": "12/11 09:46",
+          "expires_at": "2026-11-12T09:46:04Z",
+          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 20.40 (0.52 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 58%.",
+          "news_context": "actualité à surveiller (score 1) : Asian stocks tumble, Nvidia stings as board to decide CEO’s fate",
+          "manual_exit": null
+        },
         {
           "id": "d113384fa7",
           "asset": "gold",
@@ -3064,6 +3135,74 @@
           "created_local": "12/11 09:41",
           "expires_at": "2026-11-12T09:41:02Z",
           "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 18.50 (0.47 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 63%.",
+          "news_context": "actualité à surveiller (score 1) : Asian stocks tumble, Nvidia stings as board to decide CEO’s fate",
+          "manual_exit": null
+        },
+        {
+          "id": "b7dd2de4fd",
+          "asset": "gold",
+          "asset_label": "Or (XAU/USD)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 3953.4,
+          "take_profit": 3942.8,
+          "stop_loss": 3960.5,
+          "risk_reward": 1.49,
+          "confidence": "fort",
+          "score": 5.92,
+          "criteria": [
+            "adx",
+            "macd",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "tp",
+          "pnl_pct": 0.2481,
+          "pnl_gross_pct": 0.2681,
+          "duration_minutes": 17,
+          "close_price": 3942.8,
+          "created_at": "2026-11-12T08:35:57Z",
+          "closed_at": "2026-11-12T08:53:00Z",
+          "created_local": "12/11 09:35",
+          "expires_at": "2026-11-12T09:35:57Z",
+          "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 17.70 (0.45 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 64%.",
+          "news_context": "actualité à surveiller (score 1) : Asian stocks tumble, Nvidia stings as board to decide CEO’s fate",
+          "manual_exit": null
+        },
+        {
+          "id": "ce70b0f4de",
+          "asset": "gold",
+          "asset_label": "Or (XAU/USD)",
+          "direction": "short",
+          "horizon": "3h",
+          "entry": 3953.4,
+          "take_profit": 3937.6,
+          "stop_loss": 3963.9,
+          "risk_reward": 1.5,
+          "confidence": "fort",
+          "score": 5.92,
+          "criteria": [
+            "adx",
+            "macd",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "tp",
+          "pnl_pct": 0.3797,
+          "pnl_gross_pct": 0.3997,
+          "duration_minutes": 19,
+          "close_price": 3937.6,
+          "created_at": "2026-11-12T08:35:57Z",
+          "closed_at": "2026-11-12T08:55:00Z",
+          "created_local": "12/11 09:35",
+          "expires_at": "2026-11-12T11:35:57Z",
+          "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 26.33 (0.67 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 63%.",
           "news_context": "actualité à surveiller (score 1) : Asian stocks tumble, Nvidia stings as board to decide CEO’s fate",
           "manual_exit": null
         },
@@ -3167,142 +3306,6 @@
           "created_local": "12/11 09:21",
           "expires_at": "2026-11-12T09:21:04Z",
           "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 17.80 (0.45 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 62%.",
-          "news_context": "actualité à surveiller (score 1) : Asian stocks tumble, Nvidia stings as board to decide CEO’s fate",
-          "manual_exit": null
-        },
-        {
-          "id": "c4595e2262",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 3966.6,
-          "take_profit": 3956.5,
-          "stop_loss": 3973.3,
-          "risk_reward": 1.51,
-          "confidence": "fort",
-          "score": 5.97,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "tp",
-          "pnl_pct": 0.2346,
-          "pnl_gross_pct": 0.2546,
-          "duration_minutes": 8,
-          "close_price": 3956.5,
-          "created_at": "2026-11-12T08:15:52Z",
-          "closed_at": "2026-11-12T08:24:00Z",
-          "created_local": "12/11 09:15",
-          "expires_at": "2026-11-12T09:15:52Z",
-          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 16.83 (0.42 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 66%.",
-          "news_context": "actualité à surveiller (score 1) : Asian stocks tumble, Nvidia stings as board to decide CEO’s fate",
-          "manual_exit": null
-        },
-        {
-          "id": "efb2113e6e",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 3967.7,
-          "take_profit": 3957.6,
-          "stop_loss": 3974.4,
-          "risk_reward": 1.51,
-          "confidence": "fort",
-          "score": 5.97,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "tp",
-          "pnl_pct": 0.2346,
-          "pnl_gross_pct": 0.2546,
-          "duration_minutes": 12,
-          "close_price": 3957.6,
-          "created_at": "2026-11-12T08:11:10Z",
-          "closed_at": "2026-11-12T08:24:00Z",
-          "created_local": "12/11 09:11",
-          "expires_at": "2026-11-12T09:11:10Z",
-          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 16.77 (0.42 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 66%.",
-          "news_context": "actualité à surveiller (score 1) : Asian stocks tumble, Nvidia stings as board to decide CEO’s fate",
-          "manual_exit": null
-        },
-        {
-          "id": "be2863bb2e",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 3969.5,
-          "take_profit": 3961.5,
-          "stop_loss": 3974.8,
-          "risk_reward": 1.51,
-          "confidence": "fort",
-          "score": 5.97,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "tp",
-          "pnl_pct": 0.1815,
-          "pnl_gross_pct": 0.2015,
-          "duration_minutes": 12,
-          "close_price": 3961.5,
-          "created_at": "2026-11-12T08:05:59Z",
-          "closed_at": "2026-11-12T08:18:00Z",
-          "created_local": "12/11 09:05",
-          "expires_at": "2026-11-12T09:05:59Z",
-          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 13.35 (0.34 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 80%.",
-          "news_context": "actualité à surveiller (score 1) : Asian stocks tumble, Nvidia stings as board to decide CEO’s fate",
-          "manual_exit": null
-        },
-        {
-          "id": "be3a7fed89",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 3966.8,
-          "take_profit": 3958.8,
-          "stop_loss": 3972.1,
-          "risk_reward": 1.51,
-          "confidence": "fort",
-          "score": 6.02,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "tp",
-          "pnl_pct": 0.1817,
-          "pnl_gross_pct": 0.2017,
-          "duration_minutes": 19,
-          "close_price": 3958.8,
-          "created_at": "2026-11-12T08:01:21Z",
-          "closed_at": "2026-11-12T08:21:00Z",
-          "created_local": "12/11 09:01",
-          "expires_at": "2026-11-12T09:01:21Z",
-          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 13.35 (0.34 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 79%.",
           "news_context": "actualité à surveiller (score 1) : Asian stocks tumble, Nvidia stings as board to decide CEO’s fate",
           "manual_exit": null
         }
@@ -3311,17 +3314,17 @@
     {
       "key": "adx",
       "label": "Force de tendance (ADX)",
-      "weight": 1.041,
+      "weight": 1.048,
       "stats": {
-        "n": 1565,
-        "tp": 477,
+        "n": 1569,
+        "tp": 481,
         "sl": 771,
         "expired": 317,
-        "win_rate": 0.38221153846153844,
-        "neutral_win_rate": 0.3699,
-        "edge": 0.0123,
-        "pnl_pct": -6.7882,
-        "avg_pnl_pct": -0.0043
+        "win_rate": 0.384185303514377,
+        "neutral_win_rate": 0.37,
+        "edge": 0.0142,
+        "pnl_pct": -5.5856,
+        "avg_pnl_pct": -0.0036
       },
       "by_source": {
         "bot": {
@@ -3358,18 +3361,87 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 1390,
-          "tp": 419,
+          "n": 1394,
+          "tp": 423,
           "sl": 688,
           "expired": 283,
-          "win_rate": 0.3785004516711834,
-          "neutral_win_rate": 0.3675,
-          "edge": 0.011,
-          "pnl_pct": -1.7073,
-          "avg_pnl_pct": -0.0012
+          "win_rate": 0.38073807380738073,
+          "neutral_win_rate": 0.3676,
+          "edge": 0.0131,
+          "pnl_pct": -0.5047,
+          "avg_pnl_pct": -0.0004
         }
       },
       "last_trades": [
+        {
+          "id": "373b193da0",
+          "asset": "gold",
+          "asset_label": "Or (XAU/USD)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 3950.6,
+          "take_profit": 3938.5,
+          "stop_loss": 3958.7,
+          "risk_reward": 1.49,
+          "confidence": "fort",
+          "score": 7.05,
+          "criteria": [
+            "adx",
+            "macd",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "tp",
+          "pnl_pct": 0.2863,
+          "pnl_gross_pct": 0.3063,
+          "duration_minutes": 3,
+          "close_price": 3938.5,
+          "created_at": "2026-11-12T08:51:07Z",
+          "closed_at": "2026-11-12T08:55:00Z",
+          "created_local": "12/11 09:51",
+          "expires_at": "2026-11-12T09:51:07Z",
+          "rationale": "Vente : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 20.20 (0.51 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 62%.",
+          "news_context": "actualité à surveiller (score 1) : Asian stocks tumble, Nvidia stings as board to decide CEO’s fate",
+          "manual_exit": null
+        },
+        {
+          "id": "33ba838509",
+          "asset": "gold",
+          "asset_label": "Or (XAU/USD)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 3954.6,
+          "take_profit": 3942.4,
+          "stop_loss": 3962.8,
+          "risk_reward": 1.49,
+          "confidence": "fort",
+          "score": 6.05,
+          "criteria": [
+            "adx",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "tp",
+          "pnl_pct": 0.2885,
+          "pnl_gross_pct": 0.3085,
+          "duration_minutes": 6,
+          "close_price": 3942.4,
+          "created_at": "2026-11-12T08:46:04Z",
+          "closed_at": "2026-11-12T08:53:00Z",
+          "created_local": "12/11 09:46",
+          "expires_at": "2026-11-12T09:46:04Z",
+          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 20.40 (0.52 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 58%.",
+          "news_context": "actualité à surveiller (score 1) : Asian stocks tumble, Nvidia stings as board to decide CEO’s fate",
+          "manual_exit": null
+        },
         {
           "id": "d113384fa7",
           "asset": "gold",
@@ -3401,6 +3473,74 @@
           "created_local": "12/11 09:41",
           "expires_at": "2026-11-12T09:41:02Z",
           "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 18.50 (0.47 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 63%.",
+          "news_context": "actualité à surveiller (score 1) : Asian stocks tumble, Nvidia stings as board to decide CEO’s fate",
+          "manual_exit": null
+        },
+        {
+          "id": "b7dd2de4fd",
+          "asset": "gold",
+          "asset_label": "Or (XAU/USD)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 3953.4,
+          "take_profit": 3942.8,
+          "stop_loss": 3960.5,
+          "risk_reward": 1.49,
+          "confidence": "fort",
+          "score": 5.92,
+          "criteria": [
+            "adx",
+            "macd",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "tp",
+          "pnl_pct": 0.2481,
+          "pnl_gross_pct": 0.2681,
+          "duration_minutes": 17,
+          "close_price": 3942.8,
+          "created_at": "2026-11-12T08:35:57Z",
+          "closed_at": "2026-11-12T08:53:00Z",
+          "created_local": "12/11 09:35",
+          "expires_at": "2026-11-12T09:35:57Z",
+          "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 17.70 (0.45 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 64%.",
+          "news_context": "actualité à surveiller (score 1) : Asian stocks tumble, Nvidia stings as board to decide CEO’s fate",
+          "manual_exit": null
+        },
+        {
+          "id": "ce70b0f4de",
+          "asset": "gold",
+          "asset_label": "Or (XAU/USD)",
+          "direction": "short",
+          "horizon": "3h",
+          "entry": 3953.4,
+          "take_profit": 3937.6,
+          "stop_loss": 3963.9,
+          "risk_reward": 1.5,
+          "confidence": "fort",
+          "score": 5.92,
+          "criteria": [
+            "adx",
+            "macd",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "tp",
+          "pnl_pct": 0.3797,
+          "pnl_gross_pct": 0.3997,
+          "duration_minutes": 19,
+          "close_price": 3937.6,
+          "created_at": "2026-11-12T08:35:57Z",
+          "closed_at": "2026-11-12T08:55:00Z",
+          "created_local": "12/11 09:35",
+          "expires_at": "2026-11-12T11:35:57Z",
+          "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 26.33 (0.67 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 63%.",
           "news_context": "actualité à surveiller (score 1) : Asian stocks tumble, Nvidia stings as board to decide CEO’s fate",
           "manual_exit": null
         },
@@ -3506,159 +3646,23 @@
           "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 17.80 (0.45 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 62%.",
           "news_context": "actualité à surveiller (score 1) : Asian stocks tumble, Nvidia stings as board to decide CEO’s fate",
           "manual_exit": null
-        },
-        {
-          "id": "c4595e2262",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 3966.6,
-          "take_profit": 3956.5,
-          "stop_loss": 3973.3,
-          "risk_reward": 1.51,
-          "confidence": "fort",
-          "score": 5.97,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "tp",
-          "pnl_pct": 0.2346,
-          "pnl_gross_pct": 0.2546,
-          "duration_minutes": 8,
-          "close_price": 3956.5,
-          "created_at": "2026-11-12T08:15:52Z",
-          "closed_at": "2026-11-12T08:24:00Z",
-          "created_local": "12/11 09:15",
-          "expires_at": "2026-11-12T09:15:52Z",
-          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 16.83 (0.42 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 66%.",
-          "news_context": "actualité à surveiller (score 1) : Asian stocks tumble, Nvidia stings as board to decide CEO’s fate",
-          "manual_exit": null
-        },
-        {
-          "id": "efb2113e6e",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 3967.7,
-          "take_profit": 3957.6,
-          "stop_loss": 3974.4,
-          "risk_reward": 1.51,
-          "confidence": "fort",
-          "score": 5.97,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "tp",
-          "pnl_pct": 0.2346,
-          "pnl_gross_pct": 0.2546,
-          "duration_minutes": 12,
-          "close_price": 3957.6,
-          "created_at": "2026-11-12T08:11:10Z",
-          "closed_at": "2026-11-12T08:24:00Z",
-          "created_local": "12/11 09:11",
-          "expires_at": "2026-11-12T09:11:10Z",
-          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 16.77 (0.42 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 66%.",
-          "news_context": "actualité à surveiller (score 1) : Asian stocks tumble, Nvidia stings as board to decide CEO’s fate",
-          "manual_exit": null
-        },
-        {
-          "id": "be2863bb2e",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 3969.5,
-          "take_profit": 3961.5,
-          "stop_loss": 3974.8,
-          "risk_reward": 1.51,
-          "confidence": "fort",
-          "score": 5.97,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "tp",
-          "pnl_pct": 0.1815,
-          "pnl_gross_pct": 0.2015,
-          "duration_minutes": 12,
-          "close_price": 3961.5,
-          "created_at": "2026-11-12T08:05:59Z",
-          "closed_at": "2026-11-12T08:18:00Z",
-          "created_local": "12/11 09:05",
-          "expires_at": "2026-11-12T09:05:59Z",
-          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 13.35 (0.34 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 80%.",
-          "news_context": "actualité à surveiller (score 1) : Asian stocks tumble, Nvidia stings as board to decide CEO’s fate",
-          "manual_exit": null
-        },
-        {
-          "id": "be3a7fed89",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 3966.8,
-          "take_profit": 3958.8,
-          "stop_loss": 3972.1,
-          "risk_reward": 1.51,
-          "confidence": "fort",
-          "score": 6.02,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "tp",
-          "pnl_pct": 0.1817,
-          "pnl_gross_pct": 0.2017,
-          "duration_minutes": 19,
-          "close_price": 3958.8,
-          "created_at": "2026-11-12T08:01:21Z",
-          "closed_at": "2026-11-12T08:21:00Z",
-          "created_local": "12/11 09:01",
-          "expires_at": "2026-11-12T09:01:21Z",
-          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 13.35 (0.34 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 79%.",
-          "news_context": "actualité à surveiller (score 1) : Asian stocks tumble, Nvidia stings as board to decide CEO’s fate",
-          "manual_exit": null
         }
       ]
     },
     {
       "key": "vwap",
       "label": "VWAP",
-      "weight": 0.793,
+      "weight": 0.799,
       "stats": {
-        "n": 1536,
-        "tp": 472,
+        "n": 1540,
+        "tp": 476,
         "sl": 755,
         "expired": 309,
-        "win_rate": 0.38467807660961695,
-        "neutral_win_rate": 0.3691,
-        "edge": 0.0156,
-        "pnl_pct": -4.701,
-        "avg_pnl_pct": -0.0031
+        "win_rate": 0.3866774979691308,
+        "neutral_win_rate": 0.3692,
+        "edge": 0.0175,
+        "pnl_pct": -3.4984,
+        "avg_pnl_pct": -0.0023
       },
       "by_source": {
         "bot": {
@@ -3695,18 +3699,87 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 1363,
-          "tp": 414,
+          "n": 1367,
+          "tp": 418,
           "sl": 674,
           "expired": 275,
-          "win_rate": 0.3805147058823529,
-          "neutral_win_rate": 0.3666,
-          "edge": 0.0139,
-          "pnl_pct": -0.2365,
-          "avg_pnl_pct": -0.0002
+          "win_rate": 0.38278388278388276,
+          "neutral_win_rate": 0.3667,
+          "edge": 0.0161,
+          "pnl_pct": 0.9661,
+          "avg_pnl_pct": 0.0007
         }
       },
       "last_trades": [
+        {
+          "id": "373b193da0",
+          "asset": "gold",
+          "asset_label": "Or (XAU/USD)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 3950.6,
+          "take_profit": 3938.5,
+          "stop_loss": 3958.7,
+          "risk_reward": 1.49,
+          "confidence": "fort",
+          "score": 7.05,
+          "criteria": [
+            "adx",
+            "macd",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "tp",
+          "pnl_pct": 0.2863,
+          "pnl_gross_pct": 0.3063,
+          "duration_minutes": 3,
+          "close_price": 3938.5,
+          "created_at": "2026-11-12T08:51:07Z",
+          "closed_at": "2026-11-12T08:55:00Z",
+          "created_local": "12/11 09:51",
+          "expires_at": "2026-11-12T09:51:07Z",
+          "rationale": "Vente : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 20.20 (0.51 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 62%.",
+          "news_context": "actualité à surveiller (score 1) : Asian stocks tumble, Nvidia stings as board to decide CEO’s fate",
+          "manual_exit": null
+        },
+        {
+          "id": "33ba838509",
+          "asset": "gold",
+          "asset_label": "Or (XAU/USD)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 3954.6,
+          "take_profit": 3942.4,
+          "stop_loss": 3962.8,
+          "risk_reward": 1.49,
+          "confidence": "fort",
+          "score": 6.05,
+          "criteria": [
+            "adx",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "tp",
+          "pnl_pct": 0.2885,
+          "pnl_gross_pct": 0.3085,
+          "duration_minutes": 6,
+          "close_price": 3942.4,
+          "created_at": "2026-11-12T08:46:04Z",
+          "closed_at": "2026-11-12T08:53:00Z",
+          "created_local": "12/11 09:46",
+          "expires_at": "2026-11-12T09:46:04Z",
+          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 20.40 (0.52 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 58%.",
+          "news_context": "actualité à surveiller (score 1) : Asian stocks tumble, Nvidia stings as board to decide CEO’s fate",
+          "manual_exit": null
+        },
         {
           "id": "d113384fa7",
           "asset": "gold",
@@ -3738,6 +3811,74 @@
           "created_local": "12/11 09:41",
           "expires_at": "2026-11-12T09:41:02Z",
           "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 18.50 (0.47 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 63%.",
+          "news_context": "actualité à surveiller (score 1) : Asian stocks tumble, Nvidia stings as board to decide CEO’s fate",
+          "manual_exit": null
+        },
+        {
+          "id": "b7dd2de4fd",
+          "asset": "gold",
+          "asset_label": "Or (XAU/USD)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 3953.4,
+          "take_profit": 3942.8,
+          "stop_loss": 3960.5,
+          "risk_reward": 1.49,
+          "confidence": "fort",
+          "score": 5.92,
+          "criteria": [
+            "adx",
+            "macd",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "tp",
+          "pnl_pct": 0.2481,
+          "pnl_gross_pct": 0.2681,
+          "duration_minutes": 17,
+          "close_price": 3942.8,
+          "created_at": "2026-11-12T08:35:57Z",
+          "closed_at": "2026-11-12T08:53:00Z",
+          "created_local": "12/11 09:35",
+          "expires_at": "2026-11-12T09:35:57Z",
+          "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 17.70 (0.45 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 64%.",
+          "news_context": "actualité à surveiller (score 1) : Asian stocks tumble, Nvidia stings as board to decide CEO’s fate",
+          "manual_exit": null
+        },
+        {
+          "id": "ce70b0f4de",
+          "asset": "gold",
+          "asset_label": "Or (XAU/USD)",
+          "direction": "short",
+          "horizon": "3h",
+          "entry": 3953.4,
+          "take_profit": 3937.6,
+          "stop_loss": 3963.9,
+          "risk_reward": 1.5,
+          "confidence": "fort",
+          "score": 5.92,
+          "criteria": [
+            "adx",
+            "macd",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "tp",
+          "pnl_pct": 0.3797,
+          "pnl_gross_pct": 0.3997,
+          "duration_minutes": 19,
+          "close_price": 3937.6,
+          "created_at": "2026-11-12T08:35:57Z",
+          "closed_at": "2026-11-12T08:55:00Z",
+          "created_local": "12/11 09:35",
+          "expires_at": "2026-11-12T11:35:57Z",
+          "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 26.33 (0.67 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 63%.",
           "news_context": "actualité à surveiller (score 1) : Asian stocks tumble, Nvidia stings as board to decide CEO’s fate",
           "manual_exit": null
         },
@@ -3843,159 +3984,23 @@
           "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 17.80 (0.45 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 62%.",
           "news_context": "actualité à surveiller (score 1) : Asian stocks tumble, Nvidia stings as board to decide CEO’s fate",
           "manual_exit": null
-        },
-        {
-          "id": "c4595e2262",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 3966.6,
-          "take_profit": 3956.5,
-          "stop_loss": 3973.3,
-          "risk_reward": 1.51,
-          "confidence": "fort",
-          "score": 5.97,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "tp",
-          "pnl_pct": 0.2346,
-          "pnl_gross_pct": 0.2546,
-          "duration_minutes": 8,
-          "close_price": 3956.5,
-          "created_at": "2026-11-12T08:15:52Z",
-          "closed_at": "2026-11-12T08:24:00Z",
-          "created_local": "12/11 09:15",
-          "expires_at": "2026-11-12T09:15:52Z",
-          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 16.83 (0.42 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 66%.",
-          "news_context": "actualité à surveiller (score 1) : Asian stocks tumble, Nvidia stings as board to decide CEO’s fate",
-          "manual_exit": null
-        },
-        {
-          "id": "efb2113e6e",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 3967.7,
-          "take_profit": 3957.6,
-          "stop_loss": 3974.4,
-          "risk_reward": 1.51,
-          "confidence": "fort",
-          "score": 5.97,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "tp",
-          "pnl_pct": 0.2346,
-          "pnl_gross_pct": 0.2546,
-          "duration_minutes": 12,
-          "close_price": 3957.6,
-          "created_at": "2026-11-12T08:11:10Z",
-          "closed_at": "2026-11-12T08:24:00Z",
-          "created_local": "12/11 09:11",
-          "expires_at": "2026-11-12T09:11:10Z",
-          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 16.77 (0.42 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 66%.",
-          "news_context": "actualité à surveiller (score 1) : Asian stocks tumble, Nvidia stings as board to decide CEO’s fate",
-          "manual_exit": null
-        },
-        {
-          "id": "be2863bb2e",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 3969.5,
-          "take_profit": 3961.5,
-          "stop_loss": 3974.8,
-          "risk_reward": 1.51,
-          "confidence": "fort",
-          "score": 5.97,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "tp",
-          "pnl_pct": 0.1815,
-          "pnl_gross_pct": 0.2015,
-          "duration_minutes": 12,
-          "close_price": 3961.5,
-          "created_at": "2026-11-12T08:05:59Z",
-          "closed_at": "2026-11-12T08:18:00Z",
-          "created_local": "12/11 09:05",
-          "expires_at": "2026-11-12T09:05:59Z",
-          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 13.35 (0.34 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 80%.",
-          "news_context": "actualité à surveiller (score 1) : Asian stocks tumble, Nvidia stings as board to decide CEO’s fate",
-          "manual_exit": null
-        },
-        {
-          "id": "be3a7fed89",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 3966.8,
-          "take_profit": 3958.8,
-          "stop_loss": 3972.1,
-          "risk_reward": 1.51,
-          "confidence": "fort",
-          "score": 6.02,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "tp",
-          "pnl_pct": 0.1817,
-          "pnl_gross_pct": 0.2017,
-          "duration_minutes": 19,
-          "close_price": 3958.8,
-          "created_at": "2026-11-12T08:01:21Z",
-          "closed_at": "2026-11-12T08:21:00Z",
-          "created_local": "12/11 09:01",
-          "expires_at": "2026-11-12T09:01:21Z",
-          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 13.35 (0.34 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 79%.",
-          "news_context": "actualité à surveiller (score 1) : Asian stocks tumble, Nvidia stings as board to decide CEO’s fate",
-          "manual_exit": null
         }
       ]
     },
     {
       "key": "rsi",
       "label": "RSI",
-      "weight": 1.119,
+      "weight": 1.123,
       "stats": {
-        "n": 1188,
-        "tp": 387,
+        "n": 1190,
+        "tp": 389,
         "sl": 572,
         "expired": 229,
-        "win_rate": 0.4035453597497393,
+        "win_rate": 0.404786680541103,
         "neutral_win_rate": 0.3687,
-        "edge": 0.0348,
-        "pnl_pct": 13.1437,
-        "avg_pnl_pct": 0.0111
+        "edge": 0.0361,
+        "pnl_pct": 13.7185,
+        "avg_pnl_pct": 0.0115
       },
       "by_source": {
         "bot": {
@@ -4032,18 +4037,87 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 1038,
-          "tp": 334,
+          "n": 1040,
+          "tp": 336,
           "sl": 506,
           "expired": 198,
-          "win_rate": 0.3976190476190476,
-          "neutral_win_rate": 0.3657,
-          "edge": 0.0319,
-          "pnl_pct": 14.3773,
-          "avg_pnl_pct": 0.0139
+          "win_rate": 0.3990498812351544,
+          "neutral_win_rate": 0.3658,
+          "edge": 0.0332,
+          "pnl_pct": 14.9521,
+          "avg_pnl_pct": 0.0144
         }
       },
       "last_trades": [
+        {
+          "id": "373b193da0",
+          "asset": "gold",
+          "asset_label": "Or (XAU/USD)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 3950.6,
+          "take_profit": 3938.5,
+          "stop_loss": 3958.7,
+          "risk_reward": 1.49,
+          "confidence": "fort",
+          "score": 7.05,
+          "criteria": [
+            "adx",
+            "macd",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "tp",
+          "pnl_pct": 0.2863,
+          "pnl_gross_pct": 0.3063,
+          "duration_minutes": 3,
+          "close_price": 3938.5,
+          "created_at": "2026-11-12T08:51:07Z",
+          "closed_at": "2026-11-12T08:55:00Z",
+          "created_local": "12/11 09:51",
+          "expires_at": "2026-11-12T09:51:07Z",
+          "rationale": "Vente : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 20.20 (0.51 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 62%.",
+          "news_context": "actualité à surveiller (score 1) : Asian stocks tumble, Nvidia stings as board to decide CEO’s fate",
+          "manual_exit": null
+        },
+        {
+          "id": "33ba838509",
+          "asset": "gold",
+          "asset_label": "Or (XAU/USD)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 3954.6,
+          "take_profit": 3942.4,
+          "stop_loss": 3962.8,
+          "risk_reward": 1.49,
+          "confidence": "fort",
+          "score": 6.05,
+          "criteria": [
+            "adx",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "tp",
+          "pnl_pct": 0.2885,
+          "pnl_gross_pct": 0.3085,
+          "duration_minutes": 6,
+          "close_price": 3942.4,
+          "created_at": "2026-11-12T08:46:04Z",
+          "closed_at": "2026-11-12T08:53:00Z",
+          "created_local": "12/11 09:46",
+          "expires_at": "2026-11-12T09:46:04Z",
+          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 20.40 (0.52 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 58%.",
+          "news_context": "actualité à surveiller (score 1) : Asian stocks tumble, Nvidia stings as board to decide CEO’s fate",
+          "manual_exit": null
+        },
         {
           "id": "d113384fa7",
           "asset": "gold",
@@ -4248,74 +4322,6 @@
           "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 16.77 (0.42 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 66%.",
           "news_context": "actualité à surveiller (score 1) : Asian stocks tumble, Nvidia stings as board to decide CEO’s fate",
           "manual_exit": null
-        },
-        {
-          "id": "be2863bb2e",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 3969.5,
-          "take_profit": 3961.5,
-          "stop_loss": 3974.8,
-          "risk_reward": 1.51,
-          "confidence": "fort",
-          "score": 5.97,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "tp",
-          "pnl_pct": 0.1815,
-          "pnl_gross_pct": 0.2015,
-          "duration_minutes": 12,
-          "close_price": 3961.5,
-          "created_at": "2026-11-12T08:05:59Z",
-          "closed_at": "2026-11-12T08:18:00Z",
-          "created_local": "12/11 09:05",
-          "expires_at": "2026-11-12T09:05:59Z",
-          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 13.35 (0.34 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 80%.",
-          "news_context": "actualité à surveiller (score 1) : Asian stocks tumble, Nvidia stings as board to decide CEO’s fate",
-          "manual_exit": null
-        },
-        {
-          "id": "be3a7fed89",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 3966.8,
-          "take_profit": 3958.8,
-          "stop_loss": 3972.1,
-          "risk_reward": 1.51,
-          "confidence": "fort",
-          "score": 6.02,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "tp",
-          "pnl_pct": 0.1817,
-          "pnl_gross_pct": 0.2017,
-          "duration_minutes": 19,
-          "close_price": 3958.8,
-          "created_at": "2026-11-12T08:01:21Z",
-          "closed_at": "2026-11-12T08:21:00Z",
-          "created_local": "12/11 09:01",
-          "expires_at": "2026-11-12T09:01:21Z",
-          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 13.35 (0.34 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 79%.",
-          "news_context": "actualité à surveiller (score 1) : Asian stocks tumble, Nvidia stings as board to decide CEO’s fate",
-          "manual_exit": null
         }
       ]
     },
@@ -4324,15 +4330,15 @@
       "label": "MACD",
       "weight": 1.0,
       "stats": {
-        "n": 396,
-        "tp": 96,
+        "n": 399,
+        "tp": 99,
         "sl": 216,
         "expired": 84,
-        "win_rate": 0.3076923076923077,
-        "neutral_win_rate": 0.3721,
-        "edge": -0.0644,
-        "pnl_pct": -16.3007,
-        "avg_pnl_pct": -0.0412
+        "win_rate": 0.3142857142857143,
+        "neutral_win_rate": 0.3723,
+        "edge": -0.058,
+        "pnl_pct": -15.3866,
+        "avg_pnl_pct": -0.0386
       },
       "by_source": {
         "bot": {
@@ -4369,18 +4375,121 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 345,
-          "tp": 82,
+          "n": 348,
+          "tp": 85,
           "sl": 190,
           "expired": 73,
-          "win_rate": 0.3014705882352941,
-          "neutral_win_rate": 0.3688,
-          "edge": -0.0673,
-          "pnl_pct": -14.6233,
-          "avg_pnl_pct": -0.0424
+          "win_rate": 0.3090909090909091,
+          "neutral_win_rate": 0.3691,
+          "edge": -0.06,
+          "pnl_pct": -13.7092,
+          "avg_pnl_pct": -0.0394
         }
       },
       "last_trades": [
+        {
+          "id": "373b193da0",
+          "asset": "gold",
+          "asset_label": "Or (XAU/USD)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 3950.6,
+          "take_profit": 3938.5,
+          "stop_loss": 3958.7,
+          "risk_reward": 1.49,
+          "confidence": "fort",
+          "score": 7.05,
+          "criteria": [
+            "adx",
+            "macd",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "tp",
+          "pnl_pct": 0.2863,
+          "pnl_gross_pct": 0.3063,
+          "duration_minutes": 3,
+          "close_price": 3938.5,
+          "created_at": "2026-11-12T08:51:07Z",
+          "closed_at": "2026-11-12T08:55:00Z",
+          "created_local": "12/11 09:51",
+          "expires_at": "2026-11-12T09:51:07Z",
+          "rationale": "Vente : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 20.20 (0.51 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 62%.",
+          "news_context": "actualité à surveiller (score 1) : Asian stocks tumble, Nvidia stings as board to decide CEO’s fate",
+          "manual_exit": null
+        },
+        {
+          "id": "b7dd2de4fd",
+          "asset": "gold",
+          "asset_label": "Or (XAU/USD)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 3953.4,
+          "take_profit": 3942.8,
+          "stop_loss": 3960.5,
+          "risk_reward": 1.49,
+          "confidence": "fort",
+          "score": 5.92,
+          "criteria": [
+            "adx",
+            "macd",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "tp",
+          "pnl_pct": 0.2481,
+          "pnl_gross_pct": 0.2681,
+          "duration_minutes": 17,
+          "close_price": 3942.8,
+          "created_at": "2026-11-12T08:35:57Z",
+          "closed_at": "2026-11-12T08:53:00Z",
+          "created_local": "12/11 09:35",
+          "expires_at": "2026-11-12T09:35:57Z",
+          "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 17.70 (0.45 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 64%.",
+          "news_context": "actualité à surveiller (score 1) : Asian stocks tumble, Nvidia stings as board to decide CEO’s fate",
+          "manual_exit": null
+        },
+        {
+          "id": "ce70b0f4de",
+          "asset": "gold",
+          "asset_label": "Or (XAU/USD)",
+          "direction": "short",
+          "horizon": "3h",
+          "entry": 3953.4,
+          "take_profit": 3937.6,
+          "stop_loss": 3963.9,
+          "risk_reward": 1.5,
+          "confidence": "fort",
+          "score": 5.92,
+          "criteria": [
+            "adx",
+            "macd",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "tp",
+          "pnl_pct": 0.3797,
+          "pnl_gross_pct": 0.3997,
+          "duration_minutes": 19,
+          "close_price": 3937.6,
+          "created_at": "2026-11-12T08:35:57Z",
+          "closed_at": "2026-11-12T08:55:00Z",
+          "created_local": "12/11 09:35",
+          "expires_at": "2026-11-12T11:35:57Z",
+          "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 26.33 (0.67 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 63%.",
+          "news_context": "actualité à surveiller (score 1) : Asian stocks tumble, Nvidia stings as board to decide CEO’s fate",
+          "manual_exit": null
+        },
         {
           "id": "6203f331d0",
           "asset": "gold",
@@ -4554,112 +4663,6 @@
           "expires_at": "2026-11-12T08:10:54Z",
           "rationale": "Vente : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 15.50 (0.39 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 59%.",
           "news_context": "actualité à surveiller (score 2) : Asian stocks tumble, Nvidia stings as board to decide CEO’s fate | EU, UK weigh delay to 10% EV tariff from Jan 1 - report",
-          "manual_exit": null
-        },
-        {
-          "id": "5f046ffa44",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 3970.0,
-          "take_profit": 3960.0,
-          "stop_loss": 3976.7,
-          "risk_reward": 1.49,
-          "confidence": "fort",
-          "score": 6.99,
-          "criteria": [
-            "adx",
-            "macd",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.1963,
-          "pnl_gross_pct": -0.1763,
-          "duration_minutes": 0,
-          "close_price": 3977.0,
-          "created_at": "2026-11-12T07:06:00Z",
-          "closed_at": "2026-11-12T07:06:00Z",
-          "created_local": "12/11 08:06",
-          "expires_at": "2026-11-12T08:06:00Z",
-          "rationale": "Vente : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 16.73 (0.42 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 54%.",
-          "news_context": "actualité à surveiller (score 2) : Asian stocks tumble, Nvidia stings as board to decide CEO’s fate | EU, UK weigh delay to 10% EV tariff from Jan 1 - report",
-          "manual_exit": null
-        },
-        {
-          "id": "e22379c2f7",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 3972.5,
-          "take_profit": 3962.9,
-          "stop_loss": 3978.9,
-          "risk_reward": 1.5,
-          "confidence": "fort",
-          "score": 6.99,
-          "criteria": [
-            "adx",
-            "macd",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "tp",
-          "pnl_pct": 0.2217,
-          "pnl_gross_pct": 0.2417,
-          "duration_minutes": 30,
-          "close_price": 3962.9,
-          "created_at": "2026-11-12T07:01:28Z",
-          "closed_at": "2026-11-12T07:32:00Z",
-          "created_local": "12/11 08:01",
-          "expires_at": "2026-11-12T08:01:28Z",
-          "rationale": "Vente : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 15.97 (0.40 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 56%.",
-          "news_context": "actualité à surveiller (score 1) : EU, UK weigh delay to 10% EV tariff from Jan 1 - report",
-          "manual_exit": null
-        },
-        {
-          "id": "1970693303",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "short",
-          "horizon": "3h",
-          "entry": 3972.5,
-          "take_profit": 3957.0,
-          "stop_loss": 3982.8,
-          "risk_reward": 1.5,
-          "confidence": "fort",
-          "score": 8.17,
-          "criteria": [
-            "adx",
-            "macd",
-            "pdhl",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "tp",
-          "pnl_pct": 0.3702,
-          "pnl_gross_pct": 0.3902,
-          "duration_minutes": 82,
-          "close_price": 3957.0,
-          "created_at": "2026-11-12T07:01:28Z",
-          "closed_at": "2026-11-12T08:24:00Z",
-          "created_local": "12/11 08:01",
-          "expires_at": "2026-11-12T10:01:28Z",
-          "rationale": "Vente : tendance forte (ADX), MACD en expansion, cassure des extrêmes de la veille, RSI en momentum, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 25.87 (0.65 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 56%.",
-          "news_context": "actualité à surveiller (score 1) : EU, UK weigh delay to 10% EV tariff from Jan 1 - report",
           "manual_exit": null
         }
       ]
@@ -5350,6 +5353,40 @@
   ],
   "open_signals": [
     {
+      "id": "2d57f03d76",
+      "asset": "gold",
+      "asset_label": "Or (XAU/USD)",
+      "direction": "short",
+      "horizon": "1h",
+      "entry": 3937.6,
+      "take_profit": 3926.8,
+      "stop_loss": 3944.8,
+      "risk_reward": 1.5,
+      "confidence": "fort",
+      "score": 5.99,
+      "criteria": [
+        "adx",
+        "macd",
+        "trend_15m",
+        "trend_1h",
+        "trend_5m",
+        "vwap"
+      ],
+      "source": "shadow",
+      "status": "open",
+      "pnl_pct": null,
+      "pnl_gross_pct": null,
+      "duration_minutes": null,
+      "close_price": null,
+      "created_at": "2026-11-12T09:05:53Z",
+      "closed_at": null,
+      "created_local": "12/11 10:05",
+      "expires_at": "2026-11-12T10:05:53Z",
+      "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 18.07 (0.46 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 71%.",
+      "news_context": "actualité calme sur les 2 dernières heures",
+      "manual_exit": null
+    },
+    {
       "id": "8b5a2d8c1b",
       "asset": "gold",
       "asset_label": "Or (XAU/USD)",
@@ -5415,143 +5452,6 @@
       "expires_at": "2026-11-12T09:55:53Z",
       "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 19.77 (0.50 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 63%.",
       "news_context": "actualité calme sur les 2 dernières heures",
-      "manual_exit": null
-    },
-    {
-      "id": "373b193da0",
-      "asset": "gold",
-      "asset_label": "Or (XAU/USD)",
-      "direction": "short",
-      "horizon": "1h",
-      "entry": 3950.6,
-      "take_profit": 3938.5,
-      "stop_loss": 3958.7,
-      "risk_reward": 1.49,
-      "confidence": "fort",
-      "score": 7.05,
-      "criteria": [
-        "adx",
-        "macd",
-        "rsi",
-        "trend_15m",
-        "trend_1h",
-        "trend_5m",
-        "vwap"
-      ],
-      "source": "shadow",
-      "status": "open",
-      "pnl_pct": null,
-      "pnl_gross_pct": null,
-      "duration_minutes": null,
-      "close_price": null,
-      "created_at": "2026-11-12T08:51:07Z",
-      "closed_at": null,
-      "created_local": "12/11 09:51",
-      "expires_at": "2026-11-12T09:51:07Z",
-      "rationale": "Vente : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 20.20 (0.51 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 62%.",
-      "news_context": "actualité à surveiller (score 1) : Asian stocks tumble, Nvidia stings as board to decide CEO’s fate",
-      "manual_exit": null
-    },
-    {
-      "id": "33ba838509",
-      "asset": "gold",
-      "asset_label": "Or (XAU/USD)",
-      "direction": "short",
-      "horizon": "1h",
-      "entry": 3954.6,
-      "take_profit": 3942.4,
-      "stop_loss": 3962.8,
-      "risk_reward": 1.49,
-      "confidence": "fort",
-      "score": 6.05,
-      "criteria": [
-        "adx",
-        "rsi",
-        "trend_15m",
-        "trend_1h",
-        "trend_5m",
-        "vwap"
-      ],
-      "source": "shadow",
-      "status": "open",
-      "pnl_pct": null,
-      "pnl_gross_pct": null,
-      "duration_minutes": null,
-      "close_price": null,
-      "created_at": "2026-11-12T08:46:04Z",
-      "closed_at": null,
-      "created_local": "12/11 09:46",
-      "expires_at": "2026-11-12T09:46:04Z",
-      "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 20.40 (0.52 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 58%.",
-      "news_context": "actualité à surveiller (score 1) : Asian stocks tumble, Nvidia stings as board to decide CEO’s fate",
-      "manual_exit": null
-    },
-    {
-      "id": "b7dd2de4fd",
-      "asset": "gold",
-      "asset_label": "Or (XAU/USD)",
-      "direction": "short",
-      "horizon": "1h",
-      "entry": 3953.4,
-      "take_profit": 3942.8,
-      "stop_loss": 3960.5,
-      "risk_reward": 1.49,
-      "confidence": "fort",
-      "score": 5.92,
-      "criteria": [
-        "adx",
-        "macd",
-        "trend_15m",
-        "trend_1h",
-        "trend_5m",
-        "vwap"
-      ],
-      "source": "shadow",
-      "status": "open",
-      "pnl_pct": null,
-      "pnl_gross_pct": null,
-      "duration_minutes": null,
-      "close_price": null,
-      "created_at": "2026-11-12T08:35:57Z",
-      "closed_at": null,
-      "created_local": "12/11 09:35",
-      "expires_at": "2026-11-12T09:35:57Z",
-      "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 17.70 (0.45 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 64%.",
-      "news_context": "actualité à surveiller (score 1) : Asian stocks tumble, Nvidia stings as board to decide CEO’s fate",
-      "manual_exit": null
-    },
-    {
-      "id": "ce70b0f4de",
-      "asset": "gold",
-      "asset_label": "Or (XAU/USD)",
-      "direction": "short",
-      "horizon": "3h",
-      "entry": 3953.4,
-      "take_profit": 3937.6,
-      "stop_loss": 3963.9,
-      "risk_reward": 1.5,
-      "confidence": "fort",
-      "score": 5.92,
-      "criteria": [
-        "adx",
-        "macd",
-        "trend_15m",
-        "trend_1h",
-        "trend_5m",
-        "vwap"
-      ],
-      "source": "shadow",
-      "status": "open",
-      "pnl_pct": null,
-      "pnl_gross_pct": null,
-      "duration_minutes": null,
-      "close_price": null,
-      "created_at": "2026-11-12T08:35:57Z",
-      "closed_at": null,
-      "created_local": "12/11 09:35",
-      "expires_at": "2026-11-12T11:35:57Z",
-      "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 26.33 (0.67 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 63%.",
-      "news_context": "actualité à surveiller (score 1) : Asian stocks tumble, Nvidia stings as board to decide CEO’s fate",
       "manual_exit": null
     }
   ],
@@ -7156,46 +7056,46 @@
   "adjustments": {
     "notes": [
       "trades réels : +0,09 R ± 0,19 R par trade avant frais sur 176 trades (0 R = hasard)",
-      "tendance (trend_5m, trend_15m, trend_1h, adx) : +0,07 R ± 0,06 R sur 1989 trades éq. → poids ×1,04",
-      "vwap : +0,08 R ± 0,06 R sur 1872 trades éq. → poids ×1,06",
-      "rsi : +0,11 R ± 0,07 R sur 1543 trades éq. → poids ×1,12",
+      "tendance (trend_5m, trend_15m, trend_1h, adx) : +0,08 R ± 0,06 R sur 1993 trades éq. → poids ×1,05",
+      "vwap : +0,09 R ± 0,06 R sur 1876 trades éq. → poids ×1,07",
+      "rsi : +0,12 R ± 0,07 R sur 1545 trades éq. → poids ×1,12",
       "pdhl : +0,26 R ± 0,18 R sur 230 trades éq. → poids ×1,20",
       "tranche 10h UTC : -0,26 R sur 107 trades éq. → évitée",
       "tranche 12h UTC : -0,44 R sur 67 trades éq. → évitée",
       "tranche 19h UTC : -0,30 R sur 86 trades éq. → évitée",
-      "ethereum, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,17 R contre +0,07 R en global sur 98 trades éq. → poids ×0,91 sur cet actif",
-      "ethereum, rsi : -0,21 R contre +0,11 R en global sur 70 trades éq. → poids ×0,79 sur cet actif",
-      "euro, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,22 R contre +0,07 R en global sur 89 trades éq. → poids ×0,88 sur cet actif",
-      "euro, vwap : -0,21 R contre +0,08 R en global sur 84 trades éq. → poids ×0,91 sur cet actif",
-      "euro, rsi : -0,19 R contre +0,11 R en global sur 75 trades éq. → poids ×0,92 sur cet actif",
-      "nasdaq, tendance (trend_5m, trend_15m, trend_1h, adx) : +0,25 R contre +0,07 R en global sur 570 trades éq. → poids ×1,10 sur cet actif",
-      "nasdaq, vwap : +0,25 R contre +0,08 R en global sur 563 trades éq. → poids ×1,08 sur cet actif",
-      "nasdaq, rsi : +0,35 R contre +0,11 R en global sur 439 trades éq. → poids ×1,21 sur cet actif",
-      "oil, rsi : -0,05 R contre +0,11 R en global sur 234 trades éq. → poids ×0,96 sur cet actif",
-      "sp500, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,14 R contre +0,07 R en global sur 221 trades éq. → poids ×0,84 sur cet actif",
-      "sp500, vwap : -0,14 R contre +0,08 R en global sur 216 trades éq. → poids ×0,83 sur cet actif",
-      "sp500, rsi : -0,10 R contre +0,11 R en global sur 181 trades éq. → poids ×0,90 sur cet actif"
+      "ethereum, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,17 R contre +0,08 R en global sur 98 trades éq. → poids ×0,90 sur cet actif",
+      "ethereum, rsi : -0,21 R contre +0,12 R en global sur 70 trades éq. → poids ×0,78 sur cet actif",
+      "euro, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,22 R contre +0,08 R en global sur 89 trades éq. → poids ×0,88 sur cet actif",
+      "euro, vwap : -0,21 R contre +0,09 R en global sur 84 trades éq. → poids ×0,91 sur cet actif",
+      "euro, rsi : -0,19 R contre +0,12 R en global sur 75 trades éq. → poids ×0,92 sur cet actif",
+      "nasdaq, tendance (trend_5m, trend_15m, trend_1h, adx) : +0,25 R contre +0,08 R en global sur 570 trades éq. → poids ×1,09 sur cet actif",
+      "nasdaq, vwap : +0,25 R contre +0,09 R en global sur 563 trades éq. → poids ×1,08 sur cet actif",
+      "nasdaq, rsi : +0,35 R contre +0,12 R en global sur 439 trades éq. → poids ×1,20 sur cet actif",
+      "oil, rsi : -0,05 R contre +0,12 R en global sur 234 trades éq. → poids ×0,95 sur cet actif",
+      "sp500, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,14 R contre +0,08 R en global sur 221 trades éq. → poids ×0,83 sur cet actif",
+      "sp500, vwap : -0,14 R contre +0,09 R en global sur 216 trades éq. → poids ×0,82 sur cet actif",
+      "sp500, rsi : -0,10 R contre +0,12 R en global sur 181 trades éq. → poids ×0,89 sur cet actif"
     ],
     "avoid_hours_utc": [
       10,
       12,
       19
     ],
-    "sample": 2327,
+    "sample": 2331,
     "sample_by_source": {
       "bot": 175,
-      "shadow": 1390,
+      "shadow": 1394,
       "manual": 1,
       "backtest": 761
     },
     "method": "v2 : recalcul complet, marge de sécurité, résultats en R, sources pondérées",
     "weights": {
-      "trend_5m": 1.041,
-      "trend_15m": 1.041,
-      "trend_1h": 1.041,
-      "adx": 1.041,
-      "vwap": 0.793,
-      "rsi": 1.119,
+      "trend_5m": 1.048,
+      "trend_15m": 1.048,
+      "trend_1h": 1.048,
+      "adx": 1.048,
+      "vwap": 0.799,
+      "rsi": 1.123,
       "macd": 1.0,
       "level": 1.0,
       "volume": 0.75,
@@ -7205,12 +7105,12 @@
     },
     "weights_by_asset": {
       "bitcoin": {
-        "trend_5m": 1.041,
-        "trend_15m": 1.041,
-        "trend_1h": 1.041,
-        "adx": 1.041,
-        "vwap": 0.793,
-        "rsi": 1.119,
+        "trend_5m": 1.048,
+        "trend_15m": 1.048,
+        "trend_1h": 1.048,
+        "adx": 1.048,
+        "vwap": 0.799,
+        "rsi": 1.123,
         "macd": 1.0,
         "level": 1.0,
         "volume": 0.75,
@@ -7219,12 +7119,12 @@
         "corr": 0.5
       },
       "ethereum": {
-        "trend_5m": 0.945,
-        "trend_15m": 0.945,
-        "trend_1h": 0.945,
-        "adx": 0.945,
-        "vwap": 0.793,
-        "rsi": 0.881,
+        "trend_5m": 0.944,
+        "trend_15m": 0.944,
+        "trend_1h": 0.944,
+        "adx": 0.944,
+        "vwap": 0.799,
+        "rsi": 0.879,
         "macd": 1.0,
         "level": 1.0,
         "volume": 0.75,
@@ -7233,12 +7133,12 @@
         "corr": 0.5
       },
       "euro": {
-        "trend_5m": 0.918,
-        "trend_15m": 0.918,
-        "trend_1h": 0.918,
-        "adx": 0.918,
+        "trend_5m": 0.917,
+        "trend_15m": 0.917,
+        "trend_1h": 0.917,
+        "adx": 0.917,
         "vwap": 0.724,
-        "rsi": 1.031,
+        "rsi": 1.03,
         "macd": 1.0,
         "level": 1.0,
         "volume": 0.75,
@@ -7247,12 +7147,12 @@
         "corr": 0.5
       },
       "gold": {
-        "trend_5m": 1.041,
-        "trend_15m": 1.041,
-        "trend_1h": 1.041,
-        "adx": 1.041,
-        "vwap": 0.793,
-        "rsi": 1.119,
+        "trend_5m": 1.048,
+        "trend_15m": 1.048,
+        "trend_1h": 1.048,
+        "adx": 1.048,
+        "vwap": 0.799,
+        "rsi": 1.123,
         "macd": 1.0,
         "level": 1.0,
         "volume": 0.75,
@@ -7265,7 +7165,7 @@
         "trend_15m": 1.147,
         "trend_1h": 1.147,
         "adx": 1.147,
-        "vwap": 0.859,
+        "vwap": 0.86,
         "rsi": 1.351,
         "macd": 1.0,
         "level": 1.0,
@@ -7275,12 +7175,12 @@
         "corr": 0.5
       },
       "oil": {
-        "trend_5m": 1.041,
-        "trend_15m": 1.041,
-        "trend_1h": 1.041,
-        "adx": 1.041,
-        "vwap": 0.793,
-        "rsi": 1.071,
+        "trend_5m": 1.048,
+        "trend_15m": 1.048,
+        "trend_1h": 1.048,
+        "adx": 1.048,
+        "vwap": 0.799,
+        "rsi": 1.07,
         "macd": 1.0,
         "level": 1.0,
         "volume": 0.75,
@@ -7289,12 +7189,12 @@
         "corr": 0.5
       },
       "sp500": {
-        "trend_5m": 0.87,
-        "trend_15m": 0.87,
-        "trend_1h": 0.87,
-        "adx": 0.87,
-        "vwap": 0.66,
-        "rsi": 1.003,
+        "trend_5m": 0.868,
+        "trend_15m": 0.868,
+        "trend_1h": 0.868,
+        "adx": 0.868,
+        "vwap": 0.659,
+        "rsi": 1.002,
         "macd": 1.0,
         "level": 1.0,
         "volume": 0.75,
@@ -7311,40 +7211,40 @@
           "trend_1h",
           "adx"
         ],
-        "n": 2326,
-        "n_eff": 1989.3,
-        "mean_r": 0.0741,
+        "n": 2330,
+        "n_eff": 1993.3,
+        "mean_r": 0.0769,
         "margin_r": 0.0576,
-        "multiplier": 1.041
+        "multiplier": 1.048
       },
       "vwap": {
         "members": [
           "vwap"
         ],
-        "n": 2160,
-        "n_eff": 1871.6,
-        "mean_r": 0.0829,
+        "n": 2164,
+        "n_eff": 1875.6,
+        "mean_r": 0.0858,
         "margin_r": 0.0598,
-        "multiplier": 1.058
+        "multiplier": 1.065
       },
       "rsi": {
         "members": [
           "rsi"
         ],
-        "n": 1827,
-        "n_eff": 1543.0,
-        "mean_r": 0.1141,
+        "n": 1829,
+        "n_eff": 1545.0,
+        "mean_r": 0.1158,
         "margin_r": 0.0665,
-        "multiplier": 1.119
+        "multiplier": 1.123
       },
       "macd": {
         "members": [
           "macd"
         ],
-        "n": 637,
-        "n_eff": 532.3,
-        "mean_r": -0.0477,
-        "margin_r": 0.1082,
+        "n": 640,
+        "n_eff": 535.3,
+        "mean_r": -0.0391,
+        "margin_r": 0.108,
         "multiplier": 1.0
       },
       "level": {
@@ -7405,9 +7305,9 @@
         "margin_r": 0.1919
       },
       "fantômes": {
-        "n": 1390,
-        "mean_r": 0.097,
-        "margin_r": 0.0708
+        "n": 1394,
+        "mean_r": 0.101,
+        "margin_r": 0.0707
       },
       "backtest": {
         "n": 761,
@@ -7482,11 +7382,11 @@
       },
       "horizon_3h_gold": {
         "label": "horizon ~3 h sur Or (XAU/USD)",
-        "n": 51,
-        "mean_net_r": 0.1465,
-        "lower_r": -0.2594,
+        "n": 52,
+        "mean_net_r": 0.1712,
+        "lower_r": -0.2326,
         "promoted": false,
-        "missing": 49
+        "missing": 48
       },
       "essai_oil": {
         "label": "nouvel actif : Pétrole WTI (CL)",
@@ -7511,9 +7411,9 @@
     },
     "variants_z": 2.75,
     "promoted_variants": [],
-    "updated_at": "2026-11-12T09:01:30.298536+00:00",
+    "updated_at": "2026-11-12T09:05:54.646470+00:00",
     "context": {
-      "n": 2095,
+      "n": 2099,
       "features": {
         "adx": {
           "label": "force de tendance (ADX 15 min)",
@@ -7522,30 +7422,30 @@
               "label": "bas (< 27)",
               "lo": -1000000000.0,
               "hi": 27.3,
-              "n": 697,
-              "n_eff": 592.0,
-              "mean_r": -0.0366,
-              "margin_r": 0.1298,
+              "n": 698,
+              "n_eff": 593.0,
+              "mean_r": -0.0338,
+              "margin_r": 0.1297,
               "avoid": false
             },
             {
               "label": "milieu (27 à 39)",
               "lo": 27.3,
               "hi": 38.53,
-              "n": 699,
-              "n_eff": 593.6,
-              "mean_r": 0.1766,
-              "margin_r": 0.1381,
+              "n": 701,
+              "n_eff": 595.6,
+              "mean_r": 0.1812,
+              "margin_r": 0.1379,
               "avoid": false
             },
             {
               "label": "haut (≥ 39)",
               "lo": 38.53,
               "hi": 1000000000.0,
-              "n": 699,
-              "n_eff": 616.6,
-              "mean_r": 0.104,
-              "margin_r": 0.1388,
+              "n": 700,
+              "n_eff": 617.6,
+              "mean_r": 0.1064,
+              "margin_r": 0.1387,
               "avoid": false
             }
           ]
@@ -7556,31 +7456,31 @@
             {
               "label": "bas (< 59)",
               "lo": -1000000000.0,
-              "hi": 58.91,
-              "n": 696,
-              "n_eff": 607.3,
-              "mean_r": 0.0561,
-              "margin_r": 0.1236,
+              "hi": 58.92,
+              "n": 699,
+              "n_eff": 610.3,
+              "mean_r": 0.0602,
+              "margin_r": 0.1234,
               "avoid": false
             },
             {
               "label": "milieu (59 à 66)",
-              "lo": 58.91,
-              "hi": 66.19,
-              "n": 699,
-              "n_eff": 595.1,
-              "mean_r": 0.1407,
-              "margin_r": 0.1469,
+              "lo": 58.92,
+              "hi": 66.22,
+              "n": 700,
+              "n_eff": 595.5,
+              "mean_r": 0.1368,
+              "margin_r": 0.1467,
               "avoid": false
             },
             {
               "label": "haut (≥ 66)",
-              "lo": 66.19,
+              "lo": 66.22,
               "hi": 1000000000.0,
               "n": 700,
-              "n_eff": 599.2,
-              "mean_r": 0.0542,
-              "margin_r": 0.1374,
+              "n_eff": 599.9,
+              "mean_r": 0.064,
+              "margin_r": 0.1375,
               "avoid": false
             }
           ]
@@ -7589,33 +7489,33 @@
           "label": "écart au VWAP dans le sens du trade (en range)",
           "buckets": [
             {
-              "label": "bas (< 0,90)",
+              "label": "bas (< 0,91)",
               "lo": -1000000000.0,
-              "hi": 0.9034,
-              "n": 658,
-              "n_eff": 572.3,
-              "mean_r": -0.0062,
-              "margin_r": 0.1259,
+              "hi": 0.906,
+              "n": 660,
+              "n_eff": 573.6,
+              "mean_r": -0.0058,
+              "margin_r": 0.1258,
               "avoid": false
             },
             {
-              "label": "milieu (0,90 à 1,55)",
-              "lo": 0.9034,
+              "label": "milieu (0,91 à 1,55)",
+              "lo": 0.906,
               "hi": 1.5452,
-              "n": 659,
-              "n_eff": 567.7,
-              "mean_r": 0.0167,
-              "margin_r": 0.1405,
+              "n": 660,
+              "n_eff": 569.4,
+              "mean_r": 0.0245,
+              "margin_r": 0.1404,
               "avoid": false
             },
             {
               "label": "haut (≥ 1,55)",
               "lo": 1.5452,
               "hi": 1000000000.0,
-              "n": 659,
-              "n_eff": 580.6,
-              "mean_r": 0.2518,
-              "margin_r": 0.1505,
+              "n": 660,
+              "n_eff": 581.6,
+              "mean_r": 0.254,
+              "margin_r": 0.1503,
               "avoid": false
             }
           ]
@@ -7636,21 +7536,21 @@
             {
               "label": "milieu (0,23 à 0,53)",
               "lo": 0.2277,
-              "hi": 0.5328,
-              "n": 698,
-              "n_eff": 597.4,
-              "mean_r": 0.0432,
-              "margin_r": 0.1382,
+              "hi": 0.5334,
+              "n": 701,
+              "n_eff": 600.1,
+              "mean_r": 0.0431,
+              "margin_r": 0.1379,
               "avoid": false
             },
             {
               "label": "haut (≥ 0,53)",
-              "lo": 0.5328,
+              "lo": 0.5334,
               "hi": 1000000000.0,
-              "n": 699,
-              "n_eff": 598.0,
-              "mean_r": 0.1353,
-              "margin_r": 0.148,
+              "n": 700,
+              "n_eff": 599.2,
+              "mean_r": 0.1457,
+              "margin_r": 0.1479,
               "avoid": false
             }
           ]
@@ -7662,30 +7562,30 @@
               "label": "bas (< 1,07)",
               "lo": -1000000000.0,
               "hi": 1.074,
-              "n": 696,
-              "n_eff": 618.1,
-              "mean_r": -0.1192,
-              "margin_r": 0.1102,
+              "n": 697,
+              "n_eff": 619.1,
+              "mean_r": -0.1165,
+              "margin_r": 0.1103,
               "avoid": true
             },
             {
               "label": "milieu (1,07 à 1,41)",
               "lo": 1.074,
-              "hi": 1.406,
-              "n": 700,
-              "n_eff": 593.2,
-              "mean_r": 0.0704,
-              "margin_r": 0.1322,
+              "hi": 1.405,
+              "n": 702,
+              "n_eff": 595.5,
+              "mean_r": 0.0787,
+              "margin_r": 0.132,
               "avoid": false
             },
             {
               "label": "haut (≥ 1,41)",
-              "lo": 1.406,
+              "lo": 1.405,
               "hi": 1000000000.0,
-              "n": 699,
-              "n_eff": 590.6,
-              "mean_r": 0.3148,
-              "margin_r": 0.1604,
+              "n": 700,
+              "n_eff": 591.3,
+              "mean_r": 0.3138,
+              "margin_r": 0.1603,
               "avoid": false
             }
           ]
@@ -7697,30 +7597,30 @@
               "label": "bas (< 0,99)",
               "lo": -1000000000.0,
               "hi": 0.987,
-              "n": 624,
-              "n_eff": 557.5,
-              "mean_r": 0.0332,
-              "margin_r": 0.1311,
+              "n": 627,
+              "n_eff": 560.5,
+              "mean_r": 0.0415,
+              "margin_r": 0.1308,
               "avoid": false
             },
             {
               "label": "milieu (0,99 à 1,28)",
               "lo": 0.987,
-              "hi": 1.279,
-              "n": 629,
-              "n_eff": 531.1,
-              "mean_r": 0.0222,
-              "margin_r": 0.1354,
+              "hi": 1.278,
+              "n": 626,
+              "n_eff": 528.4,
+              "mean_r": 0.0267,
+              "margin_r": 0.1359,
               "avoid": false
             },
             {
               "label": "haut (≥ 1,28)",
-              "lo": 1.279,
+              "lo": 1.278,
               "hi": 1000000000.0,
-              "n": 627,
-              "n_eff": 499.3,
-              "mean_r": 0.2986,
-              "margin_r": 0.1728,
+              "n": 630,
+              "n_eff": 502.0,
+              "mean_r": 0.2927,
+              "margin_r": 0.1722,
               "avoid": false
             }
           ]
@@ -7731,30 +7631,30 @@
             {
               "label": "bas (< 0,39)",
               "lo": -1000000000.0,
-              "hi": 0.3877,
-              "n": 698,
-              "n_eff": 603.3,
-              "mean_r": 0.1335,
-              "margin_r": 0.1451,
+              "hi": 0.3878,
+              "n": 699,
+              "n_eff": 604.3,
+              "mean_r": 0.1316,
+              "margin_r": 0.1449,
               "avoid": false
             },
             {
               "label": "milieu (0,39 à 0,63)",
-              "lo": 0.3877,
+              "lo": 0.3878,
               "hi": 0.6331,
-              "n": 698,
-              "n_eff": 623.7,
-              "mean_r": 0.1287,
-              "margin_r": 0.1325,
+              "n": 700,
+              "n_eff": 625.7,
+              "mean_r": 0.1371,
+              "margin_r": 0.1324,
               "avoid": false
             },
             {
               "label": "haut (≥ 0,63)",
               "lo": 0.6331,
               "hi": 1000000000.0,
-              "n": 699,
-              "n_eff": 582.4,
-              "mean_r": -0.033,
+              "n": 700,
+              "n_eff": 583.4,
+              "mean_r": -0.0299,
               "margin_r": 0.1268,
               "avoid": false
             }
@@ -7767,20 +7667,20 @@
               "label": "bas (< 0,08)",
               "lo": -1000000000.0,
               "hi": 0.0796,
-              "n": 698,
-              "n_eff": 614.7,
-              "mean_r": 0.1295,
-              "margin_r": 0.1572,
+              "n": 699,
+              "n_eff": 615.7,
+              "mean_r": 0.1317,
+              "margin_r": 0.1571,
               "avoid": false
             },
             {
               "label": "milieu (0,08 à 0,12)",
               "lo": 0.0796,
               "hi": 0.1241,
-              "n": 696,
-              "n_eff": 603.7,
-              "mean_r": 0.1105,
-              "margin_r": 0.1243,
+              "n": 699,
+              "n_eff": 606.7,
+              "mean_r": 0.1179,
+              "margin_r": 0.1241,
               "avoid": false
             },
             {
@@ -7802,9 +7702,9 @@
               "label": "plus de 30 min avant l'ouverture US",
               "lo": -1000000000.0,
               "hi": -30.0,
-              "n": 800,
-              "n_eff": 704.1,
-              "mean_r": -0.0508,
+              "n": 804,
+              "n_eff": 708.0,
+              "mean_r": -0.0411,
               "margin_r": 0.1077,
               "avoid": false
             },
@@ -7867,9 +7767,9 @@
               "label": "jeudi",
               "lo": 3,
               "hi": 4,
-              "n": 602,
-              "n_eff": 526.1,
-              "mean_r": -0.1488,
+              "n": 606,
+              "n_eff": 530.1,
+              "mean_r": -0.1355,
               "margin_r": 0.1311,
               "avoid": true
             },
@@ -7912,24 +7812,24 @@
           "lo": -1000000000.0,
           "hi": 1.074,
           "label": "volatilité du moment / moyenne 24 h : bas (< 1,07)",
-          "mean_r": -0.1192,
-          "n": 696
+          "mean_r": -0.1165,
+          "n": 697
         },
         {
           "feature": "weekday",
           "lo": 3,
           "hi": 4,
           "label": "jour de la semaine : jeudi",
-          "mean_r": -0.1488,
-          "n": 602
+          "mean_r": -0.1355,
+          "n": 606
         }
       ]
     },
     "exits": {
       "réels et en ombre": {
-        "n": 1335,
-        "current_net_r": 0.0126,
-        "mfe_median": 0.929,
+        "n": 1339,
+        "current_net_r": 0.0168,
+        "mfe_median": 0.933,
         "sl_reached": {
           "0.5": 251,
           "0.8": 150,
@@ -7938,21 +7838,21 @@
         "n_sl": 659,
         "rules": {
           "0.5": {
-            "net_r": -0.0039,
-            "diff_r": -0.0166,
-            "margin_r": 0.0436,
+            "net_r": 0.0003,
+            "diff_r": -0.0165,
+            "margin_r": 0.0434,
             "better": false
           },
           "0.8": {
-            "net_r": -0.0029,
+            "net_r": 0.0013,
             "diff_r": -0.0155,
-            "margin_r": 0.0347,
+            "margin_r": 0.0346,
             "better": false
           },
           "1.0": {
-            "net_r": 0.0008,
+            "net_r": 0.005,
             "diff_r": -0.0118,
-            "margin_r": 0.0306,
+            "margin_r": 0.0305,
             "better": false
           }
         }
@@ -8067,10 +7967,10 @@
     }
   },
   "state": {
-    "last_scan": "2026-11-12T09:01:29Z",
+    "last_scan": "2026-11-12T09:05:53Z",
     "last_scan_note": "0 signal(aux)",
     "last_summary": "2026-11-11T23:06:02Z",
-    "last_track": "2026-11-12T09:01:29Z",
+    "last_track": "2026-11-12T09:05:53Z",
     "last_summary_day": "2026-11-11"
   },
   "limits": {
@@ -20366,7 +20266,7 @@
           "notified_exit": "2026-11-12T02:06:02Z"
         }
       ],
-      "checked_hour": "2026-11-12T08:00:00Z",
+      "checked_hour": "2026-11-12T09:00:00Z",
       "n": 31,
       "mean_r": -0.349,
       "live": true,
@@ -20374,244 +20274,244 @@
         "kind": "channel",
         "points": [
           [
-            1794301200,
-            75462.2734,
-            74244.9609
-          ],
-          [
             1794304800,
-            75462.2734,
-            74075.25
+            75473.1875,
+            74070.9922
           ],
           [
             1794308400,
-            75462.2734,
-            74017.3203
+            75473.1875,
+            74014.5078
           ],
           [
             1794312000,
-            75442.9062,
-            74017.3203
+            75434.8828,
+            74014.5078
           ],
           [
             1794315600,
-            75340.2266,
-            74017.3203
+            75332.1172,
+            74014.5078
           ],
           [
             1794319200,
-            75340.2266,
-            73493.9609
+            75332.1172,
+            73457.6562
           ],
           [
             1794322800,
-            75340.2266,
-            73493.9609
+            75332.1172,
+            73457.6562
           ],
           [
             1794326400,
-            75340.2266,
-            72825.1016
+            75332.1172,
+            72839.2109
           ],
           [
             1794330000,
-            75340.2266,
-            72686.7031
+            75332.1172,
+            72678.7812
           ],
           [
             1794333600,
-            75340.2266,
-            72686.7031
+            75332.1172,
+            72678.7812
           ],
           [
             1794337200,
-            75340.2266,
-            72686.7031
+            75332.1172,
+            72678.7812
           ],
           [
             1794340800,
-            75340.2266,
-            72686.7031
+            75332.1172,
+            72678.7812
           ],
           [
             1794344400,
-            75189.9688,
-            72686.7031
+            75188.7188,
+            72678.7812
           ],
           [
             1794348000,
-            75005.6484,
-            72686.7031
+            75005.6562,
+            72678.7812
           ],
           [
             1794351600,
-            74902.4062,
-            72686.7031
+            74902.8828,
+            72678.7812
           ],
           [
             1794355200,
-            74902.4062,
-            72686.7031
+            74902.8828,
+            72678.7812
           ],
           [
             1794358800,
-            74902.4062,
-            72686.7031
+            74902.8828,
+            72678.7812
           ],
           [
             1794362400,
-            74882.2266,
-            72686.7031
+            74893.5703,
+            72678.7812
           ],
           [
             1794366000,
-            74882.2266,
-            72686.7031
+            74893.5703,
+            72678.7812
           ],
           [
             1794369600,
-            74786.1094,
-            72686.7031
+            74789.3125,
+            72678.7812
           ],
           [
             1794373200,
-            74731.5,
-            72686.7031
+            74731.3672,
+            72678.7812
           ],
           [
             1794376800,
-            74731.5,
-            72686.7031
+            74731.3672,
+            72678.7812
           ],
           [
             1794380400,
-            74731.5,
-            72686.7031
+            74731.3672,
+            72678.7812
           ],
           [
             1794384000,
-            74731.5,
-            72686.7031
+            74731.3672,
+            72678.7812
           ],
           [
             1794387600,
-            74731.5,
-            72686.7031
+            74731.3672,
+            72678.7812
           ],
           [
             1794391200,
-            74731.5,
-            72686.7031
+            74731.3672,
+            72678.7812
           ],
           [
             1794394800,
-            74731.5,
-            72686.7031
+            74731.3672,
+            72678.7812
           ],
           [
             1794398400,
-            74069.1719,
-            72686.7031
+            74070.4688,
+            72678.7812
           ],
           [
             1794402000,
-            74069.1719,
-            72706.4766
+            74070.4688,
+            72715.4531
           ],
           [
             1794405600,
-            74069.1719,
-            73028.2812
+            74070.4688,
+            73037.6719
           ],
           [
             1794409200,
-            74069.1719,
+            74070.4688,
             73119.9531
           ],
           [
             1794412800,
-            74382.0,
+            74382.3281,
             73119.9531
           ],
           [
             1794416400,
-            74382.0,
+            74382.3281,
             73119.9531
           ],
           [
             1794420000,
-            74683.6797,
+            74682.5938,
             73119.9531
           ],
           [
             1794423600,
-            74683.6797,
+            74682.5938,
             73119.9531
           ],
           [
             1794427200,
-            74683.6797,
+            74682.5938,
             73119.9531
           ],
           [
             1794430800,
-            74683.6797,
+            74682.5938,
             73119.9531
           ],
           [
             1794434400,
-            74724.1172,
+            74717.9375,
             73119.9531
           ],
           [
             1794438000,
-            74724.1172,
-            73309.6016
+            74717.9375,
+            73307.4297
           ],
           [
             1794441600,
-            74724.1172,
-            73309.6016
+            74717.9375,
+            73307.4297
           ],
           [
             1794445200,
-            74724.1172,
-            73309.6016
+            74717.9375,
+            73307.4297
           ],
           [
             1794448800,
-            74724.1172,
-            73309.6016
+            74717.9375,
+            73307.4297
           ],
           [
             1794452400,
-            74724.1172,
-            73309.6016
+            74717.9375,
+            73307.4297
           ],
           [
             1794456000,
-            74724.1172,
-            73309.6016
+            74717.9375,
+            73307.4297
           ],
           [
             1794459600,
-            74724.1172,
-            73309.6016
+            74717.9375,
+            73307.4297
           ],
           [
             1794463200,
-            74724.1172,
-            73309.6016
+            74717.9375,
+            73307.4297
           ],
           [
             1794466800,
-            74724.1172,
-            73309.6016
+            74717.9375,
+            73307.4297
           ],
           [
             1794470400,
-            74724.1172,
-            73309.6016
+            74717.9375,
+            73307.4297
+          ],
+          [
+            1794474000,
+            74717.9375,
+            73307.4297
           ]
         ]
       }
@@ -23980,7 +23880,7 @@
         }
       ],
       "live": false,
-      "checked_hour": "2026-11-12T08:00:00Z",
+      "checked_hour": "2026-11-12T09:00:00Z",
       "n": 10,
       "mean_r": -0.7789
     },
@@ -24593,7 +24493,7 @@
         }
       ],
       "live": true,
-      "checked_hour": "2026-11-12T08:45:00Z",
+      "checked_hour": "2026-11-12T09:00:00Z",
       "n": 13,
       "mean_r": -0.2343,
       "levels": {
@@ -24645,7 +24545,7 @@
     }
   },
   "drift": {
-    "updated_at": "2026-11-12T08:35:57Z",
+    "updated_at": "2026-11-12T09:05:53Z",
     "cells": {
       "donchian_1h:bitcoin": {
         "n": 31,
@@ -24736,19 +24636,19 @@
         "since_status": "2026-11-10T14:10:54Z"
       },
       "horizon_3h_gold": {
-        "n": 51,
-        "cum_r": 10.3019,
+        "n": 52,
+        "cum_r": 11.779,
         "dd_r": 6.395,
         "ref_n": 694,
         "ref_mean_r": 0.0963,
-        "cum_pct": 0.7344,
-        "dd_pct": 0.4396,
+        "cum_pct": 0.78,
+        "dd_pct": 0.4352,
         "status": "dans la norme",
         "band": {
-          "cum_p5": -9.235,
-          "cum_p50": 5.024,
-          "cum_p95": 19.592,
-          "dd_p95": 14.488
+          "cum_p5": -9.549,
+          "cum_p50": 5.049,
+          "cum_p95": 19.779,
+          "dd_p95": 14.588
         },
         "label": "Horizon 3 h · or",
         "ref_period": [
