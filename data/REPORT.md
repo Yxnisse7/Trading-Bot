@@ -1,6 +1,6 @@
 # Trading-Bot — rapport
 
-_Mis à jour le 12/11/2026 à 22:01 (Europe/Paris)._
+_Mis à jour le 12/11/2026 à 22:05 (Europe/Paris)._
 
 ## Vue d'ensemble
 
@@ -8,7 +8,7 @@ _Mis à jour le 12/11/2026 à 22:01 (Europe/Paris)._
 - Taux de réussite cumulé (TP / (TP+SL)) : **40%** — hasard attendu 39%, avantage **+1%**
 - P&L théorique cumulé, net des coûts estimés (somme des % par trade, sans levier) : **-6.38 %** (brut -2.22 %)
 - Signaux ouverts : **0**
-- Signaux fantômes (suivis en silence pour l'apprentissage) : **1471** clôturés, 1 ouverts, taux de réussite 37% (hasard attendu 37%)
+- Signaux fantômes (suivis en silence pour l'apprentissage) : **1472** clôturés, 0 ouverts, taux de réussite 37% (hasard attendu 37%)
 
 ## Statistiques
 
@@ -114,24 +114,24 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 
 | Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
 |---|---:|---:|---:|---:|---:|---:|
-| adx | 1471 | 443 | 741 | 287 | 37% | -0.010 % |
+| adx | 1472 | 443 | 741 | 288 | 37% | -0.009 % |
 | corr | 113 | 29 | 62 | 22 | 32% | -0.032 % |
 | level | 140 | 51 | 55 | 34 | 48% | +0.053 % |
 | macd | 365 | 97 | 194 | 74 | 33% | -0.032 % |
 | orb | 93 | 29 | 37 | 27 | 44% | -0.014 % |
 | pdhl | 148 | 60 | 70 | 18 | 46% | +0.112 % |
-| rsi | 1100 | 349 | 549 | 202 | 39% | +0.002 % |
-| trend_15m | 1471 | 443 | 741 | 287 | 37% | -0.010 % |
-| trend_1h | 1445 | 435 | 729 | 281 | 37% | -0.009 % |
-| trend_5m | 1318 | 410 | 669 | 239 | 38% | -0.007 % |
+| rsi | 1101 | 349 | 549 | 203 | 39% | +0.002 % |
+| trend_15m | 1472 | 443 | 741 | 288 | 37% | -0.009 % |
+| trend_1h | 1446 | 435 | 729 | 282 | 37% | -0.009 % |
+| trend_5m | 1319 | 410 | 669 | 240 | 38% | -0.007 % |
 | volume | 19 | 3 | 13 | 3 | 19% | -0.164 % |
-| vwap | 1444 | 438 | 727 | 279 | 38% | -0.009 % |
+| vwap | 1445 | 438 | 727 | 280 | 38% | -0.009 % |
 
 ### Fantômes par actif
 
 | Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
 |---|---:|---:|---:|---:|---:|---:|
-| bitcoin | 54 | 13 | 24 | 17 | 35% | -0.078 % |
+| bitcoin | 55 | 13 | 24 | 18 | 35% | -0.075 % |
 | ethereum | 49 | 10 | 28 | 11 | 26% | -0.165 % |
 | euro | 59 | 19 | 35 | 5 | 35% | -0.023 % |
 | gold | 545 | 184 | 222 | 139 | 45% | +0.008 % |
@@ -178,10 +178,10 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 
 | Critère | Poids actuel |
 |---|---:|
-| trend_5m | 1.008 |
-| trend_15m | 1.008 |
-| trend_1h | 1.008 |
-| adx | 1.008 |
+| trend_5m | 1.009 |
+| trend_15m | 1.009 |
+| trend_1h | 1.009 |
+| adx | 1.009 |
 | vwap | 0.767 |
 | rsi | 1.069 |
 | macd | 1.0 |
@@ -195,10 +195,10 @@ Tranches horaires évitées (UTC) : [10, 12, 19]
 
 Corrections par actif :
 
-- ethereum : {'trend_5m': 0.876, 'trend_15m': 0.876, 'trend_1h': 0.876, 'adx': 0.876, 'rsi': 0.79}
-- euro : {'trend_5m': 0.927, 'trend_15m': 0.927, 'trend_1h': 0.927, 'adx': 0.927, 'vwap': 0.73, 'rsi': 0.962}
-- nasdaq : {'rsi': 1.147}
-- sp500 : {'trend_5m': 0.846, 'trend_15m': 0.846, 'trend_1h': 0.846, 'adx': 0.846, 'vwap': 0.642, 'rsi': 0.971, 'macd': 0.958, 'pdhl': 0.977}
+- ethereum : {'trend_5m': 0.876, 'trend_15m': 0.876, 'trend_1h': 0.876, 'adx': 0.876, 'rsi': 0.789}
+- euro : {'trend_5m': 0.927, 'trend_15m': 0.927, 'trend_1h': 0.927, 'adx': 0.927, 'vwap': 0.73, 'rsi': 0.961}
+- nasdaq : {'rsi': 1.146}
+- sp500 : {'trend_5m': 0.846, 'trend_15m': 0.846, 'trend_1h': 0.846, 'adx': 0.846, 'vwap': 0.642, 'rsi': 0.97, 'macd': 0.958, 'pdhl': 0.977}
 
 | Variante testée en fantôme | Trades | Gain net moyen | Statut |
 |---|---:|---:|---|
@@ -208,7 +208,7 @@ Corrections par actif :
 | entrées dans l'heure avant l'ouverture américaine | 21 | +0.43 R | en test |
 | reprise juste après un stop | 28 | -0.31 R | en test |
 | nouvel actif : S&P 500 (ES) | 48 | -0.16 R | en test |
-| nouvel actif : Bitcoin (BTC/USD) | 32 | -0.53 R | en test |
+| nouvel actif : Bitcoin (BTC/USD) | 33 | -0.51 R | en test |
 | nouvel actif : Ethereum (ETH/USD) | 43 | -0.39 R | en test |
 | horizon ~3 h sur Or (XAU/USD) | 58 | +0.15 R | en test |
 | nouvel actif : Pétrole WTI (CL) | 137 | -0.07 R | en test |
@@ -217,9 +217,9 @@ Corrections par actif :
 Notes :
 
 - trades réels : +0,06 R ± 0,19 R par trade avant frais sur 180 trades (0 R = hasard)
-- tendance (trend_5m, trend_15m, trend_1h, adx) : +0,06 R ± 0,06 R sur 2073 trades éq. → poids ×1,01
-- vwap : +0,07 R ± 0,06 R sur 1955 trades éq. → poids ×1,02
-- rsi : +0,09 R ± 0,06 R sur 1607 trades éq. → poids ×1,07
+- tendance (trend_5m, trend_15m, trend_1h, adx) : +0,06 R ± 0,06 R sur 2074 trades éq. → poids ×1,01
+- vwap : +0,07 R ± 0,06 R sur 1956 trades éq. → poids ×1,02
+- rsi : +0,09 R ± 0,06 R sur 1608 trades éq. → poids ×1,07
 - pdhl : +0,25 R ± 0,18 R sur 231 trades éq. → poids ×1,17
 - tranche 10h UTC : -0,26 R sur 107 trades éq. → évitée
 - tranche 12h UTC : -0,44 R sur 67 trades éq. → évitée
@@ -229,13 +229,13 @@ Notes :
 - euro, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,22 R contre +0,06 R en global sur 91 trades éq. → poids ×0,92 sur cet actif
 - euro, vwap : -0,21 R contre +0,07 R en global sur 86 trades éq. → poids ×0,95 sur cet actif
 - euro, rsi : -0,22 R contre +0,09 R en global sur 76 trades éq. → poids ×0,90 sur cet actif
-- nasdaq, tendance (trend_5m, trend_15m, trend_1h, adx) : +0,19 R contre +0,06 R en global sur 598 trades éq. → poids ×1,00 sur cet actif
 - nasdaq, rsi : +0,27 R contre +0,09 R en global sur 467 trades éq. → poids ×1,07 sur cet actif
 - sp500, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,15 R contre +0,06 R en global sur 224 trades éq. → poids ×0,84 sur cet actif
 - sp500, vwap : -0,15 R contre +0,07 R en global sur 219 trades éq. → poids ×0,84 sur cet actif
 - sp500, rsi : -0,11 R contre +0,09 R en global sur 184 trades éq. → poids ×0,91 sur cet actif
 - sp500, macd : -0,29 R contre -0,01 R en global sur 59 trades éq. → poids ×0,96 sur cet actif
 - sp500, pdhl : -0,19 R contre +0,25 R en global sur 31 trades éq. → poids ×0,84 sur cet actif
+- variante « indices le matin européen » en test : 151 trades, -0,43 R net, pas meilleure que les signaux réels
 
 ## Backtests (données historiques 5 min)
 

@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-12T22:01:36.680218+01:00",
+  "updated_at": "2026-11-12T22:05:58.359956+01:00",
   "timezone": "Europe/Paris",
   "equity_curve": [
     {
@@ -1950,18 +1950,18 @@
       "avg_pnl_pct": -0.0355
     },
     "shadow": {
-      "n": 1471,
+      "n": 1472,
       "tp": 443,
       "sl": 741,
-      "expired": 287,
+      "expired": 288,
       "win_rate": 0.37415540540540543,
       "neutral_win_rate": 0.3668,
       "edge": 0.0074,
-      "pnl_pct": -14.1475,
-      "avg_pnl_pct": -0.0096
+      "pnl_pct": -14.0441,
+      "avg_pnl_pct": -0.0095
     },
     "open": 0,
-    "open_shadow": 1
+    "open_shadow": 0
   },
   "by_source": {
     "bot": {
@@ -1998,15 +1998,15 @@
       "avg_pnl_pct": 0.0
     },
     "shadow": {
-      "n": 1471,
+      "n": 1472,
       "tp": 443,
       "sl": 741,
-      "expired": 287,
+      "expired": 288,
       "win_rate": 0.37415540540540543,
       "neutral_win_rate": 0.3668,
       "edge": 0.0074,
-      "pnl_pct": -14.1475,
-      "avg_pnl_pct": -0.0096
+      "pnl_pct": -14.0441,
+      "avg_pnl_pct": -0.0095
     }
   },
   "by_horizon": {
@@ -2147,15 +2147,15 @@
         "avg_pnl_pct": -0.0503
       },
       "shadow": {
-        "n": 54,
+        "n": 55,
         "tp": 13,
         "sl": 24,
-        "expired": 17,
+        "expired": 18,
         "win_rate": 0.35135135135135137,
-        "neutral_win_rate": 0.4059,
-        "edge": -0.0545,
-        "pnl_pct": -4.2101,
-        "avg_pnl_pct": -0.078
+        "neutral_win_rate": 0.4058,
+        "edge": -0.0544,
+        "pnl_pct": -4.1067,
+        "avg_pnl_pct": -0.0747
       },
       "open": 0,
       "session_utc": null,
@@ -2336,17 +2336,17 @@
     {
       "key": "trend_5m",
       "label": "Tendance 5 min",
-      "weight": 1.008,
+      "weight": 1.009,
       "stats": {
-        "n": 1479,
+        "n": 1480,
         "tp": 464,
         "sl": 745,
-        "expired": 270,
+        "expired": 271,
         "win_rate": 0.3837882547559967,
-        "neutral_win_rate": 0.3656,
-        "edge": 0.0182,
-        "pnl_pct": -13.1996,
-        "avg_pnl_pct": -0.0089
+        "neutral_win_rate": 0.3657,
+        "edge": 0.0181,
+        "pnl_pct": -13.0962,
+        "avg_pnl_pct": -0.0088
       },
       "by_source": {
         "bot": {
@@ -2383,18 +2383,52 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 1318,
+          "n": 1319,
           "tp": 410,
           "sl": 669,
-          "expired": 239,
+          "expired": 240,
           "win_rate": 0.3799814643188137,
-          "neutral_win_rate": 0.3633,
-          "edge": 0.0167,
-          "pnl_pct": -8.8512,
-          "avg_pnl_pct": -0.0067
+          "neutral_win_rate": 0.3634,
+          "edge": 0.0166,
+          "pnl_pct": -8.7478,
+          "avg_pnl_pct": -0.0066
         }
       },
       "last_trades": [
+        {
+          "id": "410793e42f",
+          "asset": "bitcoin",
+          "asset_label": "Bitcoin (BTC/USD)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 71553.0,
+          "take_profit": 71272.0,
+          "stop_loss": 71740.0,
+          "risk_reward": 1.5,
+          "confidence": "fort",
+          "score": 5.93,
+          "criteria": [
+            "adx",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "expired",
+          "pnl_pct": 0.1034,
+          "pnl_gross_pct": 0.1634,
+          "duration_minutes": 60,
+          "close_price": 71436.07,
+          "created_at": "2026-11-12T20:05:45Z",
+          "closed_at": "2026-11-12T21:05:48Z",
+          "created_local": "12/11 21:05",
+          "expires_at": "2026-11-12T21:05:45Z",
+          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 467.6 (0.65 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 81%.",
+          "news_context": "actualité à surveiller (score 1) : Fed’s Daly says more rate hikes likely needed to fight inflation",
+          "manual_exit": null
+        },
         {
           "id": "5349275c2f",
           "asset": "nasdaq",
@@ -2634,56 +2668,22 @@
           "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 238.12 (0.84 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 89%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
           "news_context": "actualité à surveiller (score 3) : Stock Market Midday, Nov. 12: Nvidia CEO Resigns, AMD Surges as Wall Street Edges Higher | Exclusive-Bank of Mexico rate cuts sends wrong message, says deputy governor Heath",
           "manual_exit": null
-        },
-        {
-          "id": "6cd29d4999",
-          "asset": "nasdaq",
-          "asset_label": "Nasdaq 100 (NQ)",
-          "direction": "long",
-          "horizon": "24h",
-          "entry": 28469.75,
-          "take_profit": 28898.5,
-          "stop_loss": 28327.0,
-          "risk_reward": 3.0,
-          "confidence": "fort",
-          "score": 6.72,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.5114,
-          "pnl_gross_pct": -0.5014,
-          "duration_minutes": 109,
-          "close_price": 28327.0,
-          "created_at": "2026-11-12T18:25:52Z",
-          "closed_at": "2026-11-12T20:15:00Z",
-          "created_local": "12/11 19:25",
-          "expires_at": "2026-11-13T18:25:52Z",
-          "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 238.12 (0.84 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 89%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
-          "news_context": "actualité à surveiller (score 3) : Stock Market Midday, Nov. 12: Nvidia CEO Resigns, AMD Surges as Wall Street Edges Higher | Exclusive-Bank of Mexico rate cuts sends wrong message, says deputy governor Heath",
-          "manual_exit": null
         }
       ]
     },
     {
       "key": "trend_15m",
       "label": "Tendance 15 min",
-      "weight": 1.008,
+      "weight": 1.009,
       "stats": {
-        "n": 1650,
+        "n": 1651,
         "tp": 501,
         "sl": 828,
-        "expired": 321,
+        "expired": 322,
         "win_rate": 0.37697516930022573,
         "neutral_win_rate": 0.3688,
         "edge": 0.0082,
-        "pnl_pct": -20.3722,
+        "pnl_pct": -20.2688,
         "avg_pnl_pct": -0.0123
       },
       "by_source": {
@@ -2721,18 +2721,52 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 1471,
+          "n": 1472,
           "tp": 443,
           "sl": 741,
-          "expired": 287,
+          "expired": 288,
           "win_rate": 0.37415540540540543,
           "neutral_win_rate": 0.3668,
           "edge": 0.0074,
-          "pnl_pct": -14.1475,
-          "avg_pnl_pct": -0.0096
+          "pnl_pct": -14.0441,
+          "avg_pnl_pct": -0.0095
         }
       },
       "last_trades": [
+        {
+          "id": "410793e42f",
+          "asset": "bitcoin",
+          "asset_label": "Bitcoin (BTC/USD)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 71553.0,
+          "take_profit": 71272.0,
+          "stop_loss": 71740.0,
+          "risk_reward": 1.5,
+          "confidence": "fort",
+          "score": 5.93,
+          "criteria": [
+            "adx",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "expired",
+          "pnl_pct": 0.1034,
+          "pnl_gross_pct": 0.1634,
+          "duration_minutes": 60,
+          "close_price": 71436.07,
+          "created_at": "2026-11-12T20:05:45Z",
+          "closed_at": "2026-11-12T21:05:48Z",
+          "created_local": "12/11 21:05",
+          "expires_at": "2026-11-12T21:05:45Z",
+          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 467.6 (0.65 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 81%.",
+          "news_context": "actualité à surveiller (score 1) : Fed’s Daly says more rate hikes likely needed to fight inflation",
+          "manual_exit": null
+        },
         {
           "id": "5349275c2f",
           "asset": "nasdaq",
@@ -2972,56 +3006,22 @@
           "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 238.12 (0.84 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 89%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
           "news_context": "actualité à surveiller (score 3) : Stock Market Midday, Nov. 12: Nvidia CEO Resigns, AMD Surges as Wall Street Edges Higher | Exclusive-Bank of Mexico rate cuts sends wrong message, says deputy governor Heath",
           "manual_exit": null
-        },
-        {
-          "id": "6cd29d4999",
-          "asset": "nasdaq",
-          "asset_label": "Nasdaq 100 (NQ)",
-          "direction": "long",
-          "horizon": "24h",
-          "entry": 28469.75,
-          "take_profit": 28898.5,
-          "stop_loss": 28327.0,
-          "risk_reward": 3.0,
-          "confidence": "fort",
-          "score": 6.72,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.5114,
-          "pnl_gross_pct": -0.5014,
-          "duration_minutes": 109,
-          "close_price": 28327.0,
-          "created_at": "2026-11-12T18:25:52Z",
-          "closed_at": "2026-11-12T20:15:00Z",
-          "created_local": "12/11 19:25",
-          "expires_at": "2026-11-13T18:25:52Z",
-          "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 238.12 (0.84 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 89%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
-          "news_context": "actualité à surveiller (score 3) : Stock Market Midday, Nov. 12: Nvidia CEO Resigns, AMD Surges as Wall Street Edges Higher | Exclusive-Bank of Mexico rate cuts sends wrong message, says deputy governor Heath",
-          "manual_exit": null
         }
       ]
     },
     {
       "key": "trend_1h",
       "label": "Tendance 1 h",
-      "weight": 1.008,
+      "weight": 1.009,
       "stats": {
-        "n": 1624,
+        "n": 1625,
         "tp": 493,
         "sl": 816,
-        "expired": 315,
+        "expired": 316,
         "win_rate": 0.37662337662337664,
-        "neutral_win_rate": 0.3686,
-        "edge": 0.008,
-        "pnl_pct": -18.552,
+        "neutral_win_rate": 0.3687,
+        "edge": 0.0079,
+        "pnl_pct": -18.4486,
         "avg_pnl_pct": -0.0114
       },
       "by_source": {
@@ -3059,18 +3059,52 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 1445,
+          "n": 1446,
           "tp": 435,
           "sl": 729,
-          "expired": 281,
+          "expired": 282,
           "win_rate": 0.37371134020618557,
           "neutral_win_rate": 0.3665,
           "edge": 0.0072,
-          "pnl_pct": -12.3273,
+          "pnl_pct": -12.2239,
           "avg_pnl_pct": -0.0085
         }
       },
       "last_trades": [
+        {
+          "id": "410793e42f",
+          "asset": "bitcoin",
+          "asset_label": "Bitcoin (BTC/USD)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 71553.0,
+          "take_profit": 71272.0,
+          "stop_loss": 71740.0,
+          "risk_reward": 1.5,
+          "confidence": "fort",
+          "score": 5.93,
+          "criteria": [
+            "adx",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "expired",
+          "pnl_pct": 0.1034,
+          "pnl_gross_pct": 0.1634,
+          "duration_minutes": 60,
+          "close_price": 71436.07,
+          "created_at": "2026-11-12T20:05:45Z",
+          "closed_at": "2026-11-12T21:05:48Z",
+          "created_local": "12/11 21:05",
+          "expires_at": "2026-11-12T21:05:45Z",
+          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 467.6 (0.65 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 81%.",
+          "news_context": "actualité à surveiller (score 1) : Fed’s Daly says more rate hikes likely needed to fight inflation",
+          "manual_exit": null
+        },
         {
           "id": "5349275c2f",
           "asset": "nasdaq",
@@ -3310,56 +3344,22 @@
           "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 238.12 (0.84 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 89%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
           "news_context": "actualité à surveiller (score 3) : Stock Market Midday, Nov. 12: Nvidia CEO Resigns, AMD Surges as Wall Street Edges Higher | Exclusive-Bank of Mexico rate cuts sends wrong message, says deputy governor Heath",
           "manual_exit": null
-        },
-        {
-          "id": "6cd29d4999",
-          "asset": "nasdaq",
-          "asset_label": "Nasdaq 100 (NQ)",
-          "direction": "long",
-          "horizon": "24h",
-          "entry": 28469.75,
-          "take_profit": 28898.5,
-          "stop_loss": 28327.0,
-          "risk_reward": 3.0,
-          "confidence": "fort",
-          "score": 6.72,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.5114,
-          "pnl_gross_pct": -0.5014,
-          "duration_minutes": 109,
-          "close_price": 28327.0,
-          "created_at": "2026-11-12T18:25:52Z",
-          "closed_at": "2026-11-12T20:15:00Z",
-          "created_local": "12/11 19:25",
-          "expires_at": "2026-11-13T18:25:52Z",
-          "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 238.12 (0.84 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 89%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
-          "news_context": "actualité à surveiller (score 3) : Stock Market Midday, Nov. 12: Nvidia CEO Resigns, AMD Surges as Wall Street Edges Higher | Exclusive-Bank of Mexico rate cuts sends wrong message, says deputy governor Heath",
-          "manual_exit": null
         }
       ]
     },
     {
       "key": "adx",
       "label": "Force de tendance (ADX)",
-      "weight": 1.008,
+      "weight": 1.009,
       "stats": {
-        "n": 1650,
+        "n": 1651,
         "tp": 501,
         "sl": 828,
-        "expired": 321,
+        "expired": 322,
         "win_rate": 0.37697516930022573,
         "neutral_win_rate": 0.3688,
         "edge": 0.0082,
-        "pnl_pct": -20.3722,
+        "pnl_pct": -20.2688,
         "avg_pnl_pct": -0.0123
       },
       "by_source": {
@@ -3397,18 +3397,52 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 1471,
+          "n": 1472,
           "tp": 443,
           "sl": 741,
-          "expired": 287,
+          "expired": 288,
           "win_rate": 0.37415540540540543,
           "neutral_win_rate": 0.3668,
           "edge": 0.0074,
-          "pnl_pct": -14.1475,
-          "avg_pnl_pct": -0.0096
+          "pnl_pct": -14.0441,
+          "avg_pnl_pct": -0.0095
         }
       },
       "last_trades": [
+        {
+          "id": "410793e42f",
+          "asset": "bitcoin",
+          "asset_label": "Bitcoin (BTC/USD)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 71553.0,
+          "take_profit": 71272.0,
+          "stop_loss": 71740.0,
+          "risk_reward": 1.5,
+          "confidence": "fort",
+          "score": 5.93,
+          "criteria": [
+            "adx",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "expired",
+          "pnl_pct": 0.1034,
+          "pnl_gross_pct": 0.1634,
+          "duration_minutes": 60,
+          "close_price": 71436.07,
+          "created_at": "2026-11-12T20:05:45Z",
+          "closed_at": "2026-11-12T21:05:48Z",
+          "created_local": "12/11 21:05",
+          "expires_at": "2026-11-12T21:05:45Z",
+          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 467.6 (0.65 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 81%.",
+          "news_context": "actualité à surveiller (score 1) : Fed’s Daly says more rate hikes likely needed to fight inflation",
+          "manual_exit": null
+        },
         {
           "id": "5349275c2f",
           "asset": "nasdaq",
@@ -3648,40 +3682,6 @@
           "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 238.12 (0.84 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 89%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
           "news_context": "actualité à surveiller (score 3) : Stock Market Midday, Nov. 12: Nvidia CEO Resigns, AMD Surges as Wall Street Edges Higher | Exclusive-Bank of Mexico rate cuts sends wrong message, says deputy governor Heath",
           "manual_exit": null
-        },
-        {
-          "id": "6cd29d4999",
-          "asset": "nasdaq",
-          "asset_label": "Nasdaq 100 (NQ)",
-          "direction": "long",
-          "horizon": "24h",
-          "entry": 28469.75,
-          "take_profit": 28898.5,
-          "stop_loss": 28327.0,
-          "risk_reward": 3.0,
-          "confidence": "fort",
-          "score": 6.72,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.5114,
-          "pnl_gross_pct": -0.5014,
-          "duration_minutes": 109,
-          "close_price": 28327.0,
-          "created_at": "2026-11-12T18:25:52Z",
-          "closed_at": "2026-11-12T20:15:00Z",
-          "created_local": "12/11 19:25",
-          "expires_at": "2026-11-13T18:25:52Z",
-          "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 238.12 (0.84 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 89%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
-          "news_context": "actualité à surveiller (score 3) : Stock Market Midday, Nov. 12: Nvidia CEO Resigns, AMD Surges as Wall Street Edges Higher | Exclusive-Bank of Mexico rate cuts sends wrong message, says deputy governor Heath",
-          "manual_exit": null
         }
       ]
     },
@@ -3690,15 +3690,15 @@
       "label": "VWAP",
       "weight": 0.767,
       "stats": {
-        "n": 1621,
+        "n": 1622,
         "tp": 496,
         "sl": 812,
-        "expired": 313,
+        "expired": 314,
         "win_rate": 0.37920489296636084,
         "neutral_win_rate": 0.3681,
         "edge": 0.0111,
-        "pnl_pct": -18.285,
-        "avg_pnl_pct": -0.0113
+        "pnl_pct": -18.1816,
+        "avg_pnl_pct": -0.0112
       },
       "by_source": {
         "bot": {
@@ -3735,18 +3735,52 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 1444,
+          "n": 1445,
           "tp": 438,
           "sl": 727,
-          "expired": 279,
+          "expired": 280,
           "win_rate": 0.3759656652360515,
           "neutral_win_rate": 0.3659,
           "edge": 0.0101,
-          "pnl_pct": -12.6767,
-          "avg_pnl_pct": -0.0088
+          "pnl_pct": -12.5733,
+          "avg_pnl_pct": -0.0087
         }
       },
       "last_trades": [
+        {
+          "id": "410793e42f",
+          "asset": "bitcoin",
+          "asset_label": "Bitcoin (BTC/USD)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 71553.0,
+          "take_profit": 71272.0,
+          "stop_loss": 71740.0,
+          "risk_reward": 1.5,
+          "confidence": "fort",
+          "score": 5.93,
+          "criteria": [
+            "adx",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "expired",
+          "pnl_pct": 0.1034,
+          "pnl_gross_pct": 0.1634,
+          "duration_minutes": 60,
+          "close_price": 71436.07,
+          "created_at": "2026-11-12T20:05:45Z",
+          "closed_at": "2026-11-12T21:05:48Z",
+          "created_local": "12/11 21:05",
+          "expires_at": "2026-11-12T21:05:45Z",
+          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 467.6 (0.65 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 81%.",
+          "news_context": "actualité à surveiller (score 1) : Fed’s Daly says more rate hikes likely needed to fight inflation",
+          "manual_exit": null
+        },
         {
           "id": "5349275c2f",
           "asset": "nasdaq",
@@ -3986,40 +4020,6 @@
           "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 238.12 (0.84 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 89%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
           "news_context": "actualité à surveiller (score 3) : Stock Market Midday, Nov. 12: Nvidia CEO Resigns, AMD Surges as Wall Street Edges Higher | Exclusive-Bank of Mexico rate cuts sends wrong message, says deputy governor Heath",
           "manual_exit": null
-        },
-        {
-          "id": "6cd29d4999",
-          "asset": "nasdaq",
-          "asset_label": "Nasdaq 100 (NQ)",
-          "direction": "long",
-          "horizon": "24h",
-          "entry": 28469.75,
-          "take_profit": 28898.5,
-          "stop_loss": 28327.0,
-          "risk_reward": 3.0,
-          "confidence": "fort",
-          "score": 6.72,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.5114,
-          "pnl_gross_pct": -0.5014,
-          "duration_minutes": 109,
-          "close_price": 28327.0,
-          "created_at": "2026-11-12T18:25:52Z",
-          "closed_at": "2026-11-12T20:15:00Z",
-          "created_local": "12/11 19:25",
-          "expires_at": "2026-11-13T18:25:52Z",
-          "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 238.12 (0.84 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 89%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
-          "news_context": "actualité à surveiller (score 3) : Stock Market Midday, Nov. 12: Nvidia CEO Resigns, AMD Surges as Wall Street Edges Higher | Exclusive-Bank of Mexico rate cuts sends wrong message, says deputy governor Heath",
-          "manual_exit": null
         }
       ]
     },
@@ -4028,15 +4028,15 @@
       "label": "RSI",
       "weight": 1.069,
       "stats": {
-        "n": 1254,
+        "n": 1255,
         "tp": 402,
         "sl": 619,
-        "expired": 233,
+        "expired": 234,
         "win_rate": 0.39373163565132224,
         "neutral_win_rate": 0.3669,
         "edge": 0.0268,
-        "pnl_pct": -0.457,
-        "avg_pnl_pct": -0.0004
+        "pnl_pct": -0.3536,
+        "avg_pnl_pct": -0.0003
       },
       "by_source": {
         "bot": {
@@ -4073,18 +4073,52 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 1100,
+          "n": 1101,
           "tp": 349,
           "sl": 549,
-          "expired": 202,
+          "expired": 203,
           "win_rate": 0.388641425389755,
           "neutral_win_rate": 0.3643,
           "edge": 0.0243,
-          "pnl_pct": 1.9204,
-          "avg_pnl_pct": 0.0017
+          "pnl_pct": 2.0238,
+          "avg_pnl_pct": 0.0018
         }
       },
       "last_trades": [
+        {
+          "id": "410793e42f",
+          "asset": "bitcoin",
+          "asset_label": "Bitcoin (BTC/USD)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 71553.0,
+          "take_profit": 71272.0,
+          "stop_loss": 71740.0,
+          "risk_reward": 1.5,
+          "confidence": "fort",
+          "score": 5.93,
+          "criteria": [
+            "adx",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "expired",
+          "pnl_pct": 0.1034,
+          "pnl_gross_pct": 0.1634,
+          "duration_minutes": 60,
+          "close_price": 71436.07,
+          "created_at": "2026-11-12T20:05:45Z",
+          "closed_at": "2026-11-12T21:05:48Z",
+          "created_local": "12/11 21:05",
+          "expires_at": "2026-11-12T21:05:45Z",
+          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 467.6 (0.65 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 81%.",
+          "news_context": "actualité à surveiller (score 1) : Fed’s Daly says more rate hikes likely needed to fight inflation",
+          "manual_exit": null
+        },
         {
           "id": "5349275c2f",
           "asset": "nasdaq",
@@ -4321,40 +4355,6 @@
           "closed_at": "2026-11-12T19:40:00Z",
           "created_local": "12/11 19:31",
           "expires_at": "2026-11-13T18:31:24Z",
-          "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 238.12 (0.84 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 89%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
-          "news_context": "actualité à surveiller (score 3) : Stock Market Midday, Nov. 12: Nvidia CEO Resigns, AMD Surges as Wall Street Edges Higher | Exclusive-Bank of Mexico rate cuts sends wrong message, says deputy governor Heath",
-          "manual_exit": null
-        },
-        {
-          "id": "6cd29d4999",
-          "asset": "nasdaq",
-          "asset_label": "Nasdaq 100 (NQ)",
-          "direction": "long",
-          "horizon": "24h",
-          "entry": 28469.75,
-          "take_profit": 28898.5,
-          "stop_loss": 28327.0,
-          "risk_reward": 3.0,
-          "confidence": "fort",
-          "score": 6.72,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.5114,
-          "pnl_gross_pct": -0.5014,
-          "duration_minutes": 109,
-          "close_price": 28327.0,
-          "created_at": "2026-11-12T18:25:52Z",
-          "closed_at": "2026-11-12T20:15:00Z",
-          "created_local": "12/11 19:25",
-          "expires_at": "2026-11-13T18:25:52Z",
           "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 238.12 (0.84 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 89%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
           "news_context": "actualité à surveiller (score 3) : Stock Market Midday, Nov. 12: Nvidia CEO Resigns, AMD Surges as Wall Street Edges Higher | Exclusive-Bank of Mexico rate cuts sends wrong message, says deputy governor Heath",
           "manual_exit": null
@@ -5392,42 +5392,7 @@
       ]
     }
   ],
-  "open_signals": [
-    {
-      "id": "410793e42f",
-      "asset": "bitcoin",
-      "asset_label": "Bitcoin (BTC/USD)",
-      "direction": "short",
-      "horizon": "1h",
-      "entry": 71553.0,
-      "take_profit": 71272.0,
-      "stop_loss": 71740.0,
-      "risk_reward": 1.5,
-      "confidence": "fort",
-      "score": 5.93,
-      "criteria": [
-        "adx",
-        "rsi",
-        "trend_15m",
-        "trend_1h",
-        "trend_5m",
-        "vwap"
-      ],
-      "source": "shadow",
-      "status": "open",
-      "pnl_pct": null,
-      "pnl_gross_pct": null,
-      "duration_minutes": null,
-      "close_price": null,
-      "created_at": "2026-11-12T20:05:45Z",
-      "closed_at": null,
-      "created_local": "12/11 21:05",
-      "expires_at": "2026-11-12T21:05:45Z",
-      "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 467.6 (0.65 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 81%.",
-      "news_context": "actualité à surveiller (score 1) : Fed’s Daly says more rate hikes likely needed to fight inflation",
-      "manual_exit": null
-    }
-  ],
+  "open_signals": [],
   "recent_trades": [
     {
       "id": "f2cf4e26cc",
@@ -7027,9 +6992,9 @@
   "adjustments": {
     "notes": [
       "trades réels : +0,06 R ± 0,19 R par trade avant frais sur 180 trades (0 R = hasard)",
-      "tendance (trend_5m, trend_15m, trend_1h, adx) : +0,06 R ± 0,06 R sur 2073 trades éq. → poids ×1,01",
-      "vwap : +0,07 R ± 0,06 R sur 1955 trades éq. → poids ×1,02",
-      "rsi : +0,09 R ± 0,06 R sur 1607 trades éq. → poids ×1,07",
+      "tendance (trend_5m, trend_15m, trend_1h, adx) : +0,06 R ± 0,06 R sur 2074 trades éq. → poids ×1,01",
+      "vwap : +0,07 R ± 0,06 R sur 1956 trades éq. → poids ×1,02",
+      "rsi : +0,09 R ± 0,06 R sur 1608 trades éq. → poids ×1,07",
       "pdhl : +0,25 R ± 0,18 R sur 231 trades éq. → poids ×1,17",
       "tranche 10h UTC : -0,26 R sur 107 trades éq. → évitée",
       "tranche 12h UTC : -0,44 R sur 67 trades éq. → évitée",
@@ -7039,32 +7004,32 @@
       "euro, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,22 R contre +0,06 R en global sur 91 trades éq. → poids ×0,92 sur cet actif",
       "euro, vwap : -0,21 R contre +0,07 R en global sur 86 trades éq. → poids ×0,95 sur cet actif",
       "euro, rsi : -0,22 R contre +0,09 R en global sur 76 trades éq. → poids ×0,90 sur cet actif",
-      "nasdaq, tendance (trend_5m, trend_15m, trend_1h, adx) : +0,19 R contre +0,06 R en global sur 598 trades éq. → poids ×1,00 sur cet actif",
       "nasdaq, rsi : +0,27 R contre +0,09 R en global sur 467 trades éq. → poids ×1,07 sur cet actif",
       "sp500, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,15 R contre +0,06 R en global sur 224 trades éq. → poids ×0,84 sur cet actif",
       "sp500, vwap : -0,15 R contre +0,07 R en global sur 219 trades éq. → poids ×0,84 sur cet actif",
       "sp500, rsi : -0,11 R contre +0,09 R en global sur 184 trades éq. → poids ×0,91 sur cet actif",
       "sp500, macd : -0,29 R contre -0,01 R en global sur 59 trades éq. → poids ×0,96 sur cet actif",
-      "sp500, pdhl : -0,19 R contre +0,25 R en global sur 31 trades éq. → poids ×0,84 sur cet actif"
+      "sp500, pdhl : -0,19 R contre +0,25 R en global sur 31 trades éq. → poids ×0,84 sur cet actif",
+      "variante « indices le matin européen » en test : 151 trades, -0,43 R net, pas meilleure que les signaux réels"
     ],
     "avoid_hours_utc": [
       10,
       12,
       19
     ],
-    "sample": 2412,
+    "sample": 2413,
     "sample_by_source": {
       "bot": 179,
-      "shadow": 1471,
+      "shadow": 1472,
       "manual": 1,
       "backtest": 761
     },
     "method": "v2 : recalcul complet, marge de sécurité, résultats en R, sources pondérées",
     "weights": {
-      "trend_5m": 1.008,
-      "trend_15m": 1.008,
-      "trend_1h": 1.008,
-      "adx": 1.008,
+      "trend_5m": 1.009,
+      "trend_15m": 1.009,
+      "trend_1h": 1.009,
+      "adx": 1.009,
       "vwap": 0.767,
       "rsi": 1.069,
       "macd": 1.0,
@@ -7076,10 +7041,10 @@
     },
     "weights_by_asset": {
       "bitcoin": {
-        "trend_5m": 1.008,
-        "trend_15m": 1.008,
-        "trend_1h": 1.008,
-        "adx": 1.008,
+        "trend_5m": 1.009,
+        "trend_15m": 1.009,
+        "trend_1h": 1.009,
+        "adx": 1.009,
         "vwap": 0.767,
         "rsi": 1.069,
         "macd": 1.0,
@@ -7095,7 +7060,7 @@
         "trend_1h": 0.876,
         "adx": 0.876,
         "vwap": 0.767,
-        "rsi": 0.79,
+        "rsi": 0.789,
         "macd": 1.0,
         "level": 1.0,
         "volume": 0.75,
@@ -7109,7 +7074,7 @@
         "trend_1h": 0.927,
         "adx": 0.927,
         "vwap": 0.73,
-        "rsi": 0.962,
+        "rsi": 0.961,
         "macd": 1.0,
         "level": 1.0,
         "volume": 0.75,
@@ -7118,10 +7083,10 @@
         "corr": 0.5
       },
       "gold": {
-        "trend_5m": 1.008,
-        "trend_15m": 1.008,
-        "trend_1h": 1.008,
-        "adx": 1.008,
+        "trend_5m": 1.009,
+        "trend_15m": 1.009,
+        "trend_1h": 1.009,
+        "adx": 1.009,
         "vwap": 0.767,
         "rsi": 1.069,
         "macd": 1.0,
@@ -7132,12 +7097,12 @@
         "corr": 0.5
       },
       "nasdaq": {
-        "trend_5m": 1.008,
-        "trend_15m": 1.008,
-        "trend_1h": 1.008,
-        "adx": 1.008,
+        "trend_5m": 1.009,
+        "trend_15m": 1.009,
+        "trend_1h": 1.009,
+        "adx": 1.009,
         "vwap": 0.767,
-        "rsi": 1.147,
+        "rsi": 1.146,
         "macd": 1.0,
         "level": 1.0,
         "volume": 0.75,
@@ -7146,10 +7111,10 @@
         "corr": 0.5
       },
       "oil": {
-        "trend_5m": 1.008,
-        "trend_15m": 1.008,
-        "trend_1h": 1.008,
-        "adx": 1.008,
+        "trend_5m": 1.009,
+        "trend_15m": 1.009,
+        "trend_1h": 1.009,
+        "adx": 1.009,
         "vwap": 0.767,
         "rsi": 1.069,
         "macd": 1.0,
@@ -7165,7 +7130,7 @@
         "trend_1h": 0.846,
         "adx": 0.846,
         "vwap": 0.642,
-        "rsi": 0.971,
+        "rsi": 0.97,
         "macd": 0.958,
         "level": 1.0,
         "volume": 0.75,
@@ -7182,30 +7147,30 @@
           "trend_1h",
           "adx"
         ],
-        "n": 2411,
-        "n_eff": 2072.6,
-        "mean_r": 0.0594,
-        "margin_r": 0.0563,
-        "multiplier": 1.008
+        "n": 2412,
+        "n_eff": 2073.6,
+        "mean_r": 0.0597,
+        "margin_r": 0.0562,
+        "multiplier": 1.009
       },
       "vwap": {
         "members": [
           "vwap"
         ],
-        "n": 2245,
-        "n_eff": 1955.0,
-        "mean_r": 0.0672,
+        "n": 2246,
+        "n_eff": 1956.0,
+        "mean_r": 0.0674,
         "margin_r": 0.0583,
-        "multiplier": 1.022
+        "multiplier": 1.023
       },
       "rsi": {
         "members": [
           "rsi"
         ],
-        "n": 1893,
-        "n_eff": 1607.3,
-        "mean_r": 0.0923,
-        "margin_r": 0.0649,
+        "n": 1894,
+        "n_eff": 1608.3,
+        "mean_r": 0.0926,
+        "margin_r": 0.0648,
         "multiplier": 1.069
       },
       "macd": {
@@ -7276,8 +7241,8 @@
         "margin_r": 0.1891
       },
       "fantômes": {
-        "n": 1471,
-        "mean_r": 0.0798,
+        "n": 1472,
+        "mean_r": 0.0801,
         "margin_r": 0.0684
       },
       "backtest": {
@@ -7337,11 +7302,11 @@
       },
       "essai_bitcoin": {
         "label": "nouvel actif : Bitcoin (BTC/USD)",
-        "n": 32,
-        "mean_net_r": -0.5333,
-        "lower_r": -1.0385,
+        "n": 33,
+        "mean_net_r": -0.5051,
+        "lower_r": -1.0009,
         "promoted": false,
-        "missing": 68
+        "missing": 67
       },
       "essai_ethereum": {
         "label": "nouvel actif : Ethereum (ETH/USD)",
@@ -7382,9 +7347,9 @@
     },
     "variants_z": 2.75,
     "promoted_variants": [],
-    "updated_at": "2026-11-12T20:46:34.969328+00:00",
+    "updated_at": "2026-11-12T21:05:51.224068+00:00",
     "context": {
-      "n": 2180,
+      "n": 2181,
       "features": {
         "adx": {
           "label": "force de tendance (ADX 15 min)",
@@ -7392,21 +7357,21 @@
             {
               "label": "bas (< 27)",
               "lo": -1000000000.0,
-              "hi": 27.22,
-              "n": 725,
-              "n_eff": 621.1,
-              "mean_r": -0.0745,
+              "hi": 27.24,
+              "n": 727,
+              "n_eff": 622.4,
+              "mean_r": -0.0816,
               "margin_r": 0.1252,
               "avoid": false
             },
             {
               "label": "milieu (27 à 38)",
-              "lo": 27.22,
+              "lo": 27.24,
               "hi": 38.47,
-              "n": 728,
-              "n_eff": 620.2,
-              "mean_r": 0.1492,
-              "margin_r": 0.1351,
+              "n": 727,
+              "n_eff": 619.6,
+              "mean_r": 0.1577,
+              "margin_r": 0.1348,
               "avoid": false
             },
             {
@@ -7428,10 +7393,10 @@
               "label": "bas (< 59)",
               "lo": -1000000000.0,
               "hi": 58.86,
-              "n": 726,
-              "n_eff": 635.5,
-              "mean_r": 0.0269,
-              "margin_r": 0.1198,
+              "n": 727,
+              "n_eff": 636.5,
+              "mean_r": 0.0279,
+              "margin_r": 0.1196,
               "avoid": false
             },
             {
@@ -7472,21 +7437,21 @@
             {
               "label": "milieu (0,91 à 1,55)",
               "lo": 0.907,
-              "hi": 1.5484,
+              "hi": 1.5452,
               "n": 687,
               "n_eff": 594.2,
-              "mean_r": 0.0101,
+              "mean_r": 0.0129,
               "margin_r": 0.1364,
               "avoid": false
             },
             {
               "label": "haut (≥ 1,55)",
-              "lo": 1.5484,
+              "lo": 1.5452,
               "hi": 1000000000.0,
-              "n": 687,
-              "n_eff": 608.6,
-              "mean_r": 0.2444,
-              "margin_r": 0.1462,
+              "n": 688,
+              "n_eff": 609.6,
+              "mean_r": 0.2423,
+              "margin_r": 0.1461,
               "avoid": false
             }
           ]
@@ -7498,10 +7463,10 @@
               "label": "bas (< 0,23)",
               "lo": -1000000000.0,
               "hi": 0.2277,
-              "n": 725,
-              "n_eff": 632.5,
-              "mean_r": 0.0569,
-              "margin_r": 0.1188,
+              "n": 726,
+              "n_eff": 633.5,
+              "mean_r": 0.0578,
+              "margin_r": 0.1186,
               "avoid": false
             },
             {
@@ -7533,11 +7498,11 @@
               "label": "bas (< 1,08)",
               "lo": -1000000000.0,
               "hi": 1.083,
-              "n": 724,
-              "n_eff": 643.3,
-              "mean_r": -0.1083,
-              "margin_r": 0.1082,
-              "avoid": true
+              "n": 725,
+              "n_eff": 644.3,
+              "mean_r": -0.1071,
+              "margin_r": 0.108,
+              "avoid": false
             },
             {
               "label": "milieu (1,08 à 1,43)",
@@ -7567,21 +7532,21 @@
             {
               "label": "bas (< 0,99)",
               "lo": -1000000000.0,
-              "hi": 0.989,
-              "n": 645,
-              "n_eff": 577.5,
-              "mean_r": 0.0584,
+              "hi": 0.988,
+              "n": 644,
+              "n_eff": 576.8,
+              "mean_r": 0.0603,
               "margin_r": 0.1288,
               "avoid": false
             },
             {
               "label": "milieu (0,99 à 1,28)",
-              "lo": 0.989,
+              "lo": 0.988,
               "hi": 1.278,
-              "n": 644,
-              "n_eff": 544.6,
-              "mean_r": -0.0141,
-              "margin_r": 0.1331,
+              "n": 646,
+              "n_eff": 546.3,
+              "mean_r": -0.0148,
+              "margin_r": 0.1329,
               "avoid": false
             },
             {
@@ -7602,17 +7567,17 @@
             {
               "label": "bas (< 0,39)",
               "lo": -1000000000.0,
-              "hi": 0.3888,
-              "n": 726,
-              "n_eff": 631.3,
-              "mean_r": 0.1113,
-              "margin_r": 0.1415,
+              "hi": 0.389,
+              "n": 727,
+              "n_eff": 632.3,
+              "mean_r": 0.1095,
+              "margin_r": 0.1413,
               "avoid": false
             },
             {
               "label": "milieu (0,39 à 0,64)",
-              "lo": 0.3888,
-              "hi": 0.637,
+              "lo": 0.389,
+              "hi": 0.6374,
               "n": 727,
               "n_eff": 649.1,
               "mean_r": 0.1531,
@@ -7621,12 +7586,12 @@
             },
             {
               "label": "haut (≥ 0,64)",
-              "lo": 0.637,
+              "lo": 0.6374,
               "hi": 1000000000.0,
               "n": 727,
               "n_eff": 612.1,
-              "mean_r": -0.0962,
-              "margin_r": 0.1217,
+              "mean_r": -0.0931,
+              "margin_r": 0.1216,
               "avoid": false
             }
           ]
@@ -7658,10 +7623,10 @@
               "label": "haut (≥ 0,12)",
               "lo": 0.1241,
               "hi": 1000000000.0,
-              "n": 727,
-              "n_eff": 612.9,
-              "mean_r": -0.0161,
-              "margin_r": 0.1161,
+              "n": 728,
+              "n_eff": 613.9,
+              "mean_r": -0.015,
+              "margin_r": 0.1159,
               "avoid": false
             }
           ]
@@ -7693,10 +7658,10 @@
               "label": "plus de 1 h 30 après l'ouverture US",
               "lo": 90.0,
               "hi": 1000000000.0,
-              "n": 1012,
-              "n_eff": 865.3,
-              "mean_r": 0.1251,
-              "margin_r": 0.1194,
+              "n": 1013,
+              "n_eff": 866.3,
+              "mean_r": 0.1257,
+              "margin_r": 0.1193,
               "avoid": false
             }
           ]
@@ -7738,10 +7703,10 @@
               "label": "jeudi",
               "lo": 3,
               "hi": 4,
-              "n": 687,
-              "n_eff": 608.5,
-              "mean_r": -0.1678,
-              "margin_r": 0.1212,
+              "n": 688,
+              "n_eff": 609.5,
+              "mean_r": -0.1665,
+              "margin_r": 0.1211,
               "avoid": true
             },
             {
@@ -7779,27 +7744,19 @@
       },
       "avoid": [
         {
-          "feature": "atr_ratio",
-          "lo": -1000000000.0,
-          "hi": 1.083,
-          "label": "volatilité du moment / moyenne 24 h : bas (< 1,08)",
-          "mean_r": -0.1083,
-          "n": 724
-        },
-        {
           "feature": "weekday",
           "lo": 3,
           "hi": 4,
           "label": "jour de la semaine : jeudi",
-          "mean_r": -0.1678,
-          "n": 687
+          "mean_r": -0.1665,
+          "n": 688
         }
       ]
     },
     "exits": {
       "réels et en ombre": {
-        "n": 1420,
-        "current_net_r": -0.0088,
+        "n": 1421,
+        "current_net_r": -0.0086,
         "mfe_median": 0.902,
         "sl_reached": {
           "0.5": 269,
@@ -7809,19 +7766,19 @@
         "n_sl": 716,
         "rules": {
           "0.5": {
-            "net_r": -0.0175,
-            "diff_r": -0.0087,
-            "margin_r": 0.0417,
+            "net_r": -0.0177,
+            "diff_r": -0.0091,
+            "margin_r": 0.0416,
             "better": false
           },
           "0.8": {
-            "net_r": -0.0184,
-            "diff_r": -0.0096,
+            "net_r": -0.0181,
+            "diff_r": -0.0095,
             "margin_r": 0.033,
             "better": false
           },
           "1.0": {
-            "net_r": -0.0168,
+            "net_r": -0.0165,
             "diff_r": -0.0079,
             "margin_r": 0.029,
             "better": false
@@ -7938,10 +7895,10 @@
     }
   },
   "state": {
-    "last_scan": "2026-11-12T21:01:29Z",
+    "last_scan": "2026-11-12T21:05:48Z",
     "last_scan_note": "0 signal(aux)",
     "last_summary": "2026-11-11T23:06:02Z",
-    "last_track": "2026-11-12T21:01:29Z",
+    "last_track": "2026-11-12T21:05:48Z",
     "last_summary_day": "2026-11-11",
     "pc_down": 1794502956
   },
@@ -20248,7 +20205,7 @@
           "reason": null,
           "exit_ts": null,
           "exit": null,
-          "last": 71554.7109375,
+          "last": 71390.3671875,
           "r_topstep": null,
           "r_bot": null,
           "notified_entry": "2026-11-12T12:06:07Z",
@@ -20257,18 +20214,13 @@
           "pc": true
         }
       ],
-      "checked_hour": "2026-11-12T20:00:00Z",
+      "checked_hour": "2026-11-12T21:00:00Z",
       "n": 31,
       "mean_r": -0.349,
       "live": true,
       "levels": {
         "kind": "channel",
         "points": [
-          [
-            1794344400,
-            75189.9688,
-            72686.7031
-          ],
           [
             1794348000,
             75005.6484,
@@ -20502,6 +20454,11 @@
           [
             1794513600,
             74118.9688,
+            71174.2266
+          ],
+          [
+            1794517200,
+            73991.6875,
             71174.2266
           ]
         ]
@@ -23871,7 +23828,7 @@
         }
       ],
       "live": false,
-      "checked_hour": "2026-11-12T20:00:00Z",
+      "checked_hour": "2026-11-12T21:00:00Z",
       "n": 10,
       "mean_r": -0.7789
     },
@@ -24484,16 +24441,16 @@
         }
       ],
       "live": true,
-      "checked_hour": "2026-11-12T20:45:00Z",
+      "checked_hour": "2026-11-12T21:00:00Z",
       "n": 13,
       "mean_r": -0.2343,
       "levels": {
         "kind": "level",
         "from": 1794441600,
         "to": 1794528000,
-        "level": 74737.6484,
-        "stop": 73938.6562,
-        "range": 1597.9844
+        "level": 74724.832,
+        "stop": 73922.75,
+        "range": 1604.1641
       }
     },
     "double7:nasdaq": {
