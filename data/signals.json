@@ -97,7 +97,7 @@
       },
       "exc": {
         "mfe": 0.0,
-        "mae": 0.0735,
+        "mae": 0.2556,
         "armed": {
           "0.5": false,
           "0.8": false,
@@ -206,6 +206,119 @@
         "warnings": [
           "lot minimal 1 MNQ imposé : risque au stop 156.50 au lieu de 153.78 visé",
           "levier ×37.1 au-delà du plafond ×20"
+        ]
+      },
+      "exc": {
+        "mfe": 0.0,
+        "mae": 0.1725,
+        "armed": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "be": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "last_ts": null
+      }
+    }
+  },
+  {
+    "id": "cfba323c9a",
+    "asset": "nasdaq",
+    "asset_label": "Nasdaq 100 (NQ)",
+    "direction": "long",
+    "entry": 28481.75,
+    "take_profit": 28719.0,
+    "stop_loss": 28402.5,
+    "risk_reward": 2.99,
+    "confidence": "fort",
+    "score": 6.73,
+    "criteria": [
+      "adx",
+      "rsi",
+      "trend_15m",
+      "trend_1h",
+      "trend_5m",
+      "vwap"
+    ],
+    "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 131.82 (0.46 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 98%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+    "news_context": "actualité à surveiller (score 2) : Fed’s Hammack backs gradual rate hikes as AI spending fuels sticky inflation",
+    "created_at": "2026-11-12T17:25:51Z",
+    "expires_at": "2026-11-13T17:25:51Z",
+    "status": "open",
+    "closed_at": null,
+    "close_price": null,
+    "pnl_pct": null,
+    "pnl_gross_pct": null,
+    "duration_minutes": null,
+    "hourly_range": 131.815217,
+    "source": "bot",
+    "horizon": "24h",
+    "horizon_minutes": 1440,
+    "meta": {
+      "tick": 0.25,
+      "details": {
+        "trend_5m": "EMA20 28479.98 / EMA50 28383.49 (5 min)",
+        "trend_15m": "EMA20 28379.28 / EMA50 28310.32",
+        "trend_1h": "prix vs EMA20 1 h 28325.03",
+        "adx": "ADX15 30.4 (+DI 25.6 / -DI 12.6)",
+        "vwap": "VWAP jour 28314.79",
+        "rsi": "RSI14 5 min 53.1",
+        "macd": "histogramme MACD -16.5467",
+        "level": "support 28311.75 / résistance 28652.25",
+        "volume": "z-score volume -3.33",
+        "pdhl": "veille : haut 28697.00 / bas 27918.00",
+        "activity": "activité de l'heure 1.05× la moyenne",
+        "corr": "VIX +0.5 % sur 15 min"
+      },
+      "support": 28311.75,
+      "resistance": 28652.25,
+      "atr_5m": 65.83214405805288,
+      "atr_ratio": 1.7052788697325751,
+      "hourly_range_pct": 0.4628,
+      "adx_15m": 30.371958523140048,
+      "sigma_5m": 0.0018346431866080703,
+      "p_resolution": 0.985,
+      "p_tp_neutral": 0.42033333333333334,
+      "activity_ratio": 1.053,
+      "base_minutes": 5,
+      "ctx": {
+        "adx": 30.37,
+        "rsi_dir": 53.13,
+        "vwap_ext": 1.2666,
+        "ema_ext": 0.0134,
+        "atr_ratio": 1.705,
+        "activity": 1.053,
+        "range_pct": 0.4628,
+        "cost_r": 0.054,
+        "us_open_min": 175.8,
+        "weekday": 3
+      },
+      "exit_override": {
+        "stop_x": 1.5,
+        "target_x": 3.0,
+        "minutes": 1440,
+        "source": "essai 29"
+      },
+      "price_time": "2026-11-12T17:20:00Z",
+      "filters": [],
+      "filters_checked": true,
+      "sim": {
+        "lots": 1,
+        "lot_label": "MNQ",
+        "risk_amount": 158.5,
+        "risk_pct_effective": 10.307,
+        "notional": 56963.5,
+        "leverage": 37.04,
+        "capped_by_leverage": false,
+        "balance_at_open": 1537.82,
+        "risky": true,
+        "warnings": [
+          "lot minimal 1 MNQ imposé : risque au stop 158.50 au lieu de 153.78 visé",
+          "levier ×37.0 au-delà du plafond ×20"
         ]
       }
     }
