@@ -84,7 +84,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1794555660
+        "last_ts": 1794555900
       }
     }
   },
@@ -162,10 +162,10 @@
       "price_time": "2026-11-13T07:35:00Z",
       "variant": "essai_bitcoin",
       "exc": {
-        "mfe": 0.2749,
+        "mfe": 0.6118,
         "mae": 0.4249,
         "armed": {
-          "0.5": false,
+          "0.5": true,
           "0.8": false,
           "1.0": false
         },
@@ -174,7 +174,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1794556260
+        "last_ts": 1794556500
       }
     }
   },
@@ -264,7 +264,7 @@
       "variant": "modele_arbres",
       "exc": {
         "mfe": 0.1698,
-        "mae": 0.8302,
+        "mae": 0.9057,
         "armed": {
           "0.5": false,
           "0.8": false,
@@ -275,7 +275,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1794555660
+        "last_ts": 1794555900
       }
     }
   },
@@ -354,7 +354,7 @@
       "variant": "essai_oil",
       "exc": {
         "mfe": 0.0667,
-        "mae": 0.6667,
+        "mae": 0.9333,
         "armed": {
           "0.5": false,
           "0.8": false,
@@ -365,7 +365,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1794555600
+        "last_ts": 1794555900
       }
     }
   },
@@ -440,7 +440,97 @@
         "us_open_min": -399.0,
         "weekday": 4
       },
-      "variant": "confiance_moyenne"
+      "variant": "confiance_moyenne",
+      "exc": {
+        "mfe": 0.0633,
+        "mae": 0.0,
+        "armed": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "be": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "last_ts": null
+      }
+    }
+  },
+  {
+    "id": "a3e10ec39c",
+    "asset": "ethereum",
+    "asset_label": "Ethereum (ETH/USD)",
+    "direction": "short",
+    "entry": 1934.4,
+    "take_profit": 1921.0,
+    "stop_loss": 1943.4,
+    "risk_reward": 1.49,
+    "confidence": "fort",
+    "score": 5.35,
+    "criteria": [
+      "adx",
+      "macd",
+      "trend_15m",
+      "trend_1h",
+      "trend_5m",
+      "vwap"
+    ],
+    "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 22.39 (1.16 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 65%.",
+    "news_context": "actualité à surveiller (score 1) : If a Stock Market Crash Is Coming, Warren Buffett’s 6-Word Advice Is the Smartest Move You Can Make",
+    "created_at": "2026-11-13T07:55:59Z",
+    "expires_at": "2026-11-13T08:55:59Z",
+    "status": "open",
+    "closed_at": null,
+    "close_price": null,
+    "pnl_pct": null,
+    "pnl_gross_pct": null,
+    "duration_minutes": null,
+    "hourly_range": 22.393333,
+    "source": "shadow",
+    "horizon": "1h",
+    "horizon_minutes": 60,
+    "meta": {
+      "tick": 0.1,
+      "details": {
+        "trend_5m": "EMA20 1935.60 / EMA50 1939.80 (5 min)",
+        "trend_15m": "EMA20 1942.41 / EMA50 1968.33",
+        "trend_1h": "prix vs EMA20 1 h 1982.66",
+        "adx": "ADX15 52.3 (+DI 13.2 / -DI 33.6)",
+        "vwap": "VWAP jour 1951.49",
+        "rsi": "RSI14 5 min 49.0",
+        "macd": "histogramme MACD -0.0020",
+        "level": "support 1915.00 / résistance -",
+        "volume": "z-score volume 0.06",
+        "pdhl": "veille : haut 2063.57 / bas 1981.12",
+        "activity": "activité de l'heure 1.01× la moyenne"
+      },
+      "support": 1915.0,
+      "resistance": null,
+      "atr_5m": 6.045225599650538,
+      "atr_ratio": 1.0379926226256555,
+      "hourly_range_pct": 1.1577,
+      "adx_15m": 52.326666971091235,
+      "sigma_5m": 0.0020313222832967683,
+      "p_resolution": 0.6503333333333333,
+      "p_tp_neutral": 0.24966666666666668,
+      "activity_ratio": 1.01,
+      "base_minutes": 5,
+      "ctx": {
+        "adx": 52.33,
+        "rsi_dir": 50.99,
+        "vwap_ext": 0.7648,
+        "ema_ext": 0.0553,
+        "atr_ratio": 1.038,
+        "activity": 1.01,
+        "range_pct": 1.1577,
+        "cost_r": 0.1719,
+        "us_open_min": -394.0,
+        "weekday": 4
+      },
+      "price_time": "2026-11-13T07:55:00Z",
+      "variant": "essai_ethereum"
     }
   }
 ]
