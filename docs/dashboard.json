@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-13T16:55:53.378324+01:00",
+  "updated_at": "2026-11-13T17:01:32.692850+01:00",
   "timezone": "Europe/Paris",
   "equity_curve": [
     {
@@ -1961,7 +1961,7 @@
       "avg_pnl_pct": -0.0126
     },
     "open": 0,
-    "open_shadow": 1
+    "open_shadow": 2
   },
   "by_source": {
     "bot": {
@@ -5399,6 +5399,41 @@
   ],
   "open_signals": [
     {
+      "id": "040af0b098",
+      "asset": "sp500",
+      "asset_label": "S&P 500 (ES)",
+      "direction": "short",
+      "horizon": "1h",
+      "entry": 7555.25,
+      "take_profit": 7538.5,
+      "stop_loss": 7566.75,
+      "risk_reward": 1.46,
+      "confidence": "fort",
+      "score": 6.04,
+      "criteria": [
+        "adx",
+        "level",
+        "rsi",
+        "trend_15m",
+        "trend_1h",
+        "trend_5m",
+        "vwap"
+      ],
+      "source": "shadow",
+      "status": "open",
+      "pnl_pct": null,
+      "pnl_gross_pct": null,
+      "duration_minutes": null,
+      "close_price": null,
+      "created_at": "2026-11-13T16:01:18Z",
+      "closed_at": null,
+      "created_local": "13/11 17:01",
+      "expires_at": "2026-11-13T17:01:18Z",
+      "rationale": "Vente : tendance forte (ADX), niveau clé favorable, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 27.94 (0.37 %), TP = 60 % du range, SL = 41 % du range, probabilité de résolution sous 1 h ≈ 93%.",
+      "news_context": "actualité calme sur les 2 dernières heures",
+      "manual_exit": null
+    },
+    {
       "id": "a5d2697045",
       "asset": "nasdaq",
       "asset_label": "Nasdaq 100 (NQ)",
@@ -7942,10 +7977,10 @@
     }
   },
   "state": {
-    "last_scan": "2026-11-13T15:55:46Z",
+    "last_scan": "2026-11-13T16:01:18Z",
     "last_scan_note": "0 signal(aux)",
     "last_summary": "2026-11-12T23:06:01Z",
-    "last_track": "2026-11-13T15:51:05Z",
+    "last_track": "2026-11-13T16:01:18Z",
     "last_summary_day": "2026-11-12",
     "pc_down": null
   },
@@ -20817,18 +20852,13 @@
           "r_bot": 3.3452
         }
       ],
-      "checked_hour": "2026-11-13T15:00:00Z",
+      "checked_hour": "2026-11-13T16:00:00Z",
       "n": 20,
       "mean_r": 0.0983,
       "live": false,
       "levels": {
         "kind": "channel",
         "points": [
-          [
-            1794402000,
-            4074.7,
-            4020.8
-          ],
           [
             1794405600,
             4074.7,
@@ -21063,6 +21093,11 @@
             1794578400,
             3927.2,
             3874.5
+          ],
+          [
+            1794582000,
+            3927.2,
+            3876.1001
           ]
         ]
       }
@@ -24585,7 +24620,7 @@
       "since": "2026-10-26T12:00:00Z",
       "trades": [],
       "live": true,
-      "checked_hour": "2026-11-13T15:45:00Z",
+      "checked_hour": "2026-11-13T16:00:00Z",
       "n": 0,
       "mean_r": null
     },
@@ -24595,7 +24630,7 @@
       "since": "2026-11-09T00:00:00Z",
       "trades": [],
       "live": false,
-      "checked_hour": "2026-11-13T15:00:00Z",
+      "checked_hour": "2026-11-13T16:00:00Z",
       "n": 0,
       "mean_r": null
     },
@@ -24613,7 +24648,7 @@
         "stop": 2016.9301,
         "range": 81.65
       },
-      "checked_hour": "2026-11-13T15:00:00Z",
+      "checked_hour": "2026-11-13T16:00:00Z",
       "n": 0,
       "mean_r": null
     }
