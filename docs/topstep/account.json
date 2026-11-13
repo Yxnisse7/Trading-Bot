@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-13T18:36:28Z",
+  "updated_at": "2026-11-13T18:41:13Z",
   "rules": {
     "account": "50K",
     "start_balance": 50000.0,
@@ -89,23 +89,21 @@
       "file": "history/5.json"
     }
   ],
-  "balance": 49167.74,
-  "profit": -832.26,
+  "balance": 49444.52,
+  "profit": -555.48,
   "mll": 48227.18,
-  "room_to_mll": 940.56,
+  "room_to_mll": 1217.34,
   "peak_eod": 50227.18,
   "target_balance": 53000.0,
   "needed_profit": 3000.0,
   "best_day": 227.18,
   "consistency_ok": true,
   "today": "2026-11-13",
-  "today_pnl": -1059.44,
-  "room_today": -59.44,
+  "today_pnl": -782.66,
+  "room_today": 217.34,
   "status": "en cours",
   "failed": null,
-  "violations": [
-    "journée du 13/11 : -1059 $, limite journalière de 1000 $ atteinte"
-  ],
+  "violations": [],
   "days": [
     {
       "day": "2026-11-12",
@@ -113,7 +111,7 @@
     },
     {
       "day": "2026-11-13",
-      "pnl": -1059.44
+      "pnl": -782.66
     }
   ],
   "trades": [
@@ -411,28 +409,32 @@
       "past_flat_time": false,
       "note": "signal du bot classique (PC)",
       "balance_after": 49167.74
-    }
-  ],
-  "open": [
+    },
     {
       "id": "j11131500nasv2",
       "asset": "nasdaq",
       "asset_label": "Nasdaq 100 (NQ)",
       "symbol": "MNQ",
       "direction": "short",
-      "entry": 28087.25,
-      "take_profit": null,
-      "stop_loss": 28203.494607,
+      "entry": 28088.5,
+      "exit": 27949.25,
       "contracts": 1,
-      "multiplier": 2.0,
-      "origin": "stratégie",
+      "status": "journal",
+      "origin": "journal",
       "opened_at": "2026-11-13T15:00:00Z",
-      "expires_at": "2026-11-13T21:00:00Z",
-      "risk": 232.49,
-      "notional": 56174.5,
-      "cost_pct": 0.0,
-      "fee_per_order": 0.86
-    },
+      "closed_at": "2026-11-13T18:30:00Z",
+      "day": "2026-11-13",
+      "pnl_gross": 278.5,
+      "fees": 1.22,
+      "slippage": 0.5,
+      "cost": 1.72,
+      "pnl": 276.78,
+      "past_flat_time": false,
+      "note": "signal réel noise_area_v2:nasdaq",
+      "balance_after": 49444.52
+    }
+  ],
+  "open": [
     {
       "id": "j11121200bit",
       "asset": "bitcoin",
@@ -472,10 +474,10 @@
       "fee_per_order": 0.86
     }
   ],
-  "journal_count": 42,
+  "journal_count": 43,
   "daily_target": 1200.0,
   "skipped": [],
-  "day_closed": "limite journalière atteinte (-1059 $) : Topstep bloque le compte jusqu'au lendemain",
+  "day_closed": null,
   "candidates": [
     {
       "id": "08ac7eddda",
