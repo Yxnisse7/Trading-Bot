@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-13T12:31:25.779500+01:00",
+  "updated_at": "2026-11-13T12:36:11.503983+01:00",
   "timezone": "Europe/Paris",
   "equity_curve": [
     {
@@ -1961,7 +1961,7 @@
       "avg_pnl_pct": -0.012
     },
     "open": 0,
-    "open_shadow": 0
+    "open_shadow": 1
   },
   "by_source": {
     "bot": {
@@ -5372,7 +5372,42 @@
       ]
     }
   ],
-  "open_signals": [],
+  "open_signals": [
+    {
+      "id": "909c5b8220",
+      "asset": "bitcoin",
+      "asset_label": "Bitcoin (BTC/USD)",
+      "direction": "short",
+      "horizon": "1h",
+      "entry": 69134.0,
+      "take_profit": 68710.0,
+      "stop_loss": 69416.0,
+      "risk_reward": 1.5,
+      "confidence": "fort",
+      "score": 5.76,
+      "criteria": [
+        "adx",
+        "level",
+        "macd",
+        "trend_15m",
+        "trend_1h",
+        "vwap"
+      ],
+      "source": "shadow",
+      "status": "open",
+      "pnl_pct": null,
+      "pnl_gross_pct": null,
+      "duration_minutes": null,
+      "close_price": null,
+      "created_at": "2026-11-13T11:36:00Z",
+      "closed_at": null,
+      "created_local": "13/11 12:36",
+      "expires_at": "2026-11-13T12:36:00Z",
+      "rationale": "Vente : tendance forte (ADX), niveau clé favorable, MACD en expansion, tendance 15 min, tendance 1 h, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 705.9 (1.02 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 39%.",
+      "news_context": "actualité à surveiller (score 1) : The Fed expected rate cuts this year. Now it’s bracing for another inflation fight",
+      "manual_exit": null
+    }
+  ],
   "recent_trades": [
     {
       "id": "f2cf4e26cc",
@@ -7883,7 +7918,7 @@
     }
   },
   "state": {
-    "last_scan": "2026-11-13T11:31:14Z",
+    "last_scan": "2026-11-13T11:36:00Z",
     "last_scan_note": "0 signal(aux)",
     "last_summary": "2026-11-12T23:06:01Z",
     "last_track": "2026-11-13T10:16:05Z",
@@ -24459,7 +24494,7 @@
         }
       ],
       "live": true,
-      "checked_hour": "2026-11-13T11:15:00Z",
+      "checked_hour": "2026-11-13T11:30:00Z",
       "n": 13,
       "mean_r": -0.2343,
       "levels": {
