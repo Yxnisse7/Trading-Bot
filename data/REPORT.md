@@ -1,14 +1,14 @@
 # Trading-Bot — rapport
 
-_Mis à jour le 13/11/2026 à 17:41 (Europe/Paris)._
+_Mis à jour le 13/11/2026 à 17:46 (Europe/Paris)._
 
 ## Vue d'ensemble
 
 - Trades clôturés : **180**
 - Taux de réussite cumulé (TP / (TP+SL)) : **40%** — hasard attendu 39%, avantage **+1%**
 - P&L théorique cumulé, net des coûts estimés (somme des % par trade, sans levier) : **-6.38 %** (brut -2.22 %)
-- Signaux ouverts : **3**
-- Signaux fantômes (suivis en silence pour l'apprentissage) : **1504** clôturés, 7 ouverts, taux de réussite 37% (hasard attendu 37%)
+- Signaux ouverts : **4**
+- Signaux fantômes (suivis en silence pour l'apprentissage) : **1506** clôturés, 5 ouverts, taux de réussite 37% (hasard attendu 37%)
 
 ## Signaux ouverts
 
@@ -17,6 +17,7 @@ _Mis à jour le 13/11/2026 à 17:41 (Europe/Paris)._
 | 13/11 17:20 | Nasdaq 100 (NQ) | short | 27811.75 | 27478.75 | 27922.75 | fort | signaux du bot | 17:20 |
 | 13/11 17:35 | Nasdaq 100 (NQ) | short | 27824.75 | 27527.75 | 27923.75 | fort | signaux du bot | 17:35 |
 | 13/11 17:41 | Nasdaq 100 (NQ) | short | 27850.0 | 27579.0 | 27940.5 | fort | signaux du bot | 17:41 |
+| 13/11 17:46 | Nasdaq 100 (NQ) | short | 27821.25 | 27552.5 | 27911.0 | fort | signaux du bot | 17:46 |
 
 ## Statistiques
 
@@ -122,18 +123,18 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 
 | Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
 |---|---:|---:|---:|---:|---:|---:|
-| adx | 1504 | 448 | 759 | 297 | 37% | -0.013 % |
-| corr | 116 | 30 | 64 | 22 | 32% | -0.037 % |
+| adx | 1506 | 448 | 761 | 297 | 37% | -0.013 % |
+| corr | 117 | 30 | 65 | 22 | 32% | -0.039 % |
 | level | 144 | 52 | 57 | 35 | 48% | +0.044 % |
-| macd | 372 | 98 | 198 | 76 | 33% | -0.036 % |
-| orb | 94 | 30 | 37 | 27 | 45% | -0.011 % |
+| macd | 373 | 98 | 199 | 76 | 33% | -0.037 % |
+| orb | 95 | 30 | 38 | 27 | 44% | -0.014 % |
 | pdhl | 152 | 61 | 73 | 18 | 46% | +0.104 % |
-| rsi | 1124 | 353 | 563 | 208 | 39% | -0.001 % |
-| trend_15m | 1504 | 448 | 759 | 297 | 37% | -0.013 % |
-| trend_1h | 1478 | 440 | 747 | 291 | 37% | -0.012 % |
-| trend_5m | 1346 | 415 | 685 | 246 | 38% | -0.009 % |
+| rsi | 1125 | 353 | 564 | 208 | 38% | -0.002 % |
+| trend_15m | 1506 | 448 | 761 | 297 | 37% | -0.013 % |
+| trend_1h | 1480 | 440 | 749 | 291 | 37% | -0.012 % |
+| trend_5m | 1348 | 415 | 687 | 246 | 38% | -0.010 % |
 | volume | 22 | 3 | 16 | 3 | 16% | -0.210 % |
-| vwap | 1476 | 443 | 745 | 288 | 37% | -0.012 % |
+| vwap | 1478 | 443 | 747 | 288 | 37% | -0.013 % |
 
 ### Fantômes par actif
 
@@ -142,8 +143,8 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 | bitcoin | 65 | 15 | 30 | 20 | 33% | -0.086 % |
 | ethereum | 55 | 11 | 32 | 12 | 26% | -0.181 % |
 | euro | 60 | 19 | 36 | 5 | 35% | -0.024 % |
-| gold | 556 | 185 | 226 | 145 | 45% | +0.006 % |
-| nasdaq | 506 | 143 | 293 | 70 | 33% | +0.007 % |
+| gold | 557 | 185 | 227 | 145 | 45% | +0.006 % |
+| nasdaq | 507 | 143 | 294 | 70 | 33% | +0.006 % |
 | oil | 139 | 42 | 68 | 29 | 38% | -0.034 % |
 | sp500 | 123 | 33 | 74 | 16 | 31% | -0.035 % |
 
@@ -190,8 +191,8 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 | trend_15m | 1.0 |
 | trend_1h | 1.0 |
 | adx | 1.0 |
-| vwap | 0.754 |
-| rsi | 1.053 |
+| vwap | 0.753 |
+| rsi | 1.051 |
 | macd | 1.0 |
 | level | 1.0 |
 | volume | 0.75 |
@@ -204,46 +205,46 @@ Tranches horaires évitées (UTC) : [10, 12, 19]
 Corrections par actif :
 
 - bitcoin : {'macd': 0.5}
-- ethereum : {'trend_5m': 0.829, 'trend_15m': 0.829, 'trend_1h': 0.829, 'adx': 0.829, 'rsi': 0.728}
-- euro : {'trend_5m': 0.906, 'trend_15m': 0.906, 'trend_1h': 0.906, 'adx': 0.906, 'vwap': 0.707, 'rsi': 0.927}
-- nasdaq : {'trend_5m': 1.013, 'trend_15m': 1.013, 'trend_1h': 1.013, 'adx': 1.013, 'rsi': 1.142}
-- sp500 : {'trend_5m': 0.875, 'trend_15m': 0.875, 'trend_1h': 0.875, 'adx': 0.875, 'vwap': 0.659, 'rsi': 0.998, 'macd': 0.973, 'pdhl': 0.99}
+- ethereum : {'trend_5m': 0.832, 'trend_15m': 0.832, 'trend_1h': 0.832, 'adx': 0.832, 'rsi': 0.729}
+- euro : {'trend_5m': 0.908, 'trend_15m': 0.908, 'trend_1h': 0.908, 'adx': 0.908, 'vwap': 0.708, 'rsi': 0.927}
+- nasdaq : {'trend_5m': 1.011, 'trend_15m': 1.011, 'trend_1h': 1.011, 'adx': 1.011, 'rsi': 1.142}
+- sp500 : {'trend_5m': 0.877, 'trend_15m': 0.877, 'trend_1h': 0.877, 'adx': 0.877, 'vwap': 0.66, 'rsi': 0.998, 'macd': 0.978, 'pdhl': 0.99}
 
 | Variante testée en fantôme | Trades | Gain net moyen | Statut |
 |---|---:|---:|---|
 | indices le matin européen | 152 | -0.44 R | en test |
 | horizon ~3 h | 216 | -0.36 R | en test |
-| confiance moyenne | 77 | -0.05 R | en test |
+| confiance moyenne | 78 | -0.06 R | en test |
 | entrées dans l'heure avant l'ouverture américaine | 21 | +0.43 R | en test |
 | reprise juste après un stop | 28 | -0.31 R | en test |
 | nouvel actif : S&P 500 (ES) | 49 | -0.12 R | en test |
 | nouvel actif : Bitcoin (BTC/USD) | 43 | -0.51 R | en test |
 | nouvel actif : Ethereum (ETH/USD) | 49 | -0.43 R | en test |
-| horizon ~3 h sur Or (XAU/USD) | 60 | +0.15 R | en test |
+| horizon ~3 h sur Or (XAU/USD) | 61 | +0.13 R | en test |
 | nouvel actif : Pétrole WTI (CL) | 139 | -0.08 R | en test |
 | nouvel actif : Euro / dollar (6E) | 60 | -0.42 R | en test |
 
 Notes :
 
 - trades réels : +0,06 R ± 0,19 R par trade avant frais sur 180 trades (0 R = hasard)
-- vwap : +0,06 R ± 0,06 R sur 1987 trades éq. → poids ×1,01
-- rsi : +0,09 R ± 0,06 R sur 1631 trades éq. → poids ×1,05
+- vwap : +0,06 R ± 0,06 R sur 1989 trades éq. → poids ×1,00
+- rsi : +0,08 R ± 0,06 R sur 1632 trades éq. → poids ×1,05
 - pdhl : +0,24 R ± 0,18 R sur 235 trades éq. → poids ×1,14
 - tranche 10h UTC : -0,26 R sur 107 trades éq. → évitée
 - tranche 12h UTC : -0,44 R sur 67 trades éq. → évitée
 - tranche 19h UTC : -0,30 R sur 86 trades éq. → évitée
 - bitcoin, macd : -0,62 R contre -0,02 R en global sur 30 trades éq. → poids ×0,50 sur cet actif
 - ethereum, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,21 R contre +0,05 R en global sur 107 trades éq. → poids ×0,83 sur cet actif
-- ethereum, rsi : -0,27 R contre +0,09 R en global sur 75 trades éq. → poids ×0,69 sur cet actif
+- ethereum, rsi : -0,27 R contre +0,08 R en global sur 75 trades éq. → poids ×0,69 sur cet actif
 - euro, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,23 R contre +0,05 R en global sur 92 trades éq. → poids ×0,91 sur cet actif
 - euro, vwap : -0,22 R contre +0,06 R en global sur 87 trades éq. → poids ×0,94 sur cet actif
-- euro, rsi : -0,23 R contre +0,09 R en global sur 77 trades éq. → poids ×0,88 sur cet actif
-- nasdaq, tendance (trend_5m, trend_15m, trend_1h, adx) : +0,19 R contre +0,05 R en global sur 599 trades éq. → poids ×1,01 sur cet actif
-- nasdaq, rsi : +0,27 R contre +0,09 R en global sur 468 trades éq. → poids ×1,08 sur cet actif
-- sp500, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,15 R contre +0,05 R en global sur 225 trades éq. → poids ×0,87 sur cet actif
-- sp500, vwap : -0,14 R contre +0,06 R en global sur 220 trades éq. → poids ×0,87 sur cet actif
-- sp500, rsi : -0,10 R contre +0,09 R en global sur 185 trades éq. → poids ×0,95 sur cet actif
-- sp500, macd : -0,29 R contre -0,02 R en global sur 59 trades éq. → poids ×0,97 sur cet actif
+- euro, rsi : -0,23 R contre +0,08 R en global sur 77 trades éq. → poids ×0,88 sur cet actif
+- nasdaq, tendance (trend_5m, trend_15m, trend_1h, adx) : +0,19 R contre +0,05 R en global sur 600 trades éq. → poids ×1,01 sur cet actif
+- nasdaq, rsi : +0,27 R contre +0,08 R en global sur 468 trades éq. → poids ×1,09 sur cet actif
+- sp500, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,15 R contre +0,05 R en global sur 225 trades éq. → poids ×0,88 sur cet actif
+- sp500, vwap : -0,14 R contre +0,06 R en global sur 220 trades éq. → poids ×0,88 sur cet actif
+- sp500, rsi : -0,10 R contre +0,08 R en global sur 185 trades éq. → poids ×0,95 sur cet actif
+- sp500, macd : -0,29 R contre -0,02 R en global sur 59 trades éq. → poids ×0,98 sur cet actif
 - sp500, pdhl : -0,19 R contre +0,24 R en global sur 31 trades éq. → poids ×0,87 sur cet actif
 
 ## Backtests (données historiques 5 min)
