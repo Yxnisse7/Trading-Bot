@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-13T07:55:51.902081+01:00",
+  "updated_at": "2026-11-13T08:01:26.616534+01:00",
   "timezone": "Europe/Paris",
   "equity_curve": [
     {
@@ -1961,7 +1961,7 @@
       "avg_pnl_pct": -0.0105
     },
     "open": 0,
-    "open_shadow": 0
+    "open_shadow": 2
   },
   "by_source": {
     "bot": {
@@ -5416,7 +5416,76 @@
       ]
     }
   ],
-  "open_signals": [],
+  "open_signals": [
+    {
+      "id": "fa6a59ac7b",
+      "asset": "nasdaq",
+      "asset_label": "Nasdaq 100 (NQ)",
+      "direction": "short",
+      "horizon": "24h",
+      "entry": 28292.0,
+      "take_profit": 28064.75,
+      "stop_loss": 28367.75,
+      "risk_reward": 3.0,
+      "confidence": "fort",
+      "score": 5.95,
+      "criteria": [
+        "adx",
+        "rsi",
+        "trend_15m",
+        "trend_1h",
+        "trend_5m",
+        "vwap"
+      ],
+      "source": "shadow",
+      "status": "open",
+      "pnl_pct": null,
+      "pnl_gross_pct": null,
+      "duration_minutes": null,
+      "close_price": null,
+      "created_at": "2026-11-13T07:01:15Z",
+      "closed_at": null,
+      "created_local": "13/11 08:01",
+      "expires_at": "2026-11-14T07:01:15Z",
+      "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 139.50 (0.49 %), TP = 44 % du range, SL = 36 % du range, probabilité de résolution sous 1 h ≈ 76%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+      "news_context": "actualité à surveiller (score 1) : Dollar set for best week in two months on rate hike wagers, yen tests 160",
+      "manual_exit": null
+    },
+    {
+      "id": "44fab9f346",
+      "asset": "gold",
+      "asset_label": "Or (XAU/USD)",
+      "direction": "short",
+      "horizon": "3h",
+      "entry": 3897.3,
+      "take_profit": 3879.0,
+      "stop_loss": 3909.5,
+      "risk_reward": 1.5,
+      "confidence": "fort",
+      "score": 5.84,
+      "criteria": [
+        "adx",
+        "macd",
+        "rsi",
+        "trend_15m",
+        "trend_1h",
+        "vwap"
+      ],
+      "source": "shadow",
+      "status": "open",
+      "pnl_pct": null,
+      "pnl_gross_pct": null,
+      "duration_minutes": null,
+      "close_price": null,
+      "created_at": "2026-11-13T07:01:15Z",
+      "closed_at": null,
+      "created_local": "13/11 08:01",
+      "expires_at": "2026-11-13T10:01:15Z",
+      "rationale": "Vente : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 45 min, tendance 3 h, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 30.45 (0.78 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 57%.",
+      "news_context": "actualité à surveiller (score 2) : Dollar set for best week in two months on rate hike wagers, yen tests 160",
+      "manual_exit": null
+    }
+  ],
   "recent_trades": [
     {
       "id": "f2cf4e26cc",
@@ -7927,7 +7996,7 @@
     }
   },
   "state": {
-    "last_scan": "2026-11-13T06:55:44Z",
+    "last_scan": "2026-11-13T07:01:15Z",
     "last_scan_note": "0 signal(aux)",
     "last_summary": "2026-11-12T23:06:01Z",
     "last_track": "2026-11-13T06:21:10Z",
@@ -20802,18 +20871,13 @@
           "r_bot": 3.3452
         }
       ],
-      "checked_hour": "2026-11-13T06:00:00Z",
+      "checked_hour": "2026-11-13T07:00:00Z",
       "n": 20,
       "mean_r": 0.0983,
       "live": false,
       "levels": {
         "kind": "channel",
         "points": [
-          [
-            1794366000,
-            4135.5,
-            4020.8
-          ],
           [
             1794369600,
             4135.1001,
@@ -21036,7 +21100,7 @@
           ],
           [
             1794535200,
-            3988.2,
+            3988.3999,
             3856.7
           ],
           [
@@ -21047,6 +21111,11 @@
           [
             1794546000,
             3978.0,
+            3856.7
+          ],
+          [
+            1794549600,
+            3970.3999,
             3856.7
           ]
         ]
@@ -24521,7 +24590,7 @@
       "since": "2026-10-26T12:00:00Z",
       "trades": [],
       "live": true,
-      "checked_hour": "2026-11-13T06:45:00Z",
+      "checked_hour": "2026-11-13T07:00:00Z",
       "n": 0,
       "mean_r": null
     },
@@ -24531,7 +24600,7 @@
       "since": "2026-11-09T00:00:00Z",
       "trades": [],
       "live": false,
-      "checked_hour": "2026-11-13T06:00:00Z",
+      "checked_hour": "2026-11-13T07:00:00Z",
       "n": 0,
       "mean_r": null
     },
@@ -24545,11 +24614,11 @@
         "kind": "level",
         "from": 1794528000,
         "to": 1794614400,
-        "level": 2057.7551,
-        "stop": 2016.9301,
-        "range": 81.65
+        "level": 2057.835,
+        "stop": 2017.3199,
+        "range": 81.0302
       },
-      "checked_hour": "2026-11-13T06:00:00Z",
+      "checked_hour": "2026-11-13T07:00:00Z",
       "n": 0,
       "mean_r": null
     }
