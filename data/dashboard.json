@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-13T06:31:28.427218+01:00",
+  "updated_at": "2026-11-13T06:36:01.466723+01:00",
   "timezone": "Europe/Paris",
   "equity_curve": [
     {
@@ -1961,7 +1961,7 @@
       "avg_pnl_pct": -0.0096
     },
     "open": 0,
-    "open_shadow": 0
+    "open_shadow": 1
   },
   "by_source": {
     "bot": {
@@ -5420,7 +5420,42 @@
       ]
     }
   ],
-  "open_signals": [],
+  "open_signals": [
+    {
+      "id": "3903d68248",
+      "asset": "bitcoin",
+      "asset_label": "Bitcoin (BTC/USD)",
+      "direction": "short",
+      "horizon": "1h",
+      "entry": 68422.0,
+      "take_profit": 68082.0,
+      "stop_loss": 68649.0,
+      "risk_reward": 1.5,
+      "confidence": "fort",
+      "score": 5.87,
+      "criteria": [
+        "adx",
+        "rsi",
+        "trend_15m",
+        "trend_1h",
+        "trend_5m",
+        "vwap"
+      ],
+      "source": "shadow",
+      "status": "open",
+      "pnl_pct": null,
+      "pnl_gross_pct": null,
+      "duration_minutes": null,
+      "close_price": null,
+      "created_at": "2026-11-13T05:35:56Z",
+      "closed_at": null,
+      "created_local": "13/11 06:35",
+      "expires_at": "2026-11-13T06:35:56Z",
+      "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 566.4 (0.83 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 78%.",
+      "news_context": "actualité calme sur les 2 dernières heures",
+      "manual_exit": null
+    }
+  ],
   "recent_trades": [
     {
       "id": "f2cf4e26cc",
@@ -7931,7 +7966,7 @@
     }
   },
   "state": {
-    "last_scan": "2026-11-13T05:31:19Z",
+    "last_scan": "2026-11-13T05:35:56Z",
     "last_scan_note": "0 signal(aux)",
     "last_summary": "2026-11-12T23:06:01Z",
     "last_track": "2026-11-13T04:45:59Z",
@@ -24507,7 +24542,7 @@
         }
       ],
       "live": true,
-      "checked_hour": "2026-11-13T05:15:00Z",
+      "checked_hour": "2026-11-13T05:30:00Z",
       "n": 13,
       "mean_r": -0.2343,
       "levels": {
