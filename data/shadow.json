@@ -79,7 +79,7 @@
       },
       "variant": "confiance_moyenne",
       "exc": {
-        "mfe": 0.834,
+        "mfe": 0.8784,
         "mae": 0.3166,
         "armed": {
           "0.5": true,
@@ -91,7 +91,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1794586860
+        "last_ts": 1794587100
       }
     }
   },
@@ -175,19 +175,19 @@
       },
       "variant": "confiance_moyenne",
       "exc": {
-        "mfe": 0.9535,
+        "mfe": 1.0021,
         "mae": 0.3066,
         "armed": {
           "0.5": true,
           "0.8": true,
-          "1.0": false
+          "1.0": true
         },
         "be": {
           "0.5": true,
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1794586860
+        "last_ts": 1794587100
       }
     }
   },
@@ -269,7 +269,7 @@
       "variant": "horizon_3h_gold",
       "exc": {
         "mfe": 0.0917,
-        "mae": 0.5167,
+        "mae": 0.8917,
         "armed": {
           "0.5": false,
           "0.8": false,
@@ -280,7 +280,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1794586860
+        "last_ts": 1794587100
       }
     }
   },
@@ -364,7 +364,7 @@
       },
       "variant": "confiance_moyenne",
       "exc": {
-        "mfe": 0.6194,
+        "mfe": 0.6712,
         "mae": 0.7185,
         "armed": {
           "0.5": true,
@@ -372,12 +372,89 @@
           "1.0": false
         },
         "be": {
-          "0.5": false,
+          "0.5": true,
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1794586860
+        "last_ts": 1794587100
       }
+    }
+  },
+  {
+    "id": "dcc2100ee1",
+    "asset": "sp500",
+    "asset_label": "S&P 500 (ES)",
+    "direction": "short",
+    "entry": 7544.0,
+    "take_profit": 7528.0,
+    "stop_loss": 7554.75,
+    "risk_reward": 1.49,
+    "confidence": "fort",
+    "score": 5.16,
+    "criteria": [
+      "adx",
+      "rsi",
+      "trend_15m",
+      "trend_1h",
+      "trend_5m",
+      "vwap"
+    ],
+    "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 26.81 (0.36 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 97%.",
+    "news_context": "actualité à surveiller (score 2) : Fed’s Collins says more rate hikes may be needed soon",
+    "created_at": "2026-11-13T16:35:58Z",
+    "expires_at": "2026-11-13T17:35:58Z",
+    "status": "open",
+    "closed_at": null,
+    "close_price": null,
+    "pnl_pct": null,
+    "pnl_gross_pct": null,
+    "duration_minutes": null,
+    "hourly_range": 26.8125,
+    "source": "shadow",
+    "horizon": "1h",
+    "horizon_minutes": 60,
+    "meta": {
+      "tick": 0.25,
+      "details": {
+        "trend_5m": "EMA20 7554.91 / EMA50 7584.51 (5 min)",
+        "trend_15m": "EMA20 7588.33 / EMA50 7607.77",
+        "trend_1h": "prix vs EMA20 1 h 7608.41",
+        "adx": "ADX15 34.9 (+DI 15.1 / -DI 39.9)",
+        "vwap": "VWAP jour 7578.31",
+        "rsi": "RSI14 5 min 39.2",
+        "macd": "histogramme MACD 2.6938",
+        "level": "support 7519.25 / résistance 7564.50",
+        "volume": "z-score volume -2.96",
+        "orb": "range d'ouverture 7580.75 – 7643.50",
+        "pdhl": "veille : haut 7674.75 / bas 7572.00",
+        "activity": "activité de l'heure 1.67× la moyenne",
+        "corr": "VIX +0.5 % sur 15 min"
+      },
+      "support": 7519.25,
+      "resistance": 7564.5,
+      "atr_5m": 13.925420211981814,
+      "atr_ratio": 2.2725446289566174,
+      "hourly_range_pct": 0.3554,
+      "adx_15m": 34.869308322971186,
+      "sigma_5m": 0.0011772044564716147,
+      "p_resolution": 0.9653333333333334,
+      "p_tp_neutral": 0.41633333333333333,
+      "activity_ratio": 1.669,
+      "base_minutes": 5,
+      "ctx": {
+        "adx": 34.87,
+        "rsi_dir": 60.85,
+        "vwap_ext": 1.2794,
+        "ema_ext": 0.4069,
+        "atr_ratio": 2.273,
+        "activity": 1.669,
+        "range_pct": 0.3554,
+        "cost_r": 0.0702,
+        "us_open_min": 126.0,
+        "weekday": 4
+      },
+      "price_time": "2026-11-13T16:30:00Z",
+      "variant": "essai_sp500"
     }
   }
 ]
