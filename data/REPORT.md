@@ -1,20 +1,21 @@
 # Trading-Bot — rapport
 
-_Mis à jour le 16/11/2026 à 16:11 (Europe/Paris)._
+_Mis à jour le 16/11/2026 à 16:16 (Europe/Paris)._
 
 ## Vue d'ensemble
 
 - Trades clôturés : **184**
 - Taux de réussite cumulé (TP / (TP+SL)) : **39%** — hasard attendu 38%, avantage **+1%**
 - P&L théorique cumulé, net des coûts estimés (somme des % par trade, sans levier) : **-7.83 %** (brut -3.63 %)
-- Signaux ouverts : **1**
-- Signaux fantômes (suivis en silence pour l'apprentissage) : **1568** clôturés, 8 ouverts, taux de réussite 36% (hasard attendu 37%)
+- Signaux ouverts : **2**
+- Signaux fantômes (suivis en silence pour l'apprentissage) : **1568** clôturés, 9 ouverts, taux de réussite 36% (hasard attendu 37%)
 
 ## Signaux ouverts
 
 | Heure | Actif | Sens | Entrée | TP | SL | Confiance | Source | Expire |
 |---|---|---|---:|---:|---:|---|---|---|
 | 16/11 16:11 | Nasdaq 100 (NQ) | short | 27473.0 | 26902.5 | 27663.0 | fort | signaux du bot | 16:11 |
+| 16/11 16:16 | Nasdaq 100 (NQ) | short | 27402.25 | 26829.5 | 27593.0 | fort | signaux du bot | 16:16 |
 
 ## Statistiques
 
