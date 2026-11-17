@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-17T10:26:10.205391+01:00",
+  "updated_at": "2026-11-17T10:31:27.539226+01:00",
   "timezone": "Europe/Paris",
   "equity_curve": [
     {
@@ -2013,18 +2013,18 @@
       "avg_pnl_pct": -0.0523
     },
     "shadow": {
-      "n": 1582,
-      "tp": 468,
+      "n": 1584,
+      "tp": 470,
       "sl": 812,
       "expired": 302,
-      "win_rate": 0.365625,
-      "neutral_win_rate": 0.3678,
-      "edge": -0.0022,
-      "pnl_pct": -28.9987,
-      "avg_pnl_pct": -0.0183
+      "win_rate": 0.3666146645865835,
+      "neutral_win_rate": 0.3676,
+      "edge": -0.001,
+      "pnl_pct": -25.6005,
+      "avg_pnl_pct": -0.0162
     },
     "open": 1,
-    "open_shadow": 7
+    "open_shadow": 5
   },
   "by_source": {
     "bot": {
@@ -2061,15 +2061,15 @@
       "avg_pnl_pct": 0.0
     },
     "shadow": {
-      "n": 1582,
-      "tp": 468,
+      "n": 1584,
+      "tp": 470,
       "sl": 812,
       "expired": 302,
-      "win_rate": 0.365625,
-      "neutral_win_rate": 0.3678,
-      "edge": -0.0022,
-      "pnl_pct": -28.9987,
-      "avg_pnl_pct": -0.0183
+      "win_rate": 0.3666146645865835,
+      "neutral_win_rate": 0.3676,
+      "edge": -0.001,
+      "pnl_pct": -25.6005,
+      "avg_pnl_pct": -0.0162
     }
   },
   "by_horizon": {
@@ -2128,15 +2128,15 @@
         "avg_pnl_pct": -0.0586
       },
       "shadow": {
-        "n": 527,
-        "tp": 148,
+        "n": 529,
+        "tp": 150,
         "sl": 309,
         "expired": 70,
-        "win_rate": 0.3238512035010941,
-        "neutral_win_rate": 0.2818,
-        "edge": 0.0421,
-        "pnl_pct": 2.5819,
-        "avg_pnl_pct": 0.0049
+        "win_rate": 0.32679738562091504,
+        "neutral_win_rate": 0.2817,
+        "edge": 0.0451,
+        "pnl_pct": 5.9801,
+        "avg_pnl_pct": 0.0113
       },
       "open": 1,
       "session_utc": [
@@ -2401,15 +2401,15 @@
       "label": "Tendance 5 min",
       "weight": 1.0,
       "stats": {
-        "n": 1586,
-        "tp": 489,
+        "n": 1588,
+        "tp": 491,
         "sl": 818,
         "expired": 279,
-        "win_rate": 0.37413925019127775,
-        "neutral_win_rate": 0.366,
-        "edge": 0.0081,
-        "pnl_pct": -29.2014,
-        "avg_pnl_pct": -0.0184
+        "win_rate": 0.37509549274255155,
+        "neutral_win_rate": 0.3658,
+        "edge": 0.0093,
+        "pnl_pct": -25.8032,
+        "avg_pnl_pct": -0.0162
       },
       "by_source": {
         "bot": {
@@ -2446,15 +2446,15 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 1418,
-          "tp": 435,
+          "n": 1420,
+          "tp": 437,
           "sl": 735,
           "expired": 248,
-          "win_rate": 0.3717948717948718,
-          "neutral_win_rate": 0.3644,
-          "edge": 0.0074,
-          "pnl_pct": -21.4513,
-          "avg_pnl_pct": -0.0151
+          "win_rate": 0.3728668941979522,
+          "neutral_win_rate": 0.3643,
+          "edge": 0.0086,
+          "pnl_pct": -18.0531,
+          "avg_pnl_pct": -0.0127
         }
       },
       "last_trades": [
@@ -2491,6 +2491,40 @@
           "expires_at": "2026-11-16T18:40:55Z",
           "rationale": "Vente : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 24.04 (0.32 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 94%.",
           "news_context": "prudence post-USD Fed Chairman Warsh Speaks : critères renforcés · actualité calme sur les 2 dernières heures",
+          "manual_exit": null
+        },
+        {
+          "id": "add0052e91",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "short",
+          "horizon": "24h",
+          "entry": 27573.5,
+          "take_profit": 27100.0,
+          "stop_loss": 27731.5,
+          "risk_reward": 3.0,
+          "confidence": "fort",
+          "score": 5.82,
+          "criteria": [
+            "adx",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "tp",
+          "pnl_pct": 1.7072,
+          "pnl_gross_pct": 1.7172,
+          "duration_minutes": 1032,
+          "close_price": 27100.0,
+          "created_at": "2026-11-16T16:06:01Z",
+          "closed_at": "2026-11-17T09:19:00Z",
+          "created_local": "16/11 17:06",
+          "expires_at": "2026-11-17T16:06:01Z",
+          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 263.35 (0.96 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 77%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+          "news_context": "actualité à surveiller (score 2) : Prediction: A Stock Market Crash Is Coming Eventually. Here's What Investors Should Do Based on What Happened in the Last 3 Crashes. | If a Stock Market Crash Is Coming in 2027, Warren Buffett’s Advice Makes My Next Move Clear",
           "manual_exit": null
         },
         {
@@ -2701,42 +2735,6 @@
           "created_local": "16/11 16:25",
           "expires_at": "2026-11-17T15:25:44Z",
           "rationale": "Vente : tendance forte (ADX), marché meneur favorable, MACD en expansion, cassure du range d'ouverture, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 263.35 (0.96 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 67%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
-          "news_context": "actualité à surveiller (score 2) : If a Stock Market Crash Is Coming in 2027, Warren Buffett’s Advice Makes My Next Move Clear | Why this 40-year market veteran is making a lonely bet on a 40% stock-market crash — and $500 oil",
-          "manual_exit": null
-        },
-        {
-          "id": "81f8b7acb4",
-          "asset": "nasdaq",
-          "asset_label": "Nasdaq 100 (NQ)",
-          "direction": "short",
-          "horizon": "24h",
-          "entry": 27435.0,
-          "take_profit": 26931.0,
-          "stop_loss": 27603.0,
-          "risk_reward": 3.0,
-          "confidence": "fort",
-          "score": 7.31,
-          "criteria": [
-            "adx",
-            "corr",
-            "orb",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "bot",
-          "status": "sl",
-          "pnl_pct": -0.6224,
-          "pnl_gross_pct": -0.6124,
-          "duration_minutes": 57,
-          "close_price": 27603.0,
-          "created_at": "2026-11-16T15:25:44Z",
-          "closed_at": "2026-11-16T16:23:00Z",
-          "created_local": "16/11 16:25",
-          "expires_at": "2026-11-17T15:25:44Z",
-          "rationale": "Vente : tendance forte (ADX), marché meneur favorable, cassure du range d'ouverture, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 280.00 (1.02 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 53%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
           "news_context": "actualité à surveiller (score 2) : If a Stock Market Crash Is Coming in 2027, Warren Buffett’s Advice Makes My Next Move Clear | Why this 40-year market veteran is making a lonely bet on a 40% stock-market crash — and $500 oil",
           "manual_exit": null
         }
@@ -2747,15 +2745,15 @@
       "label": "Tendance 15 min",
       "weight": 1.0,
       "stats": {
-        "n": 1768,
-        "tp": 526,
+        "n": 1770,
+        "tp": 528,
         "sl": 906,
         "expired": 336,
-        "win_rate": 0.36731843575418993,
-        "neutral_win_rate": 0.3691,
-        "edge": -0.0018,
-        "pnl_pct": -38.6251,
-        "avg_pnl_pct": -0.0218
+        "win_rate": 0.3682008368200837,
+        "neutral_win_rate": 0.369,
+        "edge": -0.0008,
+        "pnl_pct": -35.2269,
+        "avg_pnl_pct": -0.0199
       },
       "by_source": {
         "bot": {
@@ -2792,15 +2790,15 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 1582,
-          "tp": 468,
+          "n": 1584,
+          "tp": 470,
           "sl": 812,
           "expired": 302,
-          "win_rate": 0.365625,
-          "neutral_win_rate": 0.3678,
-          "edge": -0.0022,
-          "pnl_pct": -28.9987,
-          "avg_pnl_pct": -0.0183
+          "win_rate": 0.3666146645865835,
+          "neutral_win_rate": 0.3676,
+          "edge": -0.001,
+          "pnl_pct": -25.6005,
+          "avg_pnl_pct": -0.0162
         }
       },
       "last_trades": [
@@ -2837,6 +2835,40 @@
           "expires_at": "2026-11-16T18:40:55Z",
           "rationale": "Vente : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 24.04 (0.32 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 94%.",
           "news_context": "prudence post-USD Fed Chairman Warsh Speaks : critères renforcés · actualité calme sur les 2 dernières heures",
+          "manual_exit": null
+        },
+        {
+          "id": "add0052e91",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "short",
+          "horizon": "24h",
+          "entry": 27573.5,
+          "take_profit": 27100.0,
+          "stop_loss": 27731.5,
+          "risk_reward": 3.0,
+          "confidence": "fort",
+          "score": 5.82,
+          "criteria": [
+            "adx",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "tp",
+          "pnl_pct": 1.7072,
+          "pnl_gross_pct": 1.7172,
+          "duration_minutes": 1032,
+          "close_price": 27100.0,
+          "created_at": "2026-11-16T16:06:01Z",
+          "closed_at": "2026-11-17T09:19:00Z",
+          "created_local": "16/11 17:06",
+          "expires_at": "2026-11-17T16:06:01Z",
+          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 263.35 (0.96 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 77%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+          "news_context": "actualité à surveiller (score 2) : Prediction: A Stock Market Crash Is Coming Eventually. Here's What Investors Should Do Based on What Happened in the Last 3 Crashes. | If a Stock Market Crash Is Coming in 2027, Warren Buffett’s Advice Makes My Next Move Clear",
           "manual_exit": null
         },
         {
@@ -3047,42 +3079,6 @@
           "created_local": "16/11 16:25",
           "expires_at": "2026-11-17T15:25:44Z",
           "rationale": "Vente : tendance forte (ADX), marché meneur favorable, MACD en expansion, cassure du range d'ouverture, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 263.35 (0.96 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 67%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
-          "news_context": "actualité à surveiller (score 2) : If a Stock Market Crash Is Coming in 2027, Warren Buffett’s Advice Makes My Next Move Clear | Why this 40-year market veteran is making a lonely bet on a 40% stock-market crash — and $500 oil",
-          "manual_exit": null
-        },
-        {
-          "id": "81f8b7acb4",
-          "asset": "nasdaq",
-          "asset_label": "Nasdaq 100 (NQ)",
-          "direction": "short",
-          "horizon": "24h",
-          "entry": 27435.0,
-          "take_profit": 26931.0,
-          "stop_loss": 27603.0,
-          "risk_reward": 3.0,
-          "confidence": "fort",
-          "score": 7.31,
-          "criteria": [
-            "adx",
-            "corr",
-            "orb",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "bot",
-          "status": "sl",
-          "pnl_pct": -0.6224,
-          "pnl_gross_pct": -0.6124,
-          "duration_minutes": 57,
-          "close_price": 27603.0,
-          "created_at": "2026-11-16T15:25:44Z",
-          "closed_at": "2026-11-16T16:23:00Z",
-          "created_local": "16/11 16:25",
-          "expires_at": "2026-11-17T15:25:44Z",
-          "rationale": "Vente : tendance forte (ADX), marché meneur favorable, cassure du range d'ouverture, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 280.00 (1.02 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 53%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
           "news_context": "actualité à surveiller (score 2) : If a Stock Market Crash Is Coming in 2027, Warren Buffett’s Advice Makes My Next Move Clear | Why this 40-year market veteran is making a lonely bet on a 40% stock-market crash — and $500 oil",
           "manual_exit": null
         }
@@ -3093,15 +3089,15 @@
       "label": "Tendance 1 h",
       "weight": 1.0,
       "stats": {
-        "n": 1742,
-        "tp": 518,
+        "n": 1744,
+        "tp": 520,
         "sl": 894,
         "expired": 330,
-        "win_rate": 0.3668555240793201,
-        "neutral_win_rate": 0.369,
-        "edge": -0.0021,
-        "pnl_pct": -36.8049,
-        "avg_pnl_pct": -0.0211
+        "win_rate": 0.36775106082036774,
+        "neutral_win_rate": 0.3689,
+        "edge": -0.0011,
+        "pnl_pct": -33.4067,
+        "avg_pnl_pct": -0.0192
       },
       "by_source": {
         "bot": {
@@ -3138,15 +3134,15 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 1556,
-          "tp": 460,
+          "n": 1558,
+          "tp": 462,
           "sl": 800,
           "expired": 296,
-          "win_rate": 0.36507936507936506,
-          "neutral_win_rate": 0.3676,
-          "edge": -0.0025,
-          "pnl_pct": -27.1785,
-          "avg_pnl_pct": -0.0175
+          "win_rate": 0.36608557844690964,
+          "neutral_win_rate": 0.3675,
+          "edge": -0.0014,
+          "pnl_pct": -23.7803,
+          "avg_pnl_pct": -0.0153
         }
       },
       "last_trades": [
@@ -3183,6 +3179,40 @@
           "expires_at": "2026-11-16T18:40:55Z",
           "rationale": "Vente : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 24.04 (0.32 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 94%.",
           "news_context": "prudence post-USD Fed Chairman Warsh Speaks : critères renforcés · actualité calme sur les 2 dernières heures",
+          "manual_exit": null
+        },
+        {
+          "id": "add0052e91",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "short",
+          "horizon": "24h",
+          "entry": 27573.5,
+          "take_profit": 27100.0,
+          "stop_loss": 27731.5,
+          "risk_reward": 3.0,
+          "confidence": "fort",
+          "score": 5.82,
+          "criteria": [
+            "adx",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "tp",
+          "pnl_pct": 1.7072,
+          "pnl_gross_pct": 1.7172,
+          "duration_minutes": 1032,
+          "close_price": 27100.0,
+          "created_at": "2026-11-16T16:06:01Z",
+          "closed_at": "2026-11-17T09:19:00Z",
+          "created_local": "16/11 17:06",
+          "expires_at": "2026-11-17T16:06:01Z",
+          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 263.35 (0.96 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 77%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+          "news_context": "actualité à surveiller (score 2) : Prediction: A Stock Market Crash Is Coming Eventually. Here's What Investors Should Do Based on What Happened in the Last 3 Crashes. | If a Stock Market Crash Is Coming in 2027, Warren Buffett’s Advice Makes My Next Move Clear",
           "manual_exit": null
         },
         {
@@ -3393,42 +3423,6 @@
           "created_local": "16/11 16:25",
           "expires_at": "2026-11-17T15:25:44Z",
           "rationale": "Vente : tendance forte (ADX), marché meneur favorable, MACD en expansion, cassure du range d'ouverture, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 263.35 (0.96 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 67%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
-          "news_context": "actualité à surveiller (score 2) : If a Stock Market Crash Is Coming in 2027, Warren Buffett’s Advice Makes My Next Move Clear | Why this 40-year market veteran is making a lonely bet on a 40% stock-market crash — and $500 oil",
-          "manual_exit": null
-        },
-        {
-          "id": "81f8b7acb4",
-          "asset": "nasdaq",
-          "asset_label": "Nasdaq 100 (NQ)",
-          "direction": "short",
-          "horizon": "24h",
-          "entry": 27435.0,
-          "take_profit": 26931.0,
-          "stop_loss": 27603.0,
-          "risk_reward": 3.0,
-          "confidence": "fort",
-          "score": 7.31,
-          "criteria": [
-            "adx",
-            "corr",
-            "orb",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "bot",
-          "status": "sl",
-          "pnl_pct": -0.6224,
-          "pnl_gross_pct": -0.6124,
-          "duration_minutes": 57,
-          "close_price": 27603.0,
-          "created_at": "2026-11-16T15:25:44Z",
-          "closed_at": "2026-11-16T16:23:00Z",
-          "created_local": "16/11 16:25",
-          "expires_at": "2026-11-17T15:25:44Z",
-          "rationale": "Vente : tendance forte (ADX), marché meneur favorable, cassure du range d'ouverture, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 280.00 (1.02 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 53%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
           "news_context": "actualité à surveiller (score 2) : If a Stock Market Crash Is Coming in 2027, Warren Buffett’s Advice Makes My Next Move Clear | Why this 40-year market veteran is making a lonely bet on a 40% stock-market crash — and $500 oil",
           "manual_exit": null
         }
@@ -3439,15 +3433,15 @@
       "label": "Force de tendance (ADX)",
       "weight": 1.0,
       "stats": {
-        "n": 1768,
-        "tp": 526,
+        "n": 1770,
+        "tp": 528,
         "sl": 906,
         "expired": 336,
-        "win_rate": 0.36731843575418993,
-        "neutral_win_rate": 0.3691,
-        "edge": -0.0018,
-        "pnl_pct": -38.6251,
-        "avg_pnl_pct": -0.0218
+        "win_rate": 0.3682008368200837,
+        "neutral_win_rate": 0.369,
+        "edge": -0.0008,
+        "pnl_pct": -35.2269,
+        "avg_pnl_pct": -0.0199
       },
       "by_source": {
         "bot": {
@@ -3484,15 +3478,15 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 1582,
-          "tp": 468,
+          "n": 1584,
+          "tp": 470,
           "sl": 812,
           "expired": 302,
-          "win_rate": 0.365625,
-          "neutral_win_rate": 0.3678,
-          "edge": -0.0022,
-          "pnl_pct": -28.9987,
-          "avg_pnl_pct": -0.0183
+          "win_rate": 0.3666146645865835,
+          "neutral_win_rate": 0.3676,
+          "edge": -0.001,
+          "pnl_pct": -25.6005,
+          "avg_pnl_pct": -0.0162
         }
       },
       "last_trades": [
@@ -3529,6 +3523,40 @@
           "expires_at": "2026-11-16T18:40:55Z",
           "rationale": "Vente : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 24.04 (0.32 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 94%.",
           "news_context": "prudence post-USD Fed Chairman Warsh Speaks : critères renforcés · actualité calme sur les 2 dernières heures",
+          "manual_exit": null
+        },
+        {
+          "id": "add0052e91",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "short",
+          "horizon": "24h",
+          "entry": 27573.5,
+          "take_profit": 27100.0,
+          "stop_loss": 27731.5,
+          "risk_reward": 3.0,
+          "confidence": "fort",
+          "score": 5.82,
+          "criteria": [
+            "adx",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "tp",
+          "pnl_pct": 1.7072,
+          "pnl_gross_pct": 1.7172,
+          "duration_minutes": 1032,
+          "close_price": 27100.0,
+          "created_at": "2026-11-16T16:06:01Z",
+          "closed_at": "2026-11-17T09:19:00Z",
+          "created_local": "16/11 17:06",
+          "expires_at": "2026-11-17T16:06:01Z",
+          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 263.35 (0.96 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 77%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+          "news_context": "actualité à surveiller (score 2) : Prediction: A Stock Market Crash Is Coming Eventually. Here's What Investors Should Do Based on What Happened in the Last 3 Crashes. | If a Stock Market Crash Is Coming in 2027, Warren Buffett’s Advice Makes My Next Move Clear",
           "manual_exit": null
         },
         {
@@ -3741,42 +3769,6 @@
           "rationale": "Vente : tendance forte (ADX), marché meneur favorable, MACD en expansion, cassure du range d'ouverture, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 263.35 (0.96 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 67%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
           "news_context": "actualité à surveiller (score 2) : If a Stock Market Crash Is Coming in 2027, Warren Buffett’s Advice Makes My Next Move Clear | Why this 40-year market veteran is making a lonely bet on a 40% stock-market crash — and $500 oil",
           "manual_exit": null
-        },
-        {
-          "id": "81f8b7acb4",
-          "asset": "nasdaq",
-          "asset_label": "Nasdaq 100 (NQ)",
-          "direction": "short",
-          "horizon": "24h",
-          "entry": 27435.0,
-          "take_profit": 26931.0,
-          "stop_loss": 27603.0,
-          "risk_reward": 3.0,
-          "confidence": "fort",
-          "score": 7.31,
-          "criteria": [
-            "adx",
-            "corr",
-            "orb",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "bot",
-          "status": "sl",
-          "pnl_pct": -0.6224,
-          "pnl_gross_pct": -0.6124,
-          "duration_minutes": 57,
-          "close_price": 27603.0,
-          "created_at": "2026-11-16T15:25:44Z",
-          "closed_at": "2026-11-16T16:23:00Z",
-          "created_local": "16/11 16:25",
-          "expires_at": "2026-11-17T15:25:44Z",
-          "rationale": "Vente : tendance forte (ADX), marché meneur favorable, cassure du range d'ouverture, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 280.00 (1.02 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 53%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
-          "news_context": "actualité à surveiller (score 2) : If a Stock Market Crash Is Coming in 2027, Warren Buffett’s Advice Makes My Next Move Clear | Why this 40-year market veteran is making a lonely bet on a 40% stock-market crash — and $500 oil",
-          "manual_exit": null
         }
       ]
     },
@@ -3785,15 +3777,15 @@
       "label": "VWAP",
       "weight": 0.75,
       "stats": {
-        "n": 1732,
-        "tp": 521,
+        "n": 1734,
+        "tp": 523,
         "sl": 887,
         "expired": 324,
-        "win_rate": 0.3700284090909091,
-        "neutral_win_rate": 0.3683,
-        "edge": 0.0017,
-        "pnl_pct": -34.8083,
-        "avg_pnl_pct": -0.0201
+        "win_rate": 0.3709219858156028,
+        "neutral_win_rate": 0.3682,
+        "edge": 0.0027,
+        "pnl_pct": -31.4101,
+        "avg_pnl_pct": -0.0181
       },
       "by_source": {
         "bot": {
@@ -3830,15 +3822,15 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 1548,
-          "tp": 463,
+          "n": 1550,
+          "tp": 465,
           "sl": 795,
           "expired": 290,
-          "win_rate": 0.36804451510333863,
-          "neutral_win_rate": 0.3668,
-          "edge": 0.0012,
-          "pnl_pct": -25.7983,
-          "avg_pnl_pct": -0.0167
+          "win_rate": 0.36904761904761907,
+          "neutral_win_rate": 0.3667,
+          "edge": 0.0023,
+          "pnl_pct": -22.4001,
+          "avg_pnl_pct": -0.0145
         }
       },
       "last_trades": [
@@ -3875,6 +3867,40 @@
           "expires_at": "2026-11-16T18:40:55Z",
           "rationale": "Vente : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 24.04 (0.32 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 94%.",
           "news_context": "prudence post-USD Fed Chairman Warsh Speaks : critères renforcés · actualité calme sur les 2 dernières heures",
+          "manual_exit": null
+        },
+        {
+          "id": "add0052e91",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "short",
+          "horizon": "24h",
+          "entry": 27573.5,
+          "take_profit": 27100.0,
+          "stop_loss": 27731.5,
+          "risk_reward": 3.0,
+          "confidence": "fort",
+          "score": 5.82,
+          "criteria": [
+            "adx",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "tp",
+          "pnl_pct": 1.7072,
+          "pnl_gross_pct": 1.7172,
+          "duration_minutes": 1032,
+          "close_price": 27100.0,
+          "created_at": "2026-11-16T16:06:01Z",
+          "closed_at": "2026-11-17T09:19:00Z",
+          "created_local": "16/11 17:06",
+          "expires_at": "2026-11-17T16:06:01Z",
+          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 263.35 (0.96 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 77%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+          "news_context": "actualité à surveiller (score 2) : Prediction: A Stock Market Crash Is Coming Eventually. Here's What Investors Should Do Based on What Happened in the Last 3 Crashes. | If a Stock Market Crash Is Coming in 2027, Warren Buffett’s Advice Makes My Next Move Clear",
           "manual_exit": null
         },
         {
@@ -4087,59 +4113,23 @@
           "rationale": "Vente : tendance forte (ADX), marché meneur favorable, MACD en expansion, cassure du range d'ouverture, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 263.35 (0.96 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 67%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
           "news_context": "actualité à surveiller (score 2) : If a Stock Market Crash Is Coming in 2027, Warren Buffett’s Advice Makes My Next Move Clear | Why this 40-year market veteran is making a lonely bet on a 40% stock-market crash — and $500 oil",
           "manual_exit": null
-        },
-        {
-          "id": "81f8b7acb4",
-          "asset": "nasdaq",
-          "asset_label": "Nasdaq 100 (NQ)",
-          "direction": "short",
-          "horizon": "24h",
-          "entry": 27435.0,
-          "take_profit": 26931.0,
-          "stop_loss": 27603.0,
-          "risk_reward": 3.0,
-          "confidence": "fort",
-          "score": 7.31,
-          "criteria": [
-            "adx",
-            "corr",
-            "orb",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "bot",
-          "status": "sl",
-          "pnl_pct": -0.6224,
-          "pnl_gross_pct": -0.6124,
-          "duration_minutes": 57,
-          "close_price": 27603.0,
-          "created_at": "2026-11-16T15:25:44Z",
-          "closed_at": "2026-11-16T16:23:00Z",
-          "created_local": "16/11 16:25",
-          "expires_at": "2026-11-17T15:25:44Z",
-          "rationale": "Vente : tendance forte (ADX), marché meneur favorable, cassure du range d'ouverture, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 280.00 (1.02 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 53%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
-          "news_context": "actualité à surveiller (score 2) : If a Stock Market Crash Is Coming in 2027, Warren Buffett’s Advice Makes My Next Move Clear | Why this 40-year market veteran is making a lonely bet on a 40% stock-market crash — and $500 oil",
-          "manual_exit": null
         }
       ]
     },
     {
       "key": "rsi",
       "label": "RSI",
-      "weight": 1.019,
+      "weight": 1.028,
       "stats": {
-        "n": 1344,
-        "tp": 423,
+        "n": 1346,
+        "tp": 425,
         "sl": 678,
         "expired": 243,
-        "win_rate": 0.38419618528610355,
-        "neutral_win_rate": 0.3675,
-        "edge": 0.0167,
-        "pnl_pct": -10.9238,
-        "avg_pnl_pct": -0.0081
+        "win_rate": 0.38531278331822305,
+        "neutral_win_rate": 0.3674,
+        "edge": 0.0179,
+        "pnl_pct": -7.5256,
+        "avg_pnl_pct": -0.0056
       },
       "by_source": {
         "bot": {
@@ -4176,15 +4166,15 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 1183,
-          "tp": 370,
+          "n": 1185,
+          "tp": 372,
           "sl": 601,
           "expired": 212,
-          "win_rate": 0.38105046343975285,
-          "neutral_win_rate": 0.3659,
-          "edge": 0.0152,
-          "pnl_pct": -5.1447,
-          "avg_pnl_pct": -0.0043
+          "win_rate": 0.3823227132579651,
+          "neutral_win_rate": 0.3657,
+          "edge": 0.0166,
+          "pnl_pct": -1.7465,
+          "avg_pnl_pct": -0.0015
         }
       },
       "last_trades": [
@@ -4221,6 +4211,40 @@
           "expires_at": "2026-11-16T18:40:55Z",
           "rationale": "Vente : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 24.04 (0.32 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 94%.",
           "news_context": "prudence post-USD Fed Chairman Warsh Speaks : critères renforcés · actualité calme sur les 2 dernières heures",
+          "manual_exit": null
+        },
+        {
+          "id": "add0052e91",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "short",
+          "horizon": "24h",
+          "entry": 27573.5,
+          "take_profit": 27100.0,
+          "stop_loss": 27731.5,
+          "risk_reward": 3.0,
+          "confidence": "fort",
+          "score": 5.82,
+          "criteria": [
+            "adx",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "tp",
+          "pnl_pct": 1.7072,
+          "pnl_gross_pct": 1.7172,
+          "duration_minutes": 1032,
+          "close_price": 27100.0,
+          "created_at": "2026-11-16T16:06:01Z",
+          "closed_at": "2026-11-17T09:19:00Z",
+          "created_local": "16/11 17:06",
+          "expires_at": "2026-11-17T16:06:01Z",
+          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 263.35 (0.96 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 77%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+          "news_context": "actualité à surveiller (score 2) : Prediction: A Stock Market Crash Is Coming Eventually. Here's What Investors Should Do Based on What Happened in the Last 3 Crashes. | If a Stock Market Crash Is Coming in 2027, Warren Buffett’s Advice Makes My Next Move Clear",
           "manual_exit": null
         },
         {
@@ -4435,41 +4459,6 @@
           "created_local": "16/11 16:16",
           "expires_at": "2026-11-17T15:16:09Z",
           "rationale": "Vente : tendance forte (ADX), marché meneur favorable, MACD en expansion, cassure du range d'ouverture, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 318.17 (1.16 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 44%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
-          "news_context": "actualité à surveiller (score 2) : If a Stock Market Crash Is Coming in 2027, Warren Buffett’s Advice Makes My Next Move Clear | Why this 40-year market veteran is making a lonely bet on a 40% stock-market crash — and $500 oil",
-          "manual_exit": null
-        },
-        {
-          "id": "35f266230b",
-          "asset": "nasdaq",
-          "asset_label": "Nasdaq 100 (NQ)",
-          "direction": "short",
-          "horizon": "24h",
-          "entry": 27600.0,
-          "take_profit": 27131.0,
-          "stop_loss": 27756.5,
-          "risk_reward": 3.0,
-          "confidence": "fort",
-          "score": 6.56,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "volume",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "tp",
-          "pnl_pct": 1.6893,
-          "pnl_gross_pct": 1.6993,
-          "duration_minutes": 1078,
-          "close_price": 27131.0,
-          "created_at": "2026-11-16T15:06:02Z",
-          "closed_at": "2026-11-17T09:05:00Z",
-          "created_local": "16/11 16:06",
-          "expires_at": "2026-11-17T15:06:02Z",
-          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 45 min, tendance 3 h, tendance 15 min, volume anormal, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 260.64 (0.94 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 61%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
           "news_context": "actualité à surveiller (score 2) : If a Stock Market Crash Is Coming in 2027, Warren Buffett’s Advice Makes My Next Move Clear | Why this 40-year market veteran is making a lonely bet on a 40% stock-market crash — and $500 oil",
           "manual_exit": null
         }
@@ -5169,15 +5158,15 @@
       "label": "Volume anormal",
       "weight": 0.75,
       "stats": {
-        "n": 37,
-        "tp": 8,
+        "n": 38,
+        "tp": 9,
         "sl": 24,
         "expired": 5,
-        "win_rate": 0.25,
-        "neutral_win_rate": 0.379,
-        "edge": -0.129,
-        "pnl_pct": -5.2961,
-        "avg_pnl_pct": -0.1431
+        "win_rate": 0.2727272727272727,
+        "neutral_win_rate": 0.3756,
+        "edge": -0.1029,
+        "pnl_pct": -3.6051,
+        "avg_pnl_pct": -0.0949
       },
       "by_source": {
         "bot": {
@@ -5214,15 +5203,15 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 31,
-          "tp": 6,
+          "n": 32,
+          "tp": 7,
           "sl": 21,
           "expired": 4,
-          "win_rate": 0.2222222222222222,
-          "neutral_win_rate": 0.3737,
-          "edge": -0.1515,
-          "pnl_pct": -4.6111,
-          "avg_pnl_pct": -0.1487
+          "win_rate": 0.25,
+          "neutral_win_rate": 0.3699,
+          "edge": -0.1199,
+          "pnl_pct": -2.9201,
+          "avg_pnl_pct": -0.0913
         }
       },
       "last_trades": [
@@ -5295,6 +5284,42 @@
           "created_local": "16/11 16:06",
           "expires_at": "2026-11-17T15:06:02Z",
           "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 45 min, tendance 3 h, tendance 15 min, volume anormal, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 260.64 (0.94 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 61%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+          "news_context": "actualité à surveiller (score 2) : If a Stock Market Crash Is Coming in 2027, Warren Buffett’s Advice Makes My Next Move Clear | Why this 40-year market veteran is making a lonely bet on a 40% stock-market crash — and $500 oil",
+          "manual_exit": null
+        },
+        {
+          "id": "844ce6a3b9",
+          "asset": "nasdaq",
+          "asset_label": "Nasdaq 100 (NQ)",
+          "direction": "short",
+          "horizon": "24h",
+          "entry": 27586.25,
+          "take_profit": 27117.0,
+          "stop_loss": 27742.5,
+          "risk_reward": 3.0,
+          "confidence": "fort",
+          "score": 7.07,
+          "criteria": [
+            "adx",
+            "corr",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "volume",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "tp",
+          "pnl_pct": 1.691,
+          "pnl_gross_pct": 1.701,
+          "duration_minutes": 1106,
+          "close_price": 27117.0,
+          "created_at": "2026-11-16T14:51:02Z",
+          "closed_at": "2026-11-17T09:18:00Z",
+          "created_local": "16/11 15:51",
+          "expires_at": "2026-11-17T14:51:02Z",
+          "rationale": "Vente : tendance forte (ADX), marché meneur favorable, RSI en momentum, tendance 45 min, tendance 3 h, tendance 15 min, volume anormal, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 260.64 (0.94 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 59%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
           "news_context": "actualité à surveiller (score 2) : If a Stock Market Crash Is Coming in 2027, Warren Buffett’s Advice Makes My Next Move Clear | Why this 40-year market veteran is making a lonely bet on a 40% stock-market crash — and $500 oil",
           "manual_exit": null
         },
@@ -5476,41 +5501,6 @@
           "rationale": "Vente : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, volume anormal, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 23.07 (1.27 %), TP = 49 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 88%.",
           "news_context": "actualité calme sur les 2 dernières heures",
           "manual_exit": null
-        },
-        {
-          "id": "9d2127b95d",
-          "asset": "bitcoin",
-          "asset_label": "Bitcoin (BTC/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 67096.0,
-          "take_profit": 66820.0,
-          "stop_loss": 67326.0,
-          "risk_reward": 1.2,
-          "confidence": "fort",
-          "score": 6.53,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "volume",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.4028,
-          "pnl_gross_pct": -0.3428,
-          "duration_minutes": 8,
-          "close_price": 67326.0,
-          "created_at": "2026-11-14T08:01:29Z",
-          "closed_at": "2026-11-14T08:10:00Z",
-          "created_local": "14/11 09:01",
-          "expires_at": "2026-11-14T09:01:29Z",
-          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, volume anormal, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 613.0 (0.91 %), TP = 45 % du range, SL = 38 % du range, probabilité de résolution sous 1 h ≈ 78%.",
-          "news_context": "actualité à surveiller (score 1) : China, US discuss tariffs, farm trade at first trade council meeting",
-          "manual_exit": null
         }
       ]
     }
@@ -5547,40 +5537,6 @@
       "created_local": "16/11 17:11",
       "expires_at": "2026-11-17T16:11:08Z",
       "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 263.35 (0.96 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 76%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
-      "news_context": "actualité à surveiller (score 2) : Prediction: A Stock Market Crash Is Coming Eventually. Here's What Investors Should Do Based on What Happened in the Last 3 Crashes. | If a Stock Market Crash Is Coming in 2027, Warren Buffett’s Advice Makes My Next Move Clear",
-      "manual_exit": null
-    },
-    {
-      "id": "add0052e91",
-      "asset": "nasdaq",
-      "asset_label": "Nasdaq 100 (NQ)",
-      "direction": "short",
-      "horizon": "24h",
-      "entry": 27573.5,
-      "take_profit": 27100.0,
-      "stop_loss": 27731.5,
-      "risk_reward": 3.0,
-      "confidence": "fort",
-      "score": 5.82,
-      "criteria": [
-        "adx",
-        "rsi",
-        "trend_15m",
-        "trend_1h",
-        "trend_5m",
-        "vwap"
-      ],
-      "source": "shadow",
-      "status": "open",
-      "pnl_pct": null,
-      "pnl_gross_pct": null,
-      "duration_minutes": null,
-      "close_price": null,
-      "created_at": "2026-11-16T16:06:01Z",
-      "closed_at": null,
-      "created_local": "16/11 17:06",
-      "expires_at": "2026-11-17T16:06:01Z",
-      "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 263.35 (0.96 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 77%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
       "news_context": "actualité à surveiller (score 2) : Prediction: A Stock Market Crash Is Coming Eventually. Here's What Investors Should Do Based on What Happened in the Last 3 Crashes. | If a Stock Market Crash Is Coming in 2027, Warren Buffett’s Advice Makes My Next Move Clear",
       "manual_exit": null
     },
@@ -5722,42 +5678,6 @@
       "created_local": "16/11 16:11",
       "expires_at": "2026-11-17T15:11:15Z",
       "rationale": "Vente : tendance forte (ADX), MACD en expansion, cassure du range d'ouverture, RSI en momentum, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 263.35 (0.96 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 66%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
-      "news_context": "actualité à surveiller (score 2) : If a Stock Market Crash Is Coming in 2027, Warren Buffett’s Advice Makes My Next Move Clear | Why this 40-year market veteran is making a lonely bet on a 40% stock-market crash — and $500 oil",
-      "manual_exit": null
-    },
-    {
-      "id": "844ce6a3b9",
-      "asset": "nasdaq",
-      "asset_label": "Nasdaq 100 (NQ)",
-      "direction": "short",
-      "horizon": "24h",
-      "entry": 27586.25,
-      "take_profit": 27117.0,
-      "stop_loss": 27742.5,
-      "risk_reward": 3.0,
-      "confidence": "fort",
-      "score": 7.07,
-      "criteria": [
-        "adx",
-        "corr",
-        "rsi",
-        "trend_15m",
-        "trend_1h",
-        "trend_5m",
-        "volume",
-        "vwap"
-      ],
-      "source": "shadow",
-      "status": "open",
-      "pnl_pct": null,
-      "pnl_gross_pct": null,
-      "duration_minutes": null,
-      "close_price": null,
-      "created_at": "2026-11-16T14:51:02Z",
-      "closed_at": null,
-      "created_local": "16/11 15:51",
-      "expires_at": "2026-11-17T14:51:02Z",
-      "rationale": "Vente : tendance forte (ADX), marché meneur favorable, RSI en momentum, tendance 45 min, tendance 3 h, tendance 15 min, volume anormal, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 260.64 (0.94 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 59%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
       "news_context": "actualité à surveiller (score 2) : If a Stock Market Crash Is Coming in 2027, Warren Buffett’s Advice Makes My Next Move Clear | Why this 40-year market veteran is making a lonely bet on a 40% stock-market crash — and $500 oil",
       "manual_exit": null
     },
@@ -7401,35 +7321,35 @@
   "adjustments": {
     "notes": [
       "trades réels : +0,02 R ± 0,18 R par trade avant frais sur 187 trades (0 R = hasard)",
-      "rsi : +0,07 R ± 0,06 R sur 1738 trades éq. → poids ×1,02",
+      "rsi : +0,07 R ± 0,06 R sur 1740 trades éq. → poids ×1,03",
       "pdhl : +0,20 R ± 0,17 R sur 255 trades éq. → poids ×1,07",
       "tranche 10h UTC : -0,27 R sur 108 trades éq. → évitée",
       "tranche 12h UTC : -0,42 R sur 69 trades éq. → évitée",
       "tranche 19h UTC : -0,30 R sur 89 trades éq. → évitée",
       "bitcoin, macd : -0,49 R contre -0,04 R en global sur 45 trades éq. → poids ×0,58 sur cet actif",
-      "ethereum, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,20 R contre +0,04 R en global sur 140 trades éq. → poids ×0,85 sur cet actif",
+      "ethereum, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,20 R contre +0,04 R en global sur 140 trades éq. → poids ×0,84 sur cet actif",
       "ethereum, rsi : -0,24 R contre +0,07 R en global sur 100 trades éq. → poids ×0,73 sur cet actif",
-      "euro, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,21 R contre +0,04 R en global sur 102 trades éq. → poids ×0,97 sur cet actif",
-      "euro, vwap : -0,21 R contre +0,05 R en global sur 96 trades éq. → poids ×0,97 sur cet actif",
-      "euro, rsi : -0,24 R contre +0,07 R en global sur 84 trades éq. → poids ×0,87 sur cet actif",
-      "nasdaq, rsi : +0,24 R contre +0,07 R en global sur 489 trades éq. → poids ×1,07 sur cet actif",
-      "sp500, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,14 R contre +0,04 R en global sur 236 trades éq. → poids ×0,94 sur cet actif",
-      "sp500, vwap : -0,13 R contre +0,05 R en global sur 232 trades éq. → poids ×0,93 sur cet actif",
+      "euro, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,21 R contre +0,04 R en global sur 102 trades éq. → poids ×0,96 sur cet actif",
+      "euro, vwap : -0,21 R contre +0,05 R en global sur 96 trades éq. → poids ×0,96 sur cet actif",
+      "euro, rsi : -0,24 R contre +0,07 R en global sur 84 trades éq. → poids ×0,86 sur cet actif",
+      "nasdaq, rsi : +0,25 R contre +0,07 R en global sur 491 trades éq. → poids ×1,08 sur cet actif",
+      "sp500, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,14 R contre +0,04 R en global sur 236 trades éq. → poids ×0,93 sur cet actif",
+      "sp500, vwap : -0,13 R contre +0,05 R en global sur 232 trades éq. → poids ×0,92 sur cet actif",
+      "sp500, rsi : -0,09 R contre +0,07 R en global sur 195 trades éq. → poids ×0,99 sur cet actif",
       "sp500, pdhl : -0,19 R contre +0,20 R en global sur 31 trades éq. → poids ×0,96 sur cet actif",
       "variante « indices le matin européen » en test : 152 trades, -0,44 R net, pas meilleure que les signaux réels",
-      "variante « horizon ~3 h » en test : 231 trades, -0,35 R net, pas meilleure que les signaux réels",
-      "variante « confiance moyenne » en test : 82 trades, -0,11 R net, encore 18 trades avant décision",
-      "variante « entrées dans l'heure avant l'ouverture américaine » en test : 24 trades, +0,58 R net, encore 76 trades avant décision"
+      "variante « horizon ~3 h » en test : 233 trades, -0,33 R net, pas meilleure que les signaux réels",
+      "variante « confiance moyenne » en test : 82 trades, -0,11 R net, encore 18 trades avant décision"
     ],
     "avoid_hours_utc": [
       10,
       12,
       19
     ],
-    "sample": 2621,
+    "sample": 2623,
     "sample_by_source": {
       "bot": 186,
-      "shadow": 1582,
+      "shadow": 1584,
       "manual": 1,
       "backtest": 852
     },
@@ -7440,7 +7360,7 @@
       "trend_1h": 1.0,
       "adx": 1.0,
       "vwap": 0.75,
-      "rsi": 1.019,
+      "rsi": 1.028,
       "macd": 1.0,
       "level": 1.0,
       "volume": 0.75,
@@ -7455,7 +7375,7 @@
         "trend_1h": 1.0,
         "adx": 1.0,
         "vwap": 0.75,
-        "rsi": 1.019,
+        "rsi": 1.028,
         "macd": 0.576,
         "level": 1.0,
         "volume": 0.75,
@@ -7464,12 +7384,12 @@
         "corr": 0.5
       },
       "ethereum": {
-        "trend_5m": 0.849,
-        "trend_15m": 0.849,
-        "trend_1h": 0.849,
-        "adx": 0.849,
+        "trend_5m": 0.843,
+        "trend_15m": 0.843,
+        "trend_1h": 0.843,
+        "adx": 0.843,
         "vwap": 0.75,
-        "rsi": 0.748,
+        "rsi": 0.746,
         "macd": 1.0,
         "level": 1.0,
         "volume": 0.75,
@@ -7478,12 +7398,12 @@
         "corr": 0.5
       },
       "euro": {
-        "trend_5m": 0.968,
-        "trend_15m": 0.968,
-        "trend_1h": 0.968,
-        "adx": 0.968,
-        "vwap": 0.727,
-        "rsi": 0.883,
+        "trend_5m": 0.961,
+        "trend_15m": 0.961,
+        "trend_1h": 0.961,
+        "adx": 0.961,
+        "vwap": 0.722,
+        "rsi": 0.882,
         "macd": 1.0,
         "level": 1.0,
         "volume": 0.75,
@@ -7497,7 +7417,7 @@
         "trend_1h": 1.0,
         "adx": 1.0,
         "vwap": 0.75,
-        "rsi": 1.019,
+        "rsi": 1.028,
         "macd": 1.0,
         "level": 1.0,
         "volume": 0.75,
@@ -7511,7 +7431,7 @@
         "trend_1h": 1.0,
         "adx": 1.0,
         "vwap": 0.75,
-        "rsi": 1.086,
+        "rsi": 1.112,
         "macd": 1.0,
         "level": 1.0,
         "volume": 0.75,
@@ -7525,7 +7445,7 @@
         "trend_1h": 1.0,
         "adx": 1.0,
         "vwap": 0.75,
-        "rsi": 1.019,
+        "rsi": 1.028,
         "macd": 1.0,
         "level": 1.0,
         "volume": 0.75,
@@ -7534,12 +7454,12 @@
         "corr": 0.5
       },
       "sp500": {
-        "trend_5m": 0.935,
-        "trend_15m": 0.935,
-        "trend_1h": 0.935,
-        "adx": 0.935,
-        "vwap": 0.698,
-        "rsi": 1.019,
+        "trend_5m": 0.929,
+        "trend_15m": 0.929,
+        "trend_1h": 0.929,
+        "adx": 0.929,
+        "vwap": 0.692,
+        "rsi": 1.022,
         "macd": 1.0,
         "level": 1.0,
         "volume": 0.75,
@@ -7556,31 +7476,31 @@
           "trend_1h",
           "adx"
         ],
-        "n": 2620,
-        "n_eff": 2247.4,
-        "mean_r": 0.0365,
-        "margin_r": 0.0537,
+        "n": 2622,
+        "n_eff": 2249.4,
+        "mean_r": 0.0391,
+        "margin_r": 0.0538,
         "multiplier": 1.0
       },
       "vwap": {
         "members": [
           "vwap"
         ],
-        "n": 2410,
-        "n_eff": 2098.2,
-        "mean_r": 0.0457,
-        "margin_r": 0.0561,
+        "n": 2412,
+        "n_eff": 2100.2,
+        "mean_r": 0.0485,
+        "margin_r": 0.0562,
         "multiplier": 1.0
       },
       "rsi": {
         "members": [
           "rsi"
         ],
-        "n": 2049,
-        "n_eff": 1737.6,
-        "mean_r": 0.0699,
-        "margin_r": 0.0621,
-        "multiplier": 1.019
+        "n": 2051,
+        "n_eff": 1739.6,
+        "mean_r": 0.0733,
+        "margin_r": 0.0622,
+        "multiplier": 1.028
       },
       "macd": {
         "members": [
@@ -7606,10 +7526,10 @@
         "members": [
           "volume"
         ],
-        "n": 116,
-        "n_eff": 89.0,
-        "mean_r": -0.1748,
-        "margin_r": 0.2557,
+        "n": 117,
+        "n_eff": 90.0,
+        "mean_r": -0.1324,
+        "margin_r": 0.2637,
         "multiplier": 1.0
       },
       "orb": {
@@ -7636,10 +7556,10 @@
         "members": [
           "corr"
         ],
-        "n": 150,
-        "n_eff": 143.8,
-        "mean_r": -0.0157,
-        "margin_r": 0.2171,
+        "n": 151,
+        "n_eff": 144.8,
+        "mean_r": 0.0027,
+        "margin_r": 0.2191,
         "multiplier": 1.0
       }
     },
@@ -7650,9 +7570,9 @@
         "margin_r": 0.1843
       },
       "fantômes": {
-        "n": 1582,
-        "mean_r": 0.0563,
-        "margin_r": 0.0657
+        "n": 1584,
+        "mean_r": 0.06,
+        "margin_r": 0.0658
       },
       "backtest": {
         "n": 852,
@@ -7671,9 +7591,9 @@
       },
       "horizon_3h": {
         "label": "horizon ~3 h",
-        "n": 231,
-        "mean_net_r": -0.3536,
-        "lower_r": -0.5687,
+        "n": 233,
+        "mean_net_r": -0.325,
+        "lower_r": -0.5454,
         "promoted": false,
         "missing": 0
       },
@@ -7756,9 +7676,9 @@
     },
     "variants_z": 2.75,
     "promoted_variants": [],
-    "updated_at": "2026-11-17T09:16:16.523514+00:00",
+    "updated_at": "2026-11-17T09:31:19.920925+00:00",
     "context": {
-      "n": 2389,
+      "n": 2391,
       "features": {
         "adx": {
           "label": "force de tendance (ADX 15 min)",
@@ -7766,21 +7686,21 @@
             {
               "label": "bas (< 27)",
               "lo": -1000000000.0,
-              "hi": 27.22,
-              "n": 795,
-              "n_eff": 683.5,
-              "mean_r": -0.0928,
-              "margin_r": 0.1186,
+              "hi": 27.24,
+              "n": 797,
+              "n_eff": 684.9,
+              "mean_r": -0.0991,
+              "margin_r": 0.1187,
               "avoid": false
             },
             {
               "label": "milieu (27 à 39)",
-              "lo": 27.22,
+              "lo": 27.24,
               "hi": 38.53,
               "n": 797,
-              "n_eff": 676.1,
-              "mean_r": 0.118,
-              "margin_r": 0.129,
+              "n_eff": 676.6,
+              "mean_r": 0.1337,
+              "margin_r": 0.1294,
               "avoid": false
             },
             {
@@ -7802,20 +7722,20 @@
               "label": "bas (< 59)",
               "lo": -1000000000.0,
               "hi": 58.76,
-              "n": 795,
-              "n_eff": 695.5,
-              "mean_r": 0.0197,
-              "margin_r": 0.114,
+              "n": 796,
+              "n_eff": 696.5,
+              "mean_r": 0.0241,
+              "margin_r": 0.1143,
               "avoid": false
             },
             {
               "label": "milieu (59 à 66)",
               "lo": 58.76,
               "hi": 66.25,
-              "n": 795,
-              "n_eff": 680.1,
-              "mean_r": 0.0971,
-              "margin_r": 0.1375,
+              "n": 796,
+              "n_eff": 681.1,
+              "mean_r": 0.1016,
+              "margin_r": 0.1377,
               "avoid": false
             },
             {
@@ -7836,31 +7756,31 @@
             {
               "label": "bas (< 0,89)",
               "lo": -1000000000.0,
-              "hi": 0.8928,
+              "hi": 0.8902,
               "n": 745,
-              "n_eff": 655.3,
-              "mean_r": -0.0607,
-              "margin_r": 0.1174,
+              "n_eff": 655.6,
+              "mean_r": -0.0553,
+              "margin_r": 0.1179,
               "avoid": false
             },
             {
               "label": "milieu (0,89 à 1,53)",
-              "lo": 0.8928,
-              "hi": 1.5325,
-              "n": 745,
-              "n_eff": 643.7,
-              "mean_r": -0.0092,
-              "margin_r": 0.1298,
+              "lo": 0.8902,
+              "hi": 1.5319,
+              "n": 746,
+              "n_eff": 644.7,
+              "mean_r": -0.0044,
+              "margin_r": 0.1301,
               "avoid": false
             },
             {
               "label": "haut (≥ 1,53)",
-              "lo": 1.5325,
+              "lo": 1.5319,
               "hi": 1000000000.0,
-              "n": 745,
-              "n_eff": 656.5,
-              "mean_r": 0.2039,
-              "margin_r": 0.1398,
+              "n": 746,
+              "n_eff": 657.2,
+              "mean_r": 0.2032,
+              "margin_r": 0.1397,
               "avoid": false
             }
           ]
@@ -7872,20 +7792,20 @@
               "label": "bas (< 0,23)",
               "lo": -1000000000.0,
               "hi": 0.2279,
-              "n": 796,
-              "n_eff": 692.9,
-              "mean_r": 0.0381,
-              "margin_r": 0.113,
+              "n": 797,
+              "n_eff": 693.9,
+              "mean_r": 0.0425,
+              "margin_r": 0.1133,
               "avoid": false
             },
             {
               "label": "milieu (0,23 à 0,54)",
               "lo": 0.2279,
               "hi": 0.5381,
-              "n": 795,
-              "n_eff": 683.4,
-              "mean_r": -0.0011,
-              "margin_r": 0.1282,
+              "n": 796,
+              "n_eff": 684.4,
+              "mean_r": 0.0034,
+              "margin_r": 0.1285,
               "avoid": false
             },
             {
@@ -7907,20 +7827,20 @@
               "label": "bas (< 1,08)",
               "lo": -1000000000.0,
               "hi": 1.085,
-              "n": 796,
-              "n_eff": 705.3,
-              "mean_r": -0.1161,
-              "margin_r": 0.1032,
+              "n": 797,
+              "n_eff": 706.3,
+              "mean_r": -0.1115,
+              "margin_r": 0.1036,
               "avoid": true
             },
             {
               "label": "milieu (1,08 à 1,44)",
               "lo": 1.085,
               "hi": 1.442,
-              "n": 796,
-              "n_eff": 678.7,
-              "mean_r": 0.0908,
-              "margin_r": 0.1258,
+              "n": 797,
+              "n_eff": 679.7,
+              "mean_r": 0.0954,
+              "margin_r": 0.1261,
               "avoid": false
             },
             {
@@ -7976,31 +7896,31 @@
             {
               "label": "bas (< 0,40)",
               "lo": -1000000000.0,
-              "hi": 0.3951,
-              "n": 796,
-              "n_eff": 691.3,
-              "mean_r": 0.1284,
-              "margin_r": 0.1363,
+              "hi": 0.3953,
+              "n": 797,
+              "n_eff": 692.3,
+              "mean_r": 0.1265,
+              "margin_r": 0.1362,
               "avoid": false
             },
             {
               "label": "milieu (0,40 à 0,65)",
-              "lo": 0.3951,
-              "hi": 0.6535,
-              "n": 796,
-              "n_eff": 708.6,
-              "mean_r": 0.1291,
-              "margin_r": 0.1215,
+              "lo": 0.3953,
+              "hi": 0.6539,
+              "n": 797,
+              "n_eff": 709.6,
+              "mean_r": 0.13,
+              "margin_r": 0.1213,
               "avoid": false
             },
             {
               "label": "haut (≥ 0,65)",
-              "lo": 0.6535,
+              "lo": 0.6539,
               "hi": 1000000000.0,
               "n": 797,
               "n_eff": 670.2,
-              "mean_r": -0.1786,
-              "margin_r": 0.1135,
+              "mean_r": -0.1675,
+              "margin_r": 0.1148,
               "avoid": true
             }
           ]
@@ -8011,21 +7931,21 @@
             {
               "label": "bas (< 0,08)",
               "lo": -1000000000.0,
-              "hi": 0.0793,
-              "n": 796,
-              "n_eff": 699.8,
-              "mean_r": 0.0456,
-              "margin_r": 0.1443,
+              "hi": 0.0792,
+              "n": 792,
+              "n_eff": 697.2,
+              "mean_r": 0.0519,
+              "margin_r": 0.145,
               "avoid": false
             },
             {
               "label": "milieu (0,08 à 0,13)",
-              "lo": 0.0793,
+              "lo": 0.0792,
               "hi": 0.1274,
-              "n": 796,
-              "n_eff": 694.4,
-              "mean_r": 0.1247,
-              "margin_r": 0.1149,
+              "n": 802,
+              "n_eff": 699.2,
+              "mean_r": 0.1266,
+              "margin_r": 0.1148,
               "avoid": false
             },
             {
@@ -8057,20 +7977,20 @@
               "label": "de 30 min avant à 1 h 30 après",
               "lo": -30.0,
               "hi": 90.0,
-              "n": 374,
-              "n_eff": 318.6,
-              "mean_r": 0.1383,
-              "margin_r": 0.205,
+              "n": 375,
+              "n_eff": 319.6,
+              "mean_r": 0.1476,
+              "margin_r": 0.2056,
               "avoid": false
             },
             {
               "label": "plus de 1 h 30 après l'ouverture US",
               "lo": 90.0,
               "hi": 1000000000.0,
-              "n": 1079,
-              "n_eff": 918.7,
-              "mean_r": 0.0968,
-              "margin_r": 0.1148,
+              "n": 1080,
+              "n_eff": 919.7,
+              "mean_r": 0.1,
+              "margin_r": 0.115,
               "avoid": false
             }
           ]
@@ -8082,10 +8002,10 @@
               "label": "lundi",
               "lo": 0,
               "hi": 1,
-              "n": 316,
-              "n_eff": 263.9,
-              "mean_r": 0.0423,
-              "margin_r": 0.2108,
+              "n": 318,
+              "n_eff": 265.9,
+              "mean_r": 0.0648,
+              "margin_r": 0.2129,
               "avoid": false
             },
             {
@@ -8157,15 +8077,15 @@
           "lo": -1000000000.0,
           "hi": 1.085,
           "label": "volatilité du moment / moyenne 24 h : bas (< 1,08)",
-          "mean_r": -0.1161,
-          "n": 796
+          "mean_r": -0.1115,
+          "n": 797
         },
         {
           "feature": "range_pct",
-          "lo": 0.6535,
+          "lo": 0.6539,
           "hi": 1000000000.0,
           "label": "taille du range (%) : haut (≥ 0,65)",
-          "mean_r": -0.1786,
+          "mean_r": -0.1675,
           "n": 797
         },
         {
@@ -8180,8 +8100,8 @@
     },
     "exits": {
       "réels et en ombre": {
-        "n": 1538,
-        "current_net_r": -0.04,
+        "n": 1540,
+        "current_net_r": -0.0361,
         "mfe_median": 0.844,
         "sl_reached": {
           "0.5": 290,
@@ -8192,20 +8112,20 @@
         "rules": {
           "0.5": {
             "net_r": -0.055,
-            "diff_r": -0.015,
-            "margin_r": 0.0403,
+            "diff_r": -0.0189,
+            "margin_r": 0.0406,
             "better": false
           },
           "0.8": {
-            "net_r": -0.0545,
-            "diff_r": -0.0145,
-            "margin_r": 0.0319,
+            "net_r": -0.0525,
+            "diff_r": -0.0164,
+            "margin_r": 0.0321,
             "better": false
           },
           "1.0": {
-            "net_r": -0.0543,
-            "diff_r": -0.0142,
-            "margin_r": 0.0282,
+            "net_r": -0.0523,
+            "diff_r": -0.0162,
+            "margin_r": 0.0284,
             "better": false
           }
         }
@@ -8320,10 +8240,10 @@
     }
   },
   "state": {
-    "last_scan": "2026-11-17T09:26:01Z",
+    "last_scan": "2026-11-17T09:31:18Z",
     "last_scan_note": "0 signal(aux)",
     "last_summary": "2026-11-16T23:05:46Z",
-    "last_track": "2026-11-17T09:26:01Z",
+    "last_track": "2026-11-17T09:31:18Z",
     "last_summary_day": "2026-11-16",
     "pc_down": 1794622543
   },
@@ -25226,7 +25146,7 @@
       "since": "2026-10-26T12:00:00Z",
       "trades": [],
       "live": true,
-      "checked_hour": "2026-11-17T09:15:00Z",
+      "checked_hour": "2026-11-17T09:30:00Z",
       "n": 0,
       "mean_r": null
     },
