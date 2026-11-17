@@ -93,18 +93,18 @@
       "variant": "vix_bond",
       "exc": {
         "mfe": 2.589,
-        "mae": 0.0,
+        "mae": 0.1126,
         "armed": {
           "0.5": true,
           "0.8": true,
           "1.0": true
         },
         "be": {
-          "0.5": false,
-          "0.8": false,
-          "1.0": false
+          "0.5": true,
+          "0.8": true,
+          "1.0": true
         },
-        "last_ts": 1794935760
+        "last_ts": 1794936060
       }
     }
   },
@@ -200,7 +200,7 @@
       "variant": "vix_bond",
       "exc": {
         "mfe": 2.4604,
-        "mae": 0.1842,
+        "mae": 0.4071,
         "armed": {
           "0.5": true,
           "0.8": true,
@@ -211,422 +211,7 @@
           "0.8": true,
           "1.0": true
         },
-        "last_ts": 1794935760
-      }
-    }
-  },
-  {
-    "id": "f95933b5e0",
-    "asset": "nasdaq",
-    "asset_label": "Nasdaq 100 (NQ)",
-    "direction": "short",
-    "entry": 26985.25,
-    "take_profit": 26655.5,
-    "stop_loss": 27095.0,
-    "risk_reward": 3.0,
-    "confidence": "fort",
-    "score": 6.52,
-    "criteria": [
-      "adx",
-      "corr",
-      "rsi",
-      "trend_15m",
-      "trend_1h",
-      "trend_5m",
-      "vwap"
-    ],
-    "rationale": "Vente : tendance forte (ADX), marché meneur favorable, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 183.00 (0.68 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 95%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
-    "news_context": "prudence post-USD Fed Chairman Warsh Speaks : critères renforcés · actualité à surveiller (score 2) : Fed’s Musalem signals multiple rate hikes likely needed before spring 2027",
-    "created_at": "2026-11-17T16:11:19Z",
-    "expires_at": "2026-11-18T16:11:19Z",
-    "status": "open",
-    "closed_at": null,
-    "close_price": null,
-    "pnl_pct": null,
-    "pnl_gross_pct": null,
-    "duration_minutes": null,
-    "hourly_range": 183.0,
-    "source": "shadow",
-    "horizon": "24h",
-    "horizon_minutes": 1440,
-    "meta": {
-      "tick": 0.25,
-      "details": {
-        "trend_5m": "EMA20 27071.98 / EMA50 27198.95 (5 min)",
-        "trend_15m": "EMA20 27205.94 / EMA50 27278.82",
-        "trend_1h": "prix vs EMA20 1 h 27311.98",
-        "adx": "ADX15 32.8 (+DI 9.9 / -DI 41.3)",
-        "vwap": "VWAP jour 27184.41",
-        "rsi": "RSI14 5 min 41.8",
-        "macd": "histogramme MACD -25.1374",
-        "level": "support - / résistance 27360.00",
-        "volume": "z-score volume -1.70",
-        "orb": "range d'ouverture 27197.00 – 27351.00",
-        "pdhl": "veille : haut 28267.50 / bas 27180.50",
-        "activity": "activité de l'heure 1.60× la moyenne",
-        "corr": "VIX +6.4 % sur 15 min"
-      },
-      "support": null,
-      "resistance": 27360.0,
-      "atr_5m": 101.06647608231235,
-      "atr_ratio": 2.2484210343052204,
-      "hourly_range_pct": 0.6781,
-      "adx_15m": 32.788081949549195,
-      "sigma_5m": 0.0021047697824370963,
-      "p_resolution": 0.9493333333333334,
-      "p_tp_neutral": 0.4033333333333333,
-      "activity_ratio": 1.601,
-      "base_minutes": 5,
-      "ctx": {
-        "adx": 32.79,
-        "rsi_dir": 58.17,
-        "vwap_ext": 1.0883,
-        "ema_ext": 0.4739,
-        "atr_ratio": 2.248,
-        "activity": 1.601,
-        "range_pct": 0.6781,
-        "cost_r": 0.0368,
-        "us_open_min": 101.3,
-        "weekday": 1
-      },
-      "exit_override": {
-        "stop_x": 1.5,
-        "target_x": 3.0,
-        "minutes": 1440,
-        "source": "essai 29"
-      },
-      "price_time": "2026-11-17T16:05:00Z",
-      "ctx_avoid": [
-        "taille du range (%) : haut (≥ 0,65)"
-      ],
-      "filters": [
-        "filtre_contexte",
-        "vix_bond"
-      ],
-      "filters_checked": true,
-      "variant": "vix_bond",
-      "exc": {
-        "mfe": 1.7517,
-        "mae": 0.467,
-        "armed": {
-          "0.5": true,
-          "0.8": true,
-          "1.0": true
-        },
-        "be": {
-          "0.5": true,
-          "0.8": true,
-          "1.0": true
-        },
-        "last_ts": 1794935760
-      }
-    }
-  },
-  {
-    "id": "af2e6e3374",
-    "asset": "nasdaq",
-    "asset_label": "Nasdaq 100 (NQ)",
-    "direction": "short",
-    "entry": 26946.75,
-    "take_profit": 26573.25,
-    "stop_loss": 27071.25,
-    "risk_reward": 3.0,
-    "confidence": "fort",
-    "score": 6.02,
-    "criteria": [
-      "adx",
-      "rsi",
-      "trend_15m",
-      "trend_1h",
-      "trend_5m",
-      "vwap"
-    ],
-    "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 207.50 (0.77 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 92%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
-    "news_context": "prudence post-USD Fed Chairman Warsh Speaks : critères renforcés · actualité à surveiller (score 2) : Fed’s Musalem signals multiple rate hikes likely needed before spring 2027",
-    "created_at": "2026-11-17T16:26:01Z",
-    "expires_at": "2026-11-18T16:26:01Z",
-    "status": "open",
-    "closed_at": null,
-    "close_price": null,
-    "pnl_pct": null,
-    "pnl_gross_pct": null,
-    "duration_minutes": null,
-    "hourly_range": 207.5,
-    "source": "shadow",
-    "horizon": "24h",
-    "horizon_minutes": 1440,
-    "meta": {
-      "tick": 0.25,
-      "details": {
-        "trend_5m": "EMA20 27051.55 / EMA50 27175.95 (5 min)",
-        "trend_15m": "EMA20 27182.68 / EMA50 27266.50",
-        "trend_1h": "prix vs EMA20 1 h 27307.97",
-        "adx": "ADX15 32.9 (+DI 13.4 / -DI 37.5)",
-        "vwap": "VWAP jour 27167.01",
-        "rsi": "RSI14 5 min 40.5",
-        "macd": "histogramme MACD 1.6434",
-        "level": "support - / résistance 27360.00",
-        "volume": "z-score volume -3.37",
-        "orb": "range d'ouverture 27197.00 – 27351.00",
-        "pdhl": "veille : haut 28267.50 / bas 27180.50",
-        "activity": "activité de l'heure 1.66× la moyenne",
-        "corr": "VIX -2.1 % sur 15 min"
-      },
-      "support": null,
-      "resistance": 27360.0,
-      "atr_5m": 100.97490420753573,
-      "atr_ratio": 2.2396892745887604,
-      "hourly_range_pct": 0.77,
-      "adx_15m": 32.90621516818228,
-      "sigma_5m": 0.002141607221619995,
-      "p_resolution": 0.9163333333333333,
-      "p_tp_neutral": 0.381,
-      "activity_ratio": 1.66,
-      "base_minutes": 5,
-      "ctx": {
-        "adx": 32.91,
-        "rsi_dir": 59.54,
-        "vwap_ext": 1.0615,
-        "ema_ext": 0.5051,
-        "atr_ratio": 2.24,
-        "activity": 1.66,
-        "range_pct": 0.77,
-        "cost_r": 0.0325,
-        "us_open_min": 116.0,
-        "weekday": 1
-      },
-      "exit_override": {
-        "stop_x": 1.5,
-        "target_x": 3.0,
-        "minutes": 1440,
-        "source": "essai 29"
-      },
-      "price_time": "2026-11-17T16:20:00Z",
-      "ctx_avoid": [
-        "taille du range (%) : haut (≥ 0,65)"
-      ],
-      "filters": [
-        "filtre_contexte",
-        "vix_bond"
-      ],
-      "filters_checked": true,
-      "variant": "vix_bond",
-      "exc": {
-        "mfe": 1.2349,
-        "mae": 0.7209,
-        "armed": {
-          "0.5": true,
-          "0.8": true,
-          "1.0": true
-        },
-        "be": {
-          "0.5": true,
-          "0.8": true,
-          "1.0": true
-        },
-        "last_ts": 1794935760
-      }
-    }
-  },
-  {
-    "id": "a0b5a8ff28",
-    "asset": "nasdaq",
-    "asset_label": "Nasdaq 100 (NQ)",
-    "direction": "short",
-    "entry": 26956.25,
-    "take_profit": 26623.25,
-    "stop_loss": 27067.25,
-    "risk_reward": 3.0,
-    "confidence": "fort",
-    "score": 6.02,
-    "criteria": [
-      "adx",
-      "rsi",
-      "trend_15m",
-      "trend_1h",
-      "trend_5m",
-      "vwap"
-    ],
-    "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 184.92 (0.69 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 95%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
-    "news_context": "prudence post-USD Fed Chairman Warsh Speaks : critères renforcés · actualité à surveiller (score 2) : Fed’s Musalem signals multiple rate hikes likely needed before spring 2027",
-    "created_at": "2026-11-17T16:31:31Z",
-    "expires_at": "2026-11-18T16:31:31Z",
-    "status": "open",
-    "closed_at": null,
-    "close_price": null,
-    "pnl_pct": null,
-    "pnl_gross_pct": null,
-    "duration_minutes": null,
-    "hourly_range": 184.916667,
-    "source": "shadow",
-    "horizon": "24h",
-    "horizon_minutes": 1440,
-    "meta": {
-      "tick": 0.25,
-      "details": {
-        "trend_5m": "EMA20 27043.90 / EMA50 27167.96 (5 min)",
-        "trend_15m": "EMA20 27183.58 / EMA50 27266.88",
-        "trend_1h": "prix vs EMA20 1 h 27308.87",
-        "adx": "ADX15 32.9 (+DI 13.2 / -DI 36.9)",
-        "vwap": "VWAP jour 27163.03",
-        "rsi": "RSI14 5 min 40.9",
-        "macd": "histogramme MACD 5.4656",
-        "level": "support - / résistance 27360.00",
-        "volume": "z-score volume -3.53",
-        "orb": "range d'ouverture 27197.00 – 27351.00",
-        "pdhl": "veille : haut 28267.50 / bas 27180.50",
-        "activity": "activité de l'heure 1.67× la moyenne",
-        "corr": "VIX -0.2 % sur 15 min"
-      },
-      "support": null,
-      "resistance": 27360.0,
-      "atr_5m": 100.15016615189542,
-      "atr_ratio": 2.217658189650838,
-      "hourly_range_pct": 0.686,
-      "adx_15m": 32.90621516818228,
-      "sigma_5m": 0.002132284845934711,
-      "p_resolution": 0.9496666666666667,
-      "p_tp_neutral": 0.4033333333333333,
-      "activity_ratio": 1.671,
-      "base_minutes": 5,
-      "ctx": {
-        "adx": 32.91,
-        "rsi_dir": 59.1,
-        "vwap_ext": 1.1183,
-        "ema_ext": 0.474,
-        "atr_ratio": 2.218,
-        "activity": 1.671,
-        "range_pct": 0.686,
-        "cost_r": 0.0364,
-        "us_open_min": 121.5,
-        "weekday": 1
-      },
-      "exit_override": {
-        "stop_x": 1.5,
-        "target_x": 3.0,
-        "minutes": 1440,
-        "source": "essai 29"
-      },
-      "price_time": "2026-11-17T16:25:00Z",
-      "ctx_avoid": [
-        "taille du range (%) : haut (≥ 0,65)"
-      ],
-      "filters": [
-        "filtre_contexte",
-        "vix_bond"
-      ],
-      "filters_checked": true,
-      "variant": "vix_bond",
-      "exc": {
-        "mfe": 1.4707,
-        "mae": 0.723,
-        "armed": {
-          "0.5": true,
-          "0.8": true,
-          "1.0": true
-        },
-        "be": {
-          "0.5": true,
-          "0.8": true,
-          "1.0": true
-        },
-        "last_ts": 1794935760
-      }
-    }
-  },
-  {
-    "id": "60458d73e8",
-    "asset": "nasdaq",
-    "asset_label": "Nasdaq 100 (NQ)",
-    "direction": "short",
-    "entry": 26899.5,
-    "take_profit": 26415.75,
-    "stop_loss": 27060.75,
-    "risk_reward": 3.0,
-    "confidence": "fort",
-    "score": 6.52,
-    "criteria": [
-      "adx",
-      "corr",
-      "rsi",
-      "trend_15m",
-      "trend_1h",
-      "trend_5m",
-      "vwap"
-    ],
-    "rationale": "Vente : tendance forte (ADX), marché meneur favorable, RSI en momentum, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 268.61 (1.00 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 86%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
-    "news_context": "actualité calme sur les 2 dernières heures",
-    "created_at": "2026-11-17T17:11:10Z",
-    "expires_at": "2026-11-18T17:11:10Z",
-    "status": "open",
-    "closed_at": null,
-    "close_price": null,
-    "pnl_pct": null,
-    "pnl_gross_pct": null,
-    "duration_minutes": null,
-    "hourly_range": 268.607143,
-    "source": "shadow",
-    "horizon": "24h",
-    "horizon_minutes": 1440,
-    "meta": {
-      "tick": 0.25,
-      "details": {
-        "trend_5m": "EMA20 27111.43 / EMA50 27225.97 (15 min)",
-        "trend_15m": "EMA20 27233.64 / EMA50 27445.16",
-        "trend_1h": "prix vs EMA20 1 h 27611.14",
-        "adx": "ADX15 31.6 (+DI 10.6 / -DI 37.2)",
-        "vwap": "VWAP jour 27126.25",
-        "rsi": "RSI14 5 min 33.2",
-        "macd": "histogramme MACD -37.5947",
-        "level": "support - / résistance 27467.75",
-        "volume": "z-score volume -0.98",
-        "pdhl": "veille : haut 28267.50 / bas 27180.50",
-        "corr": "VIX +3.5 % sur 15 min"
-      },
-      "support": null,
-      "resistance": 27467.75,
-      "atr_5m": 112.24114906660961,
-      "atr_ratio": 1.4430780828610714,
-      "hourly_range_pct": 0.9986,
-      "adx_15m": 31.63724067946392,
-      "sigma_5m": 0.0024325676629917987,
-      "p_resolution": 0.86,
-      "p_tp_neutral": 0.3496666666666667,
-      "activity_ratio": null,
-      "base_minutes": 15,
-      "ctx": {
-        "adx": 31.64,
-        "rsi_dir": 66.78,
-        "vwap_ext": 0.8442,
-        "ema_ext": 0.789,
-        "atr_ratio": 1.443,
-        "range_pct": 0.9986,
-        "cost_r": 0.025,
-        "us_open_min": 161.2,
-        "weekday": 1
-      },
-      "exit_override": {
-        "stop_x": 1.5,
-        "target_x": 3.0,
-        "minutes": 1440,
-        "source": "essai 29"
-      },
-      "price_time": "2026-11-17T17:05:00Z",
-      "variant": "horizon_3h",
-      "exc": {
-        "mfe": 0.0,
-        "mae": 0.6791,
-        "armed": {
-          "0.5": false,
-          "0.8": false,
-          "1.0": false
-        },
-        "be": {
-          "0.5": false,
-          "0.8": false,
-          "1.0": false
-        },
-        "last_ts": 1794935760
+        "last_ts": 1794936060
       }
     }
   },
@@ -710,7 +295,7 @@
       "variant": "horizon_3h",
       "exc": {
         "mfe": 0.2078,
-        "mae": 0.0,
+        "mae": 0.5581,
         "armed": {
           "0.5": false,
           "0.8": false,
@@ -721,8 +306,84 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": null
+        "last_ts": 1794936060
       }
+    }
+  },
+  {
+    "id": "01005c611a",
+    "asset": "bitcoin",
+    "asset_label": "Bitcoin (BTC/USD)",
+    "direction": "short",
+    "entry": 63717.0,
+    "take_profit": 63398.0,
+    "stop_loss": 63929.0,
+    "risk_reward": 1.5,
+    "confidence": "fort",
+    "score": 6.82,
+    "criteria": [
+      "adx",
+      "pdhl",
+      "rsi",
+      "trend_15m",
+      "trend_1h",
+      "trend_5m",
+      "vwap"
+    ],
+    "rationale": "Vente : tendance forte (ADX), cassure des extrêmes de la veille, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 530.9 (0.83 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 98%.",
+    "news_context": "actualité calme sur les 2 dernières heures",
+    "created_at": "2026-11-17T17:31:28Z",
+    "expires_at": "2026-11-17T18:31:28Z",
+    "status": "open",
+    "closed_at": null,
+    "close_price": null,
+    "pnl_pct": null,
+    "pnl_gross_pct": null,
+    "duration_minutes": null,
+    "hourly_range": 530.865,
+    "source": "shadow",
+    "horizon": "1h",
+    "horizon_minutes": 60,
+    "meta": {
+      "tick": 1.0,
+      "details": {
+        "trend_5m": "EMA20 63915.85 / EMA50 64231.19 (5 min)",
+        "trend_15m": "EMA20 64279.20 / EMA50 64486.63",
+        "trend_1h": "prix vs EMA20 1 h 64495.82",
+        "adx": "ADX15 27.7 (+DI 15.0 / -DI 27.5)",
+        "vwap": "VWAP jour 64408.34",
+        "rsi": "RSI14 5 min 42.8",
+        "macd": "histogramme MACD 31.5993",
+        "level": "support 63270.0 / résistance 64461.7",
+        "volume": "z-score volume -0.79",
+        "pdhl": "veille : haut 65627.0 / bas 63833.5",
+        "activity": "activité de l'heure 1.09× la moyenne"
+      },
+      "support": 63270.0,
+      "resistance": 64461.69,
+      "atr_5m": 280.4072962395054,
+      "atr_ratio": 2.002156141247577,
+      "hourly_range_pct": 0.8332,
+      "adx_15m": 27.663656760230417,
+      "sigma_5m": 0.0032236184501787963,
+      "p_resolution": 0.983,
+      "p_tp_neutral": 0.426,
+      "activity_ratio": 1.087,
+      "base_minutes": 5,
+      "ctx": {
+        "adx": 27.66,
+        "rsi_dir": 57.24,
+        "vwap_ext": 1.3021,
+        "ema_ext": 0.3744,
+        "atr_ratio": 2.002,
+        "activity": 1.087,
+        "range_pct": 0.8332,
+        "cost_r": 0.1803,
+        "us_open_min": 181.5,
+        "weekday": 1
+      },
+      "price_time": "2026-11-17T17:30:00Z",
+      "variant": "essai_bitcoin"
     }
   }
 ]
