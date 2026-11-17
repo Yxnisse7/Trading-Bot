@@ -104,7 +104,7 @@
           "0.8": true,
           "1.0": true
         },
-        "last_ts": 1794936960
+        "last_ts": 1794937200
       }
     }
   },
@@ -211,7 +211,7 @@
           "0.8": true,
           "1.0": true
         },
-        "last_ts": 1794936960
+        "last_ts": 1794937200
       }
     }
   },
@@ -294,7 +294,7 @@
       "price_time": "2026-11-17T17:10:00Z",
       "variant": "horizon_3h",
       "exc": {
-        "mfe": 0.2078,
+        "mfe": 0.276,
         "mae": 0.5783,
         "armed": {
           "0.5": false,
@@ -306,7 +306,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1794936960
+        "last_ts": 1794937200
       }
     }
   },
@@ -386,7 +386,7 @@
       "variant": "essai_bitcoin",
       "exc": {
         "mfe": 0.396,
-        "mae": 0.5152,
+        "mae": 0.8416,
         "armed": {
           "0.5": false,
           "0.8": false,
@@ -397,7 +397,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1794937560
+        "last_ts": 1794937800
       }
     }
   },
@@ -480,7 +480,7 @@
       "price_time": "2026-11-17T17:35:00Z",
       "variant": "horizon_3h",
       "exc": {
-        "mfe": 0.0217,
+        "mfe": 0.2915,
         "mae": 0.0,
         "armed": {
           "0.5": false,
@@ -573,7 +573,180 @@
         "source": "essai 29"
       },
       "price_time": "2026-11-17T17:40:00Z",
+      "variant": "horizon_3h",
+      "exc": {
+        "mfe": 0.1953,
+        "mae": 0.0,
+        "armed": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "be": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "last_ts": null
+      }
+    }
+  },
+  {
+    "id": "82b8e9d26b",
+    "asset": "nasdaq",
+    "asset_label": "Nasdaq 100 (NQ)",
+    "direction": "short",
+    "entry": 26994.75,
+    "take_profit": 26511.0,
+    "stop_loss": 27156.0,
+    "risk_reward": 3.0,
+    "confidence": "fort",
+    "score": 6.35,
+    "criteria": [
+      "adx",
+      "corr",
+      "rsi",
+      "trend_15m",
+      "trend_1h",
+      "trend_5m",
+      "vwap"
+    ],
+    "rationale": "Vente : tendance forte (ADX), marché meneur favorable, RSI en momentum, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 268.61 (1.00 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 87%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+    "news_context": "actualité calme sur les 2 dernières heures",
+    "created_at": "2026-11-17T17:50:55Z",
+    "expires_at": "2026-11-18T17:50:55Z",
+    "status": "open",
+    "closed_at": null,
+    "close_price": null,
+    "pnl_pct": null,
+    "pnl_gross_pct": null,
+    "duration_minutes": null,
+    "hourly_range": 268.607143,
+    "source": "shadow",
+    "horizon": "24h",
+    "horizon_minutes": 1440,
+    "meta": {
+      "tick": 0.25,
+      "details": {
+        "trend_5m": "EMA20 27099.09 / EMA50 27212.10 (15 min)",
+        "trend_15m": "EMA20 27215.10 / EMA50 27429.69",
+        "trend_1h": "prix vs EMA20 1 h 27622.09",
+        "adx": "ADX15 33.4 (+DI 12.3 / -DI 33.5)",
+        "vwap": "VWAP jour 27110.84",
+        "rsi": "RSI14 5 min 41.0",
+        "macd": "histogramme MACD -14.0291",
+        "level": "support - / résistance 27467.75",
+        "volume": "z-score volume -0.54",
+        "pdhl": "veille : haut 28267.50 / bas 27180.50",
+        "corr": "VIX +3.2 % sur 15 min"
+      },
+      "support": null,
+      "resistance": 27467.75,
+      "atr_5m": 123.99513415590006,
+      "atr_ratio": 1.593153153624443,
+      "hourly_range_pct": 0.995,
+      "adx_15m": 33.367567439285814,
+      "sigma_5m": 0.0024887169560920777,
+      "p_resolution": 0.8723333333333333,
+      "p_tp_neutral": 0.355,
+      "activity_ratio": null,
+      "base_minutes": 15,
+      "ctx": {
+        "adx": 33.37,
+        "rsi_dir": 59.0,
+        "vwap_ext": 0.4322,
+        "ema_ext": 0.3885,
+        "atr_ratio": 1.593,
+        "range_pct": 0.995,
+        "cost_r": 0.0251,
+        "us_open_min": 200.9,
+        "weekday": 1
+      },
+      "exit_override": {
+        "stop_x": 1.5,
+        "target_x": 3.0,
+        "minutes": 1440,
+        "source": "essai 29"
+      },
+      "price_time": "2026-11-17T17:45:00Z",
       "variant": "horizon_3h"
+    }
+  },
+  {
+    "id": "1ea9095f3e",
+    "asset": "sp500",
+    "asset_label": "S&P 500 (ES)",
+    "direction": "short",
+    "entry": 7359.25,
+    "take_profit": 7340.0,
+    "stop_loss": 7372.0,
+    "risk_reward": 1.51,
+    "confidence": "fort",
+    "score": 6.1,
+    "criteria": [
+      "adx",
+      "corr",
+      "rsi",
+      "trend_15m",
+      "trend_1h",
+      "trend_5m",
+      "vwap"
+    ],
+    "rationale": "Vente : tendance forte (ADX), marché meneur favorable, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 32.00 (0.43 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 98%.",
+    "news_context": "actualité calme sur les 2 dernières heures",
+    "created_at": "2026-11-17T17:50:55Z",
+    "expires_at": "2026-11-17T18:50:55Z",
+    "status": "open",
+    "closed_at": null,
+    "close_price": null,
+    "pnl_pct": null,
+    "pnl_gross_pct": null,
+    "duration_minutes": null,
+    "hourly_range": 32.0,
+    "source": "shadow",
+    "horizon": "1h",
+    "horizon_minutes": 60,
+    "meta": {
+      "tick": 0.25,
+      "details": {
+        "trend_5m": "EMA20 7360.62 / EMA50 7378.40 (5 min)",
+        "trend_15m": "EMA20 7384.37 / EMA50 7408.91",
+        "trend_1h": "prix vs EMA20 1 h 7423.37",
+        "adx": "ADX15 36.8 (+DI 15.8 / -DI 32.1)",
+        "vwap": "VWAP jour 7384.21",
+        "rsi": "RSI14 5 min 47.8",
+        "macd": "histogramme MACD 4.0333",
+        "level": "support 7308.00 / résistance 7431.50",
+        "volume": "z-score volume -2.06",
+        "pdhl": "veille : haut 7613.00 / bas 7420.25",
+        "activity": "activité de l'heure 1.45× la moyenne",
+        "corr": "VIX +3.2 % sur 15 min"
+      },
+      "support": 7308.0,
+      "resistance": 7431.5,
+      "atr_5m": 16.557344804241577,
+      "atr_ratio": 2.1795052477050842,
+      "hourly_range_pct": 0.4348,
+      "adx_15m": 36.798064066434186,
+      "sigma_5m": 0.0016298335134349643,
+      "p_resolution": 0.979,
+      "p_tp_neutral": 0.42333333333333334,
+      "activity_ratio": 1.448,
+      "base_minutes": 5,
+      "ctx": {
+        "adx": 36.8,
+        "rsi_dir": 52.18,
+        "vwap_ext": 0.7799,
+        "ema_ext": 0.0427,
+        "atr_ratio": 2.18,
+        "activity": 1.448,
+        "range_pct": 0.4348,
+        "cost_r": 0.0577,
+        "us_open_min": 200.9,
+        "weekday": 1
+      },
+      "price_time": "2026-11-17T17:45:00Z",
+      "variant": "essai_sp500"
     }
   }
 ]
