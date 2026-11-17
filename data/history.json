@@ -170090,5 +170090,114 @@
         "last_ts": 1794950400
       }
     }
+  },
+  {
+    "id": "5d0e7d5052",
+    "asset": "nasdaq",
+    "asset_label": "Nasdaq 100 (NQ)",
+    "direction": "short",
+    "entry": 27083.75,
+    "take_profit": 26591.0,
+    "stop_loss": 27248.0,
+    "risk_reward": 3.0,
+    "confidence": "fort",
+    "score": 7.88,
+    "criteria": [
+      "adx",
+      "macd",
+      "orb",
+      "pdhl",
+      "trend_15m",
+      "trend_1h",
+      "trend_5m",
+      "vwap"
+    ],
+    "rationale": "Vente : tendance forte (ADX), MACD en expansion, cassure du range d'ouverture, cassure des extrêmes de la veille, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 273.92 (1.01 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 38%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+    "news_context": "prudence post-USD Fed Chairman Warsh Speaks : critères renforcés · actualité à surveiller (score 2) : Fed’s Musalem signals multiple rate hikes likely needed before spring 2027",
+    "created_at": "2026-11-17T15:41:10Z",
+    "expires_at": "2026-11-18T15:41:10Z",
+    "status": "sl",
+    "closed_at": "2026-11-17T21:30:00Z",
+    "close_price": 27248.0,
+    "pnl_pct": -0.6165,
+    "pnl_gross_pct": -0.6065,
+    "duration_minutes": 348,
+    "hourly_range": 273.916667,
+    "source": "shadow",
+    "horizon": "24h",
+    "horizon_minutes": 1440,
+    "meta": {
+      "tick": 0.25,
+      "details": {
+        "trend_5m": "EMA20 27242.57 / EMA50 27290.40 (5 min)",
+        "trend_15m": "EMA20 27282.12 / EMA50 27314.35",
+        "trend_1h": "prix vs EMA20 1 h 27361.46",
+        "adx": "ADX15 25.9 (+DI 10.0 / -DI 26.7)",
+        "vwap": "VWAP jour 27282.51",
+        "rsi": "RSI14 5 min 29.4",
+        "macd": "histogramme MACD -17.3863",
+        "level": "support - / résistance 27360.00",
+        "volume": "z-score volume -0.96",
+        "orb": "range d'ouverture 27197.00 – 27351.00",
+        "pdhl": "veille : haut 28267.50 / bas 27180.50",
+        "activity": "activité de l'heure 2.03× la moyenne",
+        "corr": "VIX +0.8 % sur 15 min"
+      },
+      "support": null,
+      "resistance": 27360.0,
+      "atr_5m": 70.00869373192127,
+      "atr_ratio": 1.5789572607734117,
+      "hourly_range_pct": 1.0114,
+      "adx_15m": 25.8846789948125,
+      "sigma_5m": 0.001222262050462856,
+      "p_resolution": 0.37933333333333336,
+      "p_tp_neutral": 0.11733333333333333,
+      "activity_ratio": 2.026,
+      "base_minutes": 5,
+      "ctx": {
+        "adx": 25.88,
+        "rsi_dir": 70.62,
+        "vwap_ext": 0.7256,
+        "ema_ext": 0.5798,
+        "atr_ratio": 1.579,
+        "activity": 2.026,
+        "range_pct": 1.0114,
+        "cost_r": 0.0247,
+        "us_open_min": 71.2,
+        "weekday": 1
+      },
+      "exit_override": {
+        "stop_x": 1.5,
+        "target_x": 3.0,
+        "minutes": 1440,
+        "source": "essai 29"
+      },
+      "price_time": "2026-11-17T15:35:00Z",
+      "ctx_avoid": [
+        "taille du range (%) : haut (≥ 0,65)"
+      ],
+      "filters": [
+        "sans_ouverture_us",
+        "filtre_contexte",
+        "vix_bond"
+      ],
+      "filters_checked": true,
+      "variant": "vix_bond",
+      "exc": {
+        "mfe": 2.589,
+        "mae": 1.2831,
+        "armed": {
+          "0.5": true,
+          "0.8": true,
+          "1.0": true
+        },
+        "be": {
+          "0.5": true,
+          "0.8": true,
+          "1.0": true
+        },
+        "last_ts": 1794951000
+      }
+    }
   }
 ]
