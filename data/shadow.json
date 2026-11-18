@@ -85,7 +85,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1795021560
+        "last_ts": 1795021800
       }
     }
   },
@@ -172,7 +172,7 @@
       "variant": "modele_arbres",
       "exc": {
         "mfe": 0.0,
-        "mae": 0.973,
+        "mae": 0.9865,
         "armed": {
           "0.5": false,
           "0.8": false,
@@ -183,8 +183,90 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": null
+        "last_ts": 1795021800
       }
+    }
+  },
+  {
+    "id": "624bcef028",
+    "asset": "gold",
+    "asset_label": "Or (XAU/USD)",
+    "direction": "short",
+    "entry": 3744.6,
+    "take_profit": 3733.4,
+    "stop_loss": 3752.1,
+    "risk_reward": 1.49,
+    "confidence": "fort",
+    "score": 5.75,
+    "criteria": [
+      "adx",
+      "rsi",
+      "trend_15m",
+      "trend_1h",
+      "trend_5m",
+      "vwap"
+    ],
+    "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 18.68 (0.50 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 78%.",
+    "news_context": "actualité calme sur les 2 dernières heures",
+    "created_at": "2026-11-18T17:20:54Z",
+    "expires_at": "2026-11-18T18:20:54Z",
+    "status": "open",
+    "closed_at": null,
+    "close_price": null,
+    "pnl_pct": null,
+    "pnl_gross_pct": null,
+    "duration_minutes": null,
+    "hourly_range": 18.678233,
+    "source": "shadow",
+    "horizon": "1h",
+    "horizon_minutes": 60,
+    "meta": {
+      "tick": 0.1,
+      "details": {
+        "trend_5m": "EMA20 3749.52 / EMA50 3757.92 (5 min)",
+        "trend_15m": "EMA20 3760.05 / EMA50 3774.67",
+        "trend_1h": "prix vs EMA20 1 h 3784.14",
+        "adx": "ADX15 21.8 (+DI 16.9 / -DI 27.2)",
+        "vwap": "VWAP jour 3777.93",
+        "rsi": "RSI14 5 min 40.1",
+        "macd": "histogramme MACD 0.6106",
+        "level": "support - / résistance 3775.80",
+        "volume": "z-score volume -1.96",
+        "pdhl": "veille : haut 3894.00 / bas 3839.20",
+        "activity": "activité de l'heure 0.74× la moyenne",
+        "corr": "DXY -0.02 % sur 1 h, taux 10 ans -0.2 % sur 1 h"
+      },
+      "support": null,
+      "resistance": 3775.800048828125,
+      "atr_5m": 6.00433732248966,
+      "atr_ratio": 1.177487844224527,
+      "hourly_range_pct": 0.4988,
+      "adx_15m": 21.80488638295656,
+      "sigma_5m": 0.0010453165355520828,
+      "p_resolution": 0.776,
+      "p_tp_neutral": 0.31166666666666665,
+      "activity_ratio": 0.739,
+      "base_minutes": 5,
+      "ctx": {
+        "adx": 21.8,
+        "rsi_dir": 59.86,
+        "vwap_ext": 1.7844,
+        "ema_ext": 0.2636,
+        "atr_ratio": 1.177,
+        "activity": 0.739,
+        "range_pct": 0.4988,
+        "cost_r": 0.0999,
+        "us_open_min": 170.9,
+        "weekday": 2
+      },
+      "price_time": "2026-11-18T17:15:00Z",
+      "model_r": -0.0452,
+      "filters": [
+        "modele_arbres",
+        "bot_en_ombre"
+      ],
+      "filters_checked": true,
+      "variant": "modele_arbres"
     }
   }
 ]
