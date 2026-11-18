@@ -96,7 +96,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1794985560
+        "last_ts": 1794985860
       }
     }
   },
@@ -185,7 +185,7 @@
       "filters_checked": true,
       "variant": "modele_arbres",
       "exc": {
-        "mfe": 1.2206,
+        "mfe": 1.25,
         "mae": 0.0,
         "armed": {
           "0.5": true,
@@ -197,7 +197,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1794985560
+        "last_ts": 1794985860
       }
     }
   },
@@ -275,11 +275,11 @@
       "price_time": "2026-11-18T07:00:00Z",
       "variant": "essai_oil",
       "exc": {
-        "mfe": 0.4286,
+        "mfe": 0.9643,
         "mae": 0.0,
         "armed": {
-          "0.5": false,
-          "0.8": false,
+          "0.5": true,
+          "0.8": true,
           "1.0": false
         },
         "be": {
@@ -287,7 +287,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": null
+        "last_ts": 1794985860
       }
     }
   },
@@ -467,12 +467,12 @@
       "price_time": "2026-11-18T07:05:00Z",
       "variant": "essai_euro",
       "exc": {
-        "mfe": 0.8889,
+        "mfe": 1.0,
         "mae": 0.0,
         "armed": {
           "0.5": true,
           "0.8": true,
-          "1.0": false
+          "1.0": true
         },
         "be": {
           "0.5": false,
@@ -564,6 +564,107 @@
       "filters": [
         "filtre_contexte",
         "sans_etirement_or",
+        "modele_arbres",
+        "bot_en_ombre"
+      ],
+      "filters_checked": true,
+      "variant": "modele_arbres",
+      "exc": {
+        "mfe": 0.0,
+        "mae": 0.2319,
+        "armed": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "be": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "last_ts": null
+      }
+    }
+  },
+  {
+    "id": "33aa8d72a3",
+    "asset": "gold",
+    "asset_label": "Or (XAU/USD)",
+    "direction": "short",
+    "entry": 3777.3,
+    "take_profit": 3767.0,
+    "stop_loss": 3784.2,
+    "risk_reward": 1.49,
+    "confidence": "fort",
+    "score": 5.75,
+    "criteria": [
+      "adx",
+      "rsi",
+      "trend_15m",
+      "trend_1h",
+      "trend_5m",
+      "vwap"
+    ],
+    "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 17.18 (0.45 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 60%.",
+    "news_context": "actualité à surveiller (score 3) : Dollar holds near 19-month high as data supports case for US rate hikes | Iran says army targets U.S. drone and missile sites in Kuwait as Gulf attacks mount",
+    "created_at": "2026-11-18T07:21:11Z",
+    "expires_at": "2026-11-18T08:21:11Z",
+    "status": "open",
+    "closed_at": null,
+    "close_price": null,
+    "pnl_pct": null,
+    "pnl_gross_pct": null,
+    "duration_minutes": null,
+    "hourly_range": 17.182585,
+    "source": "shadow",
+    "horizon": "1h",
+    "horizon_minutes": 60,
+    "meta": {
+      "tick": 0.1,
+      "details": {
+        "trend_5m": "EMA20 3781.63 / EMA50 3790.16 (5 min)",
+        "trend_15m": "EMA20 3792.59 / EMA50 3815.06",
+        "trend_1h": "prix vs EMA20 1 h 3822.75",
+        "adx": "ADX15 33.2 (+DI 15.0 / -DI 31.3)",
+        "vwap": "VWAP jour 3804.20",
+        "rsi": "RSI14 5 min 39.1",
+        "macd": "histogramme MACD -0.4054",
+        "level": "support - / résistance 3799.80",
+        "volume": "z-score volume -1.89",
+        "pdhl": "veille : haut 3894.00 / bas 3839.20",
+        "activity": "activité de l'heure 0.86× la moyenne",
+        "corr": "DXY +0.07 % sur 1 h"
+      },
+      "support": null,
+      "resistance": 3799.800048828125,
+      "atr_5m": 4.561617275643008,
+      "atr_ratio": 0.985873520570481,
+      "hourly_range_pct": 0.4549,
+      "adx_15m": 33.17179647472815,
+      "sigma_5m": 0.0007398491736374928,
+      "p_resolution": 0.5953333333333334,
+      "p_tp_neutral": 0.22,
+      "activity_ratio": 0.856,
+      "base_minutes": 5,
+      "ctx": {
+        "adx": 33.17,
+        "rsi_dir": 60.85,
+        "vwap_ext": 1.5654,
+        "ema_ext": 0.2517,
+        "atr_ratio": 0.986,
+        "activity": 0.856,
+        "range_pct": 0.4549,
+        "cost_r": 0.1095,
+        "us_open_min": -428.8,
+        "weekday": 2
+      },
+      "price_time": "2026-11-18T07:15:00Z",
+      "ctx_avoid": [
+        "volatilité du moment / moyenne 24 h : bas (< 1,09)"
+      ],
+      "model_r": -0.0456,
+      "filters": [
+        "filtre_contexte",
         "modele_arbres",
         "bot_en_ombre"
       ],
