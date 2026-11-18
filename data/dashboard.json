@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-18T16:51:23.283731+01:00",
+  "updated_at": "2026-11-18T16:56:20.215947+01:00",
   "timezone": "Europe/Paris",
   "equity_curve": [
     {
@@ -2022,15 +2022,15 @@
       "avg_pnl_pct": -0.0469
     },
     "shadow": {
-      "n": 1680,
+      "n": 1681,
       "tp": 492,
-      "sl": 878,
+      "sl": 879,
       "expired": 310,
-      "win_rate": 0.35912408759124087,
+      "win_rate": 0.3588621444201313,
       "neutral_win_rate": 0.3659,
-      "edge": -0.0068,
-      "pnl_pct": -40.8696,
-      "avg_pnl_pct": -0.0243
+      "edge": -0.007,
+      "pnl_pct": -41.2662,
+      "avg_pnl_pct": -0.0245
     },
     "open": 0,
     "open_shadow": 1
@@ -2070,15 +2070,15 @@
       "avg_pnl_pct": 0.0
     },
     "shadow": {
-      "n": 1680,
+      "n": 1681,
       "tp": 492,
-      "sl": 878,
+      "sl": 879,
       "expired": 310,
-      "win_rate": 0.35912408759124087,
+      "win_rate": 0.3588621444201313,
       "neutral_win_rate": 0.3659,
-      "edge": -0.0068,
-      "pnl_pct": -40.8696,
-      "avg_pnl_pct": -0.0243
+      "edge": -0.007,
+      "pnl_pct": -41.2662,
+      "avg_pnl_pct": -0.0245
     }
   },
   "by_horizon": {
@@ -2219,15 +2219,15 @@
         "avg_pnl_pct": -0.0503
       },
       "shadow": {
-        "n": 92,
+        "n": 93,
         "tp": 21,
-        "sl": 48,
+        "sl": 49,
         "expired": 23,
-        "win_rate": 0.30434782608695654,
-        "neutral_win_rate": 0.4074,
-        "edge": -0.1031,
-        "pnl_pct": -10.8886,
-        "avg_pnl_pct": -0.1184
+        "win_rate": 0.3,
+        "neutral_win_rate": 0.4073,
+        "edge": -0.1073,
+        "pnl_pct": -11.2852,
+        "avg_pnl_pct": -0.1213
       },
       "open": 0,
       "session_utc": null,
@@ -2410,15 +2410,15 @@
       "label": "Tendance 5 min",
       "weight": 1.0,
       "stats": {
-        "n": 1685,
+        "n": 1686,
         "tp": 513,
-        "sl": 884,
+        "sl": 885,
         "expired": 288,
-        "win_rate": 0.36721546170365066,
+        "win_rate": 0.3669527896995708,
         "neutral_win_rate": 0.3641,
-        "edge": 0.0031,
-        "pnl_pct": -40.1022,
-        "avg_pnl_pct": -0.0238
+        "edge": 0.0029,
+        "pnl_pct": -40.4988,
+        "avg_pnl_pct": -0.024
       },
       "by_source": {
         "bot": {
@@ -2455,18 +2455,52 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 1516,
+          "n": 1517,
           "tp": 459,
-          "sl": 801,
+          "sl": 802,
           "expired": 256,
-          "win_rate": 0.36428571428571427,
-          "neutral_win_rate": 0.3625,
-          "edge": 0.0018,
-          "pnl_pct": -33.3222,
-          "avg_pnl_pct": -0.022
+          "win_rate": 0.36399682791435367,
+          "neutral_win_rate": 0.3626,
+          "edge": 0.0014,
+          "pnl_pct": -33.7188,
+          "avg_pnl_pct": -0.0222
         }
       },
       "last_trades": [
+        {
+          "id": "a2b65a5ec4",
+          "asset": "bitcoin",
+          "asset_label": "Bitcoin (BTC/USD)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 62980.0,
+          "take_profit": 62681.0,
+          "stop_loss": 63180.0,
+          "risk_reward": 1.5,
+          "confidence": "fort",
+          "score": 5.28,
+          "criteria": [
+            "adx",
+            "macd",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.3966,
+          "pnl_gross_pct": -0.3366,
+          "duration_minutes": 0,
+          "close_price": 63192.0,
+          "created_at": "2026-11-18T15:51:11Z",
+          "closed_at": "2026-11-18T15:52:00Z",
+          "created_local": "18/11 16:51",
+          "expires_at": "2026-11-18T16:51:11Z",
+          "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 498.8 (0.79 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 78%.",
+          "news_context": "actualité à surveiller (score 3) : Fed’s Waller says central bank may need to ‘shock people’ with half-point rate hike | Fed’s Waller says interest-rate hikes may be needed to ‘shock’ inflation out of the system",
+          "manual_exit": null
+        },
         {
           "id": "a7f8e17fed",
           "asset": "gold",
@@ -2705,41 +2739,6 @@
           "expires_at": "2026-11-18T12:16:04Z",
           "rationale": "Vente : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 0.00114 (0.10 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 79%.",
           "news_context": "actualité à surveiller (score 2) : UK inflation rises to one-year high but markets trim rate hike bets | Indonesia resumes rate hikes to defend rupiah, more tightening seen",
-          "manual_exit": null
-        },
-        {
-          "id": "bbab5d4f48",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 3770.6,
-          "take_profit": 3760.6,
-          "stop_loss": 3777.8,
-          "risk_reward": 1.39,
-          "confidence": "fort",
-          "score": 6.75,
-          "criteria": [
-            "adx",
-            "macd",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "expired",
-          "pnl_pct": -0.1208,
-          "pnl_gross_pct": -0.1008,
-          "duration_minutes": 64,
-          "close_price": 3774.4,
-          "created_at": "2026-11-18T11:16:04Z",
-          "closed_at": "2026-11-18T12:21:02Z",
-          "created_local": "18/11 12:16",
-          "expires_at": "2026-11-18T12:16:04Z",
-          "rationale": "Vente : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 17.89 (0.47 %), TP = 56 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 65%.",
-          "news_context": "actualité à surveiller (score 3) : UK inflation rises to one-year high but markets trim rate hike bets | Indonesia resumes rate hikes to defend rupiah, more tightening seen",
           "manual_exit": null
         }
       ]
@@ -2749,15 +2748,15 @@
       "label": "Tendance 15 min",
       "weight": 1.0,
       "stats": {
-        "n": 1867,
+        "n": 1868,
         "tp": 550,
-        "sl": 972,
+        "sl": 973,
         "expired": 345,
-        "win_rate": 0.36136662286465177,
+        "win_rate": 0.36112934996717005,
         "neutral_win_rate": 0.3673,
-        "edge": -0.0059,
-        "pnl_pct": -49.5259,
-        "avg_pnl_pct": -0.0265
+        "edge": -0.0062,
+        "pnl_pct": -49.9225,
+        "avg_pnl_pct": -0.0267
       },
       "by_source": {
         "bot": {
@@ -2794,18 +2793,52 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 1680,
+          "n": 1681,
           "tp": 492,
-          "sl": 878,
+          "sl": 879,
           "expired": 310,
-          "win_rate": 0.35912408759124087,
+          "win_rate": 0.3588621444201313,
           "neutral_win_rate": 0.3659,
-          "edge": -0.0068,
-          "pnl_pct": -40.8696,
-          "avg_pnl_pct": -0.0243
+          "edge": -0.007,
+          "pnl_pct": -41.2662,
+          "avg_pnl_pct": -0.0245
         }
       },
       "last_trades": [
+        {
+          "id": "a2b65a5ec4",
+          "asset": "bitcoin",
+          "asset_label": "Bitcoin (BTC/USD)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 62980.0,
+          "take_profit": 62681.0,
+          "stop_loss": 63180.0,
+          "risk_reward": 1.5,
+          "confidence": "fort",
+          "score": 5.28,
+          "criteria": [
+            "adx",
+            "macd",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.3966,
+          "pnl_gross_pct": -0.3366,
+          "duration_minutes": 0,
+          "close_price": 63192.0,
+          "created_at": "2026-11-18T15:51:11Z",
+          "closed_at": "2026-11-18T15:52:00Z",
+          "created_local": "18/11 16:51",
+          "expires_at": "2026-11-18T16:51:11Z",
+          "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 498.8 (0.79 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 78%.",
+          "news_context": "actualité à surveiller (score 3) : Fed’s Waller says central bank may need to ‘shock people’ with half-point rate hike | Fed’s Waller says interest-rate hikes may be needed to ‘shock’ inflation out of the system",
+          "manual_exit": null
+        },
         {
           "id": "a7f8e17fed",
           "asset": "gold",
@@ -3044,41 +3077,6 @@
           "expires_at": "2026-11-18T12:16:04Z",
           "rationale": "Vente : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 0.00114 (0.10 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 79%.",
           "news_context": "actualité à surveiller (score 2) : UK inflation rises to one-year high but markets trim rate hike bets | Indonesia resumes rate hikes to defend rupiah, more tightening seen",
-          "manual_exit": null
-        },
-        {
-          "id": "bbab5d4f48",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 3770.6,
-          "take_profit": 3760.6,
-          "stop_loss": 3777.8,
-          "risk_reward": 1.39,
-          "confidence": "fort",
-          "score": 6.75,
-          "criteria": [
-            "adx",
-            "macd",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "expired",
-          "pnl_pct": -0.1208,
-          "pnl_gross_pct": -0.1008,
-          "duration_minutes": 64,
-          "close_price": 3774.4,
-          "created_at": "2026-11-18T11:16:04Z",
-          "closed_at": "2026-11-18T12:21:02Z",
-          "created_local": "18/11 12:16",
-          "expires_at": "2026-11-18T12:16:04Z",
-          "rationale": "Vente : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 17.89 (0.47 %), TP = 56 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 65%.",
-          "news_context": "actualité à surveiller (score 3) : UK inflation rises to one-year high but markets trim rate hike bets | Indonesia resumes rate hikes to defend rupiah, more tightening seen",
           "manual_exit": null
         }
       ]
@@ -3088,15 +3086,15 @@
       "label": "Tendance 1 h",
       "weight": 1.0,
       "stats": {
-        "n": 1841,
+        "n": 1842,
         "tp": 542,
-        "sl": 960,
+        "sl": 961,
         "expired": 339,
-        "win_rate": 0.3608521970705726,
+        "win_rate": 0.3606121091151031,
         "neutral_win_rate": 0.3671,
-        "edge": -0.0062,
-        "pnl_pct": -47.7057,
-        "avg_pnl_pct": -0.0259
+        "edge": -0.0065,
+        "pnl_pct": -48.1023,
+        "avg_pnl_pct": -0.0261
       },
       "by_source": {
         "bot": {
@@ -3133,18 +3131,52 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 1654,
+          "n": 1655,
           "tp": 484,
-          "sl": 866,
+          "sl": 867,
           "expired": 304,
-          "win_rate": 0.3585185185185185,
+          "win_rate": 0.3582531458179127,
           "neutral_win_rate": 0.3657,
-          "edge": -0.0072,
-          "pnl_pct": -39.0494,
-          "avg_pnl_pct": -0.0236
+          "edge": -0.0074,
+          "pnl_pct": -39.446,
+          "avg_pnl_pct": -0.0238
         }
       },
       "last_trades": [
+        {
+          "id": "a2b65a5ec4",
+          "asset": "bitcoin",
+          "asset_label": "Bitcoin (BTC/USD)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 62980.0,
+          "take_profit": 62681.0,
+          "stop_loss": 63180.0,
+          "risk_reward": 1.5,
+          "confidence": "fort",
+          "score": 5.28,
+          "criteria": [
+            "adx",
+            "macd",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.3966,
+          "pnl_gross_pct": -0.3366,
+          "duration_minutes": 0,
+          "close_price": 63192.0,
+          "created_at": "2026-11-18T15:51:11Z",
+          "closed_at": "2026-11-18T15:52:00Z",
+          "created_local": "18/11 16:51",
+          "expires_at": "2026-11-18T16:51:11Z",
+          "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 498.8 (0.79 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 78%.",
+          "news_context": "actualité à surveiller (score 3) : Fed’s Waller says central bank may need to ‘shock people’ with half-point rate hike | Fed’s Waller says interest-rate hikes may be needed to ‘shock’ inflation out of the system",
+          "manual_exit": null
+        },
         {
           "id": "a7f8e17fed",
           "asset": "gold",
@@ -3383,41 +3415,6 @@
           "expires_at": "2026-11-18T12:16:04Z",
           "rationale": "Vente : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 0.00114 (0.10 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 79%.",
           "news_context": "actualité à surveiller (score 2) : UK inflation rises to one-year high but markets trim rate hike bets | Indonesia resumes rate hikes to defend rupiah, more tightening seen",
-          "manual_exit": null
-        },
-        {
-          "id": "bbab5d4f48",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 3770.6,
-          "take_profit": 3760.6,
-          "stop_loss": 3777.8,
-          "risk_reward": 1.39,
-          "confidence": "fort",
-          "score": 6.75,
-          "criteria": [
-            "adx",
-            "macd",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "expired",
-          "pnl_pct": -0.1208,
-          "pnl_gross_pct": -0.1008,
-          "duration_minutes": 64,
-          "close_price": 3774.4,
-          "created_at": "2026-11-18T11:16:04Z",
-          "closed_at": "2026-11-18T12:21:02Z",
-          "created_local": "18/11 12:16",
-          "expires_at": "2026-11-18T12:16:04Z",
-          "rationale": "Vente : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 17.89 (0.47 %), TP = 56 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 65%.",
-          "news_context": "actualité à surveiller (score 3) : UK inflation rises to one-year high but markets trim rate hike bets | Indonesia resumes rate hikes to defend rupiah, more tightening seen",
           "manual_exit": null
         }
       ]
@@ -3427,15 +3424,15 @@
       "label": "Force de tendance (ADX)",
       "weight": 1.0,
       "stats": {
-        "n": 1867,
+        "n": 1868,
         "tp": 550,
-        "sl": 972,
+        "sl": 973,
         "expired": 345,
-        "win_rate": 0.36136662286465177,
+        "win_rate": 0.36112934996717005,
         "neutral_win_rate": 0.3673,
-        "edge": -0.0059,
-        "pnl_pct": -49.5259,
-        "avg_pnl_pct": -0.0265
+        "edge": -0.0062,
+        "pnl_pct": -49.9225,
+        "avg_pnl_pct": -0.0267
       },
       "by_source": {
         "bot": {
@@ -3472,18 +3469,52 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 1680,
+          "n": 1681,
           "tp": 492,
-          "sl": 878,
+          "sl": 879,
           "expired": 310,
-          "win_rate": 0.35912408759124087,
+          "win_rate": 0.3588621444201313,
           "neutral_win_rate": 0.3659,
-          "edge": -0.0068,
-          "pnl_pct": -40.8696,
-          "avg_pnl_pct": -0.0243
+          "edge": -0.007,
+          "pnl_pct": -41.2662,
+          "avg_pnl_pct": -0.0245
         }
       },
       "last_trades": [
+        {
+          "id": "a2b65a5ec4",
+          "asset": "bitcoin",
+          "asset_label": "Bitcoin (BTC/USD)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 62980.0,
+          "take_profit": 62681.0,
+          "stop_loss": 63180.0,
+          "risk_reward": 1.5,
+          "confidence": "fort",
+          "score": 5.28,
+          "criteria": [
+            "adx",
+            "macd",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.3966,
+          "pnl_gross_pct": -0.3366,
+          "duration_minutes": 0,
+          "close_price": 63192.0,
+          "created_at": "2026-11-18T15:51:11Z",
+          "closed_at": "2026-11-18T15:52:00Z",
+          "created_local": "18/11 16:51",
+          "expires_at": "2026-11-18T16:51:11Z",
+          "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 498.8 (0.79 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 78%.",
+          "news_context": "actualité à surveiller (score 3) : Fed’s Waller says central bank may need to ‘shock people’ with half-point rate hike | Fed’s Waller says interest-rate hikes may be needed to ‘shock’ inflation out of the system",
+          "manual_exit": null
+        },
         {
           "id": "a7f8e17fed",
           "asset": "gold",
@@ -3723,41 +3754,6 @@
           "rationale": "Vente : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 0.00114 (0.10 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 79%.",
           "news_context": "actualité à surveiller (score 2) : UK inflation rises to one-year high but markets trim rate hike bets | Indonesia resumes rate hikes to defend rupiah, more tightening seen",
           "manual_exit": null
-        },
-        {
-          "id": "bbab5d4f48",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 3770.6,
-          "take_profit": 3760.6,
-          "stop_loss": 3777.8,
-          "risk_reward": 1.39,
-          "confidence": "fort",
-          "score": 6.75,
-          "criteria": [
-            "adx",
-            "macd",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "expired",
-          "pnl_pct": -0.1208,
-          "pnl_gross_pct": -0.1008,
-          "duration_minutes": 64,
-          "close_price": 3774.4,
-          "created_at": "2026-11-18T11:16:04Z",
-          "closed_at": "2026-11-18T12:21:02Z",
-          "created_local": "18/11 12:16",
-          "expires_at": "2026-11-18T12:16:04Z",
-          "rationale": "Vente : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 17.89 (0.47 %), TP = 56 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 65%.",
-          "news_context": "actualité à surveiller (score 3) : UK inflation rises to one-year high but markets trim rate hike bets | Indonesia resumes rate hikes to defend rupiah, more tightening seen",
-          "manual_exit": null
         }
       ]
     },
@@ -3766,15 +3762,15 @@
       "label": "VWAP",
       "weight": 0.75,
       "stats": {
-        "n": 1831,
+        "n": 1832,
         "tp": 545,
-        "sl": 953,
+        "sl": 954,
         "expired": 333,
-        "win_rate": 0.3638184245660881,
+        "win_rate": 0.36357571714476317,
         "neutral_win_rate": 0.3665,
-        "edge": -0.0027,
-        "pnl_pct": -45.7091,
-        "avg_pnl_pct": -0.025
+        "edge": -0.0029,
+        "pnl_pct": -46.1057,
+        "avg_pnl_pct": -0.0252
       },
       "by_source": {
         "bot": {
@@ -3811,18 +3807,52 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 1646,
+          "n": 1647,
           "tp": 487,
-          "sl": 861,
+          "sl": 862,
           "expired": 298,
-          "win_rate": 0.3612759643916914,
+          "win_rate": 0.36100815418828763,
           "neutral_win_rate": 0.365,
-          "edge": -0.0037,
-          "pnl_pct": -37.6692,
-          "avg_pnl_pct": -0.0229
+          "edge": -0.004,
+          "pnl_pct": -38.0658,
+          "avg_pnl_pct": -0.0231
         }
       },
       "last_trades": [
+        {
+          "id": "a2b65a5ec4",
+          "asset": "bitcoin",
+          "asset_label": "Bitcoin (BTC/USD)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 62980.0,
+          "take_profit": 62681.0,
+          "stop_loss": 63180.0,
+          "risk_reward": 1.5,
+          "confidence": "fort",
+          "score": 5.28,
+          "criteria": [
+            "adx",
+            "macd",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.3966,
+          "pnl_gross_pct": -0.3366,
+          "duration_minutes": 0,
+          "close_price": 63192.0,
+          "created_at": "2026-11-18T15:51:11Z",
+          "closed_at": "2026-11-18T15:52:00Z",
+          "created_local": "18/11 16:51",
+          "expires_at": "2026-11-18T16:51:11Z",
+          "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 498.8 (0.79 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 78%.",
+          "news_context": "actualité à surveiller (score 3) : Fed’s Waller says central bank may need to ‘shock people’ with half-point rate hike | Fed’s Waller says interest-rate hikes may be needed to ‘shock’ inflation out of the system",
+          "manual_exit": null
+        },
         {
           "id": "a7f8e17fed",
           "asset": "gold",
@@ -4061,41 +4091,6 @@
           "expires_at": "2026-11-18T12:16:04Z",
           "rationale": "Vente : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 0.00114 (0.10 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 79%.",
           "news_context": "actualité à surveiller (score 2) : UK inflation rises to one-year high but markets trim rate hike bets | Indonesia resumes rate hikes to defend rupiah, more tightening seen",
-          "manual_exit": null
-        },
-        {
-          "id": "bbab5d4f48",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 3770.6,
-          "take_profit": 3760.6,
-          "stop_loss": 3777.8,
-          "risk_reward": 1.39,
-          "confidence": "fort",
-          "score": 6.75,
-          "criteria": [
-            "adx",
-            "macd",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "expired",
-          "pnl_pct": -0.1208,
-          "pnl_gross_pct": -0.1008,
-          "duration_minutes": 64,
-          "close_price": 3774.4,
-          "created_at": "2026-11-18T11:16:04Z",
-          "closed_at": "2026-11-18T12:21:02Z",
-          "created_local": "18/11 12:16",
-          "expires_at": "2026-11-18T12:16:04Z",
-          "rationale": "Vente : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 17.89 (0.47 %), TP = 56 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 65%.",
-          "news_context": "actualité à surveiller (score 3) : UK inflation rises to one-year high but markets trim rate hike bets | Indonesia resumes rate hikes to defend rupiah, more tightening seen",
           "manual_exit": null
         }
       ]
@@ -4444,15 +4439,15 @@
       "label": "MACD",
       "weight": 1.0,
       "stats": {
-        "n": 475,
+        "n": 476,
         "tp": 123,
-        "sl": 258,
+        "sl": 259,
         "expired": 94,
-        "win_rate": 0.3228346456692913,
-        "neutral_win_rate": 0.3727,
-        "edge": -0.0499,
-        "pnl_pct": -24.1346,
-        "avg_pnl_pct": -0.0508
+        "win_rate": 0.3219895287958115,
+        "neutral_win_rate": 0.3728,
+        "edge": -0.0508,
+        "pnl_pct": -24.5312,
+        "avg_pnl_pct": -0.0515
       },
       "by_source": {
         "bot": {
@@ -4489,18 +4484,52 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 421,
+          "n": 422,
           "tp": 109,
-          "sl": 230,
+          "sl": 231,
           "expired": 82,
-          "win_rate": 0.3215339233038348,
-          "neutral_win_rate": 0.371,
-          "edge": -0.0495,
-          "pnl_pct": -22.0905,
-          "avg_pnl_pct": -0.0525
+          "win_rate": 0.3205882352941177,
+          "neutral_win_rate": 0.3711,
+          "edge": -0.0505,
+          "pnl_pct": -22.4871,
+          "avg_pnl_pct": -0.0533
         }
       },
       "last_trades": [
+        {
+          "id": "a2b65a5ec4",
+          "asset": "bitcoin",
+          "asset_label": "Bitcoin (BTC/USD)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 62980.0,
+          "take_profit": 62681.0,
+          "stop_loss": 63180.0,
+          "risk_reward": 1.5,
+          "confidence": "fort",
+          "score": 5.28,
+          "criteria": [
+            "adx",
+            "macd",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.3966,
+          "pnl_gross_pct": -0.3366,
+          "duration_minutes": 0,
+          "close_price": 63192.0,
+          "created_at": "2026-11-18T15:51:11Z",
+          "closed_at": "2026-11-18T15:52:00Z",
+          "created_local": "18/11 16:51",
+          "expires_at": "2026-11-18T16:51:11Z",
+          "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 498.8 (0.79 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 78%.",
+          "news_context": "actualité à surveiller (score 3) : Fed’s Waller says central bank may need to ‘shock people’ with half-point rate hike | Fed’s Waller says interest-rate hikes may be needed to ‘shock’ inflation out of the system",
+          "manual_exit": null
+        },
         {
           "id": "3dfd1cd8d5",
           "asset": "gold",
@@ -4740,40 +4769,6 @@
           "created_local": "18/11 08:51",
           "expires_at": "2026-11-18T08:51:03Z",
           "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 16.98 (0.45 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 57%.",
-          "news_context": "actualité à surveiller (score 2) : Dollar holds near 19-month high as data supports case for US rate hikes",
-          "manual_exit": null
-        },
-        {
-          "id": "c2cd56ad84",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 3768.9,
-          "take_profit": 3758.7,
-          "stop_loss": 3775.7,
-          "risk_reward": 1.5,
-          "confidence": "fort",
-          "score": 5.75,
-          "criteria": [
-            "adx",
-            "macd",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.2004,
-          "pnl_gross_pct": -0.1804,
-          "duration_minutes": 12,
-          "close_price": 3775.7,
-          "created_at": "2026-11-18T07:46:07Z",
-          "closed_at": "2026-11-18T07:59:00Z",
-          "created_local": "18/11 08:46",
-          "expires_at": "2026-11-18T08:46:07Z",
-          "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 16.93 (0.45 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 56%.",
           "news_context": "actualité à surveiller (score 2) : Dollar holds near 19-month high as data supports case for US rate hikes",
           "manual_exit": null
         }
@@ -5469,20 +5464,20 @@
   ],
   "open_signals": [
     {
-      "id": "a2b65a5ec4",
-      "asset": "bitcoin",
-      "asset_label": "Bitcoin (BTC/USD)",
+      "id": "28c257f8c4",
+      "asset": "ethereum",
+      "asset_label": "Ethereum (ETH/USD)",
       "direction": "short",
       "horizon": "1h",
-      "entry": 62980.0,
-      "take_profit": 62681.0,
-      "stop_loss": 63180.0,
-      "risk_reward": 1.5,
+      "entry": 1767.2,
+      "take_profit": 1756.9,
+      "stop_loss": 1774.0,
+      "risk_reward": 1.51,
       "confidence": "fort",
-      "score": 5.28,
+      "score": 5.03,
       "criteria": [
         "adx",
-        "macd",
+        "rsi",
         "trend_15m",
         "trend_1h",
         "trend_5m",
@@ -5494,11 +5489,11 @@
       "pnl_gross_pct": null,
       "duration_minutes": null,
       "close_price": null,
-      "created_at": "2026-11-18T15:51:11Z",
+      "created_at": "2026-11-18T15:56:05Z",
       "closed_at": null,
-      "created_local": "18/11 16:51",
-      "expires_at": "2026-11-18T16:51:11Z",
-      "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 498.8 (0.79 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 78%.",
+      "created_local": "18/11 16:56",
+      "expires_at": "2026-11-18T16:56:05Z",
+      "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 17.10 (0.97 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 78%.",
       "news_context": "actualité à surveiller (score 3) : Fed’s Waller says central bank may need to ‘shock people’ with half-point rate hike | Fed’s Waller says interest-rate hikes may be needed to ‘shock’ inflation out of the system",
       "manual_exit": null
     }
@@ -7111,7 +7106,7 @@
       "tranche 10h UTC : -0,27 R sur 108 trades éq. → évitée",
       "tranche 12h UTC : -0,42 R sur 69 trades éq. → évitée",
       "tranche 19h UTC : -0,30 R sur 89 trades éq. → évitée",
-      "bitcoin, macd : -0,50 R contre -0,04 R en global sur 46 trades éq. → poids ×0,53 sur cet actif",
+      "bitcoin, macd : -0,51 R contre -0,04 R en global sur 47 trades éq. → poids ×0,50 sur cet actif",
       "ethereum, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,19 R contre +0,03 R en global sur 142 trades éq. → poids ×0,89 sur cet actif",
       "ethereum, rsi : -0,25 R contre +0,06 R en global sur 102 trades éq. → poids ×0,74 sur cet actif",
       "sp500, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,12 R contre +0,03 R en global sur 242 trades éq. → poids ×0,99 sur cet actif",
@@ -7122,7 +7117,7 @@
       "variante « entrées dans l'heure avant l'ouverture américaine » en test : 24 trades, +0,58 R net, encore 76 trades avant décision",
       "variante « reprise juste après un stop » en test : 28 trades, -0,31 R net, encore 72 trades avant décision",
       "variante « nouvel actif : S&P 500 (ES) » en test : 57 trades, -0,08 R net, encore 43 trades avant décision",
-      "variante « nouvel actif : Bitcoin (BTC/USD) » en test : 70 trades, -0,51 R net, encore 30 trades avant décision",
+      "variante « nouvel actif : Bitcoin (BTC/USD) » en test : 71 trades, -0,52 R net, encore 29 trades avant décision",
       "variante « nouvel actif : Ethereum (ETH/USD) » en test : 70 trades, -0,38 R net, encore 30 trades avant décision",
       "variante « horizon ~3 h sur Or (XAU/USD) » en test : 66 trades, +0,11 R net, encore 34 trades avant décision",
       "variante « nouvel actif : Pétrole WTI (CL) » en test : 146 trades, -0,11 R net, pas meilleure que les signaux réels",
@@ -7133,10 +7128,10 @@
       12,
       19
     ],
-    "sample": 2720,
+    "sample": 2721,
     "sample_by_source": {
       "bot": 187,
-      "shadow": 1680,
+      "shadow": 1681,
       "manual": 1,
       "backtest": 852
     },
@@ -7163,7 +7158,7 @@
         "adx": 1.0,
         "vwap": 0.75,
         "rsi": 1.0,
-        "macd": 0.533,
+        "macd": 0.5,
         "level": 1.0,
         "volume": 0.75,
         "orb": 1.0,
@@ -7171,10 +7166,10 @@
         "corr": 0.5
       },
       "ethereum": {
-        "trend_5m": 0.886,
-        "trend_15m": 0.886,
-        "trend_1h": 0.886,
-        "adx": 0.886,
+        "trend_5m": 0.887,
+        "trend_15m": 0.887,
+        "trend_1h": 0.887,
+        "adx": 0.887,
         "vwap": 0.75,
         "rsi": 0.736,
         "macd": 1.0,
@@ -7241,11 +7236,11 @@
         "corr": 0.5
       },
       "sp500": {
-        "trend_5m": 0.993,
-        "trend_15m": 0.993,
-        "trend_1h": 0.993,
-        "adx": 0.993,
-        "vwap": 0.742,
+        "trend_5m": 0.994,
+        "trend_15m": 0.994,
+        "trend_1h": 0.994,
+        "adx": 0.994,
+        "vwap": 0.743,
         "rsi": 1.0,
         "macd": 1.0,
         "level": 1.0,
@@ -7263,9 +7258,9 @@
           "trend_1h",
           "adx"
         ],
-        "n": 2719,
-        "n_eff": 2346.0,
-        "mean_r": 0.0281,
+        "n": 2720,
+        "n_eff": 2347.0,
+        "mean_r": 0.0277,
         "margin_r": 0.0527,
         "multiplier": 1.0
       },
@@ -7273,9 +7268,9 @@
         "members": [
           "vwap"
         ],
-        "n": 2509,
-        "n_eff": 2196.8,
-        "mean_r": 0.0366,
+        "n": 2510,
+        "n_eff": 2197.8,
+        "mean_r": 0.0361,
         "margin_r": 0.0549,
         "multiplier": 1.0
       },
@@ -7293,10 +7288,10 @@
         "members": [
           "macd"
         ],
-        "n": 749,
-        "n_eff": 631.8,
-        "mean_r": -0.0378,
-        "margin_r": 0.0987,
+        "n": 750,
+        "n_eff": 632.8,
+        "mean_r": -0.0394,
+        "margin_r": 0.0986,
         "multiplier": 1.0
       },
       "level": {
@@ -7357,9 +7352,9 @@
         "margin_r": 0.1839
       },
       "fantômes": {
-        "n": 1680,
-        "mean_r": 0.0421,
-        "margin_r": 0.0638
+        "n": 1681,
+        "mean_r": 0.0415,
+        "margin_r": 0.0637
       },
       "backtest": {
         "n": 852,
@@ -7418,11 +7413,11 @@
       },
       "essai_bitcoin": {
         "label": "nouvel actif : Bitcoin (BTC/USD)",
-        "n": 70,
-        "mean_net_r": -0.5134,
-        "lower_r": -0.8567,
+        "n": 71,
+        "mean_net_r": -0.5238,
+        "lower_r": -0.8633,
         "promoted": false,
-        "missing": 30
+        "missing": 29
       },
       "essai_ethereum": {
         "label": "nouvel actif : Ethereum (ETH/USD)",
@@ -7463,9 +7458,9 @@
     },
     "variants_z": 2.75,
     "promoted_variants": [],
-    "updated_at": "2026-11-18T12:51:10.009600+00:00",
+    "updated_at": "2026-11-18T15:56:10.419981+00:00",
     "context": {
-      "n": 2488,
+      "n": 2489,
       "features": {
         "adx": {
           "label": "force de tendance (ADX 15 min)",
@@ -7484,10 +7479,10 @@
               "label": "milieu (28 à 38)",
               "lo": 27.5,
               "hi": 38.12,
-              "n": 829,
-              "n_eff": 716.2,
-              "mean_r": 0.0865,
-              "margin_r": 0.1251,
+              "n": 830,
+              "n_eff": 717.2,
+              "mean_r": 0.0849,
+              "margin_r": 0.125,
               "avoid": false
             },
             {
@@ -7529,10 +7524,10 @@
               "label": "haut (≥ 66)",
               "lo": 66.17,
               "hi": 1000000000.0,
-              "n": 831,
-              "n_eff": 713.6,
-              "mean_r": 0.0053,
-              "margin_r": 0.1238,
+              "n": 832,
+              "n_eff": 714.5,
+              "mean_r": 0.0037,
+              "margin_r": 0.1237,
               "avoid": false
             }
           ]
@@ -7564,10 +7559,10 @@
               "label": "haut (≥ 1,53)",
               "lo": 1.526,
               "hi": 1000000000.0,
-              "n": 778,
-              "n_eff": 688.6,
-              "mean_r": 0.1894,
-              "margin_r": 0.1357,
+              "n": 779,
+              "n_eff": 689.6,
+              "mean_r": 0.1875,
+              "margin_r": 0.1356,
               "avoid": false
             }
           ]
@@ -7588,20 +7583,20 @@
             {
               "label": "milieu (0,23 à 0,53)",
               "lo": 0.2281,
-              "hi": 0.5343,
-              "n": 830,
-              "n_eff": 719.2,
-              "mean_r": -0.0071,
-              "margin_r": 0.1251,
+              "hi": 0.5344,
+              "n": 831,
+              "n_eff": 720.2,
+              "mean_r": -0.0085,
+              "margin_r": 0.125,
               "avoid": false
             },
             {
               "label": "haut (≥ 0,53)",
-              "lo": 0.5343,
+              "lo": 0.5344,
               "hi": 1000000000.0,
               "n": 830,
               "n_eff": 715.7,
-              "mean_r": 0.0609,
+              "mean_r": 0.0608,
               "margin_r": 0.132,
               "avoid": false
             }
@@ -7623,21 +7618,21 @@
             {
               "label": "milieu (1,08 à 1,45)",
               "lo": 1.084,
-              "hi": 1.445,
-              "n": 824,
-              "n_eff": 705.1,
-              "mean_r": 0.1115,
-              "margin_r": 0.126,
+              "hi": 1.447,
+              "n": 831,
+              "n_eff": 711.8,
+              "mean_r": 0.1129,
+              "margin_r": 0.1253,
               "avoid": false
             },
             {
               "label": "haut (≥ 1,45)",
-              "lo": 1.445,
+              "lo": 1.447,
               "hi": 1000000000.0,
-              "n": 836,
-              "n_eff": 715.4,
-              "mean_r": 0.0762,
-              "margin_r": 0.1384,
+              "n": 830,
+              "n_eff": 709.7,
+              "mean_r": 0.0727,
+              "margin_r": 0.1391,
               "avoid": false
             }
           ]
@@ -7648,31 +7643,31 @@
             {
               "label": "bas (< 0,98)",
               "lo": -1000000000.0,
-              "hi": 0.978,
-              "n": 730,
-              "n_eff": 654.5,
-              "mean_r": 0.0163,
-              "margin_r": 0.1193,
+              "hi": 0.979,
+              "n": 732,
+              "n_eff": 656.1,
+              "mean_r": 0.0221,
+              "margin_r": 0.1196,
               "avoid": false
             },
             {
               "label": "milieu (0,98 à 1,28)",
-              "lo": 0.978,
-              "hi": 1.277,
+              "lo": 0.979,
+              "hi": 1.278,
               "n": 732,
-              "n_eff": 621.9,
-              "mean_r": -0.025,
-              "margin_r": 0.1244,
+              "n_eff": 622.2,
+              "mean_r": -0.0351,
+              "margin_r": 0.1238,
               "avoid": false
             },
             {
               "label": "haut (≥ 1,28)",
-              "lo": 1.277,
+              "lo": 1.278,
               "hi": 1000000000.0,
-              "n": 733,
-              "n_eff": 590.3,
-              "mean_r": 0.208,
-              "margin_r": 0.1553,
+              "n": 732,
+              "n_eff": 589.3,
+              "mean_r": 0.2104,
+              "margin_r": 0.1554,
               "avoid": false
             }
           ]
@@ -7693,20 +7688,20 @@
             {
               "label": "milieu (0,40 à 0,66)",
               "lo": 0.4016,
-              "hi": 0.6555,
-              "n": 830,
-              "n_eff": 745.9,
-              "mean_r": 0.1089,
-              "margin_r": 0.1184,
+              "hi": 0.6557,
+              "n": 831,
+              "n_eff": 746.9,
+              "mean_r": 0.1074,
+              "margin_r": 0.1183,
               "avoid": false
             },
             {
               "label": "haut (≥ 0,66)",
-              "lo": 0.6555,
+              "lo": 0.6557,
               "hi": 1000000000.0,
               "n": 830,
               "n_eff": 701.5,
-              "mean_r": -0.1729,
+              "mean_r": -0.173,
               "margin_r": 0.1135,
               "avoid": true
             }
@@ -7728,20 +7723,20 @@
             {
               "label": "milieu (0,08 à 0,13)",
               "lo": 0.0786,
-              "hi": 0.1258,
-              "n": 829,
-              "n_eff": 727.6,
-              "mean_r": 0.1479,
-              "margin_r": 0.1143,
+              "hi": 0.1261,
+              "n": 831,
+              "n_eff": 729.0,
+              "mean_r": 0.1478,
+              "margin_r": 0.1142,
               "avoid": false
             },
             {
               "label": "haut (≥ 0,13)",
-              "lo": 0.1258,
+              "lo": 0.1261,
               "hi": 1000000000.0,
-              "n": 831,
-              "n_eff": 702.6,
-              "mean_r": -0.0679,
+              "n": 830,
+              "n_eff": 702.2,
+              "mean_r": -0.0697,
               "margin_r": 0.1078,
               "avoid": false
             }
@@ -7764,10 +7759,10 @@
               "label": "de 30 min avant à 1 h 30 après",
               "lo": -30.0,
               "hi": 90.0,
-              "n": 384,
-              "n_eff": 328.0,
-              "mean_r": 0.1732,
-              "margin_r": 0.2037,
+              "n": 385,
+              "n_eff": 329.0,
+              "mean_r": 0.1694,
+              "margin_r": 0.2033,
               "avoid": false
             },
             {
@@ -7809,10 +7804,10 @@
               "label": "mercredi",
               "lo": 2,
               "hi": 3,
-              "n": 551,
-              "n_eff": 492.1,
-              "mean_r": 0.2161,
-              "margin_r": 0.1676,
+              "n": 552,
+              "n_eff": 493.1,
+              "mean_r": 0.2134,
+              "margin_r": 0.1674,
               "avoid": false
             },
             {
@@ -7861,10 +7856,10 @@
       "avoid": [
         {
           "feature": "range_pct",
-          "lo": 0.6555,
+          "lo": 0.6557,
           "hi": 1000000000.0,
           "label": "taille du range (%) : haut (≥ 0,66)",
-          "mean_r": -0.1729,
+          "mean_r": -0.173,
           "n": 830
         },
         {
@@ -7879,30 +7874,30 @@
     },
     "exits": {
       "réels et en ombre": {
-        "n": 1637,
-        "current_net_r": -0.0526,
+        "n": 1638,
+        "current_net_r": -0.0533,
         "mfe_median": 0.876,
         "sl_reached": {
           "0.5": 329,
           "0.8": 201,
           "1.0": 142
         },
-        "n_sl": 860,
+        "n_sl": 861,
         "rules": {
           "0.5": {
-            "net_r": -0.061,
+            "net_r": -0.0617,
             "diff_r": -0.0084,
             "margin_r": 0.0397,
             "better": false
           },
           "0.8": {
-            "net_r": -0.0592,
+            "net_r": -0.06,
             "diff_r": -0.0067,
-            "margin_r": 0.0317,
+            "margin_r": 0.0316,
             "better": false
           },
           "1.0": {
-            "net_r": -0.063,
+            "net_r": -0.0637,
             "diff_r": -0.0104,
             "margin_r": 0.0282,
             "better": false
@@ -8019,10 +8014,10 @@
     }
   },
   "state": {
-    "last_scan": "2026-11-18T15:51:11Z",
+    "last_scan": "2026-11-18T15:56:05Z",
     "last_scan_note": "0 signal(aux)",
     "last_summary": "2026-11-17T23:05:56Z",
-    "last_track": "2026-11-18T12:51:08Z",
+    "last_track": "2026-11-18T15:56:05Z",
     "last_summary_day": "2026-11-17",
     "pc_down": 1794622543
   },
