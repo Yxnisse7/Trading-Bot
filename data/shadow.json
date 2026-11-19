@@ -86,8 +86,8 @@
       "filters_checked": true,
       "variant": "modele_arbres",
       "exc": {
-        "mfe": 0.0933,
-        "mae": 0.1067,
+        "mfe": 0.2133,
+        "mae": 0.7867,
         "armed": {
           "0.5": false,
           "0.8": false,
@@ -98,7 +98,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": null
+        "last_ts": 1795104660
       }
     }
   },
@@ -190,7 +190,7 @@
       "variant": "modele_arbres",
       "exc": {
         "mfe": 0.1867,
-        "mae": 0.0,
+        "mae": 0.4667,
         "armed": {
           "0.5": false,
           "0.8": false,
@@ -277,7 +277,186 @@
         "us_open_min": 106.0,
         "weekday": 3
       },
-      "variant": "confiance_moyenne"
+      "variant": "confiance_moyenne",
+      "exc": {
+        "mfe": 0.0,
+        "mae": 0.6,
+        "armed": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "be": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "last_ts": null
+      }
+    }
+  },
+  {
+    "id": "e43cd00b19",
+    "asset": "gold",
+    "asset_label": "Or (XAU/USD)",
+    "direction": "short",
+    "entry": 3682.1,
+    "take_profit": 3670.8,
+    "stop_loss": 3689.6,
+    "risk_reward": 1.51,
+    "confidence": "fort",
+    "score": 5.75,
+    "criteria": [
+      "adx",
+      "rsi",
+      "trend_15m",
+      "trend_1h",
+      "trend_5m",
+      "vwap"
+    ],
+    "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 18.80 (0.51 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 78%.",
+    "news_context": "prudence post-USD FOMC Meeting Minutes : critères renforcés · actualité à surveiller (score 1) : We’re in our 50s and terrified of a market crash. Should we put $400,000 of our $1 million retirement savings into an annuity?",
+    "created_at": "2026-11-19T16:21:08Z",
+    "expires_at": "2026-11-19T17:21:08Z",
+    "status": "open",
+    "closed_at": null,
+    "close_price": null,
+    "pnl_pct": null,
+    "pnl_gross_pct": null,
+    "duration_minutes": null,
+    "hourly_range": 18.804369,
+    "source": "shadow",
+    "horizon": "1h",
+    "horizon_minutes": 60,
+    "meta": {
+      "tick": 0.1,
+      "details": {
+        "trend_5m": "EMA20 3692.67 / EMA50 3705.38 (5 min)",
+        "trend_15m": "EMA20 3707.08 / EMA50 3720.58",
+        "trend_1h": "prix vs EMA20 1 h 3724.55",
+        "adx": "ADX15 22.1 (+DI 8.8 / -DI 30.0)",
+        "vwap": "VWAP jour 3719.68",
+        "rsi": "RSI14 5 min 35.4",
+        "macd": "histogramme MACD -1.2104",
+        "level": "support - / résistance 3728.90",
+        "volume": "z-score volume -2.92",
+        "orb": "range d'ouverture 3704.20 – 3719.20",
+        "pdhl": "veille : haut 3851.40 / bas 3721.80",
+        "activity": "activité de l'heure 1.03× la moyenne",
+        "corr": "DXY +0.01 % sur 1 h, taux 10 ans -0.6 % sur 1 h"
+      },
+      "support": null,
+      "resistance": 3728.89990234375,
+      "atr_5m": 6.920798319313361,
+      "atr_ratio": 1.334030649347678,
+      "hourly_range_pct": 0.5107,
+      "adx_15m": 22.134615237529935,
+      "sigma_5m": 0.0010703585176249422,
+      "p_resolution": 0.7783333333333333,
+      "p_tp_neutral": 0.31033333333333335,
+      "activity_ratio": 1.035,
+      "base_minutes": 5,
+      "ctx": {
+        "adx": 22.13,
+        "rsi_dir": 64.6,
+        "vwap_ext": 1.9983,
+        "ema_ext": 0.5621,
+        "atr_ratio": 1.334,
+        "activity": 1.035,
+        "range_pct": 0.5107,
+        "cost_r": 0.0982,
+        "us_open_min": 111.1,
+        "weekday": 3
+      },
+      "price_time": "2026-11-19T16:15:00Z",
+      "ctx_avoid": [
+        "jour de la semaine : jeudi"
+      ],
+      "model_r": -0.0698,
+      "filters": [
+        "filtre_contexte",
+        "sans_etirement_or",
+        "modele_arbres",
+        "bot_en_ombre"
+      ],
+      "filters_checked": true,
+      "variant": "modele_arbres"
+    }
+  },
+  {
+    "id": "accbbe28c5",
+    "asset": "oil",
+    "asset_label": "Pétrole WTI (CL)",
+    "direction": "long",
+    "entry": 83.44,
+    "take_profit": 83.86,
+    "stop_loss": 83.09,
+    "risk_reward": 1.2,
+    "confidence": "fort",
+    "score": 5.75,
+    "criteria": [
+      "adx",
+      "rsi",
+      "trend_15m",
+      "trend_1h",
+      "trend_5m",
+      "vwap"
+    ],
+    "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 1.06 (1.27 %), TP = 40 % du range, SL = 33 % du range, probabilité de résolution sous 1 h ≈ 68%.",
+    "news_context": "prudence post-USD FOMC Meeting Minutes : critères renforcés · actualité à surveiller (score 1) : We’re in our 50s and terrified of a market crash. Should we put $400,000 of our $1 million retirement savings into an annuity?",
+    "created_at": "2026-11-19T16:21:08Z",
+    "expires_at": "2026-11-19T17:21:08Z",
+    "status": "open",
+    "closed_at": null,
+    "close_price": null,
+    "pnl_pct": null,
+    "pnl_gross_pct": null,
+    "duration_minutes": null,
+    "hourly_range": 1.056669,
+    "source": "shadow",
+    "horizon": "1h",
+    "horizon_minutes": 60,
+    "meta": {
+      "tick": 0.01,
+      "details": {
+        "trend_5m": "EMA20 83.28 / EMA50 83.21 (5 min)",
+        "trend_15m": "EMA20 83.18 / EMA50 82.87",
+        "trend_1h": "prix vs EMA20 1 h 82.86",
+        "adx": "ADX15 21.9 (+DI 26.2 / -DI 21.0)",
+        "vwap": "VWAP jour 82.93",
+        "rsi": "RSI14 5 min 54.3",
+        "macd": "histogramme MACD -0.0058",
+        "level": "support 82.84 / résistance 83.91",
+        "volume": "z-score volume -2.79",
+        "orb": "range d'ouverture 83.44 – 83.89",
+        "pdhl": "veille : haut 85.95 / bas 81.20",
+        "activity": "activité de l'heure 1.36× la moyenne"
+      },
+      "support": 82.83999633789062,
+      "resistance": 83.91000366210938,
+      "atr_5m": 0.2518529287896462,
+      "atr_ratio": 1.3555837299920948,
+      "hourly_range_pct": 1.2664,
+      "adx_15m": 21.923717056431432,
+      "sigma_5m": 0.001688686322983887,
+      "p_resolution": 0.6773333333333333,
+      "p_tp_neutral": 0.2936666666666667,
+      "activity_ratio": 1.364,
+      "base_minutes": 5,
+      "ctx": {
+        "adx": 21.92,
+        "rsi_dir": 54.3,
+        "vwap_ext": 0.4798,
+        "ema_ext": 0.1548,
+        "atr_ratio": 1.356,
+        "activity": 1.364,
+        "range_pct": 1.2664,
+        "cost_r": 0.0715,
+        "us_open_min": 111.1,
+        "weekday": 3
+      },
+      "price_time": "2026-11-19T16:15:00Z",
+      "variant": "essai_oil"
     }
   }
 ]
