@@ -74,19 +74,19 @@
       "price_time": "2026-11-19T16:15:00Z",
       "variant": "essai_oil",
       "exc": {
-        "mfe": 0.4,
+        "mfe": 1.1143,
         "mae": 0.6857,
         "armed": {
-          "0.5": false,
-          "0.8": false,
-          "1.0": false
+          "0.5": true,
+          "0.8": true,
+          "1.0": true
         },
         "be": {
           "0.5": false,
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1795106160
+        "last_ts": 1795106460
       }
     }
   },
@@ -166,11 +166,11 @@
       "price_time": "2026-11-19T16:40:00Z",
       "variant": "essai_ethereum",
       "exc": {
-        "mfe": 0.3899,
+        "mfe": 0.9739,
         "mae": 0.6913,
         "armed": {
-          "0.5": false,
-          "0.8": false,
+          "0.5": true,
+          "0.8": true,
           "1.0": false
         },
         "be": {
@@ -178,7 +178,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1795106760
+        "last_ts": 1795107060
       }
     }
   },
@@ -269,7 +269,7 @@
       "variant": "modele_arbres",
       "exc": {
         "mfe": 0.0,
-        "mae": 0.7568,
+        "mae": 0.9459,
         "armed": {
           "0.5": false,
           "0.8": false,
@@ -358,6 +358,108 @@
         "weekday": 3
       },
       "price_time": "2026-11-19T16:40:00Z",
+      "ctx_avoid": [
+        "jour de la semaine : jeudi"
+      ],
+      "model_r": -0.0361,
+      "filters": [
+        "filtre_contexte",
+        "modele_arbres",
+        "bot_en_ombre"
+      ],
+      "filters_checked": true,
+      "variant": "modele_arbres",
+      "exc": {
+        "mfe": 0.0267,
+        "mae": 0.0,
+        "armed": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "be": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "last_ts": null
+      }
+    }
+  },
+  {
+    "id": "50b8792dc6",
+    "asset": "gold",
+    "asset_label": "Or (XAU/USD)",
+    "direction": "short",
+    "entry": 3687.8,
+    "take_profit": 3676.5,
+    "stop_loss": 3695.3,
+    "risk_reward": 1.51,
+    "confidence": "fort",
+    "score": 5.75,
+    "criteria": [
+      "adx",
+      "rsi",
+      "trend_15m",
+      "trend_1h",
+      "trend_5m",
+      "vwap"
+    ],
+    "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 18.83 (0.51 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 78%.",
+    "news_context": "prudence post-USD FOMC Meeting Minutes : critères renforcés · actualité à surveiller (score 1) : We’re in our 50s and terrified of a market crash. Should we put $400,000 of our $1 million retirement savings into an annuity?",
+    "created_at": "2026-11-19T16:51:11Z",
+    "expires_at": "2026-11-19T17:51:11Z",
+    "status": "open",
+    "closed_at": null,
+    "close_price": null,
+    "pnl_pct": null,
+    "pnl_gross_pct": null,
+    "duration_minutes": null,
+    "hourly_range": 18.833354,
+    "source": "shadow",
+    "horizon": "1h",
+    "horizon_minutes": 60,
+    "meta": {
+      "tick": 0.1,
+      "details": {
+        "trend_5m": "EMA20 3688.69 / EMA50 3700.70 (5 min)",
+        "trend_15m": "EMA20 3702.80 / EMA50 3717.71",
+        "trend_1h": "prix vs EMA20 1 h 3725.09",
+        "adx": "ADX15 25.2 (+DI 12.8 / -DI 26.6)",
+        "vwap": "VWAP jour 3717.59",
+        "rsi": "RSI14 5 min 45.0",
+        "macd": "histogramme MACD 1.4731",
+        "level": "support - / résistance 3728.90",
+        "volume": "z-score volume -2.65",
+        "orb": "range d'ouverture 3704.20 – 3719.20",
+        "pdhl": "veille : haut 3851.40 / bas 3721.80",
+        "activity": "activité de l'heure 1.04× la moyenne",
+        "corr": "DXY +0.05 % sur 1 h, taux 10 ans +0.4 % sur 1 h"
+      },
+      "support": null,
+      "resistance": 3728.89990234375,
+      "atr_5m": 6.1744696449462575,
+      "atr_ratio": 1.191276386185655,
+      "hourly_range_pct": 0.5107,
+      "adx_15m": 25.199485565465444,
+      "sigma_5m": 0.0010947568413182207,
+      "p_resolution": 0.784,
+      "p_tp_neutral": 0.312,
+      "activity_ratio": 1.038,
+      "base_minutes": 5,
+      "ctx": {
+        "adx": 25.2,
+        "rsi_dir": 55.0,
+        "vwap_ext": 1.5818,
+        "ema_ext": 0.0474,
+        "atr_ratio": 1.191,
+        "activity": 1.038,
+        "range_pct": 0.5107,
+        "cost_r": 0.0983,
+        "us_open_min": 141.2,
+        "weekday": 3
+      },
+      "price_time": "2026-11-19T16:45:00Z",
       "ctx_avoid": [
         "jour de la semaine : jeudi"
       ],
