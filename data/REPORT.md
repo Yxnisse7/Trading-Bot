@@ -1,6 +1,6 @@
 # Trading-Bot — rapport
 
-_Mis à jour le 19/11/2026 à 14:56 (Europe/Paris)._
+_Mis à jour le 19/11/2026 à 15:01 (Europe/Paris)._
 
 ## Vue d'ensemble
 
@@ -8,7 +8,7 @@ _Mis à jour le 19/11/2026 à 14:56 (Europe/Paris)._
 - Taux de réussite cumulé (TP / (TP+SL)) : **38%** — hasard attendu 38%, avantage **+0%**
 - P&L théorique cumulé, net des coûts estimés (somme des % par trade, sans levier) : **-8.81 %** (brut -4.57 %)
 - Signaux ouverts : **0**
-- Signaux fantômes (suivis en silence pour l'apprentissage) : **1702** clôturés, 2 ouverts, taux de réussite 36% (hasard attendu 37%)
+- Signaux fantômes (suivis en silence pour l'apprentissage) : **1703** clôturés, 1 ouverts, taux de réussite 36% (hasard attendu 37%)
 
 ## Statistiques
 
@@ -114,18 +114,18 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 
 | Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
 |---|---:|---:|---:|---:|---:|---:|
-| adx | 1702 | 498 | 892 | 312 | 36% | -0.026 % |
+| adx | 1703 | 498 | 893 | 312 | 36% | -0.026 % |
 | corr | 148 | 37 | 88 | 23 | 30% | -0.070 % |
 | level | 149 | 52 | 60 | 37 | 46% | +0.031 % |
 | macd | 428 | 111 | 234 | 83 | 32% | -0.052 % |
 | orb | 106 | 32 | 46 | 28 | 41% | -0.029 % |
 | pdhl | 175 | 63 | 92 | 20 | 41% | +0.044 % |
 | rsi | 1288 | 397 | 670 | 221 | 37% | -0.013 % |
-| trend_15m | 1702 | 498 | 892 | 312 | 36% | -0.026 % |
-| trend_1h | 1676 | 490 | 880 | 306 | 36% | -0.025 % |
+| trend_15m | 1703 | 498 | 893 | 312 | 36% | -0.026 % |
+| trend_1h | 1677 | 490 | 881 | 306 | 36% | -0.025 % |
 | trend_5m | 1533 | 464 | 811 | 258 | 36% | -0.023 % |
 | volume | 35 | 8 | 22 | 5 | 27% | -0.053 % |
-| vwap | 1668 | 493 | 875 | 300 | 36% | -0.024 % |
+| vwap | 1669 | 493 | 876 | 300 | 36% | -0.024 % |
 
 ### Fantômes par actif
 
@@ -135,7 +135,7 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 | ethereum | 78 | 19 | 46 | 13 | 29% | -0.175 % |
 | euro | 67 | 22 | 38 | 7 | 37% | -0.020 % |
 | gold | 600 | 200 | 252 | 148 | 44% | +0.004 % |
-| nasdaq | 576 | 153 | 351 | 72 | 30% | -0.015 % |
+| nasdaq | 577 | 153 | 352 | 72 | 30% | -0.016 % |
 | oil | 150 | 45 | 75 | 30 | 38% | -0.042 % |
 | sp500 | 131 | 36 | 78 | 17 | 32% | -0.031 % |
 
@@ -196,8 +196,8 @@ Tranches horaires évitées (UTC) : [10, 12, 19]
 Corrections par actif :
 
 - bitcoin : {'macd': 0.584}
-- ethereum : {'trend_5m': 0.908, 'trend_15m': 0.908, 'trend_1h': 0.908, 'adx': 0.908, 'rsi': 0.767}
-- sp500 : {'trend_5m': 0.999, 'trend_15m': 0.999, 'trend_1h': 0.999, 'adx': 0.999, 'vwap': 0.747}
+- ethereum : {'trend_5m': 0.909, 'trend_15m': 0.909, 'trend_1h': 0.909, 'adx': 0.909, 'rsi': 0.767}
+- sp500 : {'vwap': 0.748}
 
 | Variante testée en fantôme | Trades | Gain net moyen | Statut |
 |---|---:|---:|---|
@@ -222,7 +222,6 @@ Notes :
 - bitcoin, macd : -0,47 R contre -0,04 R en global sur 51 trades éq. → poids ×0,58 sur cet actif
 - ethereum, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,18 R contre +0,03 R en global sur 144 trades éq. → poids ×0,91 sur cet actif
 - ethereum, rsi : -0,24 R contre +0,06 R en global sur 104 trades éq. → poids ×0,77 sur cet actif
-- sp500, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,12 R contre +0,03 R en global sur 242 trades éq. → poids ×1,00 sur cet actif
 - sp500, vwap : -0,12 R contre +0,03 R en global sur 237 trades éq. → poids ×1,00 sur cet actif
 - variante « indices le matin européen » en test : 153 trades, -0,44 R net, pas meilleure que les signaux réels
 - variante « horizon ~3 h » en test : 258 trades, -0,33 R net, pas meilleure que les signaux réels
@@ -235,6 +234,7 @@ Notes :
 - variante « horizon ~3 h sur Or (XAU/USD) » en test : 67 trades, +0,13 R net, encore 33 trades avant décision
 - variante « nouvel actif : Pétrole WTI (CL) » en test : 150 trades, -0,10 R net, pas meilleure que les signaux réels
 - variante « nouvel actif : Euro / dollar (6E) » en test : 67 trades, -0,35 R net, encore 33 trades avant décision
+- contexte perdant repéré : taille du range (%) : haut (≥ 0,66) (-0,18 R sur 837 trades), testé en silence avant d'être filtré
 
 ## Backtests (données historiques 5 min)
 
