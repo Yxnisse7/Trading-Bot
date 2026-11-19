@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-20T00:21:15.894168+01:00",
+  "updated_at": "2026-11-20T00:26:02.751865+01:00",
   "timezone": "Europe/Paris",
   "equity_curve": [
     {
@@ -2042,7 +2042,7 @@
       "avg_pnl_pct": -0.0255
     },
     "open": 0,
-    "open_shadow": 1
+    "open_shadow": 2
   },
   "by_source": {
     "bot": {
@@ -5488,6 +5488,41 @@
   ],
   "open_signals": [
     {
+      "id": "9cc60c9853",
+      "asset": "bitcoin",
+      "asset_label": "Bitcoin (BTC/USD)",
+      "direction": "short",
+      "horizon": "1h",
+      "entry": 61897.0,
+      "take_profit": 61540.0,
+      "stop_loss": 62135.0,
+      "risk_reward": 1.5,
+      "confidence": "fort",
+      "score": 6.75,
+      "criteria": [
+        "adx",
+        "pdhl",
+        "rsi",
+        "trend_15m",
+        "trend_1h",
+        "trend_5m",
+        "vwap"
+      ],
+      "source": "shadow",
+      "status": "open",
+      "pnl_pct": null,
+      "pnl_gross_pct": null,
+      "duration_minutes": null,
+      "close_price": null,
+      "created_at": "2026-11-19T23:25:55Z",
+      "closed_at": null,
+      "created_local": "20/11 00:25",
+      "expires_at": "2026-11-20T00:25:55Z",
+      "rationale": "Vente : tendance forte (ADX), cassure des extrêmes de la veille, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 595.7 (0.96 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 78%.",
+      "news_context": "actualité à surveiller (score 1) : We’re in our 50s and terrified of a market crash. Should we put $400,000 of our $1 million retirement savings into an annuity?",
+      "manual_exit": null
+    },
+    {
       "id": "74d65c4a4c",
       "asset": "nasdaq",
       "asset_label": "Nasdaq 100 (NQ)",
@@ -8040,10 +8075,10 @@
     }
   },
   "state": {
-    "last_scan": "2026-11-19T23:21:10Z",
+    "last_scan": "2026-11-19T23:25:55Z",
     "last_scan_note": "0 signal(aux)",
     "last_summary": "2026-11-19T23:06:00Z",
-    "last_track": "2026-11-19T23:21:10Z",
+    "last_track": "2026-11-19T23:25:55Z",
     "last_summary_day": "2026-11-19",
     "pc_down": 1794622543
   },
