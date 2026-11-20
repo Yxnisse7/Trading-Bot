@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-20T17:51:14.818089+01:00",
+  "updated_at": "2026-11-20T17:56:17.756783+01:00",
   "timezone": "Europe/Paris",
   "equity_curve": [
     {
@@ -2042,7 +2042,7 @@
       "avg_pnl_pct": -0.0322
     },
     "open": 0,
-    "open_shadow": 23
+    "open_shadow": 24
   },
   "by_source": {
     "bot": {
@@ -5502,6 +5502,40 @@
   ],
   "open_signals": [
     {
+      "id": "478dbb04c0",
+      "asset": "nasdaq",
+      "asset_label": "Nasdaq 100 (NQ)",
+      "direction": "short",
+      "horizon": "24h",
+      "entry": 25640.25,
+      "take_profit": 25004.5,
+      "stop_loss": 25852.0,
+      "risk_reward": 3.0,
+      "confidence": "fort",
+      "score": 5.75,
+      "criteria": [
+        "adx",
+        "macd",
+        "trend_15m",
+        "trend_1h",
+        "trend_5m",
+        "vwap"
+      ],
+      "source": "shadow",
+      "status": "open",
+      "pnl_pct": null,
+      "pnl_gross_pct": null,
+      "duration_minutes": null,
+      "close_price": null,
+      "created_at": "2026-11-20T16:56:08Z",
+      "closed_at": null,
+      "created_local": "20/11 17:56",
+      "expires_at": "2026-11-21T16:56:08Z",
+      "rationale": "Vente : tendance forte (ADX), MACD en expansion, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 353.27 (1.38 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 80%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+      "news_context": "actualité à surveiller (score 2) : Bessent advocates lower Fed rate hike, cites energy shock",
+      "manual_exit": null
+    },
+    {
       "id": "661540a58d",
       "asset": "nasdaq",
       "asset_label": "Nasdaq 100 (NQ)",
@@ -8857,10 +8891,10 @@
     }
   },
   "state": {
-    "last_scan": "2026-11-20T16:51:01Z",
+    "last_scan": "2026-11-20T16:56:08Z",
     "last_scan_note": "0 signal(aux)",
     "last_summary": "2026-11-19T23:06:00Z",
-    "last_track": "2026-11-20T16:51:01Z",
+    "last_track": "2026-11-20T16:56:08Z",
     "last_summary_day": "2026-11-19",
     "pc_down": 1794622543
   },
