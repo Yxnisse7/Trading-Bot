@@ -70,7 +70,7 @@
       },
       "variant": "confiance_moyenne",
       "exc": {
-        "mfe": 0.0,
+        "mfe": 0.0505,
         "mae": 0.0,
         "armed": {
           "0.5": false,
@@ -158,7 +158,7 @@
       "price_time": "2026-11-20T06:55:00Z",
       "variant": "horizon_3h_gold",
       "exc": {
-        "mfe": 0.0,
+        "mfe": 0.0303,
         "mae": 0.0,
         "armed": {
           "0.5": false,
@@ -172,6 +172,79 @@
         },
         "last_ts": null
       }
+    }
+  },
+  {
+    "id": "b49e572dc9",
+    "asset": "gold",
+    "asset_label": "Or (XAU/USD)",
+    "direction": "short",
+    "entry": 3560.7,
+    "take_profit": 3545.6,
+    "stop_loss": 3570.8,
+    "risk_reward": 1.5,
+    "confidence": "moyen",
+    "score": 4.0,
+    "criteria": [
+      "adx",
+      "level",
+      "trend_15m",
+      "trend_1h"
+    ],
+    "rationale": "Vente : tendance forte (ADX), niveau clé favorable, tendance 15 min, tendance 1 h. Range moyen sur 1 h ≈ 25.21 (0.71 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 92%.",
+    "news_context": "actualité calme sur les 2 dernières heures",
+    "created_at": "2026-11-20T07:11:16Z",
+    "expires_at": "2026-11-20T08:11:16Z",
+    "status": "open",
+    "closed_at": null,
+    "close_price": null,
+    "pnl_pct": null,
+    "pnl_gross_pct": null,
+    "duration_minutes": null,
+    "hourly_range": 25.209519,
+    "source": "shadow",
+    "horizon": "1h",
+    "horizon_minutes": 60,
+    "meta": {
+      "tick": 0.1,
+      "details": {
+        "trend_5m": "EMA20 3552.27 / EMA50 3560.01 (5 min)",
+        "trend_15m": "EMA20 3563.65 / EMA50 3606.45",
+        "trend_1h": "prix vs EMA20 1 h 3620.46",
+        "adx": "ADX15 41.4 (+DI 18.0 / -DI 24.5)",
+        "vwap": "VWAP jour 3560.14",
+        "rsi": "RSI14 5 min 57.9",
+        "macd": "histogramme MACD 2.0152",
+        "level": "support 3514.90 / résistance 3567.30",
+        "volume": "z-score volume -1.47",
+        "pdhl": "veille : haut 3759.50 / bas 3591.60",
+        "activity": "activité de l'heure 0.82× la moyenne",
+        "corr": "DXY -0.04 % sur 1 h"
+      },
+      "support": 3514.89990234375,
+      "resistance": 3567.300048828125,
+      "atr_5m": 9.563176506126496,
+      "atr_ratio": 1.4309372395447004,
+      "hourly_range_pct": 0.708,
+      "adx_15m": 41.44473575845273,
+      "sigma_5m": 0.0020161001511149446,
+      "p_resolution": 0.9233333333333333,
+      "p_tp_neutral": 0.386,
+      "activity_ratio": 0.824,
+      "base_minutes": 5,
+      "ctx": {
+        "adx": 41.44,
+        "rsi_dir": 42.09,
+        "vwap_ext": -0.0221,
+        "ema_ext": -0.3345,
+        "atr_ratio": 1.431,
+        "activity": 0.824,
+        "range_pct": 0.708,
+        "cost_r": 0.0705,
+        "us_open_min": -438.7,
+        "weekday": 4
+      },
+      "variant": "confiance_moyenne"
     }
   }
 ]
