@@ -79,19 +79,19 @@
       "price_time": "2026-11-20T15:20:00Z",
       "variant": "horizon_3h",
       "exc": {
-        "mfe": 0.7529,
+        "mfe": 1.1072,
         "mae": 0.0,
         "armed": {
           "0.5": true,
-          "0.8": false,
-          "1.0": false
+          "0.8": true,
+          "1.0": true
         },
         "be": {
           "0.5": false,
           "0.8": false,
           "1.0": false
         },
-        "last_ts": null
+        "last_ts": 1795188660
       }
     }
   },
@@ -172,18 +172,18 @@
       "variant": "essai_oil",
       "exc": {
         "mfe": 0.75,
-        "mae": 0.0,
+        "mae": 0.7083,
         "armed": {
           "0.5": true,
           "0.8": false,
           "1.0": false
         },
         "be": {
-          "0.5": false,
+          "0.5": true,
           "0.8": false,
           "1.0": false
         },
-        "last_ts": null
+        "last_ts": 1795188660
       }
     }
   },
@@ -259,7 +259,22 @@
         "weekday": 4
       },
       "price_time": "2026-11-20T15:35:00Z",
-      "variant": "essai_bitcoin"
+      "variant": "essai_bitcoin",
+      "exc": {
+        "mfe": 0.4051,
+        "mae": 0.2577,
+        "armed": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "be": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "last_ts": 1795189260
+      }
     }
   },
   {
@@ -355,7 +370,22 @@
         "vix_bond"
       ],
       "filters_checked": true,
-      "variant": "vix_bond"
+      "variant": "vix_bond",
+      "exc": {
+        "mfe": 0.0062,
+        "mae": 0.0,
+        "armed": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "be": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "last_ts": null
+      }
     }
   },
   {
@@ -438,7 +468,281 @@
         "source": "essai 29"
       },
       "price_time": "2026-11-20T15:30:00Z",
+      "variant": "horizon_3h",
+      "exc": {
+        "mfe": 0.0065,
+        "mae": 0.0,
+        "armed": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "be": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "last_ts": null
+      }
+    }
+  },
+  {
+    "id": "22100342b8",
+    "asset": "nasdaq",
+    "asset_label": "Nasdaq 100 (NQ)",
+    "direction": "short",
+    "entry": 25985.0,
+    "take_profit": 25438.25,
+    "stop_loss": 26167.25,
+    "risk_reward": 3.0,
+    "confidence": "fort",
+    "score": 8.25,
+    "criteria": [
+      "adx",
+      "corr",
+      "macd",
+      "orb",
+      "rsi",
+      "trend_15m",
+      "trend_1h",
+      "trend_5m",
+      "vwap"
+    ],
+    "rationale": "Vente : tendance forte (ADX), marché meneur favorable, MACD en expansion, cassure du range d'ouverture, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 303.62 (1.17 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 66%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+    "news_context": "actualité à surveiller (score 2) : Stocks plunge as investors take cover amid growing uncertainty | I’m terrified of a market crash. Should I put $400,000 of my $1 million retirement savings into an annuity?",
+    "created_at": "2026-11-20T15:41:29Z",
+    "expires_at": "2026-11-21T15:41:29Z",
+    "status": "open",
+    "closed_at": null,
+    "close_price": null,
+    "pnl_pct": null,
+    "pnl_gross_pct": null,
+    "duration_minutes": null,
+    "hourly_range": 303.625,
+    "source": "shadow",
+    "horizon": "24h",
+    "horizon_minutes": 1440,
+    "meta": {
+      "tick": 0.25,
+      "details": {
+        "trend_5m": "EMA20 26173.93 / EMA50 26191.16 (5 min)",
+        "trend_15m": "EMA20 26187.78 / EMA50 26299.86",
+        "trend_1h": "prix vs EMA20 1 h 26433.21",
+        "adx": "ADX15 21.2 (+DI 19.9 / -DI 27.1)",
+        "vwap": "VWAP jour 26257.37",
+        "rsi": "RSI14 5 min 37.6",
+        "macd": "histogramme MACD -36.3797",
+        "level": "support - / résistance 26370.00",
+        "volume": "z-score volume -1.11",
+        "orb": "range d'ouverture 26116.75 – 26451.25",
+        "pdhl": "veille : haut 27838.00 / bas 26416.00",
+        "activity": "activité de l'heure 2.05× la moyenne",
+        "corr": "VIX +6.2 % sur 15 min"
+      },
+      "support": null,
+      "resistance": 26370.0,
+      "atr_5m": 102.46431870278204,
+      "atr_ratio": 1.519934676584977,
+      "hourly_range_pct": 1.1685,
+      "adx_15m": 21.224196351681318,
+      "sigma_5m": 0.0020941139002530846,
+      "p_resolution": 0.665,
+      "p_tp_neutral": 0.25766666666666665,
+      "activity_ratio": 2.051,
+      "base_minutes": 5,
+      "ctx": {
+        "adx": 21.22,
+        "rsi_dir": 62.39,
+        "vwap_ext": 0.8971,
+        "ema_ext": 0.6222,
+        "atr_ratio": 1.52,
+        "activity": 2.051,
+        "range_pct": 1.1685,
+        "cost_r": 0.0214,
+        "us_open_min": 71.5,
+        "weekday": 4
+      },
+      "exit_override": {
+        "stop_x": 1.5,
+        "target_x": 3.0,
+        "minutes": 1440,
+        "source": "essai 29"
+      },
+      "price_time": "2026-11-20T15:35:00Z",
+      "ctx_avoid": [
+        "force de tendance (ADX 15 min) : bas (< 27)",
+        "taille du range (%) : haut (≥ 0,67)"
+      ],
+      "filters": [
+        "sans_ouverture_us",
+        "filtre_contexte",
+        "vix_bond"
+      ],
+      "filters_checked": true,
+      "variant": "vix_bond"
+    }
+  },
+  {
+    "id": "93829bb6e9",
+    "asset": "nasdaq",
+    "asset_label": "Nasdaq 100 (NQ)",
+    "direction": "short",
+    "entry": 25985.0,
+    "take_profit": 25411.25,
+    "stop_loss": 26176.25,
+    "risk_reward": 3.0,
+    "confidence": "fort",
+    "score": 8.25,
+    "criteria": [
+      "adx",
+      "corr",
+      "macd",
+      "orb",
+      "rsi",
+      "trend_15m",
+      "trend_1h",
+      "trend_5m",
+      "vwap"
+    ],
+    "rationale": "Vente : tendance forte (ADX), marché meneur favorable, MACD en expansion, cassure du range d'ouverture, RSI en momentum, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 318.92 (1.23 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 82%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+    "news_context": "actualité à surveiller (score 2) : Stocks plunge as investors take cover amid growing uncertainty | I’m terrified of a market crash. Should I put $400,000 of my $1 million retirement savings into an annuity?",
+    "created_at": "2026-11-20T15:41:29Z",
+    "expires_at": "2026-11-21T15:41:29Z",
+    "status": "open",
+    "closed_at": null,
+    "close_price": null,
+    "pnl_pct": null,
+    "pnl_gross_pct": null,
+    "duration_minutes": null,
+    "hourly_range": 318.916667,
+    "source": "shadow",
+    "horizon": "24h",
+    "horizon_minutes": 1440,
+    "meta": {
+      "tick": 0.25,
+      "details": {
+        "trend_5m": "EMA20 26187.78 / EMA50 26299.86 (15 min)",
+        "trend_15m": "EMA20 26337.07 / EMA50 26673.37",
+        "trend_1h": "prix vs EMA20 1 h 26807.80",
+        "adx": "ADX15 40.3 (+DI 14.8 / -DI 23.3)",
+        "vwap": "VWAP jour 26257.37",
+        "rsi": "RSI14 5 min 39.6",
+        "macd": "histogramme MACD -4.5665",
+        "level": "support - / résistance 26447.75",
+        "volume": "z-score volume -0.55",
+        "orb": "range d'ouverture 26116.75 – 26451.25",
+        "pdhl": "veille : haut 27838.00 / bas 26416.00",
+        "corr": "VIX +6.2 % sur 15 min"
+      },
+      "support": null,
+      "resistance": 26447.75,
+      "atr_5m": 131.50138562965142,
+      "atr_ratio": 1.3397518106090396,
+      "hourly_range_pct": 1.2273,
+      "adx_15m": 40.25044331314824,
+      "sigma_5m": 0.002813269030481432,
+      "p_resolution": 0.8233333333333334,
+      "p_tp_neutral": 0.329,
+      "activity_ratio": null,
+      "base_minutes": 15,
+      "ctx": {
+        "adx": 40.25,
+        "rsi_dir": 60.4,
+        "vwap_ext": 0.8541,
+        "ema_ext": 0.6358,
+        "atr_ratio": 1.34,
+        "range_pct": 1.2273,
+        "cost_r": 0.0204,
+        "us_open_min": 71.5,
+        "weekday": 4
+      },
+      "exit_override": {
+        "stop_x": 1.5,
+        "target_x": 3.0,
+        "minutes": 1440,
+        "source": "essai 29"
+      },
+      "price_time": "2026-11-20T15:35:00Z",
       "variant": "horizon_3h"
+    }
+  },
+  {
+    "id": "404568ff75",
+    "asset": "sp500",
+    "asset_label": "S&P 500 (ES)",
+    "direction": "short",
+    "entry": 7128.0,
+    "take_profit": 7107.25,
+    "stop_loss": 7145.25,
+    "risk_reward": 1.2,
+    "confidence": "fort",
+    "score": 7.25,
+    "criteria": [
+      "adx",
+      "corr",
+      "macd",
+      "orb",
+      "rsi",
+      "trend_15m",
+      "trend_1h",
+      "vwap"
+    ],
+    "rationale": "Vente : tendance forte (ADX), marché meneur favorable, MACD en expansion, cassure du range d'ouverture, RSI en momentum, tendance 15 min, tendance 1 h, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 50.25 (0.70 %), TP = 41 % du range, SL = 34 % du range, probabilité de résolution sous 1 h ≈ 84%.",
+    "news_context": "actualité à surveiller (score 3) : Stocks plunge as investors take cover amid growing uncertainty | I’m terrified of a market crash. Should I put $400,000 of my $1 million retirement savings into an annuity?",
+    "created_at": "2026-11-20T15:41:29Z",
+    "expires_at": "2026-11-20T16:41:29Z",
+    "status": "open",
+    "closed_at": null,
+    "close_price": null,
+    "pnl_pct": null,
+    "pnl_gross_pct": null,
+    "duration_minutes": null,
+    "hourly_range": 50.25,
+    "source": "shadow",
+    "horizon": "1h",
+    "horizon_minutes": 60,
+    "meta": {
+      "tick": 0.25,
+      "details": {
+        "trend_5m": "EMA20 7154.56 / EMA50 7151.47 (5 min)",
+        "trend_15m": "EMA20 7150.86 / EMA50 7164.80",
+        "trend_1h": "prix vs EMA20 1 h 7188.08",
+        "adx": "ADX15 21.7 (+DI 24.6 / -DI 24.7)",
+        "vwap": "VWAP jour 7161.75",
+        "rsi": "RSI14 5 min 40.5",
+        "macd": "histogramme MACD -5.7892",
+        "level": "support 7105.00 / résistance 7181.50",
+        "volume": "z-score volume -1.24",
+        "orb": "range d'ouverture 7149.00 – 7206.00",
+        "pdhl": "veille : haut 7440.50 / bas 7167.75",
+        "activity": "activité de l'heure 2.14× la moyenne",
+        "corr": "VIX +6.2 % sur 15 min"
+      },
+      "support": 7105.0,
+      "resistance": 7181.5,
+      "atr_5m": 17.919025103725808,
+      "atr_ratio": 1.5185414572751952,
+      "hourly_range_pct": 0.705,
+      "adx_15m": 21.70351589891766,
+      "sigma_5m": 0.0012614686457237878,
+      "p_resolution": 0.8356666666666667,
+      "p_tp_neutral": 0.382,
+      "activity_ratio": 2.141,
+      "base_minutes": 5,
+      "ctx": {
+        "adx": 21.7,
+        "rsi_dir": 59.49,
+        "vwap_ext": 0.6716,
+        "ema_ext": 0.5285,
+        "atr_ratio": 1.519,
+        "activity": 2.141,
+        "range_pct": 0.705,
+        "cost_r": 0.0413,
+        "us_open_min": 71.5,
+        "weekday": 4
+      },
+      "price_time": "2026-11-20T15:35:00Z",
+      "variant": "essai_sp500"
     }
   }
 ]
