@@ -1,6 +1,6 @@
 # Trading-Bot — rapport
 
-_Mis à jour le 20/11/2026 à 17:46 (Europe/Paris)._
+_Mis à jour le 20/11/2026 à 17:51 (Europe/Paris)._
 
 ## Vue d'ensemble
 
@@ -8,7 +8,7 @@ _Mis à jour le 20/11/2026 à 17:46 (Europe/Paris)._
 - Taux de réussite cumulé (TP / (TP+SL)) : **38%** — hasard attendu 38%, avantage **-0%**
 - P&L théorique cumulé, net des coûts estimés (somme des % par trade, sans levier) : **-9.16 %** (brut -4.91 %)
 - Signaux ouverts : **0**
-- Signaux fantômes (suivis en silence pour l'apprentissage) : **1794** clôturés, 22 ouverts, taux de réussite 35% (hasard attendu 37%)
+- Signaux fantômes (suivis en silence pour l'apprentissage) : **1795** clôturés, 23 ouverts, taux de réussite 35% (hasard attendu 37%)
 
 ## Statistiques
 
@@ -114,18 +114,18 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 
 | Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
 |---|---:|---:|---:|---:|---:|---:|
-| adx | 1794 | 520 | 954 | 320 | 35% | -0.032 % |
+| adx | 1795 | 520 | 955 | 320 | 35% | -0.032 % |
 | corr | 158 | 42 | 93 | 23 | 31% | -0.057 % |
 | level | 151 | 53 | 61 | 37 | 46% | +0.030 % |
-| macd | 453 | 114 | 256 | 83 | 31% | -0.065 % |
+| macd | 454 | 114 | 257 | 83 | 31% | -0.065 % |
 | orb | 107 | 33 | 46 | 28 | 42% | -0.026 % |
 | pdhl | 184 | 67 | 97 | 20 | 41% | +0.050 % |
-| rsi | 1364 | 415 | 720 | 229 | 37% | -0.021 % |
-| trend_15m | 1794 | 520 | 954 | 320 | 35% | -0.032 % |
-| trend_1h | 1768 | 512 | 942 | 314 | 35% | -0.031 % |
-| trend_5m | 1620 | 483 | 871 | 266 | 36% | -0.030 % |
+| rsi | 1365 | 415 | 721 | 229 | 37% | -0.021 % |
+| trend_15m | 1795 | 520 | 955 | 320 | 35% | -0.032 % |
+| trend_1h | 1769 | 512 | 943 | 314 | 35% | -0.032 % |
+| trend_5m | 1621 | 483 | 872 | 266 | 36% | -0.030 % |
 | volume | 41 | 9 | 27 | 5 | 25% | -0.103 % |
-| vwap | 1754 | 512 | 934 | 308 | 35% | -0.031 % |
+| vwap | 1755 | 512 | 935 | 308 | 35% | -0.031 % |
 
 ### Fantômes par actif
 
@@ -134,7 +134,7 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 | bitcoin | 109 | 26 | 58 | 25 | 31% | -0.116 % |
 | ethereum | 83 | 21 | 49 | 13 | 30% | -0.172 % |
 | euro | 67 | 22 | 38 | 7 | 37% | -0.020 % |
-| gold | 637 | 209 | 273 | 155 | 43% | -0.001 % |
+| gold | 638 | 209 | 274 | 155 | 43% | -0.001 % |
 | nasdaq | 606 | 156 | 378 | 72 | 29% | -0.032 % |
 | oil | 155 | 46 | 78 | 31 | 37% | -0.043 % |
 | sp500 | 137 | 40 | 80 | 17 | 33% | -0.021 % |
@@ -195,8 +195,8 @@ Tranches horaires évitées (UTC) : [9, 10, 12, 19]
 
 Corrections par actif :
 
-- bitcoin : {'macd': 0.612}
-- ethereum : {'trend_5m': 0.939, 'trend_15m': 0.939, 'trend_1h': 0.939, 'adx': 0.939, 'rsi': 0.806}
+- bitcoin : {'macd': 0.616}
+- ethereum : {'trend_5m': 0.94, 'trend_15m': 0.94, 'trend_1h': 0.94, 'adx': 0.94, 'rsi': 0.807}
 
 | Variante testée en fantôme | Trades | Gain net moyen | Statut |
 |---|---:|---:|---|
@@ -219,7 +219,7 @@ Notes :
 - tranche 10h UTC : -0,27 R sur 108 trades éq. → évitée
 - tranche 12h UTC : -0,42 R sur 69 trades éq. → évitée
 - tranche 19h UTC : -0,30 R sur 89 trades éq. → évitée
-- bitcoin, macd : -0,48 R contre -0,06 R en global sur 52 trades éq. → poids ×0,61 sur cet actif
+- bitcoin, macd : -0,48 R contre -0,07 R en global sur 52 trades éq. → poids ×0,62 sur cet actif
 - ethereum, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,18 R contre +0,01 R en global sur 148 trades éq. → poids ×0,94 sur cet actif
 - ethereum, rsi : -0,23 R contre +0,05 R en global sur 108 trades éq. → poids ×0,81 sur cet actif
 - variante « indices le matin européen » en test : 161 trades, -0,47 R net, pas meilleure que les signaux réels
@@ -233,7 +233,7 @@ Notes :
 - variante « horizon ~3 h sur Or (XAU/USD) » en test : 70 trades, +0,11 R net, encore 30 trades avant décision
 - variante « nouvel actif : Pétrole WTI (CL) » en test : 155 trades, -0,11 R net, pas meilleure que les signaux réels
 - variante « nouvel actif : Euro / dollar (6E) » en test : 67 trades, -0,35 R net, encore 33 trades avant décision
-- contexte perdant repéré : force de tendance (ADX 15 min) : bas (< 27) (-0,12 R sur 867 trades), testé en silence avant d'être filtré
+- contexte perdant repéré : force de tendance (ADX 15 min) : bas (< 27) (-0,12 R sur 868 trades), testé en silence avant d'être filtré
 
 ## Backtests (données historiques 5 min)
 
