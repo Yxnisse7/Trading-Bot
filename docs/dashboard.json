@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-22T06:21:31.866424+01:00",
+  "updated_at": "2026-11-22T06:26:03.882252+01:00",
   "timezone": "Europe/Paris",
   "equity_curve": [
     {
@@ -2031,18 +2031,18 @@
       "avg_pnl_pct": -0.0485
     },
     "shadow": {
-      "n": 1838,
+      "n": 1839,
       "tp": 546,
-      "sl": 967,
+      "sl": 968,
       "expired": 325,
-      "win_rate": 0.3608724388631857,
+      "win_rate": 0.3606340819022457,
       "neutral_win_rate": 0.365,
-      "edge": -0.0041,
-      "pnl_pct": -13.2936,
-      "avg_pnl_pct": -0.0072
+      "edge": -0.0044,
+      "pnl_pct": -13.8974,
+      "avg_pnl_pct": -0.0076
     },
     "open": 0,
-    "open_shadow": 1
+    "open_shadow": 0
   },
   "by_source": {
     "bot": {
@@ -2079,15 +2079,15 @@
       "avg_pnl_pct": 0.0
     },
     "shadow": {
-      "n": 1838,
+      "n": 1839,
       "tp": 546,
-      "sl": 967,
+      "sl": 968,
       "expired": 325,
-      "win_rate": 0.3608724388631857,
+      "win_rate": 0.3606340819022457,
       "neutral_win_rate": 0.365,
-      "edge": -0.0041,
-      "pnl_pct": -13.2936,
-      "avg_pnl_pct": -0.0072
+      "edge": -0.0044,
+      "pnl_pct": -13.8974,
+      "avg_pnl_pct": -0.0076
     }
   },
   "by_horizon": {
@@ -2266,15 +2266,15 @@
         "avg_pnl_pct": -0.1631
       },
       "shadow": {
-        "n": 93,
+        "n": 94,
         "tp": 22,
-        "sl": 56,
+        "sl": 57,
         "expired": 15,
-        "win_rate": 0.28205128205128205,
-        "neutral_win_rate": 0.4051,
-        "edge": -0.123,
-        "pnl_pct": -18.8543,
-        "avg_pnl_pct": -0.2027
+        "win_rate": 0.27848101265822783,
+        "neutral_win_rate": 0.405,
+        "edge": -0.1265,
+        "pnl_pct": -19.4581,
+        "avg_pnl_pct": -0.207
       },
       "open": 0,
       "session_utc": null,
@@ -2419,15 +2419,15 @@
       "label": "Tendance 5 min",
       "weight": 1.0,
       "stats": {
-        "n": 1831,
+        "n": 1832,
         "tp": 563,
-        "sl": 965,
+        "sl": 966,
         "expired": 303,
-        "win_rate": 0.36845549738219896,
+        "win_rate": 0.368214519293656,
         "neutral_win_rate": 0.3632,
-        "edge": 0.0053,
-        "pnl_pct": -9.484,
-        "avg_pnl_pct": -0.0052
+        "edge": 0.005,
+        "pnl_pct": -10.0878,
+        "avg_pnl_pct": -0.0055
       },
       "by_source": {
         "bot": {
@@ -2464,18 +2464,55 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 1661,
+          "n": 1662,
           "tp": 509,
-          "sl": 881,
+          "sl": 882,
           "expired": 271,
-          "win_rate": 0.3661870503597122,
+          "win_rate": 0.3659237958303379,
           "neutral_win_rate": 0.3617,
-          "edge": 0.0045,
-          "pnl_pct": -2.3597,
-          "avg_pnl_pct": -0.0014
+          "edge": 0.0042,
+          "pnl_pct": -2.9635,
+          "avg_pnl_pct": -0.0018
         }
       },
       "last_trades": [
+        {
+          "id": "ab16557401",
+          "asset": "ethereum",
+          "asset_label": "Ethereum (ETH/USD)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 1647.7,
+          "take_profit": 1635.0,
+          "stop_loss": 1656.2,
+          "risk_reward": 1.49,
+          "confidence": "fort",
+          "score": 7.19,
+          "criteria": [
+            "adx",
+            "corr",
+            "level",
+            "macd",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "volume",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.6038,
+          "pnl_gross_pct": -0.5238,
+          "duration_minutes": 0,
+          "close_price": 1656.33,
+          "created_at": "2026-11-22T05:21:25Z",
+          "closed_at": "2026-11-22T05:22:00Z",
+          "created_local": "22/11 06:21",
+          "expires_at": "2026-11-22T06:21:25Z",
+          "rationale": "Vente : tendance forte (ADX), marché meneur favorable, niveau clé favorable, MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, volume anormal, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 21.09 (1.28 %), TP = 60 % du range, SL = 41 % du range, probabilité de résolution sous 1 h ≈ 46%.",
+          "news_context": "actualité calme sur les 2 dernières heures",
+          "manual_exit": null
+        },
         {
           "id": "445cd7e029",
           "asset": "bitcoin",
@@ -2714,40 +2751,6 @@
           "created_local": "21/11 12:35",
           "expires_at": "2026-11-21T12:35:59Z",
           "rationale": "Achat : tendance forte (ADX), marché meneur favorable, tendance 15 min, tendance 1 h, tendance 5 min, volume anormal, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 32.64 (1.97 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 41%.",
-          "news_context": "actualité calme sur les 2 dernières heures",
-          "manual_exit": null
-        },
-        {
-          "id": "397ad54af7",
-          "asset": "bitcoin",
-          "asset_label": "Bitcoin (BTC/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 55819.0,
-          "take_profit": 55532.0,
-          "stop_loss": 56058.0,
-          "risk_reward": 1.2,
-          "confidence": "fort",
-          "score": 5.79,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.4882,
-          "pnl_gross_pct": -0.4282,
-          "duration_minutes": 1,
-          "close_price": 56058.0,
-          "created_at": "2026-11-21T06:26:08Z",
-          "closed_at": "2026-11-21T06:28:00Z",
-          "created_local": "21/11 07:26",
-          "expires_at": "2026-11-21T07:26:08Z",
-          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 844.8 (1.51 %), TP = 34 % du range, SL = 28 % du range, probabilité de résolution sous 1 h ≈ 99%.",
           "news_context": "actualité calme sur les 2 dernières heures",
           "manual_exit": null
         }
@@ -2758,15 +2761,15 @@
       "label": "Tendance 15 min",
       "weight": 1.0,
       "stats": {
-        "n": 2026,
+        "n": 2027,
         "tp": 604,
-        "sl": 1062,
+        "sl": 1063,
         "expired": 360,
-        "win_rate": 0.3625450180072029,
+        "win_rate": 0.3623275344931014,
         "neutral_win_rate": 0.3663,
-        "edge": -0.0038,
-        "pnl_pct": -22.2942,
-        "avg_pnl_pct": -0.011
+        "edge": -0.004,
+        "pnl_pct": -22.898,
+        "avg_pnl_pct": -0.0113
       },
       "by_source": {
         "bot": {
@@ -2803,18 +2806,55 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 1838,
+          "n": 1839,
           "tp": 546,
-          "sl": 967,
+          "sl": 968,
           "expired": 325,
-          "win_rate": 0.3608724388631857,
+          "win_rate": 0.3606340819022457,
           "neutral_win_rate": 0.365,
-          "edge": -0.0041,
-          "pnl_pct": -13.2936,
-          "avg_pnl_pct": -0.0072
+          "edge": -0.0044,
+          "pnl_pct": -13.8974,
+          "avg_pnl_pct": -0.0076
         }
       },
       "last_trades": [
+        {
+          "id": "ab16557401",
+          "asset": "ethereum",
+          "asset_label": "Ethereum (ETH/USD)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 1647.7,
+          "take_profit": 1635.0,
+          "stop_loss": 1656.2,
+          "risk_reward": 1.49,
+          "confidence": "fort",
+          "score": 7.19,
+          "criteria": [
+            "adx",
+            "corr",
+            "level",
+            "macd",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "volume",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.6038,
+          "pnl_gross_pct": -0.5238,
+          "duration_minutes": 0,
+          "close_price": 1656.33,
+          "created_at": "2026-11-22T05:21:25Z",
+          "closed_at": "2026-11-22T05:22:00Z",
+          "created_local": "22/11 06:21",
+          "expires_at": "2026-11-22T06:21:25Z",
+          "rationale": "Vente : tendance forte (ADX), marché meneur favorable, niveau clé favorable, MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, volume anormal, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 21.09 (1.28 %), TP = 60 % du range, SL = 41 % du range, probabilité de résolution sous 1 h ≈ 46%.",
+          "news_context": "actualité calme sur les 2 dernières heures",
+          "manual_exit": null
+        },
         {
           "id": "445cd7e029",
           "asset": "bitcoin",
@@ -3054,41 +3094,6 @@
           "expires_at": "2026-11-21T12:35:59Z",
           "rationale": "Achat : tendance forte (ADX), marché meneur favorable, tendance 15 min, tendance 1 h, tendance 5 min, volume anormal, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 32.64 (1.97 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 41%.",
           "news_context": "actualité calme sur les 2 dernières heures",
-          "manual_exit": null
-        },
-        {
-          "id": "bc5d532ab4",
-          "asset": "bitcoin",
-          "asset_label": "Bitcoin (BTC/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 57278.0,
-          "take_profit": 56704.0,
-          "stop_loss": 57661.0,
-          "risk_reward": 1.5,
-          "confidence": "fort",
-          "score": 6.29,
-          "criteria": [
-            "adx",
-            "macd",
-            "pdhl",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "volume"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.7287,
-          "pnl_gross_pct": -0.6687,
-          "duration_minutes": 3,
-          "close_price": 57661.0,
-          "created_at": "2026-11-21T08:36:03Z",
-          "closed_at": "2026-11-21T08:40:00Z",
-          "created_local": "21/11 09:36",
-          "expires_at": "2026-11-21T09:36:03Z",
-          "rationale": "Vente : tendance forte (ADX), MACD en expansion, cassure des extrêmes de la veille, RSI en momentum, tendance 15 min, tendance 1 h, volume anormal. Range moyen sur 1 h ≈ 957.3 (1.67 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 77%.",
-          "news_context": "actualité à surveiller (score 1) : Iran war sees tanker hit near Hormuz as Saudi Arabia intercepts Houthi missiles",
           "manual_exit": null
         }
       ]
@@ -3098,15 +3103,15 @@
       "label": "Tendance 1 h",
       "weight": 1.0,
       "stats": {
-        "n": 2000,
+        "n": 2001,
         "tp": 596,
-        "sl": 1050,
+        "sl": 1051,
         "expired": 354,
-        "win_rate": 0.362089914945322,
+        "win_rate": 0.3618700667880996,
         "neutral_win_rate": 0.3661,
-        "edge": -0.004,
-        "pnl_pct": -20.474,
-        "avg_pnl_pct": -0.0102
+        "edge": -0.0042,
+        "pnl_pct": -21.0778,
+        "avg_pnl_pct": -0.0105
       },
       "by_source": {
         "bot": {
@@ -3143,18 +3148,55 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 1812,
+          "n": 1813,
           "tp": 538,
-          "sl": 955,
+          "sl": 956,
           "expired": 319,
-          "win_rate": 0.3603482920294709,
+          "win_rate": 0.36010709504685406,
           "neutral_win_rate": 0.3648,
-          "edge": -0.0045,
-          "pnl_pct": -11.4734,
-          "avg_pnl_pct": -0.0063
+          "edge": -0.0047,
+          "pnl_pct": -12.0772,
+          "avg_pnl_pct": -0.0067
         }
       },
       "last_trades": [
+        {
+          "id": "ab16557401",
+          "asset": "ethereum",
+          "asset_label": "Ethereum (ETH/USD)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 1647.7,
+          "take_profit": 1635.0,
+          "stop_loss": 1656.2,
+          "risk_reward": 1.49,
+          "confidence": "fort",
+          "score": 7.19,
+          "criteria": [
+            "adx",
+            "corr",
+            "level",
+            "macd",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "volume",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.6038,
+          "pnl_gross_pct": -0.5238,
+          "duration_minutes": 0,
+          "close_price": 1656.33,
+          "created_at": "2026-11-22T05:21:25Z",
+          "closed_at": "2026-11-22T05:22:00Z",
+          "created_local": "22/11 06:21",
+          "expires_at": "2026-11-22T06:21:25Z",
+          "rationale": "Vente : tendance forte (ADX), marché meneur favorable, niveau clé favorable, MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, volume anormal, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 21.09 (1.28 %), TP = 60 % du range, SL = 41 % du range, probabilité de résolution sous 1 h ≈ 46%.",
+          "news_context": "actualité calme sur les 2 dernières heures",
+          "manual_exit": null
+        },
         {
           "id": "445cd7e029",
           "asset": "bitcoin",
@@ -3394,41 +3436,6 @@
           "expires_at": "2026-11-21T12:35:59Z",
           "rationale": "Achat : tendance forte (ADX), marché meneur favorable, tendance 15 min, tendance 1 h, tendance 5 min, volume anormal, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 32.64 (1.97 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 41%.",
           "news_context": "actualité calme sur les 2 dernières heures",
-          "manual_exit": null
-        },
-        {
-          "id": "bc5d532ab4",
-          "asset": "bitcoin",
-          "asset_label": "Bitcoin (BTC/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 57278.0,
-          "take_profit": 56704.0,
-          "stop_loss": 57661.0,
-          "risk_reward": 1.5,
-          "confidence": "fort",
-          "score": 6.29,
-          "criteria": [
-            "adx",
-            "macd",
-            "pdhl",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "volume"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.7287,
-          "pnl_gross_pct": -0.6687,
-          "duration_minutes": 3,
-          "close_price": 57661.0,
-          "created_at": "2026-11-21T08:36:03Z",
-          "closed_at": "2026-11-21T08:40:00Z",
-          "created_local": "21/11 09:36",
-          "expires_at": "2026-11-21T09:36:03Z",
-          "rationale": "Vente : tendance forte (ADX), MACD en expansion, cassure des extrêmes de la veille, RSI en momentum, tendance 15 min, tendance 1 h, volume anormal. Range moyen sur 1 h ≈ 957.3 (1.67 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 77%.",
-          "news_context": "actualité à surveiller (score 1) : Iran war sees tanker hit near Hormuz as Saudi Arabia intercepts Houthi missiles",
           "manual_exit": null
         }
       ]
@@ -3438,15 +3445,15 @@
       "label": "Force de tendance (ADX)",
       "weight": 1.0,
       "stats": {
-        "n": 2026,
+        "n": 2027,
         "tp": 604,
-        "sl": 1062,
+        "sl": 1063,
         "expired": 360,
-        "win_rate": 0.3625450180072029,
+        "win_rate": 0.3623275344931014,
         "neutral_win_rate": 0.3663,
-        "edge": -0.0038,
-        "pnl_pct": -22.2942,
-        "avg_pnl_pct": -0.011
+        "edge": -0.004,
+        "pnl_pct": -22.898,
+        "avg_pnl_pct": -0.0113
       },
       "by_source": {
         "bot": {
@@ -3483,18 +3490,55 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 1838,
+          "n": 1839,
           "tp": 546,
-          "sl": 967,
+          "sl": 968,
           "expired": 325,
-          "win_rate": 0.3608724388631857,
+          "win_rate": 0.3606340819022457,
           "neutral_win_rate": 0.365,
-          "edge": -0.0041,
-          "pnl_pct": -13.2936,
-          "avg_pnl_pct": -0.0072
+          "edge": -0.0044,
+          "pnl_pct": -13.8974,
+          "avg_pnl_pct": -0.0076
         }
       },
       "last_trades": [
+        {
+          "id": "ab16557401",
+          "asset": "ethereum",
+          "asset_label": "Ethereum (ETH/USD)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 1647.7,
+          "take_profit": 1635.0,
+          "stop_loss": 1656.2,
+          "risk_reward": 1.49,
+          "confidence": "fort",
+          "score": 7.19,
+          "criteria": [
+            "adx",
+            "corr",
+            "level",
+            "macd",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "volume",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.6038,
+          "pnl_gross_pct": -0.5238,
+          "duration_minutes": 0,
+          "close_price": 1656.33,
+          "created_at": "2026-11-22T05:21:25Z",
+          "closed_at": "2026-11-22T05:22:00Z",
+          "created_local": "22/11 06:21",
+          "expires_at": "2026-11-22T06:21:25Z",
+          "rationale": "Vente : tendance forte (ADX), marché meneur favorable, niveau clé favorable, MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, volume anormal, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 21.09 (1.28 %), TP = 60 % du range, SL = 41 % du range, probabilité de résolution sous 1 h ≈ 46%.",
+          "news_context": "actualité calme sur les 2 dernières heures",
+          "manual_exit": null
+        },
         {
           "id": "445cd7e029",
           "asset": "bitcoin",
@@ -3735,41 +3779,6 @@
           "rationale": "Achat : tendance forte (ADX), marché meneur favorable, tendance 15 min, tendance 1 h, tendance 5 min, volume anormal, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 32.64 (1.97 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 41%.",
           "news_context": "actualité calme sur les 2 dernières heures",
           "manual_exit": null
-        },
-        {
-          "id": "bc5d532ab4",
-          "asset": "bitcoin",
-          "asset_label": "Bitcoin (BTC/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 57278.0,
-          "take_profit": 56704.0,
-          "stop_loss": 57661.0,
-          "risk_reward": 1.5,
-          "confidence": "fort",
-          "score": 6.29,
-          "criteria": [
-            "adx",
-            "macd",
-            "pdhl",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "volume"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.7287,
-          "pnl_gross_pct": -0.6687,
-          "duration_minutes": 3,
-          "close_price": 57661.0,
-          "created_at": "2026-11-21T08:36:03Z",
-          "closed_at": "2026-11-21T08:40:00Z",
-          "created_local": "21/11 09:36",
-          "expires_at": "2026-11-21T09:36:03Z",
-          "rationale": "Vente : tendance forte (ADX), MACD en expansion, cassure des extrêmes de la veille, RSI en momentum, tendance 15 min, tendance 1 h, volume anormal. Range moyen sur 1 h ≈ 957.3 (1.67 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 77%.",
-          "news_context": "actualité à surveiller (score 1) : Iran war sees tanker hit near Hormuz as Saudi Arabia intercepts Houthi missiles",
-          "manual_exit": null
         }
       ]
     },
@@ -3778,15 +3787,15 @@
       "label": "VWAP",
       "weight": 0.75,
       "stats": {
-        "n": 1983,
+        "n": 1984,
         "tp": 596,
-        "sl": 1039,
+        "sl": 1040,
         "expired": 348,
-        "win_rate": 0.36452599388379203,
+        "win_rate": 0.3643031784841076,
         "neutral_win_rate": 0.3654,
-        "edge": -0.0009,
-        "pnl_pct": -17.7571,
-        "avg_pnl_pct": -0.009
+        "edge": -0.0011,
+        "pnl_pct": -18.3609,
+        "avg_pnl_pct": -0.0093
       },
       "by_source": {
         "bot": {
@@ -3823,18 +3832,55 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 1797,
+          "n": 1798,
           "tp": 538,
-          "sl": 946,
+          "sl": 947,
           "expired": 313,
-          "win_rate": 0.36253369272237196,
+          "win_rate": 0.3622895622895623,
           "neutral_win_rate": 0.364,
-          "edge": -0.0015,
-          "pnl_pct": -9.3729,
-          "avg_pnl_pct": -0.0052
+          "edge": -0.0017,
+          "pnl_pct": -9.9767,
+          "avg_pnl_pct": -0.0055
         }
       },
       "last_trades": [
+        {
+          "id": "ab16557401",
+          "asset": "ethereum",
+          "asset_label": "Ethereum (ETH/USD)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 1647.7,
+          "take_profit": 1635.0,
+          "stop_loss": 1656.2,
+          "risk_reward": 1.49,
+          "confidence": "fort",
+          "score": 7.19,
+          "criteria": [
+            "adx",
+            "corr",
+            "level",
+            "macd",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "volume",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.6038,
+          "pnl_gross_pct": -0.5238,
+          "duration_minutes": 0,
+          "close_price": 1656.33,
+          "created_at": "2026-11-22T05:21:25Z",
+          "closed_at": "2026-11-22T05:22:00Z",
+          "created_local": "22/11 06:21",
+          "expires_at": "2026-11-22T06:21:25Z",
+          "rationale": "Vente : tendance forte (ADX), marché meneur favorable, niveau clé favorable, MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, volume anormal, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 21.09 (1.28 %), TP = 60 % du range, SL = 41 % du range, probabilité de résolution sous 1 h ≈ 46%.",
+          "news_context": "actualité calme sur les 2 dernières heures",
+          "manual_exit": null
+        },
         {
           "id": "445cd7e029",
           "asset": "bitcoin",
@@ -4073,40 +4119,6 @@
           "created_local": "21/11 12:35",
           "expires_at": "2026-11-21T12:35:59Z",
           "rationale": "Achat : tendance forte (ADX), marché meneur favorable, tendance 15 min, tendance 1 h, tendance 5 min, volume anormal, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 32.64 (1.97 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 41%.",
-          "news_context": "actualité calme sur les 2 dernières heures",
-          "manual_exit": null
-        },
-        {
-          "id": "397ad54af7",
-          "asset": "bitcoin",
-          "asset_label": "Bitcoin (BTC/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 55819.0,
-          "take_profit": 55532.0,
-          "stop_loss": 56058.0,
-          "risk_reward": 1.2,
-          "confidence": "fort",
-          "score": 5.79,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.4882,
-          "pnl_gross_pct": -0.4282,
-          "duration_minutes": 1,
-          "close_price": 56058.0,
-          "created_at": "2026-11-21T06:26:08Z",
-          "closed_at": "2026-11-21T06:28:00Z",
-          "created_local": "21/11 07:26",
-          "expires_at": "2026-11-21T07:26:08Z",
-          "rationale": "Vente : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 844.8 (1.51 %), TP = 34 % du range, SL = 28 % du range, probabilité de résolution sous 1 h ≈ 99%.",
           "news_context": "actualité calme sur les 2 dernières heures",
           "manual_exit": null
         }
@@ -4455,15 +4467,15 @@
       "label": "MACD",
       "weight": 1.0,
       "stats": {
-        "n": 526,
+        "n": 527,
         "tp": 140,
-        "sl": 290,
+        "sl": 291,
         "expired": 96,
-        "win_rate": 0.32558139534883723,
+        "win_rate": 0.3248259860788863,
         "neutral_win_rate": 0.3695,
-        "edge": -0.0439,
-        "pnl_pct": -7.5725,
-        "avg_pnl_pct": -0.0144
+        "edge": -0.0447,
+        "pnl_pct": -8.1763,
+        "avg_pnl_pct": -0.0155
       },
       "by_source": {
         "bot": {
@@ -4500,18 +4512,55 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 471,
+          "n": 472,
           "tp": 126,
-          "sl": 261,
+          "sl": 262,
           "expired": 84,
-          "win_rate": 0.32558139534883723,
-          "neutral_win_rate": 0.3678,
-          "edge": -0.0422,
-          "pnl_pct": -5.1841,
-          "avg_pnl_pct": -0.011
+          "win_rate": 0.3247422680412371,
+          "neutral_win_rate": 0.3679,
+          "edge": -0.0432,
+          "pnl_pct": -5.7879,
+          "avg_pnl_pct": -0.0123
         }
       },
       "last_trades": [
+        {
+          "id": "ab16557401",
+          "asset": "ethereum",
+          "asset_label": "Ethereum (ETH/USD)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 1647.7,
+          "take_profit": 1635.0,
+          "stop_loss": 1656.2,
+          "risk_reward": 1.49,
+          "confidence": "fort",
+          "score": 7.19,
+          "criteria": [
+            "adx",
+            "corr",
+            "level",
+            "macd",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "volume",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.6038,
+          "pnl_gross_pct": -0.5238,
+          "duration_minutes": 0,
+          "close_price": 1656.33,
+          "created_at": "2026-11-22T05:21:25Z",
+          "closed_at": "2026-11-22T05:22:00Z",
+          "created_local": "22/11 06:21",
+          "expires_at": "2026-11-22T06:21:25Z",
+          "rationale": "Vente : tendance forte (ADX), marché meneur favorable, niveau clé favorable, MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, volume anormal, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 21.09 (1.28 %), TP = 60 % du range, SL = 41 % du range, probabilité de résolution sous 1 h ≈ 46%.",
+          "news_context": "actualité calme sur les 2 dernières heures",
+          "manual_exit": null
+        },
         {
           "id": "6c6d775653",
           "asset": "ethereum",
@@ -4757,41 +4806,6 @@
           "rationale": "Vente : tendance forte (ADX), marché meneur favorable, MACD en expansion, RSI en momentum, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 350.08 (1.36 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 80%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
           "news_context": "actualité à surveiller (score 2) : Bessent advocates lower Fed rate hike, cites energy shock",
           "manual_exit": null
-        },
-        {
-          "id": "180f35b3fa",
-          "asset": "nasdaq",
-          "asset_label": "Nasdaq 100 (NQ)",
-          "direction": "short",
-          "horizon": "24h",
-          "entry": 25765.75,
-          "take_profit": 25137.0,
-          "stop_loss": 25975.5,
-          "risk_reward": 3.0,
-          "confidence": "fort",
-          "score": 6.75,
-          "criteria": [
-            "adx",
-            "macd",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "tp",
-          "pnl_pct": 2.4303,
-          "pnl_gross_pct": 2.4403,
-          "duration_minutes": 224,
-          "close_price": 25137.0,
-          "created_at": "2026-11-20T16:46:16Z",
-          "closed_at": "2026-11-20T20:31:00Z",
-          "created_local": "20/11 17:46",
-          "expires_at": "2026-11-21T16:46:16Z",
-          "rationale": "Vente : tendance forte (ADX), MACD en expansion, RSI en momentum, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 349.06 (1.35 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 79%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
-          "news_context": "actualité à surveiller (score 2) : Bessent advocates lower Fed rate hike, cites energy shock",
-          "manual_exit": null
         }
       ]
     },
@@ -4800,15 +4814,15 @@
       "label": "Niveau clé",
       "weight": 1.0,
       "stats": {
-        "n": 172,
+        "n": 173,
         "tp": 57,
-        "sl": 74,
+        "sl": 75,
         "expired": 41,
-        "win_rate": 0.4351145038167939,
-        "neutral_win_rate": 0.3769,
-        "edge": 0.0582,
-        "pnl_pct": 2.496,
-        "avg_pnl_pct": 0.0145
+        "win_rate": 0.4318181818181818,
+        "neutral_win_rate": 0.3771,
+        "edge": 0.0547,
+        "pnl_pct": 1.8922,
+        "avg_pnl_pct": 0.0109
       },
       "by_source": {
         "bot": {
@@ -4845,18 +4859,55 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 152,
+          "n": 153,
           "tp": 53,
-          "sl": 62,
+          "sl": 63,
           "expired": 37,
-          "win_rate": 0.4608695652173913,
-          "neutral_win_rate": 0.3751,
-          "edge": 0.0858,
-          "pnl_pct": 3.6818,
-          "avg_pnl_pct": 0.0242
+          "win_rate": 0.45689655172413796,
+          "neutral_win_rate": 0.3753,
+          "edge": 0.0816,
+          "pnl_pct": 3.078,
+          "avg_pnl_pct": 0.0201
         }
       },
       "last_trades": [
+        {
+          "id": "ab16557401",
+          "asset": "ethereum",
+          "asset_label": "Ethereum (ETH/USD)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 1647.7,
+          "take_profit": 1635.0,
+          "stop_loss": 1656.2,
+          "risk_reward": 1.49,
+          "confidence": "fort",
+          "score": 7.19,
+          "criteria": [
+            "adx",
+            "corr",
+            "level",
+            "macd",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "volume",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.6038,
+          "pnl_gross_pct": -0.5238,
+          "duration_minutes": 0,
+          "close_price": 1656.33,
+          "created_at": "2026-11-22T05:21:25Z",
+          "closed_at": "2026-11-22T05:22:00Z",
+          "created_local": "22/11 06:21",
+          "expires_at": "2026-11-22T06:21:25Z",
+          "rationale": "Vente : tendance forte (ADX), marché meneur favorable, niveau clé favorable, MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, volume anormal, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 21.09 (1.28 %), TP = 60 % du range, SL = 41 % du range, probabilité de résolution sous 1 h ≈ 46%.",
+          "news_context": "actualité calme sur les 2 dernières heures",
+          "manual_exit": null
+        },
         {
           "id": "70fb29477a",
           "asset": "ethereum",
@@ -5091,39 +5142,6 @@
           "rationale": "Vente : tendance forte (ADX), niveau clé favorable, MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, volume anormal. Range moyen sur 1 h ≈ 854.0 (1.33 %), TP = 60 % du range, SL = 42 % du range, probabilité de résolution sous 1 h ≈ 81%.",
           "news_context": "actualité calme sur les 2 dernières heures",
           "manual_exit": null
-        },
-        {
-          "id": "5e1ddf4154",
-          "asset": "bitcoin",
-          "asset_label": "Bitcoin (BTC/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 67352.0,
-          "take_profit": 66984.0,
-          "stop_loss": 67597.0,
-          "risk_reward": 1.5,
-          "confidence": "fort",
-          "score": 5.08,
-          "criteria": [
-            "adx",
-            "level",
-            "pdhl",
-            "trend_15m",
-            "trend_1h"
-          ],
-          "source": "shadow",
-          "status": "expired",
-          "pnl_pct": 0.0263,
-          "pnl_gross_pct": 0.0863,
-          "duration_minutes": 64,
-          "close_price": 67293.89,
-          "created_at": "2026-11-14T09:51:11Z",
-          "closed_at": "2026-11-14T10:55:52Z",
-          "created_local": "14/11 10:51",
-          "expires_at": "2026-11-14T10:51:11Z",
-          "rationale": "Vente : tendance forte (ADX), niveau clé favorable, cassure des extrêmes de la veille, tendance 15 min, tendance 1 h. Range moyen sur 1 h ≈ 613.6 (0.91 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 50%.",
-          "news_context": "actualité à surveiller (score 3) : New Inflation Data Offers Terrible News for President Donald Trump's Economy and the AI-Driven Bull Market | China, U.S. discuss tariff cuts ahead of Trump-Xi meeting next week",
-          "manual_exit": null
         }
       ]
     },
@@ -5132,15 +5150,15 @@
       "label": "Volume anormal",
       "weight": 0.75,
       "stats": {
-        "n": 50,
+        "n": 51,
         "tp": 12,
-        "sl": 32,
+        "sl": 33,
         "expired": 6,
-        "win_rate": 0.2727272727272727,
-        "neutral_win_rate": 0.3736,
-        "edge": -0.1009,
-        "pnl_pct": -4.896,
-        "avg_pnl_pct": -0.0979
+        "win_rate": 0.26666666666666666,
+        "neutral_win_rate": 0.3741,
+        "edge": -0.1074,
+        "pnl_pct": -5.4998,
+        "avg_pnl_pct": -0.1078
       },
       "by_source": {
         "bot": {
@@ -5177,18 +5195,55 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 44,
+          "n": 45,
           "tp": 10,
-          "sl": 29,
+          "sl": 30,
           "expired": 5,
-          "win_rate": 0.2564102564102564,
-          "neutral_win_rate": 0.3691,
-          "edge": -0.1127,
-          "pnl_pct": -4.211,
-          "avg_pnl_pct": -0.0957
+          "win_rate": 0.25,
+          "neutral_win_rate": 0.3698,
+          "edge": -0.1198,
+          "pnl_pct": -4.8148,
+          "avg_pnl_pct": -0.107
         }
       },
       "last_trades": [
+        {
+          "id": "ab16557401",
+          "asset": "ethereum",
+          "asset_label": "Ethereum (ETH/USD)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 1647.7,
+          "take_profit": 1635.0,
+          "stop_loss": 1656.2,
+          "risk_reward": 1.49,
+          "confidence": "fort",
+          "score": 7.19,
+          "criteria": [
+            "adx",
+            "corr",
+            "level",
+            "macd",
+            "trend_15m",
+            "trend_1h",
+            "trend_5m",
+            "volume",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.6038,
+          "pnl_gross_pct": -0.5238,
+          "duration_minutes": 0,
+          "close_price": 1656.33,
+          "created_at": "2026-11-22T05:21:25Z",
+          "closed_at": "2026-11-22T05:22:00Z",
+          "created_local": "22/11 06:21",
+          "expires_at": "2026-11-22T06:21:25Z",
+          "rationale": "Vente : tendance forte (ADX), marché meneur favorable, niveau clé favorable, MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, volume anormal, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 21.09 (1.28 %), TP = 60 % du range, SL = 41 % du range, probabilité de résolution sous 1 h ≈ 46%.",
+          "news_context": "actualité calme sur les 2 dernières heures",
+          "manual_exit": null
+        },
         {
           "id": "7cddcee59c",
           "asset": "ethereum",
@@ -5434,85 +5489,11 @@
           "rationale": "Vente : tendance forte (ADX), marché meneur favorable, MACD en expansion, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, volume anormal, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 20.61 (1.20 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 90%.",
           "news_context": "actualité calme sur les 2 dernières heures",
           "manual_exit": null
-        },
-        {
-          "id": "bcc98e8190",
-          "asset": "ethereum",
-          "asset_label": "Ethereum (ETH/USD)",
-          "direction": "short",
-          "horizon": "1h",
-          "entry": 1730.0,
-          "take_profit": 1717.9,
-          "stop_loss": 1738.1,
-          "risk_reward": 1.49,
-          "confidence": "fort",
-          "score": 6.92,
-          "criteria": [
-            "adx",
-            "pdhl",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "volume",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.5482,
-          "pnl_gross_pct": -0.4682,
-          "duration_minutes": 3,
-          "close_price": 1738.1,
-          "created_at": "2026-11-20T02:11:05Z",
-          "closed_at": "2026-11-20T02:15:00Z",
-          "created_local": "20/11 03:11",
-          "expires_at": "2026-11-20T03:11:05Z",
-          "rationale": "Vente : tendance forte (ADX), cassure des extrêmes de la veille, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, volume anormal, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 20.19 (1.17 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 81%.",
-          "news_context": "actualité à surveiller (score 2) : I’m terrified of a market crash. Should I put $400,000 of my $1 million retirement savings into an annuity? | Analysis-BOJ’s ambiguity on rate hike path could tempt yen bears",
-          "manual_exit": null
         }
       ]
     }
   ],
-  "open_signals": [
-    {
-      "id": "ab16557401",
-      "asset": "ethereum",
-      "asset_label": "Ethereum (ETH/USD)",
-      "direction": "short",
-      "horizon": "1h",
-      "entry": 1647.7,
-      "take_profit": 1635.0,
-      "stop_loss": 1656.2,
-      "risk_reward": 1.49,
-      "confidence": "fort",
-      "score": 7.19,
-      "criteria": [
-        "adx",
-        "corr",
-        "level",
-        "macd",
-        "trend_15m",
-        "trend_1h",
-        "trend_5m",
-        "volume",
-        "vwap"
-      ],
-      "source": "shadow",
-      "status": "open",
-      "pnl_pct": null,
-      "pnl_gross_pct": null,
-      "duration_minutes": null,
-      "close_price": null,
-      "created_at": "2026-11-22T05:21:25Z",
-      "closed_at": null,
-      "created_local": "22/11 06:21",
-      "expires_at": "2026-11-22T06:21:25Z",
-      "rationale": "Vente : tendance forte (ADX), marché meneur favorable, niveau clé favorable, MACD en expansion, tendance 15 min, tendance 1 h, tendance 5 min, volume anormal, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 21.09 (1.28 %), TP = 60 % du range, SL = 41 % du range, probabilité de résolution sous 1 h ≈ 46%.",
-      "news_context": "actualité calme sur les 2 dernières heures",
-      "manual_exit": null
-    }
-  ],
+  "open_signals": [],
   "recent_trades": [
     {
       "id": "8e4e77a82c",
@@ -7127,8 +7108,8 @@
       "tranche 12h UTC : -0,42 R sur 69 trades éq. → évitée",
       "tranche 19h UTC : -0,30 R sur 89 trades éq. → évitée",
       "bitcoin, macd : -0,50 R contre -0,02 R en global sur 54 trades éq. → poids ×0,50 sur cet actif",
-      "ethereum, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,21 R contre +0,04 R en global sur 158 trades éq. → poids ×0,80 sur cet actif",
-      "ethereum, vwap : -0,18 R contre +0,05 R en global sur 100 trades éq. → poids ×0,96 sur cet actif",
+      "ethereum, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,21 R contre +0,04 R en global sur 160 trades éq. → poids ×0,79 sur cet actif",
+      "ethereum, vwap : -0,19 R contre +0,05 R en global sur 101 trades éq. → poids ×0,94 sur cet actif",
       "ethereum, rsi : -0,27 R contre +0,07 R en global sur 114 trades éq. → poids ×0,63 sur cet actif",
       "nasdaq, tendance (trend_5m, trend_15m, trend_1h, adx) : +0,16 R contre +0,04 R en global sur 728 trades éq. → poids ×1,00 sur cet actif",
       "nasdaq, rsi : +0,25 R contre +0,07 R en global sur 580 trades éq. → poids ×1,09 sur cet actif",
@@ -7146,10 +7127,10 @@
       12,
       19
     ],
-    "sample": 2879,
+    "sample": 2880,
     "sample_by_source": {
       "bot": 188,
-      "shadow": 1838,
+      "shadow": 1839,
       "manual": 1,
       "backtest": 852
     },
@@ -7184,11 +7165,11 @@
         "corr": 0.5
       },
       "ethereum": {
-        "trend_5m": 0.804,
-        "trend_15m": 0.804,
-        "trend_1h": 0.804,
-        "adx": 0.804,
-        "vwap": 0.722,
+        "trend_5m": 0.79,
+        "trend_15m": 0.79,
+        "trend_1h": 0.79,
+        "adx": 0.79,
+        "vwap": 0.706,
         "rsi": 0.653,
         "macd": 1.0,
         "level": 1.0,
@@ -7226,10 +7207,10 @@
         "corr": 0.5
       },
       "nasdaq": {
-        "trend_5m": 1.003,
-        "trend_15m": 1.003,
-        "trend_1h": 1.003,
-        "adx": 1.003,
+        "trend_5m": 1.004,
+        "trend_15m": 1.004,
+        "trend_1h": 1.004,
+        "adx": 1.004,
         "vwap": 0.75,
         "rsi": 1.125,
         "macd": 1.0,
@@ -7276,9 +7257,9 @@
           "trend_1h",
           "adx"
         ],
-        "n": 2878,
-        "n_eff": 2504.5,
-        "mean_r": 0.0374,
+        "n": 2879,
+        "n_eff": 2505.5,
+        "mean_r": 0.037,
         "margin_r": 0.0516,
         "multiplier": 1.0
       },
@@ -7286,10 +7267,10 @@
         "members": [
           "vwap"
         ],
-        "n": 2661,
-        "n_eff": 2348.3,
-        "mean_r": 0.0459,
-        "margin_r": 0.0538,
+        "n": 2662,
+        "n_eff": 2349.3,
+        "mean_r": 0.0455,
+        "margin_r": 0.0537,
         "multiplier": 1.0
       },
       "rsi": {
@@ -7306,30 +7287,30 @@
         "members": [
           "macd"
         ],
-        "n": 800,
-        "n_eff": 682.4,
-        "mean_r": -0.0173,
-        "margin_r": 0.0983,
+        "n": 801,
+        "n_eff": 683.4,
+        "mean_r": -0.0188,
+        "margin_r": 0.0982,
         "multiplier": 1.0
       },
       "level": {
         "members": [
           "level"
         ],
-        "n": 290,
-        "n_eff": 241.1,
-        "mean_r": 0.0928,
-        "margin_r": 0.1644,
+        "n": 291,
+        "n_eff": 242.1,
+        "mean_r": 0.0881,
+        "margin_r": 0.164,
         "multiplier": 1.0
       },
       "volume": {
         "members": [
           "volume"
         ],
-        "n": 129,
-        "n_eff": 101.6,
-        "mean_r": -0.1364,
-        "margin_r": 0.2459,
+        "n": 130,
+        "n_eff": 102.5,
+        "mean_r": -0.1464,
+        "margin_r": 0.244,
         "multiplier": 1.0
       },
       "orb": {
@@ -7356,10 +7337,10 @@
         "members": [
           "corr"
         ],
-        "n": 198,
-        "n_eff": 191.0,
-        "mean_r": 0.0662,
-        "margin_r": 0.2055,
+        "n": 199,
+        "n_eff": 192.0,
+        "mean_r": 0.0611,
+        "margin_r": 0.2048,
         "multiplier": 1.0
       }
     },
@@ -7370,9 +7351,9 @@
         "margin_r": 0.1833
       },
       "fantômes": {
-        "n": 1838,
-        "mean_r": 0.0545,
-        "margin_r": 0.0619
+        "n": 1839,
+        "mean_r": 0.054,
+        "margin_r": 0.0618
       },
       "backtest": {
         "n": 852,
@@ -7439,11 +7420,11 @@
       },
       "essai_ethereum": {
         "label": "nouvel actif : Ethereum (ETH/USD)",
-        "n": 87,
-        "mean_net_r": -0.3983,
-        "lower_r": -0.7185,
+        "n": 88,
+        "mean_net_r": -0.4071,
+        "lower_r": -0.7245,
         "promoted": false,
-        "missing": 13
+        "missing": 12
       },
       "horizon_3h_gold": {
         "label": "horizon ~3 h sur Or (XAU/USD)",
@@ -7476,9 +7457,9 @@
     },
     "variants_z": 2.75,
     "promoted_variants": [],
-    "updated_at": "2026-11-22T05:11:18.410457+00:00",
+    "updated_at": "2026-11-22T05:25:59.778435+00:00",
     "context": {
-      "n": 2647,
+      "n": 2648,
       "features": {
         "adx": {
           "label": "force de tendance (ADX 15 min)",
@@ -7497,10 +7478,10 @@
               "label": "milieu (27 à 38)",
               "lo": 27.3,
               "hi": 38.01,
-              "n": 882,
-              "n_eff": 766.0,
-              "mean_r": 0.0803,
-              "margin_r": 0.1211,
+              "n": 883,
+              "n_eff": 767.0,
+              "mean_r": 0.0789,
+              "margin_r": 0.121,
               "avoid": false
             },
             {
@@ -7542,10 +7523,10 @@
               "label": "haut (≥ 66)",
               "lo": 66.09,
               "hi": 1000000000.0,
-              "n": 883,
-              "n_eff": 764.8,
-              "mean_r": 0.0192,
-              "margin_r": 0.1211,
+              "n": 884,
+              "n_eff": 765.8,
+              "mean_r": 0.0178,
+              "margin_r": 0.121,
               "avoid": false
             }
           ]
@@ -7566,21 +7547,21 @@
             {
               "label": "milieu (0,89 à 1,53)",
               "lo": 0.886,
-              "hi": 1.5314,
+              "hi": 1.529,
               "n": 831,
               "n_eff": 728.9,
-              "mean_r": 0.0125,
+              "mean_r": 0.009,
               "margin_r": 0.1246,
               "avoid": false
             },
             {
               "label": "haut (≥ 1,53)",
-              "lo": 1.5314,
+              "lo": 1.529,
               "hi": 1000000000.0,
-              "n": 831,
-              "n_eff": 741.6,
-              "mean_r": 0.1754,
-              "margin_r": 0.1303,
+              "n": 832,
+              "n_eff": 742.6,
+              "mean_r": 0.1772,
+              "margin_r": 0.1302,
               "avoid": false
             }
           ]
@@ -7602,10 +7583,10 @@
               "label": "milieu (0,23 à 0,53)",
               "lo": 0.2285,
               "hi": 0.5334,
-              "n": 882,
-              "n_eff": 771.4,
-              "mean_r": 0.0073,
-              "margin_r": 0.1223,
+              "n": 883,
+              "n_eff": 772.4,
+              "mean_r": 0.006,
+              "margin_r": 0.1222,
               "avoid": false
             },
             {
@@ -7627,10 +7608,10 @@
               "label": "bas (< 1,09)",
               "lo": -1000000000.0,
               "hi": 1.086,
-              "n": 881,
-              "n_eff": 789.8,
-              "mean_r": -0.1265,
-              "margin_r": 0.098,
+              "n": 882,
+              "n_eff": 790.8,
+              "mean_r": -0.1277,
+              "margin_r": 0.0979,
               "avoid": true
             },
             {
@@ -7661,21 +7642,21 @@
             {
               "label": "bas (< 0,97)",
               "lo": -1000000000.0,
-              "hi": 0.974,
-              "n": 776,
-              "n_eff": 701.5,
-              "mean_r": -0.0365,
+              "hi": 0.973,
+              "n": 775,
+              "n_eff": 701.1,
+              "mean_r": -0.0368,
               "margin_r": 0.1135,
               "avoid": false
             },
             {
               "label": "milieu (0,97 à 1,28)",
-              "lo": 0.974,
+              "lo": 0.973,
               "hi": 1.276,
-              "n": 776,
-              "n_eff": 664.8,
-              "mean_r": -0.0243,
-              "margin_r": 0.1215,
+              "n": 778,
+              "n_eff": 666.2,
+              "mean_r": -0.0256,
+              "margin_r": 0.1214,
               "avoid": false
             },
             {
@@ -7704,22 +7685,22 @@
               "avoid": false
             },
             {
-              "label": "milieu (0,41 à 0,69)",
+              "label": "milieu (0,41 à 0,70)",
               "lo": 0.414,
-              "hi": 0.6945,
-              "n": 884,
-              "n_eff": 800.7,
-              "mean_r": 0.0881,
-              "margin_r": 0.1135,
+              "hi": 0.6954,
+              "n": 885,
+              "n_eff": 801.4,
+              "mean_r": 0.0875,
+              "margin_r": 0.1134,
               "avoid": false
             },
             {
-              "label": "haut (≥ 0,69)",
-              "lo": 0.6945,
+              "label": "haut (≥ 0,70)",
+              "lo": 0.6954,
               "hi": 1000000000.0,
               "n": 883,
-              "n_eff": 759.7,
-              "mean_r": -0.1051,
+              "n_eff": 760.0,
+              "mean_r": -0.1059,
               "margin_r": 0.1177,
               "avoid": false
             }
@@ -7741,21 +7722,21 @@
             {
               "label": "milieu (0,08 à 0,12)",
               "lo": 0.0777,
-              "hi": 0.124,
-              "n": 881,
-              "n_eff": 777.2,
-              "mean_r": 0.12,
-              "margin_r": 0.1115,
+              "hi": 0.1241,
+              "n": 883,
+              "n_eff": 778.9,
+              "mean_r": 0.1212,
+              "margin_r": 0.1114,
               "avoid": false
             },
             {
               "label": "haut (≥ 0,12)",
-              "lo": 0.124,
+              "lo": 0.1241,
               "hi": 1000000000.0,
-              "n": 884,
-              "n_eff": 753.0,
-              "mean_r": -0.0499,
-              "margin_r": 0.1043,
+              "n": 883,
+              "n_eff": 752.3,
+              "mean_r": -0.053,
+              "margin_r": 0.1042,
               "avoid": false
             }
           ]
@@ -7767,9 +7748,9 @@
               "label": "plus de 30 min avant l'ouverture US",
               "lo": -1000000000.0,
               "hi": -30.0,
-              "n": 1037,
-              "n_eff": 926.2,
-              "mean_r": -0.0997,
+              "n": 1038,
+              "n_eff": 927.2,
+              "mean_r": -0.1008,
               "margin_r": 0.0938,
               "avoid": true
             },
@@ -7862,10 +7843,10 @@
               "label": "dimanche",
               "lo": 6,
               "hi": 7,
-              "n": 21,
-              "n_eff": 18.3,
-              "mean_r": -0.0418,
-              "margin_r": 0.6335,
+              "n": 22,
+              "n_eff": 19.3,
+              "mean_r": -0.0999,
+              "margin_r": 0.6127,
               "avoid": false
             }
           ]
@@ -7877,16 +7858,16 @@
           "lo": -1000000000.0,
           "hi": 1.086,
           "label": "volatilité du moment / moyenne 24 h : bas (< 1,09)",
-          "mean_r": -0.1265,
-          "n": 881
+          "mean_r": -0.1277,
+          "n": 882
         },
         {
           "feature": "us_open_min",
           "lo": -1000000000.0,
           "hi": -30.0,
           "label": "minutes depuis l'ouverture américaine : plus de 30 min avant l'ouverture US",
-          "mean_r": -0.0997,
-          "n": 1037
+          "mean_r": -0.1008,
+          "n": 1038
         },
         {
           "feature": "weekday",
@@ -7900,30 +7881,30 @@
     },
     "exits": {
       "réels et en ombre": {
-        "n": 1796,
-        "current_net_r": -0.039,
-        "mfe_median": 0.862,
+        "n": 1797,
+        "current_net_r": -0.0396,
+        "mfe_median": 0.86,
         "sl_reached": {
           "0.5": 359,
           "0.8": 216,
           "1.0": 151
         },
-        "n_sl": 950,
+        "n_sl": 951,
         "rules": {
           "0.5": {
-            "net_r": -0.0545,
+            "net_r": -0.0551,
             "diff_r": -0.0155,
-            "margin_r": 0.0385,
+            "margin_r": 0.0384,
             "better": false
           },
           "0.8": {
-            "net_r": -0.0577,
+            "net_r": -0.0583,
             "diff_r": -0.0187,
             "margin_r": 0.0311,
             "better": false
           },
           "1.0": {
-            "net_r": -0.0579,
+            "net_r": -0.0585,
             "diff_r": -0.0189,
             "margin_r": 0.0274,
             "better": false
@@ -8040,10 +8021,10 @@
     }
   },
   "state": {
-    "last_scan": "2026-11-22T05:21:25Z",
+    "last_scan": "2026-11-22T05:25:57Z",
     "last_scan_note": "0 signal(aux)",
     "last_summary": "2026-11-21T23:06:03Z",
-    "last_track": "2026-11-22T05:11:15Z",
+    "last_track": "2026-11-22T05:25:57Z",
     "last_summary_day": "2026-11-21",
     "pc_down": 1794622543
   },
