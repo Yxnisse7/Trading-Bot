@@ -1,6 +1,6 @@
 # Trading-Bot — rapport
 
-_Mis à jour le 23/11/2026 à 15:51 (Europe/Paris)._
+_Mis à jour le 23/11/2026 à 15:56 (Europe/Paris)._
 
 ## Vue d'ensemble
 
@@ -8,7 +8,7 @@ _Mis à jour le 23/11/2026 à 15:51 (Europe/Paris)._
 - Taux de réussite cumulé (TP / (TP+SL)) : **38%** — hasard attendu 38%, avantage **-0%**
 - P&L théorique cumulé, net des coûts estimés (somme des % par trade, sans levier) : **-9.16 %** (brut -4.91 %)
 - Signaux ouverts : **0**
-- Signaux fantômes (suivis en silence pour l'apprentissage) : **1865** clôturés, 4 ouverts, taux de réussite 36% (hasard attendu 37%)
+- Signaux fantômes (suivis en silence pour l'apprentissage) : **1866** clôturés, 4 ouverts, taux de réussite 36% (hasard attendu 37%)
 
 ## Statistiques
 
@@ -114,18 +114,18 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 
 | Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
 |---|---:|---:|---:|---:|---:|---:|
-| adx | 1865 | 555 | 982 | 328 | 36% | -0.010 % |
+| adx | 1866 | 555 | 983 | 328 | 36% | -0.010 % |
 | corr | 187 | 55 | 106 | 26 | 34% | +0.033 % |
 | level | 160 | 54 | 68 | 38 | 44% | +0.001 % |
-| macd | 484 | 130 | 269 | 85 | 33% | -0.016 % |
+| macd | 485 | 130 | 270 | 85 | 32% | -0.017 % |
 | orb | 116 | 42 | 46 | 28 | 48% | +0.131 % |
 | pdhl | 194 | 69 | 102 | 23 | 40% | +0.032 % |
 | rsi | 1414 | 442 | 737 | 235 | 37% | +0.008 % |
-| trend_15m | 1865 | 555 | 982 | 328 | 36% | -0.010 % |
-| trend_1h | 1839 | 547 | 970 | 322 | 36% | -0.009 % |
-| trend_5m | 1686 | 516 | 896 | 274 | 37% | -0.005 % |
+| trend_15m | 1866 | 555 | 983 | 328 | 36% | -0.010 % |
+| trend_1h | 1840 | 547 | 971 | 322 | 36% | -0.009 % |
+| trend_5m | 1687 | 516 | 897 | 274 | 37% | -0.005 % |
 | volume | 49 | 11 | 32 | 6 | 26% | -0.111 % |
-| vwap | 1822 | 545 | 961 | 316 | 36% | -0.008 % |
+| vwap | 1823 | 545 | 962 | 316 | 36% | -0.009 % |
 
 ### Fantômes par actif
 
@@ -134,7 +134,7 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 | bitcoin | 125 | 31 | 64 | 30 | 33% | -0.104 % |
 | ethereum | 98 | 23 | 59 | 16 | 28% | -0.205 % |
 | euro | 70 | 23 | 40 | 7 | 37% | -0.020 % |
-| gold | 647 | 213 | 279 | 155 | 43% | -0.001 % |
+| gold | 648 | 213 | 280 | 155 | 43% | -0.002 % |
 | nasdaq | 630 | 176 | 382 | 72 | 32% | +0.039 % |
 | oil | 156 | 47 | 78 | 31 | 38% | -0.040 % |
 | sp500 | 139 | 42 | 80 | 17 | 34% | -0.013 % |
@@ -196,8 +196,8 @@ Tranches horaires évitées (UTC) : [9, 10, 12, 19]
 Corrections par actif :
 
 - bitcoin : {'macd': 0.5, 'pdhl': 0.776}
-- ethereum : {'trend_5m': 0.828, 'trend_15m': 0.828, 'trend_1h': 0.828, 'adx': 0.828, 'vwap': 0.707, 'rsi': 0.66}
-- nasdaq : {'trend_5m': 1.007, 'trend_15m': 1.007, 'trend_1h': 1.007, 'adx': 1.007, 'rsi': 1.143, 'pdhl': 1.104}
+- ethereum : {'trend_5m': 0.829, 'trend_15m': 0.829, 'trend_1h': 0.829, 'adx': 0.829, 'vwap': 0.707, 'rsi': 0.66}
+- nasdaq : {'trend_5m': 1.008, 'trend_15m': 1.008, 'trend_1h': 1.008, 'adx': 1.008, 'rsi': 1.143, 'pdhl': 1.104}
 - oil : {'rsi': 0.997}
 
 | Variante testée en fantôme | Trades | Gain net moyen | Statut |
@@ -210,7 +210,7 @@ Corrections par actif :
 | nouvel actif : S&P 500 (ES) | 65 | +0.05 R | en test |
 | nouvel actif : Bitcoin (BTC/USD) | 103 | -0.42 R | en test |
 | nouvel actif : Ethereum (ETH/USD) | 92 | -0.41 R | en test |
-| horizon ~3 h sur Or (XAU/USD) | 71 | +0.13 R | en test |
+| horizon ~3 h sur Or (XAU/USD) | 72 | +0.12 R | en test |
 | nouvel actif : Pétrole WTI (CL) | 156 | -0.10 R | en test |
 | nouvel actif : Euro / dollar (6E) | 70 | -0.35 R | en test |
 
