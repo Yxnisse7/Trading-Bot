@@ -87,7 +87,7 @@
       "variant": "modele_arbres",
       "exc": {
         "mfe": 0.4348,
-        "mae": 0.0,
+        "mae": 0.0783,
         "armed": {
           "0.5": false,
           "0.8": false,
@@ -98,7 +98,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1795418760
+        "last_ts": 1795419060
       }
     }
   },
@@ -191,7 +191,7 @@
       "variant": "modele_arbres",
       "exc": {
         "mfe": 0.0273,
-        "mae": 0.4,
+        "mae": 0.5091,
         "armed": {
           "0.5": false,
           "0.8": false,
@@ -202,7 +202,7 @@
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1795418760
+        "last_ts": 1795419060
       }
     }
   },
@@ -295,7 +295,7 @@
       "variant": "modele_arbres",
       "exc": {
         "mfe": 0.0,
-        "mae": 0.3182,
+        "mae": 0.3818,
         "armed": {
           "0.5": false,
           "0.8": false,
@@ -391,6 +391,108 @@
       "filters": [
         "filtre_contexte",
         "sans_etirement_or",
+        "modele_arbres",
+        "bot_en_ombre"
+      ],
+      "filters_checked": true,
+      "variant": "modele_arbres",
+      "exc": {
+        "mfe": 0.0,
+        "mae": 0.1481,
+        "armed": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "be": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "last_ts": null
+      }
+    }
+  },
+  {
+    "id": "a138710ceb",
+    "asset": "gold",
+    "asset_label": "Or (XAU/USD)",
+    "direction": "long",
+    "entry": 3630.4,
+    "take_profit": 3646.7,
+    "stop_loss": 3618.4,
+    "risk_reward": 1.36,
+    "confidence": "fort",
+    "score": 5.79,
+    "criteria": [
+      "adx",
+      "rsi",
+      "trend_15m",
+      "trend_1h",
+      "trend_5m",
+      "vwap"
+    ],
+    "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 27.15 (0.75 %), TP = 60 % du range, SL = 44 % du range, probabilité de résolution sous 1 h ≈ 44%.",
+    "news_context": "actualité à surveiller (score 1) : EU and Indonesia sign trade deal to eliminate most tariffs",
+    "created_at": "2026-11-23T07:41:13Z",
+    "expires_at": "2026-11-23T08:41:13Z",
+    "status": "open",
+    "closed_at": null,
+    "close_price": null,
+    "pnl_pct": null,
+    "pnl_gross_pct": null,
+    "duration_minutes": null,
+    "hourly_range": 27.152174,
+    "source": "shadow",
+    "horizon": "1h",
+    "horizon_minutes": 60,
+    "meta": {
+      "tick": 0.1,
+      "details": {
+        "trend_5m": "EMA20 3624.34 / EMA50 3611.32 (5 min)",
+        "trend_15m": "EMA20 3609.74 / EMA50 3587.42",
+        "trend_1h": "prix vs EMA20 1 h 3587.07",
+        "adx": "ADX15 40.2 (+DI 32.6 / -DI 11.2)",
+        "vwap": "VWAP jour 3606.81",
+        "rsi": "RSI14 5 min 62.1",
+        "macd": "histogramme MACD 0.0887",
+        "level": "support 3620.60 / résistance 3693.80",
+        "volume": "z-score volume -1.64",
+        "pdhl": "veille : haut 3588.00 / bas 3566.30",
+        "activity": "activité de l'heure 0.90× la moyenne",
+        "corr": "DXY -0.03 % sur 1 h"
+      },
+      "support": 3620.60009765625,
+      "resistance": 3693.800048828125,
+      "atr_5m": 5.4964014717374905,
+      "atr_ratio": 0.6577164825151667,
+      "hourly_range_pct": 0.7479,
+      "adx_15m": 40.162199095319735,
+      "sigma_5m": 0.0010274711138878677,
+      "p_resolution": 0.43733333333333335,
+      "p_tp_neutral": 0.15533333333333332,
+      "activity_ratio": 0.903,
+      "base_minutes": 5,
+      "ctx": {
+        "adx": 40.16,
+        "rsi_dir": 62.15,
+        "vwap_ext": 0.8689,
+        "ema_ext": 0.223,
+        "atr_ratio": 0.658,
+        "activity": 0.903,
+        "range_pct": 0.7479,
+        "cost_r": 0.0605,
+        "us_open_min": -408.8,
+        "weekday": 0
+      },
+      "price_time": "2026-11-23T07:35:00Z",
+      "ctx_avoid": [
+        "volatilité du moment / moyenne 24 h : bas (< 1,09)",
+        "minutes depuis l'ouverture américaine : plus de 30 min avant l'ouverture US"
+      ],
+      "model_r": -0.0548,
+      "filters": [
+        "filtre_contexte",
         "modele_arbres",
         "bot_en_ombre"
       ],
