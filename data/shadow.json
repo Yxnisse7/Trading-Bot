@@ -82,19 +82,19 @@
       "price_time": "2026-11-23T14:15:00Z",
       "variant": "avant_ouverture",
       "exc": {
-        "mfe": 0.5277,
+        "mfe": 1.7735,
         "mae": 0.0,
         "armed": {
           "0.5": true,
-          "0.8": false,
-          "1.0": false
+          "0.8": true,
+          "1.0": true
         },
         "be": {
           "0.5": false,
           "0.8": false,
           "1.0": false
         },
-        "last_ts": 1795443960
+        "last_ts": 1795444260
       }
     }
   },
@@ -180,19 +180,19 @@
       "price_time": "2026-11-23T14:20:00Z",
       "variant": "avant_ouverture",
       "exc": {
-        "mfe": 0.0219,
-        "mae": 0.0115,
+        "mfe": 1.1024,
+        "mae": 0.2403,
         "armed": {
-          "0.5": false,
-          "0.8": false,
-          "1.0": false
+          "0.5": true,
+          "0.8": true,
+          "1.0": true
         },
         "be": {
-          "0.5": false,
-          "0.8": false,
-          "1.0": false
+          "0.5": true,
+          "0.8": true,
+          "1.0": true
         },
-        "last_ts": null
+        "last_ts": 1795444260
       }
     }
   },
@@ -284,7 +284,188 @@
         "vix_bond"
       ],
       "filters_checked": true,
+      "variant": "vix_bond",
+      "exc": {
+        "mfe": 0.0385,
+        "mae": 0.0,
+        "armed": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "be": {
+          "0.5": false,
+          "0.8": false,
+          "1.0": false
+        },
+        "last_ts": null
+      }
+    }
+  },
+  {
+    "id": "2e01dfc160",
+    "asset": "nasdaq",
+    "asset_label": "Nasdaq 100 (NQ)",
+    "direction": "long",
+    "entry": 26826.5,
+    "take_profit": 27775.0,
+    "stop_loss": 26510.5,
+    "risk_reward": 3.0,
+    "confidence": "fort",
+    "score": 6.31,
+    "criteria": [
+      "adx",
+      "corr",
+      "level",
+      "trend_15m",
+      "trend_1h",
+      "trend_5m",
+      "vwap"
+    ],
+    "rationale": "Achat : tendance forte (ADX), marché meneur favorable, niveau clé favorable, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 527.17 (1.97 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 86%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+    "news_context": "actualité à surveiller (score 2) : Stock Market Today: Dow, S&P 500, and Nasdaq Surge as Nvidia Leads a Major AI Rebound",
+    "created_at": "2026-11-23T14:41:14Z",
+    "expires_at": "2026-11-24T14:41:14Z",
+    "status": "open",
+    "closed_at": null,
+    "close_price": null,
+    "pnl_pct": null,
+    "pnl_gross_pct": null,
+    "duration_minutes": null,
+    "hourly_range": 527.166667,
+    "source": "shadow",
+    "horizon": "24h",
+    "horizon_minutes": 1440,
+    "meta": {
+      "tick": 0.25,
+      "details": {
+        "trend_5m": "EMA20 26426.06 / EMA50 26185.88 (5 min)",
+        "trend_15m": "EMA20 26232.92 / EMA50 26041.05",
+        "trend_1h": "prix vs EMA20 1 h 26074.71",
+        "adx": "ADX15 31.9 (+DI 55.3 / -DI 8.7)",
+        "vwap": "VWAP jour 26101.66",
+        "rsi": "RSI14 5 min 74.2",
+        "macd": "histogramme MACD 77.8686",
+        "level": "support 26674.25 / résistance 27321.75",
+        "volume": "z-score volume 0.27",
+        "pdhl": "veille : haut 25884.50 / bas 25462.00",
+        "activity": "activité de l'heure 1.69× la moyenne",
+        "corr": "VIX -3.4 % sur 15 min"
+      },
+      "support": 26674.25,
+      "resistance": 27321.75,
+      "atr_5m": 121.61854563908274,
+      "atr_ratio": 1.8075860360589489,
+      "hourly_range_pct": 1.9651,
+      "adx_15m": 31.85353068164401,
+      "sigma_5m": 0.00478775813932272,
+      "p_resolution": 0.859,
+      "p_tp_neutral": 0.3566666666666667,
+      "activity_ratio": 1.692,
+      "base_minutes": 5,
+      "ctx": {
+        "adx": 31.85,
+        "rsi_dir": 74.24,
+        "vwap_ext": 1.375,
+        "ema_ext": 0.7596,
+        "atr_ratio": 1.808,
+        "activity": 1.692,
+        "range_pct": 1.9651,
+        "cost_r": 0.0127,
+        "us_open_min": 11.2,
+        "weekday": 0
+      },
+      "exit_override": {
+        "stop_x": 1.5,
+        "target_x": 3.0,
+        "minutes": 1440,
+        "source": "essai 29"
+      },
+      "price_time": "2026-11-23T14:35:00Z",
+      "ctx_avoid": [
+        "taille du range (%) : haut (≥ 0,73)"
+      ],
+      "filters": [
+        "sans_ouverture_us",
+        "filtre_contexte",
+        "vix_bond"
+      ],
+      "filters_checked": true,
       "variant": "vix_bond"
+    }
+  },
+  {
+    "id": "09a2043c0d",
+    "asset": "gold",
+    "asset_label": "Or (XAU/USD)",
+    "direction": "long",
+    "entry": 3685.8,
+    "take_profit": 3715.4,
+    "stop_loss": 3666.1,
+    "risk_reward": 1.5,
+    "confidence": "fort",
+    "score": 5.75,
+    "criteria": [
+      "adx",
+      "macd",
+      "trend_15m",
+      "trend_1h",
+      "trend_5m",
+      "vwap"
+    ],
+    "rationale": "Achat : tendance forte (ADX), MACD en expansion, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 49.31 (1.34 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 61%.",
+    "news_context": "actualité calme sur les 2 dernières heures",
+    "created_at": "2026-11-23T14:41:14Z",
+    "expires_at": "2026-11-23T17:41:14Z",
+    "status": "open",
+    "closed_at": null,
+    "close_price": null,
+    "pnl_pct": null,
+    "pnl_gross_pct": null,
+    "duration_minutes": null,
+    "hourly_range": 49.307181,
+    "source": "shadow",
+    "horizon": "3h",
+    "horizon_minutes": 180,
+    "meta": {
+      "tick": 0.1,
+      "details": {
+        "trend_5m": "EMA20 3637.76 / EMA50 3618.48 (15 min)",
+        "trend_15m": "EMA20 3618.40 / EMA50 3610.66",
+        "trend_1h": "prix vs EMA20 1 h 3634.48",
+        "adx": "ADX15 34.2 (+DI 38.1 / -DI 10.8)",
+        "vwap": "VWAP jour 3622.16",
+        "rsi": "RSI14 5 min 76.6",
+        "macd": "histogramme MACD 7.1137",
+        "level": "support 3599.90 / résistance 3759.50",
+        "volume": "z-score volume -0.62",
+        "pdhl": "veille : haut 3588.00 / bas 3566.30",
+        "corr": "DXY +0.07 % sur 1 h, taux 10 ans +0.8 % sur 1 h"
+      },
+      "support": 3599.89990234375,
+      "resistance": 3759.5,
+      "atr_5m": 12.835727059301112,
+      "atr_ratio": 1.0516176479011061,
+      "hourly_range_pct": 1.3378,
+      "adx_15m": 34.21073285528579,
+      "sigma_5m": 0.0022010268095725293,
+      "p_resolution": 0.6143333333333333,
+      "p_tp_neutral": 0.22033333333333333,
+      "activity_ratio": null,
+      "base_minutes": 15,
+      "ctx": {
+        "adx": 34.21,
+        "rsi_dir": 76.6,
+        "vwap_ext": 1.2907,
+        "ema_ext": 0.9743,
+        "atr_ratio": 1.052,
+        "range_pct": 1.3378,
+        "cost_r": 0.0374,
+        "us_open_min": 11.2,
+        "weekday": 0
+      },
+      "price_time": "2026-11-23T14:35:00Z",
+      "variant": "horizon_3h_gold"
     }
   }
 ]
