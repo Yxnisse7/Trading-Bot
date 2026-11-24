@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-24T05:06:16.805208+01:00",
+  "updated_at": "2026-11-24T05:11:26.503874+01:00",
   "timezone": "Europe/Paris",
   "equity_curve": [
     {
@@ -2031,18 +2031,18 @@
       "avg_pnl_pct": -0.0485
     },
     "shadow": {
-      "n": 1919,
+      "n": 1920,
       "tp": 562,
-      "sl": 1019,
+      "sl": 1020,
       "expired": 338,
-      "win_rate": 0.35547122074636306,
+      "win_rate": 0.3552465233881163,
       "neutral_win_rate": 0.3658,
-      "edge": -0.0103,
-      "pnl_pct": -32.2959,
-      "avg_pnl_pct": -0.0168
+      "edge": -0.0106,
+      "pnl_pct": -32.8488,
+      "avg_pnl_pct": -0.0171
     },
     "open": 0,
-    "open_shadow": 46
+    "open_shadow": 45
   },
   "by_source": {
     "bot": {
@@ -2079,15 +2079,15 @@
       "avg_pnl_pct": 0.0
     },
     "shadow": {
-      "n": 1919,
+      "n": 1920,
       "tp": 562,
-      "sl": 1019,
+      "sl": 1020,
       "expired": 338,
-      "win_rate": 0.35547122074636306,
+      "win_rate": 0.3552465233881163,
       "neutral_win_rate": 0.3658,
-      "edge": -0.0103,
-      "pnl_pct": -32.2959,
-      "avg_pnl_pct": -0.0168
+      "edge": -0.0106,
+      "pnl_pct": -32.8488,
+      "avg_pnl_pct": -0.0171
     }
   },
   "by_horizon": {
@@ -2228,15 +2228,15 @@
         "avg_pnl_pct": -0.0503
       },
       "shadow": {
-        "n": 127,
+        "n": 128,
         "tp": 32,
-        "sl": 65,
+        "sl": 66,
         "expired": 30,
-        "win_rate": 0.32989690721649484,
-        "neutral_win_rate": 0.4113,
-        "edge": -0.0814,
-        "pnl_pct": -13.0279,
-        "avg_pnl_pct": -0.1026
+        "win_rate": 0.32653061224489793,
+        "neutral_win_rate": 0.4117,
+        "edge": -0.0852,
+        "pnl_pct": -13.5808,
+        "avg_pnl_pct": -0.1061
       },
       "open": 0,
       "session_utc": null,
@@ -2765,15 +2765,15 @@
       "label": "Tendance 15 min",
       "weight": 1.0,
       "stats": {
-        "n": 2107,
+        "n": 2108,
         "tp": 620,
-        "sl": 1114,
+        "sl": 1115,
         "expired": 373,
-        "win_rate": 0.3575547866205306,
+        "win_rate": 0.3573487031700288,
         "neutral_win_rate": 0.367,
-        "edge": -0.0094,
-        "pnl_pct": -41.2965,
-        "avg_pnl_pct": -0.0196
+        "edge": -0.0097,
+        "pnl_pct": -41.8494,
+        "avg_pnl_pct": -0.0199
       },
       "by_source": {
         "bot": {
@@ -2810,18 +2810,52 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 1919,
+          "n": 1920,
           "tp": 562,
-          "sl": 1019,
+          "sl": 1020,
           "expired": 338,
-          "win_rate": 0.35547122074636306,
+          "win_rate": 0.3552465233881163,
           "neutral_win_rate": 0.3658,
-          "edge": -0.0103,
-          "pnl_pct": -32.2959,
-          "avg_pnl_pct": -0.0168
+          "edge": -0.0106,
+          "pnl_pct": -32.8488,
+          "avg_pnl_pct": -0.0171
         }
       },
       "last_trades": [
+        {
+          "id": "1850fe087c",
+          "asset": "bitcoin",
+          "asset_label": "Bitcoin (BTC/USD)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 60257.0,
+          "take_profit": 59899.0,
+          "stop_loss": 60554.0,
+          "risk_reward": 1.21,
+          "confidence": "fort",
+          "score": 5.56,
+          "criteria": [
+            "adx",
+            "pdhl",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.5529,
+          "pnl_gross_pct": -0.4929,
+          "duration_minutes": 9,
+          "close_price": 60554.0,
+          "created_at": "2026-11-24T04:01:37Z",
+          "closed_at": "2026-11-24T04:11:00Z",
+          "created_local": "24/11 05:01",
+          "expires_at": "2026-11-24T05:01:37Z",
+          "rationale": "Vente : tendance forte (ADX), cassure des extrêmes de la veille, RSI en momentum, tendance 15 min, tendance 1 h, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 742.1 (1.23 %), TP = 48 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 73%.",
+          "news_context": "actualité calme sur les 2 dernières heures",
+          "manual_exit": null
+        },
         {
           "id": "ffb2b554e9",
           "asset": "ethereum",
@@ -3068,40 +3102,6 @@
           "expires_at": "2026-11-23T19:16:00Z",
           "rationale": "Achat : tendance forte (ADX), marché meneur favorable, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 49.42 (0.68 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 95%.",
           "news_context": "actualité à surveiller (score 2) : Chevron Corp. (CVX): Q3 Earnings Triple on Refining Margin Surge",
-          "manual_exit": null
-        },
-        {
-          "id": "7a38f501c7",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "long",
-          "horizon": "3h",
-          "entry": 3657.8,
-          "take_profit": 3686.7,
-          "stop_loss": 3638.6,
-          "risk_reward": 1.51,
-          "confidence": "fort",
-          "score": 5.76,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.5449,
-          "pnl_gross_pct": -0.5249,
-          "duration_minutes": 93,
-          "close_price": 3638.6,
-          "created_at": "2026-11-23T18:11:20Z",
-          "closed_at": "2026-11-23T19:45:00Z",
-          "created_local": "23/11 19:11",
-          "expires_at": "2026-11-23T21:11:20Z",
-          "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 48.10 (1.31 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 74%.",
-          "news_context": "actualité à surveiller (score 2) : Fed Rate-Hike Odds Jump As Nvidia, 'Central Bank Of AI,' Saves The Day",
           "manual_exit": null
         }
       ]
@@ -3111,15 +3111,15 @@
       "label": "Tendance 1 h",
       "weight": 1.0,
       "stats": {
-        "n": 2081,
+        "n": 2082,
         "tp": 612,
-        "sl": 1102,
+        "sl": 1103,
         "expired": 367,
-        "win_rate": 0.3570595099183197,
+        "win_rate": 0.3568513119533528,
         "neutral_win_rate": 0.3668,
-        "edge": -0.0097,
-        "pnl_pct": -39.4763,
-        "avg_pnl_pct": -0.019
+        "edge": -0.0099,
+        "pnl_pct": -40.0292,
+        "avg_pnl_pct": -0.0192
       },
       "by_source": {
         "bot": {
@@ -3156,18 +3156,52 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 1893,
+          "n": 1894,
           "tp": 554,
-          "sl": 1007,
+          "sl": 1008,
           "expired": 332,
-          "win_rate": 0.35490070467648943,
+          "win_rate": 0.3546734955185659,
           "neutral_win_rate": 0.3656,
-          "edge": -0.0107,
-          "pnl_pct": -30.4757,
-          "avg_pnl_pct": -0.0161
+          "edge": -0.0109,
+          "pnl_pct": -31.0286,
+          "avg_pnl_pct": -0.0164
         }
       },
       "last_trades": [
+        {
+          "id": "1850fe087c",
+          "asset": "bitcoin",
+          "asset_label": "Bitcoin (BTC/USD)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 60257.0,
+          "take_profit": 59899.0,
+          "stop_loss": 60554.0,
+          "risk_reward": 1.21,
+          "confidence": "fort",
+          "score": 5.56,
+          "criteria": [
+            "adx",
+            "pdhl",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.5529,
+          "pnl_gross_pct": -0.4929,
+          "duration_minutes": 9,
+          "close_price": 60554.0,
+          "created_at": "2026-11-24T04:01:37Z",
+          "closed_at": "2026-11-24T04:11:00Z",
+          "created_local": "24/11 05:01",
+          "expires_at": "2026-11-24T05:01:37Z",
+          "rationale": "Vente : tendance forte (ADX), cassure des extrêmes de la veille, RSI en momentum, tendance 15 min, tendance 1 h, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 742.1 (1.23 %), TP = 48 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 73%.",
+          "news_context": "actualité calme sur les 2 dernières heures",
+          "manual_exit": null
+        },
         {
           "id": "ffb2b554e9",
           "asset": "ethereum",
@@ -3414,40 +3448,6 @@
           "expires_at": "2026-11-23T19:16:00Z",
           "rationale": "Achat : tendance forte (ADX), marché meneur favorable, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 49.42 (0.68 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 95%.",
           "news_context": "actualité à surveiller (score 2) : Chevron Corp. (CVX): Q3 Earnings Triple on Refining Margin Surge",
-          "manual_exit": null
-        },
-        {
-          "id": "7a38f501c7",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "long",
-          "horizon": "3h",
-          "entry": 3657.8,
-          "take_profit": 3686.7,
-          "stop_loss": 3638.6,
-          "risk_reward": 1.51,
-          "confidence": "fort",
-          "score": 5.76,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.5449,
-          "pnl_gross_pct": -0.5249,
-          "duration_minutes": 93,
-          "close_price": 3638.6,
-          "created_at": "2026-11-23T18:11:20Z",
-          "closed_at": "2026-11-23T19:45:00Z",
-          "created_local": "23/11 19:11",
-          "expires_at": "2026-11-23T21:11:20Z",
-          "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 48.10 (1.31 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 74%.",
-          "news_context": "actualité à surveiller (score 2) : Fed Rate-Hike Odds Jump As Nvidia, 'Central Bank Of AI,' Saves The Day",
           "manual_exit": null
         }
       ]
@@ -3457,15 +3457,15 @@
       "label": "Force de tendance (ADX)",
       "weight": 1.0,
       "stats": {
-        "n": 2107,
+        "n": 2108,
         "tp": 620,
-        "sl": 1114,
+        "sl": 1115,
         "expired": 373,
-        "win_rate": 0.3575547866205306,
+        "win_rate": 0.3573487031700288,
         "neutral_win_rate": 0.367,
-        "edge": -0.0094,
-        "pnl_pct": -41.2965,
-        "avg_pnl_pct": -0.0196
+        "edge": -0.0097,
+        "pnl_pct": -41.8494,
+        "avg_pnl_pct": -0.0199
       },
       "by_source": {
         "bot": {
@@ -3502,18 +3502,52 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 1919,
+          "n": 1920,
           "tp": 562,
-          "sl": 1019,
+          "sl": 1020,
           "expired": 338,
-          "win_rate": 0.35547122074636306,
+          "win_rate": 0.3552465233881163,
           "neutral_win_rate": 0.3658,
-          "edge": -0.0103,
-          "pnl_pct": -32.2959,
-          "avg_pnl_pct": -0.0168
+          "edge": -0.0106,
+          "pnl_pct": -32.8488,
+          "avg_pnl_pct": -0.0171
         }
       },
       "last_trades": [
+        {
+          "id": "1850fe087c",
+          "asset": "bitcoin",
+          "asset_label": "Bitcoin (BTC/USD)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 60257.0,
+          "take_profit": 59899.0,
+          "stop_loss": 60554.0,
+          "risk_reward": 1.21,
+          "confidence": "fort",
+          "score": 5.56,
+          "criteria": [
+            "adx",
+            "pdhl",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.5529,
+          "pnl_gross_pct": -0.4929,
+          "duration_minutes": 9,
+          "close_price": 60554.0,
+          "created_at": "2026-11-24T04:01:37Z",
+          "closed_at": "2026-11-24T04:11:00Z",
+          "created_local": "24/11 05:01",
+          "expires_at": "2026-11-24T05:01:37Z",
+          "rationale": "Vente : tendance forte (ADX), cassure des extrêmes de la veille, RSI en momentum, tendance 15 min, tendance 1 h, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 742.1 (1.23 %), TP = 48 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 73%.",
+          "news_context": "actualité calme sur les 2 dernières heures",
+          "manual_exit": null
+        },
         {
           "id": "ffb2b554e9",
           "asset": "ethereum",
@@ -3761,40 +3795,6 @@
           "rationale": "Achat : tendance forte (ADX), marché meneur favorable, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 49.42 (0.68 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 95%.",
           "news_context": "actualité à surveiller (score 2) : Chevron Corp. (CVX): Q3 Earnings Triple on Refining Margin Surge",
           "manual_exit": null
-        },
-        {
-          "id": "7a38f501c7",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "long",
-          "horizon": "3h",
-          "entry": 3657.8,
-          "take_profit": 3686.7,
-          "stop_loss": 3638.6,
-          "risk_reward": 1.51,
-          "confidence": "fort",
-          "score": 5.76,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.5449,
-          "pnl_gross_pct": -0.5249,
-          "duration_minutes": 93,
-          "close_price": 3638.6,
-          "created_at": "2026-11-23T18:11:20Z",
-          "closed_at": "2026-11-23T19:45:00Z",
-          "created_local": "23/11 19:11",
-          "expires_at": "2026-11-23T21:11:20Z",
-          "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 48.10 (1.31 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 74%.",
-          "news_context": "actualité à surveiller (score 2) : Fed Rate-Hike Odds Jump As Nvidia, 'Central Bank Of AI,' Saves The Day",
-          "manual_exit": null
         }
       ]
     },
@@ -3803,15 +3803,15 @@
       "label": "VWAP",
       "weight": 0.75,
       "stats": {
-        "n": 2062,
+        "n": 2063,
         "tp": 610,
-        "sl": 1091,
+        "sl": 1092,
         "expired": 361,
-        "win_rate": 0.3586125808348031,
+        "win_rate": 0.3584018801410106,
         "neutral_win_rate": 0.3661,
-        "edge": -0.0075,
-        "pnl_pct": -37.5787,
-        "avg_pnl_pct": -0.0182
+        "edge": -0.0077,
+        "pnl_pct": -38.1316,
+        "avg_pnl_pct": -0.0185
       },
       "by_source": {
         "bot": {
@@ -3848,18 +3848,52 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 1876,
+          "n": 1877,
           "tp": 552,
-          "sl": 998,
+          "sl": 999,
           "expired": 326,
-          "win_rate": 0.3561290322580645,
+          "win_rate": 0.35589941972920697,
           "neutral_win_rate": 0.3648,
-          "edge": -0.0087,
-          "pnl_pct": -29.1945,
-          "avg_pnl_pct": -0.0156
+          "edge": -0.0089,
+          "pnl_pct": -29.7474,
+          "avg_pnl_pct": -0.0158
         }
       },
       "last_trades": [
+        {
+          "id": "1850fe087c",
+          "asset": "bitcoin",
+          "asset_label": "Bitcoin (BTC/USD)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 60257.0,
+          "take_profit": 59899.0,
+          "stop_loss": 60554.0,
+          "risk_reward": 1.21,
+          "confidence": "fort",
+          "score": 5.56,
+          "criteria": [
+            "adx",
+            "pdhl",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.5529,
+          "pnl_gross_pct": -0.4929,
+          "duration_minutes": 9,
+          "close_price": 60554.0,
+          "created_at": "2026-11-24T04:01:37Z",
+          "closed_at": "2026-11-24T04:11:00Z",
+          "created_local": "24/11 05:01",
+          "expires_at": "2026-11-24T05:01:37Z",
+          "rationale": "Vente : tendance forte (ADX), cassure des extrêmes de la veille, RSI en momentum, tendance 15 min, tendance 1 h, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 742.1 (1.23 %), TP = 48 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 73%.",
+          "news_context": "actualité calme sur les 2 dernières heures",
+          "manual_exit": null
+        },
         {
           "id": "ffb2b554e9",
           "asset": "ethereum",
@@ -4107,57 +4141,23 @@
           "rationale": "Achat : tendance forte (ADX), marché meneur favorable, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 49.42 (0.68 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 95%.",
           "news_context": "actualité à surveiller (score 2) : Chevron Corp. (CVX): Q3 Earnings Triple on Refining Margin Surge",
           "manual_exit": null
-        },
-        {
-          "id": "7a38f501c7",
-          "asset": "gold",
-          "asset_label": "Or (XAU/USD)",
-          "direction": "long",
-          "horizon": "3h",
-          "entry": 3657.8,
-          "take_profit": 3686.7,
-          "stop_loss": 3638.6,
-          "risk_reward": 1.51,
-          "confidence": "fort",
-          "score": 5.76,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.5449,
-          "pnl_gross_pct": -0.5249,
-          "duration_minutes": 93,
-          "close_price": 3638.6,
-          "created_at": "2026-11-23T18:11:20Z",
-          "closed_at": "2026-11-23T19:45:00Z",
-          "created_local": "23/11 19:11",
-          "expires_at": "2026-11-23T21:11:20Z",
-          "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 48.10 (1.31 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 74%.",
-          "news_context": "actualité à surveiller (score 2) : Fed Rate-Hike Odds Jump As Nvidia, 'Central Bank Of AI,' Saves The Day",
-          "manual_exit": null
         }
       ]
     },
     {
       "key": "rsi",
       "label": "RSI",
-      "weight": 1.002,
+      "weight": 1.0,
       "stats": {
-        "n": 1626,
+        "n": 1627,
         "tp": 501,
-        "sl": 849,
+        "sl": 850,
         "expired": 276,
-        "win_rate": 0.3711111111111111,
+        "win_rate": 0.37083641746854185,
         "neutral_win_rate": 0.365,
-        "edge": 0.0061,
-        "pnl_pct": -6.5773,
-        "avg_pnl_pct": -0.004
+        "edge": 0.0058,
+        "pnl_pct": -7.1302,
+        "avg_pnl_pct": -0.0044
       },
       "by_source": {
         "bot": {
@@ -4194,18 +4194,52 @@
           "avg_pnl_pct": 0.0
         },
         "shadow": {
-          "n": 1464,
+          "n": 1465,
           "tp": 448,
-          "sl": 772,
+          "sl": 773,
           "expired": 244,
-          "win_rate": 0.36721311475409835,
-          "neutral_win_rate": 0.3634,
-          "edge": 0.0038,
-          "pnl_pct": -1.7683,
-          "avg_pnl_pct": -0.0012
+          "win_rate": 0.3669123669123669,
+          "neutral_win_rate": 0.3635,
+          "edge": 0.0034,
+          "pnl_pct": -2.3212,
+          "avg_pnl_pct": -0.0016
         }
       },
       "last_trades": [
+        {
+          "id": "1850fe087c",
+          "asset": "bitcoin",
+          "asset_label": "Bitcoin (BTC/USD)",
+          "direction": "short",
+          "horizon": "1h",
+          "entry": 60257.0,
+          "take_profit": 59899.0,
+          "stop_loss": 60554.0,
+          "risk_reward": 1.21,
+          "confidence": "fort",
+          "score": 5.56,
+          "criteria": [
+            "adx",
+            "pdhl",
+            "rsi",
+            "trend_15m",
+            "trend_1h",
+            "vwap"
+          ],
+          "source": "shadow",
+          "status": "sl",
+          "pnl_pct": -0.5529,
+          "pnl_gross_pct": -0.4929,
+          "duration_minutes": 9,
+          "close_price": 60554.0,
+          "created_at": "2026-11-24T04:01:37Z",
+          "closed_at": "2026-11-24T04:11:00Z",
+          "created_local": "24/11 05:01",
+          "expires_at": "2026-11-24T05:01:37Z",
+          "rationale": "Vente : tendance forte (ADX), cassure des extrêmes de la veille, RSI en momentum, tendance 15 min, tendance 1 h, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 742.1 (1.23 %), TP = 48 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 73%.",
+          "news_context": "actualité calme sur les 2 dernières heures",
+          "manual_exit": null
+        },
         {
           "id": "ffb2b554e9",
           "asset": "ethereum",
@@ -4450,40 +4484,6 @@
           "expires_at": "2026-11-24T18:11:20Z",
           "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 260.51 (0.97 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 93%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
           "news_context": "actualité à surveiller (score 2) : Fed Rate-Hike Odds Jump As Nvidia, 'Central Bank Of AI,' Saves The Day",
-          "manual_exit": null
-        },
-        {
-          "id": "0af9cad1c2",
-          "asset": "nasdaq",
-          "asset_label": "Nasdaq 100 (NQ)",
-          "direction": "long",
-          "horizon": "24h",
-          "entry": 26868.5,
-          "take_profit": 27332.0,
-          "stop_loss": 26714.0,
-          "risk_reward": 3.0,
-          "confidence": "fort",
-          "score": 5.89,
-          "criteria": [
-            "adx",
-            "rsi",
-            "trend_15m",
-            "trend_1h",
-            "trend_5m",
-            "vwap"
-          ],
-          "source": "shadow",
-          "status": "sl",
-          "pnl_pct": -0.585,
-          "pnl_gross_pct": -0.575,
-          "duration_minutes": 4,
-          "close_price": 26714.0,
-          "created_at": "2026-11-23T17:41:10Z",
-          "closed_at": "2026-11-23T17:46:00Z",
-          "created_local": "23/11 18:41",
-          "expires_at": "2026-11-24T17:41:10Z",
-          "rationale": "Achat : tendance forte (ADX), RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 257.67 (0.96 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 100%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
-          "news_context": "actualité à surveiller (score 3) : Fed Rate-Hike Odds Jump As Nvidia, 'Central Bank Of AI,' Saves The Day | It’s now much easier to live 100% off dividends after November's market crash — here’s why and how much you need in 2027",
           "manual_exit": null
         }
       ]
@@ -5532,40 +5532,6 @@
     }
   ],
   "open_signals": [
-    {
-      "id": "1850fe087c",
-      "asset": "bitcoin",
-      "asset_label": "Bitcoin (BTC/USD)",
-      "direction": "short",
-      "horizon": "1h",
-      "entry": 60257.0,
-      "take_profit": 59899.0,
-      "stop_loss": 60554.0,
-      "risk_reward": 1.21,
-      "confidence": "fort",
-      "score": 5.56,
-      "criteria": [
-        "adx",
-        "pdhl",
-        "rsi",
-        "trend_15m",
-        "trend_1h",
-        "vwap"
-      ],
-      "source": "shadow",
-      "status": "open",
-      "pnl_pct": null,
-      "pnl_gross_pct": null,
-      "duration_minutes": null,
-      "close_price": null,
-      "created_at": "2026-11-24T04:01:37Z",
-      "closed_at": null,
-      "created_local": "24/11 05:01",
-      "expires_at": "2026-11-24T05:01:37Z",
-      "rationale": "Vente : tendance forte (ADX), cassure des extrêmes de la veille, RSI en momentum, tendance 15 min, tendance 1 h, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 742.1 (1.23 %), TP = 48 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 73%.",
-      "news_context": "actualité calme sur les 2 dernières heures",
-      "manual_exit": null
-    },
     {
       "id": "adbf002690",
       "asset": "nasdaq",
@@ -8713,20 +8679,20 @@
   "adjustments": {
     "notes": [
       "trades réels : +0,03 R ± 0,18 R par trade avant frais sur 189 trades (0 R = hasard)",
-      "rsi : +0,06 R ± 0,06 R sur 2069 trades éq. → poids ×1,00",
+      "rsi : +0,06 R ± 0,06 R sur 2070 trades éq. → poids ×1,00",
       "orb : +0,26 R ± 0,22 R sur 169 trades éq. → poids ×1,12",
       "tranche 09h UTC : -0,21 R sur 167 trades éq. → évitée",
       "tranche 10h UTC : -0,27 R sur 110 trades éq. → évitée",
       "tranche 12h UTC : -0,42 R sur 71 trades éq. → évitée",
       "tranche 19h UTC : -0,28 R sur 94 trades éq. → évitée",
       "bitcoin, macd : -0,44 R contre -0,02 R en global sur 61 trades éq. → poids ×0,55 sur cet actif",
-      "bitcoin, pdhl : -0,27 R contre +0,12 R en global sur 41 trades éq. → poids ×0,81 sur cet actif",
+      "bitcoin, pdhl : -0,29 R contre +0,12 R en global sur 42 trades éq. → poids ×0,76 sur cet actif",
       "ethereum, tendance (trend_5m, trend_15m, trend_1h, adx) : -0,19 R contre +0,03 R en global sur 179 trades éq. → poids ×0,86 sur cet actif",
       "ethereum, vwap : -0,18 R contre +0,03 R en global sur 108 trades éq. → poids ×0,98 sur cet actif",
       "ethereum, rsi : -0,25 R contre +0,06 R en global sur 130 trades éq. → poids ×0,69 sur cet actif",
       "ethereum, pdhl : -0,54 R contre +0,12 R en global sur 30 trades éq. → poids ×0,50 sur cet actif",
       "nasdaq, rsi : +0,23 R contre +0,06 R en global sur 592 trades éq. → poids ×1,10 sur cet actif",
-      "nasdaq, pdhl : +0,58 R contre +0,12 R en global sur 75 trades éq. → poids ×1,10 sur cet actif",
+      "nasdaq, pdhl : +0,58 R contre +0,12 R en global sur 75 trades éq. → poids ×1,11 sur cet actif",
       "oil, rsi : -0,09 R contre +0,06 R en global sur 259 trades éq. → poids ×0,99 sur cet actif",
       "variante « indices le matin européen » en test : 161 trades, -0,47 R net, pas meilleure que les signaux réels",
       "variante « horizon ~3 h » en test : 279 trades, -0,22 R net, pas meilleure que les signaux réels",
@@ -8739,10 +8705,10 @@
       12,
       19
     ],
-    "sample": 3051,
+    "sample": 3052,
     "sample_by_source": {
       "bot": 188,
-      "shadow": 1919,
+      "shadow": 1920,
       "manual": 1,
       "backtest": 943
     },
@@ -8753,7 +8719,7 @@
       "trend_1h": 1.0,
       "adx": 1.0,
       "vwap": 0.75,
-      "rsi": 1.002,
+      "rsi": 1.0,
       "macd": 1.0,
       "level": 1.0,
       "volume": 0.75,
@@ -8768,19 +8734,19 @@
         "trend_1h": 1.0,
         "adx": 1.0,
         "vwap": 0.75,
-        "rsi": 1.002,
+        "rsi": 1.0,
         "macd": 0.554,
         "level": 1.0,
         "volume": 0.75,
         "orb": 1.118,
-        "pdhl": 0.809,
+        "pdhl": 0.762,
         "corr": 0.5
       },
       "ethereum": {
-        "trend_5m": 0.858,
-        "trend_15m": 0.858,
-        "trend_1h": 0.858,
-        "adx": 0.858,
+        "trend_5m": 0.859,
+        "trend_15m": 0.859,
+        "trend_1h": 0.859,
+        "adx": 0.859,
         "vwap": 0.732,
         "rsi": 0.686,
         "macd": 1.0,
@@ -8796,7 +8762,7 @@
         "trend_1h": 1.0,
         "adx": 1.0,
         "vwap": 0.75,
-        "rsi": 1.002,
+        "rsi": 1.0,
         "macd": 1.0,
         "level": 1.0,
         "volume": 0.75,
@@ -8810,7 +8776,7 @@
         "trend_1h": 1.0,
         "adx": 1.0,
         "vwap": 0.75,
-        "rsi": 1.002,
+        "rsi": 1.0,
         "macd": 1.0,
         "level": 1.0,
         "volume": 0.75,
@@ -8829,7 +8795,7 @@
         "level": 1.0,
         "volume": 0.75,
         "orb": 1.118,
-        "pdhl": 1.105,
+        "pdhl": 1.114,
         "corr": 0.5
       },
       "oil": {
@@ -8852,7 +8818,7 @@
         "trend_1h": 1.0,
         "adx": 1.0,
         "vwap": 0.75,
-        "rsi": 1.002,
+        "rsi": 1.0,
         "macd": 1.0,
         "level": 1.0,
         "volume": 0.75,
@@ -8869,9 +8835,9 @@
           "trend_1h",
           "adx"
         ],
-        "n": 3050,
-        "n_eff": 2645.7,
-        "mean_r": 0.0263,
+        "n": 3051,
+        "n_eff": 2646.7,
+        "mean_r": 0.026,
         "margin_r": 0.0499,
         "multiplier": 1.0
       },
@@ -8879,21 +8845,21 @@
         "members": [
           "vwap"
         ],
-        "n": 2786,
-        "n_eff": 2457.3,
-        "mean_r": 0.0326,
-        "margin_r": 0.0523,
+        "n": 2787,
+        "n_eff": 2458.3,
+        "mean_r": 0.0322,
+        "margin_r": 0.0522,
         "multiplier": 1.0
       },
       "rsi": {
         "members": [
           "rsi"
         ],
-        "n": 2407,
-        "n_eff": 2069.3,
-        "mean_r": 0.0581,
+        "n": 2408,
+        "n_eff": 2070.3,
+        "mean_r": 0.0576,
         "margin_r": 0.0574,
-        "multiplier": 1.002
+        "multiplier": 1.0
       },
       "macd": {
         "members": [
@@ -8939,10 +8905,10 @@
         "members": [
           "pdhl"
         ],
-        "n": 352,
-        "n_eff": 297.0,
-        "mean_r": 0.1207,
-        "margin_r": 0.1588,
+        "n": 353,
+        "n_eff": 298.0,
+        "mean_r": 0.1169,
+        "margin_r": 0.1584,
         "multiplier": 1.0
       },
       "corr": {
@@ -8963,8 +8929,8 @@
         "margin_r": 0.1833
       },
       "fantômes": {
-        "n": 1919,
-        "mean_r": 0.0383,
+        "n": 1920,
+        "mean_r": 0.0377,
         "margin_r": 0.0601
       },
       "backtest": {
@@ -9024,9 +8990,9 @@
       },
       "essai_bitcoin": {
         "label": "nouvel actif : Bitcoin (BTC/USD)",
-        "n": 105,
-        "mean_net_r": -0.4087,
-        "lower_r": -0.696,
+        "n": 106,
+        "mean_net_r": -0.4154,
+        "lower_r": -0.7006,
         "promoted": false,
         "missing": 0
       },
@@ -9069,9 +9035,9 @@
     },
     "variants_z": 2.75,
     "promoted_variants": [],
-    "updated_at": "2026-11-24T04:01:40.181909+00:00",
+    "updated_at": "2026-11-24T04:11:23.242198+00:00",
     "context": {
-      "n": 2819,
+      "n": 2820,
       "features": {
         "adx": {
           "label": "force de tendance (ADX 15 min)",
@@ -9079,21 +9045,21 @@
             {
               "label": "bas (< 27)",
               "lo": -1000000000.0,
-              "hi": 27.4,
-              "n": 939,
-              "n_eff": 813.2,
-              "mean_r": -0.0708,
-              "margin_r": 0.1116,
+              "hi": 27.41,
+              "n": 940,
+              "n_eff": 813.9,
+              "mean_r": -0.0713,
+              "margin_r": 0.1115,
               "avoid": false
             },
             {
               "label": "milieu (27 à 38)",
-              "lo": 27.4,
+              "lo": 27.41,
               "hi": 37.88,
               "n": 940,
-              "n_eff": 813.8,
-              "mean_r": 0.0628,
-              "margin_r": 0.1165,
+              "n_eff": 814.1,
+              "mean_r": 0.0621,
+              "margin_r": 0.1164,
               "avoid": false
             },
             {
@@ -9115,10 +9081,10 @@
               "label": "bas (< 59)",
               "lo": -1000000000.0,
               "hi": 58.76,
-              "n": 938,
-              "n_eff": 832.9,
-              "mean_r": -0.029,
-              "margin_r": 0.1046,
+              "n": 939,
+              "n_eff": 833.9,
+              "mean_r": -0.0302,
+              "margin_r": 0.1045,
               "avoid": false
             },
             {
@@ -9150,10 +9116,10 @@
               "label": "bas (< 0,89)",
               "lo": -1000000000.0,
               "hi": 0.8941,
-              "n": 873,
-              "n_eff": 776.5,
-              "mean_r": -0.0482,
-              "margin_r": 0.1126,
+              "n": 874,
+              "n_eff": 777.5,
+              "mean_r": -0.0494,
+              "margin_r": 0.1125,
               "avoid": false
             },
             {
@@ -9185,9 +9151,9 @@
               "label": "bas (< 0,23)",
               "lo": -1000000000.0,
               "hi": 0.2334,
-              "n": 939,
-              "n_eff": 829.4,
-              "mean_r": 0.0004,
+              "n": 940,
+              "n_eff": 830.4,
+              "mean_r": -0.0008,
               "margin_r": 0.1035,
               "avoid": false
             },
@@ -9219,21 +9185,21 @@
             {
               "label": "bas (< 1,09)",
               "lo": -1000000000.0,
-              "hi": 1.086,
-              "n": 937,
-              "n_eff": 836.5,
-              "mean_r": -0.1365,
-              "margin_r": 0.0949,
+              "hi": 1.087,
+              "n": 940,
+              "n_eff": 838.9,
+              "mean_r": -0.1384,
+              "margin_r": 0.0947,
               "avoid": true
             },
             {
               "label": "milieu (1,09 à 1,45)",
-              "lo": 1.086,
+              "lo": 1.087,
               "hi": 1.445,
-              "n": 938,
-              "n_eff": 810.7,
-              "mean_r": 0.0874,
-              "margin_r": 0.117,
+              "n": 936,
+              "n_eff": 809.3,
+              "mean_r": 0.0886,
+              "margin_r": 0.1172,
               "avoid": false
             },
             {
@@ -9275,10 +9241,10 @@
               "label": "haut (≥ 1,29)",
               "lo": 1.289,
               "hi": 1000000000.0,
-              "n": 832,
-              "n_eff": 680.3,
-              "mean_r": 0.242,
-              "margin_r": 0.1437,
+              "n": 833,
+              "n_eff": 681.3,
+              "mean_r": 0.2401,
+              "margin_r": 0.1436,
               "avoid": false
             }
           ]
@@ -9289,30 +9255,30 @@
             {
               "label": "bas (< 0,42)",
               "lo": -1000000000.0,
-              "hi": 0.4226,
-              "n": 939,
-              "n_eff": 812.5,
-              "mean_r": 0.096,
-              "margin_r": 0.1235,
+              "hi": 0.4228,
+              "n": 940,
+              "n_eff": 813.5,
+              "mean_r": 0.0978,
+              "margin_r": 0.1234,
               "avoid": false
             },
             {
               "label": "milieu (0,42 à 0,74)",
-              "lo": 0.4226,
-              "hi": 0.7361,
+              "lo": 0.4228,
+              "hi": 0.7365,
               "n": 940,
               "n_eff": 846.1,
-              "mean_r": 0.1029,
-              "margin_r": 0.1111,
+              "mean_r": 0.1023,
+              "margin_r": 0.111,
               "avoid": false
             },
             {
               "label": "haut (≥ 0,74)",
-              "lo": 0.7361,
+              "lo": 0.7365,
               "hi": 1000000000.0,
               "n": 940,
               "n_eff": 808.2,
-              "mean_r": -0.1399,
+              "mean_r": -0.1428,
               "margin_r": 0.1107,
               "avoid": true
             }
@@ -9324,21 +9290,21 @@
             {
               "label": "bas (< 0,08)",
               "lo": -1000000000.0,
-              "hi": 0.0762,
-              "n": 938,
-              "n_eff": 841.9,
-              "mean_r": 0.0078,
-              "margin_r": 0.1308,
+              "hi": 0.0763,
+              "n": 940,
+              "n_eff": 843.9,
+              "mean_r": 0.0077,
+              "margin_r": 0.1305,
               "avoid": false
             },
             {
               "label": "milieu (0,08 à 0,12)",
-              "lo": 0.0762,
+              "lo": 0.0763,
               "hi": 0.1241,
-              "n": 941,
-              "n_eff": 825.4,
-              "mean_r": 0.1169,
-              "margin_r": 0.1085,
+              "n": 940,
+              "n_eff": 824.4,
+              "mean_r": 0.1159,
+              "margin_r": 0.1086,
               "avoid": false
             },
             {
@@ -9360,10 +9326,10 @@
               "label": "plus de 30 min avant l'ouverture US",
               "lo": -1000000000.0,
               "hi": -30.0,
-              "n": 1097,
-              "n_eff": 974.6,
-              "mean_r": -0.1062,
-              "margin_r": 0.0912,
+              "n": 1098,
+              "n_eff": 975.6,
+              "mean_r": -0.1072,
+              "margin_r": 0.0911,
               "avoid": true
             },
             {
@@ -9405,10 +9371,10 @@
               "label": "mardi",
               "lo": 1,
               "hi": 2,
-              "n": 405,
-              "n_eff": 348.0,
-              "mean_r": -0.0848,
-              "margin_r": 0.1547,
+              "n": 406,
+              "n_eff": 349.0,
+              "mean_r": -0.0876,
+              "margin_r": 0.1544,
               "avoid": false
             },
             {
@@ -9468,17 +9434,17 @@
         {
           "feature": "atr_ratio",
           "lo": -1000000000.0,
-          "hi": 1.086,
+          "hi": 1.087,
           "label": "volatilité du moment / moyenne 24 h : bas (< 1,09)",
-          "mean_r": -0.1365,
-          "n": 937
+          "mean_r": -0.1384,
+          "n": 940
         },
         {
           "feature": "range_pct",
-          "lo": 0.7361,
+          "lo": 0.7365,
           "hi": 1000000000.0,
           "label": "taille du range (%) : haut (≥ 0,74)",
-          "mean_r": -0.1399,
+          "mean_r": -0.1428,
           "n": 940
         },
         {
@@ -9486,8 +9452,8 @@
           "lo": -1000000000.0,
           "hi": -30.0,
           "label": "minutes depuis l'ouverture américaine : plus de 30 min avant l'ouverture US",
-          "mean_r": -0.1062,
-          "n": 1097
+          "mean_r": -0.1072,
+          "n": 1098
         },
         {
           "feature": "weekday",
@@ -9501,32 +9467,32 @@
     },
     "exits": {
       "réels et en ombre": {
-        "n": 1877,
-        "current_net_r": -0.0554,
+        "n": 1878,
+        "current_net_r": -0.0559,
         "mfe_median": 0.842,
         "sl_reached": {
           "0.5": 371,
           "0.8": 221,
           "1.0": 155
         },
-        "n_sl": 1002,
+        "n_sl": 1003,
         "rules": {
           "0.5": {
-            "net_r": -0.067,
+            "net_r": -0.0675,
             "diff_r": -0.0116,
             "margin_r": 0.0371,
             "better": false
           },
           "0.8": {
-            "net_r": -0.0725,
+            "net_r": -0.073,
             "diff_r": -0.0171,
-            "margin_r": 0.03,
+            "margin_r": 0.0299,
             "better": false
           },
           "1.0": {
-            "net_r": -0.0727,
+            "net_r": -0.0733,
             "diff_r": -0.0173,
-            "margin_r": 0.0264,
+            "margin_r": 0.0263,
             "better": false
           }
         }
@@ -9641,10 +9607,10 @@
     }
   },
   "state": {
-    "last_scan": "2026-11-24T04:06:10Z",
+    "last_scan": "2026-11-24T04:11:20Z",
     "last_scan_note": "0 signal(aux)",
     "last_summary": "2026-11-23T23:05:54Z",
-    "last_track": "2026-11-24T04:06:10Z",
+    "last_track": "2026-11-24T04:11:20Z",
     "last_summary_day": "2026-11-23",
     "pc_down": 1794622543
   },
@@ -23300,7 +23266,7 @@
           "r_bot": 0.5429
         }
       ],
-      "checked_hour": "2026-11-24T03:00:00Z",
+      "checked_hour": "2026-11-24T04:00:00Z",
       "n": 27,
       "mean_r": 0.6035,
       "live": false
@@ -23946,7 +23912,7 @@
         }
       ],
       "live": false,
-      "checked_hour": "2026-11-24T03:00:00Z",
+      "checked_hour": "2026-11-24T04:00:00Z",
       "n": 42,
       "mean_r": -0.2951
     },
@@ -24494,7 +24460,7 @@
         }
       ],
       "live": false,
-      "checked_hour": "2026-11-24T03:00:00Z",
+      "checked_hour": "2026-11-24T04:00:00Z",
       "n": 35,
       "mean_r": 0.2628,
       "levels": {
@@ -24505,393 +24471,393 @@
         "points": [
           [
             1795444500,
-            26970.4745,
-            25055.9676
+            26970.5376,
+            25055.9085
           ],
           [
             1795444800,
-            26998.5739,
-            25029.6835
+            26998.7027,
+            25029.5631
           ],
           [
             1795445100,
-            27064.0119,
-            24968.4732
+            27063.7473,
+            24968.7207
           ],
           [
             1795445400,
-            27068.7464,
-            24964.0446
+            27068.6595,
+            24964.1258
           ],
           [
             1795445700,
-            27058.6327,
-            24973.5048
+            27058.9315,
+            24973.2254
           ],
           [
             1795446000,
-            27078.7225,
-            24954.713
+            27079.1108,
+            24954.3498
           ],
           [
             1795446300,
-            27100.0753,
-            24934.7397
+            27100.0808,
+            24934.7346
           ],
           [
             1795446600,
-            27098.5902,
-            24936.1288
+            27099.0497,
+            24935.6991
           ],
           [
             1795446900,
-            27137.7133,
-            24899.5333
+            27138.159,
+            24899.1164
           ],
           [
             1795447200,
-            27156.4388,
-            24882.0176
+            27157.1218,
+            24881.3787
           ],
           [
             1795447500,
-            27160.5325,
-            24878.1883
+            27160.9165,
+            24877.8292
           ],
           [
             1795447800,
-            27156.6779,
-            24881.7939
+            27157.1676,
+            24881.3358
           ],
           [
             1795448100,
-            27179.9294,
-            24860.0446
+            27179.9675,
+            24860.009
           ],
           [
             1795448400,
-            27196.0158,
-            24844.9975
+            27196.2392,
+            24844.7885
           ],
           [
             1795448700,
-            27208.0456,
-            24833.7448
+            27208.3217,
+            24833.4866
           ],
           [
             1795449000,
-            27221.6878,
-            24820.984
+            27222.023,
+            24820.6705
           ],
           [
             1795449300,
-            27245.1541,
-            24799.0338
+            27245.9913,
+            24798.2507
           ],
           [
             1795449600,
-            27221.3781,
-            24821.2737
+            27222.3894,
+            24820.3278
           ],
           [
             1795449900,
-            27230.0156,
-            24813.1943
+            27230.4912,
+            24812.7494
           ],
           [
             1795450200,
-            27214.7113,
-            24827.5098
+            27215.456,
+            24826.8133
           ],
           [
             1795450500,
-            27209.692,
-            24832.2048
+            27209.8533,
+            24832.0539
           ],
           [
             1795450800,
-            27220.215,
-            24822.3617
+            27220.3892,
+            24822.1987
           ],
           [
             1795451100,
-            27203.5695,
-            24837.9318
+            27203.9267,
+            24837.5977
           ],
           [
             1795451400,
-            27192.1626,
-            24848.6017
+            27192.7461,
+            24848.056
           ],
           [
             1795451700,
-            27204.7668,
-            24836.8119
+            27205.4831,
+            24836.1418
           ],
           [
             1795452000,
-            27211.4858,
-            24830.5269
+            27212.0302,
+            24830.0177
           ],
           [
             1795452300,
-            27226.3044,
-            24816.6657
+            27226.8671,
+            24816.1393
           ],
           [
             1795452600,
-            27243.4893,
-            24800.5911
+            27244.1652,
+            24799.9588
           ],
           [
             1795452900,
-            27273.7776,
-            24772.2595
+            27274.4383,
+            24771.6415
           ],
           [
             1795453200,
-            27264.2149,
-            24781.2044
+            27264.5538,
+            24780.8874
           ],
           [
             1795453500,
-            27288.6305,
-            24758.3662
+            27289.155,
+            24757.8756
           ],
           [
             1795453800,
-            27267.8335,
-            24777.8196
+            27268.4799,
+            24777.215
           ],
           [
             1795454100,
-            27277.5472,
-            24768.7335
+            27277.94,
+            24768.366
           ],
           [
             1795454400,
-            27266.0088,
-            24779.5264
+            27266.5342,
+            24779.035
           ],
           [
             1795454700,
-            27256.199,
-            24788.7024
+            27256.4936,
+            24788.4269
           ],
           [
             1795455000,
-            27256.88,
-            24788.0654
+            27256.2738,
+            24788.6325
           ],
           [
             1795455300,
-            27251.8121,
-            24792.8059
+            27252.3362,
+            24792.3157
           ],
           [
             1795455600,
-            27285.1362,
-            24761.6347
+            27285.4458,
+            24761.3452
           ],
           [
             1795455900,
-            27286.741,
-            24760.1336
+            27287.0877,
+            24759.8093
           ],
           [
             1795456200,
-            27293.8611,
-            24753.4735
+            27294.1377,
+            24753.2148
           ],
           [
             1795456500,
-            27285.1385,
-            24761.6326
+            27285.8465,
+            24760.9703
           ],
           [
             1795456800,
-            27288.1752,
-            24758.7921
+            27288.4013,
+            24758.5806
           ],
           [
             1795457100,
-            27307.5868,
-            24740.6346
+            27307.6889,
+            24740.539
           ],
           [
             1795457400,
-            27301.3369,
-            24746.4807
+            27301.4853,
+            24746.3419
           ],
           [
             1795457700,
-            27310.6342,
-            24737.784
+            27310.8717,
+            24737.5619
           ],
           [
             1795458000,
-            27299.3257,
-            24748.362
+            27299.6852,
+            24748.0257
           ],
           [
             1795458300,
-            27292.0499,
-            24755.1677
+            27292.4137,
+            24754.8274
           ],
           [
             1795458600,
-            27284.8405,
-            24761.9113
+            27285.0299,
+            24761.7342
           ],
           [
             1795458900,
-            27282.0896,
-            24764.4845
+            27282.5911,
+            24764.0154
           ],
           [
             1795459200,
-            27280.2378,
-            24766.2167
+            27280.4364,
+            24766.0309
           ],
           [
             1795459500,
-            27289.1618,
-            24757.8692
+            27289.2448,
+            24757.7916
           ],
           [
             1795459800,
-            27282.1062,
-            24764.469
+            27282.5799,
+            24764.0259
           ],
           [
             1795460100,
-            27262.7875,
-            24782.5396
+            27263.2564,
+            24782.101
           ],
           [
             1795460400,
-            27263.7672,
-            24781.6232
+            27264.2701,
+            24781.1527
           ],
           [
             1795460700,
-            27275.6079,
-            24770.5475
+            27276.3679,
+            24769.8366
           ],
           [
             1795461000,
-            27273.972,
-            24772.0777
+            27274.0917,
+            24771.9657
           ],
           [
             1795461300,
-            27271.6666,
-            24774.2341
+            27272.1701,
+            24773.7632
           ],
           [
             1795461600,
-            27270.5393,
-            24775.2886
+            27271.0453,
+            24774.8153
           ],
           [
             1795461900,
-            27274.8235,
-            24771.2812
+            27275.2085,
+            24770.9211
           ],
           [
             1795462200,
-            27273.2263,
-            24772.7752
+            27273.698,
+            24772.334
           ],
           [
             1795462500,
-            27276.8876,
-            24769.3504
+            27277.2819,
+            24768.9816
           ],
           [
             1795462800,
-            27284.0415,
-            24762.6588
+            27284.7354,
+            24762.0096
           ],
           [
             1795463100,
-            27271.2624,
-            24774.6122
+            27271.723,
+            24774.1814
           ],
           [
             1795463400,
-            27278.1266,
-            24768.1915
+            27278.5428,
+            24767.8021
           ],
           [
             1795463700,
-            27268.5199,
-            24777.1776
+            27268.391,
+            24777.2982
           ],
           [
             1795464000,
-            27273.3402,
-            24772.6687
+            27273.7554,
+            24772.2803
           ],
           [
             1795464300,
-            27290.9899,
-            24756.1592
+            27291.4474,
+            24755.7313
           ],
           [
             1795464600,
-            27298.0639,
-            24749.5423
+            27298.5367,
+            24749.1
           ],
           [
             1795464900,
-            27306.4971,
-            24741.6539
+            27307.0343,
+            24741.1514
           ],
           [
             1795465200,
-            27303.2645,
-            24744.6776
+            27303.8545,
+            24744.1258
           ],
           [
             1795465500,
-            27309.5165,
-            24738.8296
+            27310.1587,
+            24738.2288
           ],
           [
             1795465800,
-            27319.6227,
-            24729.3763
+            27320.1084,
+            24728.9219
           ],
           [
             1795466100,
-            27318.4125,
-            24730.5082
+            27319.2552,
+            24729.72
           ],
           [
             1795466400,
-            27310.8177,
-            24737.6124
+            27311.2101,
+            24737.2453
           ],
           [
             1795466700,
-            27311.8149,
-            24736.6796
+            27312.1486,
+            24736.3675
           ],
           [
             1795467000,
-            27304.1113,
-            24743.8856
+            27304.4246,
+            24743.5925
           ],
           [
             1795467300,
-            27300.4716,
-            24747.2901
+            27301.0039,
+            24746.7922
           ],
           [
             1795467600,
-            27312.2537,
-            24736.2692
+            27312.4746,
+            24736.0626
           ]
         ]
       }
@@ -25649,7 +25615,7 @@
         }
       ],
       "live": true,
-      "checked_hour": "2026-11-24T03:30:00Z",
+      "checked_hour": "2026-11-24T04:00:00Z",
       "n": 38,
       "mean_r": 0.2688,
       "levels": {
@@ -26717,28 +26683,28 @@
           "entry_ts": 1795474800,
           "entry_at": "2026-11-23T23:00:00Z",
           "direction": "long",
-          "entry": 3636.39990234375,
-          "risk": 36.363999,
-          "stop": 3600.035903,
+          "entry": 3636.60009765625,
+          "risk": 36.366001,
+          "stop": 3600.234097,
           "status": "open",
           "reason": null,
           "exit_ts": null,
           "exit": null,
-          "last": 3639.199951171875,
+          "last": 3629.89990234375,
           "r_topstep": null,
           "r_bot": null
         }
       ],
       "live": false,
-      "checked_hour": "2026-11-24T03:00:00Z",
+      "checked_hour": "2026-11-24T04:00:00Z",
       "n": 22,
       "mean_r": -0.227,
       "levels": {
         "kind": "window",
         "from": 1795474800,
         "to": 1795507200,
-        "entry": 3636.39990234375,
-        "stop": 3600.0359
+        "entry": 3636.60009765625,
+        "stop": 3600.2341
       }
     },
     "cassure_williams:bitcoin": {
