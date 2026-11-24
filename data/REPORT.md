@@ -1,6 +1,6 @@
 # Trading-Bot — rapport
 
-_Mis à jour le 24/11/2026 à 14:16 (Europe/Paris)._
+_Mis à jour le 24/11/2026 à 14:21 (Europe/Paris)._
 
 ## Vue d'ensemble
 
@@ -8,7 +8,7 @@ _Mis à jour le 24/11/2026 à 14:16 (Europe/Paris)._
 - Taux de réussite cumulé (TP / (TP+SL)) : **38%** — hasard attendu 38%, avantage **-0%**
 - P&L théorique cumulé, net des coûts estimés (somme des % par trade, sans levier) : **-9.16 %** (brut -4.91 %)
 - Signaux ouverts : **0**
-- Signaux fantômes (suivis en silence pour l'apprentissage) : **1973** clôturés, 2 ouverts, taux de réussite 35% (hasard attendu 36%)
+- Signaux fantômes (suivis en silence pour l'apprentissage) : **1974** clôturés, 2 ouverts, taux de réussite 35% (hasard attendu 36%)
 
 ## Statistiques
 
@@ -114,18 +114,18 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 
 | Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
 |---|---:|---:|---:|---:|---:|---:|
-| adx | 1973 | 564 | 1070 | 339 | 35% | -0.039 % |
+| adx | 1974 | 565 | 1070 | 339 | 35% | -0.039 % |
 | corr | 204 | 57 | 120 | 27 | 32% | -0.016 % |
 | level | 174 | 54 | 80 | 40 | 40% | -0.021 % |
 | macd | 495 | 134 | 275 | 86 | 33% | -0.019 % |
 | orb | 118 | 43 | 47 | 28 | 48% | +0.127 % |
 | pdhl | 204 | 72 | 108 | 24 | 40% | +0.021 % |
-| rsi | 1516 | 449 | 822 | 245 | 35% | -0.030 % |
-| trend_15m | 1973 | 564 | 1070 | 339 | 35% | -0.039 % |
-| trend_1h | 1947 | 556 | 1058 | 333 | 34% | -0.038 % |
-| trend_5m | 1792 | 525 | 982 | 285 | 35% | -0.036 % |
+| rsi | 1517 | 450 | 822 | 245 | 35% | -0.030 % |
+| trend_15m | 1974 | 565 | 1070 | 339 | 35% | -0.039 % |
+| trend_1h | 1948 | 557 | 1058 | 333 | 34% | -0.038 % |
+| trend_5m | 1793 | 526 | 982 | 285 | 35% | -0.036 % |
 | volume | 52 | 12 | 34 | 6 | 26% | -0.107 % |
-| vwap | 1930 | 554 | 1049 | 327 | 35% | -0.038 % |
+| vwap | 1931 | 555 | 1049 | 327 | 35% | -0.038 % |
 
 ### Fantômes par actif
 
@@ -137,7 +137,7 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 | gold | 675 | 213 | 299 | 163 | 42% | -0.010 % |
 | nasdaq | 685 | 176 | 437 | 72 | 29% | -0.036 % |
 | oil | 160 | 47 | 81 | 32 | 37% | -0.047 % |
-| sp500 | 144 | 43 | 83 | 18 | 34% | -0.015 % |
+| sp500 | 145 | 44 | 83 | 18 | 35% | -0.013 % |
 
 ## Derniers trades
 
@@ -196,7 +196,7 @@ Tranches horaires évitées (UTC) : [9, 10, 12, 19]
 Corrections par actif :
 
 - bitcoin : {'macd': 0.548, 'pdhl': 0.847}
-- ethereum : {'trend_5m': 0.878, 'trend_15m': 0.878, 'trend_1h': 0.878, 'adx': 0.878, 'vwap': 0.738, 'rsi': 0.711, 'pdhl': 0.5}
+- ethereum : {'trend_5m': 0.877, 'trend_15m': 0.877, 'trend_1h': 0.877, 'adx': 0.877, 'vwap': 0.737, 'rsi': 0.709, 'pdhl': 0.5}
 - nasdaq : {'pdhl': 1.141}
 
 | Variante testée en fantôme | Trades | Gain net moyen | Statut |
@@ -206,7 +206,7 @@ Corrections par actif :
 | confiance moyenne | 89 | -0.09 R | en test |
 | entrées dans l'heure avant l'ouverture américaine | 31 | +0.30 R | en test |
 | reprise juste après un stop | 33 | -0.06 R | en test |
-| nouvel actif : S&P 500 (ES) | 70 | +0.03 R | en test |
+| nouvel actif : S&P 500 (ES) | 71 | +0.05 R | en test |
 | nouvel actif : Bitcoin (BTC/USD) | 108 | -0.40 R | en test |
 | nouvel actif : Ethereum (ETH/USD) | 96 | -0.42 R | en test |
 | horizon ~3 h sur Or (XAU/USD) | 74 | +0.09 R | en test |
@@ -233,7 +233,7 @@ Notes :
 - variante « confiance moyenne » en test : 89 trades, -0,09 R net, encore 11 trades avant décision
 - variante « entrées dans l'heure avant l'ouverture américaine » en test : 31 trades, +0,30 R net, encore 69 trades avant décision
 - variante « reprise juste après un stop » en test : 33 trades, -0,06 R net, encore 67 trades avant décision
-- variante « nouvel actif : S&P 500 (ES) » en test : 70 trades, +0,03 R net, encore 30 trades avant décision
+- variante « nouvel actif : S&P 500 (ES) » en test : 71 trades, +0,05 R net, encore 29 trades avant décision
 - variante « nouvel actif : Bitcoin (BTC/USD) » en test : 108 trades, -0,40 R net, pas meilleure que les signaux réels
 
 ## Backtests (données historiques 5 min)
