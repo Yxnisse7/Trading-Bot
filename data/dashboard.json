@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-25T19:01:43.970333+01:00",
+  "updated_at": "2026-11-25T19:06:04.348241+01:00",
   "timezone": "Europe/Paris",
   "equity_curve": [
     {
@@ -8032,7 +8032,7 @@
     }
   },
   "state": {
-    "last_scan": "2026-11-25T18:01:33Z",
+    "last_scan": "2026-11-25T18:05:52Z",
     "last_scan_note": "0 signal(aux)",
     "last_summary": "2026-11-24T23:05:59Z",
     "last_track": "2026-11-25T11:41:08Z",
@@ -20415,30 +20415,26 @@
           "entry": 59172.62890625,
           "risk": 1066.805262,
           "stop": 60239.434168,
-          "status": "open",
-          "reason": null,
-          "exit_ts": null,
-          "exit": null,
-          "last": 58673.62890625,
-          "r_topstep": null,
-          "r_bot": null,
+          "status": "closed",
+          "reason": "canal",
+          "exit_ts": 1795629600,
+          "exit": 59518.859375,
+          "last": null,
+          "r_topstep": -0.3557,
+          "r_bot": -0.3578,
           "notified_entry": "2026-11-25T02:06:09Z",
           "micros": null,
-          "close_at": null
+          "close_at": null,
+          "notified_exit": "2026-11-25T18:05:52Z"
         }
       ],
-      "checked_hour": "2026-11-25T17:00:00Z",
-      "n": 35,
-      "mean_r": -0.0316,
+      "checked_hour": "2026-11-25T18:00:00Z",
+      "n": 36,
+      "mean_r": -0.0406,
       "live": true,
       "levels": {
         "kind": "channel",
         "points": [
-          [
-            1795456800,
-            64451.6016,
-            60287.4688
-          ],
           [
             1795460400,
             64451.6016,
@@ -20671,6 +20667,11 @@
           ],
           [
             1795626000,
+            60012.6484,
+            57214.4688
+          ],
+          [
+            1795629600,
             60012.6484,
             57214.4688
           ]
@@ -24851,19 +24852,19 @@
           "entry": 59903.8984375,
           "risk": 740.641162,
           "stop": 60644.5396,
-          "status": "open",
-          "reason": null,
-          "exit_ts": null,
-          "exit": null,
-          "last": 58673.62890625,
-          "r_topstep": null,
-          "r_bot": null
+          "status": "closed",
+          "reason": "stop",
+          "exit_ts": 1795626900,
+          "exit": 58904.63936875713,
+          "last": null,
+          "r_topstep": 1.3044,
+          "r_bot": 1.3007
         }
       ],
       "live": false,
-      "checked_hour": "2026-11-25T17:00:00Z",
-      "n": 14,
-      "mean_r": 0.009
+      "checked_hour": "2026-11-25T18:00:00Z",
+      "n": 15,
+      "mean_r": 0.0954
     },
     "nuit_asie:gold": {
       "strategy": "nuit_asie",
@@ -25598,16 +25599,16 @@
         }
       ],
       "live": true,
-      "checked_hour": "2026-11-25T17:45:00Z",
+      "checked_hour": "2026-11-25T18:00:00Z",
       "n": 14,
       "mean_r": -0.2906,
       "levels": {
         "kind": "level",
         "from": 1795564800,
         "to": 1795651200,
-        "level": 60936.5117,
+        "level": 60932.2012,
         "stop": 59737.3008,
-        "range": 2398.4219
+        "range": 2389.8008
       }
     },
     "double7:nasdaq": {
@@ -25712,22 +25713,22 @@
     }
   },
   "drift": {
-    "updated_at": "2026-11-25T09:10:59Z",
+    "updated_at": "2026-11-25T18:05:52Z",
     "cells": {
       "donchian_1h:bitcoin": {
-        "n": 35,
-        "cum_r": -1.1066,
+        "n": 36,
+        "cum_r": -1.4623,
         "dd_r": 12.7738,
         "ref_n": 511,
         "ref_mean_r": 0.0728,
-        "cum_pct": 0.446,
-        "dd_pct": 0.8158,
+        "cum_pct": 0.431,
+        "dd_pct": 0.803,
         "status": "dans la norme",
         "band": {
-          "cum_p5": -14.158,
-          "cum_p50": 0.423,
-          "cum_p95": 25.756,
-          "dd_p95": 16.482
+          "cum_p5": -13.931,
+          "cum_p50": 0.439,
+          "cum_p95": 26.423,
+          "dd_p95": 16.671
         },
         "label": "Donchian 1 h · Bitcoin",
         "ref_period": [
