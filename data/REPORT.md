@@ -1,6 +1,6 @@
 # Trading-Bot — rapport
 
-_Mis à jour le 27/11/2026 à 19:01 (Europe/Paris)._
+_Mis à jour le 27/11/2026 à 19:06 (Europe/Paris)._
 
 ## Vue d'ensemble
 
@@ -8,7 +8,7 @@ _Mis à jour le 27/11/2026 à 19:01 (Europe/Paris)._
 - Taux de réussite cumulé (TP / (TP+SL)) : **38%** — hasard attendu 38%, avantage **-0%**
 - P&L théorique cumulé, net des coûts estimés (somme des % par trade, sans levier) : **-9.75 %** (brut -5.49 %)
 - Signaux ouverts : **4**
-- Signaux fantômes (suivis en silence pour l'apprentissage) : **2029** clôturés, 26 ouverts, taux de réussite 34% (hasard attendu 36%)
+- Signaux fantômes (suivis en silence pour l'apprentissage) : **2030** clôturés, 25 ouverts, taux de réussite 34% (hasard attendu 36%)
 
 ## Signaux ouverts
 
@@ -123,18 +123,18 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 
 | Segment | Trades | TP | SL | Expirés | Taux de réussite | P&L moyen |
 |---|---:|---:|---:|---:|---:|---:|
-| adx | 2029 | 580 | 1105 | 344 | 34% | -0.040 % |
+| adx | 2030 | 580 | 1106 | 344 | 34% | -0.040 % |
 | corr | 214 | 61 | 126 | 27 | 33% | -0.007 % |
 | level | 188 | 58 | 89 | 41 | 39% | -0.041 % |
 | macd | 515 | 137 | 291 | 87 | 32% | -0.035 % |
 | orb | 128 | 43 | 57 | 28 | 43% | +0.051 % |
 | pdhl | 215 | 76 | 111 | 28 | 41% | +0.021 % |
-| rsi | 1561 | 464 | 848 | 249 | 35% | -0.030 % |
-| trend_15m | 2029 | 580 | 1105 | 344 | 34% | -0.040 % |
-| trend_1h | 2003 | 572 | 1093 | 338 | 34% | -0.040 % |
-| trend_5m | 1843 | 539 | 1014 | 290 | 35% | -0.037 % |
-| volume | 54 | 12 | 36 | 6 | 25% | -0.118 % |
-| vwap | 1983 | 568 | 1084 | 331 | 34% | -0.040 % |
+| rsi | 1562 | 464 | 849 | 249 | 35% | -0.030 % |
+| trend_15m | 2030 | 580 | 1106 | 344 | 34% | -0.040 % |
+| trend_1h | 2004 | 572 | 1094 | 338 | 34% | -0.040 % |
+| trend_5m | 1844 | 539 | 1015 | 290 | 35% | -0.038 % |
+| volume | 55 | 12 | 37 | 6 | 24% | -0.122 % |
+| vwap | 1984 | 568 | 1085 | 331 | 34% | -0.040 % |
 
 ### Fantômes par actif
 
@@ -146,7 +146,7 @@ Setups rejetés pour confiance insuffisante, suivis sans notification. Ils serve
 | gold | 690 | 215 | 308 | 167 | 41% | -0.013 % |
 | nasdaq | 704 | 180 | 452 | 72 | 28% | -0.037 % |
 | oil | 165 | 50 | 82 | 33 | 38% | -0.038 % |
-| sp500 | 147 | 46 | 83 | 18 | 36% | -0.008 % |
+| sp500 | 148 | 46 | 84 | 18 | 35% | -0.011 % |
 
 ## Derniers trades
 
@@ -205,7 +205,7 @@ Tranches horaires évitées (UTC) : [9, 10, 12, 19]
 Corrections par actif :
 
 - bitcoin : {'macd': 0.5, 'pdhl': 0.771}
-- ethereum : {'trend_5m': 0.834, 'trend_15m': 0.834, 'trend_1h': 0.834, 'adx': 0.834, 'vwap': 0.689, 'rsi': 0.683, 'macd': 0.945, 'level': 0.5, 'pdhl': 0.5}
+- ethereum : {'trend_5m': 0.835, 'trend_15m': 0.835, 'trend_1h': 0.835, 'adx': 0.835, 'vwap': 0.69, 'rsi': 0.685, 'macd': 0.945, 'level': 0.5, 'pdhl': 0.5}
 - nasdaq : {'pdhl': 1.119}
 
 | Variante testée en fantôme | Trades | Gain net moyen | Statut |
@@ -215,7 +215,7 @@ Corrections par actif :
 | confiance moyenne | 91 | -0.11 R | en test |
 | entrées dans l'heure avant l'ouverture américaine | 31 | +0.30 R | en test |
 | reprise juste après un stop | 33 | -0.06 R | en test |
-| nouvel actif : S&P 500 (ES) | 73 | +0.08 R | en test |
+| nouvel actif : S&P 500 (ES) | 74 | +0.06 R | en test |
 | nouvel actif : Bitcoin (BTC/USD) | 111 | -0.42 R | en test |
 | nouvel actif : Ethereum (ETH/USD) | 102 | -0.44 R | en test |
 | horizon ~3 h sur Or (XAU/USD) | 79 | +0.06 R | en test |
@@ -243,7 +243,7 @@ Notes :
 - variante « confiance moyenne » en test : 91 trades, -0,11 R net, encore 9 trades avant décision
 - variante « entrées dans l'heure avant l'ouverture américaine » en test : 31 trades, +0,30 R net, encore 69 trades avant décision
 - variante « reprise juste après un stop » en test : 33 trades, -0,06 R net, encore 67 trades avant décision
-- variante « nouvel actif : S&P 500 (ES) » en test : 73 trades, +0,08 R net, encore 27 trades avant décision
+- variante « nouvel actif : S&P 500 (ES) » en test : 74 trades, +0,06 R net, encore 26 trades avant décision
 
 ## Backtests (données historiques 5 min)
 
