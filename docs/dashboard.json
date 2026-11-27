@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-27T16:56:22.929325+01:00",
+  "updated_at": "2026-11-27T17:01:42.623323+01:00",
   "timezone": "Europe/Paris",
   "equity_curve": [
     {
@@ -2050,8 +2050,8 @@
       "pnl_pct": -80.7381,
       "avg_pnl_pct": -0.0399
     },
-    "open": 1,
-    "open_shadow": 4
+    "open": 2,
+    "open_shadow": 5
   },
   "by_source": {
     "bot": {
@@ -2165,7 +2165,7 @@
         "pnl_pct": -25.8294,
         "avg_pnl_pct": -0.0367
       },
-      "open": 1,
+      "open": 2,
       "session_utc": [
         13,
         20
@@ -5524,6 +5524,79 @@
   ],
   "open_signals": [
     {
+      "id": "197fdf656e",
+      "asset": "nasdaq",
+      "asset_label": "Nasdaq 100 (NQ)",
+      "direction": "long",
+      "horizon": "24h",
+      "entry": 26538.5,
+      "take_profit": 26962.5,
+      "stop_loss": 26397.0,
+      "risk_reward": 3.0,
+      "confidence": "fort",
+      "score": 7.36,
+      "criteria": [
+        "adx",
+        "corr",
+        "pdhl",
+        "rsi",
+        "trend_15m",
+        "trend_1h",
+        "trend_5m",
+        "vwap"
+      ],
+      "source": "bot",
+      "status": "open",
+      "pnl_pct": null,
+      "pnl_gross_pct": null,
+      "duration_minutes": null,
+      "close_price": null,
+      "created_at": "2026-11-27T16:01:29Z",
+      "closed_at": null,
+      "created_local": "27/11 17:01",
+      "expires_at": "2026-11-28T16:01:29Z",
+      "rationale": "Achat : tendance forte (ADX), marché meneur favorable, cassure des extrêmes de la veille, RSI en momentum, tendance 15 min, tendance 1 h, tendance 5 min, prix du bon côté du VWAP. Range moyen sur 1 h ≈ 235.33 (0.89 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 1 h ≈ 54%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+      "news_context": "actualité calme sur les 2 dernières heures",
+      "manual_exit": null
+    },
+    {
+      "id": "bd0f475ffb",
+      "asset": "nasdaq",
+      "asset_label": "Nasdaq 100 (NQ)",
+      "direction": "long",
+      "horizon": "24h",
+      "entry": 26538.5,
+      "take_profit": 27167.5,
+      "stop_loss": 26329.0,
+      "risk_reward": 3.0,
+      "confidence": "fort",
+      "score": 8.36,
+      "criteria": [
+        "adx",
+        "corr",
+        "macd",
+        "pdhl",
+        "rsi",
+        "trend_15m",
+        "trend_1h",
+        "trend_5m",
+        "vwap"
+      ],
+      "source": "shadow",
+      "status": "open",
+      "pnl_pct": null,
+      "pnl_gross_pct": null,
+      "duration_minutes": null,
+      "close_price": null,
+      "created_at": "2026-11-27T16:01:29Z",
+      "closed_at": null,
+      "created_local": "27/11 17:01",
+      "expires_at": "2026-11-28T16:01:29Z",
+      "rationale": "Achat : tendance forte (ADX), marché meneur favorable, MACD en expansion, cassure des extrêmes de la veille, RSI en momentum, tendance 45 min, tendance 3 h, tendance 15 min, prix du bon côté du VWAP. Range moyen sur 3 h ≈ 349.25 (1.32 %), TP = 60 % du range, SL = 40 % du range, probabilité de résolution sous 3 h ≈ 71%. Sortie élargie (essai 29) : stop 1.5 fois plus large, objectif à 3 fois le stop, au plus tard 24 h.",
+      "news_context": "actualité calme sur les 2 dernières heures",
+      "manual_exit": null
+    },
+    {
       "id": "f1e4f56af9",
       "asset": "nasdaq",
       "asset_label": "Nasdaq 100 (NQ)",
@@ -8236,10 +8309,10 @@
     }
   },
   "state": {
-    "last_scan": "2026-11-27T15:56:11Z",
+    "last_scan": "2026-11-27T16:01:29Z",
     "last_scan_note": "1 signal(aux)",
     "last_summary": "2026-11-26T23:06:00Z",
-    "last_track": "2026-11-27T15:56:11Z",
+    "last_track": "2026-11-27T16:01:29Z",
     "last_summary_day": "2026-11-26",
     "pc_down": 1794622543
   },
@@ -8265,7 +8338,7 @@
     "avg_win": 177.66,
     "avg_loss": -111.99,
     "open_positions": 5,
-    "skipped": 25,
+    "skipped": 26,
     "risky": 195
   },
   "stress": {
@@ -21276,23 +21349,18 @@
           "reason": null,
           "exit_ts": null,
           "exit": null,
-          "last": 3669.60009765625,
+          "last": 3656.89990234375,
           "r_topstep": null,
           "r_bot": null
         }
       ],
-      "checked_hour": "2026-11-27T15:00:00Z",
+      "checked_hour": "2026-11-27T16:00:00Z",
       "n": 24,
       "mean_r": 0.2564,
       "live": false,
       "levels": {
         "kind": "channel",
         "points": [
-          [
-            1795492800,
-            3691.0,
-            3599.8999
-          ],
           [
             1795496400,
             3691.0,
@@ -21526,6 +21594,11 @@
           [
             1795788000,
             3634.7,
+            3453.8
+          ],
+          [
+            1795791600,
+            3672.5,
             3453.8
           ]
         ]
@@ -25122,7 +25195,7 @@
       "since": "2026-10-26T12:00:00Z",
       "trades": [],
       "live": true,
-      "checked_hour": "2026-11-27T15:45:00Z",
+      "checked_hour": "2026-11-27T16:00:00Z",
       "n": 0,
       "mean_r": null
     },
@@ -25163,7 +25236,7 @@
         }
       ],
       "live": false,
-      "checked_hour": "2026-11-27T15:00:00Z",
+      "checked_hour": "2026-11-27T16:00:00Z",
       "n": 2,
       "mean_r": 1.359
     },
@@ -25227,7 +25300,7 @@
         "stop": 1687.4301,
         "range": 59.3
       },
-      "checked_hour": "2026-11-27T15:00:00Z",
+      "checked_hour": "2026-11-27T16:00:00Z",
       "n": 3,
       "mean_r": -0.9493
     }
